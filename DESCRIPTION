@@ -11,7 +11,7 @@ Description: Studies including both mircobiome and metabolomics data are becomin
     search space, only considering metabolite-function interactions that have been recorded
     in a pathway database. This package also provides a framework to assess differential 
     association. 
-Depends: R (>= 3.4.4)
+Depends: R (>= 3.5.0)
 Imports:
     compositions
 Suggests:
