@@ -2,11 +2,15 @@ Package: anansi
 Type: Package
 Title: ANnotation based ANalysis of Specific Interactions
 Version: 0.5.0
-Author@R: person("Thomaz", "Bastiaanssen", , "thomaz.bastiaanssen@ucc.ie", role = c("aut", "cre"), comment = c(ORCID = "0000-0001-6891-734X"))
+Author@R: person("Thomaz", "Bastiaanssen", "thomaz.bastiaanssen@ucc.ie", role = c("aut", "cre"), comment = c(ORCID = "0000-0001-6891-734X"))
 Maintainer: Thomaz Bastiaanssen <thomaz.bastiaanssen@ucc.ie>
-Description: Anansi is a framework to measure and compare associations between two 'omics datasets based on field knowledge. 
-    The intended use is to compare functions in the microbiome to metabolites these fucntions are known to interact with, 
-    but theoretically anansi could be used for any two measurement types as long as they have a defined interaction framework.
+Description: Studies including both mircobiome and metabolomics data are becoming more common. 
+    Often, it would be helpful to integrate both datasets in order to see if they corroborate 
+    each others patterns. All vs all association is imprecise and likely to yield spurious 
+    associations. This package takes a knowledge-based approach to constrain association 
+    search space, only considering metabolite-function interactions that have been recorded
+    in a pathway database. This package also provides a framework to assess differential 
+    association. 
 Depends: R (>= 3.4.4)
 Imports:
     compositions
