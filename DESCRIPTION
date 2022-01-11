@@ -1,8 +1,10 @@
 Package: anansi
 Type: Package
-Title: ANnotation based ANalysis of Specific Interactions
+Title: Annotation-based Analysis of Specific Interactions
 Version: 0.5.0
-Author@R: person("Thomaz", "Bastiaanssen", "thomaz.bastiaanssen@ucc.ie", role = c("aut", "cre"), comment = c(ORCID = "0000-0001-6891-734X"))
+Author@R: c(
+   person("Thomaz", "Bastiaanssen", email = "thomaz.bastiaanssen@ucc.ie", role = c("aut", "cre"), comment = c(ORCID = "0000-0001-6891-734X"))
+   )
 Maintainer: Thomaz Bastiaanssen <thomaz.bastiaanssen@ucc.ie>
 Description: Studies including both mircobiome and metabolomics data are becoming more common. 
     Often, it would be helpful to integrate both datasets in order to see if they corroborate 
