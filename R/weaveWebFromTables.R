@@ -1,3 +1,9 @@
+#' Create an anansiWeb object from two 'omics tables and a dictionary
+#' @param tableY A data.frame containing metabolites of interest. Rows should be samples and columns should be features.
+#' @param tableX A data.frame containing functions of interest. Rows should be samples and columns should be features.
+#' @param dictionary A binary or boolean matrix that has names from tableY as row names and names from tableY as column names. For general use, we recommend using the one provided in this package.
+#' @return an anansiWeb object. Web is used as input for most of the main workflow of anansi.
+#'
 weaveWebFromTables = function(tableY, tableX, dictionary, verbose = T){
   #For conventional use, table Y should be metabolites and table X functions.
 
