@@ -15,7 +15,6 @@ Description: Studies including both mircobiome and metabolomics data are becomin
     association. 
 Depends: R (>= 3.5.0)
 Imports:
-    compositions
 Suggests:
     dplyr, 
     purrr, 

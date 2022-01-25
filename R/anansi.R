@@ -4,17 +4,24 @@
 #' @param groups A categorical or continuous value necessary for differential correlations. Typically a state or treatment score.
 #' @param adjust.method Method to adjust p-values for multiple comparisons. Method="BH" is the default value. See p.adjust in the base R stats package.
 #' @param verbose A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.
+#' @param diff_cor A boolean. Toggles whether to compute differential correlations. Default is True.
 #' @return A list of lists containing correlation coefficients, p-values and q-values for all operations.
 
-anansi = function(web, method = "pearson", groups, adjust.method = "BH", verbose = T){
-
-  if(is.null(groups) | is.na(groups)){message("Please be aware that the `groups` argument is missing. \nAnansi will proceed without differential association testing"  )}
+anansi = function(web, method = "pearson", groups, adjust.method = "BH", verbose = T, diff_cor = T){
+  if(is.null(groups) | is.na(groups)){
+    message("Please be aware that the `groups` argument is missing. \nAnansi will proceed without differential association testing")
+    diff_cor = F}
 
   if(verbose){print("Running annotation-based correlations")}
-  out_cors  = anansiCorTestByGroup(web = web, method = method, groups = groups, adjust.method = adjust.method, verbose = verbose)
+  outlist = list(cor_results = anansiCorTestByGroup(web = web,
+                                                    method = method,
+                                                    groups = groups,
+                                                    adjust.method = adjust.method,
+                                                    verbose = verbose))
 
+  if(diff_cor){
   if(verbose){print("Fitting models for differential correlation testing")}
-  out_models = anansiDiffCor(web = web, groups = groups, adjust.method = adjust.method)
-
-  return(list(cor_results = out_cors, model_results = out_models))
+    outlist[["model_results"]] = anansiDiffCor(web = web, groups = groups, adjust.method = adjust.method)
+  }
+  return(outlist)
 }

@@ -4,7 +4,14 @@
 \alias{anansi}
 \title{Calculate an association network}
 \usage{
-anansi(web, method = "pearson", groups, adjust.method = "BH", verbose = T)
+anansi(
+  web,
+  method = "pearson",
+  groups,
+  adjust.method = "BH",
+  verbose = T,
+  diff_cor = T
+)
 }
 \arguments{
 \item{web}{An anansiWeb object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables} for how to weave a web.}
@@ -16,6 +23,8 @@ anansi(web, method = "pearson", groups, adjust.method = "BH", verbose = T)
 \item{adjust.method}{Method to adjust p-values for multiple comparisons. Method="BH" is the default value. See p.adjust in the base R stats package.}
 
 \item{verbose}{A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.}
+
+\item{diff_cor}{A boolean. Toggles whether to compute differential correlations. Default is True.}
 }
 \value{
 A list of lists containing correlation coefficients, p-values and q-values for all operations.
