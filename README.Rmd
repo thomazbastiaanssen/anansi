@@ -45,12 +45,12 @@ data(FMT_KOs)
 
 ## Data preparation
 
-The main anansi function expects data in the 'web' format; a list with exactly three elements: 
+The main anansi function expects data in the 'anansiWeb' format; Basically a list with exactly three tables: 
 The first table should be a count table of metabolites.
 The second table should be a count table of functions. 
 Both tables should have rows as features and columns as samples.
 
-the third table should be a binary adjacency matrix with the colnames of table 1 as rows and the colnames of table 2 as columns. Such a table is provided in the anansi library and is referred to as a dictionary (becasue you use it to look up which metabolites interact with which functions).  
+the third table should be a binary adjacency matrix with the column names of table 1 as rows and the colnames of table 2 as columns. Such a table is provided in the anansi library and is referred to as a dictionary (because you use it to look up which metabolites interact with which functions).  
 
 the weaveWebFromTables() function can be used to parse these tables into 
 
@@ -89,7 +89,7 @@ t2 = t(KOs.exp)
 ## weave a web
 
 ```{r, eval = T}
-web = weaveWebFromTables(table1 = t1, table2 = t2, dictionary = anansi_dic)
+web = weaveWebFromTables(tableY = t1, tableY = t2, dictionary = anansi_dic)
 ```
 
 ## Run anansi

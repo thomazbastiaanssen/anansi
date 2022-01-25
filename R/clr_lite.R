@@ -1,6 +1,12 @@
+anansi_compute_clr = function(x){
+  #compute CLR using Aitchison's method
+  return(log(x/exp(mean(log(x)))))
+}
+
+
 impute_zeroes = function(vec, method = "logunif"){
   if(! method %in% c("logunif", "unif", "const")){stop("`method` must be exactly `logunif`, `unif` or `const`")}
-  
+
   #Find detection limit
   DL = min(vec[vec != 0])
   if(method == "logunif"){
@@ -13,36 +19,36 @@ impute_zeroes = function(vec, method = "logunif"){
     vec[vec == 0] = 0.65 * DL
   }
   return(vec)
-} 
+}
 
 
 clr_imputed = function(vec, method = "logunif", replicates = 1000){
   if(! method %in% c("logunif", "unif", "const")){stop("`method` must be exactly `logunif`, `unif` or `const`")}
-  return(apply(replicate(replicates, compositions::clr(impute_zeroes(vec = vec, method = method))), 1, median))
+  return(apply(replicate(replicates, anansi_compute_clr(impute_zeroes(vec = vec, method = method))), 1, median))
 }
 
 
-clr_lite = function(counts, samples_are = "cols", method = "logunif", replicates = 1000) 
+clr_lite = function(counts, samples_are = "cols", method = "logunif", replicates = 1000)
 {
   temp_counts = counts
-  
+
   if(! method %in% c("logunif", "unif", "const"))
   {stop("`method` must be exactly `logunif`, `unif` or `const`")}
-  
+
   if(samples_are == "rows"){
     temp_counts = data.frame(t(temp_counts))
   }
-  
-  temp_counts = apply(X          = temp_counts, 
-                      MARGIN     = 2, 
-                      FUN        = clr_imputed, 
-                      method     = method, 
+
+  temp_counts = apply(X          = temp_counts,
+                      MARGIN     = 2,
+                      FUN        = clr_imputed,
+                      method     = method,
                       replicates = replicates)
-  
+
   if(samples_are == "rows"){
     temp_counts = data.frame(t(temp_counts))
   }
-  
+
   clr_counts = data.frame(temp_counts)
   rownames(clr_counts) = rownames(counts)
   colnames(clr_counts) = colnames(counts)
