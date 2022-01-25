@@ -8,6 +8,8 @@
 
 anansi = function(web, method = "pearson", groups, adjust.method = "BH", verbose = T){
 
+  if(is.null(groups) | is.na(groups)){message("Please be aware that the `groups` argument is missing. \nAnansi will proceed without differential association testing"  )}
+
   if(verbose){print("Running annotation-based correlations")}
   out_cors  = anansiCorTestByGroup(web = web, method = method, groups = groups, adjust.method = adjust.method, verbose = verbose)
 
