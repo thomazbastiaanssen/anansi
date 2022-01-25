@@ -1,5 +1,5 @@
 #' Calculate an association network
-#' @param web An anansiWeb object, containing two tables with omics data and a dictionary that links them. See \code weaveWebFromTables for how to weave a web.
+#' @param web An anansiWeb object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables} for how to weave a web.
 #' @param method Correlation method. Method="pearson" is the default value. The alternatives to be passed to cor are "spearman" and "kendall".
 #' @param groups A categorical or continuous value necessary for differential correlations. Typically a state or treatment score.
 #' @param adjust.method Method to adjust p-values for multiple comparisons. Method="BH" is the default value. See p.adjust in the base R stats package.

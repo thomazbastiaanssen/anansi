@@ -7,7 +7,7 @@
 anansi(web, method = "pearson", groups, adjust.method = "BH", verbose = T)
 }
 \arguments{
-\item{web}{An anansiWeb object, containing two tables with omics data and a dictionary that links them. See \code weaveWebFromTables for how to weave a web.}
+\item{web}{An anansiWeb object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables} for how to weave a web.}
 
 \item{method}{Correlation method. Method="pearson" is the default value. The alternatives to be passed to cor are "spearman" and "kendall".}
 
