@@ -7,7 +7,7 @@
 anansi(web, method = "pearson", groups, adjust.method = "BH", verbose = T)
 }
 \arguments{
-\item{web}{An anansi web object, containing two tables with omics data and a dictionary that links them.}
+\item{web}{An anansiWeb object, containing two tables with omics data and a dictionary that links them. See \code weaveWebFromTables for how to weave a web.}
 
 \item{method}{Correlation method. Method="pearson" is the default value. The alternatives to be passed to cor are "spearman" and "kendall".}
 
@@ -16,6 +16,9 @@ anansi(web, method = "pearson", groups, adjust.method = "BH", verbose = T)
 \item{adjust.method}{Method to adjust p-values for multiple comparisons. Method="BH" is the default value. See p.adjust in the base R stats package.}
 
 \item{verbose}{A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.}
+}
+\value{
+A list of lists containing correlation coefficients, p-values and q-values for all operations.
 }
 \description{
 Calculate an association network
