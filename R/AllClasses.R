@@ -14,4 +14,3 @@ setClass("anansiTale",
            q.values  = "matrix"
            )
          )
-
