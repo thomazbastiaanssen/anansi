@@ -101,7 +101,7 @@ anansiLong = spinToLong(anansi_output = anansi_out)
 
 #Now it's ready to be plugged into ggplot2, though let's clean up a bit more. 
 
-#Only consider interactions where the entire model fits well enough
+#Only consider interactions where the entire model fits well enough. 
 anansiLong = anansiLong[anansiLong$model_full_q.values < 0.1,]
 
 #Plug into ggplot2
