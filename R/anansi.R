@@ -8,6 +8,7 @@
 #' @return A list of lists containing correlation coefficients, p-values and q-values for all operations.
 
 anansi = function(web, method = "pearson", groups, adjust.method = "BH", verbose = T, diff_cor = T){
+<<<<<<< HEAD
   if(inherits(groups, "character")){
     if(!all(table(groups) > 3)) {
       warning("The `groups` argument is categorical, but not all groups have at least three observations.
@@ -20,6 +21,10 @@ anansi = function(web, method = "pearson", groups, adjust.method = "BH", verbose
   if(diff_cor & (is.null(groups) | any(is.na(groups)))){
     message("Please be aware that the `groups` argument is missing or contains NAs. \n
             Anansi will proceed without differential association testing")
+=======
+  if(is.null(groups) | any(is.na(groups))){
+    message("Please be aware that the `groups` argument is missing or contains NAs. \nAnansi will proceed without differential association testing")
+>>>>>>> b7eccdc3585c881aecd6f60b9782f19ce2261ce3
     diff_cor = F}
 
   if(verbose){print("Running annotation-based correlations")}
