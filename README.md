@@ -51,19 +51,20 @@ data(FMT_KOs)
 
 ## Data preparation
 
-The main anansi function expects data in the ‘anansiWeb’ format;
-Basically a list with exactly three tables: The first table should be a
-count table of metabolites. The second table should be a count table of
-functions. Both tables should have rows as features and columns as
-samples.
+The main anansi function expects data in the `anansiWeb` format;
+Basically a list with exactly three tables: The first table, `tableY`,
+should be a count table of metabolites. The second table, `tableX`,
+should be a count table of functions. Both tables should have rows as
+features and columns as samples.
 
 the third table should be a binary adjacency matrix with the column
-names of table 1 as rows and the colnames of table 2 as columns. Such a
+names of table Y as rows and the colnames of table X as columns. Such a
 table is provided in the anansi library and is referred to as a
 dictionary (because you use it to look up which metabolites interact
 with which functions).
 
-the weaveWebFromTables() function can be used to parse these tables into
+the `weaveWebFromTables()` function can be used to parse these tables
+into
 
 ``` r
 #Clean and CLR-transform the KEGG orthologue table
