@@ -2,12 +2,15 @@
 output:
   md_document:
     variant: markdown_github
+    
+    
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-```{r setup, include=FALSE}
+```{r setup, include = F}
 knitr::opts_chunk$set(echo = TRUE)
+library(anansi)
 ```
 
 The `anansi` package computes and compares the association between the features of two 'omics datasets that are known to interact based on a database such as KEGG. 
@@ -20,10 +23,10 @@ citation("anansi")
 
 OK, now let's get started.
 
-```{r, eval = T}
+```{r, eval=FALSE}
 #install and load anansi
 #devtools::install_github("thomazbastiaanssen/anansi")
-#library(anansi)
+library(anansi)
 
 #load ggforce for plotting results
 library(ggforce)
@@ -52,7 +55,7 @@ the third table should be a binary adjacency matrix with the column names of tab
 the weaveWebFromTables() function can be used to parse these tables into 
 
 
-```{r, eval = T}
+```{r, eval=FALSE}
 #Clean and CLR-transform the KEGG orthologue table
 KOs   <- floor(KOs)
 KOs   <- apply(KOs,c(1,2),function(x) as.numeric(as.character(x)))
@@ -70,13 +73,13 @@ t2 = t(KOs.exp)
 
 ## weave a web
 
-```{r, eval = T}
+```{r, eval=FALSE}
 web = weaveWebFromTables(tableY = t1, tableX = t2, dictionary = anansi_dic)
 ```
 
 ## Run anansi
 
-```{r, eval = T}
+```{r, eval=FALSE}
 anansi_out = anansi(web    = web, #generated above
                     method = "pearson", #define the type of correlation used
                     groups = metadata$Legend, #optional, to compare associations between groups
@@ -88,7 +91,7 @@ anansi_out = anansi(web    = web, #generated above
 
 Anansi gives a nested list of lists as an output. I highly recommend using purrr from the tidyverse to parse it
 
-```{r, eval = T, fig.width = 10, fig.height = 10}
+```{r, eval=FALSE, fig.width = 10, fig.height = 10}
 anansi_out %>%
   
   #Induvidually wrangle all results to long format
