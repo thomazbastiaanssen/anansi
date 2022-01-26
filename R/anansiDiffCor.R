@@ -59,7 +59,7 @@ anansiDiffCor = function(web, groups, adjust.method = adjust.method){
   out_qvals[PriorKnowledge]      <- p.adjust(out_pvals[PriorKnowledge], method = adjust.method)
 
   out_tale        = new("anansiTale",
-                       type       = "model",
+                       type       = "model_full",
                        estimates  = out_rvals,
                        p.values   = out_pvals,
                        q.values   = out_qvals)
@@ -68,7 +68,7 @@ anansiDiffCor = function(web, groups, adjust.method = adjust.method){
   out_disjqvals[PriorKnowledge]  <- p.adjust(out_disjpvals[PriorKnowledge], method = adjust.method)
 
   out_disjointed = new("anansiTale",
-                       type       = "model",
+                       type       = "model_disjointed",
                        estimates  = out_disjrvals,
                        p.values   = out_disjpvals,
                        q.values   = out_disjqvals)
@@ -77,7 +77,7 @@ anansiDiffCor = function(web, groups, adjust.method = adjust.method){
   out_emergqvals[PriorKnowledge] <- p.adjust(out_emergpvals[PriorKnowledge], method = adjust.method)
 
   out_emergent   = new("anansiTale",
-                       type       = "model",
+                       type       = "model_emergent",
                        estimates  = out_emergrvals,
                        p.values   = out_emergpvals,
                        q.values   = out_emergqvals)

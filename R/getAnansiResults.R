@@ -13,7 +13,7 @@ getAnansiResults <- function(tale){
   p.values  = c(tale@p.values),
   q.values  = c(tale@q.values))
 
-  names(out_df)[3] <- paste(tale@type, names(out_df)[3], sep = "_")
+  names(out_df)[-c(1:2)] <- paste(tale@type, names(out_df)[-c(1:2)], sep = "_")
 
   return(out_df)
 }
