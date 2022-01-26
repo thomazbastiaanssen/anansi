@@ -36,7 +36,7 @@ OK, now let’s get started.
 library(anansi)
 
 #load ggplot2 and ggforce to plot results
-library(ggplot)
+library(ggplot2)
 library(ggforce)
 
 #load anansi dictionary and human-readable names for KEGG compounds and orthologues
@@ -59,10 +59,10 @@ should be a count table of functions. Both tables should have rows as
 features and columns as samples.
 
 the third table should be a binary adjacency matrix with the column
-names of table Y as rows and the colnames of table X as columns. Such a
-table is provided in the anansi library and is referred to as a
-dictionary (because you use it to look up which metabolites interact
-with which functions).
+names of `tableY` as rows and the column names of `tableX` as columns.
+Such an adjacency matrix is provided in the anansi library and is
+referred to as a dictionary (because you use it to look up which
+metabolites interact with which functions).
 
 the `weaveWebFromTables()` function can be used to parse these tables
 into an `anansiWeb` object.
@@ -100,12 +100,14 @@ anansi_out = anansi(web    = web, #generated above
                     )
 ```
 
+## Plot the results
+
 Anansi gives a complex nested list of lists as an output. Two functions
 exist that will wrangle your data to more friendly formats for you. You
-can either use spinToLong() or spinToWide(). They will give you long or
-wide format data.frames, respectively. For general reporting, we
-recommend sticking to wide format. Long format can be helpful to plug
-the data into ggplot2.
+can either use `spinToLong()` or `spinToWide()`. They will give you long
+or wide format data.frames, respectively. For general reporting, we
+recommend sticking to the wide format as it’s the most legible. The long
+format can be helpful to plug the data into `ggplot2`.
 
 ``` r
 anansiLong = spinToLong(anansi_output = anansi_out)  
