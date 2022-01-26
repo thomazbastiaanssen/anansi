@@ -16,11 +16,6 @@ Description: Studies including both mircobiome and metabolomics data are becomin
 Depends: R (>= 3.5.0)
 Imports:
 Suggests:
-    dplyr, 
-    purrr, 
-    tibble, 
-    tidyr,
-    magrittr,
     ggplot2, 
     ggforce
 License: GPLv3
