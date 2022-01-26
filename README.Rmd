@@ -77,7 +77,7 @@ KOs   <- apply(KOs,c(1,2),function(x) as.numeric(as.character(x)))
 KOs   <- KOs[apply(KOs == 0, 1, sum) <= (ncol(KOs) * 0.90), ] 
 
 #only keep functions that are represented in the dictionary
-KOs   <- KOs[row.names(KOs) %in% colnames(anansi_dic),]
+KOs   <- KOs[row.names(KOs) %in% sort(unique(unlist(anansi_dic))),]
 
 KOs.exp = clr_lite(KOs)
 
@@ -97,7 +97,7 @@ web = weaveWebFromTables(tableY = t1, tableX = t2, dictionary = anansi_dic)
 ```{r, eval = T}
 anansi_out = anansi(web    = web, #generated above
                     method = "pearson", #define the type of correlation used
-                    groups = c("A", "B"), #optional, to compare associations between groups
+                    groups = metadata$Legend, #optional, to compare associations between groups
                     adjust.method = "BH", #apply the Benjamini-Hochberg procedure for FDR
                     verbose = T #To let you know what's happening
                     )

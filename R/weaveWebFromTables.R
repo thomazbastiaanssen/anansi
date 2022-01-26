@@ -1,13 +1,13 @@
 #' Create an anansiWeb object from two 'omics tables and a dictionary
-#' @param tableY A data.frame containing metabolites of interest. Rows should be samples and columns should be features.
-#' @param tableX A data.frame containing functions of interest. Rows should be samples and columns should be features.
-#' @param dictionary A binary or boolean matrix that has names from tableY as row names and names from tableY as column names. For general use, we recommend using the one provided in this package.
+#' @param tableY A table containing metabolites of interest. Rows should be samples and columns should be features.
+#' @param tableX A table containing functions of interest. Rows should be samples and columns should be features.
+#' @param dictionary A list that has compound names from tableY as names. For general use, we recommend using the one provided in this package.
 #' @return an anansiWeb object. Web is used as input for most of the main workflow of anansi.
 #'
 weaveWebFromTables = function(tableY, tableX, dictionary, verbose = T){
   #For conventional use, table Y should be metabolites and table X functions.
 
-  # The two 'table' data.frames MUST have row
+  # The two 'table' matrices MUST have row
   # and column names that are unique, and
   # look like the following:
   #
@@ -17,7 +17,10 @@ weaveWebFromTables = function(tableY, tableX, dictionary, verbose = T){
   #   sample3      3   0   2   0   0   0
   #       ... many more rows ...
   #
-  # the column names need to correspond to the names in the dictionary.
+
+
+  #create binary adjacency matrix first
+  dictionary = makeAdjacencyMatrixFromList(tableY = tableY, dict_list = dictionary)
 
   available_tableY = sort(intersect(colnames(tableY), rownames(dictionary)))
   available_tableX = sort(intersect(colnames(tableX), colnames(dictionary)))

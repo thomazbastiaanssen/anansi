@@ -20,9 +20,6 @@ anansi = function(web, method = "pearson", groups, adjust.method = "BH", verbose
 
   if(diff_cor & (is.null(groups) | any(is.na(groups)))){
     message("Please be aware that the `groups` argument is missing or contains NAs. \nAnansi will proceed without differential association testing")
-
-  if(is.null(groups) | any(is.na(groups))){
-    message("Please be aware that the `groups` argument is missing or contains NAs. \nAnansi will proceed without differential association testing")
     diff_cor = F}
 
   if(verbose){print("Running annotation-based correlations")}
@@ -36,6 +33,6 @@ anansi = function(web, method = "pearson", groups, adjust.method = "BH", verbose
   if(verbose){print("Fitting models for differential correlation testing")}
     outlist[["model_results"]] = anansiDiffCor(web = web, groups = groups, adjust.method = adjust.method)
     }
-  }
+
   return(outlist)
 }
