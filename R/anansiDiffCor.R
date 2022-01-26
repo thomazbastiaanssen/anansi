@@ -4,7 +4,9 @@ anansiDiffCor = function(web, groups, adjust.method = adjust.method){
   X              <- web@tableX
   PriorKnowledge <- web@dictionary
 
-  #Create result matrices
+  #Create result container matrices. We take advantage of the fact that true interactions are coded as TRUE, which corresponds to 1,
+  #automatically setting all non-canonical interactions as p = 1 and estimate = 0.
+
   out_rvals      <- web@dictionary
   out_pvals      <- !web@dictionary
   out_disjrvals  <- web@dictionary
@@ -56,22 +58,34 @@ anansiDiffCor = function(web, groups, adjust.method = adjust.method){
   out_qvals                      <- out_pvals
   out_qvals[PriorKnowledge]      <- p.adjust(out_pvals[PriorKnowledge], method = adjust.method)
 
+  out_tale        = new("anansiTale",
+                       type       = "model",
+                       estimates  = out_rvals,
+                       p.values   = out_pvals,
+                       q.values   = out_qvals)
+
   out_disjqvals                  <- out_disjpvals
   out_disjqvals[PriorKnowledge]  <- p.adjust(out_disjpvals[PriorKnowledge], method = adjust.method)
+
+  out_disjointed = new("anansiTale",
+                       type       = "model",
+                       estimates  = out_disjrvals,
+                       p.values   = out_disjpvals,
+                       q.values   = out_disjqvals)
 
   out_emergqvals                 <- out_emergpvals
   out_emergqvals[PriorKnowledge] <- p.adjust(out_emergpvals[PriorKnowledge], method = adjust.method)
 
+  out_emergent   = new("anansiTale",
+                       type       = "model",
+                       estimates  = out_emergrvals,
+                       p.values   = out_emergpvals,
+                       q.values   = out_emergqvals)
+
   #Collect into nested list and return results
-  return(list(modelfit   = list(r.squared = out_rvals,
-                                p         = out_pvals,
-                                q         = out_qvals),
-              disjointed = list(r.squared = out_disjrvals,
-                                p         = out_disjpvals,
-                                q         = out_disjqvals),
-              emergent   = list(r.squared = out_emergrvals,
-                                p         = out_emergpvals,
-                                q         = out_emergqvals)))
+  return(list(modelfit   = out_tale,
+              disjointed = out_disjointed,
+              emergent   = out_emergent))
 
 }
 

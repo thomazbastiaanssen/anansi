@@ -2,7 +2,7 @@ anansiCorPvalue = function(web, method = "pearson", groups = NULL, adjust.method
   #Compute correlation coefficients
   r    <- anansiCor(web = web, method = method, groups = groups)
 
-  if(is.null(groups) | is.na(groups)){groups = TRUE}
+  if(is.null(groups) | any(is.na(groups))){groups = TRUE}
   #Compute t-statistics based on the n and the correlation coefficient
   n    <- web@dictionary
   n[T] <- nrow(web@tableY[groups,])

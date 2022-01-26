@@ -89,7 +89,7 @@ t2 = t(KOs.exp)
 ## weave a web
 
 ```{r, eval = T}
-web = weaveWebFromTables(tableY = t1, tableY = t2, dictionary = anansi_dic)
+web = weaveWebFromTables(tableY = t1, tableX = t2, dictionary = anansi_dic)
 ```
 
 ## Run anansi
