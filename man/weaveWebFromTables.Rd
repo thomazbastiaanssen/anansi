@@ -7,11 +7,11 @@
 weaveWebFromTables(tableY, tableX, dictionary, verbose = T)
 }
 \arguments{
-\item{tableY}{A data.frame containing metabolites of interest. Rows should be samples and columns should be features.}
+\item{tableY}{A table containing metabolites of interest. Rows should be samples and columns should be features.}
 
-\item{tableX}{A data.frame containing functions of interest. Rows should be samples and columns should be features.}
+\item{tableX}{A table containing functions of interest. Rows should be samples and columns should be features.}
 
-\item{dictionary}{A binary or boolean matrix that has names from tableY as row names and names from tableY as column names. For general use, we recommend using the one provided in this package.}
+\item{dictionary}{A list that has compound names from tableY as names. For general use, we recommend using the one provided in this package.}
 }
 \value{
 an anansiWeb object. Web is used as input for most of the main workflow of anansi.
