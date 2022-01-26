@@ -4,13 +4,15 @@
 \alias{getAnansiResults}
 \title{Extract information from an anansiTale object and parse it into a neat table}
 \usage{
-getAnansiResults(tale)
+getAnansiResults(tale, format = "wide")
 }
 \arguments{
-\item{tale}{An anansiTale object}
+\item{tale}{An \code{anansiTale} object}
+
+\item{format}{either \code{wide} or \code{long}. Default is \code{wide}. Toggles the output format.}
 }
 \value{
-A wide format data.frame. The first two columns are the Compounds and Fucntions.
+A wide format data.frame. The first two columns are the Compounds and Functions.
 }
 \description{
 Extract information from an anansiTale object and parse it into a neat table
