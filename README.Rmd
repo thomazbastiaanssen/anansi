@@ -23,10 +23,7 @@ OK, now let's get started.
 ```{r, eval = T}
 #install and load anansi
 #devtools::install_github("thomazbastiaanssen/anansi")
-library(anansi)
-
-#load tidyverse, highly recommended for data wrangling 
-suppressPackageStartupMessages(library(tidyverse))
+#library(anansi)
 
 #load ggforce for plotting results
 library(ggforce)
@@ -56,21 +53,6 @@ the weaveWebFromTables() function can be used to parse these tables into
 
 
 ```{r, eval = T}
-#First rid of the "cpd:" part of the names of compounds to match the metabolite table
-names(anansi_dic) = gsub(pattern = "cpd:", replacement = "", x = names(anansi_dic))
-
-#Then prune the dictionary list to reduce memory usage
-anansi_dic = anansi_dic[names(anansi_dic) %in% rownames(metab)]
-
-#then wrangle the adjacency list to a binary matrix
-anansi_dic <- anansi_dic %>% 
-  enframe() %>% 
-  unnest(cols = c(value)) %>% add_column(present = T) %>%
-  pivot_wider(values_from = present, values_fill = F) %>%
-  filter(!is.na(value)) %>% 
-  column_to_rownames("value") %>% 
-  t()
-
 #Clean and CLR-transform the KEGG orthologue table
 KOs   <- floor(KOs)
 KOs   <- apply(KOs,c(1,2),function(x) as.numeric(as.character(x)))

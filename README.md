@@ -16,21 +16,17 @@ citation("anansi")
     ## 
     ## To cite package 'anansi' in publications use:
     ## 
-    ##   person and comment = c) (2022). anansi: ANnotation based ANalysis of
+    ##   Thomaz Bastiaanssen (2022). anansi: Annotation-based Analysis of
     ##   Specific Interactions. R package version 0.5.0.
     ## 
     ## A BibTeX entry for LaTeX users is
     ## 
     ##   @Manual{,
-    ##     title = {anansi: ANnotation based ANalysis of Specific Interactions},
-    ##     author = {{person} and comment = c)},
+    ##     title = {anansi: Annotation-based Analysis of Specific Interactions},
+    ##     author = {Thomaz Bastiaanssen},
     ##     year = {2022},
     ##     note = {R package version 0.5.0},
     ##   }
-    ## 
-    ## ATTENTION: This citation information has been auto-generated from the
-    ## package DESCRIPTION file and may need manual editing, see
-    ## 'help("citation")'.
 
 OK, now let’s get started.
 
@@ -38,9 +34,6 @@ OK, now let’s get started.
 #install and load anansi
 #devtools::install_github("thomazbastiaanssen/anansi")
 library(anansi)
-
-#load tidyverse, highly recommended for data wrangling 
-suppressPackageStartupMessages(library(tidyverse))
 
 #load ggforce for plotting results
 library(ggforce)
@@ -58,42 +51,28 @@ data(FMT_KOs)
 
 ## Data preparation
 
-The main anansi function expects data in the ‘web’ format; a list with
-exactly three elements: The first table should be a count table of
-metabolites. The second table should be a count table of functions. Both
-tables should have rows as features and columns as samples.
+The main anansi function expects data in the ‘anansiWeb’ format;
+Basically a list with exactly three tables: The first table should be a
+count table of metabolites. The second table should be a count table of
+functions. Both tables should have rows as features and columns as
+samples.
 
-the third table should be a binary adjacency matrix with the colnames of
-table 1 as rows and the colnames of table 2 as columns. Such a table is
-provided in the anansi library and is referred to as a dictionary
-(becasue you use it to look up which metabolites interact with which
-functions).
+the third table should be a binary adjacency matrix with the column
+names of table 1 as rows and the colnames of table 2 as columns. Such a
+table is provided in the anansi library and is referred to as a
+dictionary (because you use it to look up which metabolites interact
+with which functions).
 
 the weaveWebFromTables() function can be used to parse these tables into
 
 ``` r
-#First rid of the "cpd:" part of the names of compounds to match the metabolite table
-names(anansi_dic) = gsub(pattern = "cpd:", replacement = "", x = names(anansi_dic))
-
-#Then prune the dictionary list to reduce memory usage
-anansi_dic = anansi_dic[names(anansi_dic) %in% rownames(metab)]
-
-#then wrangle the adjacency list to a binary matrix
-anansi_dic <- anansi_dic %>% 
-  enframe() %>% 
-  unnest(cols = c(value)) %>% add_column(present = T) %>%
-  pivot_wider(values_from = present, values_fill = F) %>%
-  filter(!is.na(value)) %>% 
-  column_to_rownames("value") %>% 
-  t()
-
 #Clean and CLR-transform the KEGG orthologue table
 KOs   <- floor(KOs)
 KOs   <- apply(KOs,c(1,2),function(x) as.numeric(as.character(x)))
 KOs   <- KOs[apply(KOs == 0, 1, sum) <= (ncol(KOs) * 0.90), ] 
 
 #only keep functions that are represented in the dictionary
-KOs   <- KOs[row.names(KOs) %in% colnames(anansi_dic),]
+KOs   <- KOs[row.names(KOs) %in% sort(unique(unlist(anansi_dic))),]
 
 KOs.exp = clr_lite(KOs)
 
@@ -105,11 +84,8 @@ t2 = t(KOs.exp)
 ## weave a web
 
 ``` r
-web = weaveWebFromTables(table1 = t1, table2 = t2, dictionary = anansi_dic)
+web = weaveWebFromTables(tableY = t1, tableX = t2, dictionary = anansi_dic)
 ```
-
-    ## [1] "3 were matched between table 1 and the columns of the adjacency matrix"
-    ## [1] "50 were matched between table 2 and the rows of the adjacency matrix"
 
 ## Run anansi
 
@@ -121,10 +97,6 @@ anansi_out = anansi(web    = web, #generated above
                     verbose = T #To let you know what's happening
                     )
 ```
-
-    ## [1] "Running annotation-based correlations"
-    ## [1] "Running correlations for the following groups: Aged yFMT, Aged oFMT, Young yFMT and all together"
-    ## [1] "Fitting models for differential correlation testing"
 
 Anansi gives a nested list of lists as an output. I highly recommend
 using purrr from the tidyverse to parse it
@@ -203,5 +175,3 @@ anansi_out %>%
   ylab("") + 
   xlab("Pearson's rho")
 ```
-
-![](README_files/figure-markdown_github/unnamed-chunk-6-1.png)
