@@ -36,9 +36,9 @@ weaveWebFromTables = function(tableY, tableX, dictionary, verbose = T){
   tableY = tableY[,rownames(dictionary)]
   tableX = tableX[,colnames(dictionary)]
 
-  #Return an anansiWeb with three objects: typically metabolites, functions and adjacency matrix
+  #Return an anansiWeb object with three slots: typically metabolites, functions and adjacency matrix
   return(new("anansiWeb",
-             tableY     = tableY,
-             tableX     = tableX,
-             dictionary = dictionary))
+             tableY     = as.matrix(tableY),
+             tableX     = as.matrix(tableX),
+             dictionary = as.matrix(dictionary)))
 }

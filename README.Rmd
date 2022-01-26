@@ -89,7 +89,7 @@ t2 = t(KOs.exp)
 ## weave a web
 
 ```{r, eval = T}
-web = weaveWebFromTables(tableY = t1, tableY = t2, dictionary = anansi_dic)
+web = weaveWebFromTables(tableY = t1, tableX = t2, dictionary = anansi_dic)
 ```
 
 ## Run anansi
@@ -97,7 +97,7 @@ web = weaveWebFromTables(tableY = t1, tableY = t2, dictionary = anansi_dic)
 ```{r, eval = T}
 anansi_out = anansi(web    = web, #generated above
                     method = "pearson", #define the type of correlation used
-                    groups = metadata$Legend, #optional, to compare associations between groups
+                    groups = c("A", "B"), #optional, to compare associations between groups
                     adjust.method = "BH", #apply the Benjamini-Hochberg procedure for FDR
                     verbose = T #To let you know what's happening
                     )

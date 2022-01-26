@@ -1,7 +1,17 @@
 setClass("anansiWeb",
          slots = c(
-           tableY     = "data.frame",
-           tableX     = "data.frame",
-           dictionary = "data.frame"
+           tableY     = "matrix",
+           tableX     = "matrix",
+           dictionary = "matrix"
            )
          )
+
+setClass("anansiTale",
+         slots = c(
+           type      = "character",
+           estimates = "matrix",
+           p.values  = "matrix",
+           q.values  = "matrix"
+           )
+         )
+
