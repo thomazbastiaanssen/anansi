@@ -65,7 +65,7 @@ into an `anansiWeb` object.
 
 ``` r
 #Clean and CLR-transform the KEGG orthologue table
-KOs   <- floor(KOs)
+KOs   <- floor(FMT_KOs)
 KOs   <- apply(KOs,c(1,2),function(x) as.numeric(as.character(x)))
 KOs   <- KOs[apply(KOs == 0, 1, sum) <= (ncol(KOs) * 0.90), ] 
 
@@ -75,7 +75,7 @@ KOs   <- KOs[row.names(KOs) %in% sort(unique(unlist(anansi_dic))),]
 KOs.exp = clr_lite(KOs)
 
 #anansi expects samples to be rows and features to be columns. 
-t1 = t(metab)
+t1 = t(FMT_metab)
 t2 = t(KOs.exp)
 ```
 
@@ -90,7 +90,7 @@ web = weaveWebFromTables(tableY = t1, tableX = t2, dictionary = anansi_dic)
 ``` r
 anansi_out = anansi(web    = web, #generated above
                     method = "pearson", #define the type of correlation used
-                    groups = metadata$Legend, #optional, to compare associations between groups
+                    groups = FMT_metadata$Legend, #optional, to compare associations between groups
                     adjust.method = "BH", #apply the Benjamini-Hochberg procedure for FDR
                     verbose = T #To let you know what's happening
                     )
