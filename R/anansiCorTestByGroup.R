@@ -46,6 +46,8 @@ anansiCorTestByGroup = function(web, method = "pearson", groups, adjust.method =
 #' @param adjust.method Method to adjust p-values for multiple comparisons. \code{adjust.method = "BH"} is the default value. See \code{p.adjust} in the base R \code{stats} package.
 #' @return An \code{anansiTale} result object.
 #' @seealso \code{\link{anansi}} \cr \code{\link{anansiCorTestByGroup}}
+#' @importFrom stats pt p.adjust
+#' @importFrom methods new
 #'
 anansiCorPvalue = function(web, method = "pearson", groups = NULL, adjust.method = adjust.method) {
   #Compute correlation coefficients
@@ -78,8 +80,10 @@ anansiCorPvalue = function(web, method = "pearson", groups = NULL, adjust.method
 #' Typically, the main \code{anansi} function will run this for you.
 #' @param web An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables} for how to weave a web.
 #' @param method Correlation method. \code{method = "pearson"} is the default value. The alternatives to be passed to \code{cor} are "spearman" and "kendall".
+#' @param groups A boolean vector used to select which samples should be included in the correlaitons.
 #' @seealso \code{\link{anansi}} \cr \code{\link{anansiCorTestByGroup}}
 #' @return A matrix of r-statistics.
+#' @importFrom stats cor
 #'
 anansiCor = function(web, method = "pearson", groups = NULL){
   #Run correlations on subsections of your data

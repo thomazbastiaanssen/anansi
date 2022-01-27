@@ -16,7 +16,9 @@ weaveWebFromTables(
 
 \item{tableX}{A table containing functions of interest. Rows should be samples and columns should be features.}
 
-\item{dictionary}{A list that has compound names from tableY as names. Default is the dictionary provided in this package.
+\item{dictionary}{A list that has compound names from tableY as names. Default is the dictionary provided in this package.}
+
+\item{verbose}{A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.
 For general use, we recommend sticking to that one. You can access the dictionary like this: \code{data(dictionary)}}
 }
 \value{

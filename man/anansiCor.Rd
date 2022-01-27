@@ -11,6 +11,8 @@ anansiCor(web, method = "pearson", groups = NULL)
 \item{web}{An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables} for how to weave a web.}
 
 \item{method}{Correlation method. \code{method = "pearson"} is the default value. The alternatives to be passed to \code{cor} are "spearman" and "kendall".}
+
+\item{groups}{A boolean vector used to select which samples should be included in the correlaitons.}
 }
 \value{
 A matrix of r-statistics.

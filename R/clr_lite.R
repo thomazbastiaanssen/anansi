@@ -63,6 +63,7 @@ anansi_compute_clr = function(x){
 #' @param vec A vector of compositional data that may contain zeroes.
 #' @param method The method for zero imputation. One of "logunif", "unif" or "const".
 #' @return A vector with all the zeroes replaced with non-zero values.
+#' @importFrom stats runif
 #'
 impute_zeroes = function(vec, method = "logunif"){
   if(! method %in% c("logunif", "unif", "const")){stop("`method` must be exactly `logunif`, `unif` or `const`")}
@@ -88,6 +89,7 @@ impute_zeroes = function(vec, method = "logunif"){
 #' @param method The method for zero imputation. One of "logunif", "unif" or "const".
 #' @param replicates A positive integer. Default is 1000. Controls how many replicates the median should be taken over.
 #' @return a vector of CLR-transformed data
+#' @importFrom stats median
 #'
 clr_imputed = function(vec, method = "logunif", replicates = 1000){
   if(! method %in% c("logunif", "unif", "const")){stop("`method` must be exactly `logunif`, `unif` or `const`")}

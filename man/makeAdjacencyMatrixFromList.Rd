@@ -9,7 +9,7 @@ makeAdjacencyMatrixFromList(tableY, dict_list)
 \arguments{
 \item{tableY}{A matrix containing metabolites of interest. Rows should be samples and columns should be features.}
 
-\item{dictionary}{A list that has compound names as entries. For general use, we recommend using the one provided in this package.}
+\item{dict_list}{A list that has compound names as entries. For general use, we recommend using the one provided in this package.}
 }
 \value{
 a binary adjacency matrix with compounds form tableY as rows and functions from tableX as columns.

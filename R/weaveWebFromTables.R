@@ -3,6 +3,8 @@
 #' @param tableY A table containing metabolites of interest. Rows should be samples and columns should be features.
 #' @param tableX A table containing functions of interest. Rows should be samples and columns should be features.
 #' @param dictionary A list that has compound names from tableY as names. Default is the dictionary provided in this package.
+#' @param verbose A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.
+
 #' For general use, we recommend sticking to that one. You can access the dictionary like this: \code{data(dictionary)}
 #' @return an \code{anansiWeb} object. Web is used as input for most of the main workflow of anansi.
 #' @export
@@ -59,7 +61,7 @@ weaveWebFromTables = function(tableY, tableX, dictionary = anansi::anansi_dic, v
 #' For general use, should probably not be called directly, but rather through \code{\link{weaveWebFromTables}}.
 #' @seealso \code{\link{weaveWebFromTables}}
 #' @param tableY A matrix containing metabolites of interest. Rows should be samples and columns should be features.
-#' @param dictionary A list that has compound names as entries. For general use, we recommend using the one provided in this package.
+#' @param dict_list A list that has compound names as entries. For general use, we recommend using the one provided in this package.
 #' @return a binary adjacency matrix with compounds form tableY as rows and functions from tableX as columns.
 #'
 makeAdjacencyMatrixFromList <- function(tableY, dict_list){

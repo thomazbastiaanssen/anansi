@@ -4,6 +4,7 @@
 #' @param groups A categorical or continuous value necessary for differential correlations. Typically a state or treatment score.
 #' @param adjust.method Method to adjust p-values for multiple comparisons. \code{adjust.method = "BH"} is the default value. See \code{p.adjust} in the base R \code{stats} package.
 #' @return a list of \code{anansiTale} result objects, one for the total model, one for emergent correlations and one for disjointed correlations.
+#' @importFrom stats anova lm pf residuals
 #'
 anansiDiffCor = function(web, groups, adjust.method = adjust.method){
   #Extract data from web
