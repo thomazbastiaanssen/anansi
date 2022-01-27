@@ -6,6 +6,7 @@
 #' @param adjust.method Method to adjust p-values for multiple comparisons. \code{adjust.method = "BH"} is the default value. See \code{p.adjust} in the base R \code{stats} package.
 #' @param verbose A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.
 #' @return a list of \code{anansiTale} result objects, one for the total dataset and per group if applicable.
+#' @seealso \code{\link{anansi}}
 #'
 anansiCorTestByGroup = function(web, method = "pearson", groups, adjust.method = adjust.method, verbose = T){
   #Determine all groups
@@ -13,16 +14,11 @@ anansiCorTestByGroup = function(web, method = "pearson", groups, adjust.method =
 
   #Assess correlations for entire data set
   all_out = anansiCorPvalue(web, method = method, adjust.method = adjust.method)
-  all_out@type = paste(all_out@type, "All", sep = "_")
+  all_out@subject = "All"
   out_list = list(All = all_out)
 
   #If groups argument is suitable, run subset analysis
-
-
-  ######################
-  ###################### fix me!!
-  ######################
-  if(length(unique(groups)) < floor(length(groups)/3)){
+  if(inherits(groups, "character") & all(table(groups) > 3) & length(all_groups > 1)){
 
   #If verbose, verbalize.
   if(verbose){print(paste("Running correlations for the following groups:",
@@ -32,7 +28,7 @@ anansiCorTestByGroup = function(web, method = "pearson", groups, adjust.method =
   #Assess correlations for subsets if applicable.
   for(i in 1:length(all_groups)){
     out_by_group = anansiCorPvalue(web, method = method, groups = groups == all_groups[i], adjust.method = adjust.method)
-    out_by_group@type = paste(out_by_group@type, all_groups[i], sep = "_")
+    out_by_group@subject = all_groups[i]
 
     out_list[[i+1]] = out_by_group
   }
@@ -49,6 +45,7 @@ anansiCorTestByGroup = function(web, method = "pearson", groups, adjust.method =
 #' @param groups A categorical or continuous value necessary for differential correlations. Typically a state or treatment score. If no argument provided, anansi will let you know and still to regular correlations according to your dictionary.
 #' @param adjust.method Method to adjust p-values for multiple comparisons. \code{adjust.method = "BH"} is the default value. See \code{p.adjust} in the base R \code{stats} package.
 #' @return An \code{anansiTale} result object.
+#' @seealso \code{\link{anansi}} \cr \code{\link{anansiCorTestByGroup}}
 #'
 anansiCorPvalue = function(web, method = "pearson", groups = NULL, adjust.method = adjust.method) {
   #Compute correlation coefficients
@@ -69,7 +66,8 @@ anansiCorPvalue = function(web, method = "pearson", groups = NULL, adjust.method
 
   #Collate correlation coefficients, p-values and q-values into an anansiTale
   out  <- new("anansiTale",
-              type       = "correlation",
+              subject    = "All",
+              type       = "r.values",
               estimates  = r,
               p.values   = p,
               q.values   = q)
@@ -80,6 +78,7 @@ anansiCorPvalue = function(web, method = "pearson", groups = NULL, adjust.method
 #' Typically, the main \code{anansi} function will run this for you.
 #' @param web An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables} for how to weave a web.
 #' @param method Correlation method. \code{method = "pearson"} is the default value. The alternatives to be passed to \code{cor} are "spearman" and "kendall".
+#' @seealso \code{\link{anansi}} \cr \code{\link{anansiCorTestByGroup}}
 #' @return A matrix of r-statistics.
 #'
 anansiCor = function(web, method = "pearson", groups = NULL){

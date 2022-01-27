@@ -8,6 +8,7 @@ setClass("anansiWeb",
 
 setClass("anansiTale",
          slots = c(
+           subject   = "character",
            type      = "character",
            estimates = "matrix",
            p.values  = "matrix",

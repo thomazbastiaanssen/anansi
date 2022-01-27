@@ -16,6 +16,7 @@ spinToLong <- function(anansi_output, prune = T){
 
   #Merge all individual correlation results into a single long data.frame
   long_out  = Reduce(rbind, flat_cor_list)
+  colnames(long_out)[3] = "r.values"
 
   if("model_results" %in% res_names){
     #Make a flat list of the model results in wide format

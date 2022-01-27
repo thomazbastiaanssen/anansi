@@ -4,18 +4,24 @@
 \alias{weaveWebFromTables}
 \title{Create an anansiWeb object from two 'omics tables and a dictionary}
 \usage{
-weaveWebFromTables(tableY, tableX, dictionary, verbose = T)
+weaveWebFromTables(
+  tableY,
+  tableX,
+  dictionary = anansi::anansi_dic,
+  verbose = T
+)
 }
 \arguments{
 \item{tableY}{A table containing metabolites of interest. Rows should be samples and columns should be features.}
 
 \item{tableX}{A table containing functions of interest. Rows should be samples and columns should be features.}
 
-\item{dictionary}{A list that has compound names from tableY as names. For general use, we recommend using the one provided in this package.}
+\item{dictionary}{A list that has compound names from tableY as names. Default is the dictionary provided in this package.
+For general use, we recommend sticking to that one. You can access the dictionary like this: \code{data(dictionary)}}
 }
 \value{
 an \code{anansiWeb} object. Web is used as input for most of the main workflow of anansi.
 }
 \description{
-Create an anansiWeb object from two 'omics tables and a dictionary
+This fucntion will take two dables of 'omics data, typically metabolomics and functional microbiome data. It will also take a dictionary list, which is provided in this package.
 }

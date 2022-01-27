@@ -1,10 +1,12 @@
 #' Create an anansiWeb object from two 'omics tables and a dictionary
+#' @description This fucntion will take two dables of 'omics data, typically metabolomics and functional microbiome data. It will also take a dictionary list, which is provided in this package.
 #' @param tableY A table containing metabolites of interest. Rows should be samples and columns should be features.
 #' @param tableX A table containing functions of interest. Rows should be samples and columns should be features.
-#' @param dictionary A list that has compound names from tableY as names. For general use, we recommend using the one provided in this package.
+#' @param dictionary A list that has compound names from tableY as names. Default is the dictionary provided in this package.
+#' For general use, we recommend sticking to that one. You can access the dictionary like this: \code{data(dictionary)}
 #' @return an \code{anansiWeb} object. Web is used as input for most of the main workflow of anansi.
 #' @export
-weaveWebFromTables = function(tableY, tableX, dictionary, verbose = T){
+weaveWebFromTables = function(tableY, tableX, dictionary = anansi::anansi_dic, verbose = T){
   #For conventional use, table Y should be metabolites and table X functions.
 
   # The two 'table' matrices MUST have row
@@ -21,6 +23,12 @@ weaveWebFromTables = function(tableY, tableX, dictionary, verbose = T){
 
   #create binary adjacency matrix first
   dictionary = makeAdjacencyMatrixFromList(tableY = tableY, dict_list = dictionary)
+
+  #Check if input tables have the same names and the same length.
+  if(!identical(row.names(tableY), row.names(tableX)))
+    {warning("The row names of tableY and tableX do not correspond. Please make sure they are in the same order.")}
+  if(nrow(tableY) != nrow(tableX))
+    {stop("tableY and tableX do not have the same number of rows/observations.")}
 
   available_tableY = sort(intersect(colnames(tableY), rownames(dictionary)))
   available_tableX = sort(intersect(colnames(tableX), colnames(dictionary)))
@@ -48,7 +56,7 @@ weaveWebFromTables = function(tableY, tableX, dictionary, verbose = T){
 
 #'Wrangle anansi dictionary list into binary adjacency matrix
 #' @description Takes the anansi dictionary in list format and wrangles it into a biary adjacency matrix based on which compounds are present in both the dictionary and  \code{tableY}.
-#' Should probably not be ran directly, but rather through \code{\link{weaveWebFromTables}}.
+#' For general use, should probably not be called directly, but rather through \code{\link{weaveWebFromTables}}.
 #' @seealso \code{\link{weaveWebFromTables}}
 #' @param tableY A matrix containing metabolites of interest. Rows should be samples and columns should be features.
 #' @param dictionary A list that has compound names as entries. For general use, we recommend using the one provided in this package.

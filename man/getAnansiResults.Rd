@@ -17,3 +17,6 @@ A wide format data.frame. The first two columns are the Compounds and Functions.
 \description{
 Extract information from an anansiTale object and parse it into a neat table
 }
+\seealso{
+\code{\link{spinToWide}}\cr \code{\link{spinToLong}}
+}

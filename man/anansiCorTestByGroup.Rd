@@ -29,3 +29,6 @@ a list of \code{anansiTale} result objects, one for the total dataset and per gr
 \description{
 If the \code{groups} argument is suitable, will also run correlation analysis per group. Typically, the main \code{anansi} function will run this for you.
 }
+\seealso{
+\code{\link{anansi}}
+}

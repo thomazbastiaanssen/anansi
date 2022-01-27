@@ -19,3 +19,6 @@ A matrix of r-statistics.
 Compute r-statistics for each compound-function pair in the dictionary.
 Typically, the main \code{anansi} function will run this for you.
 }
+\seealso{
+\code{\link{anansi}} \cr \code{\link{anansiCorTestByGroup}}
+}
