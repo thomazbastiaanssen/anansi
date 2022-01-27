@@ -2,8 +2,7 @@
 % Please edit documentation in R/anansiDiffCor.R
 \name{anansiDiffCor}
 \alias{anansiDiffCor}
-\title{Run differential correlation analysis for all interacting metabolites and functions.
-Can either take continuous or categorical data for \code{groups}. Typically, the main \code{anansi} function will run this for you.}
+\title{Run differential correlation analysis for all interacting metabolites and functions.}
 \usage{
 anansiDiffCor(web, groups, adjust.method = adjust.method)
 }
@@ -18,6 +17,5 @@ anansiDiffCor(web, groups, adjust.method = adjust.method)
 a list of \code{anansiTale} result objects, one for the total model, one for emergent correlations and one for disjointed correlations.
 }
 \description{
-Run differential correlation analysis for all interacting metabolites and functions.
 Can either take continuous or categorical data for \code{groups}. Typically, the main \code{anansi} function will run this for you.
 }

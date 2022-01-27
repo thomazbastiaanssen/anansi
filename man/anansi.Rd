@@ -30,5 +30,5 @@ anansi(
 A list of lists containing correlation coefficients, p-values and q-values for all operations.
 }
 \description{
-Calculate an association network
+This is the main workspider function in the anansi package. It manages the individual functionalities of anansi, including correlation analysis, correlation by group and differential correlation.
 }

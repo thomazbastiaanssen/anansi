@@ -1,5 +1,5 @@
 #' Run differential correlation analysis for all interacting metabolites and functions.
-#' Can either take continuous or categorical data for \code{groups}. Typically, the main \code{anansi} function will run this for you.
+#' @description Can either take continuous or categorical data for \code{groups}. Typically, the main \code{anansi} function will run this for you.
 #' @param web An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables} for how to weave a web.
 #' @param groups A categorical or continuous value necessary for differential correlations. Typically a state or treatment score.
 #' @param adjust.method Method to adjust p-values for multiple comparisons. \code{adjust.method = "BH"} is the default value. See \code{p.adjust} in the base R \code{stats} package.

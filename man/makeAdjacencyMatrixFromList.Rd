@@ -15,5 +15,9 @@ makeAdjacencyMatrixFromList(tableY, dict_list)
 a binary adjacency matrix with compounds form tableY as rows and functions from tableX as columns.
 }
 \description{
-Wrangle anansi dictionary list into binary adjacency matrix
+Takes the anansi dictionary in list format and wrangles it into a biary adjacency matrix based on which compounds are present in both the dictionary and  \code{tableY}.
+Should probably not be ran directly, but rather through \code{\link{weaveWebFromTables}}.
+}
+\seealso{
+\code{\link{weaveWebFromTables}}
 }

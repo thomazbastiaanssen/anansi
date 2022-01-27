@@ -12,8 +12,11 @@ impute_zeroes(vec, method = "logunif")
 \item{method}{The method for zero imputation. One of "logunif", "unif" or "const".}
 }
 \value{
-a vector with all the zeroes replaced with non-zero values.
+A vector with all the zeroes replaced with non-zero values.
 }
 \description{
-Replace zeroes with non-zero values in order to perform a CLR-transformation
+See \code{\link{clr_lite}}.
+}
+\seealso{
+\code{\link{clr_lite}}
 }

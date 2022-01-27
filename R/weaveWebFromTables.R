@@ -47,6 +47,9 @@ weaveWebFromTables = function(tableY, tableX, dictionary, verbose = T){
 }
 
 #'Wrangle anansi dictionary list into binary adjacency matrix
+#' @description Takes the anansi dictionary in list format and wrangles it into a biary adjacency matrix based on which compounds are present in both the dictionary and  \code{tableY}.
+#' Should probably not be ran directly, but rather through \code{\link{weaveWebFromTables}}.
+#' @seealso \code{\link{weaveWebFromTables}}
 #' @param tableY A matrix containing metabolites of interest. Rows should be samples and columns should be features.
 #' @param dictionary A list that has compound names as entries. For general use, we recommend using the one provided in this package.
 #' @return a binary adjacency matrix with compounds form tableY as rows and functions from tableX as columns.

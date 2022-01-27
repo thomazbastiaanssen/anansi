@@ -17,5 +17,8 @@ clr_imputed(vec, method = "logunif", replicates = 1000)
 a vector of CLR-transformed data
 }
 \description{
-Resample random values, perform CLR over each iteration and return the median result.
+See \code{clr_lite}.
+}
+\seealso{
+\code{\link{clr_lite}}
 }

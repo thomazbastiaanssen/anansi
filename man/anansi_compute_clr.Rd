@@ -10,8 +10,11 @@ anansi_compute_clr(x)
 \item{x}{A vector of compositional data without zeroes.}
 }
 \value{
-a vector of CLR-transformed data
+A vector of CLR-transformed data
 }
 \description{
-compute CLR using Aitchison's method
+See \code{clr_lite}.
+}
+\seealso{
+\code{\link{clr_lite}}
 }

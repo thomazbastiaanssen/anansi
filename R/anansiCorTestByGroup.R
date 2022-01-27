@@ -1,5 +1,5 @@
 #' Run correlations for all interacting metabolites and functions.
-#' If the \code{groups} argument is suitable, will also run correlation analysis per group. Typically, the main \code{anansi} function will run this for you.
+#' @description If the \code{groups} argument is suitable, will also run correlation analysis per group. Typically, the main \code{anansi} function will run this for you.
 #' @param web An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables} for how to weave a web.
 #' @param method Correlation method. \code{method = "pearson"} is the default value. The alternatives to be passed to \code{cor} are "spearman" and "kendall".
 #' @param groups A categorical or continuous value necessary for differential correlations. Typically a state or treatment score.
