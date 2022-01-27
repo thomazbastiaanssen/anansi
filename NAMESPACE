@@ -2,4 +2,6 @@
 
 export(anansi)
 export(clr_lite)
+export(spinToLong)
+export(spinToWide)
 export(weaveWebFromTables)

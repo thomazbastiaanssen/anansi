@@ -2,6 +2,7 @@
 #' @param anansi_output The output of the main anansi function.
 #' @param prune Boolean, default is TRUE. Toggles whether to take out the non-canonical associations.
 #' @return a wide format data.frame
+#' @export
 
 spinToWide <- function(anansi_output, prune = T){
   #First flatten all types  of results (cor, model, etc) and create a list of individual wide data.frames.

@@ -32,3 +32,44 @@ A list of lists containing correlation coefficients, p-values and q-values for a
 \description{
 This is the main workspider function in the anansi package. It manages the individual functionalities of anansi, including correlation analysis, correlation by group and differential correlation.
 }
+\examples{
+\dontrun{
+#Load example data:
+
+data(dictionary)
+data(FMT_data)
+
+#Clean and prepare the example data.
+#In the example dataset, the metabolites are already cleaned.
+
+KOs   <- floor(FMT_KOs)
+KOs   <- apply(KOs,c(1,2),function(x) as.numeric(as.character(x)))
+KOs   <- KOs[apply(KOs == 0, 1, sum) <= (ncol(KOs) * 0.90), ]
+
+KOs   <- KOs[row.names(KOs) \%in\% sort(unique(unlist(anansi_dic))),]
+
+#CLR-transform.
+
+KOs.exp = clr_lite(KOs)
+
+#Make sure that columns are features and rows are samples.
+
+t1 = t(FMT_metab)
+t2 = t(KOs.exp)
+
+#Run anansi pipeline.
+
+web        = weaveWebFromTables(tableY     = t1,
+                                tableX     = t2,
+                                dictionary = anansi_dic)
+
+anansi_out = anansi(web     = web,
+                    method  = "pearson",
+                    groups  = metadata$Legend,
+                    adjust.method = "BH",
+                    verbose = TRUE)
+
+results    = spinToWide(anansi_output = anansi_out)
+}
+
+}

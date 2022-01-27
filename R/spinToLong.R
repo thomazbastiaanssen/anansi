@@ -2,6 +2,7 @@
 #' @param anansi_output The output of the main anansi function.
 #' @param prune Boolean, default is TRUE. Toggles whether to take out the non-canonical associations.
 #' @return a long format data.frame intended to be compatible with \code{ggplot2}
+#' @export
 
 spinToLong <- function(anansi_output, prune = T){
   #Figure out how many types of results were computed (cor, model, etc). be sure to exclude the dictionary here

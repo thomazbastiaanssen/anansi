@@ -39,20 +39,16 @@ library(anansi)
 library(ggplot2)
 library(ggforce)
 
-#load anansi dictionary and human-readable names for KEGG compounds and orthologues
+#load anansi dictionary and complementary human-readable names for KEGG compounds and orthologues
 data(dictionary)
-data(cpd_translation)
-data(KO_translation)
 
-#load example data from FMT Aging study
-data(FMT_metadata)
-data(FMT_metabs)
-data(FMT_KOs)
+#load example data + metadata from FMT Aging study
+data(FMT_data)
 ```
 
 ## Data preparation
 
-The main anansi function expects data in the `anansiWeb` format;
+The main `anansi` function expects data in the `anansiWeb` format;
 Basically a list with exactly three tables: The first table, `tableY`,
 should be a count table of metabolites. The second table, `tableX`,
 should be a count table of functions. Both tables should have rows as
@@ -60,7 +56,7 @@ features and columns as samples.
 
 the third table should be a binary adjacency matrix with the column
 names of `tableY` as rows and the column names of `tableX` as columns.
-Such an adjacency matrix is provided in the anansi library and is
+Such an adjacency matrix is provided in the `anansi` library and is
 referred to as a dictionary (because you use it to look up which
 metabolites interact with which functions).
 
