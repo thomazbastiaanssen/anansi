@@ -2,20 +2,16 @@
 % Please edit documentation in R/clr_lite.R
 \name{anansi_compute_clr}
 \alias{anansi_compute_clr}
-\title{Impute zeroes and perform a centered log-ratio (CLR) transformation on your count table}
+\title{compute CLR using Aitchison's method}
 \usage{
 anansi_compute_clr(x)
 }
 \arguments{
-\item{counts}{A count table.}
-
-\item{method}{The method for zero imputation. One of "logunif", "unif" or "const".}
-
-\item{replicates}{An integer. for the two random sampling methods, if this is larger than 1, every zero will be imputed that many times. The median of the CLR of all those replicates will be returned.}
+\item{x}{A vector of compositional data without zeroes.}
 }
 \value{
-A CLR-transformed count table.
+a vector of CLR-transformed data
 }
 \description{
-Impute zeroes and perform a centered log-ratio (CLR) transformation on your count table
+compute CLR using Aitchison's method
 }
