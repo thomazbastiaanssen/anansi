@@ -2,6 +2,7 @@
 #' @param tableY A matrix containing metabolites of interest. Rows should be samples and columns should be features.
 #' @param dictionary A list that has compound names as entries. For general use, we recommend using the one provided in this package.
 #' @return a binary adjacency matrix with compounds form tableY as rows and functions from tableX as columns.
+#'
 makeAdjacencyMatrixFromList <- function(tableY, dict_list){
   #Prune list to only contain metabolites in tableY
   dict_pruned = dict_list[names(dict_list) %in% colnames(tableY)]

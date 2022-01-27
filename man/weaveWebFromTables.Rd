@@ -14,7 +14,7 @@ weaveWebFromTables(tableY, tableX, dictionary, verbose = T)
 \item{dictionary}{A list that has compound names from tableY as names. For general use, we recommend using the one provided in this package.}
 }
 \value{
-an anansiWeb object. Web is used as input for most of the main workflow of anansi.
+an \code{anansiWeb} object. Web is used as input for most of the main workflow of anansi.
 }
 \description{
 Create an anansiWeb object from two 'omics tables and a dictionary

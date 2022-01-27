@@ -6,7 +6,7 @@
 #' @param verbose A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.
 #' @param diff_cor A boolean. Toggles whether to compute differential correlations. Default is \code{TRUE}.
 #' @return A list of lists containing correlation coefficients, p-values and q-values for all operations.
-
+#'
 anansi = function(web, method = "pearson", groups = NULL, adjust.method = "BH", verbose = T, diff_cor = T){
 
   if(inherits(groups, "character")){

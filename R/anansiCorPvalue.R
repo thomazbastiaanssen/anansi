@@ -1,3 +1,11 @@
+#' Compute r-statistics for each compound-function pair in the dictionary.
+#' Typically, the main \code{anansi} function will run this for you.
+#' @param web An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables} for how to weave a web.
+#' @param method Correlation method. \code{method = "pearson"} is the default value. The alternatives to be passed to \code{cor} are "spearman" and "kendall".
+#' @param groups A categorical or continuous value necessary for differential correlations. Typically a state or treatment score. If no argument provided, anansi will let you know and still to regular correlations according to your dictionary.
+#' @param adjust.method Method to adjust p-values for multiple comparisons. \code{adjust.method = "BH"} is the default value. See \code{p.adjust} in the base R \code{stats} package.
+#' @return An \code{anansiTale} result object.
+#'
 anansiCorPvalue = function(web, method = "pearson", groups = NULL, adjust.method = adjust.method) {
   #Compute correlation coefficients
   r    <- anansiCor(web = web, method = method, groups = groups)

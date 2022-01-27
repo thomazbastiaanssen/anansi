@@ -1,3 +1,9 @@
+#' Impute zeroes and perform a centered log-ratio (CLR) transformation on your count table
+#' @param counts A count table.
+#' @param method The method for zero imputation. One of "logunif", "unif" or "const".
+#' @param replicates An integer. for the two random sampling methods, if this is larger than 1, every zero will be imputed that many times. The median of the CLR of all those replicates will be returned.
+#' @return A CLR-transformed count table.
+#'
 anansi_compute_clr = function(x){
   #compute CLR using Aitchison's method
   return(log(x/exp(mean(log(x)))))
