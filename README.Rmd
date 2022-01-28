@@ -119,7 +119,7 @@ anansiLong <- anansiLong[anansiLong$model_full_q.values < 0.1,]
 
 The long format can be helpful to plug the data into `ggplot2`. Here, we recreate part of the results from the FMT Aging study.
 
-```{r, eval=TRUE, fig.width = 10, fig.height = 10}
+```{r plot_FMT, eval=TRUE, fig.width = 10, fig.height = 10}
 
 ggplot(data = anansiLong, 
        aes(x      = r.values, 

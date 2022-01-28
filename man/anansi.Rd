@@ -65,7 +65,7 @@ web        = weaveWebFromTables(tableY     = t1,
 
 anansi_out = anansi(web     = web,
                     method  = "pearson",
-                    groups  = metadata$Legend,
+                    groups  = FMT_metadata$Legend,
                     adjust.method = "BH",
                     verbose = TRUE)
 

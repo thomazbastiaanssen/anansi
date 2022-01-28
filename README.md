@@ -183,4 +183,4 @@ ggplot(data = anansiLong,
   xlab("Pearson's rho")
 ```
 
-![](README_files/figure-markdown_github/unnamed-chunk-7-1.png)
+![](README_files/figure-markdown_github/plot_FMT-1.png)
