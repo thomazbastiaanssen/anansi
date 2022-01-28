@@ -1,8 +1,17 @@
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
+## Introduction
+
 The `anansi` package computes and compares the association between the
 features of two ’omics datasets that are known to interact based on a
-database such as KEGG.
+database such as KEGG. Studies including both microbiome and
+metabolomics data are becoming more common. Often, it would be helpful
+to integrate both datasets in order to see if they corroborate each
+others patterns. All vs all association is imprecise and likely to yield
+spurious associations. This package takes a knowledge-based approach to
+constrain association search space, only considering metabolite-function
+interactions that have been recorded in a pathway database. This package
+also provides a framework to assess differential association.
 
 If you use this software, please cite our work.
 
@@ -27,6 +36,8 @@ citation("anansi")
     ##     year = {2022},
     ##     note = {R package version 0.5.0},
     ##   }
+
+## Setup
 
 OK, now let’s get started.
 

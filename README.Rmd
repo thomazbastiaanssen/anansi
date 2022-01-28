@@ -12,14 +12,22 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 library(anansi)
 ```
+## Introduction
 
-The `anansi` package computes and compares the association between the features of two 'omics datasets that are known to interact based on a database such as KEGG. 
+The `anansi` package computes and compares the association between the features of two 'omics datasets that are known to interact based on a database such as KEGG. Studies including both microbiome and metabolomics data are becoming more common. 
+Often, it would be helpful to integrate both datasets in order to see if they corroborate 
+each others patterns. All vs all association is imprecise and likely to yield spurious 
+associations. This package takes a knowledge-based approach to constrain association 
+search space, only considering metabolite-function interactions that have been recorded
+in a pathway database. This package also provides a framework to assess differential 
+association. 
 
 If you use this software, please cite our work.
 
 ```{r}
 citation("anansi")
 ```
+## Setup
 
 OK, now let's get started.
 
