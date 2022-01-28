@@ -71,9 +71,6 @@ Such an adjacency matrix is provided in the `anansi` library and is
 referred to as a dictionary (because you use it to look up which
 metabolites interact with which functions).
 
-the `weaveWebFromTables()` function can be used to parse these tables
-into an `anansiWeb` object.
-
 ``` r
 #Clean and CLR-transform the KEGG orthologue table
 KOs   <- floor(FMT_KOs)
@@ -90,13 +87,24 @@ t1 = t(FMT_metab)
 t2 = t(KOs.exp)
 ```
 
-## weave a web
+## Weave a web
+
+The `weaveWebFromTables()` function can be used to parse the tables that
+we prepared above into an `anansiWeb` object.
 
 ``` r
 web = weaveWebFromTables(tableY = t1, tableX = t2, dictionary = anansi_dic)
 ```
 
 ## Run anansi
+
+The main workspider in this package is called `anansi`. Generally, you
+want to give it two arguments. First, there’s `web`, which is an
+`ananisWeb` object, such as the one we generated in the above step.
+Second, there’s `groups`, which should be a vector to compare the
+associations on. For instance, this may be a vector containing
+categories such as your treatment groups, or even a continuous value
+like age.
 
 ``` r
 anansi_out = anansi(web    = web, #generated above
