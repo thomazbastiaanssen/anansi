@@ -120,7 +120,7 @@ like age or .
 ``` r
 anansi_out = anansi(web    = web, #generated above
                     method = "pearson", #define the type of correlation used
-                    groups = FMT_metadata$Legend, #optional, to compare associations between groups
+                    groups = FMT_metadata$Legend, #Compare associations between treatments
                     adjust.method = "BH", #apply the Benjamini-Hochberg procedure for FDR
                     verbose = T #To let you know what's happening
                     )
