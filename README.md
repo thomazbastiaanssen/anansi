@@ -53,7 +53,7 @@ Fig. 7” in that paper.
 
 ``` r
 #install and load anansi
-#devtools::install_github("thomazbastiaanssen/anansi")
+#devtools::install_github("thomazbastiaanssen/anansi", )
 library(anansi)
 
 #load ggplot2 and ggforce to plot results

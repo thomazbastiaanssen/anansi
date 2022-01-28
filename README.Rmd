@@ -38,7 +38,7 @@ A very early version of `anansi` was used to generate "Extended Data Fig. 7" in 
 
 ```{r, eval=FALSE}
 #install and load anansi
-#devtools::install_github("thomazbastiaanssen/anansi")
+#devtools::install_github("thomazbastiaanssen/anansi", )
 library(anansi)
 
 #load ggplot2 and ggforce to plot results
