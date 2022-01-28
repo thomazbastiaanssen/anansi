@@ -62,15 +62,30 @@ Both tables should have rows as features and columns as samples.
 
 the third table should be a binary adjacency matrix with the column names of `tableY` as rows and the column names of `tableX` as columns. Such an adjacency matrix is provided in the `anansi` library and is referred to as a dictionary (because you use it to look up which metabolites interact with which functions).  
 
+### A note on functional microbiome data
+
+Two common questions in the host-microbiome field are "Who's there?" and "What are they doing?". 
+Techniques like 16S sequencing and shotgun metagenomics sequencing are most commonly used to answer the first question. 
+The second question can be a bit more tricky - often we'll need functional inference software to address them. 
+For 16S sequencing, algorithms like PICRUSt2 and Piphillin can be used to infer function. For shotgun metagenomics, HUMANn3 in the bioBakery suite can be used.  
+All of these algorithms can produce functional count data in terms of KEGG Orthologues (KOs). These tables can be directly plugged in to `anansi`. 
+
 ```{r, eval=TRUE}
-#Clean and CLR-transform the KEGG orthologue table
-KOs     <- floor(FMT_KOs)
+#Clean and CLR-transform the KEGG orthologue table.
+
+#Only keep functions that are represented in the dictionary.
+KOs     <- FMT_KOs[row.names(FMT_KOs) %in% sort(unique(unlist(anansi_dic))),]
+
+#Cut the decimal part off.
+KOs     <- floor(KOs)
+
+#Ensure all entires are numbers.
 KOs     <- apply(KOs,c(1,2),function(x) as.numeric(as.character(x)))
+
+#Remove all features with < 10% prevalence in the dataset.
 KOs     <- KOs[apply(KOs == 0, 1, sum) <= (ncol(KOs) * 0.90), ] 
 
-#only keep functions that are represented in the dictionary
-KOs     <- KOs[row.names(KOs) %in% sort(unique(unlist(anansi_dic))),]
-
+#Perform a centered log-ratio transformation on the functional count table.
 KOs.exp <- clr_lite(KOs)
 
 #anansi expects samples to be rows and features to be columns. 
