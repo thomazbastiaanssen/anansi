@@ -81,12 +81,13 @@ metabolites interact with which functions).
 ### A note on functional microbiome data
 
 Two common questions in the host-microbiome field are “Who’s there?” and
-“What are they doing?”. Techniques like 16S sequencing and shotgun
-metagenomics sequencing are most commonly used to answer the first
-question. The second question can be a bit more tricky - often we’ll
-need functional inference software to address them. For 16S sequencing,
-algorithms like PICRUSt2 and Piphillin can be used to infer function.
-For shotgun metagenomics, HUMANn3 in the bioBakery suite can be used.  
+“What are they doing?”.  
+Techniques like 16S sequencing and shotgun metagenomics sequencing are
+most commonly used to answer the first question. The second question can
+be a bit more tricky - often we’ll need functional inference software to
+address them. For 16S sequencing, algorithms like PICRUSt2 and Piphillin
+can be used to infer function. For shotgun metagenomics, HUMANn3 in the
+bioBakery suite can be used.  
 All of these algorithms can produce functional count data in terms of
 KEGG Orthologues (KOs). These tables can be directly plugged in to
 `anansi`.
