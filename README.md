@@ -42,8 +42,9 @@ citation("anansi")
 OK, now let’s get started. We’ll load a complementary training dataset
 using `data(FMT_data)`. This loads a curated snippet from the dataset
 described in more detail here:
-<https://doi.org/10.1038/s43587-021-00093-9> A very early version of
-`anansi` was used to generate “Extended Data Fig. 7” in that paper.
+<https://doi.org/10.1038/s43587-021-00093-9>  
+A very early version of `anansi` was used to generate “Extended Data
+Fig. 7” in that paper.
 
 ``` r
 #install and load anansi
