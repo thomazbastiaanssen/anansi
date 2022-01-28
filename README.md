@@ -39,7 +39,11 @@ citation("anansi")
 
 ## Setup
 
-OK, now let’s get started.
+OK, now let’s get started. We’ll load a complementary training dataset
+using `data(FMT_data)`. This loads a curated snippet from the dataset
+described in more detail here:
+<https://doi.org/10.1038/s43587-021-00093-9> A very early version of
+`anansi` was used to generate “Extended Data Fig. 7” in that paper.
 
 ``` r
 #install and load anansi
@@ -122,7 +126,7 @@ functions exist that will wrangle your data to more friendly formats for
 you. You can either use `spinToLong()` or `spinToWide()`. They will give
 you long or wide format data.frames, respectively. For general
 reporting, we recommend sticking to the wide format as it’s the most
-legible. The long format can be helpful to plug the data into `ggplot2`.
+legible.
 
 ``` r
 anansiLong = spinToLong(anansi_output = anansi_out)  
@@ -134,9 +138,10 @@ anansiLong = anansiLong[anansiLong$model_full_q.values < 0.1,]
 
 ## Plot the results
 
-``` r
-#Plug into ggplot2
+The long format can be helpful to plug the data into `ggplot2`. Here, we
+recreate part of the results from the FMT Aging study.
 
+``` r
 ggplot(data = anansiLong, 
        aes(x      = r.values, 
            y      = Functions, 
