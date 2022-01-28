@@ -115,23 +115,26 @@ anansi_out = anansi(web    = web, #generated above
                     )
 ```
 
-## Plot the results
+## Spin to a table
 
-Anansi gives a complex nested list of lists as an output. Two functions
-exist that will wrangle your data to more friendly formats for you. You
-can either use `spinToLong()` or `spinToWide()`. They will give you long
-or wide format data.frames, respectively. For general reporting, we
-recommend sticking to the wide format as it’s the most legible. The long
-format can be helpful to plug the data into `ggplot2`.
+`anansi` gives a complex nested list of lists as an output. Two
+functions exist that will wrangle your data to more friendly formats for
+you. You can either use `spinToLong()` or `spinToWide()`. They will give
+you long or wide format data.frames, respectively. For general
+reporting, we recommend sticking to the wide format as it’s the most
+legible. The long format can be helpful to plug the data into `ggplot2`.
 
 ``` r
 anansiLong = spinToLong(anansi_output = anansi_out)  
-
 #Now it's ready to be plugged into ggplot2, though let's clean up a bit more. 
 
 #Only consider interactions where the entire model fits well enough. 
 anansiLong = anansiLong[anansiLong$model_full_q.values < 0.1,]
+```
 
+## Plot the results
+
+``` r
 #Plug into ggplot2
 
 ggplot(data = anansiLong, 
