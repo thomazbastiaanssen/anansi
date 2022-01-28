@@ -36,9 +36,9 @@ We'll load a complementary training dataset using `data(FMT_data)`. This loads a
 A very early version of `anansi` was used to generate "Extended Data Fig. 7" in that paper. 
 
 
-```{r, eval=FALSE}
+```{r, eval=TRUE}
 #install and load anansi
-#devtools::install_github("thomazbastiaanssen/anansi", )
+#devtools::install_github("thomazbastiaanssen/anansi")
 library(anansi)
 
 #load ggplot2 and ggforce to plot results
@@ -62,20 +62,20 @@ Both tables should have rows as features and columns as samples.
 
 the third table should be a binary adjacency matrix with the column names of `tableY` as rows and the column names of `tableX` as columns. Such an adjacency matrix is provided in the `anansi` library and is referred to as a dictionary (because you use it to look up which metabolites interact with which functions).  
 
-```{r, eval=FALSE}
+```{r, eval=TRUE}
 #Clean and CLR-transform the KEGG orthologue table
-KOs   <- floor(FMT_KOs)
-KOs   <- apply(KOs,c(1,2),function(x) as.numeric(as.character(x)))
-KOs   <- KOs[apply(KOs == 0, 1, sum) <= (ncol(KOs) * 0.90), ] 
+KOs     <- floor(FMT_KOs)
+KOs     <- apply(KOs,c(1,2),function(x) as.numeric(as.character(x)))
+KOs     <- KOs[apply(KOs == 0, 1, sum) <= (ncol(KOs) * 0.90), ] 
 
 #only keep functions that are represented in the dictionary
-KOs   <- KOs[row.names(KOs) %in% sort(unique(unlist(anansi_dic))),]
+KOs     <- KOs[row.names(KOs) %in% sort(unique(unlist(anansi_dic))),]
 
-KOs.exp = clr_lite(KOs)
+KOs.exp <- clr_lite(KOs)
 
 #anansi expects samples to be rows and features to be columns. 
-t1 = t(FMT_metab)
-t2 = t(KOs.exp)
+t1      <- t(FMT_metab)
+t2      <- t(KOs.exp)
 ```
 
 ## Weave a web
@@ -83,21 +83,21 @@ t2 = t(KOs.exp)
 The `weaveWebFromTables()` function can be used to parse the tables that we prepared above into an `anansiWeb` object. 
 The `anansiWeb` format is a necessary input file for the main `anansi` workflow. 
 
-```{r, eval=FALSE}
-web = weaveWebFromTables(tableY = t1, tableX = t2, dictionary = anansi_dic)
+```{r, eval=TRUE}
+web <- weaveWebFromTables(tableY = t1, tableX = t2, dictionary = anansi_dic)
 ```
 
 ## Run anansi
 
 The main workspider in this package is called `anansi`. Generally, you want to give it two arguments. First, there's `web`, which is an `ananisWeb` object, such as the one we generated in the above step. Second, there's `groups`, which should be a vector to compare the associations on. For instance, this may be a vector containing categories such as your treatment groups, or even a continuous value like age or . 
 
-```{r, eval=FALSE}
-anansi_out = anansi(web    = web, #generated above
-                    method = "pearson", #define the type of correlation used
-                    groups = FMT_metadata$Legend, #Compare associations between treatments
-                    adjust.method = "BH", #apply the Benjamini-Hochberg procedure for FDR
-                    verbose = T #To let you know what's happening
-                    )
+```{r, eval=TRUE}
+anansi_out <- anansi(web    = web, #generated above
+                     method = "pearson", #define the type of correlation used
+                     groups = FMT_metadata$Legend, #Compare associations between treatments
+                     adjust.method = "BH", #apply the Benjamini-Hochberg procedure for FDR
+                     verbose = T #To let you know what's happening
+                     )
 
 ```
 ## Spin to a table
@@ -106,20 +106,20 @@ anansi_out = anansi(web    = web, #generated above
 You can either use `spinToLong()` or `spinToWide()`. They will give you long or wide format data.frames, respectively.
 For general reporting, we recommend sticking to the wide format as it's the most legible. 
 
-```{r, eval=FALSE}
+```{r, eval=TRUE}
 
-anansiLong = spinToLong(anansi_output = anansi_out)  
+anansiLong <- spinToLong(anansi_output = anansi_out)  
 #Now it's ready to be plugged into ggplot2, though let's clean up a bit more. 
 
 #Only consider interactions where the entire model fits well enough. 
-anansiLong = anansiLong[anansiLong$model_full_q.values < 0.1,]
+anansiLong <- anansiLong[anansiLong$model_full_q.values < 0.1,]
 
 ```
 ## Plot the results
 
 The long format can be helpful to plug the data into `ggplot2`. Here, we recreate part of the results from the FMT Aging study.
 
-```{r, eval=FALSE, fig.width = 10, fig.height = 10}
+```{r, eval=TRUE, fig.width = 10, fig.height = 10}
 
 ggplot(data = anansiLong, 
        aes(x      = r.values, 

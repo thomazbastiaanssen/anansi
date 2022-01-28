@@ -53,7 +53,7 @@ Fig. 7” in that paper.
 
 ``` r
 #install and load anansi
-#devtools::install_github("thomazbastiaanssen/anansi", )
+#devtools::install_github("thomazbastiaanssen/anansi")
 library(anansi)
 
 #load ggplot2 and ggforce to plot results
@@ -83,18 +83,18 @@ metabolites interact with which functions).
 
 ``` r
 #Clean and CLR-transform the KEGG orthologue table
-KOs   <- floor(FMT_KOs)
-KOs   <- apply(KOs,c(1,2),function(x) as.numeric(as.character(x)))
-KOs   <- KOs[apply(KOs == 0, 1, sum) <= (ncol(KOs) * 0.90), ] 
+KOs     <- floor(FMT_KOs)
+KOs     <- apply(KOs,c(1,2),function(x) as.numeric(as.character(x)))
+KOs     <- KOs[apply(KOs == 0, 1, sum) <= (ncol(KOs) * 0.90), ] 
 
 #only keep functions that are represented in the dictionary
-KOs   <- KOs[row.names(KOs) %in% sort(unique(unlist(anansi_dic))),]
+KOs     <- KOs[row.names(KOs) %in% sort(unique(unlist(anansi_dic))),]
 
-KOs.exp = clr_lite(KOs)
+KOs.exp <- clr_lite(KOs)
 
 #anansi expects samples to be rows and features to be columns. 
-t1 = t(FMT_metab)
-t2 = t(KOs.exp)
+t1      <- t(FMT_metab)
+t2      <- t(KOs.exp)
 ```
 
 ## Weave a web
@@ -104,8 +104,11 @@ we prepared above into an `anansiWeb` object. The `anansiWeb` format is
 a necessary input file for the main `anansi` workflow.
 
 ``` r
-web = weaveWebFromTables(tableY = t1, tableX = t2, dictionary = anansi_dic)
+web <- weaveWebFromTables(tableY = t1, tableX = t2, dictionary = anansi_dic)
 ```
+
+    ## [1] "3 were matched between table 1 and the columns of the adjacency matrix"
+    ## [1] "50 were matched between table 2 and the rows of the adjacency matrix"
 
 ## Run anansi
 
@@ -118,13 +121,17 @@ categories such as your treatment groups, or even a continuous value
 like age or .
 
 ``` r
-anansi_out = anansi(web    = web, #generated above
-                    method = "pearson", #define the type of correlation used
-                    groups = FMT_metadata$Legend, #Compare associations between treatments
-                    adjust.method = "BH", #apply the Benjamini-Hochberg procedure for FDR
-                    verbose = T #To let you know what's happening
-                    )
+anansi_out <- anansi(web    = web, #generated above
+                     method = "pearson", #define the type of correlation used
+                     groups = FMT_metadata$Legend, #Compare associations between treatments
+                     adjust.method = "BH", #apply the Benjamini-Hochberg procedure for FDR
+                     verbose = T #To let you know what's happening
+                     )
 ```
+
+    ## [1] "Running annotation-based correlations"
+    ## [1] "Running correlations for the following groups: Aged yFMT, Aged oFMT, Young yFMT and all together"
+    ## [1] "Fitting models for differential correlation testing"
 
 ## Spin to a table
 
@@ -136,11 +143,11 @@ reporting, we recommend sticking to the wide format as it’s the most
 legible.
 
 ``` r
-anansiLong = spinToLong(anansi_output = anansi_out)  
+anansiLong <- spinToLong(anansi_output = anansi_out)  
 #Now it's ready to be plugged into ggplot2, though let's clean up a bit more. 
 
 #Only consider interactions where the entire model fits well enough. 
-anansiLong = anansiLong[anansiLong$model_full_q.values < 0.1,]
+anansiLong <- anansiLong[anansiLong$model_full_q.values < 0.1,]
 ```
 
 ## Plot the results
@@ -175,3 +182,5 @@ ggplot(data = anansiLong,
   ylab("") + 
   xlab("Pearson's rho")
 ```
+
+![](README_files/figure-markdown_github/unnamed-chunk-7-1.png)
