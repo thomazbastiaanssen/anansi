@@ -78,7 +78,7 @@ t1      <- t(FMT_metab)
 t2      <- t(KOs.exp)
 ```
 
-## Weave a web
+## Weave a web🕸️
 
 The `weaveWebFromTables()` function can be used to parse the tables that we prepared above into an `anansiWeb` object. 
 The `anansiWeb` format is a necessary input file for the main `anansi` workflow. 
@@ -87,7 +87,7 @@ The `anansiWeb` format is a necessary input file for the main `anansi` workflow.
 web <- weaveWebFromTables(tableY = t1, tableX = t2, dictionary = anansi_dic)
 ```
 
-## Run anansi
+## Run anansi🕷️
 
 The main workspider in this package is called `anansi`. Generally, you want to give it two arguments. First, there's `web`, which is an `ananisWeb` object, such as the one we generated in the above step. Second, there's `groups`, which should be a vector to compare the associations on. For instance, this may be a vector containing categories such as your treatment groups, or even a continuous value like age or . 
 
@@ -100,7 +100,7 @@ anansi_out <- anansi(web    = web, #generated above
                      )
 
 ```
-## Spin to a table
+## Spin to a table📝
 
 `anansi` gives a complex nested list of lists as an output. Two functions exist that will wrangle your data to more friendly formats for you. 
 You can either use `spinToLong()` or `spinToWide()`. They will give you long or wide format data.frames, respectively.

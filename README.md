@@ -94,7 +94,7 @@ t1      <- t(FMT_metab)
 t2      <- t(KOs.exp)
 ```
 
-## Weave a web
+## Weave a web🕸️
 
 The `weaveWebFromTables()` function can be used to parse the tables that
 we prepared above into an `anansiWeb` object. The `anansiWeb` format is
@@ -107,7 +107,7 @@ web <- weaveWebFromTables(tableY = t1, tableX = t2, dictionary = anansi_dic)
     ## [1] "3 were matched between table 1 and the columns of the adjacency matrix"
     ## [1] "50 were matched between table 2 and the rows of the adjacency matrix"
 
-## Run anansi
+## Run anansi🕷️
 
 The main workspider in this package is called `anansi`. Generally, you
 want to give it two arguments. First, there’s `web`, which is an
@@ -130,7 +130,7 @@ anansi_out <- anansi(web    = web, #generated above
     ## [1] "Running correlations for the following groups: Aged yFMT, Aged oFMT, Young yFMT and all together"
     ## [1] "Fitting models for differential correlation testing"
 
-## Spin to a table
+## Spin to a table📝
 
 `anansi` gives a complex nested list of lists as an output. Two
 functions exist that will wrangle your data to more friendly formats for
