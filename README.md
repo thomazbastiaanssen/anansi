@@ -13,6 +13,11 @@ constrain association search space, only considering metabolite-function
 interactions that have been recorded in a pathway database. This package
 also provides a framework to assess differential association.
 
+While `anansi` is geared towards metabolite-function interactions in the
+context of host-microbe interactions, it is perfectly capable of
+handling any other pair of datasets where some features interact
+canonically.
+
 If you use this software, please cite our work.
 
 ``` r
@@ -95,7 +100,8 @@ t2 = t(KOs.exp)
 ## Weave a web
 
 The `weaveWebFromTables()` function can be used to parse the tables that
-we prepared above into an `anansiWeb` object.
+we prepared above into an `anansiWeb` object. The `anansiWeb` format is
+a necessary input file for the main `anansi` workflow.
 
 ``` r
 web = weaveWebFromTables(tableY = t1, tableX = t2, dictionary = anansi_dic)
@@ -109,7 +115,7 @@ want to give it two arguments. First, there’s `web`, which is an
 Second, there’s `groups`, which should be a vector to compare the
 associations on. For instance, this may be a vector containing
 categories such as your treatment groups, or even a continuous value
-like age.
+like age or .
 
 ``` r
 anansi_out = anansi(web    = web, #generated above
