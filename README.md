@@ -24,9 +24,6 @@ If you use this software, please cite our work.
 citation("anansi")
 ```
 
-    ## Warning in citation("anansi"): no date field in DESCRIPTION file of package
-    ## 'anansi'
-
     ## 
     ## To cite package 'anansi' in publications use:
     ## 
