@@ -13,13 +13,13 @@ anansiCorTestByGroup(
 )
 }
 \arguments{
-\item{web}{An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables} for how to weave a web.}
+\item{web}{An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.}
 
-\item{method}{Correlation method. \code{method = "pearson"} is the default value. The alternatives to be passed to \code{cor} are "spearman" and "kendall".}
+\item{method}{Correlation method. \code{method = "pearson"} is the default value. The alternatives to be passed to \code{cor()} are "spearman" and "kendall".}
 
 \item{groups}{A categorical or continuous value necessary for differential correlations. Typically a state or treatment score.}
 
-\item{adjust.method}{Method to adjust p-values for multiple comparisons. \code{adjust.method = "BH"} is the default value. See \code{p.adjust} in the base R \code{stats} package.}
+\item{adjust.method}{Method to adjust p-values for multiple comparisons. \code{adjust.method = "BH"} is the default value. See \code{p.adjust()} in the base R \code{stats} package.}
 
 \item{verbose}{A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.}
 }
@@ -27,7 +27,7 @@ anansiCorTestByGroup(
 a list of \code{anansiTale} result objects, one for the total dataset and per group if applicable.
 }
 \description{
-If the \code{groups} argument is suitable, will also run correlation analysis per group. Typically, the main \code{anansi} function will run this for you.
+If the \code{groups} argument is suitable, will also run correlation analysis per group. Typically, the main \code{anansi()} function will run this for you.
 }
 \seealso{
 \code{\link{anansi}}

@@ -1,6 +1,8 @@
 #' Impute zeroes and perform a centered log-ratio (CLR) transformation
 #' @description Microbiome data is compositional. When compositional data is examined using non-compositional methods, many problems arise.
-#' Performing a centered log-ratio transformation is a reasonable way to address these problems reasonably well.\cr \cr
+#' Performing a centered log-ratio transformation is a reasonable way to address these problems reasonably well.
+#'
+#' \cr \cr
 #' A major problem with this approach is that microbiome data typically contains lots of zeroes and the logarithm of zero is undefined.
 #' Here, we implemented a few methods discussed by Lubbe \emph{et al.} 2021 to replace zeroes with non-zero values in such a way that the structure of the data remains reasonably well preserved.
 #' \cr \cr

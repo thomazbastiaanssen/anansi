@@ -132,7 +132,7 @@ web <- weaveWebFromTables(tableY = t1, tableX = t2, dictionary = anansi_dic)
 
 The main workspider in this package is called `anansi`. Generally, you
 want to give it two arguments. First, there’s `web`, which is an
-`ananisWeb` object, such as the one we generated in the above step.
+`anansiWeb` object, such as the one we generated in the above step.
 Second, there’s `groups`, which should be a vector to compare the
 associations on. For instance, this may be a vector containing
 categories such as your treatment groups, or even a continuous value

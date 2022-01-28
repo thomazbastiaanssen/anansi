@@ -3,9 +3,9 @@
 \docType{class}
 \name{anansiTale-class}
 \alias{anansiTale-class}
-\title{An S4 class to contain all anansi results so that they can easily be extracted.}
+\title{An S4 class to contain all \code{anansi} results so that they can easily be extracted.}
 \description{
-anansiTale is the main container that will hold your output data coming out of the \code{anansi} pipeline.
+\code{anansiTale} is the main container that will hold your output data coming out of the \code{anansi} pipeline.
 }
 \section{Slots}{
 

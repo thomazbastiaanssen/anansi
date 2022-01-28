@@ -3,7 +3,7 @@
 \name{anansiCorPvalue}
 \alias{anansiCorPvalue}
 \title{Compute r-statistics for each compound-function pair in the dictionary.
-Typically, the main \code{anansi} function will run this for you.}
+Typically, the main \code{anansi()} function will run this for you.}
 \usage{
 anansiCorPvalue(
   web,
@@ -13,20 +13,20 @@ anansiCorPvalue(
 )
 }
 \arguments{
-\item{web}{An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables} for how to weave a web.}
+\item{web}{An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.}
 
-\item{method}{Correlation method. \code{method = "pearson"} is the default value. The alternatives to be passed to \code{cor} are "spearman" and "kendall".}
+\item{method}{Correlation method. \code{method = "pearson"} is the default value. The alternatives to be passed to \code{cor()} are "spearman" and "kendall".}
 
 \item{groups}{A categorical or continuous value necessary for differential correlations. Typically a state or treatment score. If no argument provided, anansi will let you know and still to regular correlations according to your dictionary.}
 
-\item{adjust.method}{Method to adjust p-values for multiple comparisons. \code{adjust.method = "BH"} is the default value. See \code{p.adjust} in the base R \code{stats} package.}
+\item{adjust.method}{Method to adjust p-values for multiple comparisons. \code{adjust.method = "BH"} is the default value. See \code{p.adjust()} in the base R \code{stats} package.}
 }
 \value{
 An \code{anansiTale} result object.
 }
 \description{
 Compute r-statistics for each compound-function pair in the dictionary.
-Typically, the main \code{anansi} function will run this for you.
+Typically, the main \code{anansi()} function will run this for you.
 }
 \seealso{
 \code{\link{anansi}} \cr \code{\link{anansiCorTestByGroup}}

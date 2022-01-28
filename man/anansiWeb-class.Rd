@@ -14,6 +14,6 @@ anansiWeb is the main container that will hold your input data thoughout the \co
 
 \item{\code{tableX}}{A matrix of functional data. Rows are samples and columns are features.}
 
-\item{\code{dictionary}}{A binary adjacency matrix. Typically generated using the \code{weaveWebFromTables} function.}
+\item{\code{dictionary}}{A binary adjacency matrix. Typically generated using the \code{weaveWebFromTables()} function.}
 }}
 

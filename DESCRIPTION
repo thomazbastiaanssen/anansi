@@ -6,7 +6,7 @@ Authors@R: c(
    person("Thomaz", "Bastiaanssen", email = "thomaz.bastiaanssen@ucc.ie", role = c("aut", "cre"), comment = c(ORCID = "0000-0001-6891-734X"))
    )
 Maintainer: Thomaz Bastiaanssen <thomaz.bastiaanssen@ucc.ie>
-Description: Studies including both mircobiome and metabolomics data are becoming more common. 
+Description: Studies including both microbiome and metabolomics data are becoming more common. 
     Often, it would be helpful to integrate both datasets in order to see if they corroborate 
     each others patterns. All vs all association is imprecise and likely to yield spurious 
     associations. This package takes a knowledge-based approach to constrain association 
