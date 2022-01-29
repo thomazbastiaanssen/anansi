@@ -46,3 +46,41 @@ setClass("anansiYarn",
            output = "list"
          )
 )
+
+#' Plotting method for \code{anansiYarn} object.
+#' @description Makes a lot of histograms, useful to eyeball the p-value distribution.
+#' @param x An \code{anansiYarn} object.
+#' @importFrom graphics hist par
+#'
+setMethod("plot", "anansiYarn", function(x){
+  par(ask=TRUE)
+  plotnames  = names(unlist(x@output))
+  dictionary = x@input$web@dictionary
+
+  for(p in 1:(length(plotnames))){
+    tale = unlist(x@output)[[plotnames[p]]]
+
+    #figure out if we're plotting r.values or r.squared.
+    if(tale@type == "r.values"){
+    hist(c(tale@estimates[dictionary]),
+         xlim = c(-1, 1), xlab = tale@type, main = paste(tale@type, "of", tale@subject))
+    }
+    if(tale@type == "r.squared"){
+      hist(c(tale@estimates[dictionary]),
+           xlim = c(0, 1), xlab = tale@type, main = paste(tale@type, "of", tale@subject))
+    }
+    #plot p.values
+    hist(c(tale@p.values[dictionary]),
+         xlim = c(0, 1), xlab = tale@type,
+         main = paste("p.values of", tale@subject),
+         breaks = 20)
+
+    #plot q.values
+    hist(c(tale@q.values[dictionary]),
+         xlim = c(0, 1), xlab = tale@type,
+         main = paste("q.values of", tale@subject),
+         breaks = 20)
+  }
+  par(ask = FALSE)
+}
+)
