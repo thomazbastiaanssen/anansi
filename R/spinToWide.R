@@ -6,7 +6,7 @@
 
 spinToWide <- function(anansi_output, prune = T){
   #First flatten all types  of results (cor, model, etc) and create a list of individual wide data.frames.
-  flat_list = lapply(unlist(anansi_output[1:(length(anansi_output)-1)]), getAnansiResults)
+  flat_list = lapply(unlist(anansi_output@output), getAnansiResults)
 
 
   #merge all data.frames in the list while keeping the row order.
@@ -14,7 +14,7 @@ spinToWide <- function(anansi_output, prune = T){
 
   if(prune){
     #If true, remove all non-canonical interactions.
-    wide_df = wide_df[c(anansi_output$dictionary),]
+    wide_df = wide_df[c(anansi_output@input$web@dictionary),]
   }
 
   return(wide_df)

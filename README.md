@@ -18,6 +18,8 @@ context of host-microbe interactions, it is perfectly capable of
 handling any other pair of datasets where some features interact
 canonically.
 
+Please note this package is in active development.
+
 If you use this software, please cite our work.
 
 ``` r

@@ -7,7 +7,7 @@
 spinToLong(anansi_output, prune = T)
 }
 \arguments{
-\item{anansi_output}{The output of the main anansi function.}
+\item{anansi_output}{an \code{anansiYarn} object. The output of the main anansi function.}
 
 \item{prune}{Boolean, default is TRUE. Toggles whether to take out the non-canonical associations.}
 }

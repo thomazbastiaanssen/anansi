@@ -50,6 +50,10 @@
 #'
 anansi = function(web, method = "pearson", groups = NULL, adjust.method = "BH", verbose = T, diff_cor = T){
 
+
+  #generate anansiYarn output object
+  outYarn = new("anansiYarn", input = list(web = web, groups = groups))
+
   if(inherits(groups, "character")){
     if(!all(table(groups) > 3)) {
       warning("The `groups` argument is categorical, but not all groups have at least three observations.
@@ -65,8 +69,9 @@ anansi = function(web, method = "pearson", groups = NULL, adjust.method = "BH", 
     groups = "All"
   }
 
+
   if(verbose){print("Running annotation-based correlations")}
-  outlist = list(cor_results = anansiCorTestByGroup(web = web,
+  outlist = list(cor_results = anansiCorTestByGroup(web    = web,
                                                     method = method,
                                                     groups = groups,
                                                     adjust.method = adjust.method,
@@ -76,9 +81,7 @@ anansi = function(web, method = "pearson", groups = NULL, adjust.method = "BH", 
   if(verbose){print("Fitting models for differential correlation testing")}
     outlist[["model_results"]] = anansiDiffCor(web = web, groups = groups, adjust.method = adjust.method)
   }
+  outYarn@output = outlist
 
-  #Include the dictionary for downstream analysis
-  outlist[["dictionary"]] = web@dictionary
-
-  return(outlist)
+  return(outYarn)
 }
