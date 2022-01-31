@@ -12,9 +12,8 @@ anansiCorTestByGroup = function(web, method = "pearson", groups, adjust.method =
 
   #Determine all groups
   all_groups = unique(groups)
-
   #If there are numbers here, we cannot do cor by group, so we'll substitute a groups called "All" for this part.
-  if(!inherits(all_groups, "character")){all_groups = "All" ; groups = "All"}
+  if(!inherits(all_groups, "character")){all_groups = "All" ; groups = rep("All", nrow(web@tableY))}
 
   #If that's all fine, we can determine the size of the output
   else if(length(all_groups) > 1)
@@ -28,8 +27,10 @@ anansiCorTestByGroup = function(web, method = "pearson", groups, adjust.method =
   out_list$All = anansiCorPvalue(web, method = method, groups = rep(T, nrow(web@tableY)), adjust.method = adjust.method)
   out_list$All@subject = "All"
 
+
   #If verbose, verbalize.
-  if(length(all_groups > 1)){
+  if(length(all_groups) > 1){
+
   if(verbose)
   {print(paste("Running correlations for the following groups:",
                     paste(all_groups, collapse = ", ")))}

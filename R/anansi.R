@@ -99,7 +99,7 @@ assessGroups <- function(web, groups, diff_cor = diff_cor){
 if(!is.null(groups) & length(groups) != nrow(web@tableY)){
   warning("groups has a different length than your input tables. \nSomething is likely wrong, please check your input. ")
   diff_cor = F
-  groups = "All"
+  groups = rep("All", nrow(web@tableY))
 }
 #check if groups is missing or broken
 if(diff_cor){
@@ -107,17 +107,17 @@ if(diff_cor){
   if(is.null(groups) | any(is.na(groups))){
     message("Please be aware that the `groups` argument is missing or contains NAs. \nAnansi will proceed without differential association testing")
     diff_cor = F
-    groups = "All"
+    groups = rep("All", nrow(web@tableY))
   }
 
 }
-#In the case that grops is categorical, check if there are enough observations per group.
+#In the case that groups is categorical, check if there are enough observations per group.
 if(inherits(groups, "character")){
   if(!all(table(groups) > 3)) {
     warning("The `groups` argument is categorical, but not all groups have at least three observations.
               Correlations per group cannot be done. Please check your groups. ")
     diff_cor = F
-    groups = "All"
+    groups = rep("All", nrow(web@tableY))
   }
 }
 return(list(diff_cor = diff_cor,

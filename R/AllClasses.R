@@ -82,5 +82,5 @@ setMethod("plot", "anansiYarn", function(x){
          breaks = 20)
   }
   par(ask = FALSE)
-}
-)
+  }
+  )
