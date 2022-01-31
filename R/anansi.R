@@ -63,7 +63,7 @@ anansi = function(web, method = "pearson", groups = NULL, adjust.method = "BH", 
   outlist = vector(mode = "list", length = sum(1 , diff_cor))
   names(outlist)[1] = "cor_results"
 
-  outlist                    = anansiCorTestByGroup(web    = web,
+  outlist$cor_results        = anansiCorTestByGroup(web    = web,
                                                     method = method,
                                                     groups = groups,
                                                     adjust.method = adjust.method,
@@ -97,10 +97,11 @@ assessGroups <- function(web, groups, diff_cor = diff_cor){
 
 #Check if groups has the same length as the number of observations.
 if(!is.null(groups) & length(groups) != nrow(web@tableY)){
-  warning("groups has a different length than your input tables. \nSomething is likely wrong, please check your input. ")
+  warning("The `groups` argument has a different length than your input tables. \nSomething is likely wrong, please check your input. ")
   diff_cor = F
   groups = rep("All", nrow(web@tableY))
 }
+
 #check if groups is missing or broken
 if(diff_cor){
 
@@ -109,8 +110,8 @@ if(diff_cor){
     diff_cor = F
     groups = rep("All", nrow(web@tableY))
   }
-
 }
+
 #In the case that groups is categorical, check if there are enough observations per group.
 if(inherits(groups, "character")){
   if(!all(table(groups) > 3)) {
@@ -120,6 +121,7 @@ if(inherits(groups, "character")){
     groups = rep("All", nrow(web@tableY))
   }
 }
+
 return(list(diff_cor = diff_cor,
             groups   = groups))
 }

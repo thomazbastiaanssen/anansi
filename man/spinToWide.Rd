@@ -4,12 +4,24 @@
 \alias{spinToWide}
 \title{Take anansi output and wrangle it all to a wide data.frame format.}
 \usage{
-spinToWide(anansi_output, prune = T)
+spinToWide(
+  anansi_output,
+  prune = T,
+  translate = T,
+  Y_translation = anansi::cpd_translation,
+  X_translation = anansi::KO_translation
+)
 }
 \arguments{
 \item{anansi_output}{The output of the main anansi function.}
 
 \item{prune}{Boolean, default is TRUE. Toggles whether to take out the non-canonical associations.}
+
+\item{translate}{Boolean, default is TRUE. Toggles whether to translate the names of Compounds and Functions to human readable names.}
+
+\item{Y_translation}{data.frame, a lookup table with compound names as the first column and human readable names as the second. See \code{cpd_translation} for an example file.}
+
+\item{X_translation}{data.frame, a lookup table with function names as the first column and human readable names as the second. See \code{KO_translation} for an example file.}
 }
 \value{
 a wide format data.frame

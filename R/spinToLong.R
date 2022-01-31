@@ -1,10 +1,13 @@
 #' Take anansi output and wrangle it all to a long data.frame format.
 #' @param anansi_output an \code{anansiYarn} object. The output of the main anansi function.
 #' @param prune Boolean, default is TRUE. Toggles whether to take out the non-canonical associations.
+#' @param translate Boolean, default is TRUE. Toggles whether to translate the names of Compounds and Functions to human readable names.
+#' @param Y_translation data.frame, a lookup table with compound names as the first column and human readable names as the second. See \code{cpd_translation} for an example file.
+#' @param X_translation data.frame, a lookup table with function names as the first column and human readable names as the second. See \code{KO_translation} for an example file.
 #' @return a long format data.frame intended to be compatible with \code{ggplot2}
 #' @export
-
-spinToLong <- function(anansi_output, prune = T){
+#'
+spinToLong <- function(anansi_output, prune = T, translate = T, Y_translation = anansi::cpd_translation, X_translation = anansi::KO_translation){
   #Figure out how many types of results were computed (cor, model, etc). be sure to exclude the dictionary here
   res_types = length(anansi_output@output)
   res_names = names(anansi_output@output)[1:res_types]
@@ -31,6 +34,18 @@ spinToLong <- function(anansi_output, prune = T){
 
     #Combine the results into a single data.frame
     long_out = cbind(long_out, wide_model_df[,-c(1, 2)])
+  }
+
+  if(translate){
+    relevant_cpd = Y_translation[Y_translation[,1] %in% wide_df$Compounds,]
+    wide_df$Compounds = rep(paste(relevant_cpd[,1],
+                                  gsub(";.*", "", relevant_cpd[,2]), sep = ": "),
+                            times = length(unique(wide_df$Functions)))
+
+    relevant_fun = X_translation[X_translation[,1] %in% wide_df$Functions,]
+    wide_df$Functions = rep(paste(relevant_fun[,1],
+                                  relevant_fun[,2], sep = ": "),
+                            each = length(unique(wide_df$Compounds)))
   }
 
   if(prune){
