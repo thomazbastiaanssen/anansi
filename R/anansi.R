@@ -54,28 +54,20 @@ anansi = function(web, method = "pearson", groups = NULL, adjust.method = "BH", 
   #generate anansiYarn output object
   outYarn = new("anansiYarn", input = list(web = web, groups = groups))
 
-  if(inherits(groups, "character")){
-    if(!all(table(groups) > 3)) {
-      warning("The `groups` argument is categorical, but not all groups have at least three observations.
-              Correlations per group cannot be done. Please check your groups. ")
-      diff_cor = F
-      groups = "All"
-    }
-  }
-
-  if(diff_cor & (is.null(groups) | any(is.na(groups)))){
-    message("Please be aware that the `groups` argument is missing or contains NAs. \nAnansi will proceed without differential association testing")
-    diff_cor = F
-    groups = "All"
-  }
-
+  assess = assessGroups(web = web, groups = groups, diff_cor = diff_cor)
+  groups          = assess$groups
+  diff_cor        = assess$diff_cor
 
   if(verbose){print("Running annotation-based correlations")}
-  outlist = list(cor_results = anansiCorTestByGroup(web    = web,
+  #initialize cor_output list object
+  outlist = vector(mode = "list", length = sum(1 , diff_cor))
+  names(outlist)[1] = "cor_results"
+
+  outlist                    = anansiCorTestByGroup(web    = web,
                                                     method = method,
                                                     groups = groups,
                                                     adjust.method = adjust.method,
-                                                    verbose = verbose))
+                                                    verbose = verbose)
 
   if(diff_cor){
   if(verbose){print("Fitting models for differential correlation testing")}
@@ -84,4 +76,49 @@ anansi = function(web, method = "pearson", groups = NULL, adjust.method = "BH", 
   outYarn@output = outlist
 
   return(outYarn)
+}
+
+
+#' Investigate validity of the groups argument
+#' @description checks whether \code{groups} is missing, the correct length and suitable for correlations per groups and differential correlations.
+#' If something looks off, \code{assessGroups} will do its best to salvage it and let you know something's up.
+#' This is a helper function called by \code{anansi}.
+#' @param web web An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.
+#' @param groups A categorical or continuous value necessary for differential correlations. Typically a state or treatment score. If no argument provided, anansi will let you know and still to regular correlations according to your dictionary.
+#' @param diff_cor A boolean. Toggles whether to compute differential correlations. Default is \code{TRUE}.
+#' @return a list including a modified \code{groups} and \code{diff_cor} argument.
+#'
+assessGroups <- function(web, groups, diff_cor = diff_cor){
+  #Three main options for data coming in:
+  #1) groups is empty/NA
+  #2) groups is numerical for diff_cor only
+  #3) groups is categorical for diff_cor and cor_by_group
+
+#Check if groups has the same length as the number of observations.
+if(!is.null(groups) & length(groups) != nrow(web@tableY)){
+  warning("groups has a different length than your input tables. \nSomething is likely wrong, please check your input. ")
+  diff_cor = F
+  groups = "All"
+}
+#check if groups is missing or broken
+if(diff_cor){
+
+  if(is.null(groups) | any(is.na(groups))){
+    message("Please be aware that the `groups` argument is missing or contains NAs. \nAnansi will proceed without differential association testing")
+    diff_cor = F
+    groups = "All"
+  }
+
+}
+#In the case that grops is categorical, check if there are enough observations per group.
+if(inherits(groups, "character")){
+  if(!all(table(groups) > 3)) {
+    warning("The `groups` argument is categorical, but not all groups have at least three observations.
+              Correlations per group cannot be done. Please check your groups. ")
+    diff_cor = F
+    groups = "All"
+  }
+}
+return(list(diff_cor = diff_cor,
+            groups   = groups))
 }

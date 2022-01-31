@@ -9,30 +9,39 @@
 #' @seealso \code{\link{anansi}}
 #'
 anansiCorTestByGroup = function(web, method = "pearson", groups, adjust.method = adjust.method, verbose = T){
+
   #Determine all groups
   all_groups = unique(groups)
 
-  #Assess correlations for entire data set
-  all_out = anansiCorPvalue(web, method = method, adjust.method = adjust.method)
-  all_out@subject = "All"
-  out_list = list(All = all_out)
+  #If there are numbers here, we cannot do cor by group, so we'll substitute a groups called "All" for this part.
+  if(!inherits(all_groups, "character")){all_groups = "All" ; groups = "All"}
 
-  #If groups argument is suitable, run subset analysis
-  if(inherits(groups, "character") & all(table(groups) > 3) & length(all_groups > 1)){
+  #If that's all fine, we can determine the size of the output
+  else if(length(all_groups) > 1)
+  {all_groups = c("All", all_groups)}
+
+  #Generate container list of suitable length for all results
+  out_list = vector(mode = "list", length = length(all_groups))
+  names(out_list) = c(all_groups)
+
+  #first run for all groups together
+  out_list$All = anansiCorPvalue(web, method = method, groups = rep(T, nrow(web@tableY)), adjust.method = adjust.method)
+  out_list$All@subject = "All"
 
   #If verbose, verbalize.
-  if(verbose){print(paste("Running correlations for the following groups:",
-                          paste(all_groups, collapse = ", "),
-                          "and all together"))}
+  if(length(all_groups > 1)){
+  if(verbose)
+  {print(paste("Running correlations for the following groups:",
+                    paste(all_groups, collapse = ", ")))}
 
   #Assess correlations for subsets if applicable.
-  for(i in 1:length(all_groups)){
+  #Skip 1 since that's taken by "All".
+  for(i in 2:length(all_groups)){
     out_by_group = anansiCorPvalue(web, method = method, groups = groups == all_groups[i], adjust.method = adjust.method)
     out_by_group@subject = all_groups[i]
 
-    out_list[[i+1]] = out_by_group
-  }
-  names(out_list)[-1] <- all_groups
+    out_list[[i]] = out_by_group
+    }
   }
   #Return results
   return(out_list)
@@ -53,7 +62,6 @@ anansiCorPvalue = function(web, method = "pearson", groups = NULL, adjust.method
   #Compute correlation coefficients
   r    <- anansiCor(web = web, method = method, groups = groups)
 
-  if(is.null(groups) | any(is.na(groups))){groups = TRUE}
   #Compute t-statistics based on the n and the correlation coefficient
   n    <- web@dictionary
   n[T] <- nrow(web@tableY[groups,])
@@ -86,8 +94,8 @@ anansiCorPvalue = function(web, method = "pearson", groups = NULL, adjust.method
 #' @importFrom stats cor
 #'
 anansiCor = function(web, method = "pearson", groups = NULL){
+
   #Run correlations on subsections of your data
-  if(is.null(groups) | any(is.na(groups))){groups = TRUE}
   merge <- cbind(web@tableY[groups,], web@tableX[groups,])
   cors  <- cor(merge, method = method)
   cors_bipartite <- cors[1:ncol(web@tableY), (ncol(web@tableY)+1):ncol(cors)]

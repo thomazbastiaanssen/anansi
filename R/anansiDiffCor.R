@@ -28,7 +28,7 @@ anansiDiffCor = function(web, groups, adjust.method = adjust.method){
     included_functions <- X[,PriorKnowledge[y,] == 1]
 
     for(x in 1:ncol(included_functions)){
-      #For every function associatd to that molecule, fit some models:
+      #For every function associated to that molecule, fit some models:
       X_tested <- included_functions[,x]
 
       # fit linear model
