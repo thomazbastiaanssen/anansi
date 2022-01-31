@@ -37,15 +37,15 @@ spinToLong <- function(anansi_output, prune = T, translate = T, Y_translation = 
   }
 
   if(translate){
-    relevant_cpd = Y_translation[Y_translation[,1] %in% wide_df$Compounds,]
-    wide_df$Compounds = rep(paste(relevant_cpd[,1],
+    relevant_cpd = Y_translation[Y_translation[,1] %in% long_out$Compounds,]
+    long_out$Compounds = rep(paste(relevant_cpd[,1],
                                   gsub(";.*", "", relevant_cpd[,2]), sep = ": "),
-                            times = length(unique(wide_df$Functions)))
+                            times = length(unique(long_out$Functions)))
 
-    relevant_fun = X_translation[X_translation[,1] %in% wide_df$Functions,]
-    wide_df$Functions = rep(paste(relevant_fun[,1],
+    relevant_fun = X_translation[X_translation[,1] %in% long_out$Functions,]
+    long_out$Functions = rep(paste(relevant_fun[,1],
                                   relevant_fun[,2], sep = ": "),
-                            each = length(unique(wide_df$Compounds)))
+                            each = length(unique(long_out$Compounds)))
   }
 
   if(prune){
