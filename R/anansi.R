@@ -71,7 +71,8 @@ anansi = function(web, method = "pearson", groups = NULL, adjust.method = "BH", 
 
   if(diff_cor){
   if(verbose){print("Fitting models for differential correlation testing")}
-    outlist[["model_results"]] = anansiDiffCor(web = web, groups = groups, adjust.method = adjust.method)
+    names(outlist)[2] = "model_results"
+    outlist$model_results = anansiDiffCor(web = web, groups = groups, adjust.method = adjust.method)
   }
   outYarn@output = outlist
 
