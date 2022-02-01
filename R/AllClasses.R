@@ -79,11 +79,12 @@ setClass("anansiYarn",
 #'
 setMethod("plot", "anansiYarn", function(x){
   par(ask=TRUE)
-  plotnames  = names(unlist(x@output))
-  dictionary = x@input$web@dictionary
+  plotnames  = c(names(x@output@cor_results), names(x@output@model_results))
+  plotlist   = list(unlist(x@output@cor_results), unlist(x@output@model_results))
+  dictionary = x@input@web@dictionary
 
   for(p in 1:(length(plotnames))){
-    tale = unlist(x@output)[[plotnames[p]]]
+    tale = unlist(plotlist)[[plotnames[p]]]
 
     #figure out if we're plotting r.values or r.squared.
     if(tale@type == "r.values"){
@@ -96,13 +97,13 @@ setMethod("plot", "anansiYarn", function(x){
     }
     #plot p.values
     hist(c(tale@p.values[dictionary]),
-         xlim = c(0, 1), xlab = tale@type,
+         xlim = c(0, 1), xlab = "p.values",
          main = paste("p.values of", tale@subject),
          breaks = 20)
 
     #plot q.values
     hist(c(tale@q.values[dictionary]),
-         xlim = c(0, 1), xlab = tale@type,
+         xlim = c(0, 1), xlab = "q.values",
          main = paste("q.values of", tale@subject),
          breaks = 20)
   }
