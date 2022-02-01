@@ -75,6 +75,7 @@ setClass("anansiYarn",
 #' @description Makes a lot of histograms, useful to eyeball the p-value distribution.
 #' @param x An \code{anansiYarn} object.
 #' @importFrom graphics hist par
+#' @export
 #'
 setMethod("plot", "anansiYarn", function(x){
   par(ask=TRUE)
@@ -108,3 +109,50 @@ setMethod("plot", "anansiYarn", function(x){
   par(ask = FALSE)
   }
   )
+
+#' Show method for \code{anansiYarn} object.
+#' @description method to print \code{anansiYarn} object by calling \code{show}.
+#' Since anansiYarn objects are typically huge and unwieldy, also gives some tips on how to handle it.
+#' @param object An \code{anansiYarn} object.
+#' @importFrom utils str
+#' @importFrom methods show
+#' @export
+#'
+setMethod("show", "anansiYarn", function(object){
+  str(object)
+  cat("\nThis is an anansiYarn S4 object. They tend to be very large so we here's a summary instead.
+      You can parse it to a data.frame using the spinToWide() & spinToLong() functions,
+      or you can manually explore it by using the @ operator. ")
+}
+)
+
+#' Print method for \code{anansiYarn} object.
+#' @description method to print \code{anansiYarn} object by calling \code{print}.
+#' Since anansiYarn objects are typically huge and unwieldy, also gives some tips on how to handle it.
+#' @param x An \code{anansiYarn} object.
+#' @importFrom utils str
+#' @export
+#'
+setMethod("print", "anansiYarn", function(x){
+  str(x)
+  cat("\nThis is an anansiYarn S4 object. They tend to be very large so we here's a summary instead.
+      You can parse it to a data.frame using the spinToWide() & spinToLong() functions,
+      or you can manually explore it by using the @ operator. ")
+}
+)
+
+#' Summary method for \code{anansiYarn} object.
+#' @description method to print \code{anansiYarn} object by calling \code{summary}.
+#' Since anansiYarn objects are typically huge and unwieldy, also gives some tips on how to handle it.
+#' @param object An \code{anansiYarn} object.
+#' @importFrom utils str
+#' @export
+#'
+setMethod("summary", "anansiYarn", function(object){
+  str(object)
+  cat("\nThis is an anansiYarn S4 object. They tend to be very large so we here's a summary instead.
+      You can parse it to a data.frame using the spinToWide() & spinToLong() functions,
+      or you can manually explore it by using the @ operator. ")
+}
+)
+
