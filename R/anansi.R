@@ -52,7 +52,7 @@ anansi = function(web, method = "pearson", groups = NULL, adjust.method = "BH", 
 
 
   #generate anansiYarn output object
-  outYarn = new("anansiYarn", input = list(web = web, groups = groups))
+  outYarn = new("anansiYarn", input = new("anansiInput", web = web, groups = groups))
 
   assess = assessGroups(web = web, groups = groups, diff_cor = diff_cor)
   groups          = assess$groups
@@ -60,10 +60,9 @@ anansi = function(web, method = "pearson", groups = NULL, adjust.method = "BH", 
 
   if(verbose){print("Running annotation-based correlations")}
   #initialize cor_output list object
-  outlist = vector(mode = "list", length = sum(1 , diff_cor))
-  names(outlist)[1] = "cor_results"
+  output = new("anansiOutput")
 
-  outlist$cor_results        = anansiCorTestByGroup(web    = web,
+  output@cor_results        = anansiCorTestByGroup(web    = web,
                                                     method = method,
                                                     groups = groups,
                                                     adjust.method = adjust.method,
@@ -71,10 +70,9 @@ anansi = function(web, method = "pearson", groups = NULL, adjust.method = "BH", 
 
   if(diff_cor){
   if(verbose){print("Fitting models for differential correlation testing")}
-    names(outlist)[2] = "model_results"
-    outlist$model_results = anansiDiffCor(web = web, groups = groups, adjust.method = adjust.method)
+    output@model_results = anansiDiffCor(web = web, groups = groups, adjust.method = adjust.method)
   }
-  outYarn@output = outlist
+  outYarn@output = output
 
   return(outYarn)
 }

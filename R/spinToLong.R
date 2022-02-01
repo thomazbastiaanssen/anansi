@@ -8,23 +8,20 @@
 #' @export
 #'
 spinToLong <- function(anansi_output, prune = T, translate = T, Y_translation = anansi::cpd_translation, X_translation = anansi::KO_translation){
-  #Figure out how many types of results were computed (cor, model, etc). be sure to exclude the dictionary here
-  res_types = length(anansi_output@output)
-  res_names = names(anansi_output@output)[1:res_types]
 
-  #Also, figure out how many groups were present in the correlations.
-  n_cors = length(anansi_output@output$cor_results)
+  #Figure out how many groups were present in the correlations.
+  n_cors = length(anansi_output@output@cor_results)
 
   #Flatten all types  of the correlations and create a list of individual wide data.frames.
-  flat_cor_list = lapply(anansi_output@output$cor_results, getAnansiResults, format = "long")
+  flat_cor_list = lapply(anansi_output@output@cor_results, getAnansiResults, format = "long")
 
   #Merge all individual correlation results into a single long data.frame
   long_out  = Reduce(rbind, flat_cor_list)
   colnames(long_out)[3] = "r.values"
 
-  if("model_results" %in% res_names){
+  if(length(anansi_output@output@model_results) > 0){
     #Make a flat list of the model results in wide format
-    flat_model_list = lapply(anansi_output@output$model_results, getAnansiResults, format = "wide")
+    flat_model_list = lapply(anansi_output@output@model_results, getAnansiResults, format = "wide")
 
     #Merge all model results in a single wide data.frame
     wide_model_df   = Reduce(function(x, y) merge(x, y, sort = F), flat_model_list)
@@ -50,7 +47,7 @@ spinToLong <- function(anansi_output, prune = T, translate = T, Y_translation = 
 
   if(prune){
     #If true, remove all non-canonical interactions.
-    long_out = long_out[c(anansi_output@input$web@dictionary),]
+    long_out = long_out[c(anansi_output@input@web@dictionary),]
 
   }
 

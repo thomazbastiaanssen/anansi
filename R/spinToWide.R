@@ -9,7 +9,8 @@
 #'
 spinToWide <- function(anansi_output, prune = T, translate = T, Y_translation = anansi::cpd_translation, X_translation = anansi::KO_translation){
   #First flatten all types  of results (cor, model, etc) and create a list of individual wide data.frames.
-  flat_list = lapply(unlist(anansi_output@output), getAnansiResults)
+  flat_list = lapply(unlist(list(anansi_output@output@cor_results,
+                                 anansi_output@output@model_results)), getAnansiResults)
 
 
   #merge all data.frames in the list while keeping the row order.
@@ -29,7 +30,7 @@ spinToWide <- function(anansi_output, prune = T, translate = T, Y_translation = 
 
   if(prune){
     #If true, remove all non-canonical interactions.
-    wide_df = wide_df[c(anansi_output@input$web@dictionary),]
+    wide_df = wide_df[c(anansi_output@input@web@dictionary),]
   }
 
   return(wide_df)
