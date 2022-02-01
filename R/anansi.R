@@ -50,7 +50,6 @@
 #'
 anansi = function(web, method = "pearson", groups = NULL, adjust.method = "BH", verbose = T, diff_cor = T){
 
-
   #generate anansiYarn output object
   outYarn = new("anansiYarn", input = new("anansiInput", web = web, groups = groups))
 
@@ -62,7 +61,7 @@ anansi = function(web, method = "pearson", groups = NULL, adjust.method = "BH", 
   #initialize cor_output list object
   output = new("anansiOutput")
 
-  output@cor_results        = anansiCorTestByGroup(web    = web,
+  output@cor_results        = anansiCorTestByGroup(web     = web,
                                                     method = method,
                                                     groups = groups,
                                                     adjust.method = adjust.method,
