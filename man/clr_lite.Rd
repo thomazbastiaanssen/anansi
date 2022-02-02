@@ -2,9 +2,18 @@
 % Please edit documentation in R/clr_lite.R
 \name{clr_lite}
 \alias{clr_lite}
+\alias{clr_c}
+\alias{clr_unif}
+\alias{clr_logunif}
 \title{Impute zeroes and perform a centered log-ratio (CLR) transformation}
 \usage{
 clr_lite(counts, samples_are = "cols", method = "logunif", replicates = 1000)
+
+clr_c(counts, samples_are = "cols")
+
+clr_unif(counts, samples_are = "cols", replicates = 1000)
+
+clr_logunif(counts, samples_are = "cols", replicates = 1000)
 }
 \arguments{
 \item{counts}{A compositional count table.}
@@ -30,6 +39,20 @@ Here, we implemented a few methods discussed by Lubbe \emph{et al.} 2021 to repl
 Some of these methods (namely 'logunif' and 'runif') involve imputing small values between 0 and the lowest non-zero value in the dataset.
 For these methods, we have implemented a resampling approach in order to stabilize the inter-run variability. See \code{method} for more information.
 }
+\section{Functions}{
+
+\code{clr_c:}
+ A wrapper for \code{clr_lite(counts, method = "const", replicates = 1)}.
+
+
+\code{clr_unif:}
+ A wrapper for \code{clr_lite(counts, method = "unif")}.
+
+
+\code{clr_logunif:}
+ A wrapper for \code{clr_lite(counts, method = "logunif")}.
+}
+
 \references{
 Sugnet Lubbe, Peter Filzmoser, Matthias Templ (2021)
 \emph{Comparison of zero replacement strategies for compositional data with large numbers of zeros.}

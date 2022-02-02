@@ -98,5 +98,32 @@ clr_imputed = function(vec, method = "logunif", replicates = 1000){
   return(apply(replicate(replicates, anansi_compute_clr(impute_zeroes(vec = vec, method = method))), 1, median))
 }
 
+#' @rdname clr_lite
+#' @section Functions:
+#' \code{clr_c:}
+#'  A wrapper for \code{clr_lite(counts, method = "const", replicates = 1)}.
+#' @export
+#'
+clr_c <- function(counts, samples_are = "cols"){
+  clr_lite(counts, samples_are = samples_are, method = "const", replicates = 1)
+}
 
+#' @rdname clr_lite
+#' @section Functions:
+#' \code{clr_unif:}
+#'  A wrapper for \code{clr_lite(counts, method = "unif")}.
+#' @export
+#'
+clr_unif <- function(counts, samples_are = "cols", replicates = 1000){
+  clr_lite(counts, samples_are = samples_are, method = "unif", replicates = replicates)
+}
 
+#' @rdname clr_lite
+#' @section Functions:
+#' \code{clr_logunif:}
+#'  A wrapper for \code{clr_lite(counts, method = "logunif")}.
+#' @export
+#'
+clr_logunif <- function(counts, samples_are = "cols", replicates = 1000){
+  clr_lite(counts, samples_are = samples_are, method = "logunif", replicates = replicates)
+}
