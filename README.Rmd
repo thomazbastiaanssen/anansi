@@ -118,9 +118,9 @@ anansi_out <- anansi(web    = web, #generated above
 ```
 ## Spin to a table📝
 
-`anansi` gives a complex nested list of lists as an output. Two functions exist that will wrangle your data to more friendly formats for you. 
+`anansi` gives a complex nested `anansiYarn` object as an output. Two functions exist that will wrangle your data to more friendly formats for you. 
 You can either use `spinToLong()` or `spinToWide()`. They will give you long or wide format data.frames, respectively.
-For general reporting, we recommend sticking to the wide format as it's the most legible. 
+For general reporting, we recommend sticking to the wide format as it's the most legible. You can also use the `plot()` method on an `anansiYarn` object to gain some insights in the state of your p, q, r and r^2 parameters. 
 
 ```{r, eval=TRUE}
 

@@ -111,7 +111,7 @@ KOs     <- apply(KOs,c(1,2),function(x) as.numeric(as.character(x)))
 KOs     <- KOs[apply(KOs == 0, 1, sum) <= (ncol(KOs) * 0.90), ] 
 
 #Perform a centered log-ratio transformation on the functional count table.
-KOs.exp <- clr_lite(KOs)
+KOs.exp <- clr_c(KOs)
 
 #anansi expects samples to be rows and features to be columns. 
 t1      <- t(FMT_metab)
@@ -156,12 +156,13 @@ anansi_out <- anansi(web    = web, #generated above
 
 ## Spin to a table📝
 
-`anansi` gives a complex nested list of lists as an output. Two
+`anansi` gives a complex nested `anansiYarn` object as an output. Two
 functions exist that will wrangle your data to more friendly formats for
 you. You can either use `spinToLong()` or `spinToWide()`. They will give
 you long or wide format data.frames, respectively. For general
 reporting, we recommend sticking to the wide format as it’s the most
-legible.
+legible. You can also use the `plot()` method on an `anansiYarn` object
+to gain some insights in the state of your p, q, r and r^2 parameters.
 
 ``` r
 anansiLong <- spinToLong(anansi_output = anansi_out)  

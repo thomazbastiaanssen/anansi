@@ -25,11 +25,10 @@ anansiDiffCor = function(web, groups, adjust.method = adjust.method){
   #Nested for loop: for every metabolite, do:
   for(y in 1:ncol(Y)){
     #Find the associated functions
-    included_functions <- X[,PriorKnowledge[y,] == 1]
 
-    for(x in 1:ncol(included_functions)){
+    for(x in which(PriorKnowledge[y,])){
       #For every function associated to that molecule, fit some models:
-      X_tested <- included_functions[,x]
+      X_tested <- X[,x]
 
       # fit linear model
       fit      <- lm(Y[,y] ~ X_tested * groups)
@@ -38,8 +37,8 @@ anansiDiffCor = function(web, groups, adjust.method = adjust.method){
       fstat    <- summary(fit)$fstatistic
       p        <- pf(fstat[1], fstat[2], fstat[3], lower.tail = FALSE)
 
-      out_rvals[y, colnames(included_functions)[x]] <- summary(fit)$r.squared
-      out_pvals[y, colnames(included_functions)[x]] <- p
+      out_rvals[y, x] <- summary(fit)$r.squared
+      out_pvals[y, x] <- p
 
       #run ANOVA to determine impact of group on SLOPE of association.
       disj_fit        <- anova(fit)
@@ -47,8 +46,8 @@ anansiDiffCor = function(web, groups, adjust.method = adjust.method){
       #Calculate r.squared
       disj.rsquared  <- disj_fit[3,2] / (disj_fit[3,2] + disj_fit[4,2])
 
-      out_disjrvals[y, colnames(included_functions)[x]]  <- disj.rsquared
-      out_disjpvals[y, colnames(included_functions)[x]]  <- disj_fit[3,5]
+      out_disjrvals[y, x]  <- disj.rsquared
+      out_disjpvals[y, x]  <- disj_fit[3,5]
 
       #run ANOVA to determine impact of group on STRENGTH of association.
       abs_resid      <- abs(residuals(lm(Y[,y] ~ X_tested)))
@@ -57,8 +56,8 @@ anansiDiffCor = function(web, groups, adjust.method = adjust.method){
       #Calculate r.squared
       emerg.rsquared <- emerg_fit[1,2] / (emerg_fit[1,2] + emerg_fit[2,2])
 
-      out_emergrvals[y, colnames(included_functions)[x]] <- emerg.rsquared
-      out_emergpvals[y, colnames(included_functions)[x]] <- emerg_fit[1,5]
+      out_emergrvals[y, x] <- emerg.rsquared
+      out_emergpvals[y, x] <- emerg_fit[1,5]
 
     }
   }
