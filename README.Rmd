@@ -87,7 +87,7 @@ KOs     <- apply(KOs,c(1,2),function(x) as.numeric(as.character(x)))
 KOs     <- KOs[apply(KOs == 0, 1, sum) <= (ncol(KOs) * 0.90), ] 
 
 #Perform a centered log-ratio transformation on the functional count table.
-KOs.exp <- clr_lite(KOs)
+KOs.exp <- clr_c(KOs)
 
 #anansi expects samples to be rows and features to be columns. 
 t1      <- t(FMT_metab)

@@ -10,7 +10,8 @@ anansi(
   groups = NULL,
   adjust.method = "BH",
   verbose = T,
-  diff_cor = T
+  diff_cor = T,
+  ignore_dictionary = F
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ anansi(
 \item{verbose}{A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.}
 
 \item{diff_cor}{A boolean. Toggles whether to compute differential correlations. Default is \code{TRUE}.}
+
+\item{ignore_dictionary}{A boolean. Default is FALSE. If set to TRUE, regular all vs all associations will be tested regardless of the dictionary.}
 }
 \value{
 A list of lists containing correlation coefficients, p-values and q-values for all operations.
@@ -50,7 +53,7 @@ KOs   <- KOs[row.names(KOs) \%in\% sort(unique(unlist(anansi_dic))),]
 
 #CLR-transform.
 
-KOs.exp = clr_lite(KOs)
+KOs.exp = clr_c(KOs)
 
 #Make sure that columns are features and rows are samples.
 

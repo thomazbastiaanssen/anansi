@@ -6,6 +6,7 @@
 #' @param adjust.method Method to adjust p-values for multiple comparisons. \code{adjust.method = "BH"} is the default value. See \code{p.adjust()} in the base R \code{stats} package.
 #' @param verbose A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.
 #' @param diff_cor A boolean. Toggles whether to compute differential correlations. Default is \code{TRUE}.
+#' @param ignore_dictionary A boolean. Default is FALSE. If set to TRUE, regular all vs all associations will be tested regardless of the dictionary.
 #' @return A list of lists containing correlation coefficients, p-values and q-values for all operations.
 #' @export
 #' @examples
@@ -26,7 +27,7 @@
 #'
 #' #CLR-transform.
 #'
-#' KOs.exp = clr_lite(KOs)
+#' KOs.exp = clr_c(KOs)
 #'
 #' #Make sure that columns are features and rows are samples.
 #'
@@ -48,7 +49,13 @@
 #' results    = spinToWide(anansi_output = anansi_out)
 #' }
 #'
-anansi = function(web, method = "pearson", groups = NULL, adjust.method = "BH", verbose = T, diff_cor = T){
+anansi = function(web, method = "pearson", groups = NULL, adjust.method = "BH", verbose = T, diff_cor = T, ignore_dictionary = F){
+
+  if(ignore_dictionary){
+    if(verbose){print("Dictionary will be ignored. Running all vs all associations.")}
+    #set dictionary to all TRUE
+    web@dictionary <- web@dictionary == web@dictionary
+  }
 
   #generate anansiYarn output object
   outYarn = new("anansiYarn", input = new("anansiInput", web = web, groups = groups))
