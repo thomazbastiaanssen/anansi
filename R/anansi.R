@@ -57,12 +57,15 @@ anansi = function(web, method = "pearson", groups = NULL, adjust.method = "BH", 
     web@dictionary <- web@dictionary == web@dictionary
   }
 
-  #generate anansiYarn output object
-  outYarn = new("anansiYarn", input = new("anansiInput", web = web, groups = groups))
-
+  #assess validity of input
   assess = assessGroups(web = web, groups = groups, diff_cor = diff_cor)
   groups          = assess$groups
   diff_cor        = assess$diff_cor
+
+  #generate anansiYarn output object
+  outYarn = new("anansiYarn", input = new("anansiInput", web = web, groups = groups))
+
+
 
   if(verbose){print("Running annotation-based correlations")}
   #initialize cor_output list object
