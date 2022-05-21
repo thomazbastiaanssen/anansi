@@ -119,6 +119,7 @@ makeAdjacencyMatrixFromGroupMemberList <- function(dict_list){
 
   basic_list = makeAdjacencyMatrixFromMemberList(dict_list = dict_list)
   #Populate the empty adjacency matrix with TRUE between features that share a membership
+  #Thanks to Benjamin Valderrama for the suggestion to use crosspod here!
   dict_out = crossprod(basic_list) >= 1
 
   return(dict_out)
