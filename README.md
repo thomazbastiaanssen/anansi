@@ -81,6 +81,14 @@ Such an adjacency matrix is provided in the `anansi` library and is
 referred to as a dictionary (because you use it to look up which
 metabolites interact with which functions).
 
+Though this example uses metabolites and functions, `anansi` is able to
+handle any type of ’omics data, as long as there is a dictionary
+available. Because of this, anansi uses the type-naive nomenclature
+`tableY` and `tableX`. The Y and X refer to the position these
+measurements will have in the linear modeling framework:
+
+*l**m*(*Y*∼*X*×*c**o**v**a**r**i**a**t**e**s*)
+
 ### A note on functional microbiome data
 
 Two common questions in the host-microbiome field are “Who’s there?” and
