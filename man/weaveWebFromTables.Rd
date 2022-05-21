@@ -15,11 +15,11 @@ weaveWebFromTables(
 )
 }
 \arguments{
-\item{tableY}{A table containing metabolites of interest. Rows should be samples and columns should be features.}
+\item{tableY}{A table containing features of interest. Rows should be samples and columns should be features. The Y and X refer to the position of the features in a formula: Y ~ X.}
 
-\item{tableX}{A table containing functions of interest. Rows should be samples and columns should be features.}
+\item{tableX}{A table containing features of interest. Rows should be samples and columns should be features. The Y and X refer to the position of the features in a formula: Y ~ X.}
 
-\item{dictionary}{A list that has compound names from tableY as names. Default is the dictionary provided in this package.}
+\item{dictionary}{A list that has feature names from tableY as names. Default is the dictionary provided in this package.}
 
 \item{max_factor}{A proportion (0-1). The maximum proportion of the total dataset that can be a member of a group. Only used for membership adjacency matrices.}
 
@@ -34,5 +34,5 @@ For general use, we recommend sticking to that one. You can access the dictionar
 an \code{anansiWeb} object. Web is used as input for most of the main workflow of anansi.
 }
 \description{
-This fucntion will take two dables of 'omics data, typically metabolomics and functional microbiome data. It will also take a dictionary list, which is provided in this package.
+This function will take two dables of 'omics data, for example metabolomics and functional microbiome data. It will also take a dictionary list, which is provided in this package.
 }

@@ -14,7 +14,7 @@ makeAdjacencyMatrix(
 )
 }
 \arguments{
-\item{dict_list}{A list that has compound names as entries. For general use, we recommend using the one provided in this package.}
+\item{dict_list}{A list that has tableY names as entries in the case of mode == "interaction" and group names in the case of mode == "membership". For general use, we recommend using the one provided in this package.}
 
 \item{tableY}{A matrix containing y features of interest. Rows should be samples and columns should be features. Only used for mode == "interaction".}
 

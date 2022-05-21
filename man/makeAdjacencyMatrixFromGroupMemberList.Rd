@@ -12,11 +12,11 @@ makeAdjacencyMatrixFromGroupMemberList(
 )
 }
 \arguments{
-\item{member_list}{A list that has compound names as entries. For general use, we recommend using the one provided in this package.}
+\item{member_list}{A list that has tableY names as entries in the case of mode == "interaction" and groupnames in the case of mode == "membership". For general use, we recommend using the one provided in this package.}
 
 \item{max_factor}{A proportion (0-1). The maximum proportion of the total dataset that can be a member of a group.}
 
-\item{clean}{A boolean, whether to clear temporary files during the function.}
+\item{clean}{A boolean, whether to clear temporary files during the function call.}
 
 \item{verbose}{A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.}
 }

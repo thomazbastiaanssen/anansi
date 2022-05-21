@@ -124,7 +124,9 @@ For general reporting, we recommend sticking to the wide format as it's the most
 
 ```{r, eval=TRUE}
 
-anansiLong <- spinToLong(anansi_output = anansi_out)  
+anansiLong <- spinToLong(anansi_output = anansi_out, translate = T, 
+                         Y_translation = anansi::cpd_translation, 
+                         X_translation = anansi::KO_translation)  
 #Now it's ready to be plugged into ggplot2, though let's clean up a bit more. 
 
 #Only consider interactions where the entire model fits well enough. 
@@ -139,7 +141,7 @@ The long format can be helpful to plug the data into `ggplot2`. Here, we recreat
 
 ggplot(data = anansiLong, 
        aes(x      = r.values, 
-           y      = Functions, 
+           y      = feature_X, 
            fill   = type, 
            alpha  = model_disjointed_p.values < 0.05)) + 
   
@@ -150,7 +152,7 @@ ggplot(data = anansiLong,
   geom_point(shape = 21, size = 3) + 
   
   #facet per compound
-  ggforce::facet_col(~Compounds, space = "free", scales = "free_y") + 
+  ggforce::facet_col(~feature_Y, space = "free", scales = "free_y") + 
   
   #fix the scales, labels, theme and other layout
   scale_y_discrete(limits = rev, position = "right") +

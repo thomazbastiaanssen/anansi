@@ -1,8 +1,8 @@
 #' Create an anansiWeb object from two 'omics tables and a dictionary
-#' @description This fucntion will take two dables of 'omics data, typically metabolomics and functional microbiome data. It will also take a dictionary list, which is provided in this package.
-#' @param tableY A table containing metabolites of interest. Rows should be samples and columns should be features.
-#' @param tableX A table containing functions of interest. Rows should be samples and columns should be features.
-#' @param dictionary A list that has compound names from tableY as names. Default is the dictionary provided in this package.
+#' @description This function will take two dables of 'omics data, for example metabolomics and functional microbiome data. It will also take a dictionary list, which is provided in this package.
+#' @param tableY A table containing features of interest. Rows should be samples and columns should be features. The Y and X refer to the position of the features in a formula: Y ~ X.
+#' @param tableX A table containing features of interest. Rows should be samples and columns should be features. The Y and X refer to the position of the features in a formula: Y ~ X.
+#' @param dictionary A list that has feature names from tableY as names. Default is the dictionary provided in this package.
 #' @param max_factor A proportion (0-1). The maximum proportion of the total dataset that can be a member of a group. Only used for membership adjacency matrices.
 #' @param clean A boolean, whether to clear temporary files during the function. Only used for membership adjacency matrices
 #' @param mode A character vector. Can be "interaction" or "membership". Toggles whether to link two datasets based on their interactions or based on shared group membership.
@@ -50,7 +50,7 @@ weaveWebFromTables = function(tableY, tableX, dictionary = anansi::anansi_dic, m
   #Select the relevant part of the adjacency matrix
   dictionary = dictionary[available_tableY, available_tableX]
 
-  #Ensure there are no metabolites or functions that never interact
+  #Ensure there are no features that never interact
   dictionary = dictionary[rowSums(dictionary) > 0,colSums(dictionary) > 0]
 
   #use the dictionary to clean input tables
@@ -68,7 +68,7 @@ weaveWebFromTables = function(tableY, tableX, dictionary = anansi::anansi_dic, m
 #' @description Takes the anansi dictionary in list format and wrangles it into a binary adjacency matrix.
 #' @seealso \code{\link{weaveWebFromTables}}
 #' @param tableY A matrix containing y features of interest. Rows should be samples and columns should be features. Only used for mode == "interaction".
-#' @param dict_list A list that has compound names as entries. For general use, we recommend using the one provided in this package.
+#' @param dict_list A list that has tableY names as entries in the case of mode == "interaction" and group names in the case of mode == "membership". For general use, we recommend using the one provided in this package.
 #' @param max_factor A proportion (0-1). The maximum proportion of the total dataset that can be a member of a group.
 #' @param clean A boolean, whether to clear temporary files during the function.
 #' @param verbose A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.
@@ -90,12 +90,12 @@ makeAdjacencyMatrix <- function(dict_list, tableY = NULL, max_factor = 0.001, cl
 }
 
 #' Wrangle anansi dictionary list into binary adjacency matrix
-#' @description Takes the anansi dictionary in list format and wrangles it into a biary adjacency matrix based on which compounds are present in both the dictionary and  \code{tableY}.
+#' @description Takes the anansi dictionary in list format and wrangles it into a biary adjacency matrix based on which tableY features are present in both the dictionary and  \code{tableY}.
 #' For general use, should probably not be called directly, but rather through \code{\link{weaveWebFromTables}}.
 #' @seealso \code{\link{weaveWebFromTables}}
 #' @param tableY A matrix containing metabolites of interest. Rows should be samples and columns should be features.
-#' @param dict_list A list that has compound names as entries. For general use, we recommend using the one provided in this package.
-#' @return a binary adjacency matrix with compounds form tableY as rows and functions from tableX as columns.
+#' @param dict_list A list that has tableY names as entries in the case of mode == "interaction" and group names in the case of mode == "membership". For general use, we recommend using the one provided in this package.
+#' @return a binary adjacency matrix with features from tableY as rows and features from tableX as columns.
 #'
 makeAdjacencyMatrixFromList <- function(tableY, dict_list){
   #Prune list to only contain metabolites in tableY
@@ -121,9 +121,9 @@ makeAdjacencyMatrixFromList <- function(tableY, dict_list){
 #' @description Takes the anansi dictionary in list format and wrangles it into a binary adjacency matrix based on group membership.
 #' For general use, should probably not be called directly, but rather through \code{\link{weaveWebFromTables}}.
 #' @seealso \code{\link{weaveWebFromTables}}
-#' @param member_list A list that has compound names as entries. For general use, we recommend using the one provided in this package.
+#' @param member_list A list that has tableY names as entries in the case of mode == "interaction" and groupnames in the case of mode == "membership". For general use, we recommend using the one provided in this package.
 #' @param max_factor A proportion (0-1). The maximum proportion of the total dataset that can be a member of a group.
-#' @param clean A boolean, whether to clear temporary files during the function.
+#' @param clean A boolean, whether to clear temporary files during the function call.
 #' @param verbose A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.
 #' @return a binary adjacency matrix with the group members on both the rows and columns.
 #' @importFrom utils combn

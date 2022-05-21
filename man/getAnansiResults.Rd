@@ -12,7 +12,7 @@ getAnansiResults(tale, format = "wide")
 \item{format}{either \code{wide} or \code{long}. Default is \code{wide}. Toggles the output format.}
 }
 \value{
-A wide format data.frame. The first two columns are the Compounds and Functions.
+A wide format data.frame. The first two columns are the features from tableY and tableX, respectively
 }
 \description{
 Extract information from an anansiTale object and parse it into a neat table

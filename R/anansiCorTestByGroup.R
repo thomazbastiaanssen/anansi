@@ -48,7 +48,7 @@ anansiCorTestByGroup = function(web, method = "pearson", groups, adjust.method =
   return(out_list)
 }
 
-#' Compute r-statistics for each compound-function pair in the dictionary.
+#' Compute r-statistics for each featureY-featureX pair in the dictionary.
 #' Typically, the main \code{anansi()} function will run this for you.
 #' @param web An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.
 #' @param method Correlation method. \code{method = "pearson"} is the default value. The alternatives to be passed to \code{cor()} are "spearman" and "kendall".
@@ -85,7 +85,7 @@ anansiCorPvalue = function(web, method = "pearson", groups = NULL, adjust.method
   return(out)
 }
 
-#' Compute r-statistics for each compound-function pair in the dictionary.
+#' Compute r-statistics for each featureY-featureX pair in the dictionary.
 #' Typically, the main \code{anansi()} function will run this for you.
 #' @param web An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.
 #' @param method Correlation method. \code{method = "pearson"} is the default value. The alternatives to be passed to \code{cor()} are "spearman" and "kendall".

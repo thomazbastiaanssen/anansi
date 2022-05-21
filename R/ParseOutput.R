@@ -1,13 +1,13 @@
 #' Take anansi output and wrangle it all to a wide data.frame format.
 #' @param anansi_output The output of the main anansi function.
 #' @param prune Boolean, default is TRUE. Toggles whether to take out the non-canonical associations.
-#' @param translate Boolean, default is TRUE. Toggles whether to translate the names of Compounds and Functions to human readable names.
-#' @param Y_translation data.frame, a lookup table with compound names as the first column and human readable names as the second. See \code{cpd_translation} for an example file.
-#' @param X_translation data.frame, a lookup table with function names as the first column and human readable names as the second. See \code{KO_translation} for an example file.
+#' @param translate Boolean, default is TRUE. Toggles whether to translate the names of the features in tableX and tableY to human readable names.
+#' @param Y_translation data.frame, a lookup table with featureY names as the first column and human readable names as the second. See \code{cpd_translation} for an example file.
+#' @param X_translation data.frame, a lookup table with featureX names as the first column and human readable names as the second. See \code{KO_translation} for an example file.
 #' @return a wide format data.frame
 #' @export
 #'
-spinToWide <- function(anansi_output, prune = T, translate = T, Y_translation = anansi::cpd_translation, X_translation = anansi::KO_translation){
+spinToWide <- function(anansi_output, prune = T, translate = F, Y_translation = NULL, X_translation = NULL){
   #First flatten all types  of results (cor, model, etc) and create a list of individual wide data.frames.
   flat_list = lapply(unlist(list(anansi_output@output@cor_results,
                                  anansi_output@output@model_results)), getAnansiResults)
@@ -32,13 +32,13 @@ spinToWide <- function(anansi_output, prune = T, translate = T, Y_translation = 
 #' Take anansi output and wrangle it all to a long data.frame format.
 #' @param anansi_output an \code{anansiYarn} object. The output of the main anansi function.
 #' @param prune Boolean, default is TRUE. Toggles whether to take out the non-canonical associations.
-#' @param translate Boolean, default is TRUE. Toggles whether to translate the names of Compounds and Functions to human readable names.
-#' @param Y_translation data.frame, a lookup table with compound names as the first column and human readable names as the second. See \code{cpd_translation} for an example file.
-#' @param X_translation data.frame, a lookup table with function names as the first column and human readable names as the second. See \code{KO_translation} for an example file.
+#' @param translate Boolean, default is TRUE. Toggles whether to translate the names of the features in tableX and tableY to human readable names.
+#' @param Y_translation data.frame, a lookup table with featureY names as the first column and human readable names as the second. See \code{cpd_translation} for an example file.
+#' @param X_translation data.frame, a lookup table with featureX names as the first column and human readable names as the second. See \code{KO_translation} for an example file.
 #' @return a long format data.frame intended to be compatible with \code{ggplot2}
 #' @export
 #'
-spinToLong <- function(anansi_output, prune = T, translate = T, Y_translation = anansi::cpd_translation, X_translation = anansi::KO_translation){
+spinToLong <- function(anansi_output, prune = T, translate = F, Y_translation = NULL, X_translation = NULL){
 
   #Figure out how many groups were present in the correlations.
   n_cors = length(anansi_output@output@cor_results)
@@ -80,7 +80,7 @@ spinToLong <- function(anansi_output, prune = T, translate = T, Y_translation = 
 #' Extract information from an anansiTale object and parse it into a neat table
 #' @param tale An \code{anansiTale} object
 #' @param format either \code{wide} or \code{long}. Default is \code{wide}. Toggles the output format.
-#' @return A wide format data.frame. The first two columns are the Compounds and Functions.
+#' @return A wide format data.frame. The first two columns are the features from tableY and tableX, respectively
 #' @seealso \code{\link{spinToWide}}\cr \code{\link{spinToLong}}
 #'
 
@@ -88,8 +88,8 @@ getAnansiResults <- function(tale, format = "wide"){
   if(!format %in% c("wide", "long")){stop("format should be either `wide` or `long`.")}
   out_df =
     cbind(expand.grid(
-      Compounds = row.names(tale@estimates),
-      Functions = colnames(tale@estimates), stringsAsFactors = F),
+      feature_Y = row.names(tale@estimates),
+      feature_X = colnames(tale@estimates), stringsAsFactors = F),
       estimates = c(tale@estimates),
       p.values  = c(tale@p.values),
       q.values  = c(tale@q.values))
@@ -106,23 +106,23 @@ getAnansiResults <- function(tale, format = "wide"){
 }
 
 
-#' Translate Compounds and Functions column to human readable names
-#' @description helper funciton for the spinToLong and \code{spinToWide} functions.
-#' @param x a table with a Compounds and Functions column.
-#' @param Y_translation data.frame, a lookup table with compound names as the first column and human readable names as the second. See \code{cpd_translation} for an example file.
-#' @param X_translation data.frame, a lookup table with function names as the first column and human readable names as the second. See \code{KO_translation} for an example file.
-#' @return an expanded table with a Compounds and Functions column.
+#' Translate tableY and tableX columns column to human readable names
+#' @description helper function for the spinToLong and \code{spinToWide} functions.
+#' @param x a table with a feature_Y and feature_X column.
+#' @param Y_translation data.frame, a lookup table with featureY names as the first column and human readable names as the second. See \code{cpd_translation} for an example file.
+#' @param X_translation data.frame, a lookup table with featureX names as the first column and human readable names as the second. See \code{KO_translation} for an example file.
+#' @return an expanded table with a column for the human readable names for the features in both tableY and tableX.
 #'
 anansiTranslate <- function(x, Y_translation = Y_translation, X_translation = X_translation){
 
-  relevant_cpd = Y_translation[Y_translation[,1] %in% x$Compounds,]
-  x$Compounds = rep(paste(relevant_cpd[,1],
-                          gsub(";.*", "", relevant_cpd[,2]), sep = ": "),
-                    times = length(unique(x$Functions)))
+  relevant_Y = Y_translation[Y_translation[,1] %in% x$feature_Y,]
+  x$feature_Y = rep(paste(relevant_Y[,1],
+                          gsub(";.*", "", relevant_Y[,2]), sep = ": "),
+                    times = length(unique(x$feature_X)))
 
-  relevant_fun = X_translation[X_translation[,1] %in% x$Functions,]
-  x$Functions = rep(paste(relevant_fun[,1],
-                          relevant_fun[,2], sep = ": "),
-                    each = length(unique(x$Compounds)))
+  relevant_X = X_translation[X_translation[,1] %in% x$feature_X,]
+  x$feature_X = rep(paste(relevant_X[,1],
+                          relevant_X[,2], sep = ": "),
+                    each = length(unique(x$feature_Y)))
   return(x)
 }

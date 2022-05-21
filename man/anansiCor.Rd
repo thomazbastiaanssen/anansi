@@ -2,7 +2,7 @@
 % Please edit documentation in R/anansiCorTestByGroup.R
 \name{anansiCor}
 \alias{anansiCor}
-\title{Compute r-statistics for each compound-function pair in the dictionary.
+\title{Compute r-statistics for each featureY-featureX pair in the dictionary.
 Typically, the main \code{anansi()} function will run this for you.}
 \usage{
 anansiCor(web, method = "pearson", groups = NULL)
@@ -18,7 +18,7 @@ anansiCor(web, method = "pearson", groups = NULL)
 A matrix of r-statistics.
 }
 \description{
-Compute r-statistics for each compound-function pair in the dictionary.
+Compute r-statistics for each featureY-featureX pair in the dictionary.
 Typically, the main \code{anansi()} function will run this for you.
 }
 \seealso{

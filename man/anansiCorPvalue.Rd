@@ -2,7 +2,7 @@
 % Please edit documentation in R/anansiCorTestByGroup.R
 \name{anansiCorPvalue}
 \alias{anansiCorPvalue}
-\title{Compute r-statistics for each compound-function pair in the dictionary.
+\title{Compute r-statistics for each featureY-featureX pair in the dictionary.
 Typically, the main \code{anansi()} function will run this for you.}
 \usage{
 anansiCorPvalue(
@@ -25,7 +25,7 @@ anansiCorPvalue(
 An \code{anansiTale} result object.
 }
 \description{
-Compute r-statistics for each compound-function pair in the dictionary.
+Compute r-statistics for each featureY-featureX pair in the dictionary.
 Typically, the main \code{anansi()} function will run this for you.
 }
 \seealso{

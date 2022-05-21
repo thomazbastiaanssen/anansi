@@ -2,7 +2,7 @@
 % Please edit documentation in R/ParseOutput.R
 \name{anansiTranslate}
 \alias{anansiTranslate}
-\title{Translate Compounds and Functions column to human readable names}
+\title{Translate tableY and tableX columns column to human readable names}
 \usage{
 anansiTranslate(
   x,
@@ -11,15 +11,15 @@ anansiTranslate(
 )
 }
 \arguments{
-\item{x}{a table with a Compounds and Functions column.}
+\item{x}{a table with a feature_Y and feature_X column.}
 
-\item{Y_translation}{data.frame, a lookup table with compound names as the first column and human readable names as the second. See \code{cpd_translation} for an example file.}
+\item{Y_translation}{data.frame, a lookup table with featureY names as the first column and human readable names as the second. See \code{cpd_translation} for an example file.}
 
-\item{X_translation}{data.frame, a lookup table with function names as the first column and human readable names as the second. See \code{KO_translation} for an example file.}
+\item{X_translation}{data.frame, a lookup table with featureX names as the first column and human readable names as the second. See \code{KO_translation} for an example file.}
 }
 \value{
-an expanded table with a Compounds and Functions column.
+an expanded table with a column for the human readable names for the features in both tableY and tableX.
 }
 \description{
-helper funciton for the spinToLong and \code{spinToWide} functions.
+helper function for the spinToLong and \code{spinToWide} functions.
 }

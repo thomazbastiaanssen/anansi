@@ -7,9 +7,9 @@
 spinToLong(
   anansi_output,
   prune = T,
-  translate = T,
-  Y_translation = anansi::cpd_translation,
-  X_translation = anansi::KO_translation
+  translate = F,
+  Y_translation = NULL,
+  X_translation = NULL
 )
 }
 \arguments{
@@ -17,11 +17,11 @@ spinToLong(
 
 \item{prune}{Boolean, default is TRUE. Toggles whether to take out the non-canonical associations.}
 
-\item{translate}{Boolean, default is TRUE. Toggles whether to translate the names of Compounds and Functions to human readable names.}
+\item{translate}{Boolean, default is TRUE. Toggles whether to translate the names of the features in tableX and tableY to human readable names.}
 
-\item{Y_translation}{data.frame, a lookup table with compound names as the first column and human readable names as the second. See \code{cpd_translation} for an example file.}
+\item{Y_translation}{data.frame, a lookup table with featureY names as the first column and human readable names as the second. See \code{cpd_translation} for an example file.}
 
-\item{X_translation}{data.frame, a lookup table with function names as the first column and human readable names as the second. See \code{KO_translation} for an example file.}
+\item{X_translation}{data.frame, a lookup table with featureX names as the first column and human readable names as the second. See \code{KO_translation} for an example file.}
 }
 \value{
 a long format data.frame intended to be compatible with \code{ggplot2}

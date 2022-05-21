@@ -72,7 +72,10 @@ anansi_out = anansi(web     = web,
                     adjust.method = "BH",
                     verbose = TRUE)
 
-results    = spinToWide(anansi_output = anansi_out)
+results    = spinToWide(anansi_output = anansi_out, translate = T,
+                        Y_translation = anansi::cpd_translation,
+                        X_translation = anansi::KO_translation)
+
 }
 
 }

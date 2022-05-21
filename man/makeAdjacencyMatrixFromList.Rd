@@ -9,13 +9,13 @@ makeAdjacencyMatrixFromList(tableY, dict_list)
 \arguments{
 \item{tableY}{A matrix containing metabolites of interest. Rows should be samples and columns should be features.}
 
-\item{dict_list}{A list that has compound names as entries. For general use, we recommend using the one provided in this package.}
+\item{dict_list}{A list that has tableY names as entries in the case of mode == "interaction" and group names in the case of mode == "membership". For general use, we recommend using the one provided in this package.}
 }
 \value{
-a binary adjacency matrix with compounds form tableY as rows and functions from tableX as columns.
+a binary adjacency matrix with features from tableY as rows and features from tableX as columns.
 }
 \description{
-Takes the anansi dictionary in list format and wrangles it into a biary adjacency matrix based on which compounds are present in both the dictionary and  \code{tableY}.
+Takes the anansi dictionary in list format and wrangles it into a biary adjacency matrix based on which tableY features are present in both the dictionary and  \code{tableY}.
 For general use, should probably not be called directly, but rather through \code{\link{weaveWebFromTables}}.
 }
 \seealso{
