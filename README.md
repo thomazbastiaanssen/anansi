@@ -87,7 +87,7 @@ available. Because of this, anansi uses the type-naive nomenclature
 `tableY` and `tableX`. The Y and X refer to the position these
 measurements will have in the linear modeling framework:
 
-$$Y \\sim X \\times \\{covariates}$$
+*Y* ∼ *X* × covariates
 
 ### A note on functional microbiome data
 
