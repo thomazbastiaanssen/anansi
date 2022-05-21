@@ -4,23 +4,12 @@
 \alias{makeAdjacencyMatrix}
 \title{Starting point to wrangle anansi dictionary list into binary adjacency matrix}
 \usage{
-makeAdjacencyMatrix(
-  dict_list,
-  tableY = NULL,
-  max_factor = 0.001,
-  clean = T,
-  verbose = T,
-  mode = mode
-)
+makeAdjacencyMatrix(dict_list, tableY = NULL, verbose = T, mode = mode)
 }
 \arguments{
 \item{dict_list}{A list that has tableY names as entries in the case of mode == "interaction" and group names in the case of mode == "membership". For general use, we recommend using the one provided in this package.}
 
 \item{tableY}{A matrix containing y features of interest. Rows should be samples and columns should be features. Only used for mode == "interaction".}
-
-\item{max_factor}{A proportion (0-1). The maximum proportion of the total dataset that can be a member of a group.}
-
-\item{clean}{A boolean, whether to clear temporary files during the function.}
 
 \item{verbose}{A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.}
 
