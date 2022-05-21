@@ -8,7 +8,10 @@ weaveWebFromTables(
   tableY,
   tableX,
   dictionary = anansi::anansi_dic,
-  verbose = T
+  max_factor = 0.001,
+  clean = clean,
+  verbose = T,
+  mode = "interaction"
 )
 }
 \arguments{
@@ -18,8 +21,14 @@ weaveWebFromTables(
 
 \item{dictionary}{A list that has compound names from tableY as names. Default is the dictionary provided in this package.}
 
+\item{max_factor}{A proportion (0-1). The maximum proportion of the total dataset that can be a member of a group. Only used for membership adjacency matrices.}
+
+\item{clean}{A boolean, whether to clear temporary files during the function. Only used for membership adjacency matrices}
+
 \item{verbose}{A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.
 For general use, we recommend sticking to that one. You can access the dictionary like this: \code{data(dictionary)}}
+
+\item{mode}{A character vector. Can be "interaction" or "membership". Toggles whether to link two datasets based on their interactions or based on shared group membership.}
 }
 \value{
 an \code{anansiWeb} object. Web is used as input for most of the main workflow of anansi.
