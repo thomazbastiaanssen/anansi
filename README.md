@@ -128,6 +128,7 @@ a necessary input file for the main `anansi` workflow.
 web <- weaveWebFromTables(tableY = t1, tableX = t2, dictionary = anansi_dic)
 ```
 
+    ## [1] "Operating in interaction mode"
     ## [1] "3 were matched between table 1 and the columns of the adjacency matrix"
     ## [1] "50 were matched between table 2 and the rows of the adjacency matrix"
 
@@ -165,7 +166,9 @@ legible. You can also use the `plot()` method on an `anansiYarn` object
 to gain some insights in the state of your p, q, r and r^2 parameters.
 
 ``` r
-anansiLong <- spinToLong(anansi_output = anansi_out)  
+anansiLong <- spinToLong(anansi_output = anansi_out, translate = T, 
+                         Y_translation = anansi::cpd_translation, 
+                         X_translation = anansi::KO_translation)  
 #Now it's ready to be plugged into ggplot2, though let's clean up a bit more. 
 
 #Only consider interactions where the entire model fits well enough. 
@@ -180,7 +183,7 @@ recreate part of the results from the FMT Aging study.
 ``` r
 ggplot(data = anansiLong, 
        aes(x      = r.values, 
-           y      = Functions, 
+           y      = feature_X, 
            fill   = type, 
            alpha  = model_disjointed_p.values < 0.05)) + 
   
@@ -191,7 +194,7 @@ ggplot(data = anansiLong,
   geom_point(shape = 21, size = 3) + 
   
   #facet per compound
-  ggforce::facet_col(~Compounds, space = "free", scales = "free_y") + 
+  ggforce::facet_col(~feature_Y, space = "free", scales = "free_y") + 
   
   #fix the scales, labels, theme and other layout
   scale_y_discrete(limits = rev, position = "right") +
