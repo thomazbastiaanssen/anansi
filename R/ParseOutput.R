@@ -25,6 +25,9 @@ spinToWide <- function(anansi_output, prune = T, translate = F, Y_translation = 
     wide_df = wide_df[c(anansi_output@input@web@dictionary),]
   }
 
+  #Sort the output by the first column
+  wide_df = wide_df[order(wide_df[,1]),]
+
   return(wide_df)
 }
 
