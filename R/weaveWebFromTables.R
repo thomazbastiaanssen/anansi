@@ -145,7 +145,7 @@ makeAdjacencyMatrixFromGroupMemberList <- function(dict_list, mode = mode){
 prune_dictionary_for_exclusivity <- function(dict_list, max_sds = 3, verbose = T){
 
   mem_sizes = unlist(lapply(dict_list, length))
-  discard    = mem_sizes > (median(mem_sizes) + (max_sds * sd(mem_sizes)))
+  discard   = mem_sizes > (median(mem_sizes) + (max_sds * sd(mem_sizes)))
 
   if(verbose)
   {print(paste(sum(discard), "groups were", max_sds, "sds larger than the median group size and were kicked out. "))

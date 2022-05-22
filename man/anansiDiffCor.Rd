@@ -4,7 +4,7 @@
 \alias{anansiDiffCor}
 \title{Run differential correlation analysis for all interacting metabolites and functions.}
 \usage{
-anansiDiffCor(web, groups, adjust.method = adjust.method)
+anansiDiffCor(web, groups, adjust.method = adjust.method, verbose = T)
 }
 \arguments{
 \item{web}{An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.}
@@ -12,6 +12,8 @@ anansiDiffCor(web, groups, adjust.method = adjust.method)
 \item{groups}{A categorical or continuous value necessary for differential correlations. Typically a state or treatment score.}
 
 \item{adjust.method}{Method to adjust p-values for multiple comparisons. \code{adjust.method = "BH"} is the default value. See \code{p.adjust()} in the base R \code{stats} package.}
+
+\item{verbose}{A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.}
 }
 \value{
 a list of \code{anansiTale} result objects, one for the total model, one for emergent correlations and one for disjointed correlations.

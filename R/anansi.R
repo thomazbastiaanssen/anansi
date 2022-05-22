@@ -82,7 +82,7 @@ anansi = function(web, method = "pearson", groups = NULL, adjust.method = "BH", 
 
   if(diff_cor){
   if(verbose){print("Fitting models for differential correlation testing")}
-    output@model_results = anansiDiffCor(web = web, groups = groups, adjust.method = adjust.method)
+    output@model_results = anansiDiffCor(web = web, groups = groups, adjust.method = adjust.method, verbose = verbose)
   }
   outYarn@output = output
 
