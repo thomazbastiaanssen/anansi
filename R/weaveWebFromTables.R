@@ -5,11 +5,12 @@
 #' @param dictionary A list that has feature names from tableY as names. Default is the dictionary provided in this package.
 #' @param mode A character vector. Can be "interaction" or "membership". Toggles whether to link two datasets based on their interactions or based on shared group membership.
 #' @param verbose A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.
-
+#' @param prune A boolean. Toggles whether to prune particularly large groups.
+#' @param max_sds. A numeric. Only relevant for prune == TRUE. How many SDs larger than the median a group can be before it is pruned.
 #' For general use, we recommend sticking to that one. You can access the dictionary like this: \code{data(dictionary)}
 #' @return an \code{anansiWeb} object. Web is used as input for most of the main workflow of anansi.
 #' @export
-weaveWebFromTables = function(tableY, tableX, dictionary = anansi::anansi_dic, verbose = T, mode = "interaction"){
+weaveWebFromTables = function(tableY, tableX, dictionary = anansi::anansi_dic, verbose = T, mode = "interaction", prune = F, max_sds = 3){
 
   stopifnot("the mode argument needs to be interaction or membership." = mode %in% c("interaction", "membership"))
   #For conventional use, table Y should be metabolites and table X functions.
@@ -25,6 +26,10 @@ weaveWebFromTables = function(tableY, tableX, dictionary = anansi::anansi_dic, v
   #       ... many more rows ...
   #
 
+  if(prune){
+    dictionary = prune_dictionary_for_exclusivity(dict_list = dictionary,
+                                                  max_sds = max_sds, verbose = verbose)
+  }
 
   #create binary adjacency matrix first
   dictionary = makeAdjacencyMatrix(tableY = tableY, dict_list = dictionary,
@@ -130,3 +135,22 @@ makeAdjacencyMatrixFromGroupMemberList <- function(dict_list, mode = mode){
 
 }
 
+#' Kick out particularly large groups before wrangling the dictionary list into a binary adjacency matrix.
+#' @description Takes the anansi dictionary in list format and prunes the larges groups based on sd from the median.
+#' @param dict_list A list that has tableY names as entries in the case of mode == "interaction" and group names in the case of mode == "membership". For general use, we recommend using the one provided in this package.
+#' @param verbose A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.
+#' @param max_sds a numeric, how many standard deviantions larger than the group median are groups allowed to be?
+#' @return a pruned anansi dictionary list object.
+#'
+prune_dictionary_for_exclusivity <- function(dict_list, max_sds = 3, verbose = T){
+
+  mem_sizes = unlist(lapply(dict_list, length))
+  discard    = mem_sizes > (median(mem_sizes) + (max_sds * sd(mem_sizes)))
+
+  if(verbose)
+  {print(paste(sum(discard), "groups were", max_sds, "sds larger than the median group size and were kicked out. "))
+    print(paste("These include", paste(names(dict_list[discard]), collapse = ", ")))}
+
+  return(dict_list[!discard])
+
+}

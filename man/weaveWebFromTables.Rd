@@ -9,7 +9,9 @@ weaveWebFromTables(
   tableX,
   dictionary = anansi::anansi_dic,
   verbose = T,
-  mode = "interaction"
+  mode = "interaction",
+  prune = F,
+  max_sds = 3
 )
 }
 \arguments{
@@ -19,10 +21,14 @@ weaveWebFromTables(
 
 \item{dictionary}{A list that has feature names from tableY as names. Default is the dictionary provided in this package.}
 
-\item{verbose}{A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.
-For general use, we recommend sticking to that one. You can access the dictionary like this: \code{data(dictionary)}}
+\item{verbose}{A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.}
 
 \item{mode}{A character vector. Can be "interaction" or "membership". Toggles whether to link two datasets based on their interactions or based on shared group membership.}
+
+\item{prune}{A boolean. Toggles whether to prune particularly large groups.}
+
+\item{max_sds.}{A numeric. Only relevant for prune == TRUE. How many SDs larger than the median a group can be before it is pruned.
+For general use, we recommend sticking to that one. You can access the dictionary like this: \code{data(dictionary)}}
 }
 \value{
 an \code{anansiWeb} object. Web is used as input for most of the main workflow of anansi.
