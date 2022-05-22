@@ -4,10 +4,12 @@
 \alias{makeAdjacencyMatrixFromGroupMemberList}
 \title{Wrangle anansi dictionary list into binary adjacency matrix}
 \usage{
-makeAdjacencyMatrixFromGroupMemberList(dict_list)
+makeAdjacencyMatrixFromGroupMemberList(dict_list, mode = mode)
 }
 \arguments{
 \item{dict_list}{A list that has tableY names as entries in the case of mode == "interaction" and groupnames in the case of mode == "membership". For general use, we recommend using the one provided in this package.}
+
+\item{mode}{A character vector. Can be "interaction" or "membership". Toggles whether to link two datasets based on their interactions or based on shared group membership.}
 }
 \value{
 a binary adjacency matrix with the group members on both the rows and columns.

@@ -28,5 +28,5 @@ For general use, we recommend sticking to that one. You can access the dictionar
 an \code{anansiWeb} object. Web is used as input for most of the main workflow of anansi.
 }
 \description{
-This function will take two dables of 'omics data, for example metabolomics and functional microbiome data. It will also take a dictionary list, which is provided in this package.
+This function will take two tables of 'omics data, for example metabolomics and functional microbiome data. It will also take a dictionary list, which is provided in this package.
 }

@@ -4,18 +4,20 @@
 \alias{makeAdjacencyMatrixFromList}
 \title{Wrangle anansi dictionary list into binary adjacency matrix}
 \usage{
-makeAdjacencyMatrixFromList(tableY, dict_list)
+makeAdjacencyMatrixFromList(tableY = NULL, dict_list, mode = "interaction")
 }
 \arguments{
-\item{tableY}{A matrix containing metabolites of interest. Rows should be samples and columns should be features.}
+\item{tableY}{A matrix containing features of interest. Rows should be samples and columns should be features.}
 
-\item{dict_list}{A list that has tableY names as entries in the case of mode == "interaction" and group names in the case of mode == "membership". For general use, we recommend using the one provided in this package.}
+\item{dict_list}{A list that has tableY names as entries in the case of mode == "interaction" and groupnames in the case of mode == "membership". For general use, we recommend using the one provided in this package.}
+
+\item{mode}{A character vector. Can be "interaction" or "membership". Toggles whether to link two datasets based on their interactions or based on shared group membership.}
 }
 \value{
-a binary adjacency matrix with features from tableY as rows and features from tableX as columns.
+a binary adjacency matrix with the group members on both the rows and columns.
 }
 \description{
-Takes the anansi dictionary in list format and wrangles it into a biary adjacency matrix based on which tableY features are present in both the dictionary and  \code{tableY}.
+Takes the anansi dictionary in list format and wrangles it into a binary adjacency matrix based on which tableY features are present in both the dictionary and  \code{tableY}.
 For general use, should probably not be called directly, but rather through \code{\link{weaveWebFromTables}}.
 }
 \seealso{

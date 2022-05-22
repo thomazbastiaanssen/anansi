@@ -1,5 +1,5 @@
 #' Create an anansiWeb object from two 'omics tables and a dictionary
-#' @description This function will take two dables of 'omics data, for example metabolomics and functional microbiome data. It will also take a dictionary list, which is provided in this package.
+#' @description This function will take two tables of 'omics data, for example metabolomics and functional microbiome data. It will also take a dictionary list, which is provided in this package.
 #' @param tableY A table containing features of interest. Rows should be samples and columns should be features. The Y and X refer to the position of the features in a formula: Y ~ X.
 #' @param tableX A table containing features of interest. Rows should be samples and columns should be features. The Y and X refer to the position of the features in a formula: Y ~ X.
 #' @param dictionary A list that has feature names from tableY as names. Default is the dictionary provided in this package.
@@ -72,77 +72,61 @@ weaveWebFromTables = function(tableY, tableX, dictionary = anansi::anansi_dic, v
 makeAdjacencyMatrix <- function(dict_list, tableY = NULL, verbose = T, mode = mode){
   if(mode == "interaction"){
     if(verbose){print("Operating in interaction mode")}
-    makeAdjacencyMatrixFromList(tableY = tableY, dict_list = dict_list)
+    makeAdjacencyMatrixFromList(tableY = tableY, dict_list = dict_list, mode = mode)
   }
   else if(mode == "membership"){
     if(verbose){print("Operating in membership mode")}
-    makeAdjacencyMatrixFromGroupMemberList(dict_list = dict_list)
+    makeAdjacencyMatrixFromGroupMemberList(dict_list = dict_list, mode = mode)
   }
 }
 
 #' Wrangle anansi dictionary list into binary adjacency matrix
-#' @description Takes the anansi dictionary in list format and wrangles it into a biary adjacency matrix based on which tableY features are present in both the dictionary and  \code{tableY}.
+#' @description Takes the anansi dictionary in list format and wrangles it into a binary adjacency matrix based on which tableY features are present in both the dictionary and  \code{tableY}.
 #' For general use, should probably not be called directly, but rather through \code{\link{weaveWebFromTables}}.
 #' @seealso \code{\link{weaveWebFromTables}}
-#' @param tableY A matrix containing metabolites of interest. Rows should be samples and columns should be features.
-#' @param dict_list A list that has tableY names as entries in the case of mode == "interaction" and group names in the case of mode == "membership". For general use, we recommend using the one provided in this package.
-#' @return a binary adjacency matrix with features from tableY as rows and features from tableX as columns.
+#' @param tableY A matrix containing features of interest. Rows should be samples and columns should be features.
+#' @param dict_list A list that has tableY names as entries in the case of mode == "interaction" and groupnames in the case of mode == "membership". For general use, we recommend using the one provided in this package.
+#' @param mode A character vector. Can be "interaction" or "membership". Toggles whether to link two datasets based on their interactions or based on shared group membership.
+#' @return a binary adjacency matrix with the group members on both the rows and columns.
 #'
-makeAdjacencyMatrixFromList <- function(tableY, dict_list){
-  #Prune list to only contain metabolites in tableY
-  dict_pruned = dict_list[names(dict_list) %in% colnames(tableY)]
-  compnames   = names(dict_pruned)
-  funcnames   = sort(unique(unlist(dict_pruned)))
+makeAdjacencyMatrixFromList <- function(tableY = NULL, dict_list, mode = "interaction"){
+
+  #If in interaction mode, prune list to only contain features in tableY
+  if(mode == "interaction"){
+    dict_list = dict_list[names(dict_list) %in% colnames(tableY)]
+  }
+  ynames = names(dict_list)
+  xnames = sort(unique(unlist(dict_list)))
 
   #create an empty adjacency matrix
-  dict_out = matrix(nrow = length(compnames),
-                    ncol = length(funcnames),
-                    dimnames = list(compnames, funcnames),
-                    data = F)
+  dict_out = matrix(nrow = length(ynames),
+                    ncol = length(xnames),
+                    dimnames = list(ynames, xnames), data = F)
   #Fill in the canonical associations by row
-  for(comp in 1:length(dict_pruned)){
-    dict_out[comp,dict_pruned[[comp]]] <- T
+  for (y in 1:length(dict_list)) {
+    dict_out[y, dict_list[[y]]] <- T
   }
   #Return the resulting matrix
   return(dict_out)
 }
 
 
-#'Wrangle anansi dictionary list into binary adjacency matrix
+#' Wrangle anansi dictionary list into binary adjacency matrix
 #' @description Takes the anansi dictionary in list format and wrangles it into a binary adjacency matrix based on group membership.
 #' For general use, should probably not be called directly, but rather through \code{\link{weaveWebFromTables}}.
 #' @seealso \code{\link{weaveWebFromTables}}
 #' @param dict_list A list that has tableY names as entries in the case of mode == "interaction" and groupnames in the case of mode == "membership". For general use, we recommend using the one provided in this package.
+#' @param mode A character vector. Can be "interaction" or "membership". Toggles whether to link two datasets based on their interactions or based on shared group membership.
 #' @return a binary adjacency matrix with the group members on both the rows and columns.
 #'
-makeAdjacencyMatrixFromGroupMemberList <- function(dict_list){
+makeAdjacencyMatrixFromGroupMemberList <- function(dict_list, mode = mode){
 
-  basic_list = makeAdjacencyMatrixFromMemberList(dict_list = dict_list)
+  basic_list = makeAdjacencyMatrixFromList(tableY = NULL, dict_list = dict_list, mode = mode)
   #Populate the empty adjacency matrix with TRUE between features that share a membership
   #Thanks to Benjamin Valderrama for the suggestion to use crosspod here!
   dict_out = crossprod(basic_list) >= 1
 
   return(dict_out)
 
-}
-
-#' Wrangle anansi dictionary list into binary adjacency matrix
-#' @description Takes the anansi dictionary in list format and wrangles it into a binary adjacency matrix based on group membership.
-#' For general use, should probably not be called directly, but rather through \code{\link{weaveWebFromTables}}.
-#' @seealso \code{\link{weaveWebFromTables}}
-#' @param dict_list A list that has tableY names as entries in the case of mode == "interaction" and groupnames in the case of mode == "membership". For general use, we recommend using the one provided in this package.
-#' @return a binary adjacency matrix with the group members on both the rows and columns.
-#' @importFrom utils combn
-#'
-makeAdjacencyMatrixFromMemberList <- function(dict_list)
-{
-  ynames = names(dict_list)
-  xnames = sort(unique(unlist(dict_list)))
-  dict_out = matrix(nrow = length(ynames), ncol = length(xnames),
-                    dimnames = list(ynames, xnames), data = F)
-  for (y in 1:length(dict_list)) {
-    dict_out[y, dict_list[[y]]] <- T
-  }
-  return(dict_out)
 }
 
