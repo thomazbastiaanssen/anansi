@@ -1,4 +1,4 @@
-#' Make a progress bar. Lifted from the excellent ALDEx2 library on bioconductor.
+#' Make a progress bar. Lifted from the excellent ALDEx2 and exprso libraries.
 #' @description plot a progress bar.
 #' @param i current state
 #' @param k maximum

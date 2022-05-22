@@ -2,7 +2,7 @@
 % Please edit documentation in R/extra.R
 \name{progress}
 \alias{progress}
-\title{Make a progress bar. Lifted from the excellent ALDEx2 library on bioconductor.}
+\title{Make a progress bar. Lifted from the excellent ALDEx2 and exprso libraries.}
 \usage{
 progress(i, k, numTicks)
 }

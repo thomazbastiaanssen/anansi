@@ -27,7 +27,7 @@ weaveWebFromTables(
 
 \item{prune}{A boolean. Toggles whether to prune particularly large groups.}
 
-\item{max_sds.}{A numeric. Only relevant for prune == TRUE. How many SDs larger than the median a group can be before it is pruned.
+\item{max_sds}{A numeric. Only relevant for prune == TRUE. How many SDs larger than the median a group can be before it is pruned.
 For general use, we recommend sticking to that one. You can access the dictionary like this: \code{data(dictionary)}}
 }
 \value{

@@ -6,7 +6,7 @@
 #' @param mode A character vector. Can be "interaction" or "membership". Toggles whether to link two datasets based on their interactions or based on shared group membership.
 #' @param verbose A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.
 #' @param prune A boolean. Toggles whether to prune particularly large groups.
-#' @param max_sds. A numeric. Only relevant for prune == TRUE. How many SDs larger than the median a group can be before it is pruned.
+#' @param max_sds A numeric. Only relevant for prune == TRUE. How many SDs larger than the median a group can be before it is pruned.
 #' For general use, we recommend sticking to that one. You can access the dictionary like this: \code{data(dictionary)}
 #' @return an \code{anansiWeb} object. Web is used as input for most of the main workflow of anansi.
 #' @export
@@ -141,6 +141,7 @@ makeAdjacencyMatrixFromGroupMemberList <- function(dict_list, mode = mode){
 #' @param verbose A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.
 #' @param max_sds a numeric, how many standard deviantions larger than the group median are groups allowed to be?
 #' @return a pruned anansi dictionary list object.
+#' @importFrom stats sd
 #'
 prune_dictionary_for_exclusivity <- function(dict_list, max_sds = 3, verbose = T){
 
