@@ -162,6 +162,7 @@ anansi_out <- anansi(web    = web, #generated above
     ## [1] "Running annotation-based correlations"
     ## [1] "Running correlations for the following groups: All, Aged yFMT, Aged oFMT, Young yFMT"
     ## [1] "Fitting models for differential correlation testing"
+    ## |------------(25%)----------(50%)----------(75%)----------|
 
 ## Spin to a table📝
 
