@@ -6,12 +6,13 @@
 #' @param verbose A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.
 #' @return a list of \code{anansiTale} result objects, one for the total model, one for emergent correlations and one for disjointed correlations.
 #' @importFrom stats anova lm pf residuals
+#' @importFrom future.apply future_apply
 #'
 anansiDiffCor = function(web, groups, adjust.method = adjust.method, verbose = T){
   #Create a matrix with row and column coordinates to cycle through the relevant comparisons in tableY and tableX.
   which_dictionary <- which(web@dictionary, arr.ind = T, useNames = F)
 
-  stats_out <- apply(which_dictionary, 1, FUN = glm_calc_diff_cor, web = web, groups = groups)
+  stats_out <- future.apply::future_apply(which_dictionary, 1, FUN = glm_calc_diff_cor, web = web, groups = groups)
 
   #Create result container matrices. We take advantage of the fact that true interactions are coded as TRUE, which corresponds to 1,
   #automatically setting all non-canonical interactions as p = 1 and estimate = 0.

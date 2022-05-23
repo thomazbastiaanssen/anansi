@@ -16,7 +16,8 @@ Description: Studies including both microbiome and metabolomics data are becomin
 Depends: R (>= 3.5.0)
 Imports:
     stats, 
-    methods
+    methods,
+    future.apply
 Suggests:
     ggplot2, 
     ggforce
