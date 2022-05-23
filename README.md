@@ -60,6 +60,9 @@ library(anansi)
 library(ggplot2)
 library(ggforce)
 
+#Anansi supports parallelisation through the future.apply framework. You can call it like this:
+#plan(multisession)
+
 #load anansi dictionary and complementary human-readable names for KEGG compounds and orthologues
 data(dictionary)
 
@@ -162,7 +165,6 @@ anansi_out <- anansi(web    = web, #generated above
     ## [1] "Running annotation-based correlations"
     ## [1] "Running correlations for the following groups: All, Aged yFMT, Aged oFMT, Young yFMT"
     ## [1] "Fitting models for differential correlation testing"
-    ## |------------(25%)----------(50%)----------(75%)----------|
 
 ## Spin to a table📝
 
