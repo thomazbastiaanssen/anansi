@@ -12,7 +12,7 @@ anansiDiffCor = function(web, groups, adjust.method = adjust.method, verbose = T
   #Create a matrix with row and column coordinates to cycle through the relevant comparisons in tableY and tableX.
   which_dictionary <- which(web@dictionary, arr.ind = T, useNames = F)
 
-  stats_out <- future.apply::future_apply(which_dictionary, 1, FUN = glm_calc_diff_cor, web = web, groups = groups)
+   stats_out <- future.apply::future_apply(which_dictionary, 1, FUN = glm_calc_diff_cor, web = web, groups = groups)
 
   #Create result container matrices. We take advantage of the fact that true interactions are coded as TRUE, which corresponds to 1,
   #automatically setting all non-canonical interactions as p = 1 and estimate = 0.
@@ -115,3 +115,4 @@ glm_calc_diff_cor <- function(web, which_dictionary, groups){
 
   return(vec_out)
 }
+
