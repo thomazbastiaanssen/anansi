@@ -156,4 +156,3 @@ setMethod("summary", "anansiYarn", function(object){
       or you can manually explore it by using the @ operator. ")
 }
 )
-

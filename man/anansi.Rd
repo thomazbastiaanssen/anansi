@@ -9,6 +9,8 @@ anansi(
   method = "pearson",
   groups = NULL,
   adjust.method = "BH",
+  modeltype = "lm",
+  reff = NULL,
   verbose = T,
   diff_cor = T,
   ignore_dictionary = F
@@ -22,6 +24,10 @@ anansi(
 \item{groups}{A categorical or continuous value necessary for differential correlations. Typically a state or treatment score. If no argument provided, anansi will let you know and still to regular correlations according to your dictionary.}
 
 \item{adjust.method}{Method to adjust p-values for multiple comparisons. \code{adjust.method = "BH"} is the default value. See \code{p.adjust()} in the base R \code{stats} package.}
+
+\item{modeltype}{A string, either "lm" or "lmer" depending on the type of model that should be ran.}
+
+\item{reff}{A categorical vector typically depicting a shared ID between samples. Only for mixed effect models.}
 
 \item{verbose}{A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.}
 

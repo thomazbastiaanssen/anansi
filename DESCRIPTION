@@ -17,6 +17,8 @@ Depends: R (>= 3.5.0)
 Imports:
     stats, 
     methods,
+    utils,
+    lme4,
     future.apply
 Suggests:
     ggplot2, 

@@ -3,6 +3,8 @@
 #' @param web An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.
 #' @param method Correlation method. \code{method = "pearson"} is the default value. The alternatives to be passed to \code{cor()} are "spearman" and "kendall".
 #' @param groups A categorical or continuous value necessary for differential correlations. Typically a state or treatment score. If no argument provided, anansi will let you know and still to regular correlations according to your dictionary.
+#' @param reff A categorical vector typically depicting a shared ID between samples. Only for mixed effect models.
+#' @param modeltype A string, either "lm" or "lmer" depending on the type of model that should be ran.
 #' @param adjust.method Method to adjust p-values for multiple comparisons. \code{adjust.method = "BH"} is the default value. See \code{p.adjust()} in the base R \code{stats} package.
 #' @param verbose A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.
 #' @param diff_cor A boolean. Toggles whether to compute differential correlations. Default is \code{TRUE}.
@@ -52,7 +54,8 @@
 #'
 #' }
 #'
-anansi = function(web, method = "pearson", groups = NULL, adjust.method = "BH", verbose = T, diff_cor = T, ignore_dictionary = F){
+anansi = function(web, method = "pearson", groups = NULL, adjust.method = "BH", modeltype = "lm",
+                  reff = NULL, verbose = T, diff_cor = T, ignore_dictionary = F){
 
   if(ignore_dictionary){
     if(verbose){print("Dictionary will be ignored. Running all vs all associations.")}
@@ -62,6 +65,8 @@ anansi = function(web, method = "pearson", groups = NULL, adjust.method = "BH", 
 
   #assess validity of input
   assess = assessGroups(web = web, groups = groups, diff_cor = diff_cor)
+  assess$diff_cor = assessModelType(modeltype = modeltype, reff = reff, diff_cor = diff_cor)
+
   groups          = assess$groups
   diff_cor        = assess$diff_cor
 
@@ -81,8 +86,11 @@ anansi = function(web, method = "pearson", groups = NULL, adjust.method = "BH", 
                                                     verbose = verbose)
 
   if(diff_cor){
-  if(verbose){print("Fitting models for differential correlation testing")}
-    output@model_results = anansiDiffCor(web = web, groups = groups, adjust.method = adjust.method, verbose = verbose)
+  if(verbose){print("Fitting models for differential correlation testing")
+    print(paste("Model type:", modeltype, sep = ""))}
+    output@model_results = anansiDiffCor(web = web, groups = groups,
+                                         adjust.method = adjust.method, reff = reff,
+                                         modeltype = modeltype, verbose = verbose)
   }
   outYarn@output = output
 
@@ -134,4 +142,27 @@ if(inherits(groups, "character")){
 
 return(list(diff_cor = diff_cor,
             groups   = groups))
+}
+#' Investigate validity of the model call
+#' @description checks the model call is legitimate
+#' @param reff A categorical vector typically depicting a shared ID between samples. Only for mixed effect models.
+#' @param modeltype A string, either "lm" or "lmer" depending on the type of model that should be ran.
+#' @param diff_cor A boolean. Toggles whether to compute differential correlations. Default is \code{TRUE}.
+#'
+assessModelType <- function(modeltype, reff, diff_cor){
+  if(diff_cor){
+    if(!modeltype %in% c("lmer", "lm")){
+      warning("modeltype was not recognised. Needs to be exaclty `lm` or `lmer`. Disabling differential association analysis. ")
+      diff_cor = FALSE
+    }
+    if(modeltype == "lmer" & is.null(reff)){
+      warning("lmer needs a categorical value for reff depicting group membership. Disabling differential association analysis. ")
+      diff_cor = FALSE
+    }
+    if(modeltype != "lmer" & !is.null(reff)){
+      warning("Only lmer can take a random effect. Either activate lmer or remove the reff argument. Disabling differential association analysis. ")
+      diff_cor = FALSE
+    }
+  }
+  return(diff_cor)
 }
