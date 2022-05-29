@@ -167,6 +167,9 @@ anansiTranslate <- function(x, Y_translation = Y_translation, X_translation = X_
 #'     theme_bw() +
 #'
 #'     #Improve annotation:
+#'     scale_fill_manual(values = c("Young yFMT" = "#2166ac",
+#'                                  "Aged oFMT"  = "#b2182b",
+#'                                  "Aged yFMT"  = "#ef8a62")) +
 #'     ylab(p$name[1]) +
 #'     xlab(p$name[2]) +
 #'     ggtitle(paste(p$name[1], "vs", p$name[2]))
@@ -187,6 +190,10 @@ spinToPlots <- function(anansiYarn, target = anansiYarn@input@web@dictionary){
   names(out_list) <- paste(colnames(anansiYarn@input@web@tableY)[pairs_of_interest[,1]],
                            "vs" ,
                            colnames(anansiYarn@input@web@tableX)[pairs_of_interest[,2]])
+
+  #Reorganize order of out_list as to reflect order of the other spinToX functions.
+  outlist = out_list[sort(names(out_list))]
+
   return(out_list)
 }
 

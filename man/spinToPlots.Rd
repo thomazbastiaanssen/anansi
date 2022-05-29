@@ -49,6 +49,9 @@ plotted = lapply(outPlots, FUN = function(p){
     theme_bw() +
 
     #Improve annotation:
+    scale_fill_manual(values = c("Young yFMT" = "#2166ac",
+                                 "Aged oFMT"  = "#b2182b",
+                                 "Aged yFMT"  = "#ef8a62")) +
     ylab(p$name[1]) +
     xlab(p$name[2]) +
     ggtitle(paste(p$name[1], "vs", p$name[2]))
