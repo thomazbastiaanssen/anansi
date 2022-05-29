@@ -192,7 +192,7 @@ spinToPlots <- function(anansiYarn, target = anansiYarn@input@web@dictionary){
                            colnames(anansiYarn@input@web@tableX)[pairs_of_interest[,2]])
 
   #Reorganize order of out_list as to reflect order of the other spinToX functions.
-  outlist = out_list[sort(names(out_list))]
+  out_list = out_list[order(names(out_list))]
 
   return(out_list)
 }
