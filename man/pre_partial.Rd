@@ -16,7 +16,7 @@ pre_partial(web, formula, metadata, verbose)
 \item{verbose}{A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.}
 }
 \value{
-An anansWeb object with updated tableY.
+An anansiWeb object with updated tableY.
 }
 \description{
 Fit a model and return the residuals of the tableY features. Called by \code{adjust_web()}

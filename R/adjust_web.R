@@ -4,7 +4,7 @@
 #' @param formula a formula object of type ~ x + y + z where x, y and z are covariates that you are not interested in. Do not include groups or tableX features here.
 #' @param metadata a data.frame containing the term(s) mentioned in the formula
 #' @param verbose A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.
-#' @return An anansWeb object with updated tableY.
+#' @return An anansiWeb object with updated tableY.
 #'
 adjust_web <- function(web, formula, metadata, verbose = T){
   web@tableY <- pre_partial(web = web, formula = formula, metadata, verbose = verbose)
@@ -17,7 +17,7 @@ adjust_web <- function(web, formula, metadata, verbose = T){
 #' @param formula a formula object of type ~ x + y + z where x, y and z are covariates that you are not interested in. Do not include groups or tableX features here.
 #' @param metadata a data.frame containing the term(s) mentioned in the formula
 #' @param verbose A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.
-#' @return An anansWeb object with updated tableY.
+#' @return An anansiWeb object with updated tableY.
 #' @importFrom stats lm residuals update.formula
 #'
 pre_partial <- function(web, formula, metadata, verbose){

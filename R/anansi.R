@@ -64,14 +64,18 @@ anansi = function(web, method = "pearson", groups = NULL, adjust.method = "BH", 
   }
 
   #assess validity of input
-  assess = assessGroups(web = web, groups = groups, diff_cor = diff_cor)
-  assess$diff_cor = assessModelType(modeltype = modeltype, reff = reff, diff_cor = diff_cor)
+  assessG         = assessGroups(web = web, groups = groups, diff_cor = diff_cor)
 
-  groups          = assess$groups
-  diff_cor        = assess$diff_cor
+  groups          = assessG$groups
+  diff_cor        = assessG$diff_cor
+
+  assessM         = assessModelType(modeltype = modeltype, reff = reff, diff_cor = diff_cor)
+
+  diff_cor        = assessM$diff_cor
+  reff            = assessM$reff
 
   #generate anansiYarn output object
-  outYarn = new("anansiYarn", input = new("anansiInput", web = web, groups = groups))
+  outYarn = new("anansiYarn", input = new("anansiInput", web = web, groups = groups, reff = reff))
 
 
 
@@ -164,5 +168,7 @@ assessModelType <- function(modeltype, reff, diff_cor){
       diff_cor = FALSE
     }
   }
-  return(diff_cor)
+  if(is.null(reff)){reff = NA}
+  return(list(diff_cor = diff_cor,
+              reff     = reff))
 }

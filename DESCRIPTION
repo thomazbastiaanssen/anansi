@@ -22,7 +22,8 @@ Imports:
     future.apply
 Suggests:
     ggplot2, 
-    ggforce
+    ggforce, 
+    patchwork
 License: GPL (>= 3) | BSD_3_clause + file LICENSE
 Encoding: UTF-8
 LazyData: true

@@ -129,3 +129,80 @@ anansiTranslate <- function(x, Y_translation = Y_translation, X_translation = X_
                     each = length(unique(x$feature_Y)))
   return(x)
 }
+
+#' Take anansi output and wrangle it to a list of plottable objects.
+#' @param anansiYarn The output of the main anansi function.
+#' @param target A boolean matrix. Determines which associations should be prepared for plotting. Default is the dictionary.
+#' @return a list of ready to plot data.frames and their names.
+#' @export
+#' @examples
+#' \dontrun{
+#' #Starting off at the example in ?anansi
+#'
+#' anansi_out = anansi(web     = web,
+#'                     method  = "pearson",
+#'                     groups  = FMT_metadata$Legend,
+#'                     adjust.method = "BH",
+#'                     verbose = TRUE)
+#'
+#' #Let's look at all canonical interactions that also have a sufficiently well-fitting model:
+#'
+#' outPlots = spinToPlots(anansi_out,
+#'                        target = anansi_out@input@web@dictionary &
+#'                                 anansi_out@output@model_results$modelfit@q.values < 0.1)
+#'
+#' #load ggplot2 and patchwork for plotting
+#'
+#' library(ggplot2)
+#' library(patchwork)
+#'
+#' plotted = lapply(outPlots, FUN = function(p){
+#'
+#'     #Main ggplot call
+#'     ggplot(data = p$data, aes(x = X, y = Y, fill = groups)) +
+#'
+#'     #Establish geoms:
+#'     geom_point(shape = 21) +
+#'     geom_smooth(method = "lm") +
+#'     theme_bw() +
+#'
+#'     #Improve annotation:
+#'     ylab(p$name[1]) +
+#'     xlab(p$name[2]) +
+#'     ggtitle(paste(p$name[1], "vs", p$name[2]))
+#'
+#'  })
+#'
+#' #Call patchwork to unify and arrange the first 6 plots
+#'
+#' wrap_plots(plotted[1:6]) + plot_layout(guides = 'collect')
+#'
+#' }
+#'
+spinToPlots <- function(anansiYarn, target = anansiYarn@input@web@dictionary){
+  pairs_of_interest = which(target, arr.ind = T, useNames = F)
+
+  out_list = apply(X = pairs_of_interest, MARGIN = 1, FUN = gather_plot, anansiYarn = anansiYarn, simplify = F)
+
+  names(out_list) <- paste(colnames(anansiYarn@input@web@tableY)[pairs_of_interest[,1]],
+                           "vs" ,
+                           colnames(anansiYarn@input@web@tableX)[pairs_of_interest[,2]])
+  return(out_list)
+}
+
+#' Take anansi output and wrangle it to a list of plottable objects. Meant to be apply'd by \code{spinToPlots()}.
+#' @param pair_of_interest A vector of length 2. Denotes the column position of the tableY and tableX data to be plotted.
+#' @param anansiYarn The output of the main anansi function.
+#' @return a list of ready to plot data.frames and their names
+#'
+gather_plot <- function(pair_of_interest, anansiYarn){
+  df_out = data.frame(Y = anansiYarn@input@web@tableY[,pair_of_interest[1]],
+                      X = anansiYarn@input@web@tableX[,pair_of_interest[2]],
+                      groups = anansiYarn@input@groups,
+                      reff   = anansiYarn@input@reff)
+  return(list(
+    data = df_out,
+    name = c(colnames(anansiYarn@input@web@tableY)[pair_of_interest[1]],
+             colnames(anansiYarn@input@web@tableX)[pair_of_interest[2]]))
+  )
+}
