@@ -10,7 +10,7 @@
 #' @importFrom stats anova lm pf residuals
 #' @importFrom future.apply future_apply
 #'
-anansiDiffCor = function(web, groups, adjust.method = adjust.method, reff, modeltype, verbose = T){
+anansiDiffCor = function(web, groups, adjust.method = adjust.method, best.of.two = best.of.two, reff, modeltype, verbose = T){
   #Create a matrix with row and column coordinates to cycle through the relevant comparisons in tableY and tableX.
   which_dictionary <- which(web@dictionary, arr.ind = T, useNames = F)
 
@@ -36,7 +36,7 @@ anansiDiffCor = function(web, groups, adjust.method = adjust.method, reff, model
 
   #Adjust for multiple comparisons
   out_qvals                      <- out_pvals
-  out_qvals[web@dictionary]      <- p.adjust(out_pvals[web@dictionary], method = adjust.method)
+  out_qvals[web@dictionary]      <- anansiPAdjust(out_pvals[web@dictionary], method = adjust.method, best.of.two = best.of.two)
 
   out_tale        = new("anansiTale",
                         subject    = "model_full",
@@ -46,7 +46,7 @@ anansiDiffCor = function(web, groups, adjust.method = adjust.method, reff, model
                         q.values   = out_qvals)
 
   out_disjqvals                  <- out_disjpvals
-  out_disjqvals[web@dictionary]  <- p.adjust(out_disjpvals[web@dictionary], method = adjust.method)
+  out_disjqvals[web@dictionary]  <- anansiPAdjust(out_disjpvals[web@dictionary], method = adjust.method, best.of.two = best.of.two)
 
   out_disjointed = new("anansiTale",
                        subject    = "model_disjointed",
@@ -56,7 +56,7 @@ anansiDiffCor = function(web, groups, adjust.method = adjust.method, reff, model
                        q.values   = out_disjqvals)
 
   out_emergqvals                 <- out_emergpvals
-  out_emergqvals[web@dictionary] <- p.adjust(out_emergpvals[web@dictionary], method = adjust.method)
+  out_emergqvals[web@dictionary] <- anansiPAdjust(out_emergpvals[web@dictionary], method = adjust.method, best.of.two = best.of.two)
 
   out_emergent   = new("anansiTale",
                        subject    = "model_emergent",

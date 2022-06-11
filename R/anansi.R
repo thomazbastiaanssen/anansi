@@ -6,6 +6,7 @@
 #' @param reff A categorical vector typically depicting a shared ID between samples. Only for mixed effect models.
 #' @param modeltype A string, either "lm" or "lmer" depending on the type of model that should be ran.
 #' @param adjust.method Method to adjust p-values for multiple comparisons. \code{adjust.method = "BH"} is the default value. See \code{p.adjust()} in the base R \code{stats} package.
+#' @param best.of.two Experimental. Toggles the resampling of p-values only from the row and column of the interaction in question.
 #' @param verbose A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.
 #' @param diff_cor A boolean. Toggles whether to compute differential correlations. Default is \code{TRUE}.
 #' @param ignore_dictionary A boolean. Default is FALSE. If set to TRUE, regular all vs all associations will be tested regardless of the dictionary.
@@ -95,7 +96,7 @@
 #' #See also ?spinToPlots
 #' }
 #'
-anansi = function(web, method = "pearson", groups = NULL, adjust.method = "BH", modeltype = "lm",
+anansi = function(web, method = "pearson", groups = NULL, adjust.method = "BH", best.of.two = F, modeltype = "lm",
                   reff = NULL, verbose = T, diff_cor = T, ignore_dictionary = F){
 
   if(ignore_dictionary){
@@ -128,13 +129,14 @@ anansi = function(web, method = "pearson", groups = NULL, adjust.method = "BH", 
                                                     method = method,
                                                     groups = groups,
                                                     adjust.method = adjust.method,
+                                                    best.of.two = best.of.two,
                                                     verbose = verbose)
 
   if(diff_cor){
   if(verbose){print("Fitting models for differential correlation testing")
     print(paste("Model type:", modeltype, sep = ""))}
     output@model_results = anansiDiffCor(web = web, groups = groups,
-                                         adjust.method = adjust.method, reff = reff,
+                                         adjust.method = adjust.method, best.of.two = best.of.two, reff = reff,
                                          modeltype = modeltype, verbose = verbose)
   }
   outYarn@output = output

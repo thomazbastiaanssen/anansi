@@ -8,7 +8,7 @@
 #' @return a list of \code{anansiTale} result objects, one for the total dataset and per group if applicable.
 #' @seealso \code{\link{anansi}}
 #'
-anansiCorTestByGroup = function(web, method = "pearson", groups, adjust.method = adjust.method, verbose = T){
+anansiCorTestByGroup = function(web, method = "pearson", groups, adjust.method = adjust.method, best.of.two = best.of.two, verbose = T){
 
   #Determine all groups
   all_groups = unique(groups)
@@ -24,7 +24,7 @@ anansiCorTestByGroup = function(web, method = "pearson", groups, adjust.method =
   names(out_list) = c(all_groups)
 
   #first run for all groups together
-  out_list$All = anansiCorPvalue(web, method = method, groups = rep(T, nrow(web@tableY)), adjust.method = adjust.method)
+  out_list$All = anansiCorPvalue(web, method = method, groups = rep(T, nrow(web@tableY)), adjust.method = adjust.method, best.of.two = best.of.two)
   out_list$All@subject = "All"
 
 
@@ -38,7 +38,7 @@ anansiCorTestByGroup = function(web, method = "pearson", groups, adjust.method =
   #Assess correlations for subsets if applicable.
   #Skip 1 since that's taken by "All".
   for(i in 2:length(all_groups)){
-    out_by_group = anansiCorPvalue(web, method = method, groups = groups == all_groups[i], adjust.method = adjust.method)
+    out_by_group = anansiCorPvalue(web, method = method, groups = groups == all_groups[i], adjust.method = adjust.method, best.of.two = best.of.two)
     out_by_group@subject = all_groups[i]
 
     out_list[[i]] = out_by_group
@@ -59,7 +59,7 @@ anansiCorTestByGroup = function(web, method = "pearson", groups, adjust.method =
 #' @importFrom stats pt p.adjust
 #' @importFrom methods new
 #'
-anansiCorPvalue = function(web, method = "pearson", groups = NULL, adjust.method = adjust.method) {
+anansiCorPvalue = function(web, method = "pearson", groups = NULL, adjust.method = adjust.method, best.of.two = best.of.two) {
   #Compute correlation coefficients
   r    <- anansiCor(web = web, method = method, groups = groups)
 
@@ -73,7 +73,7 @@ anansiCorPvalue = function(web, method = "pearson", groups = NULL, adjust.method
 
   #Compute naive adjusted p-values
   q    <- p
-  q[web@dictionary] <- p.adjust(p[web@dictionary], method = adjust.method)
+  q[web@dictionary] <- anansiPAdjust(p[web@dictionary], method = adjust.method, best.of.two = best.of.two)
 
   #Collate correlation coefficients, p-values and q-values into an anansiTale
   out  <- new("anansiTale",
