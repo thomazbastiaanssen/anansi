@@ -1,37 +1,64 @@
-#' Handle FDR methods for anansi. Can also be used on anansi output.
-#' @param p A matrix containing the p-values from an anansiTale object.
-#' @param dictionary And anansi Dictionary object.
+#' Handle FDR methods for anansi. Can also be used on anansi output to recalculate FDR.
+#' @param x an AnansiYarn object, the main output from anansi().
 #' @param method The p-value adjustment method. See ?p.adjust.
 #' @param resampling A boolean. Toggles the resampling of p-values to help reduce the influence of dependence of p-values. Will take more time on large datasets.
 #' @param locality A boolean. Toggles whether to prefer sampling from p-values from a comparison that shares an x or y feature. In a nutshell, considers the local p-value landscape when more important when correcting for FDR.
 #' @param verbose A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.
+#' @importFrom stats p.adjust
+#' @importFrom methods slot slot<-
 #' @export
 #'
-anansiAdjustP <- function(p, dictionary, method = "BH", resampling = F, locality = T, verbose = T){
-  if(!resampling){
+anansiAdjustP <- function(x, method = "BH", resampling = F, locality = T, verbose = T){
+  stopifnot("Input needs to be an anansiYarn object, the output of the anansi() function" = class(x) == "anansiYarn")
+
+  if(!resampling & locality){
     locality = F
     if(verbose){print("Locality is only available for resampling procedure. Setting locality to False")}
-    }
-  if(resampling){
-    coord <- which(dictionary, arr.ind = T)
-
-    p[dictionary] <- unlist(apply(coord,
-                                  MARGIN = 1,
-                                  FUN = function(x){
-                                    compute_FDR(
-                                    coord      = x,
-                                    p          = p,
-                                    dictionary = dictionary,
-                                    locality   = locality,
-                                    method     = method)}
-                                  )
-                            )
-
-    return(p[dictionary])
   }
+  if(verbose)
+    {print("Adjusting p-values...")
+    if(resampling & locality){print("Using locally resampled distributions. ")}
+    else if(resampling & !locality){print("Using total resampled distributions.")}
+    else if(!resampling){print("Using theoretical distribution.")}
+    }
 
-  else{return(p.adjust(p[dictionary], method = method))}
-}
+  dictionary = x@input@web@dictionary
+
+
+  pval_df = data.frame(model = c(
+    rep("cor_results",   length(x@output@cor_results  )),
+    rep("model_results", length(x@output@model_results))),
+                  group = c(
+                    names(x@output@cor_results),
+                    names(x@output@model_results)))
+
+  for(i in 1:nrow(pval_df)){
+    p = slot(slot(x@output, pval_df[i,1])[[pval_df[i,2]]], 'p.values')
+
+
+
+    if(resampling){
+      coord <- which(dictionary, arr.ind = T)
+
+      slot(slot(x@output, pval_df[i,1])[[pval_df[i,2]]], 'q.values')[dictionary] <-
+        apply(coord,
+                     MARGIN = 1,
+                     FUN = function(x){
+                       compute_FDR(
+                         coord      = x,
+                         p          = p,
+                         dictionary = dictionary,
+                         locality   = locality,
+                         method     = method)})
+    }
+    else{
+      slot(slot(x@output, pval_df[i,1])[[pval_df[i,2]]], 'q.values')[dictionary] <-
+      p.adjust(p[dictionary], method = method)
+    }
+
+  }
+  return(x)
+  }
 
 
 

@@ -12,7 +12,7 @@ anansiCor(web, method = "pearson", groups = NULL)
 
 \item{method}{Correlation method. \code{method = "pearson"} is the default value. The alternatives to be passed to \code{cor()} are "spearman" and "kendall".}
 
-\item{groups}{A boolean vector used to select which samples should be included in the correlaitons.}
+\item{groups}{A boolean vector used to select which samples should be included in the correlations.}
 }
 \value{
 A matrix of r-statistics.

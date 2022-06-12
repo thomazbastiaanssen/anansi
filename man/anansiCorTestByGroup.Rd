@@ -4,15 +4,7 @@
 \alias{anansiCorTestByGroup}
 \title{Run correlations for all interacting metabolites and functions.}
 \usage{
-anansiCorTestByGroup(
-  web,
-  method = "pearson",
-  groups,
-  adjust.method = adjust.method,
-  resampling = resampling,
-  locality = locality,
-  verbose = T
-)
+anansiCorTestByGroup(web, method = "pearson", groups, verbose = T)
 }
 \arguments{
 \item{web}{An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.}
@@ -20,12 +12,6 @@ anansiCorTestByGroup(
 \item{method}{Correlation method. \code{method = "pearson"} is the default value. The alternatives to be passed to \code{cor()} are "spearman" and "kendall".}
 
 \item{groups}{A categorical or continuous value necessary for differential correlations. Typically a state or treatment score.}
-
-\item{adjust.method}{Method to adjust p-values for multiple comparisons. \code{adjust.method = "BH"} is the default value. See \code{p.adjust()} in the base R \code{stats} package.}
-
-\item{resampling}{A boolean. Toggles the resampling of p-values to help reduce the influence of dependence of p-values. Will take more time on large datasets.}
-
-\item{locality}{A boolean. Toggles whether to prefer sampling from p-values from a comparison that shares an x or y feature. In a nutshell, considers the local p-value landscape when more important when correcting for FDR.}
 
 \item{verbose}{A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.}
 }

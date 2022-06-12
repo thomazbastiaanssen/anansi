@@ -2,21 +2,12 @@
 % Please edit documentation in R/anansiPAdjust.R
 \name{anansiAdjustP}
 \alias{anansiAdjustP}
-\title{Handle FDR methods for anansi. Can also be used on anansi output.}
+\title{Handle FDR methods for anansi. Can also be used on anansi output to recalculate FDR.}
 \usage{
-anansiAdjustP(
-  p,
-  dictionary,
-  method = "BH",
-  resampling = F,
-  locality = T,
-  verbose = T
-)
+anansiAdjustP(x, method = "BH", resampling = F, locality = T, verbose = T)
 }
 \arguments{
-\item{p}{A matrix containing the p-values from an anansiTale object.}
-
-\item{dictionary}{And anansi Dictionary object.}
+\item{x}{an AnansiYarn object, the main output from anansi().}
 
 \item{method}{The p-value adjustment method. See ?p.adjust.}
 
@@ -27,5 +18,5 @@ anansiAdjustP(
 \item{verbose}{A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.}
 }
 \description{
-Handle FDR methods for anansi. Can also be used on anansi output.
+Handle FDR methods for anansi. Can also be used on anansi output to recalculate FDR.
 }

@@ -3,14 +3,11 @@
 #' @param web An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.
 #' @param method Correlation method. \code{method = "pearson"} is the default value. The alternatives to be passed to \code{cor()} are "spearman" and "kendall".
 #' @param groups A categorical or continuous value necessary for differential correlations. Typically a state or treatment score.
-#' @param adjust.method Method to adjust p-values for multiple comparisons. \code{adjust.method = "BH"} is the default value. See \code{p.adjust()} in the base R \code{stats} package.
-#' @param resampling A boolean. Toggles the resampling of p-values to help reduce the influence of dependence of p-values. Will take more time on large datasets.
-#' @param locality A boolean. Toggles whether to prefer sampling from p-values from a comparison that shares an x or y feature. In a nutshell, considers the local p-value landscape when more important when correcting for FDR.
 #' @param verbose A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.
 #' @return a list of \code{anansiTale} result objects, one for the total dataset and per group if applicable.
 #' @seealso \code{\link{anansi}}
 #'
-anansiCorTestByGroup = function(web, method = "pearson", groups, adjust.method = adjust.method, resampling = resampling, locality = locality, verbose = T){
+anansiCorTestByGroup = function(web, method = "pearson", groups, verbose = T){
 
   #Determine all groups
   all_groups = unique(groups)
@@ -26,7 +23,7 @@ anansiCorTestByGroup = function(web, method = "pearson", groups, adjust.method =
   names(out_list) = c(all_groups)
 
   #first run for all groups together
-  out_list$All = anansiCorPvalue(web, method = method, groups = rep(T, nrow(web@tableY)), adjust.method = adjust.method, resampling = resampling, locality = locality, verbose = verbose)
+  out_list$All = anansiCorPvalue(web, method = method, groups = rep(T, nrow(web@tableY)), verbose = verbose)
   out_list$All@subject = "All"
 
 
@@ -40,7 +37,7 @@ anansiCorTestByGroup = function(web, method = "pearson", groups, adjust.method =
   #Assess correlations for subsets if applicable.
   #Skip 1 since that's taken by "All".
   for(i in 2:length(all_groups)){
-    out_by_group = anansiCorPvalue(web, method = method, groups = groups == all_groups[i], adjust.method = adjust.method, resampling = resampling, locality = locality, verbose = verbose)
+    out_by_group = anansiCorPvalue(web, method = method, groups = groups == all_groups[i], verbose = verbose)
     out_by_group@subject = all_groups[i]
 
     out_list[[i]] = out_by_group
@@ -55,16 +52,13 @@ anansiCorTestByGroup = function(web, method = "pearson", groups, adjust.method =
 #' @param web An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.
 #' @param method Correlation method. \code{method = "pearson"} is the default value. The alternatives to be passed to \code{cor()} are "spearman" and "kendall".
 #' @param groups A categorical or continuous value necessary for differential correlations. Typically a state or treatment score. If no argument provided, anansi will let you know and still to regular correlations according to your dictionary.
-#' @param adjust.method Method to adjust p-values for multiple comparisons. \code{adjust.method = "BH"} is the default value. See \code{p.adjust()} in the base R \code{stats} package.
-#' @param resampling A boolean. Toggles the resampling of p-values to help reduce the influence of dependence of p-values. Will take more time on large datasets.
-#' @param locality A boolean. Toggles whether to prefer sampling from p-values from a comparison that shares an x or y feature. In a nutshell, considers the local p-value landscape when more important when correcting for FDR.
 #' @param verbose A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.
 #' @return An \code{anansiTale} result object.
 #' @seealso \code{\link{anansi}} \cr \code{\link{anansiCorTestByGroup}}
-#' @importFrom stats pt p.adjust
+#' @importFrom stats pt
 #' @importFrom methods new
 #'
-anansiCorPvalue = function(web, method = "pearson", groups = NULL, adjust.method = adjust.method, resampling = resampling, locality = locality, verbose = verbose) {
+anansiCorPvalue = function(web, method = "pearson", groups = NULL, verbose = verbose) {
   #Compute correlation coefficients
   r    <- anansiCor(web = web, method = method, groups = groups)
 
@@ -78,7 +72,7 @@ anansiCorPvalue = function(web, method = "pearson", groups = NULL, adjust.method
 
   #Compute naive adjusted p-values
   q    <- p
-  q[web@dictionary] <- anansiAdjustP(p = p, dictionary = web@dictionary, method = adjust.method, resampling = resampling, locality = locality, verbose = verbose)
+  q[web@dictionary] <- NA
 
   #Collate correlation coefficients, p-values and q-values into an anansiTale
   out  <- new("anansiTale",
@@ -94,7 +88,7 @@ anansiCorPvalue = function(web, method = "pearson", groups = NULL, adjust.method
 #' Typically, the main \code{anansi()} function will run this for you.
 #' @param web An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.
 #' @param method Correlation method. \code{method = "pearson"} is the default value. The alternatives to be passed to \code{cor()} are "spearman" and "kendall".
-#' @param groups A boolean vector used to select which samples should be included in the correlaitons.
+#' @param groups A boolean vector used to select which samples should be included in the correlations.
 #' @seealso \code{\link{anansi}} \cr \code{\link{anansiCorTestByGroup}}
 #' @return A matrix of r-statistics.
 #' @importFrom stats cor

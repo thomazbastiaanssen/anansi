@@ -129,20 +129,17 @@ anansi = function(web, method = "pearson", groups = NULL, adjust.method = "BH", 
   output@cor_results        = anansiCorTestByGroup(web     = web,
                                                     method = method,
                                                     groups = groups,
-                                                    adjust.method = adjust.method,
-                                                    resampling = resampling,
-                                                    locality = locality,
                                                     verbose = verbose)
 
   if(diff_cor){
   if(verbose){print("Fitting models for differential correlation testing")
     print(paste("Model type:", modeltype, sep = ""))}
-    output@model_results = anansiDiffCor(web = web, groups = groups,
-                                         adjust.method = adjust.method, resampling = resampling,
-                                         locality = locality, reff = reff,
+    output@model_results = anansiDiffCor(web = web, groups = groups, reff = reff,
                                          modeltype = modeltype, verbose = verbose)
   }
   outYarn@output = output
+
+  outYarn <- anansiAdjustP(x = outYarn, method = adjust.method, resampling = resampling, locality = locality, verbose = verbose)
 
   return(outYarn)
 }
