@@ -1,69 +1,89 @@
-#' Handle FDR methods for anansi
+#' Handle FDR methods for anansi. Can also be used on anansi output.
+#' @param p A matrix containing the p-values from an anansiTale object.
+#' @param dictionary And anansi Dictionary object.
+#' @param method The p-value adjustment method. See ?p.adjust.
+#' @param resampling A boolean. Toggles the resampling of p-values to help reduce the influence of dependence of p-values. Will take more time on large datasets.
+#' @param locality A boolean. Toggles whether to prefer sampling from p-values from a comparison that shares an x or y feature. In a nutshell, considers the local p-value landscape when more important when correcting for FDR.
+#' @param verbose A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.
+#' @export
 #'
-anansiPAdjust <- function(p, dictionary, method, best.of.two){
-  if(best.of.two){
+anansiAdjustP <- function(p, dictionary, method = "BH", resampling = F, locality = T, verbose = T){
+  if(!resampling){
+    locality = F
+    if(verbose){print("Locality is only available for resampling procedure. Setting locality to False")}
+    }
+  if(resampling){
+    coord <- which(dictionary, arr.ind = T)
 
-    p = q
+    p[dictionary] <- unlist(apply(coord,
+                                  MARGIN = 1,
+                                  FUN = function(x){
+                                    compute_FDR(
+                                    coord      = x,
+                                    p          = p,
+                                    dictionary = dictionary,
+                                    locality   = locality,
+                                    method     = method)}
+                                  )
+                            )
 
-    return(q)
+    return(p[dictionary])
   }
 
   else{return(p.adjust(p[dictionary], method = method))}
 }
 
 
-#
-#
-# a1 = t(apply(X = p[d], MARGIN = c(1), FUN = function(x){p.adjust(p = x, method = "BH")}))
-# a2 = (apply(X = p, MARGIN = c(2), FUN = function(x){p.adjust(p = x, method = "BH")}))
-# a3 = (apply(X = p, MARGIN = c(1,2), FUN = function(x){p.adjust(p = x, method = "BH")}))
-#
-# p[,1]
-#
-# exp(mean(log(c(1, 10))))
-#
-# p.adjust(c(0.1, 0.5), method = "BH", n = 3)
-#
-#
-#
-# View(rbind(a1, a2))
-# View(do.call(rbind, list(p, a1, a2, a3)))
-#
-# p = anansi_out@output@cor_results$`Aged yFMT`@p.values
-# d = anansi_out@input@web@dictionary
-#
-# ?(p.adjust)
-#
-#
-# data(dictionary)
-# data(FMT_data)
-#
-# #Clean and prepare the example data.
-# #In the example dataset, the metabolites are already cleaned.
-#
-# KOs   <- floor(FMT_KOs)
-# KOs   <- apply(KOs,c(1,2),function(x) as.numeric(as.character(x)))
-# KOs   <- KOs[apply(KOs == 0, 1, sum) <= (ncol(KOs) * 0.90), ]
-#
-# KOs   <- KOs[row.names(KOs) %in% sort(unique(unlist(anansi_dic))),]
-#
-# #CLR-transform.
-#
-# KOs.exp = clr_c(KOs)
-#
-# #Make sure that columns are features and rows are samples.
-#
-# t1 = t(FMT_metab)
-# t2 = t(KOs.exp)
-#
-# #Run anansi pipeline.
-#
-# web        = weaveWebFromTables(tableY     = t1,
-#                                 tableX     = t2,
-#                                 dictionary = anansi_dic)
-#
-# anansi_out = anansi(web     = web,
-#                     method  = "pearson",
-#                     groups  = FMT_metadata$Legend,
-#                     adjust.method = "BH",
-#                     verbose = TRUE)
+
+#' determines which p-values to sample from
+#' @param y the row-coordinate of the p-value of interest
+#' @param x the column-coordinate of the p-value of interest
+#' @param p A matrix containing the p-values from an anansiTale object.
+#' @param dictionary And anansi Dictionary object.
+#' @param locality A boolean. Toggles whether to prefer sampling from p-values from a comparison that shares an x or y feature. In a nutshell, considers the local p-value landscape when more important when correcting for FDR.
+#'
+determine_source <- function(y, x, p, dictionary, locality = T){
+  if(!locality){return(unname(p[dictionary]))}
+  else{
+    return(unname(
+      c(
+      p[y,dictionary[y,]],
+      p[dictionary[,x],x],
+      median(p[dictionary])
+      )
+      )
+    )
+  }
+
+}
+
+#' Create a resampling matrix for FDR
+#' @param coord a vector of two integers. the first contains the row and the second the columns coordinates of the p-value of interest.
+#' @param p A matrix containing the p-values from an anansiTale object.
+#' @param dictionary And anansi Dictionary object.
+#' @param method The p-value adjustment method. See ?p.adjust.
+#' @param locality A boolean. Toggles whether to prefer sampling from p-values from a comparison that shares an x or y feature. In a nutshell, considers the local p-value landscape when more important when correcting for FDR.
+#'
+compute_FDR <- function(coord, p, dictionary, locality, method){
+
+  y = unlist(coord[1])
+  x = unlist(coord[2])
+  source = determine_source(x = x, y = y, p, dictionary, locality = locality)
+
+  #Generate resampling matrix, as to keep resampling consistent between p-values
+  resam_mat = replicate(n = 1000,
+                        sample(x       = source,
+                               size    = length(p[dictionary]),
+                               replace = T)
+                        )
+
+  resam_mat[,1] <- p[y, x]
+
+  #Perform FDR on each row, only take the first position and return the median.
+  q <- median(apply(X =  resam_mat,
+                    MARGIN = 1,
+                    FUN = function(x){p.adjust(x, method = method)})[1,]
+              )
+
+  return(q)
+}

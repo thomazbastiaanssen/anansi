@@ -5,12 +5,14 @@
 #' @param reff A categorical vector typically depicting a shared ID between samples. Only for mixed effect models.
 #' @param modeltype A string, either "lm" or "lmer" depending on the type of model that should be ran.
 #' @param adjust.method Method to adjust p-values for multiple comparisons. \code{adjust.method = "BH"} is the default value. See \code{p.adjust()} in the base R \code{stats} package.
+#' @param resampling A boolean. Toggles the resampling of p-values to help reduce the influence of dependence of p-values. Will take more time on large datasets.
+#' @param locality A boolean. Toggles whether to prefer sampling from p-values from a comparison that shares an x or y feature. In a nutshell, considers the local p-value landscape when more important when correcting for FDR.
 #' @param verbose A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.
 #' @return a list of \code{anansiTale} result objects, one for the total model, one for emergent correlations and one for disjointed correlations.
 #' @importFrom stats anova lm pf residuals
 #' @importFrom future.apply future_apply
 #'
-anansiDiffCor = function(web, groups, adjust.method = adjust.method, best.of.two = best.of.two, reff, modeltype, verbose = T){
+anansiDiffCor = function(web, groups, adjust.method = adjust.method, resampling = resampling, locality = locality, reff, modeltype, verbose = T){
   #Create a matrix with row and column coordinates to cycle through the relevant comparisons in tableY and tableX.
   which_dictionary <- which(web@dictionary, arr.ind = T, useNames = F)
 
@@ -36,7 +38,7 @@ anansiDiffCor = function(web, groups, adjust.method = adjust.method, best.of.two
 
   #Adjust for multiple comparisons
   out_qvals                      <- out_pvals
-  out_qvals[web@dictionary]      <- anansiPAdjust(out_pvals[web@dictionary], method = adjust.method, best.of.two = best.of.two)
+  out_qvals[web@dictionary]      <- anansiAdjustP(p = out_pvals, dictionary = web@dictionary, method = adjust.method, resampling = resampling, locality = locality, verbose = verbose)
 
   out_tale        = new("anansiTale",
                         subject    = "model_full",
@@ -46,7 +48,7 @@ anansiDiffCor = function(web, groups, adjust.method = adjust.method, best.of.two
                         q.values   = out_qvals)
 
   out_disjqvals                  <- out_disjpvals
-  out_disjqvals[web@dictionary]  <- anansiPAdjust(out_disjpvals[web@dictionary], method = adjust.method, best.of.two = best.of.two)
+  out_disjqvals[web@dictionary]  <- anansiAdjustP(p = out_disjpvals, dictionary = web@dictionary, method = adjust.method, resampling = resampling, locality = locality, verbose = verbose)
 
   out_disjointed = new("anansiTale",
                        subject    = "model_disjointed",
@@ -56,7 +58,7 @@ anansiDiffCor = function(web, groups, adjust.method = adjust.method, best.of.two
                        q.values   = out_disjqvals)
 
   out_emergqvals                 <- out_emergpvals
-  out_emergqvals[web@dictionary] <- anansiPAdjust(out_emergpvals[web@dictionary], method = adjust.method, best.of.two = best.of.two)
+  out_emergqvals[web@dictionary] <- anansiAdjustP(p = out_emergpvals, dictionary = web@dictionary, method = adjust.method, resampling = resampling, locality = locality, verbose = verbose)
 
   out_emergent   = new("anansiTale",
                        subject    = "model_emergent",

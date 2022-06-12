@@ -10,6 +10,8 @@ anansi(
   groups = NULL,
   adjust.method = "BH",
   modeltype = "lm",
+  resampling = F,
+  locality = F,
   reff = NULL,
   verbose = T,
   diff_cor = T,
@@ -26,6 +28,10 @@ anansi(
 \item{adjust.method}{Method to adjust p-values for multiple comparisons. \code{adjust.method = "BH"} is the default value. See \code{p.adjust()} in the base R \code{stats} package.}
 
 \item{modeltype}{A string, either "lm" or "lmer" depending on the type of model that should be ran.}
+
+\item{resampling}{A boolean. Toggles the resampling of p-values to help reduce the influence of dependence of p-values. Will take more time on large datasets.}
+
+\item{locality}{A boolean. Toggles whether to prefer sampling from p-values from a comparison that shares an x or y feature. In a nutshell, considers the local p-value landscape when more important when correcting for FDR.}
 
 \item{reff}{A categorical vector typically depicting a shared ID between samples. Only for mixed effect models.}
 
