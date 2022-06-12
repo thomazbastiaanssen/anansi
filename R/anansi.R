@@ -6,8 +6,8 @@
 #' @param reff A categorical vector typically depicting a shared ID between samples. Only for mixed effect models.
 #' @param modeltype A string, either "lm" or "lmer" depending on the type of model that should be ran.
 #' @param adjust.method Method to adjust p-values for multiple comparisons. \code{adjust.method = "BH"} is the default value. See \code{p.adjust()} in the base R \code{stats} package.
-#' @param resampling A boolean. Toggles the resampling of p-values to help reduce the influence of dependence of p-values. Will take more time on large datasets.
-#' @param locality A boolean. Toggles whether to prefer sampling from p-values from a comparison that shares an x or y feature. In a nutshell, considers the local p-value landscape when more important when correcting for FDR.
+#' @param resampling A boolean. For p-value adjustment. Toggles the resampling of p-values to help reduce the influence of dependence of p-values. Will take more time on large datasets.
+#' @param locality A boolean. For p-value adjustment. Toggles whether to prefer sampling from p-values from a comparison that shares an x or y feature. In a nutshell, considers the local p-value landscape when more important when correcting for FDR.
 #' @param verbose A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.
 #' @param diff_cor A boolean. Toggles whether to compute differential correlations. Default is \code{TRUE}.
 #' @param ignore_dictionary A boolean. Default is FALSE. If set to TRUE, regular all vs all associations will be tested regardless of the dictionary.

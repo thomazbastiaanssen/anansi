@@ -2,7 +2,7 @@
 % Please edit documentation in R/anansiPAdjust.R
 \name{determine_source}
 \alias{determine_source}
-\title{determines which p-values to sample from}
+\title{Determines which p-values to sample from}
 \usage{
 determine_source(y, x, p, dictionary, locality = T)
 }
@@ -18,5 +18,5 @@ determine_source(y, x, p, dictionary, locality = T)
 \item{locality}{A boolean. Toggles whether to prefer sampling from p-values from a comparison that shares an x or y feature. In a nutshell, considers the local p-value landscape when more important when correcting for FDR.}
 }
 \description{
-determines which p-values to sample from
+Determines which p-values to sample from
 }

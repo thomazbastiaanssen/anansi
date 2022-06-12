@@ -29,9 +29,9 @@ anansi(
 
 \item{modeltype}{A string, either "lm" or "lmer" depending on the type of model that should be ran.}
 
-\item{resampling}{A boolean. Toggles the resampling of p-values to help reduce the influence of dependence of p-values. Will take more time on large datasets.}
+\item{resampling}{A boolean. For p-value adjustment. Toggles the resampling of p-values to help reduce the influence of dependence of p-values. Will take more time on large datasets.}
 
-\item{locality}{A boolean. Toggles whether to prefer sampling from p-values from a comparison that shares an x or y feature. In a nutshell, considers the local p-value landscape when more important when correcting for FDR.}
+\item{locality}{A boolean. For p-value adjustment. Toggles whether to prefer sampling from p-values from a comparison that shares an x or y feature. In a nutshell, considers the local p-value landscape when more important when correcting for FDR.}
 
 \item{reff}{A categorical vector typically depicting a shared ID between samples. Only for mixed effect models.}
 

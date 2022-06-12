@@ -9,22 +9,31 @@
 #' @export
 #'
 anansiAdjustP <- function(x, method = "BH", resampling = F, locality = T, verbose = T){
+  #first check if the settings make sense
   stopifnot("Input needs to be an anansiYarn object, the output of the anansi() function" = class(x) == "anansiYarn")
 
   if(!resampling & locality){
     locality = F
     if(verbose){print("Locality is only available for resampling procedure. Setting locality to False")}
   }
+
+  #verbalise the plan if verbose
   if(verbose)
-    {print("Adjusting p-values...")
+  {if(method %in% c("BH", "fdr"))
+    {print("Adjusting p-values using Benjamini & Hochberg's procedure.")}
+    else
+    {print("Adjusting p-values...")}
+
     if(resampling & locality){print("Using locally resampled distributions. ")}
     else if(resampling & !locality){print("Using total resampled distributions.")}
     else if(!resampling){print("Using theoretical distribution.")}
+
     }
 
+  #extract dictionary for convenience
   dictionary = x@input@web@dictionary
 
-
+  #Take inventory of where to find p-values.
   pval_df = data.frame(model = c(
     rep("cor_results",   length(x@output@cor_results  )),
     rep("model_results", length(x@output@model_results))),
@@ -32,14 +41,18 @@ anansiAdjustP <- function(x, method = "BH", resampling = F, locality = T, verbos
                     names(x@output@cor_results),
                     names(x@output@model_results)))
 
+  #for each of those sources of p-values, do:
   for(i in 1:nrow(pval_df)){
+
+    #Extract p-values
     p = slot(slot(x@output, pval_df[i,1])[[pval_df[i,2]]], 'p.values')
 
-
-
+    #Resampling approach
     if(resampling){
+      #Extract coordinates to cycle over relevant p-values using apply
       coord <- which(dictionary, arr.ind = T)
 
+      #adjust p-values directly into the relevant slot
       slot(slot(x@output, pval_df[i,1])[[pval_df[i,2]]], 'q.values')[dictionary] <-
         apply(coord,
                      MARGIN = 1,
@@ -52,6 +65,7 @@ anansiAdjustP <- function(x, method = "BH", resampling = F, locality = T, verbos
                          method     = method)})
     }
     else{
+      #adjust p-values directly into the relevant slot
       slot(slot(x@output, pval_df[i,1])[[pval_df[i,2]]], 'q.values')[dictionary] <-
       p.adjust(p[dictionary], method = method)
     }
@@ -62,7 +76,7 @@ anansiAdjustP <- function(x, method = "BH", resampling = F, locality = T, verbos
 
 
 
-#' determines which p-values to sample from
+#' Determines which p-values to sample from
 #' @param y the row-coordinate of the p-value of interest
 #' @param x the column-coordinate of the p-value of interest
 #' @param p A matrix containing the p-values from an anansiTale object.
@@ -93,9 +107,11 @@ determine_source <- function(y, x, p, dictionary, locality = T){
 #'
 compute_FDR <- function(coord, p, dictionary, locality, method){
 
+  #Extract y (row) and x (column) coordinates of the relevant p-value.
+
   y = unlist(coord[1])
   x = unlist(coord[2])
-  source = determine_source(x = x, y = y, p, dictionary, locality = locality)
+  source = determine_source(x = x, y = y, p = p, dictionary = dictionary , locality = locality)
 
   #Generate resampling matrix, as to keep resampling consistent between p-values
   resam_mat = replicate(n = 1000,
