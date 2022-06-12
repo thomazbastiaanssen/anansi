@@ -17,7 +17,7 @@ spinToLong(
 
 \item{prune}{Boolean, default is TRUE. Toggles whether to take out the non-canonical associations.}
 
-\item{translate}{Boolean, default is TRUE. Toggles whether to translate the names of the features in tableX and tableY to human readable names.}
+\item{translate}{Boolean, default is FALSE Toggles whether to translate the names of the features in tableX and tableY to human readable names.}
 
 \item{Y_translation}{data.frame, a lookup table with featureY names as the first column and human readable names as the second. See \code{cpd_translation} for an example file.}
 

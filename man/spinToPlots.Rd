@@ -4,12 +4,24 @@
 \alias{spinToPlots}
 \title{Take anansi output and wrangle it to a list of plottable objects.}
 \usage{
-spinToPlots(anansiYarn, target = anansiYarn@input@web@dictionary)
+spinToPlots(
+  anansiYarn,
+  target = anansiYarn@input@web@dictionary,
+  translate = F,
+  Y_translation = NULL,
+  X_translation = NULL
+)
 }
 \arguments{
 \item{anansiYarn}{The output of the main anansi function.}
 
 \item{target}{A boolean matrix. Determines which associations should be prepared for plotting. Default is the dictionary.}
+
+\item{translate}{Boolean, default is FALSE Toggles whether to translate the names of the features in tableX and tableY to human readable names.}
+
+\item{Y_translation}{data.frame, a lookup table with featureY names as the first column and human readable names as the second. See \code{cpd_translation} for an example file.}
+
+\item{X_translation}{data.frame, a lookup table with featureX names as the first column and human readable names as the second. See \code{KO_translation} for an example file.}
 }
 \value{
 a list of ready to plot data.frames and their names.

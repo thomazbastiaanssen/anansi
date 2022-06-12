@@ -1,7 +1,7 @@
 #' Take anansi output and wrangle it all to a wide data.frame format.
 #' @param anansi_output The output of the main anansi function.
 #' @param prune Boolean, default is TRUE. Toggles whether to take out the non-canonical associations.
-#' @param translate Boolean, default is TRUE. Toggles whether to translate the names of the features in tableX and tableY to human readable names.
+#' @param translate Boolean, default is FALSE Toggles whether to translate the names of the features in tableX and tableY to human readable names.
 #' @param Y_translation data.frame, a lookup table with featureY names as the first column and human readable names as the second. See \code{cpd_translation} for an example file.
 #' @param X_translation data.frame, a lookup table with featureX names as the first column and human readable names as the second. See \code{KO_translation} for an example file.
 #' @return a wide format data.frame
@@ -35,7 +35,7 @@ spinToWide <- function(anansi_output, prune = T, translate = F, Y_translation = 
 #' Take anansi output and wrangle it all to a long data.frame format.
 #' @param anansi_output an \code{anansiYarn} object. The output of the main anansi function.
 #' @param prune Boolean, default is TRUE. Toggles whether to take out the non-canonical associations.
-#' @param translate Boolean, default is TRUE. Toggles whether to translate the names of the features in tableX and tableY to human readable names.
+#' @param translate Boolean, default is FALSE Toggles whether to translate the names of the features in tableX and tableY to human readable names.
 #' @param Y_translation data.frame, a lookup table with featureY names as the first column and human readable names as the second. See \code{cpd_translation} for an example file.
 #' @param X_translation data.frame, a lookup table with featureX names as the first column and human readable names as the second. See \code{KO_translation} for an example file.
 #' @return a long format data.frame intended to be compatible with \code{ggplot2}
@@ -133,6 +133,9 @@ anansiTranslate <- function(x, Y_translation = Y_translation, X_translation = X_
 #' Take anansi output and wrangle it to a list of plottable objects.
 #' @param anansiYarn The output of the main anansi function.
 #' @param target A boolean matrix. Determines which associations should be prepared for plotting. Default is the dictionary.
+#' @param translate Boolean, default is FALSE Toggles whether to translate the names of the features in tableX and tableY to human readable names.
+#' @param Y_translation data.frame, a lookup table with featureY names as the first column and human readable names as the second. See \code{cpd_translation} for an example file.
+#' @param X_translation data.frame, a lookup table with featureX names as the first column and human readable names as the second. See \code{KO_translation} for an example file.
 #' @return a list of ready to plot data.frames and their names.
 #' @export
 #' @examples
@@ -182,7 +185,7 @@ anansiTranslate <- function(x, Y_translation = Y_translation, X_translation = X_
 #'
 #' }
 #'
-spinToPlots <- function(anansiYarn, target = anansiYarn@input@web@dictionary){
+spinToPlots <- function(anansiYarn, target = anansiYarn@input@web@dictionary, translate = F, Y_translation = NULL, X_translation = NULL){
   pairs_of_interest = which(target, arr.ind = T, useNames = F)
 
   out_list = apply(X = pairs_of_interest, MARGIN = 1, FUN = gather_plot, anansiYarn = anansiYarn, simplify = F)
@@ -193,6 +196,17 @@ spinToPlots <- function(anansiYarn, target = anansiYarn@input@web@dictionary){
 
   #Reorganize order of out_list as to reflect order of the other spinToX functions.
   out_list = out_list[order(names(out_list))]
+
+  if(translate){
+    out_list <- lapply(out_list, FUN = function(y){
+      y$name <- unlist(anansiTranslate(x = tiny_df(y),
+                                       Y_translation = Y_translation,
+                                       X_translation = X_translation))
+      return(y)
+      }
+      )
+
+  }
 
   return(out_list)
 }
@@ -212,4 +226,11 @@ gather_plot <- function(pair_of_interest, anansiYarn){
     name = c(colnames(anansiYarn@input@web@tableY)[pair_of_interest[1]],
              colnames(anansiYarn@input@web@tableX)[pair_of_interest[2]]))
   )
+}
+
+#' Helper function to translate feature names in spinToPlot()
+#' @param x a vector of two names, to be wrangled to a 1x2 data.frame.
+#'
+tiny_df <- function(x){
+  return(data.frame(matrix(x$name, nrow = 1, dimnames = list("", c("feature_Y", "feature_X")))))
 }
