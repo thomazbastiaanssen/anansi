@@ -37,7 +37,7 @@ weaveWebFromTables = function(tableY, tableX = NULL, dictionary = anansi::anansi
   dictionary = makeAdjacencyMatrix(tableY = tableY, dict_list = dictionary,
                                    verbose = verbose, mode = mode)
 
-  #If we're looking at single data set, don't do associations with yourself.
+  #If we're looking at single data set, don't do associations with yourself. Set diagonal to FALSE.
   if(identical(tableX ,tableY)){
     diag(dictionary) <- F
   }
@@ -73,9 +73,10 @@ weaveWebFromTables = function(tableY, tableX = NULL, dictionary = anansi::anansi
 }
 
 #' Helper function to assess the input feature tables
-#' @description Assess the input tables. Mostly to prepare for within-table associations.
+#' @description Assess the input tables. Mostly to prepare for within-table associations. Called by \code{\link{weaveWebFromTables}}.
 #' @param tableY A table containing features of interest. Rows should be samples and columns should be features. The Y and X refer to the position of the features in a formula: Y ~ X.
 #' @param tableX A table containing features of interest. Rows should be samples and columns should be features. The Y and X refer to the position of the features in a formula: Y ~ X. If left empty, tableY will be duplicated.
+#' @param verbose A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.
 #' @return A potentially adjusted tableX.
 #'
 assessWebCall <- function(tableY, tableX, verbose){

@@ -10,10 +10,12 @@ assessWebCall(tableY, tableX, verbose)
 \item{tableY}{A table containing features of interest. Rows should be samples and columns should be features. The Y and X refer to the position of the features in a formula: Y ~ X.}
 
 \item{tableX}{A table containing features of interest. Rows should be samples and columns should be features. The Y and X refer to the position of the features in a formula: Y ~ X. If left empty, tableY will be duplicated.}
+
+\item{verbose}{A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.}
 }
 \value{
 A potentially adjusted tableX.
 }
 \description{
-Assess the input tables. Mostly to prepare for within-table associations.
+Assess the input tables. Mostly to prepare for within-table associations. Called by \code{\link{weaveWebFromTables}}.
 }

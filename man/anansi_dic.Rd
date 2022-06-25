@@ -3,9 +3,9 @@
 \docType{data}
 \name{anansi_dic}
 \alias{anansi_dic}
-\title{dictionary to link KEGG compounds to KEGG orthologues}
+\title{Dictionary to link KEGG compounds to KEGG orthologues}
 \format{
-a list of 18844 names vectors. The names refer to compounds in the KEGG database.
+a list of 18844 named vectors. The names refer to compounds in the KEGG database.
 The entries in the vectors refer to the KEGG orthologues that are associated to those compounds;
 typically either producing or requiring them.
 }
@@ -16,6 +16,6 @@ Adapted from \url{https://www.genome.jp/kegg/}
 anansi_dic
 }
 \description{
-dictionary to link KEGG compounds to KEGG orthologues
+Dictionary to link KEGG compounds to KEGG orthologues
 }
 \keyword{datasets}

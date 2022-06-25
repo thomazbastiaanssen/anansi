@@ -1,12 +1,21 @@
-#' dictionary to link KEGG compounds to KEGG orthologues
+#' Dictionary to link KEGG compounds to KEGG orthologues
 #'
-#' @format a list of 18844 names vectors. The names refer to compounds in the KEGG database.
+#' @format a list of 18844 named vectors. The names refer to compounds in the KEGG database.
 #' The entries in the vectors refer to the KEGG orthologues that are associated to those compounds;
 #' typically either producing or requiring them.
 #'
 #' @source Adapted from \url{https://www.genome.jp/kegg/}
 #'
 "anansi_dic"
+
+#' Dictionary to link KEGG orthologues based on their pathway membership.
+#'
+#' @format a list of 467 named vectors. The names refer to pathways in the KEGG database.
+#' The entries in the vectors refer to the KEGG orthologues that are make up those pathways.
+#'
+#' @source Adapted from \url{https://www.genome.jp/kegg/}
+#'
+"KO_member_dic"
 
 #' Lookup table to convert KEGG compound IDs to their human-readable counterparts
 #'
