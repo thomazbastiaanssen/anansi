@@ -6,7 +6,7 @@
 \usage{
 weaveWebFromTables(
   tableY,
-  tableX,
+  tableX = NULL,
   dictionary = anansi::anansi_dic,
   verbose = T,
   mode = "interaction",
@@ -17,7 +17,7 @@ weaveWebFromTables(
 \arguments{
 \item{tableY}{A table containing features of interest. Rows should be samples and columns should be features. The Y and X refer to the position of the features in a formula: Y ~ X.}
 
-\item{tableX}{A table containing features of interest. Rows should be samples and columns should be features. The Y and X refer to the position of the features in a formula: Y ~ X.}
+\item{tableX}{A table containing features of interest. Rows should be samples and columns should be features. The Y and X refer to the position of the features in a formula: Y ~ X. If left empty, tableY will be duplicated.}
 
 \item{dictionary}{A list that has feature names from tableY as names. Default is the dictionary provided in this package.}
 

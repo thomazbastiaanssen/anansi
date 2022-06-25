@@ -1,7 +1,7 @@
 #' Create an anansiWeb object from two 'omics tables and a dictionary
 #' @description This function will take two tables of 'omics data, for example metabolomics and functional microbiome data. It will also take a dictionary list, which is provided in this package.
 #' @param tableY A table containing features of interest. Rows should be samples and columns should be features. The Y and X refer to the position of the features in a formula: Y ~ X.
-#' @param tableX A table containing features of interest. Rows should be samples and columns should be features. The Y and X refer to the position of the features in a formula: Y ~ X.
+#' @param tableX A table containing features of interest. Rows should be samples and columns should be features. The Y and X refer to the position of the features in a formula: Y ~ X. If left empty, tableY will be duplicated.
 #' @param dictionary A list that has feature names from tableY as names. Default is the dictionary provided in this package.
 #' @param mode A character vector. Can be "interaction" or "membership". Toggles whether to link two datasets based on their interactions or based on shared group membership.
 #' @param verbose A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.
@@ -10,7 +10,9 @@
 #' For general use, we recommend sticking to that one. You can access the dictionary like this: \code{data(dictionary)}
 #' @return an \code{anansiWeb} object. Web is used as input for most of the main workflow of anansi.
 #' @export
-weaveWebFromTables = function(tableY, tableX, dictionary = anansi::anansi_dic, verbose = T, mode = "interaction", prune = F, max_sds = 3){
+weaveWebFromTables = function(tableY, tableX = NULL, dictionary = anansi::anansi_dic, verbose = T, mode = "interaction", prune = F, max_sds = 3){
+
+  tableX <- assessWebCall(tableY = tableY, tableX = tableX, verbose = verbose)
 
   stopifnot("the mode argument needs to be interaction or membership." = mode %in% c("interaction", "membership"))
   #For conventional use, table Y should be metabolites and table X functions.
@@ -34,6 +36,11 @@ weaveWebFromTables = function(tableY, tableX, dictionary = anansi::anansi_dic, v
   #create binary adjacency matrix first
   dictionary = makeAdjacencyMatrix(tableY = tableY, dict_list = dictionary,
                                    verbose = verbose, mode = mode)
+
+  #If we're looking at single data set, don't do associations with yourself.
+  if(identical(tableX ,tableY)){
+    diag(dictionary) <- F
+  }
 
   #Check if input tables have the same names and the same length.
   if(!identical(row.names(tableY), row.names(tableX)))
@@ -63,6 +70,21 @@ weaveWebFromTables = function(tableY, tableX, dictionary = anansi::anansi_dic, v
              tableY     = as.matrix(tableY),
              tableX     = as.matrix(tableX),
              dictionary = as.matrix(dictionary)))
+}
+
+#' Helper function to assess the input feature tables
+#' @description Assess the input tables. Mostly to prepare for within-table associations.
+#' @param tableY A table containing features of interest. Rows should be samples and columns should be features. The Y and X refer to the position of the features in a formula: Y ~ X.
+#' @param tableX A table containing features of interest. Rows should be samples and columns should be features. The Y and X refer to the position of the features in a formula: Y ~ X. If left empty, tableY will be duplicated.
+#' @return A potentially adjusted tableX.
+#'
+assessWebCall <- function(tableY, tableX, verbose){
+  if(is.null(tableX))
+  {tableX <- tableY}
+
+    if(identical(tableX, tableY) & verbose)
+    {print("Single feature table detected. Preparing web for within-table analysis.")}
+  return(tableX)
 }
 
 #' Starting point to wrangle anansi dictionary list into binary adjacency matrix
