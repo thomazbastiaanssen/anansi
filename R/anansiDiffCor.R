@@ -124,7 +124,7 @@ glm_calc_diff_cor <- function(web, which_dictionary, groups){
   vec_out[4]  <- disj_fit[3,5]
 
   #run ANOVA to determine impact of group on STRENGTH of association.
-  abs_resid      <- abs(residuals(lm(y ~ x)))
+  abs_resid      <- abs(residuals(lm(y ~ x, na.action = na.exclude)))
   emerg_fit      <- anova(lm(abs_resid ~ groups))
 
   #Calculate r.squared
@@ -168,9 +168,9 @@ glmer_calc_diff_cor <- function(web, which_dictionary, groups, reff){
   vec_out = c(0, 1, 0, 1, 0, 1)
 
   # fit null model to compute p-values later
-  f.null   <- lm(y ~ 1)
+  f.null   <- lm(y ~ 1, na.action = na.exclude)
   # fit complete mixed effect model
-  f.full   <- suppressMessages(lme4::lmer(y ~ x * groups + (1|reff), REML = F))
+  f.full   <- suppressMessages(lme4::lmer(y ~ x * groups + (1|reff), REML = F, na.action = na.exclude))
 
   #Compare null to full model for get a p-value
   f_comp   <- anova.merMod(f.null, f.full)
@@ -181,7 +181,7 @@ glmer_calc_diff_cor <- function(web, which_dictionary, groups, reff){
   vec_out[2] <- p
 
   #Fit a separate null model to compute effect of groups value on slope (ie interaction).
-  f.null2  <- suppressMessages(lme4::lmer(y ~ x + groups + (1|reff), REML = F))
+  f.null2  <- suppressMessages(lme4::lmer(y ~ x + groups + (1|reff), REML = F, na.action = na.exclude))
 
   #compare null to full model for get a p-value
   f_comp2   <- anova.merMod(f.null2, f.full)
@@ -193,7 +193,7 @@ glmer_calc_diff_cor <- function(web, which_dictionary, groups, reff){
 
 
   #run ANOVA to determine impact of group on STRENGTH of association.
-  abs_resid      <- abs(residuals(suppressMessages(lme4::lmer(y ~ x + (1|reff), REML = F))))
+  abs_resid      <- abs(residuals(suppressMessages(lme4::lmer(y ~ x + (1|reff), REML = F, na.action = na.exclude))))
 
   #exactly the same as the lm version for here on
   emerg_fit      <- anova(lm(abs_resid ~ groups))
