@@ -177,7 +177,7 @@ glmer_calc_diff_cor <- function(web, which_dictionary, groups, reff){
   p        <- f_comp["f.full", "Pr(>Chisq)"]
 
   #Here, we calculate R^2 for the complete fitted model using pearson's method
-  vec_out[1] <- cor(y, fitted(f.full),method = "pearson")^2
+  vec_out[1] <- cor(y, fitted(f.full),method = "pearson", use = "pairwise.complete.obs")^2
   vec_out[2] <- p
 
   #Fit a separate null model to compute effect of groups value on slope (ie interaction).
@@ -188,7 +188,7 @@ glmer_calc_diff_cor <- function(web, which_dictionary, groups, reff){
   p2        <- f_comp2["f.full", "Pr(>Chisq)"]
 
   #Here, we calculate R^2 for the complete fitted model using pearson's method
-  vec_out[3] <- cor(residuals(f.null2), fitted(f.full),method = "pearson")^2
+  vec_out[3] <- cor(residuals(f.null2), fitted(f.full),method = "pearson", use = "pairwise.complete.obs")^2
   vec_out[4] <- p2
 
 
