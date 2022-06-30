@@ -97,7 +97,7 @@ anansiCor = function(web, method = "pearson", groups = NULL){
 
   #Run correlations on subsections of your data
   merge <- cbind(web@tableY[groups,], web@tableX[groups,])
-  cors  <- cor(merge, method = method)
+  cors  <- cor(merge, method = method, use = "pairwise.complete.obs")
   cors_bipartite <- cors[1:ncol(web@tableY), (ncol(web@tableY)+1):ncol(cors)]
   #set non-canonical correlations to zero using the binary adjacency matrix.
   return(cors_bipartite * web@dictionary)
