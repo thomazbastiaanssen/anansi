@@ -4,7 +4,7 @@
 #' @param method Correlation method. \code{method = "pearson"} is the default value. The alternatives to be passed to \code{cor()} are "spearman" and "kendall".
 #' @param groups A categorical or continuous value necessary for differential correlations. Typically a state or treatment score. If no argument provided, anansi will let you know and still to regular correlations according to your dictionary.
 #' @param reff A categorical vector typically depicting a shared ID between samples. Only for mixed effect models.
-#' @param modeltype A string, either "lm" or "lmer" depending on the type of model that should be ran.
+#' @param modeltype A string, either "lm" or "lmer" depending on the type of model that should be ran, or "propr" in the case of within-composition associations..
 #' @param adjust.method Method to adjust p-values for multiple comparisons. \code{adjust.method = "BH"} is the default value. See \code{p.adjust()} in the base R \code{stats} package.
 #' @param resampling A boolean. For p-value adjustment. Toggles the resampling of p-values to help reduce the influence of dependence of p-values. Will take more time on large datasets.
 #' @param locality A boolean. For p-value adjustment. Toggles whether to prefer sampling from p-values from a comparison that shares an x or y feature. In a nutshell, considers the local p-value landscape when more important when correcting for FDR.
@@ -126,6 +126,26 @@ anansi = function(web, method = "pearson", groups = NULL, adjust.method = "BH", 
   #initialize cor_output list object
   output = new("anansiOutput")
 
+  if(modeltype == "propr"){
+    stopifnot("Two different tables detected, propr is meant for within-composition association testing." = web@tableY == web@tableX)
+    if(verbose){print("Running propr to assess within-composition associations.")}
+    output@cor_results = wrap_propr(web = web,
+                                    groups = groups,
+                                    verbose = verbose)
+
+    if(diff_cor){
+    if(verbose){print("Running propr for differential proportionality testing")}
+
+    output@model_results = wrap_propd(web = web,
+                                      groups = groups,
+                                      verbose = verbose)
+    }
+
+    outYarn@output = output
+
+  }
+
+  if(modeltype %in% c("lm", "lmer")){
   output@cor_results        = anansiCorTestByGroup(web     = web,
                                                     method = method,
                                                     groups = groups,
@@ -141,6 +161,7 @@ anansi = function(web, method = "pearson", groups = NULL, adjust.method = "BH", 
 
   outYarn <- anansiAdjustP(x = outYarn, method = adjust.method, resampling = resampling, locality = locality, verbose = verbose)
 
+  }
   return(outYarn)
 }
 
@@ -198,8 +219,8 @@ return(list(diff_cor = diff_cor,
 #'
 assessModelType <- function(modeltype, reff, diff_cor){
   if(diff_cor){
-    if(!modeltype %in% c("lmer", "lm")){
-      warning("modeltype was not recognised. Needs to be exaclty `lm` or `lmer`. Disabling differential association analysis. ")
+    if(!modeltype %in% c("lmer", "lm", "propr")){
+      warning("modeltype was not recognised. Needs to be exaclty `lm`, `lmer` or `propr`. Disabling differential association analysis. ")
       diff_cor = FALSE
     }
     if(modeltype == "lmer" & is.null(reff)){

@@ -27,7 +27,7 @@ anansi(
 
 \item{adjust.method}{Method to adjust p-values for multiple comparisons. \code{adjust.method = "BH"} is the default value. See \code{p.adjust()} in the base R \code{stats} package.}
 
-\item{modeltype}{A string, either "lm" or "lmer" depending on the type of model that should be ran.}
+\item{modeltype}{A string, either "lm" or "lmer" depending on the type of model that should be ran, or "propr" in the case of within-composition associations..}
 
 \item{resampling}{A boolean. For p-value adjustment. Toggles the resampling of p-values to help reduce the influence of dependence of p-values. Will take more time on large datasets.}
 
