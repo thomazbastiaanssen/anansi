@@ -65,6 +65,12 @@ weaveWebFromTables = function(tableY, tableX = NULL, dictionary = anansi::anansi
   tableY = tableY[,rownames(dictionary)]
   tableX = tableX[,colnames(dictionary)]
 
+  #Disable the diagonal for within-dataset testing.
+  if(identical(tableX, tableY)){
+    if(verbose){print("X and Y tables are identical. Setting the diagonal of the dictionary to FALSE.")}
+    diag(dictionary) <- F
+  }
+
   #Return an anansiWeb object with three slots: typically metabolites, functions and adjacency matrix
   return(new("anansiWeb",
              tableY     = as.matrix(tableY),

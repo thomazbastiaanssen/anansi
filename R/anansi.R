@@ -217,6 +217,7 @@ if(inherits(groups, "character")){
 return(list(diff_cor = diff_cor,
             groups   = groups))
 }
+
 #' Investigate validity of the model call
 #' @description checks the model call is legitimate
 #' @param reff A categorical vector typically depicting a shared ID between samples. Only for mixed effect models.

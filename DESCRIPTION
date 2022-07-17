@@ -19,7 +19,8 @@ Imports:
     methods,
     utils,
     lme4,
-    future.apply
+    future.apply, 
+    propr
 Suggests:
     ggplot2, 
     ggforce, 

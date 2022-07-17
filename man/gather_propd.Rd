@@ -14,6 +14,9 @@ gather_propd(web, groups, verbose)
 
 \item{verbose}{A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.}
 }
+\value{
+a list with four matrices containing thetas and p-values for emergent and disjointed proportionality testing respectively.
+}
 \description{
 Can either take continuous or categorical data for \code{groups}. Typically, the main \code{anansi()} function will run this for you.
 }

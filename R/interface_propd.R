@@ -104,12 +104,9 @@ return(out)
 #' @importFrom future.apply future_apply
 #'
 wrap_propd = function(web, groups, verbose = T){
-  warning("propr not yet supported.")
-  break
 
-
-
-
+  #Call gather propd to compute thetas and p-values
+  stats_out <- gather_propd(web = web, groups = groups, verbose = verbose)
 
   #Create result container matrices. We take advantage of the fact that true interactions are coded as TRUE, which corresponds to 1,
   #automatically setting all non-canonical interactions as p = 1 and estimate = 0.
@@ -119,10 +116,10 @@ wrap_propd = function(web, groups, verbose = T){
   out_emergrvals <- web@dictionary
   out_emergpvals <- !web@dictionary
 
-  out_disjrvals[web@dictionary]  <- stats_out[3,]
-  out_disjpvals[web@dictionary]  <- stats_out[4,]
-  out_emergrvals[web@dictionary] <- stats_out[5,]
-  out_emergpvals[web@dictionary] <- stats_out[6,]
+  out_disjrvals[web@dictionary]  <- stats_out[1,][web@dictionary]
+  out_disjpvals[web@dictionary]  <- stats_out[2,][web@dictionary]
+  out_emergrvals[web@dictionary] <- stats_out[3,][web@dictionary]
+  out_emergpvals[web@dictionary] <- stats_out[4,][web@dictionary]
 
 
   out_disjqvals                  <- out_disjpvals
@@ -130,7 +127,7 @@ wrap_propd = function(web, groups, verbose = T){
 
   out_disjointed = new("anansiTale",
                        subject    = "model_disjointed",
-                       type       = "theta",
+                       type       = "theta_f",
                        estimates  = out_disjrvals,
                        p.values   = out_disjpvals,
                        q.values   = out_disjqvals)
@@ -140,7 +137,7 @@ wrap_propd = function(web, groups, verbose = T){
 
   out_emergent   = new("anansiTale",
                        subject    = "model_emergent",
-                       type       = "theta",
+                       type       = "theta_e",
                        estimates  = out_emergrvals,
                        p.values   = out_emergpvals,
                        q.values   = out_emergqvals)
@@ -156,7 +153,9 @@ wrap_propd = function(web, groups, verbose = T){
 #' @param web An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.
 #' @param groups A categorical or continuous value necessary for differential proportionality Typically a state or treatment score.
 #' @param verbose A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.
-#' @importFrom propr propd
+#' @return a list with four matrices containing thetas and p-values for emergent and disjointed proportionality testing respectively.
+#' @importFrom propr propd getMatrix setActive
+#' @importFrom stats pf
 #'
 gather_propd = function(web, groups, verbose){
   # softmax to undo CLR.
@@ -164,11 +163,36 @@ gather_propd = function(web, groups, verbose){
   ct.list <- apply(web@tableY, 1, softmax, simplify = F)
   cts     <- do.call(rbind, ct.list)
 
-
+  #prepare for f-test
+  N = length(groups)
+  K = length(unique(groups))
 
   pd <- propr::propd(counts = cts,
               group  = groups, # a vector of 2 or more groups
               alpha = NA, # whether to handle zeros
               weighted = FALSE # whether to weigh log-ratios
   )
+
+
+  emerg_theta <- propr::getMatrix(propr::setActive(pd, what = "theta_e"))
+  disj_theta  <- propr::getMatrix(propr::setActive(pd, what = "theta_f"))
+
+  emerg_F <- theta_to_F(emerg_F, n = N)
+  disj_F  <- theta_to_F(disj_F,  n = N)
+
+  emerg_p = pf(emerg_F, K - 1, N - K, lower.tail = FALSE)
+  disj_p  = pf(disj_F,  K - 1, N - K, lower.tail = FALSE)
+
+  return(list(em_t = emerg_theta,
+              em_p = emerg_p,
+              dj_t = disj_theta,
+              dj_p = disj_p))
+}
+
+#'Calculate F stat as described in Erb et al 2017.
+#'@param theta a theta statistic from propd
+#'@param n number of observations
+#'
+theta_to_F = function(theta, n){
+  return((n - 2)*((1-theta)/theta))
 }

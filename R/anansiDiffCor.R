@@ -95,7 +95,7 @@ model_picker <- function(web, which_dictionary, groups, reff = NULL, modeltype =
 #' @param which_dictionary A matrix derived from calling \code{which(web@dictionary, arr.ind = T)}. It contains coordinates for the relevant measurements to be compared.
 #' @param groups A categorical or continuous value necessary for differential correlations. Typically a state or treatment score.
 #' @return a list of \code{anansiTale} result objects, one for the total model, one for emergent correlations and one for disjointed correlations.
-#' @importFrom stats anova lm pf residuals
+#' @importFrom stats anova lm pf residuals na.exclude
 #'
 glm_calc_diff_cor <- function(web, which_dictionary, groups){
   # Extract relevant values
@@ -156,7 +156,7 @@ anova.merMod <- utils::getFromNamespace("anova.merMod", "lme4")
 #' @param groups A categorical or continuous value necessary for differential correlations. Typically a state or treatment score.
 #' @param reff A categorical vector typically depicting a shared ID between samples. Only for mixed effect models.
 #' @return a list of \code{anansiTale} result objects, one for the total model, one for emergent correlations and one for disjointed correlations.
-#' @importFrom stats anova lm pf residuals fitted cor
+#' @importFrom stats anova lm pf residuals fitted cor na.exclude
 #' @importFrom lme4 lmer
 #
 glmer_calc_diff_cor <- function(web, which_dictionary, groups, reff){
