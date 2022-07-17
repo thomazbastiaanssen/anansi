@@ -126,7 +126,10 @@ anansi = function(web, method = "pearson", groups = NULL, adjust.method = "BH", 
   #initialize cor_output list object
   output = new("anansiOutput")
 
-  if(modeltype == "propr"){
+  if(modeltype == "propr" | method == "propr"){
+    modeltype = "propr"
+    method    = "propr"
+
     stopifnot("Two different tables detected, propr is meant for within-composition association testing." = web@tableY == web@tableX)
     if(verbose){print("Running propr to assess within-composition associations.")}
     output@cor_results = wrap_propr(web = web,
@@ -158,10 +161,11 @@ anansi = function(web, method = "pearson", groups = NULL, adjust.method = "BH", 
                                          modeltype = modeltype, verbose = verbose)
   }
   outYarn@output = output
+  }
 
+  #FDR
   outYarn <- anansiAdjustP(x = outYarn, method = adjust.method, resampling = resampling, locality = locality, verbose = verbose)
 
-  }
   return(outYarn)
 }
 

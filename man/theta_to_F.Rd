@@ -2,15 +2,17 @@
 % Please edit documentation in R/interface_propd.R
 \name{theta_to_F}
 \alias{theta_to_F}
-\title{Calculate F stat as described in Erb et al 2017.}
+\title{Calculate F stat from theta. We will consider theta to be R^2-like as it is defined as the proportion of total variance that can be explained by the groups.}
 \usage{
-theta_to_F(theta, n)
+theta_to_F(theta, N, K)
 }
 \arguments{
 \item{theta}{a theta statistic from propd}
 
-\item{n}{number of observations}
+\item{N}{number of observations}
+
+\item{K}{number of groups}
 }
 \description{
-Calculate F stat as described in Erb et al 2017.
+Calculate F stat from theta. We will consider theta to be R^2-like as it is defined as the proportion of total variance that can be explained by the groups.
 }

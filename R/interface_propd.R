@@ -116,10 +116,10 @@ wrap_propd = function(web, groups, verbose = T){
   out_emergrvals <- web@dictionary
   out_emergpvals <- !web@dictionary
 
-  out_disjrvals[web@dictionary]  <- stats_out[1,][web@dictionary]
-  out_disjpvals[web@dictionary]  <- stats_out[2,][web@dictionary]
-  out_emergrvals[web@dictionary] <- stats_out[3,][web@dictionary]
-  out_emergpvals[web@dictionary] <- stats_out[4,][web@dictionary]
+  out_disjrvals[web@dictionary]  <- stats_out$em_t[web@dictionary]
+  out_disjpvals[web@dictionary]  <- stats_out$em_p[web@dictionary]
+  out_emergrvals[web@dictionary] <- stats_out$dj_t[web@dictionary]
+  out_emergpvals[web@dictionary] <- stats_out$dj_p[web@dictionary]
 
 
   out_disjqvals                  <- out_disjpvals
@@ -174,25 +174,39 @@ gather_propd = function(web, groups, verbose){
   )
 
 
-  emerg_theta <- propr::getMatrix(propr::setActive(pd, what = "theta_e"))
-  disj_theta  <- propr::getMatrix(propr::setActive(pd, what = "theta_f"))
+  emerg_theta <- c(propr::getMatrix(propr::setActive(pd, what = "theta_e")))
+  disj_theta  <- c(propr::getMatrix(propr::setActive(pd, what = "theta_d")))
+  #emerg_theta = 1 - disj_theta
 
-  emerg_F <- theta_to_F(emerg_F, n = N)
-  disj_F  <- theta_to_F(disj_F,  n = N)
+  emerg_F <- theta_to_F(emerg_theta, N = N, K = K)
+  disj_F  <- theta_to_F(disj_theta,  N = N, K = K)
 
-  emerg_p = pf(emerg_F, K - 1, N - K, lower.tail = FALSE)
-  disj_p  = pf(disj_F,  K - 1, N - K, lower.tail = FALSE)
+  emerg_p = pf(emerg_F, df1 = (K - 1), df2 = (N - K), lower.tail = FALSE)
+  disj_p  = pf(disj_F,  df1 = (K - 1), df2 = (N - K), lower.tail = FALSE)
 
+  print(emerg_F)
+  print(disj_F)
   return(list(em_t = emerg_theta,
               em_p = emerg_p,
               dj_t = disj_theta,
               dj_p = disj_p))
 }
 
-#'Calculate F stat as described in Erb et al 2017.
+#'Calculate F stat from theta. We will consider theta to be R^2-like as it is defined as the proportion of total variance that can be explained by the groups.
 #'@param theta a theta statistic from propd
-#'@param n number of observations
+#'@param N number of observations
+#'@param K number of groups
 #'
-theta_to_F = function(theta, n){
-  return((n - 2)*((1-theta)/theta))
+theta_to_F = function(theta, N, K){
+# F = (R^2 / k)/
+# (1 - R^2) / (n - k - 1)
+#We will consider theta to be like R^2, so:
+
+
+  return(   (( theta / K )/ ((1 - theta) / (N - K - 1))))
 }
+
+
+# a = rnorm(36)
+# b = sample(letters[1:3], 36, replace = T)
+# anova(lm(a ~ b))
