@@ -97,6 +97,13 @@ clr_imputed = function(vec, method = "logunif", replicates = 1000){
   return(apply(replicate(replicates, anansi_compute_clr(impute_zeroes(vec = vec, method = method))), 1, median))
 }
 
+#' Undo CLR transformation with softmax
+#' @description softmax function to transform vector to relative abundance/proportions.
+#' @param x A clr-transformed vector
+#' @return A relative abundance/proportions vector.
+#'
+softmax <- function(x) exp(x) / sum(exp(x))
+
 #' @rdname clr_lite
 #' @section Functions:
 #' \code{clr_c:}
@@ -126,3 +133,5 @@ clr_unif <- function(counts, samples_are = "cols", replicates = 1000){
 clr_logunif <- function(counts, samples_are = "cols", replicates = 1000){
   clr_lite(counts, samples_are = samples_are, method = "logunif", replicates = replicates)
 }
+
+

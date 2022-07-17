@@ -176,6 +176,11 @@ anansi = function(web, method = "pearson", groups = NULL, adjust.method = "BH", 
 #' @return a list including a modified \code{groups} and \code{diff_cor} argument.
 #'
 assessGroups <- function(web, groups, diff_cor = diff_cor){
+
+  #first let's catch any trouble with factors.
+if (class(groups) == "factor")
+  groups <- as.character(groups)
+
   #Three main options for data coming in:
   #1) groups is empty/NA
   #2) groups is numerical for diff_cor only
@@ -206,6 +211,7 @@ if(inherits(groups, "character")){
     diff_cor = F
     groups = rep("All", nrow(web@tableY))
   }
+
 }
 
 return(list(diff_cor = diff_cor,
