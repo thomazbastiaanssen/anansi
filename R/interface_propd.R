@@ -164,8 +164,8 @@ gather_propd = function(web, groups, verbose){
   cts     <- do.call(rbind, ct.list)
 
   #prepare for f-test
-  N = length(groups)
   K = length(unique(groups))
+  N = length(groups)
 
   pd <- propr::propd(counts = cts,
               group  = groups, # a vector of 2 or more groups
@@ -173,9 +173,11 @@ gather_propd = function(web, groups, verbose){
               weighted = FALSE # whether to weigh log-ratios
   )
 
+  pe <- propr::setActive(pd, what = "theta_e")
+  pd <- propr::setActive(pd, what = "theta_f")
 
-  emerg_theta <- c(propr::getMatrix(propr::setActive(pd, what = "theta_e")))
-  disj_theta  <- c(propr::getMatrix(propr::setActive(pd, what = "theta_d")))
+  emerg_theta <- propr::getMatrix(pe)
+  disj_theta  <- propr::getMatrix(pd)
   #emerg_theta = 1 - disj_theta
 
   emerg_F <- theta_to_F(emerg_theta, N = N, K = K)
@@ -184,8 +186,7 @@ gather_propd = function(web, groups, verbose){
   emerg_p = pf(emerg_F, df1 = (K - 1), df2 = (N - K), lower.tail = FALSE)
   disj_p  = pf(disj_F,  df1 = (K - 1), df2 = (N - K), lower.tail = FALSE)
 
-  print(emerg_F)
-  print(disj_F)
+
   return(list(em_t = emerg_theta,
               em_p = emerg_p,
               dj_t = disj_theta,
@@ -198,12 +199,12 @@ gather_propd = function(web, groups, verbose){
 #'@param K number of groups
 #'
 theta_to_F = function(theta, N, K){
-# F = (R^2 / k)/
+# F = (R^2 / (k-1)/
 # (1 - R^2) / (n - k - 1)
 #We will consider theta to be like R^2, so:
 
 
-  return(   (( theta / K )/ ((1 - theta) / (N - K - 1))))
+  return(   (( theta / (K -1) )/ ((1 - theta) / (N - K))))
 }
 
 
