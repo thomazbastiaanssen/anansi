@@ -1,7 +1,7 @@
 DiagrammeR::grViz('digraph {
 
   graph [fontsize=10 fontname="Verdana" compound = true rankdir = LR];
-  node [shape=record fontsize=10 fontname="Verdana" style = filled];
+  node [shape=record fontsize=10 fontname="Verdana" style = filled layout=fdp];
 
   data1 [label = "Dataset Y", shape = folder, fillcolor = Beige];
 
@@ -9,15 +9,14 @@ DiagrammeR::grViz('digraph {
 
   data3 [label = "Dictionary", shape = folder, fillcolor = Beige];
 
-  subgraph cluster_0 {
-    node [style=filled];
+  subgraph clusterWeaveWeb {
     "Filter and\ncheck input" "Return Web"
 
-    subgraph cluster_mode {
-    node [style=filled];
-    "Interaction\nmode" "Membership\nmode"
-    label = "Generate binary\nadjacency matrix";
-    color=blue;
+    subgraph clusterCluster {
+      "Interaction\nmode" "Membership\nmode"
+
+      label = "Generate binary\nadjacency matrix";
+      color=blue;
     }
 
     label = "Create a web object with\nweaveWebFromTables()";
@@ -27,21 +26,19 @@ DiagrammeR::grViz('digraph {
   data4 [label = "anansiWeb\nobject", shape = folder, fillcolor = Beige];
 
   subgraph cluster_1 {
-    node [style=filled];
+
     "Check call" "Pairwise\nassociations" "Differential\nassociations"
     subgraph cluster_diff {
     node [style=filled];
     label = "Differential association\ntesting options";
     color=blue;
 
-    subgraph cluster_df {
-    node [style=filled];
+    subgraph cluster_model_type {
     label = "Model types";
     color=blue
     "linear model" "linear mixed\neffects model"} ->
-    subgraph cluster_dif {
-    node [style=filled];
-    label = "Model structre";
+    subgraph cluster_model_Structure {
+    label = "Model structure";
     color=blue;
     "Classical\nY ~ X" "Log-ratio\nlog(Y/X)"}
 
@@ -53,7 +50,7 @@ DiagrammeR::grViz('digraph {
     "Between dataset\n(correlation)" "Within dataset\n(propr)"}
     label = "Run analysis in the main function\nanansi()";
     color=blue;
-"Collect results" "Account for\nFDR" "Return Yarn"  }
+    "Collect results" "Account for\nFDR" "Return Yarn"  }
 
 
   data5 [label = "anansiYarn\nobject", shape = folder, fillcolor = Beige];
@@ -64,14 +61,20 @@ DiagrammeR::grViz('digraph {
     label = "Parse output to\nhandy formats";
     color=blue;
   }
-  {data1 data2, data3} -> "Filter and\ncheck input"
+
+
 
   "Plot all\nassociations"[shape = oval, fillcolor = lightblue]
+
   "Plot individual\nassociations"[shape = oval, fillcolor = lightblue]
+
   "Export as table"[shape = oval, fillcolor = lightblue]
 
+//Start graphing
 
-  // Edges between nodes render fine
+  {data1 data2 data3} -> "Filter and\ncheck input"
+
+
   "Filter and\ncheck input" -> {"Membership\nmode" "Interaction\nmode"} -> "Return Web";
   "Check call" -> {"Pairwise\nassociations" "Differential\nassociations"}
 
@@ -88,6 +91,7 @@ DiagrammeR::grViz('digraph {
   // Edges that directly connect one cluster to another
   "data4" -> "Check call" [lhead=cluster_1];
   "Return Web" -> "data4" [ltail=cluster_0];
+
 
  {"data5"} -> {"spinToLong()"} [ltail=cluster_1 lhead=cluster_2];
 
