@@ -82,9 +82,15 @@ anansiDiffCor = function(web, groups, reff, modeltype, verbose = T){
 #'
 model_picker <- function(web, which_dictionary, groups, reff = NULL, modeltype = "lm"){
   if(modeltype == "lm"){
+    if(identical(web@tableY, web@tableX)){
+      return(glm_calc_diff_prop(web = web, which_dictionary = which_dictionary, groups = groups))
+      }
     return(glm_calc_diff_cor(web = web, which_dictionary = which_dictionary, groups = groups))
   }
   if(modeltype == "lmer"){
+    if(identical(web@tableY, web@tableX)){
+      return(glmer_calc_diff_prop(web = web, which_dictionary = which_dictionary, groups = groups, reff = reff))
+    }
     return(glmer_calc_diff_cor(web = web, which_dictionary = which_dictionary, groups = groups, reff = reff))
   }
 }
@@ -148,7 +154,6 @@ glm_calc_diff_cor <- function(web, which_dictionary, groups){
 #
 anova.merMod <- utils::getFromNamespace("anova.merMod", "lme4")
 
-
 #' Run differential correlation analysis for all interacting metabolites and functions.
 #' @description Should not be run on its own. to be applied by \code{anansiDiffCor()}. Typically, the main \code{anansi()} function will handle this for you.
 #' @param web An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.
@@ -177,7 +182,7 @@ glmer_calc_diff_cor <- function(web, which_dictionary, groups, reff){
   p        <- f_comp["f.full", "Pr(>Chisq)"]
 
   #Here, we calculate R^2 for the complete fitted model using pearson's method
-  vec_out[1] <- cor(y, fitted(f.full),method = "pearson", use = "pairwise.complete.obs")^2
+  vec_out[1] <- cor(y, fitted(f.full), method = "pearson", use = "pairwise.complete.obs")^2
   vec_out[2] <- p
 
   #Fit a separate null model to compute effect of groups value on slope (ie interaction).
@@ -194,6 +199,114 @@ glmer_calc_diff_cor <- function(web, which_dictionary, groups, reff){
 
   #run ANOVA to determine impact of group on STRENGTH of association.
   abs_resid      <- abs(residuals(suppressMessages(lme4::lmer(y ~ x + (1|reff), REML = F, na.action = na.exclude))))
+
+  #exactly the same as the lm version for here on
+  emerg_fit      <- anova(lm(abs_resid ~ groups))
+
+  #Calculate r.squared
+  emerg.rsquared <- emerg_fit[1,2] / (emerg_fit[1,2] + emerg_fit[2,2])
+
+  vec_out[5] <- emerg.rsquared
+  vec_out[6] <- emerg_fit[1,5]
+
+  return(vec_out)
+}
+
+
+#' Run differential association analysis within a dataset.
+#' @description Should not be run on its own. to be applied by \code{anansiDiffCor()}. Typically, the main \code{anansi()} function will handle this for you.
+#' @param web An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.
+#' @param which_dictionary A matrix derived from calling \code{which(web@dictionary, arr.ind = T)}. It contains coordinates for the relevant measurements to be compared.
+#' @param groups A categorical or continuous value necessary for differential correlations. Typically a state or treatment score.
+#' @return a list of \code{anansiTale} result objects, one for the total model, one for emergent correlations and one for disjointed correlations.
+#' @importFrom stats anova lm pf residuals na.exclude
+#'
+glm_calc_diff_prop <- function(web, which_dictionary, groups){
+  # Extract relevant values
+  y = web@tableY[,which_dictionary[1]]
+  x = web@tableX[,which_dictionary[2]]
+
+  prop = log(y/x)
+  vec_out = c(0, 1, 0, 1, 0, 1)
+
+  # fit linear model
+  fit      <- lm(prop ~ groups)
+
+  # Calculate p-value for entire model
+  fstat    <- summary(fit)$fstatistic
+  p        <- pf(fstat[1], fstat[2], fstat[3], lower.tail = FALSE)
+
+  vec_out[1] <- summary(fit)$r.squared
+  vec_out[2] <- p
+
+  #run ANOVA to determine impact of group on SLOPE of association.
+  disj_fit        <- anova(fit)
+
+  #Calculate r.squared
+  disj.rsquared  <- disj_fit[1,2] / (disj_fit[1,2] + disj_fit[2,2])
+
+  vec_out[3]  <- disj.rsquared
+  vec_out[4]  <- disj_fit[1,5]
+
+  #run ANOVA to determine impact of group on STRENGTH of association.
+  abs_resid      <- abs(residuals(lm(prop ~ 1, na.action = na.exclude)))
+  emerg_fit      <- anova(lm(abs_resid ~ groups))
+
+  #Calculate r.squared
+  emerg.rsquared <- emerg_fit[1,2] / (emerg_fit[1,2] + emerg_fit[2,2])
+
+  vec_out[5] <- emerg.rsquared
+  vec_out[6] <- emerg_fit[1,5]
+
+  return(vec_out)
+}
+
+#' Run differential association analysis within a dataset.
+#' @description Should not be run on its own. to be applied by \code{anansiDiffCor()}. Typically, the main \code{anansi()} function will handle this for you.
+#' @param web An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.
+#' @param which_dictionary A matrix derived from calling \code{which(web@dictionary, arr.ind = T)}. It contains coordinates for the relevant measurements to be compared.
+#' @param groups A categorical or continuous value necessary for differential correlations. Typically a state or treatment score.
+#' @param reff A categorical vector typically depicting a shared ID between samples. Only for mixed effect models.
+#' @return a list of \code{anansiTale} result objects, one for the total model, one for emergent correlations and one for disjointed correlations.
+#' @importFrom stats anova lm pf residuals fitted cor na.exclude
+#' @importFrom lme4 lmer
+#
+glmer_calc_diff_prop <- function(web, which_dictionary, groups, reff){
+  # Extract relevant values
+  y = web@tableY[,which_dictionary[1]]
+  x = web@tableX[,which_dictionary[2]]
+
+  prop = log(y/x)
+  #param      r, p, r, p, r, p
+  vec_out = c(0, 1, 0, 1, 0, 1)
+
+  # fit null model to compute p-values later
+  f.null   <- lm(prop ~ 1, na.action = na.exclude)
+  # fit complete mixed effect model
+  f.full   <- suppressMessages(lme4::lmer(prop ~ 1 * groups + (1|reff), REML = F, na.action = na.exclude))
+
+  #Compare null to full model for get a p-value
+  f_comp   <- anova.merMod(f.null, f.full)
+  p        <- f_comp["f.full", "Pr(>Chisq)"]
+
+  #Here, we calculate R^2 for the complete fitted model using pearson's method
+  vec_out[1] <- cor(prop, fitted(f.full), method = "pearson", use = "pairwise.complete.obs")^2
+  vec_out[2] <- p
+
+  #Fit a separate null model to compute effect of groups value on slope (ie interaction).
+  f.null2  <- suppressMessages(lme4::lmer(prop ~ 1 + groups + (1|reff), REML = F, na.action = na.exclude))
+
+  #compare null to full model for get a p-value
+  f_comp2   <- anova.merMod(f.null2, f.full)
+  p2        <- f_comp2["f.full", "Pr(>Chisq)"]
+
+  #Here, we calculate R^2 for the complete fitted model using pearson's method
+  vec_out[3] <- cor(residuals(f.null2), fitted(f.full), method = "pearson", use = "pairwise.complete.obs")^2
+  vec_out[4] <- p2
+
+
+  #run ANOVA to determine impact of group on STRENGTH of association.
+  abs_resid      <- abs(residuals(suppressMessages(lme4::lmer(prop ~ 1 + (1|reff), REML = F, na.action = na.exclude))))
 
   #exactly the same as the lm version for here on
   emerg_fit      <- anova(lm(abs_resid ~ groups))

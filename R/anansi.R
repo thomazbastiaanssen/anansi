@@ -107,52 +107,25 @@ anansi = function(web, method = "pearson", groups = NULL, adjust.method = "BH", 
   }
 
   #assess validity of input
-  assessG         = assessGroups(web = web, groups = groups, diff_cor = diff_cor)
+  assess_res      = assessAnansiCall(web = web, groups = groups, diff_cor = diff_cor,
+                                     modeltype = modeltype, reff = reff, method = method)
 
-  groups          = assessG$groups
-  diff_cor        = assessG$diff_cor
-
-  assessM         = assessModelType(modeltype = modeltype, reff = reff, diff_cor = diff_cor)
-
-  diff_cor        = assessM$diff_cor
-  reff            = assessM$reff
+  #adjust model call if appropriate
+  groups          = assess_res$groups
+  diff_cor        = assess_res$diff_cor
+  reff            = assess_res$reff
+  method          = assess_res$method
 
   #generate anansiYarn output object
   outYarn = new("anansiYarn", input = new("anansiInput", web = web, groups = groups, reff = reff))
 
-
-
   if(verbose){print("Running annotation-based correlations")}
+
   #initialize cor_output list object
   output = new("anansiOutput")
 
-  if(modeltype == "propr" | method == "propr"){
-    modeltype = "propr"
-    method    = "propr"
-
-    stopifnot("Two different tables detected, propr is meant for within-composition association testing." = web@tableY == web@tableX)
-    if(verbose){print("Running propr to assess within-composition associations.")}
-    output@cor_results = wrap_propr(web = web,
-                                    groups = groups,
-                                    verbose = verbose)
-
-    if(diff_cor){
-    if(verbose){print("Running propr for differential proportionality testing")}
-
-    output@model_results = wrap_propd(web = web,
-                                      groups = groups,
-                                      verbose = verbose)
-    }
-
-    outYarn@output = output
-
-  }
-
-  if(modeltype %in% c("lm", "lmer")){
-  output@cor_results        = anansiCorTestByGroup(web     = web,
-                                                    method = method,
-                                                    groups = groups,
-                                                    verbose = verbose)
+  output@cor_results     = call_groupwise(web     = web, method  = method,
+                                          groups  = groups, verbose = verbose)
 
   if(diff_cor){
   if(verbose){print("Fitting models for differential correlation testing")
@@ -161,7 +134,6 @@ anansi = function(web, method = "pearson", groups = NULL, adjust.method = "BH", 
                                          modeltype = modeltype, verbose = verbose)
   }
   outYarn@output = output
-  }
 
   #FDR
   outYarn <- anansiAdjustP(x = outYarn, method = adjust.method, resampling = resampling, locality = locality, verbose = verbose)
@@ -169,6 +141,38 @@ anansi = function(web, method = "pearson", groups = NULL, adjust.method = "BH", 
   return(outYarn)
 }
 
+
+#' Investigate validity of the Anansi Call
+#' @description Calls both assessGroups and assessModelType.
+#' This is a helper function called by \code{anansi}.
+#' @param web web An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.
+#' @param groups A categorical or continuous value necessary for differential correlations. Typically a state or treatment score. If no argument provided, anansi will let you know and still to regular correlations according to your dictionary.
+#' @param diff_cor A boolean. Toggles whether to compute differential correlations. Default is \code{TRUE}.
+#' @param reff A categorical vector typically depicting a shared ID between samples. Only for mixed effect models.
+#' @param modeltype A string, either "lm" or "lmer" depending on the type of model that should be ran.
+#' @return a list including a modified \code{groups} and \code{diff_cor} argument.
+#'
+assessAnansiCall <- function(web, groups, diff_cor = diff_cor, modeltype, reff, method){
+  #create output list
+  assess_out <- list(groups = groups, diff_cor = diff_cor, reff = reff, method = method)
+
+  #assess validity of input
+  assessG         = assessGroups(web = web, groups = groups, diff_cor = diff_cor)
+
+  assess_out$groups          = assessG$groups
+  assess_out$diff_cor        = assessG$diff_cor
+
+  assessM         = assessModelType(modeltype = modeltype, reff = reff, diff_cor = diff_cor)
+
+  assess_out$diff_cor        = assessM$diff_cor
+  assess_out$reff            = assessM$reff
+
+  if(identical(web@tableY, web@tableX)){
+    assess_out$method = "propr"
+  }
+
+  return(assess_out)
+}
 
 #' Investigate validity of the groups argument
 #' @description checks whether \code{groups} is missing, the correct length and suitable for correlations per groups and differential correlations.
@@ -230,8 +234,8 @@ return(list(diff_cor = diff_cor,
 #'
 assessModelType <- function(modeltype, reff, diff_cor){
   if(diff_cor){
-    if(!modeltype %in% c("lmer", "lm", "propr")){
-      warning("modeltype was not recognised. Needs to be exaclty `lm`, `lmer` or `propr`. Disabling differential association analysis. ")
+    if(!modeltype %in% c("lmer", "lm")){
+      warning("modeltype was not recognised. Needs to be exaclty `lm`, or `lmer`. Disabling differential association analysis. ")
       diff_cor = FALSE
     }
     if(modeltype == "lmer" & is.null(reff)){
@@ -246,4 +250,23 @@ assessModelType <- function(modeltype, reff, diff_cor){
   if(is.null(reff)){reff = NA}
   return(list(diff_cor = diff_cor,
               reff     = reff))
+}
+
+#' Manages group-wise association calls
+#' @description If the \code{groups} argument is suitable, will also run correlation analysis per group. Typically, the main \code{anansi()} function will run this for you.
+#' @param web An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.
+#' @param method Correlation method.
+#' @param groups A categorical or continuous value necessary for differential correlations. Typically a state or treatment score.
+#' @param verbose A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.
+#'
+call_groupwise <- function(web, method, groups, verbose){
+  if(method %in% c("pearson", "kendall", "spearman")){
+    return(anansiCorTestByGroup(web = web, method = method, groups = groups, verbose = verbose))
+  }
+
+  if(method == "propr"){
+    stopifnot("Two different tables detected, propr is meant for within-composition association testing." = identical(web@tableY, web@tableX))
+    return(wrap_propr(web = web, groups = groups, verbose = verbose))
+  }
+
 }

@@ -1,4 +1,4 @@
-#' Run propr for all interacting features such as metabolites or functions.
+#' Run propr for all interacting features within one sample.
 #' Wraps around the propr function.
 #' @description If the \code{groups} argument is suitable, will also run proportionality analysis per group. Typically, the main \code{anansi()} function will run this for you.
 #' @param web An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.
@@ -93,119 +93,177 @@ return(out)
 
 }
 
-#' Run differential proportionality analysis using propr for all interacting features such as metabolites or functions.
-#' Wraps around the propd function.
-#' @description Can either take continuous or categorical data for \code{groups}. Typically, the main \code{anansi()} function will run this for you.
-#' @param web An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.
-#' @param groups A categorical or continuous value necessary for differential proportionality Typically a state or treatment score.
-#' @param verbose A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.
-#' @return a list of \code{anansiTale} result objects, one for the total model, one for emergent proportionality and one for disjointed proportionality.
-#' @importFrom propr propd
-#' @importFrom future.apply future_apply
+
+#Disabling propd for now, leaving this to be sure:
 #'
-wrap_propd = function(web, groups, verbose = T){
-
-  #Call gather propd to compute thetas and p-values
-  stats_out <- gather_propd(web = web, groups = groups, verbose = verbose)
-
-  #Create result container matrices. We take advantage of the fact that true interactions are coded as TRUE, which corresponds to 1,
-  #automatically setting all non-canonical interactions as p = 1 and estimate = 0.
-
-  out_disjrvals  <- web@dictionary
-  out_disjpvals  <- !web@dictionary
-  out_emergrvals <- web@dictionary
-  out_emergpvals <- !web@dictionary
-
-  out_disjrvals[web@dictionary]  <- stats_out$em_t[web@dictionary]
-  out_disjpvals[web@dictionary]  <- stats_out$em_p[web@dictionary]
-  out_emergrvals[web@dictionary] <- stats_out$dj_t[web@dictionary]
-  out_emergpvals[web@dictionary] <- stats_out$dj_p[web@dictionary]
-
-
-  out_disjqvals                  <- out_disjpvals
-  out_disjqvals[web@dictionary]  <- NA
-
-  out_disjointed = new("anansiTale",
-                       subject    = "model_disjointed",
-                       type       = "theta_f",
-                       estimates  = out_disjrvals,
-                       p.values   = out_disjpvals,
-                       q.values   = out_disjqvals)
-
-  out_emergqvals                 <- out_emergpvals
-  out_emergqvals[web@dictionary] <- NA
-
-  out_emergent   = new("anansiTale",
-                       subject    = "model_emergent",
-                       type       = "theta_e",
-                       estimates  = out_emergrvals,
-                       p.values   = out_emergpvals,
-                       q.values   = out_emergqvals)
-
-  #Collect into nested list and return results
-  return(list(disjointed = out_disjointed,
-              emergent   = out_emergent))
-}
-
-#' Run differential proportionality analysis using propr for all interacting features such as metabolites or functions.
-#' Wraps around the propd function.
-#' @description Can either take continuous or categorical data for \code{groups}. Typically, the main \code{anansi()} function will run this for you.
-#' @param web An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.
-#' @param groups A categorical or continuous value necessary for differential proportionality Typically a state or treatment score.
-#' @param verbose A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.
-#' @return a list with four matrices containing thetas and p-values for emergent and disjointed proportionality testing respectively.
-#' @importFrom propr propd getMatrix setActive
-#' @importFrom stats pf
+#' #' Run differential proportionality analysis using propr for all interacting features such as metabolites or functions.
+#' #' Wraps around the propd function.
+#' #' @description Can either take continuous or categorical data for \code{groups}. Typically, the main \code{anansi()} function will run this for you.
+#' #' @param web An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.
+#' #' @param groups A categorical or continuous value necessary for differential proportionality Typically a state or treatment score.
+#' #' @param verbose A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.
+#' #' @return a list of \code{anansiTale} result objects, one for the total model, one for emergent proportionality and one for disjointed proportionality.
+#' #' @importFrom propr propd
+#' #' @importFrom future.apply future_apply
+#' #'
+#' differential_prop = function(web, groups, verbose = T){
 #'
-gather_propd = function(web, groups, verbose){
-  # softmax to undo CLR.
-  if(verbose){print("Applying softmax to CLR-transformed data...")}
-  ct.list <- apply(web@tableY, 1, softmax, simplify = F)
-  cts     <- do.call(rbind, ct.list)
-
-  #prepare for f-test
-  K = length(unique(groups))
-  N = length(groups)
-
-  pd <- propr::propd(counts = cts,
-              group  = groups, # a vector of 2 or more groups
-              alpha = NA, # whether to handle zeros
-              weighted = FALSE # whether to weigh log-ratios
-  )
-
-  pe <- propr::setActive(pd, what = "theta_e")
-  pd <- propr::setActive(pd, what = "theta_f")
-
-  emerg_theta <- propr::getMatrix(pe)
-  disj_theta  <- propr::getMatrix(pd)
-  #emerg_theta = 1 - disj_theta
-
-  emerg_F <- theta_to_F(emerg_theta, N = N, K = K)
-  disj_F  <- theta_to_F(disj_theta,  N = N, K = K)
-
-  emerg_p = pf(emerg_F, df1 = (K - 1), df2 = (N - K), lower.tail = FALSE)
-  disj_p  = pf(disj_F,  df1 = (K - 1), df2 = (N - K), lower.tail = FALSE)
-
-
-  return(list(em_t = emerg_theta,
-              em_p = emerg_p,
-              dj_t = disj_theta,
-              dj_p = disj_p))
-}
-
-#'Calculate F stat from theta. We will consider theta to be R^2-like as it is defined as the proportion of total variance that can be explained by the groups.
-#'@param theta a theta statistic from propd
-#'@param N number of observations
-#'@param K number of groups
+#'   #Call gather propd to compute thetas and p-values
+#'   stats_out <- gather_propd(web = web, groups = groups, verbose = verbose)
 #'
-theta_to_F = function(theta, N, K){
-# F = (R^2 / (k-1)/
-# (1 - R^2) / (n - k - 1)
-#We will consider theta to be like R^2, so:
-
-
-  return(   (( theta / (K -1) )/ ((1 - theta) / (N - K))))
-}
+#'   #Create result container matrices. We take advantage of the fact that true interactions are coded as TRUE, which corresponds to 1,
+#'   #automatically setting all non-canonical interactions as p = 1 and estimate = 0.
+#'
+#'   out_disjrvals  <- web@dictionary
+#'   out_disjpvals  <- !web@dictionary
+#'   out_emergrvals <- web@dictionary
+#'   out_emergpvals <- !web@dictionary
+#'
+#'   out_disjrvals[web@dictionary]  <- stats_out$em_t[web@dictionary]
+#'   out_disjpvals[web@dictionary]  <- stats_out$em_p[web@dictionary]
+#'   out_emergrvals[web@dictionary] <- stats_out$dj_t[web@dictionary]
+#'   out_emergpvals[web@dictionary] <- stats_out$dj_p[web@dictionary]
+#'
+#'
+#'   out_disjqvals                  <- out_disjpvals
+#'   out_disjqvals[web@dictionary]  <- NA
+#'
+#'   out_disjointed = new("anansiTale",
+#'                        subject    = "model_disjointed",
+#'                        type       = "theta_f",
+#'                        estimates  = out_disjrvals,
+#'                        p.values   = out_disjpvals,
+#'                        q.values   = out_disjqvals)
+#'
+#'   out_emergqvals                 <- out_emergpvals
+#'   out_emergqvals[web@dictionary] <- NA
+#'
+#'   out_emergent   = new("anansiTale",
+#'                        subject    = "model_emergent",
+#'                        type       = "theta_e",
+#'                        estimates  = out_emergrvals,
+#'                        p.values   = out_emergpvals,
+#'                        q.values   = out_emergqvals)
+#'
+#'   #Collect into nested list and return results
+#'   return(list(disjointed = out_disjointed,
+#'               emergent   = out_emergent))
+#' }
+#'
+#'
+#' #' Run differential proportionality analysis using propr for all interacting features such as metabolites or functions.
+#' #' Wraps around the propd function.
+#' #' @description Can either take continuous or categorical data for \code{groups}. Typically, the main \code{anansi()} function will run this for you.
+#' #' @param web An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.
+#' #' @param groups A categorical or continuous value necessary for differential proportionality Typically a state or treatment score.
+#' #' @param verbose A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.
+#' #' @return a list of \code{anansiTale} result objects, one for the total model, one for emergent proportionality and one for disjointed proportionality.
+#' #' @importFrom propr propd
+#' #' @importFrom future.apply future_apply
+#' #'
+#' wrap_propd = function(web, groups, verbose = T){
+#'
+#'   #Call gather propd to compute thetas and p-values
+#'   stats_out <- gather_propd(web = web, groups = groups, verbose = verbose)
+#'
+#'   #Create result container matrices. We take advantage of the fact that true interactions are coded as TRUE, which corresponds to 1,
+#'   #automatically setting all non-canonical interactions as p = 1 and estimate = 0.
+#'
+#'   out_disjrvals  <- web@dictionary
+#'   out_disjpvals  <- !web@dictionary
+#'   out_emergrvals <- web@dictionary
+#'   out_emergpvals <- !web@dictionary
+#'
+#'   out_disjrvals[web@dictionary]  <- stats_out$em_t[web@dictionary]
+#'   out_disjpvals[web@dictionary]  <- stats_out$em_p[web@dictionary]
+#'   out_emergrvals[web@dictionary] <- stats_out$dj_t[web@dictionary]
+#'   out_emergpvals[web@dictionary] <- stats_out$dj_p[web@dictionary]
+#'
+#'
+#'   out_disjqvals                  <- out_disjpvals
+#'   out_disjqvals[web@dictionary]  <- NA
+#'
+#'   out_disjointed = new("anansiTale",
+#'                        subject    = "model_disjointed",
+#'                        type       = "theta_f",
+#'                        estimates  = out_disjrvals,
+#'                        p.values   = out_disjpvals,
+#'                        q.values   = out_disjqvals)
+#'
+#'   out_emergqvals                 <- out_emergpvals
+#'   out_emergqvals[web@dictionary] <- NA
+#'
+#'   out_emergent   = new("anansiTale",
+#'                        subject    = "model_emergent",
+#'                        type       = "theta_e",
+#'                        estimates  = out_emergrvals,
+#'                        p.values   = out_emergpvals,
+#'                        q.values   = out_emergqvals)
+#'
+#'   #Collect into nested list and return results
+#'   return(list(disjointed = out_disjointed,
+#'               emergent   = out_emergent))
+#' }
+#'
+#' #' Run differential proportionality analysis using propr for all interacting features such as metabolites or functions.
+#' #' Wraps around the propd function.
+#' #' @description Can either take continuous or categorical data for \code{groups}. Typically, the main \code{anansi()} function will run this for you.
+#' #' @param web An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.
+#' #' @param groups A categorical or continuous value necessary for differential proportionality Typically a state or treatment score.
+#' #' @param verbose A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.
+#' #' @return a list with four matrices containing thetas and p-values for emergent and disjointed proportionality testing respectively.
+#' #' @importFrom propr propd getMatrix setActive
+#' #' @importFrom stats pf
+#' #'
+#' gather_propd = function(web, groups, verbose){
+#'   # softmax to undo CLR.
+#'   if(verbose){print("Applying softmax to CLR-transformed data...")}
+#'   ct.list <- apply(web@tableY, 1, softmax, simplify = F)
+#'   cts     <- do.call(rbind, ct.list)
+#'
+#'   #prepare for f-test
+#'   K = length(unique(groups))
+#'   N = length(groups)
+#'
+#'   pd <- propr::propd(counts = cts,
+#'               group  = groups, # a vector of 2 or more groups
+#'               alpha = NA, # whether to handle zeros
+#'               weighted = FALSE # whether to weigh log-ratios
+#'   )
+#'
+#'   pe <- propr::setActive(pd, what = "theta_e")
+#'   pd <- propr::setActive(pd, what = "theta_f")
+#'
+#'   emerg_theta <- propr::getMatrix(pe)
+#'   disj_theta  <- propr::getMatrix(pd)
+#'   #emerg_theta = 1 - disj_theta
+#'
+#'   emerg_F <- theta_to_F(emerg_theta, N = N, K = K)
+#'   disj_F  <- theta_to_F(disj_theta,  N = N, K = K)
+#'
+#'   emerg_p = pf(emerg_F, df1 = (K - 1), df2 = (N - K), lower.tail = FALSE)
+#'   disj_p  = pf(disj_F,  df1 = (K - 1), df2 = (N - K), lower.tail = FALSE)
+#'
+#'
+#'   return(list(em_t = emerg_theta,
+#'               em_p = emerg_p,
+#'               dj_t = disj_theta,
+#'               dj_p = disj_p))
+#' }
+#'
+#' #'Calculate F stat from theta. We will consider theta to be R^2-like as it is defined as the proportion of total variance that can be explained by the groups.
+#' #'@param theta a theta statistic from propd
+#' #'@param N number of observations
+#' #'@param K number of groups
+#' #'
+#' theta_to_F = function(theta, N, K){
+#' # F = (R^2 / (k-1)/
+#' # (1 - R^2) / (n - k - 1)
+#' #We will consider theta to be like R^2, so:
+#'
+#'
+#'   return(   (( theta / (K -1) )/ ((1 - theta) / (N - K))))
+#' }
 
 
 # a = rnorm(36)

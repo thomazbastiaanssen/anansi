@@ -14,6 +14,13 @@ weaveWebFromTables = function(tableY, tableX = NULL, dictionary = anansi::anansi
 
   tableX <- assessWebCall(tableY = tableY, tableX = tableX, verbose = verbose)
 
+  if(identical(tableX, tableY)){
+    if(verbose){print("Using softmax to undo CLR transformation while keeping the zero imputation. ")}
+    ct.list <- apply(tableY, 1, softmax, simplify = F)
+    tableX  <- do.call(rbind, ct.list)
+    tableY  <- tableX
+  }
+
   stopifnot("the mode argument needs to be interaction or membership." = mode %in% c("interaction", "membership"))
   #For conventional use, table Y should be metabolites and table X functions.
 
@@ -38,7 +45,7 @@ weaveWebFromTables = function(tableY, tableX = NULL, dictionary = anansi::anansi
                                    verbose = verbose, mode = mode)
 
   #If we're looking at single data set, don't do associations with yourself. Set diagonal to FALSE.
-  if(identical(tableX ,tableY)){
+  if(identical(tableX, tableY)){
     diag(dictionary) <- F
   }
 
