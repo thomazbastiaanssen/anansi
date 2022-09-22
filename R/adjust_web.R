@@ -5,6 +5,7 @@
 #' @param metadata a data.frame containing the term(s) mentioned in the formula
 #' @param verbose A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.
 #' @return An anansiWeb object with updated tableY.
+#' @export
 #'
 adjust_web <- function(web, formula, metadata, verbose = T){
   web@tableY <- pre_partial(web = web, formula = formula, metadata, verbose = verbose)
