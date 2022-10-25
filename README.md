@@ -30,8 +30,8 @@ citation("anansi")
     ## 
     ## To cite package 'anansi' in publications use:
     ## 
-    ##   Thomaz Bastiaanssen (2022). anansi: Annotation-based Analysis of
-    ##   Specific Interactions. R package version 0.5.0.
+    ##   Bastiaanssen T (2022). _anansi: Annotation-based Analysis of Specific
+    ##   Interactions_. R package version 0.5.0.
     ## 
     ## A BibTeX entry for LaTeX users is
     ## 
@@ -75,8 +75,8 @@ data(FMT_data)
 The main `anansi` function expects data in the `anansiWeb` format;
 Basically a list with exactly three tables: The first table, `tableY`,
 should be a count table of metabolites. The second table, `tableX`,
-should be a count table of functions. Both tables should have rows as
-features and columns as samples.
+should be a count table of functions. Both tables should have columns as
+features and rows as samples.
 
 The third table should be a binary adjacency matrix with the column
 names of `tableY` as rows and the column names of `tableX` as columns.
@@ -165,6 +165,9 @@ anansi_out <- anansi(web    = web, #generated above
     ## [1] "Running annotation-based correlations"
     ## [1] "Running correlations for the following groups: All, Aged yFMT, Aged oFMT, Young yFMT"
     ## [1] "Fitting models for differential correlation testing"
+    ## [1] "Model type:lm"
+    ## [1] "Adjusting p-values using Benjamini & Hochberg's procedure."
+    ## [1] "Using theoretical distribution."
 
 ## Spin to a table📝
 
