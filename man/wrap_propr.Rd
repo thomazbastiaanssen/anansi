@@ -2,7 +2,7 @@
 % Please edit documentation in R/interface_propd.R
 \name{wrap_propr}
 \alias{wrap_propr}
-\title{Run propr for all interacting features such as metabolites or functions.
+\title{Run propr for all interacting features within one sample.
 Wraps around the propr function.}
 \usage{
 wrap_propr(web, groups, verbose = T)
