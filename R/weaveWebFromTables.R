@@ -21,6 +21,11 @@ weaveWebFromTables = function(tableY, tableX = NULL, dictionary = anansi::anansi
     tableY  <- tableX
   }
 
+  if(dictionary == "none"){
+    if(verbose){print("No dictionary provided, preparing for all vs all analysis. ")}
+    dictionary <- mock_dictionary(tableY = tableY, tableX = tableX)
+  }
+
   stopifnot("the mode argument needs to be interaction or membership." = mode %in% c("interaction", "membership"))
   #For conventional use, table Y should be metabolites and table X functions.
 
@@ -190,4 +195,19 @@ prune_dictionary_for_exclusivity <- function(dict_list, max_sds = 3, verbose = T
 
   return(dict_list[!discard])
 
+}
+
+#' Helper function to make a mock dictionary
+#' @description Make a full all vs all dictionary in the case of an all vs all analysis.
+#' @param tableY A table containing features of interest. Rows should be samples and columns should be features. The Y and X refer to the position of the features in a formula: Y ~ X.
+#' @param tableX A table containing features of interest. Rows should be samples and columns should be features. The Y and X refer to the position of the features in a formula: Y ~ X.
+#' @return a full anansi dictionary list object.
+#'
+mock_dictionary <- function(tableY, tableX){
+  #generate list
+  m_dic <- vector("list", length = ncol(tableY))
+  names(m_dic) <- colnames(tableY)
+  #populate list
+  m_dic = lapply(m_dic, FUN = function(x){colnames(tableX)})
+  return(m_dic)
 }
