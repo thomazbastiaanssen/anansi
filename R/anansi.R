@@ -150,6 +150,7 @@ anansi = function(web, method = "pearson", groups = NULL, adjust.method = "BH", 
 #' @param diff_cor A boolean. Toggles whether to compute differential correlations. Default is \code{TRUE}.
 #' @param reff A categorical vector typically depicting a shared ID between samples. Only for mixed effect models.
 #' @param modeltype A string, either "lm" or "lmer" depending on the type of model that should be ran.
+#' @param method Correlation method. \code{method = "pearson"} is the default value. The alternatives to be passed to \code{cor()} are "spearman" and "kendall".
 #' @return a list including a modified \code{groups} and \code{diff_cor} argument.
 #'
 assessAnansiCall <- function(web, groups, diff_cor = diff_cor, modeltype, reff, method){
@@ -186,9 +187,9 @@ assessAnansiCall <- function(web, groups, diff_cor = diff_cor, modeltype, reff, 
 assessGroups <- function(web, groups, diff_cor = diff_cor){
 
   #first let's catch any trouble with factors.
-if (class(groups) == "factor")
+if (inherits(groups, "factor")){
   groups <- as.character(groups)
-
+  }
   #Three main options for data coming in:
   #1) groups is empty/NA
   #2) groups is numerical for diff_cor only

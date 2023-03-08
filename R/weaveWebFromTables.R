@@ -21,7 +21,7 @@ weaveWebFromTables = function(tableY, tableX = NULL, dictionary = anansi::anansi
     tableY  <- tableX
   }
 
-  if(dictionary == "none"){
+  if(length(dictionary) == 1 & dictionary == "none"){
     if(verbose){print("No dictionary provided, preparing for all vs all analysis. ")}
     dictionary <- mock_dictionary(tableY = tableY, tableX = tableX)
   }

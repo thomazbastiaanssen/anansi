@@ -16,6 +16,8 @@ assessAnansiCall(web, groups, diff_cor = diff_cor, modeltype, reff, method)
 \item{modeltype}{A string, either "lm" or "lmer" depending on the type of model that should be ran.}
 
 \item{reff}{A categorical vector typically depicting a shared ID between samples. Only for mixed effect models.}
+
+\item{method}{Correlation method. \code{method = "pearson"} is the default value. The alternatives to be passed to \code{cor()} are "spearman" and "kendall".}
 }
 \value{
 a list including a modified \code{groups} and \code{diff_cor} argument.
