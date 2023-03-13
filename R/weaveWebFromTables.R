@@ -21,9 +21,11 @@ weaveWebFromTables = function(tableY, tableX = NULL, dictionary = anansi::anansi
     tableY  <- tableX
   }
 
-  if(length(dictionary) == 1 & dictionary == "none"){
-    if(verbose){print("No dictionary provided, preparing for all vs all analysis. ")}
-    dictionary <- mock_dictionary(tableY = tableY, tableX = tableX)
+  if(length(dictionary) == 1){
+    if(dictionary == "none"){
+      if(verbose){print("No dictionary provided, preparing for all vs all analysis. ")}
+      dictionary <- mock_dictionary(tableY = tableY, tableX = tableX)
+    }
   }
 
   stopifnot("the mode argument needs to be interaction or membership." = mode %in% c("interaction", "membership"))
