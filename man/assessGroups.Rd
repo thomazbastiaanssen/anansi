@@ -12,6 +12,8 @@ assessGroups(web, groups, diff_cor = diff_cor)
 \item{groups}{A categorical or continuous value necessary for differential correlations. Typically a state or treatment score. If no argument provided, anansi will let you know and still to regular correlations according to your dictionary.}
 
 \item{diff_cor}{A boolean. Toggles whether to compute differential correlations. Default is \code{TRUE}.}
+
+\item{metadata}{A vector or data.frame of categorical or continuous value necessary for differential correlations. Typically a state or treatment score. If no argument provided, anansi will let you know and still to regular correlations according to your dictionary.}
 }
 \value{
 a list including a modified \code{groups} and \code{diff_cor} argument.

@@ -4,14 +4,18 @@
 \alias{glm_calc_diff_cor}
 \title{Run differential correlation analysis for all interacting metabolites and functions.}
 \usage{
-glm_calc_diff_cor(web, which_dictionary, groups)
+glm_calc_diff_cor(web, which_dictionary, metadata, groups, formula)
 }
 \arguments{
 \item{web}{An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.}
 
 \item{which_dictionary}{A matrix derived from calling \code{which(web@dictionary, arr.ind = T)}. It contains coordinates for the relevant measurements to be compared.}
 
+\item{metadata}{A vector or data.frame of categorical or continuous value necessary for differential correlations. Typically a state or treatment score. If no argument provided, anansi will let you know and still to regular correlations according to your dictionary.}
+
 \item{groups}{A categorical or continuous value necessary for differential correlations. Typically a state or treatment score.}
+
+\item{formula}{A formula object. Used to assess differential associations.}
 }
 \value{
 a list of \code{anansiTale} result objects, one for the total model, one for emergent correlations and one for disjointed correlations.

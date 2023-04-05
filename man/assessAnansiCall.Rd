@@ -9,7 +9,7 @@ assessAnansiCall(web, groups, diff_cor = diff_cor, modeltype, reff, method)
 \arguments{
 \item{web}{web An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.}
 
-\item{groups}{A categorical or continuous value necessary for differential correlations. Typically a state or treatment score. If no argument provided, anansi will let you know and still to regular correlations according to your dictionary.}
+\item{groups}{A vector of categorical or continuous value necessary for differential correlations. Typically a state or treatment score. If no argument provided, anansi will let you know and still to regular correlations according to your dictionary.}
 
 \item{diff_cor}{A boolean. Toggles whether to compute differential correlations. Default is \code{TRUE}.}
 
@@ -18,6 +18,8 @@ assessAnansiCall(web, groups, diff_cor = diff_cor, modeltype, reff, method)
 \item{reff}{A categorical vector typically depicting a shared ID between samples. Only for mixed effect models.}
 
 \item{method}{Correlation method. \code{method = "pearson"} is the default value. The alternatives to be passed to \code{cor()} are "spearman" and "kendall".}
+
+\item{metadata}{A vector or data.frame of categorical or continuous value necessary for differential correlations. Typically a state or treatment score. If no argument provided, anansi will let you know and still to regular correlations according to your dictionary.}
 }
 \value{
 a list including a modified \code{groups} and \code{diff_cor} argument.

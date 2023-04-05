@@ -14,6 +14,8 @@ call_groupwise(web, method, groups, verbose)
 \item{groups}{A categorical or continuous value necessary for differential correlations. Typically a state or treatment score.}
 
 \item{verbose}{A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.}
+
+\item{metadata}{A vector or data.frame of categorical or continuous value necessary for differential correlations. Typically a state or treatment score. If no argument provided, anansi will let you know and still to regular correlations according to your dictionary.}
 }
 \description{
 If the \code{groups} argument is suitable, will also run correlation analysis per group. Typically, the main \code{anansi()} function will run this for you.
