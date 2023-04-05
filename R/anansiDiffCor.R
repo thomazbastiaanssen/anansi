@@ -33,41 +33,58 @@ anansiDiffCor = function(web, metadata, groups, formula, reff, modeltype, verbos
 
   out_rvals[web@dictionary]      <- stats_out[1,]
   out_pvals[web@dictionary]      <- stats_out[2,]
-  out_disjrvals[web@dictionary]  <- stats_out[3,]
-  out_disjpvals[web@dictionary]  <- stats_out[4,]
-  out_emergrvals[web@dictionary] <- stats_out[5,]
-  out_emergpvals[web@dictionary] <- stats_out[6,]
 
   #Adjust for multiple comparisons
   out_qvals                      <- out_pvals
   out_qvals[web@dictionary]      <- NA
 
-  out_tale        = new("anansiTale",
-                        subject    = "model_full",
-                        type       = "r.squared",
-                        estimates  = out_rvals,
-                        p.values   = out_pvals,
-                        q.values   = out_qvals)
+  out_tale  <- list(full = new("anansiTale",
+                               subject    = "model_full",
+                               type       = "r.squared",
+                               estimates  = out_rvals,
+                               p.values   = out_pvals,
+                               q.values   = out_qvals))
 
-  out_disjqvals                  <- out_disjpvals
-  out_disjqvals[web@dictionary]  <- NA
+  out_disjointed = vector(mode =  "list", length = length(all_terms))
 
-  out_disjointed = new("anansiTale",
-                       subject    = "model_disjointed",
-                       type       = "r.squared",
-                       estimates  = out_disjrvals,
-                       p.values   = out_disjpvals,
-                       q.values   = out_disjqvals)
+  for(t in 1:length(all_terms)){
+    out_disjrvals[web@dictionary]  <- stats_out[1 + t * 2,]
+    out_disjpvals[web@dictionary]  <- stats_out[2 + t * 2,]
 
-  out_emergqvals                 <- out_emergpvals
-  out_emergqvals[web@dictionary] <- NA
+    #Adjust for multiple comparisons
+    out_disjqvals                  <- out_disjpvals
+    out_disjqvals[web@dictionary]  <- NA
 
-  out_emergent   = new("anansiTale",
-                       subject    = "model_emergent",
-                       type       = "r.squared",
-                       estimates  = out_emergrvals,
-                       p.values   = out_emergpvals,
-                       q.values   = out_emergqvals)
+
+    out_disjointed[t] <- new("anansiTale",
+                          subject    = paste("model_disjointed", all_terms[t], sep = "_"),
+                          type       = "r.squared",
+                          estimates  = out_disjrvals,
+                          p.values   = out_disjpvals,
+                          q.values   = out_disjqvals)
+  }
+  names(out_disjointed) <- all_terms
+
+  out_emergent = vector(mode =  "list", length = length(all_terms))
+
+  for(t in 1:length(all_terms)){
+    out_emergrvals[web@dictionary]  <- stats_out[1 + 2 * length(all_terms) + t * 2,]
+    out_emergpvals[web@dictionary]  <- stats_out[2 + 2 * length(all_terms) + t * 2,]
+
+    #Adjust for multiple comparisons
+    out_emergqvals                  <- out_emergpvals
+    out_emergqvals[web@dictionary]  <- NA
+
+
+    out_emergent[t] <- new("anansiTale",
+                             subject    = paste("model_emergent", all_terms[t], sep = "_"),
+                             type       = "r.squared",
+                             estimates  = out_emergrvals,
+                             p.values   = out_emergpvals,
+                             q.values   = out_emergqvals)
+  }
+  names(out_emergent) <- all_terms
+
 
   #Collect into nested list and return results
   return(list(modelfit   = out_tale,

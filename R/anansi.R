@@ -3,6 +3,7 @@
 #' @param web An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.
 #' @param method Correlation method. \code{method = "pearson"} is the default value. The alternatives to be passed to \code{cor()} are "spearman" and "kendall".
 #' @param metadata A vector or data.frame of categorical or continuous value necessary for differential correlations. Typically a state or treatment score. If no argument provided, anansi will let you know and still to regular correlations according to your dictionary.
+#' @param group A vector of the column names of categorical values in the metadata object to control which groups should be assessed for simple correlations. If no argument provided, anansi will let you know and still to regular correlations according to your dictionary.
 #' @param formula A formula object. Used to assess differential associations.
 #' @param reff A categorical vector typically depicting a shared ID between samples. Only for mixed effect models.
 #' @param modeltype A string, either "lm" or "lmer" depending on the type of model that should be ran, or "propr" in the case of within-composition associations..
@@ -98,15 +99,29 @@
 #' #See also ?spinToPlots
 #' }
 #'
-anansi = function(web, method = "pearson", metadata = NULL, formula = ~1, adjust.method = "BH", modeltype = "lm", resampling = F, locality = F,
+anansi = function(web, method = "pearson", groups = NULL,  metadata = NULL, formula = ~1,
+                  adjust.method = "BH", modeltype = "lm", resampling = F, locality = F,
                   reff = NULL, verbose = T, diff_cor = T, ignore_dictionary = F){
 
   if(is.vector(metadata)){
     metadata = data.frame(metadata = metadata)
   }
-  #If there is a formula that not empty:
+
+  #If there is a formula that is not empty:
   if(!identical(all.vars(formula), character(0))){
-    groups = all.vars(formula)
+    unique_factors = all.vars(update.formula(formula, 0~.))
+
+    if(is.null(groups)){
+      groups = unique_factors
+    }
+
+    metadata_factors = metadata[,groups]
+    groups = do.call(paste, c(data.frame(metadata_factors), sep = "_"))
+
+    if(length(c(groups)) == 0){
+      groups <- NULL
+    }
+
   }
 
 
