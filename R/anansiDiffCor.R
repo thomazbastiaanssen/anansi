@@ -228,12 +228,25 @@ glmer_calc_diff_cor <- function(web, which_dictionary, metadata, groups, formula
   vec_out[1] <- cor(y, fitted(f.full), method = "pearson", use = "pairwise.complete.obs")^2
   vec_out[2] <- p
 
-  #Fit a separate null model to compute effect of groups value on slope (ie interaction).
-  f.null2  <- suppressMessages(lme4::lmer(y ~ x + groups + (1|reff), REML = F, na.action = na.exclude))
+  target_disj_interactions <- attr(terms(formula_full), "term.labels")[grep(pattern = "^x:", attr(terms(formula_full), "term.labels"))]
 
+  #Fit a separate null model to compute effect of groups value on slope (ie interaction).
+  formula_vector = paste(Reduce(paste, deparse1(formula_full)), " -", target_disj_interactions, sep = "")
+  f.null.list <- lapply(X = formula_vector, FUN = function(f){suppressMessages(lme4::lmer(as.formula(f),data = metadata, REML = F, na.action = na.exclude))})
+
+  f.list <- append(f.null.list, c(f.full, "Chisq"))
+  names(f.list) <- c(target_disj_interactions, "full", "test")
   #compare null to full model for get a p-value
-  f_comp2   <- anova.merMod(f.null2, f.full)
-  p2        <- f_comp2["f.full", "Pr(>Chisq)"]
+
+  ###Hier was ik gebleven. Checken of dit runt met realistischere modellen dan mtcars en me p-waarden geeft.
+  #https://stackoverflow.com/questions/52868667/pass-a-named-list-of-models-to-anova-mermod zie ook 0 df met mtcars?1
+    f_comp2   <- with(f.list,
+                    do.call(anova.merMod,
+                            lapply(names(f.list), as.name)))
+#en dan de p-waarden eruit vissen
+  stats:::anova.lmlist(f.null.list, test = "Chisq")
+  anova.merMod(f.list[[1]], f.list[[2]], f.list[[3]], test = "Chisq")
+    p2        <- f_comp2["f.full", "Pr(>Chisq)"]
 
   #Here, we calculate R^2 for the complete fitted model using pearson's method
   vec_out[3] <- cor(residuals(f.null2), fitted(f.full),method = "pearson", use = "pairwise.complete.obs")^2

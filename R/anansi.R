@@ -124,6 +124,9 @@ anansi = function(web, method = "pearson", groups = NULL,  metadata = NULL, form
 
   }
 
+  if(!is.null(reff)){
+    reff = metadata[,reff]
+  }
 
 
   if(ignore_dictionary){
