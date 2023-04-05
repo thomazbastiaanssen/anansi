@@ -1,7 +1,9 @@
 #' Run differential correlation analysis for all interacting metabolites and functions.
 #' @description Can either take continuous or categorical data for \code{groups}. Typically, the main \code{anansi()} function will run this for you.
 #' @param web An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.
+#' @param metadata A vector or data.frame of categorical or continuous value necessary for differential correlations. Typically a state or treatment score. If no argument provided, anansi will let you know and still to regular correlations according to your dictionary.
 #' @param groups A categorical or continuous value necessary for differential correlations. Typically a state or treatment score.
+#' @param formula A formula object. Used to assess differential associations.
 #' @param reff A categorical vector typically depicting a shared ID between samples. Only for mixed effect models.
 #' @param modeltype A string, either "lm" or "lmer" depending on the type of model that should be ran.
 #' @param verbose A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.
@@ -9,12 +11,15 @@
 #' @importFrom stats anova lm pf residuals
 #' @importFrom future.apply future_apply
 #'
-anansiDiffCor = function(web, groups, reff, modeltype, verbose = T){
+anansiDiffCor = function(web, metadata, groups, formula, reff, modeltype, verbose = T){
   #Create a matrix with row and column coordinates to cycle through the relevant comparisons in tableY and tableX.
   which_dictionary <- which(web@dictionary, arr.ind = T, useNames = F)
 
+  all_terms <- attr(terms(formula), "term.labels")
+
   stats_out <- future.apply::future_apply(which_dictionary, 1, FUN = model_picker,
-                                          web = web, groups = groups, reff = reff, modeltype = modeltype)
+                                          web = web, formula = formula, metadata = metadata,
+                                          groups = groups, reff = reff, modeltype = modeltype)
 
   #Create result container matrices. We take advantage of the fact that true interactions are coded as TRUE, which corresponds to 1,
   #automatically setting all non-canonical interactions as p = 1 and estimate = 0.
@@ -75,23 +80,25 @@ anansiDiffCor = function(web, groups, reff, modeltype, verbose = T){
 #' @description Should not be run on its own. to be applied by \code{anansiDiffCor()}. Typically, the main \code{anansi()} function will handle this for you.
 #' @param web An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.
 #' @param which_dictionary A matrix derived from calling \code{which(web@dictionary, arr.ind = T)}. It contains coordinates for the relevant measurements to be compared.
+#' @param metadata A vector or data.frame of categorical or continuous value necessary for differential correlations. Typically a state or treatment score. If no argument provided, anansi will let you know and still to regular correlations according to your dictionary.
 #' @param groups A categorical or continuous vector necessary for differential correlations. Typically a state or treatment score.
+#' @param formula A formula object. Used to assess differential associations.
 #' @param reff A categorical vector typically depicting a shared ID between samples. Only for mixed effect models.
 #' @param modeltype A string, either "lm" or "lmer" depending on the type of model that should be ran.
 #' @return a list of \code{anansiTale} result objects, one for the total model, one for emergent correlations and one for disjointed correlations.
 #'
-model_picker <- function(web, which_dictionary, groups, reff = NULL, modeltype = "lm"){
+model_picker <- function(web, which_dictionary, metadata, groups, formula, reff = NULL, modeltype = "lm"){
   if(modeltype == "lm"){
     if(identical(web@tableY, web@tableX)){
-      return(glm_calc_diff_prop(web = web, which_dictionary = which_dictionary, groups = groups))
+      return(glm_calc_diff_prop(web = web, which_dictionary = which_dictionary, metadata = metadata, groups = groups))
       }
-    return(glm_calc_diff_cor(web = web, which_dictionary = which_dictionary, groups = groups))
+    return(glm_calc_diff_cor(web = web, which_dictionary = which_dictionary, formula = formula, metadata = metadata, groups = groups))
   }
   if(modeltype == "lmer"){
     if(identical(web@tableY, web@tableX)){
-      return(glmer_calc_diff_prop(web = web, which_dictionary = which_dictionary, groups = groups, reff = reff))
+      return(glmer_calc_diff_prop(web = web, which_dictionary = which_dictionary, metadata = metadata, groups = groups, reff = reff))
     }
-    return(glmer_calc_diff_cor(web = web, which_dictionary = which_dictionary, groups = groups, reff = reff))
+    return(glmer_calc_diff_cor(web = web, which_dictionary = which_dictionary, formula = formula, metadata = metadata, groups = groups, reff = reff))
   }
 }
 
@@ -99,19 +106,23 @@ model_picker <- function(web, which_dictionary, groups, reff = NULL, modeltype =
 #' @description Should not be run on its own. to be applied by \code{anansiDiffCor()}. Typically, the main \code{anansi()} function will handle this for you.
 #' @param web An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.
 #' @param which_dictionary A matrix derived from calling \code{which(web@dictionary, arr.ind = T)}. It contains coordinates for the relevant measurements to be compared.
+#' @param metadata A vector or data.frame of categorical or continuous value necessary for differential correlations. Typically a state or treatment score. If no argument provided, anansi will let you know and still to regular correlations according to your dictionary.
 #' @param groups A categorical or continuous value necessary for differential correlations. Typically a state or treatment score.
+#' @param formula A formula object. Used to assess differential associations.
 #' @return a list of \code{anansiTale} result objects, one for the total model, one for emergent correlations and one for disjointed correlations.
 #' @importFrom stats anova lm pf residuals na.exclude
 #'
-glm_calc_diff_cor <- function(web, which_dictionary, groups){
+glm_calc_diff_cor <- function(web, which_dictionary, metadata, groups, formula){
   # Extract relevant values
   y = web@tableY[,which_dictionary[1]]
   x = web@tableX[,which_dictionary[2]]
 
-  vec_out = c(0, 1, 0, 1, 0, 1)
+  all_terms <- attr(terms(formula), "term.labels")
 
+  vec_out = rep(c(0, 1), 1 + 2 * length(all_terms))
+  formula_full = update.formula(formula, y ~ x * 1 * (.))
   # fit linear model
-  fit      <- lm(y ~ x * groups)
+  fit      <- lm(formula = formula_full, data = metadata)
 
   # Calculate p-value for entire model
   fstat    <- summary(fit)$fstatistic
@@ -124,20 +135,29 @@ glm_calc_diff_cor <- function(web, which_dictionary, groups){
   disj_fit        <- anova(fit)
 
   #Calculate r.squared
-  disj.rsquared  <- disj_fit[3,2] / (disj_fit[3,2] + disj_fit[4,2])
+  #get the residual sum of squares
+  resid.ss <- sum(resid(fit)^2)
+  target_disj_interactions <- grep("^x:",row.names(disj_fit))
+  disj.rsquared  <- disj_fit[target_disj_interactions,2] / (disj_fit[target_disj_interactions,2] + resid.ss)
 
-  vec_out[3]  <- disj.rsquared
-  vec_out[4]  <- disj_fit[3,5]
+  vec_out[1 + (1:length(all_terms))*2]  <- disj.rsquared
+  vec_out[2 + (1:length(all_terms))*2]  <- disj_fit[target_disj_interactions,5]
 
   #run ANOVA to determine impact of group on STRENGTH of association.
+  formula_emerg = update.formula(abs_resid ~ ., formula)
+
   abs_resid      <- abs(residuals(lm(y ~ x, na.action = na.exclude)))
-  emerg_fit      <- anova(lm(abs_resid ~ groups))
+  emerg_fit      <- lm(formula = formula_emerg, data = metadata)
+  emerg_anova    <- anova(emerg_fit)
 
   #Calculate r.squared
-  emerg.rsquared <- emerg_fit[1,2] / (emerg_fit[1,2] + emerg_fit[2,2])
+  resid_emerg.ss <- sum(resid(emerg_fit)^2)
+  target_emerg_interactions <- 1:length(all_terms)
 
-  vec_out[5] <- emerg.rsquared
-  vec_out[6] <- emerg_fit[1,5]
+  emerg.rsquared <- emerg_fit[target_emerg_interactions,2] / (emerg_fit[target_emerg_interactions,2] + resid_emerg.ss)
+
+  vec_out[1 + 2 * length(all_terms) + (1:length(all_terms))*2] <- emerg.rsquared
+  vec_out[2 + 2 * length(all_terms) + (1:length(all_terms))*2] <- emerg_fit[target_emerg_interactions,5]
 
   return(vec_out)
 }
@@ -158,24 +178,30 @@ anova.merMod <- utils::getFromNamespace("anova.merMod", "lme4")
 #' @description Should not be run on its own. to be applied by \code{anansiDiffCor()}. Typically, the main \code{anansi()} function will handle this for you.
 #' @param web An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.
 #' @param which_dictionary A matrix derived from calling \code{which(web@dictionary, arr.ind = T)}. It contains coordinates for the relevant measurements to be compared.
+#' @param metadata A vector or data.frame of categorical or continuous value necessary for differential correlations. Typically a state or treatment score. If no argument provided, anansi will let you know and still to regular correlations according to your dictionary.
 #' @param groups A categorical or continuous value necessary for differential correlations. Typically a state or treatment score.
+#' @param formula A formula object. Used to assess differential associations.
 #' @param reff A categorical vector typically depicting a shared ID between samples. Only for mixed effect models.
 #' @return a list of \code{anansiTale} result objects, one for the total model, one for emergent correlations and one for disjointed correlations.
 #' @importFrom stats anova lm pf residuals fitted cor na.exclude
 #' @importFrom lme4 lmer
 #
-glmer_calc_diff_cor <- function(web, which_dictionary, groups, reff){
+glmer_calc_diff_cor <- function(web, which_dictionary, metadata, groups, formula, reff){
   # Extract relevant values
   y = web@tableY[,which_dictionary[1]]
   x = web@tableX[,which_dictionary[2]]
 
+  all_terms <- attr(terms(formula), "term.labels")
+
   #param      r, p, r, p, r, p
-  vec_out = c(0, 1, 0, 1, 0, 1)
+  vec_out = rep(c(0, 1), 1 + 2 * length(all_terms))
 
   # fit null model to compute p-values later
   f.null   <- lm(y ~ 1, na.action = na.exclude)
   # fit complete mixed effect model
-  f.full   <- suppressMessages(lme4::lmer(y ~ x * groups + (1|reff), REML = F, na.action = na.exclude))
+  formula_full = update.formula(formula, y ~ x * 1 * (.) + (1|reff))
+
+  f.full   <- suppressMessages(lme4::lmer(formula = formula_full, data = metadata, REML = F, na.action = na.exclude))
 
   #Compare null to full model for get a p-value
   f_comp   <- anova.merMod(f.null, f.full)
