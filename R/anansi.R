@@ -3,7 +3,7 @@
 #' @param web An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.
 #' @param method Correlation method. \code{method = "pearson"} is the default value. The alternatives to be passed to \code{cor()} are "spearman" and "kendall".
 #' @param metadata A vector or data.frame of categorical or continuous value necessary for differential correlations. Typically a state or treatment score. If no argument provided, anansi will let you know and still to regular correlations according to your dictionary.
-#' @param group A vector of the column names of categorical values in the metadata object to control which groups should be assessed for simple correlations. If no argument provided, anansi will let you know and still to regular correlations according to your dictionary.
+#' @param groups A vector of the column names of categorical values in the metadata object to control which groups should be assessed for simple correlations. If no argument provided, anansi will let you know and still to regular correlations according to your dictionary.
 #' @param formula A formula object. Used to assess differential associations.
 #' @param reff A categorical vector typically depicting a shared ID between samples. Only for mixed effect models.
 #' @param modeltype A string, either "lm" or "lmer" depending on the type of model that should be ran, or "propr" in the case of within-composition associations..
@@ -172,7 +172,6 @@ anansi = function(web, method = "pearson", groups = NULL,  metadata = NULL, form
 #' @description Calls both assessGroups and assessModelType.
 #' This is a helper function called by \code{anansi}.
 #' @param web web An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.
-#' @param metadata A vector or data.frame of categorical or continuous value necessary for differential correlations. Typically a state or treatment score. If no argument provided, anansi will let you know and still to regular correlations according to your dictionary.
 #' @param groups A vector of categorical or continuous value necessary for differential correlations. Typically a state or treatment score. If no argument provided, anansi will let you know and still to regular correlations according to your dictionary.
 #' @param diff_cor A boolean. Toggles whether to compute differential correlations. Default is \code{TRUE}.
 #' @param reff A categorical vector typically depicting a shared ID between samples. Only for mixed effect models.
@@ -207,7 +206,6 @@ assessAnansiCall <- function(web, groups, diff_cor = diff_cor, modeltype, reff, 
 #' If something looks off, \code{assessGroups} will do its best to salvage it and let you know something's up.
 #' This is a helper function called by \code{anansi}.
 #' @param web web An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.
-#' @param metadata A vector or data.frame of categorical or continuous value necessary for differential correlations. Typically a state or treatment score. If no argument provided, anansi will let you know and still to regular correlations according to your dictionary.
 #' @param groups A categorical or continuous value necessary for differential correlations. Typically a state or treatment score. If no argument provided, anansi will let you know and still to regular correlations according to your dictionary.
 #' @param diff_cor A boolean. Toggles whether to compute differential correlations. Default is \code{TRUE}.
 #' @return a list including a modified \code{groups} and \code{diff_cor} argument.
@@ -285,7 +283,6 @@ assessModelType <- function(modeltype, reff, diff_cor){
 #' @description If the \code{groups} argument is suitable, will also run correlation analysis per group. Typically, the main \code{anansi()} function will run this for you.
 #' @param web An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.
 #' @param method Correlation method.
-#' @param metadata A vector or data.frame of categorical or continuous value necessary for differential correlations. Typically a state or treatment score. If no argument provided, anansi will let you know and still to regular correlations according to your dictionary.
 #' @param groups A categorical or continuous value necessary for differential correlations. Typically a state or treatment score.
 #' @param verbose A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.
 #'

@@ -8,7 +8,7 @@
 #' @param modeltype A string, either "lm" or "lmer" depending on the type of model that should be ran.
 #' @param verbose A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.
 #' @return a list of \code{anansiTale} result objects, one for the total model, one for emergent correlations and one for disjointed correlations.
-#' @importFrom stats anova lm pf residuals
+#' @importFrom stats anova lm pf residuals terms
 #' @importFrom future.apply future_apply
 #'
 anansiDiffCor = function(web, metadata, groups, formula, reff, modeltype, verbose = T){
@@ -153,7 +153,7 @@ glm_calc_diff_cor <- function(web, which_dictionary, metadata, groups, formula){
 
   #Calculate r.squared
   #get the residual sum of squares
-  resid.ss <- sum(resid(fit)^2)
+  resid.ss <- sum(residuals(fit)^2)
   target_disj_interactions <- grep("^x:",row.names(disj_fit))
   disj.rsquared  <- disj_fit[target_disj_interactions,2] / (disj_fit[target_disj_interactions,2] + resid.ss)
 
@@ -168,7 +168,7 @@ glm_calc_diff_cor <- function(web, which_dictionary, metadata, groups, formula){
   emerg_anova    <- anova(emerg_fit)
 
   #Calculate r.squared
-  resid_emerg.ss <- sum(resid(emerg_fit)^2)
+  resid_emerg.ss <- sum(residuals(emerg_fit)^2)
   target_emerg_interactions <- 1:length(all_terms)
 
   emerg.rsquared <- emerg_fit[target_emerg_interactions,2] / (emerg_fit[target_emerg_interactions,2] + resid_emerg.ss)

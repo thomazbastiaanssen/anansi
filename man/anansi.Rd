@@ -7,6 +7,7 @@
 anansi(
   web,
   method = "pearson",
+  groups = NULL,
   metadata = NULL,
   formula = ~1,
   adjust.method = "BH",
@@ -23,6 +24,8 @@ anansi(
 \item{web}{An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.}
 
 \item{method}{Correlation method. \code{method = "pearson"} is the default value. The alternatives to be passed to \code{cor()} are "spearman" and "kendall".}
+
+\item{groups}{A vector of the column names of categorical values in the metadata object to control which groups should be assessed for simple correlations. If no argument provided, anansi will let you know and still to regular correlations according to your dictionary.}
 
 \item{metadata}{A vector or data.frame of categorical or continuous value necessary for differential correlations. Typically a state or treatment score. If no argument provided, anansi will let you know and still to regular correlations according to your dictionary.}
 
