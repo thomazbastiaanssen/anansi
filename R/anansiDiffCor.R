@@ -138,6 +138,7 @@ glm_calc_diff_cor <- function(web, which_dictionary, metadata, groups, formula){
 
   vec_out = rep(c(0, 1), 1 + 2 * length(all_terms))
   formula_full = update.formula(formula, y ~ x * 1 * (.))
+
   # fit linear model
   fit      <- lm(formula = formula_full, data = metadata)
 
@@ -171,10 +172,10 @@ glm_calc_diff_cor <- function(web, which_dictionary, metadata, groups, formula){
   resid_emerg.ss <- sum(residuals(emerg_fit)^2)
   target_emerg_interactions <- 1:length(all_terms)
 
-  emerg.rsquared <- emerg_fit[target_emerg_interactions,2] / (emerg_fit[target_emerg_interactions,2] + resid_emerg.ss)
+  emerg.rsquared <- emerg_anova[target_emerg_interactions,2] / (emerg_anova[target_emerg_interactions,2] + resid_emerg.ss)
 
   vec_out[1 + 2 * length(all_terms) + (1:length(all_terms))*2] <- emerg.rsquared
-  vec_out[2 + 2 * length(all_terms) + (1:length(all_terms))*2] <- emerg_fit[target_emerg_interactions,5]
+  vec_out[2 + 2 * length(all_terms) + (1:length(all_terms))*2] <- emerg_anova[target_emerg_interactions,5]
 
   return(vec_out)
 }
@@ -208,15 +209,17 @@ glmer_calc_diff_cor <- function(web, which_dictionary, metadata, groups, formula
   y = web@tableY[,which_dictionary[1]]
   x = web@tableX[,which_dictionary[2]]
 
-  all_terms <- attr(terms(formula), "term.labels")
+  formula_full = update.formula(formula, y ~ x * 1 * (.))
 
+  which_terms <- grep(pattern = "^x:", attr(terms(formula_full), "term.labels"))
+  all_terms <- attr(terms(formula_full), "term.labels")[which_terms]
   #param      r, p, r, p, r, p
   vec_out = rep(c(0, 1), 1 + 2 * length(all_terms))
 
   # fit null model to compute p-values later
   f.null   <- lm(y ~ 1, na.action = na.exclude)
   # fit complete mixed effect model
-  formula_full = update.formula(formula, y ~ x * 1 * (.) + (1|reff))
+  formula_full = update.formula(formula_full, .~. + (1|reff))
 
   f.full   <- suppressMessages(lme4::lmer(formula = formula_full, data = metadata, REML = F, na.action = na.exclude))
 
@@ -231,39 +234,46 @@ glmer_calc_diff_cor <- function(web, which_dictionary, metadata, groups, formula
   target_disj_interactions <- attr(terms(formula_full), "term.labels")[grep(pattern = "^x:", attr(terms(formula_full), "term.labels"))]
 
   #Fit a separate null model to compute effect of groups value on slope (ie interaction).
-  formula_vector = paste(Reduce(paste, deparse1(formula_full)), " -", target_disj_interactions, sep = "")
-  f.null.list <- lapply(X = formula_vector, FUN = function(f){suppressMessages(lme4::lmer(as.formula(f),data = metadata, REML = F, na.action = na.exclude))})
+  target.list <- lapply(target_disj_interactions, FUN = function(x){as.formula(paste0(".~.-", x))})
 
-  f.list <- append(f.null.list, c(f.full, "Chisq"))
-  names(f.list) <- c(target_disj_interactions, "full", "test")
+  #update to remove each term sequentially
+  f.null.list <- lapply(target.list, FUN = function(x){update.formula(formula_full, new =x )})
+
+  #fit models
+  f.null.list <- lapply(X = f.null.list, FUN = function(f){suppressMessages(lme4::lmer(as.formula(f),data = metadata, REML = F, na.action = na.exclude))})
+
+  names(f.null.list) <- target_disj_interactions
   #compare null to full model for get a p-value
 
-  ###Hier was ik gebleven. Checken of dit runt met realistischere modellen dan mtcars en me p-waarden geeft.
-  #https://stackoverflow.com/questions/52868667/pass-a-named-list-of-models-to-anova-mermod zie ook 0 df met mtcars?1
-    f_comp2   <- with(f.list,
-                    do.call(anova.merMod,
-                            lapply(names(f.list), as.name)))
-#en dan de p-waarden eruit vissen
-  stats:::anova.lmlist(f.null.list, test = "Chisq")
-  anova.merMod(f.list[[1]], f.list[[2]], f.list[[3]], test = "Chisq")
-    p2        <- f_comp2["f.full", "Pr(>Chisq)"]
+  f_comp2   <- lapply(f.null.list, function(x){anova.merMod(x, f.full)["f.full", "Pr(>Chisq)"]})
 
+  f_comp2.rsq.list <- lapply(f.null.list, function(f){cor(residuals(f), fitted(f.full), method = "pearson", use = "pairwise.complete.obs")^2 })
   #Here, we calculate R^2 for the complete fitted model using pearson's method
-  vec_out[3] <- cor(residuals(f.null2), fitted(f.full),method = "pearson", use = "pairwise.complete.obs")^2
-  vec_out[4] <- p2
+  vec_out[1 + (1:length(all_terms))*2] <- unlist(f_comp2.rsq.list)
+  vec_out[2 + (1:length(all_terms))*2] <- unlist(f_comp2)
 
 
   #run ANOVA to determine impact of group on STRENGTH of association.
   abs_resid      <- abs(residuals(suppressMessages(lme4::lmer(y ~ x + (1|reff), REML = F, na.action = na.exclude))))
 
+
+
+
+  #run ANOVA to determine impact of group on STRENGTH of association.
+  formula_emerg = update.formula(abs_resid ~ ., formula)
+
   #exactly the same as the lm version for here on
-  emerg_fit      <- anova(lm(abs_resid ~ groups))
+  emerg_fit      <- lm(formula = formula_emerg, data = metadata)
+  emerg_anova    <- anova(emerg_fit)
 
   #Calculate r.squared
-  emerg.rsquared <- emerg_fit[1,2] / (emerg_fit[1,2] + emerg_fit[2,2])
+  resid_emerg.ss <- sum(residuals(emerg_fit)^2)
+  target_emerg_interactions <- 1:length(all_terms)
 
-  vec_out[5] <- emerg.rsquared
-  vec_out[6] <- emerg_fit[1,5]
+  emerg.rsquared <- emerg_anova[target_emerg_interactions,2] / (emerg_anova[target_emerg_interactions,2] + resid_emerg.ss)
+
+  vec_out[1 + 2 * length(all_terms) + (1:length(all_terms))*2] <- emerg.rsquared
+  vec_out[2 + 2 * length(all_terms) + (1:length(all_terms))*2] <- emerg_anova[target_emerg_interactions,5]
 
   return(vec_out)
 }

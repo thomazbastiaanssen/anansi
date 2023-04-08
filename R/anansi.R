@@ -115,7 +115,7 @@ anansi = function(web, method = "pearson", groups = NULL,  metadata = NULL, form
       groups = unique_factors
     }
 
-    metadata_factors = metadata[,groups]
+    metadata_factors = metadata[,unique_factors]
     groups = do.call(paste, c(data.frame(metadata_factors), sep = "_"))
 
     if(length(c(groups)) == 0){
@@ -146,7 +146,7 @@ anansi = function(web, method = "pearson", groups = NULL,  metadata = NULL, form
   method          = assess_res$method
 
   #generate anansiYarn output object
-  outYarn = new("anansiYarn", input = new("anansiInput", web = web, groups = groups, reff = reff))
+  outYarn = new("anansiYarn", input = new("anansiInput", web = web, groups = groups, formula = formula, reff = reff))
 
   if(verbose){print("Running annotation-based correlations")}
 
@@ -159,8 +159,9 @@ anansi = function(web, method = "pearson", groups = NULL,  metadata = NULL, form
   if(diff_cor){
   if(verbose){print("Fitting models for differential correlation testing")
     print(paste("Model type:", modeltype, sep = ""))}
-    output@model_results = anansiDiffCor(web = web, groups = groups, reff = reff,
-                                         modeltype = modeltype, verbose = verbose)
+    output@model_results = unlist(anansiDiffCor(web = web, groups = groups, formula = formula,
+                                         metadata = metadata, reff = reff,
+                                         modeltype = modeltype, verbose = verbose))
   }
   outYarn@output = output
 
