@@ -56,7 +56,7 @@ anansiDiffCor = function(web, metadata, groups, formula, reff, modeltype, verbos
     out_disjqvals[web@dictionary]  <- NA
 
 
-    out_disjointed[t] <- new("anansiTale",
+    out_disjointed[[t]] <- new("anansiTale",
                           subject    = paste("model_disjointed", all_terms[t], sep = "_"),
                           type       = "r.squared",
                           estimates  = out_disjrvals,
@@ -76,7 +76,7 @@ anansiDiffCor = function(web, metadata, groups, formula, reff, modeltype, verbos
     out_emergqvals[web@dictionary]  <- NA
 
 
-    out_emergent[t] <- new("anansiTale",
+    out_emergent[[t]] <- new("anansiTale",
                              subject    = paste("model_emergent", all_terms[t], sep = "_"),
                              type       = "r.squared",
                              estimates  = out_emergrvals,
@@ -130,9 +130,12 @@ model_picker <- function(web, which_dictionary, metadata, groups, formula, reff 
 #' @importFrom stats anova lm pf residuals na.exclude
 #'
 glm_calc_diff_cor <- function(web, which_dictionary, metadata, groups, formula){
+
+  meta_glm = metadata
+
   # Extract relevant values
-  y = web@tableY[,which_dictionary[1]]
-  x = web@tableX[,which_dictionary[2]]
+  meta_glm$y = web@tableY[,which_dictionary[1]]
+  meta_glm$x = web@tableX[,which_dictionary[2]]
 
   all_terms <- attr(terms(formula), "term.labels")
 
@@ -140,9 +143,9 @@ glm_calc_diff_cor <- function(web, which_dictionary, metadata, groups, formula){
   formula_full = update.formula(formula, y ~ x * 1 * (.))
 
   # fit linear model
-  fit      <- lm(formula = formula_full, data = metadata)
+  fit      <- lm(formula = formula_full, data = meta_glm)
 
-  # Calculate p-value for entire model
+    # Calculate p-value for entire model
   fstat    <- summary(fit)$fstatistic
   p        <- pf(fstat[1], fstat[2], fstat[3], lower.tail = FALSE)
 
@@ -164,8 +167,9 @@ glm_calc_diff_cor <- function(web, which_dictionary, metadata, groups, formula){
   #run ANOVA to determine impact of group on STRENGTH of association.
   formula_emerg = update.formula(abs_resid ~ ., formula)
 
-  abs_resid      <- abs(residuals(lm(y ~ x, na.action = na.exclude)))
-  emerg_fit      <- lm(formula = formula_emerg, data = metadata)
+  meta_glm$abs_resid      <- abs(residuals(lm(y ~ x, data = meta_glm, na.action = na.exclude)))
+
+  emerg_fit      <- lm(formula = formula_emerg, data = meta_glm)
   emerg_anova    <- anova(emerg_fit)
 
   #Calculate r.squared
@@ -205,9 +209,12 @@ anova.merMod <- utils::getFromNamespace("anova.merMod", "lme4")
 #' @importFrom lme4 lmer
 #
 glmer_calc_diff_cor <- function(web, which_dictionary, metadata, groups, formula, reff){
+
+  meta_glmer = metadata
+
   # Extract relevant values
-  y = web@tableY[,which_dictionary[1]]
-  x = web@tableX[,which_dictionary[2]]
+  meta_glmer$y = web@tableY[,which_dictionary[1]]
+  meta_glmer$x = web@tableX[,which_dictionary[2]]
 
   formula_full = update.formula(formula, y ~ x * 1 * (.))
 
@@ -217,18 +224,18 @@ glmer_calc_diff_cor <- function(web, which_dictionary, metadata, groups, formula
   vec_out = rep(c(0, 1), 1 + 2 * length(all_terms))
 
   # fit null model to compute p-values later
-  f.null   <- lm(y ~ 1, na.action = na.exclude)
+  f.null   <- lm(y ~ 1, data = meta_glmer, na.action = na.exclude)
   # fit complete mixed effect model
   formula_full = update.formula(formula_full, .~. + (1|reff))
 
-  f.full   <- suppressMessages(lme4::lmer(formula = formula_full, data = metadata, REML = F, na.action = na.exclude))
+  f.full   <- suppressMessages(lme4::lmer(formula = formula_full, data = meta_glmer, REML = F, na.action = na.exclude))
 
   #Compare null to full model for get a p-value
   f_comp   <- anova.merMod(f.null, f.full)
   p        <- f_comp["f.full", "Pr(>Chisq)"]
 
   #Here, we calculate R^2 for the complete fitted model using pearson's method
-  vec_out[1] <- cor(y, fitted(f.full), method = "pearson", use = "pairwise.complete.obs")^2
+  vec_out[1] <- cor(meta_glmer$y, fitted(f.full), method = "pearson", use = "pairwise.complete.obs")^2
   vec_out[2] <- p
 
   target_disj_interactions <- attr(terms(formula_full), "term.labels")[grep(pattern = "^x:", attr(terms(formula_full), "term.labels"))]
@@ -240,7 +247,7 @@ glmer_calc_diff_cor <- function(web, which_dictionary, metadata, groups, formula
   f.null.list <- lapply(target.list, FUN = function(x){update.formula(formula_full, new =x )})
 
   #fit models
-  f.null.list <- lapply(X = f.null.list, FUN = function(f){suppressMessages(lme4::lmer(as.formula(f),data = metadata, REML = F, na.action = na.exclude))})
+  f.null.list <- lapply(X = f.null.list, FUN = function(f){suppressMessages(lme4::lmer(as.formula(f),data = meta_glmer, REML = F, na.action = na.exclude))})
 
   names(f.null.list) <- target_disj_interactions
   #compare null to full model for get a p-value
@@ -254,7 +261,7 @@ glmer_calc_diff_cor <- function(web, which_dictionary, metadata, groups, formula
 
 
   #run ANOVA to determine impact of group on STRENGTH of association.
-  abs_resid      <- abs(residuals(suppressMessages(lme4::lmer(y ~ x + (1|reff), REML = F, na.action = na.exclude))))
+  meta_glmer$abs_resid      <- abs(residuals(suppressMessages(lme4::lmer(y ~ x + (1|reff), data = meta_glmer, REML = F, na.action = na.exclude))))
 
 
 
@@ -263,7 +270,7 @@ glmer_calc_diff_cor <- function(web, which_dictionary, metadata, groups, formula
   formula_emerg = update.formula(abs_resid ~ ., formula)
 
   #exactly the same as the lm version for here on
-  emerg_fit      <- lm(formula = formula_emerg, data = metadata)
+  emerg_fit      <- lm(formula = formula_emerg, data = meta_glmer)
   emerg_anova    <- anova(emerg_fit)
 
   #Calculate r.squared
