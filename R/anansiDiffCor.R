@@ -19,7 +19,7 @@ anansiDiffCor = function(web, metadata, groups, formula, reff, modeltype, verbos
 
   stats_out <- future.apply::future_apply(which_dictionary, 1, FUN = model_picker,
                                           web = web, formula = formula, metadata = metadata,
-                                          groups = groups, reff = reff, modeltype = modeltype)
+                                          reff = reff, modeltype = modeltype)
 
   #Create result container matrices. We take advantage of the fact that true interactions are coded as TRUE, which corresponds to 1,
   #automatically setting all non-canonical interactions as p = 1 and estimate = 0.
