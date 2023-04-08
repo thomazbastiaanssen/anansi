@@ -8,7 +8,6 @@ model_picker(
   web,
   which_dictionary,
   metadata,
-  groups,
   formula,
   reff = NULL,
   modeltype = "lm"
@@ -20,8 +19,6 @@ model_picker(
 \item{which_dictionary}{A matrix derived from calling \code{which(web@dictionary, arr.ind = T)}. It contains coordinates for the relevant measurements to be compared.}
 
 \item{metadata}{A vector or data.frame of categorical or continuous value necessary for differential correlations. Typically a state or treatment score. If no argument provided, anansi will let you know and still to regular correlations according to your dictionary.}
-
-\item{groups}{A categorical or continuous vector necessary for differential correlations. Typically a state or treatment score.}
 
 \item{formula}{A formula object. Used to assess differential associations.}
 
