@@ -218,7 +218,7 @@ ggplot(data = anansiLong,
   scale_fill_manual(values = c("Young yFMT" = "#2166ac", 
                                "Aged oFMT"  = "#b2182b", 
                                "Aged yFMT"  = "#ef8a62", 
-                               "All"        = "gray"))+
+                               "All"        = "gray"), "Treatment")+
   theme_bw() + 
   ylab("") + 
   xlab("Pearson's \u03c1")
