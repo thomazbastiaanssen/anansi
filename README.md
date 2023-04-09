@@ -178,7 +178,8 @@ you. You can either use `spinToLong()` or `spinToWide()`. They will give
 you long or wide format data.frames, respectively. For general
 reporting, we recommend sticking to the wide format as it’s the most
 legible. You can also use the `plot()` method on an `anansiYarn` object
-to gain some insights in the state of your p, q, r and r^2 parameters.
+to gain some insights in the state of your p, q, R and R<sup>2</sup>
+parameters.
 
 ``` r
 anansiLong <- spinToLong(anansi_output = anansi_out, translate = T, 
@@ -220,7 +221,7 @@ ggplot(data = anansiLong,
                                "All"        = "gray"))+
   theme_bw() + 
   ylab("") + 
-  xlab("Pearson's rho")
+  xlab("Pearson's \u03c1")
 ```
 
 ![](README_files/figure-gfm/plot_FMT-1.png)<!-- -->
