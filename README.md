@@ -30,15 +30,15 @@ citation("anansi")
     ## 
     ## To cite package 'anansi' in publications use:
     ## 
-    ##   Bastiaanssen T (2022). _anansi: Annotation-based Analysis of Specific
-    ##   Interactions_. R package version 0.5.0.
+    ##   Thomaz Bastiaanssen (2023). anansi: Annotation-based Analysis of
+    ##   Specific Interactions. R package version 0.5.0.
     ## 
     ## A BibTeX entry for LaTeX users is
     ## 
     ##   @Manual{,
     ##     title = {anansi: Annotation-based Analysis of Specific Interactions},
     ##     author = {Thomaz Bastiaanssen},
-    ##     year = {2022},
+    ##     year = {2023},
     ##     note = {R package version 0.5.0},
     ##   }
 
@@ -90,7 +90,7 @@ available. Because of this, anansi uses the type-naive nomenclature
 `tableY` and `tableX`. The Y and X refer to the position these
 measurements will have in the linear modeling framework:
 
-*Y* ∼ *X* × covariates
+$$Y \sim X \times {\text{covariates}}$$
 
 ### A note on functional microbiome data
 
@@ -146,19 +146,20 @@ web <- weaveWebFromTables(tableY = t1, tableX = t2, dictionary = anansi_dic)
 ## Run anansi🕷️
 
 The main workspider in this package is called `anansi`. Generally, you
-want to give it two arguments. First, there’s `web`, which is an
+want to give it three arguments. First, there’s `web`, which is an
 `anansiWeb` object, such as the one we generated in the above step.
-Second, there’s `groups`, which should be a vector to compare the
-associations on. For instance, this may be a vector containing
-categories such as your treatment groups, or even a continuous value
-like age or .
+Second, there’s `formula`, which should be a formula. For instance, to
+assess differential associations between treatments, we use the formula
+`~Treatment`, provided we have a column with that name in our `metadata`
+object, the Third argument.
 
 ``` r
-anansi_out <- anansi(web    = web, #generated above
-                     method = "pearson", #define the type of correlation used
-                     groups = FMT_metadata$Legend, #Compare associations between treatments
-                     adjust.method = "BH", #apply the Benjamini-Hochberg procedure for FDR
-                     verbose = T #To let you know what's happening
+anansi_out <- anansi(web      = web,          #Generated above
+                     method   = "pearson",    #Define the type of correlation used
+                     formula  = ~ Legend,     #Compare associations between treatments
+                     metadata = FMT_metadata, #The data referred to in the formula can be found here
+                     adjust.method = "BH",    #Apply the Benjamini-Hochberg procedure for FDR
+                     verbose  = T             #To let you know what's happening
                      )
 ```
 
@@ -199,7 +200,7 @@ ggplot(data = anansiLong,
        aes(x      = r.values, 
            y      = feature_X, 
            fill   = type, 
-           alpha  = model_disjointed_p.values < 0.05)) + 
+           alpha  = model_disjointed_Legend_p.values < 0.05)) + 
   
   #Make a vertical dashed red line at x = 0
   geom_vline(xintercept = 0, linetype = "dashed", colour = "red")+
@@ -212,7 +213,7 @@ ggplot(data = anansiLong,
   
   #fix the scales, labels, theme and other layout
   scale_y_discrete(limits = rev, position = "right") +
-  scale_alpha_manual(values = c("TRUE" = 1, "FALSE" = 1/3)) +
+  scale_alpha_manual(values = c("TRUE" = 1, "FALSE" = 1/3), "Disjointed association\np < 0.05") +
   scale_fill_manual(values = c("Young yFMT" = "#2166ac", 
                                "Aged oFMT"  = "#b2182b", 
                                "Aged yFMT"  = "#ef8a62", 
