@@ -157,7 +157,7 @@ object, the Third argument.
 anansi_out <- anansi(web      = web,          #Generated above
                      method   = "pearson",    #Define the type of correlation used
                      formula  = ~ Legend,     #Compare associations between treatments
-                     metadata = FMT_metadata, #The data referred to in the formula can be found here
+                     metadata = FMT_metadata, #With data referred to in the formula as column
                      adjust.method = "BH",    #Apply the Benjamini-Hochberg procedure for FDR
                      verbose  = T             #To let you know what's happening
                      )
