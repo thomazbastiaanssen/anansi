@@ -111,8 +111,8 @@ anansi = function(web, method = "pearson", groups = NULL,  metadata = NULL, form
   if(!identical(all.vars(formula), character(0))){
     unique_factors = all.vars(update.formula(formula, 0~.))
 
-    if(is.null(groups)){
-      groups = unique_factors
+    if(!is.null(groups)){
+      unique_factors = groups
     }
 
     metadata_factors = metadata[,unique_factors]
