@@ -2,7 +2,9 @@
 #' @description This is the main workspider function in the anansi package. It manages the individual functionalities of anansi, including correlation analysis, correlation by group and differential correlation.
 #' @param web An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.
 #' @param method Correlation method. \code{method = "pearson"} is the default value. The alternatives to be passed to \code{cor()} are "spearman" and "kendall".
-#' @param groups A categorical or continuous value necessary for differential correlations. Typically a state or treatment score. If no argument provided, anansi will let you know and still to regular correlations according to your dictionary.
+#' @param metadata A vector or data.frame of categorical or continuous value necessary for differential correlations. Typically a state or treatment score. If no argument provided, anansi will let you know and still to regular correlations according to your dictionary.
+#' @param groups A vector of the column names of categorical values in the metadata object to control which groups should be assessed for simple correlations. If no argument provided, anansi will let you know and still to regular correlations according to your dictionary.
+#' @param formula A formula object. Used to assess differential associations.
 #' @param reff A categorical vector typically depicting a shared ID between samples. Only for mixed effect models.
 #' @param modeltype A string, either "lm" or "lmer" depending on the type of model that should be ran, or "propr" in the case of within-composition associations..
 #' @param adjust.method Method to adjust p-values for multiple comparisons. \code{adjust.method = "BH"} is the default value. See \code{p.adjust()} in the base R \code{stats} package.
@@ -97,8 +99,35 @@
 #' #See also ?spinToPlots
 #' }
 #'
-anansi = function(web, method = "pearson", groups = NULL, adjust.method = "BH", modeltype = "lm", resampling = F, locality = F,
+anansi = function(web, method = "pearson", groups = NULL,  metadata = NULL, formula = ~1,
+                  adjust.method = "BH", modeltype = "lm", resampling = F, locality = F,
                   reff = NULL, verbose = T, diff_cor = T, ignore_dictionary = F){
+
+  if(is.vector(metadata)){
+    metadata = data.frame(metadata = metadata)
+  }
+
+  #If there is a formula that is not empty:
+  if(!identical(all.vars(formula), character(0))){
+    unique_factors = all.vars(update.formula(formula, 0~.))
+
+    if(!is.null(groups)){
+      unique_factors = groups
+    }
+
+    metadata_factors = metadata[,unique_factors]
+    groups = do.call(paste, c(data.frame(metadata_factors), sep = "_"))
+
+    if(length(c(groups)) == 0){
+      groups <- NULL
+    }
+
+  }
+
+  if(!is.null(reff)){
+    reff = metadata[,reff]
+  }
+
 
   if(ignore_dictionary){
     if(verbose){print("Dictionary will be ignored. Running all vs all associations.")}
@@ -117,7 +146,7 @@ anansi = function(web, method = "pearson", groups = NULL, adjust.method = "BH", 
   method          = assess_res$method
 
   #generate anansiYarn output object
-  outYarn = new("anansiYarn", input = new("anansiInput", web = web, groups = groups, reff = reff))
+  outYarn = new("anansiYarn", input = new("anansiInput", web = web, groups = groups, formula = formula, reff = reff))
 
   if(verbose){print("Running annotation-based correlations")}
 
@@ -130,8 +159,9 @@ anansi = function(web, method = "pearson", groups = NULL, adjust.method = "BH", 
   if(diff_cor){
   if(verbose){print("Fitting models for differential correlation testing")
     print(paste("Model type:", modeltype, sep = ""))}
-    output@model_results = anansiDiffCor(web = web, groups = groups, reff = reff,
-                                         modeltype = modeltype, verbose = verbose)
+    output@model_results = unlist(anansiDiffCor(web = web, groups = groups, formula = formula,
+                                         metadata = metadata, reff = reff,
+                                         modeltype = modeltype, verbose = verbose))
   }
   outYarn@output = output
 
@@ -146,7 +176,7 @@ anansi = function(web, method = "pearson", groups = NULL, adjust.method = "BH", 
 #' @description Calls both assessGroups and assessModelType.
 #' This is a helper function called by \code{anansi}.
 #' @param web web An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.
-#' @param groups A categorical or continuous value necessary for differential correlations. Typically a state or treatment score. If no argument provided, anansi will let you know and still to regular correlations according to your dictionary.
+#' @param groups A vector of categorical or continuous value necessary for differential correlations. Typically a state or treatment score. If no argument provided, anansi will let you know and still to regular correlations according to your dictionary.
 #' @param diff_cor A boolean. Toggles whether to compute differential correlations. Default is \code{TRUE}.
 #' @param reff A categorical vector typically depicting a shared ID between samples. Only for mixed effect models.
 #' @param modeltype A string, either "lm" or "lmer" depending on the type of model that should be ran.

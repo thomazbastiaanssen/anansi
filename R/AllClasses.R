@@ -35,13 +35,14 @@ setClass("anansiTale",
 
 #' An S4 class to contain all \code{anansi} input so that they can easily be extracted.
 #'
-#' @slot input A list that holds the input data in \code{anansiWeb} format, as well as the \code{groups} and \code{reff} argument(s) if provided.
+#' @slot input A list that holds the input data in \code{anansiWeb} format, as well as the \code{groups}, formula and \code{reff} argument(s) if provided.
 #' @description \code{anansiInput} is the container that will hold your input data in the \code{anansiYarn} output file coming out of the \code{anansi} pipeline.
 #'
 setClass("anansiInput",
          slots = c(
            web    = "anansiWeb",
            groups = "vector",
+           formula = "formula",
            reff   = "vector"
          )
 )

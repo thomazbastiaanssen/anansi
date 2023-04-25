@@ -4,14 +4,23 @@
 \alias{model_picker}
 \title{Choose the appropriate model call for \code{anansiDiffCor()}.}
 \usage{
-model_picker(web, which_dictionary, groups, reff = NULL, modeltype = "lm")
+model_picker(
+  web,
+  which_dictionary,
+  metadata,
+  formula,
+  reff = NULL,
+  modeltype = "lm"
+)
 }
 \arguments{
 \item{web}{An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.}
 
 \item{which_dictionary}{A matrix derived from calling \code{which(web@dictionary, arr.ind = T)}. It contains coordinates for the relevant measurements to be compared.}
 
-\item{groups}{A categorical or continuous vector necessary for differential correlations. Typically a state or treatment score.}
+\item{metadata}{A vector or data.frame of categorical or continuous value necessary for differential correlations. Typically a state or treatment score. If no argument provided, anansi will let you know and still to regular correlations according to your dictionary.}
+
+\item{formula}{A formula object. Used to assess differential associations.}
 
 \item{reff}{A categorical vector typically depicting a shared ID between samples. Only for mixed effect models.}
 

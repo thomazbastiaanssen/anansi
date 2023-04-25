@@ -43,7 +43,6 @@ anansiAdjustP <- function(x, method = "BH", resampling = F, locality = T, verbos
 
   #for each of those sources of p-values, do:
   for(i in 1:nrow(pval_df)){
-
     #Extract p-values
     p = slot(slot(x@output, pval_df[i,1])[[pval_df[i,2]]], 'p.values')
 
@@ -72,8 +71,8 @@ anansiAdjustP <- function(x, method = "BH", resampling = F, locality = T, verbos
 
   }
   return(x)
-  }
 
+}
 
 
 #' Determines which p-values to sample from

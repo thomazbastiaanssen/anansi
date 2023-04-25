@@ -4,12 +4,16 @@
 \alias{anansiDiffCor}
 \title{Run differential correlation analysis for all interacting metabolites and functions.}
 \usage{
-anansiDiffCor(web, groups, reff, modeltype, verbose = T)
+anansiDiffCor(web, metadata, groups, formula, reff, modeltype, verbose = T)
 }
 \arguments{
 \item{web}{An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.}
 
+\item{metadata}{A vector or data.frame of categorical or continuous value necessary for differential correlations. Typically a state or treatment score. If no argument provided, anansi will let you know and still to regular correlations according to your dictionary.}
+
 \item{groups}{A categorical or continuous value necessary for differential correlations. Typically a state or treatment score.}
+
+\item{formula}{A formula object. Used to assess differential associations.}
 
 \item{reff}{A categorical vector typically depicting a shared ID between samples. Only for mixed effect models.}
 

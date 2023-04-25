@@ -8,6 +8,8 @@ anansi(
   web,
   method = "pearson",
   groups = NULL,
+  metadata = NULL,
+  formula = ~1,
   adjust.method = "BH",
   modeltype = "lm",
   resampling = F,
@@ -23,7 +25,11 @@ anansi(
 
 \item{method}{Correlation method. \code{method = "pearson"} is the default value. The alternatives to be passed to \code{cor()} are "spearman" and "kendall".}
 
-\item{groups}{A categorical or continuous value necessary for differential correlations. Typically a state or treatment score. If no argument provided, anansi will let you know and still to regular correlations according to your dictionary.}
+\item{groups}{A vector of the column names of categorical values in the metadata object to control which groups should be assessed for simple correlations. If no argument provided, anansi will let you know and still to regular correlations according to your dictionary.}
+
+\item{metadata}{A vector or data.frame of categorical or continuous value necessary for differential correlations. Typically a state or treatment score. If no argument provided, anansi will let you know and still to regular correlations according to your dictionary.}
+
+\item{formula}{A formula object. Used to assess differential associations.}
 
 \item{adjust.method}{Method to adjust p-values for multiple comparisons. \code{adjust.method = "BH"} is the default value. See \code{p.adjust()} in the base R \code{stats} package.}
 

@@ -10,6 +10,6 @@
 \section{Slots}{
 
 \describe{
-\item{\code{input}}{A list that holds the input data in \code{anansiWeb} format, as well as the \code{groups} and \code{reff} argument(s) if provided.}
+\item{\code{input}}{A list that holds the input data in \code{anansiWeb} format, as well as the \code{groups}, formula and \code{reff} argument(s) if provided.}
 }}
 
