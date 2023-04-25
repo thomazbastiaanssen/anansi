@@ -30,8 +30,8 @@ citation("anansi")
     ## 
     ## To cite package 'anansi' in publications use:
     ## 
-    ##   Thomaz Bastiaanssen (2023). anansi: Annotation-based Analysis of
-    ##   Specific Interactions. R package version 0.5.0.
+    ##   Bastiaanssen T (2023). _anansi: Annotation-based Analysis of Specific
+    ##   Interactions_. R package version 0.5.0.
     ## 
     ## A BibTeX entry for LaTeX users is
     ## 
