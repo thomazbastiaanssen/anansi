@@ -213,3 +213,4 @@ mock_dictionary <- function(tableY, tableX){
   m_dic = lapply(m_dic, FUN = function(x){colnames(tableX)})
   return(m_dic)
 }
+

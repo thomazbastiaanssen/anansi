@@ -107,13 +107,21 @@ model_picker <- function(web, which_dictionary, metadata, formula, reff = NULL, 
   if(modeltype == "lm"){
     if(identical(web@tableY, web@tableX)){
       return(glm_calc_diff_prop(web = web, which_dictionary = which_dictionary, metadata = metadata))
-      }
+    }
+    if(class(web) == "argonansiWeb"){
+      return(glm_argonaut_calc_diff_cor(web = web, which_dictionary = which_dictionary, formula = formula, metadata = metadata))
+    }
+
     return(glm_calc_diff_cor(web = web, which_dictionary = which_dictionary, formula = formula, metadata = metadata))
   }
   if(modeltype == "lmer"){
     if(identical(web@tableY, web@tableX)){
       return(glmer_calc_diff_prop(web = web, which_dictionary = which_dictionary, metadata = metadata, reff = reff))
     }
+    if(class(web) == "argonansiWeb"){
+      return(glmer_argonaut_calc_diff_cor(web = web, which_dictionary = which_dictionary, formula = formula, metadata = metadata, reff = reff))
+    }
+
     return(glmer_calc_diff_cor(web = web, which_dictionary = which_dictionary, formula = formula, metadata = metadata, reff = reff))
   }
 }

@@ -13,6 +13,7 @@ setClass("anansiWeb",
            )
          )
 
+
 #' An S4 class to contain all \code{anansi} stats results so that they can easily be extracted.
 #'
 #' @slot subject A character that describes the data that was queried.
