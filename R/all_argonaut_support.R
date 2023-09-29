@@ -125,9 +125,14 @@
 #'
 #'   vec_out = rep(c(0, 1), 1 + 2 * length(all_terms))
 #'
-#'   left_formula = reformulate(response = "y", termlabels = colnames(argonaut::getFeature(web@tableX.sft[,which_dictionary[2],])))
-#'   formula = update.formula(.~. * 1, (.))
-#'   formula_full = update.formula(formula, y ~ x * 1 * (.))
+#'   #paste together all subtypes with plusses between them:
+#'   all_subtypes = paste(colnames(meta_glm)[grep(x = colnames(meta_glm), pattern = "x\\.")], collapse = " + ")
+#'
+#'   internal_formula = reformulate(
+#'     termlabels = paste0("(",all_subtypes ,") * 1 * ."),
+#'     response    = "y")
+#'
+#'   formula_full = update.formula(formula, internal_formula)
 #'
 #'   # fit linear model
 #'   fit      <- lm(formula = formula_full, data = meta_glm)
@@ -172,22 +177,18 @@
 #' }
 #'
 #'
-#' formula_full = update.formula(formula, y ~ x * 1 * (.))
-#' formula = ~z
-#' reformulate(response = "y",
-#'             termlabels =
-#'               c(
-#'                 colnames(df.2)[grep(x = colnames(df.2), pattern = "x\\.")]
-#'                 ))
 #'
-#' formula
-#' ?update.formula
-#' update.formula(reformulate(response = "y",
-#'                            termlabels =
-#'                              c(
-#'                                colnames(df.2)[grep(x = colnames(df.2), pattern = "x\\.")]
-#'                              )), new = paste0(".~. * 1 * (", formula, ")"))
+#' library(argonaut)
+#' library(tidyverse)
+#' set.seed(123)
 #'
+#' y = rnorm(100)
 #'
-#' reformulate(c("`P/E`", "`% Growth`"), response = as.name("+-"))
-#' as.formula(.~.*1*z)
+#' x = board_argo(nsubtypes = 5,
+#'                nfeatures = 10,
+#'                nsamples = 100, p_missing = 0.3) %>%
+#'   as.sft()
+#' z = sample(LETTERS[1:3], 100, replace = T)
+#'
+#' df.2 = data.frame(z = z, y = y, x = getFeature(x, "Philosophy"))
+#' meta_glm = df.2
