@@ -121,15 +121,15 @@
 #'   meta_glm$y = web@tableY[,which_dictionary[1]]
 #'   meta_glm = cbind(meta_glm, x = argonaut::getFeature(web@tableX.sft[,which_dictionary[2],]))
 #'
-#'   all_terms <- attr(terms(formula), "term.labels")
-#'
-#'   vec_out = rep(c(0, 1), 1 + 2 * length(all_terms))
+#'   all_terms    <- attr(terms(formula), "term.labels")
+#'   all_subtypes <- colnames(meta_glm)[grep(x = colnames(meta_glm), pattern = "x\\.")]
+#'   vec_out = rep(c(0, 1), 1 + 2 * (length(all_subtypes) + length(all_subtypes) * length(all_terms)))
 #'
 #'   #paste together all subtypes with plusses between them:
-#'   all_subtypes = paste(colnames(meta_glm)[grep(x = colnames(meta_glm), pattern = "x\\.")], collapse = " + ")
+#'   collapsed_subtypes = paste(all_subtypes, collapse = " + ")
 #'
 #'   internal_formula = reformulate(
-#'     termlabels = paste0("(",all_subtypes ,") * 1 * ."),
+#'     termlabels = paste0("(",collapsed_subtypes ,") * 1 * ."),
 #'     response    = "y")
 #'
 #'   formula_full = update.formula(formula, internal_formula)
@@ -153,8 +153,8 @@
 #'   target_disj_interactions <- grep("^x:",row.names(disj_fit))
 #'   disj.rsquared            <- disj_fit[target_disj_interactions,2] / (disj_fit[target_disj_interactions,2] + resid.ss)
 #'
-#'   vec_out[1 + (1:length(all_terms))*2]  <- disj.rsquared
-#'   vec_out[2 + (1:length(all_terms))*2]  <- disj_fit[target_disj_interactions,5]
+#'   vec_out[1 + (1:(length(all_subtypes) + length(all_subtypes) * length(all_terms))*2)]  <- disj.rsquared
+#'   vec_out[2 + (1:(length(all_subtypes) + length(all_subtypes) * length(all_terms))*2)]  <- disj_fit[target_disj_interactions,5]
 #'
 #'   #run ANOVA to determine impact of group on STRENGTH of association.
 #'   formula_emerg = update.formula(abs_resid ~ ., formula)
