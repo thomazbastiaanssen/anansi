@@ -103,6 +103,9 @@ anansi = function(web, method = "pearson", groups = NULL,  metadata = NULL, form
                   adjust.method = "BH", modeltype = "lm", resampling = F, locality = F,
                   reff = NULL, verbose = T, diff_cor = T, ignore_dictionary = F){
 
+  #Ensure appropriate options for type III ANOVAs
+  contr.opt <- options(contrasts = c("contr.sum","contr.poly"))
+
   if(is.vector(metadata)){
     metadata = data.frame(metadata = metadata)
   }
@@ -168,6 +171,8 @@ anansi = function(web, method = "pearson", groups = NULL,  metadata = NULL, form
   #FDR
   outYarn <- anansiAdjustP(x = outYarn, method = adjust.method, resampling = resampling, locality = locality, verbose = verbose)
 
+  #Restore default options
+  on.exit(options(contr.opt))
   return(outYarn)
 }
 

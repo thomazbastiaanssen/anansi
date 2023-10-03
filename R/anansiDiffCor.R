@@ -21,76 +21,8 @@ anansiDiffCor = function(web, metadata, groups, formula, reff, modeltype, verbos
                                           web = web, formula = formula, metadata = metadata,
                                           reff = reff, modeltype = modeltype)
 
-  #Create result container matrices. We take advantage of the fact that true interactions are coded as TRUE, which corresponds to 1,
-  #automatically setting all non-canonical interactions as p = 1 and estimate = 0.
 
-  out_rvals      <- web@dictionary
-  out_pvals      <- !web@dictionary
-  out_disjrvals  <- web@dictionary
-  out_disjpvals  <- !web@dictionary
-  out_emergrvals <- web@dictionary
-  out_emergpvals <- !web@dictionary
-
-  out_rvals[web@dictionary]      <- stats_out[1,]
-  out_pvals[web@dictionary]      <- stats_out[2,]
-
-  #Adjust for multiple comparisons
-  out_qvals                      <- out_pvals
-  out_qvals[web@dictionary]      <- NA
-
-  out_tale  <- list(full = new("anansiTale",
-                               subject    = "model_full",
-                               type       = "r.squared",
-                               estimates  = out_rvals,
-                               p.values   = out_pvals,
-                               q.values   = out_qvals))
-
-  out_disjointed = vector(mode =  "list", length = length(all_terms))
-
-  for(t in 1:length(all_terms)){
-    out_disjrvals[web@dictionary]  <- stats_out[1 + t * 2,]
-    out_disjpvals[web@dictionary]  <- stats_out[2 + t * 2,]
-
-    #Adjust for multiple comparisons
-    out_disjqvals                  <- out_disjpvals
-    out_disjqvals[web@dictionary]  <- NA
-
-
-    out_disjointed[[t]] <- new("anansiTale",
-                          subject    = paste("model_disjointed", all_terms[t], sep = "_"),
-                          type       = "r.squared",
-                          estimates  = out_disjrvals,
-                          p.values   = out_disjpvals,
-                          q.values   = out_disjqvals)
-  }
-  names(out_disjointed) <- all_terms
-
-  out_emergent = vector(mode =  "list", length = length(all_terms))
-
-  for(t in 1:length(all_terms)){
-    out_emergrvals[web@dictionary]  <- stats_out[1 + 2 * length(all_terms) + t * 2,]
-    out_emergpvals[web@dictionary]  <- stats_out[2 + 2 * length(all_terms) + t * 2,]
-
-    #Adjust for multiple comparisons
-    out_emergqvals                  <- out_emergpvals
-    out_emergqvals[web@dictionary]  <- NA
-
-
-    out_emergent[[t]] <- new("anansiTale",
-                             subject    = paste("model_emergent", all_terms[t], sep = "_"),
-                             type       = "r.squared",
-                             estimates  = out_emergrvals,
-                             p.values   = out_emergpvals,
-                             q.values   = out_emergqvals)
-  }
-  names(out_emergent) <- all_terms
-
-
-  #Collect into nested list and return results
-  return(list(modelfit   = out_tale,
-              disjointed = out_disjointed,
-              emergent   = out_emergent))
-
+  collate_model_output(web = web, stats_out = stats_out, all_terms = all_terms)
 }
 
 #' Choose the appropriate model call for \code{anansiDiffCor()}.
@@ -108,7 +40,7 @@ model_picker <- function(web, which_dictionary, metadata, formula, reff = NULL, 
     if(identical(web@tableY, web@tableX)){
       return(glm_calc_diff_prop(web = web, which_dictionary = which_dictionary, metadata = metadata))
     }
-    if(class(web) == "argonansiWeb"){
+    if(inherits(web, "argonansiWeb")){
       return(glm_argonaut_calc_diff_cor(web = web, which_dictionary = which_dictionary, formula = formula, metadata = metadata))
     }
 
@@ -118,8 +50,9 @@ model_picker <- function(web, which_dictionary, metadata, formula, reff = NULL, 
     if(identical(web@tableY, web@tableX)){
       return(glmer_calc_diff_prop(web = web, which_dictionary = which_dictionary, metadata = metadata, reff = reff))
     }
-    if(class(web) == "argonansiWeb"){
-      return(glmer_argonaut_calc_diff_cor(web = web, which_dictionary = which_dictionary, formula = formula, metadata = metadata, reff = reff))
+    if(inherits(web, "argonansiWeb")){
+      print("placeholder"); invisible()
+      #return(glmer_argonaut_calc_diff_cor(web = web, which_dictionary = which_dictionary, formula = formula, metadata = metadata, reff = reff))
     }
 
     return(glmer_calc_diff_cor(web = web, which_dictionary = which_dictionary, formula = formula, metadata = metadata, reff = reff))
@@ -367,7 +300,7 @@ glm_calc_diff_prop <- function(web, which_dictionary, metadata, formula){
 #' @param formula A formula object. Used to assess differential associations.
 #' @param reff A categorical vector typically depicting a shared ID between samples. Only for mixed effect models.
 #' @return a list of \code{anansiTale} result objects, one for the total model, one for emergent correlations and one for disjointed correlations.
-#' @importFrom stats anova lm pf residuals fitted cor na.exclude as.formula
+#' @importFrom stats anova lm pf residuals fitted cor na.exclude as.formula reformulate
 #' @importFrom lme4 lmer
 #
 glmer_calc_diff_prop <- function(web, which_dictionary, metadata, formula, reff){
@@ -444,4 +377,103 @@ glmer_calc_diff_prop <- function(web, which_dictionary, metadata, formula, reff)
   vec_out[2 + 2 * length(all_terms) + (1:length(all_terms))*2] <- emerg_anova[target_emerg_interactions,5]
 
   return(vec_out)
+}
+
+#' Run differential correlation analysis for all interacting metabolites and functions.
+#' @description Typically, the main \code{anansi()} function will run this for you.
+#' @param web An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.
+#' @param stats_out A vector containing all statistical output from \code{model_picker}.
+#' @param all_terms A vector containing all RHS terms of the supplied model formula, including interactions.
+#' @return a list of \code{anansiTale} result objects, one for the total model, one for emergent correlations and one for disjointed correlations.
+#'
+collate_model_output <- function(web, stats_out, all_terms){
+
+  if(inherits(web, "argonansiWeb")){
+    return(collate_model_output_argonaut(web = web,
+                                        stats_out = stats_out,
+                                        all_terms = all_terms))
+  }
+  return(collate_model_output_classic(web = web,
+                                      stats_out = stats_out,
+                                      all_terms = all_terms))
+  }
+
+
+#' Run differential correlation analysis for all interacting metabolites and functions in case of non-stratified output.
+#' @description Typically, the main \code{anansi()} function will run this for you.
+#' @param web An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.
+#' @param stats_out A vector containing all statistical output from \code{model_picker}.
+#' @param all_terms A vector containing all RHS terms of the supplied model formula, including interactions.
+#' @return a list of \code{anansiTale} result objects, one for the total model, one for emergent correlations and one for disjointed correlations.
+#'
+collate_model_output_classic <- function(web, stats_out, all_terms){
+  #Create result container matrices. We take advantage of the fact that true interactions are coded as TRUE, which corresponds to 1,
+  #automatically setting all non-canonical interactions as p = 1 and estimate = 0.
+
+  out_rvals      <- web@dictionary
+  out_pvals      <- !web@dictionary
+  out_disjrvals  <- web@dictionary
+  out_disjpvals  <- !web@dictionary
+  out_emergrvals <- web@dictionary
+  out_emergpvals <- !web@dictionary
+
+  out_rvals[web@dictionary]      <- stats_out[1,]
+  out_pvals[web@dictionary]      <- stats_out[2,]
+
+  #Adjust for multiple comparisons
+  out_qvals                      <- out_pvals
+  out_qvals[web@dictionary]      <- NA
+
+  out_tale  <- list(full = new("anansiTale",
+                               subject    = "model_full",
+                               type       = "r.squared",
+                               estimates  = out_rvals,
+                               p.values   = out_pvals,
+                               q.values   = out_qvals))
+
+  out_disjointed = vector(mode =  "list", length = length(all_terms))
+
+  for(t in 1:length(all_terms)){
+    out_disjrvals[web@dictionary]  <- stats_out[1 + t * 2,]
+    out_disjpvals[web@dictionary]  <- stats_out[2 + t * 2,]
+
+    #Adjust for multiple comparisons
+    out_disjqvals                  <- out_disjpvals
+    out_disjqvals[web@dictionary]  <- NA
+
+
+    out_disjointed[[t]] <- new("anansiTale",
+                               subject    = paste("model_disjointed", all_terms[t], sep = "_"),
+                               type       = "r.squared",
+                               estimates  = out_disjrvals,
+                               p.values   = out_disjpvals,
+                               q.values   = out_disjqvals)
+  }
+  names(out_disjointed) <- all_terms
+
+  out_emergent = vector(mode =  "list", length = length(all_terms))
+
+  for(t in 1:length(all_terms)){
+    out_emergrvals[web@dictionary]  <- stats_out[1 + 2 * length(all_terms) + t * 2,]
+    out_emergpvals[web@dictionary]  <- stats_out[2 + 2 * length(all_terms) + t * 2,]
+
+    #Adjust for multiple comparisons
+    out_emergqvals                  <- out_emergpvals
+    out_emergqvals[web@dictionary]  <- NA
+
+
+    out_emergent[[t]] <- new("anansiTale",
+                             subject    = paste("model_emergent", all_terms[t], sep = "_"),
+                             type       = "r.squared",
+                             estimates  = out_emergrvals,
+                             p.values   = out_emergpvals,
+                             q.values   = out_emergqvals)
+  }
+  names(out_emergent) <- all_terms
+
+
+  #Collect into nested list and return results
+  return(list(modelfit   = out_tale,
+              disjointed = out_disjointed,
+              emergent   = out_emergent))
 }

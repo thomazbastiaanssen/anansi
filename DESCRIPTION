@@ -19,9 +19,12 @@ Imports:
     methods,
     utils,
     lme4,
-    future.apply,
-    propr
-Additional_repositories: https://github.com/tpq/propr/
+    future.apply, 
+    propr, 
+    argonaut  
+Additional_repositories: 
+    https://github.com/tpq/propr/, 
+    https://github.com/thomazbastiaanssen/argonaut/
 Suggests:
     ggplot2, 
     ggforce, 
