@@ -27,7 +27,7 @@ setClass("argonansiWeb",
 #' For general use, we recommend sticking to that one. You can access the dictionary like this: \code{data(dictionary)}
 #' @return an \code{anansiWeb} object. Web is used as input for most of the main workflow of anansi.
 #' @export
-weaveWebFromStratifiedTables = function(tableY, stratifiedTableX, dictionary = anansi::anansi_dic, verbose = T, mode = "interaction", prune = F, max_sds = 3){
+weaveWebFromStratifiedTables <- function(tableY, stratifiedTableX, dictionary = anansi::anansi_dic, verbose = T, mode = "interaction", prune = F, max_sds = 3){
 
   stopifnot("stratifiedTableX needs to be a stratifiedFeatureTable object from the argonaut package." = "stratifiedFeatureTable" %in% class(stratifiedTableX))
 
@@ -90,7 +90,7 @@ weaveWebFromStratifiedTables = function(tableY, stratifiedTableX, dictionary = a
   #use the dictionary to clean input tables
   tableY = tableY[,rownames(dictionary)]
   tableX = tableX[,colnames(dictionary)]
-  stratifiedTableX <- stratifiedTableX[,colnames(dictionary),]
+  stratifiedTableX <- argonaut::sft(stratifiedTableX[,colnames(dictionary),])
 
   #Return an argonansiWeb object with four slots: typically metabolites, functions, stratified functions and adjacency matrix
   return(new("argonansiWeb",
@@ -117,7 +117,7 @@ glm_argonaut_calc_diff_cor <- function(web, which_dictionary, metadata, formula)
 
   # Extract relevant values
   meta_glm$y = web@tableY[,which_dictionary[1]]
-  meta_glm = cbind(meta_glm, x = argonaut::getFeature(web@tableX.sft[,which_dictionary[2],]))
+  meta_glm = cbind(meta_glm, x = argonaut::getFeature(web@tableX.sft,which_dictionary[2]))
 
   all_terms    <- attr(terms(formula), "term.labels")
   all_subtypes <- colnames(meta_glm)[grep(x = colnames(meta_glm), pattern = "x\\.")]
