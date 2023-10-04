@@ -198,15 +198,15 @@ collate_model_output_argonaut <- function(web, stats_out, all_terms){
   #Create result container matrices. We take advantage of the fact that true interactions are coded as TRUE, which corresponds to 1,
   #automatically setting all non-canonical interactions as p = 1 and estimate = 0.
 
-  strat_web = web@dictionary[,rep(1:ncol(web@dictionary), argonaut::apply_by(web@tableX.sft, 3, length)[1,])]
-  colnames(strat_web) = paste(colnames(strat_web), unlist(argonaut::apply_by(web@tableX.sft, 3, names)[1,], use.names = F), sep = ".")
+  strat_dic = web@dictionary[,rep(1:ncol(web@dictionary), argonaut::apply_by(web@tableX.sft, 3, length)[1,])]
+  colnames(strat_dict) = paste(colnames(strat_dict), unlist(argonaut::apply_by(web@tableX.sft, 3, names)[1,], use.names = F), sep = ".")
 
   out_rvals      <- web@dictionary
   out_pvals      <- !web@dictionary
-  out_disjrvals  <- strat_web
-  out_disjpvals  <- !strat_web
-  out_emergrvals <- strat_web
-  out_emergpvals <- !strat_web
+  out_disjrvals  <- strat_dict
+  out_disjpvals  <- !strat_dict
+  out_emergrvals <- strat_dict
+  out_emergpvals <- !strat_dict
 
   out_rvals[web@dictionary]      <- stats_out[1,]
   out_pvals[web@dictionary]      <- stats_out[2,]
@@ -222,17 +222,28 @@ collate_model_output_argonaut <- function(web, stats_out, all_terms){
                                p.values   = out_pvals,
                                q.values   = out_qvals))
 
-  ###Left off here:
+  n_subtypes = (length(stats_out) - 2)/ (4 * length(all_terms))
+
+  #Can't assume model structure, so use grep to count colons to deduce interactions and order.
+  ranks = rle(unlist(lapply(strsplit(all_terms, paste0(all_terms[!grepl(all_terms, pattern = "\\:")], collapse = "|"), ""), length)))
+  n_subtypes
+
+  indx <- unlist(sapply(X = 1:length(ranks), FUN = function(x){
+    rep((cumsum(ranks$lengths)[x] - ranks$lengths[x]) + 1:ranks$lengths[x], n_subtypes)
+    }))
+
+
+  which(indx == t) * 2 + 1
 
   out_disjointed = vector(mode =  "list", length = length(all_terms))
 
-  for(t in 1:length(all_terms)){
-    out_disjrvals[web@dictionary]  <- stats_out[1 + t * 2,]
-    out_disjpvals[web@dictionary]  <- stats_out[2 + t * 2,]
+  for(t in 1:length(all_terms)){0
+    out_disjrvals[strat_dic]  <- stats_out[1 + which(indx == t) * 2, ]
+    out_disjpvals[strat_dic]  <- stats_out[2 + which(indx == t) * 2, ]
 
     #Adjust for multiple comparisons
-    out_disjqvals                  <- out_disjpvals
-    out_disjqvals[web@dictionary]  <- NA
+    out_disjqvals             <- out_disjpvals
+    out_disjqvals[strat_dic]  <- NA
 
 
     out_disjointed[[t]] <- new("anansiTale",
@@ -247,12 +258,12 @@ collate_model_output_argonaut <- function(web, stats_out, all_terms){
   out_emergent = vector(mode =  "list", length = length(all_terms))
 
   for(t in 1:length(all_terms)){
-    out_emergrvals[web@dictionary]  <- stats_out[1 + 2 * length(all_terms) + t * 2,]
-    out_emergpvals[web@dictionary]  <- stats_out[2 + 2 * length(all_terms) + t * 2,]
+    out_emergrvals[strat_dic]  <- stats_out[1 + 2 * length(indx) + which(indx == t) * 2,]
+    out_emergpvals[strat_dic]  <- stats_out[2 + 2 * length(indx) + which(indx == t) * 2,]
 
     #Adjust for multiple comparisons
-    out_emergqvals                  <- out_emergpvals
-    out_emergqvals[web@dictionary]  <- NA
+    out_emergqvals             <- out_emergpvals
+    out_emergqvals[strat_dic]  <- NA
 
 
     out_emergent[[t]] <- new("anansiTale",
@@ -296,3 +307,10 @@ collate_model_output_argonaut <- function(web, stats_out, all_terms){
 # meta_glm = metadata
 #
 # argonaut::apply_by(x, 3, names)
+#
+#
+# temp = all_terms
+#
+# all_terms = c(temp)
+# do.call(length, strsplit(all_terms, paste0(all_terms[!grepl(all_terms, pattern = ":")], collapse = "|"), ""))
+# unlist(lapply(strsplit(all_terms, paste0(all_terms[!grepl(all_terms, pattern = "\\:")], collapse = "|"), ""), length))
