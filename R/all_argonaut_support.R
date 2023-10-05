@@ -9,7 +9,8 @@
 #'
 setClass("argonansiWeb",
          slots = c(
-           tableX.sft   = "stratifiedFeatureTable"
+           tableX.sft   = "stratifiedFeatureTable",
+           strat_dict   = "matrix"
          ), contains = "anansiWeb"
 )
 
@@ -91,12 +92,15 @@ weaveWebFromStratifiedTables <- function(tableY, stratifiedTableX, dictionary = 
   tableY = tableY[,rownames(dictionary)]
   tableX = tableX[,colnames(dictionary)]
   stratifiedTableX <- argonaut::sft(stratifiedTableX[,colnames(dictionary),])
+  strat_dict <- as.matrix(dictionary)[,rep(1:ncol(as.matrix(dictionary)), argonaut::apply_by(stratifiedTableX, 3, length)[1,])]
 
-  #Return an argonansiWeb object with four slots: typically metabolites, functions, stratified functions and adjacency matrix
+
+  #Return an argonansiWeb object with five slots: typically metabolites, functions, stratified functions, a stratified adjacency matrix and aggregated an adjacency matrix
   return(new("argonansiWeb",
              tableY     = as.matrix(tableY),
              tableX     = as.matrix(tableX),
              tableX.sft = stratifiedTableX,
+             strat_dict = as.matrix(strat_dict),
              dictionary = as.matrix(dictionary)))
 }
 
@@ -121,7 +125,9 @@ glm_argonaut_calc_diff_cor <- function(web, which_dictionary, metadata, formula)
 
   all_terms    <- attr(terms(formula), "term.labels")
   all_subtypes <- colnames(meta_glm)[grep(x = colnames(meta_glm), pattern = "x\\.")]
-  vec_out = rep(c(0, 1), 1 + (2 * length(all_subtypes)) * length(all_terms))
+
+  vec_full = c(0,1)
+  vec_out  = matrix(rep(c(0, 1), (2 * length(all_subtypes)) * length(all_terms)), ncol = length(all_subtypes), byrow = F)
 
   #paste together all subtypes with plusses between them:
   collapsed_subtypes = paste(all_subtypes, collapse = " + ")
@@ -139,8 +145,8 @@ glm_argonaut_calc_diff_cor <- function(web, which_dictionary, metadata, formula)
   fstat    <- summary(fit)$fstatistic
   p        <- pf(fstat[1], fstat[2], fstat[3], lower.tail = FALSE)
 
-  vec_out[1] <- summary(fit)$r.squared
-  vec_out[2] <- p
+  vec_full[1] <- summary(fit)$r.squared
+  vec_full[2] <- p
 
   #run ANOVA to determine impact of group on SLOPE of association.
   disj_fit        <- anova(fit)
@@ -151,8 +157,8 @@ glm_argonaut_calc_diff_cor <- function(web, which_dictionary, metadata, formula)
   target_disj_interactions <- grep(paste(paste0("^",all_subtypes, ":"), collapse = "|"),row.names(disj_fit))
   disj.rsquared            <- disj_fit[target_disj_interactions,2] / (disj_fit[target_disj_interactions,2] + resid.ss)
 
-  vec_out[1 + (1:(length(all_subtypes) * length(all_terms))*2)]  <- disj.rsquared
-  vec_out[2 + (1:(length(all_subtypes) * length(all_terms))*2)]  <- disj_fit[target_disj_interactions,5]
+  vec_out[cbind(rep(x = c(1:length(all_terms)*2)-1, each = length(all_subtypes)), 1:(length(all_subtypes)))] <- disj.rsquared
+  vec_out[cbind(rep(x = c(1:length(all_terms)*2),   each = length(all_subtypes)), 1:(length(all_subtypes)))] <- disj_fit[target_disj_interactions,5]
 
   #For each subtype, run ANOVA to determine impact of group on STRENGTH of association.
 
@@ -176,14 +182,14 @@ glm_argonaut_calc_diff_cor <- function(web, which_dictionary, metadata, formula)
     resid_emerg.ss <- sum(residuals(emerg_fit)^2)
 
     target_emerg_interactions <-  grep(paste(paste0("^",all_terms, "$"), collapse = "|"),row.names(emerg_anova))
-    emerg.rsquared            <- emerg_anova[target_emerg_interactions,2] / (emerg_anova[target_emerg_interactions,2] + resid_emerg.ss)
+    emerg.rsquared            <-  emerg_anova[target_emerg_interactions,2] / (emerg_anova[target_emerg_interactions,2] + resid_emerg.ss)
 
-    vec_out[1 + (length(all_subtypes) * length(all_terms))*2 + (2 * length(all_terms)*(i - 1)) + (1:length(all_terms))*2] <- emerg.rsquared
-    vec_out[2 + (length(all_subtypes) * length(all_terms))*2 + (2 * length(all_terms)*(i - 1)) + (1:length(all_terms))*2] <- emerg_anova[target_emerg_interactions,5]
+    vec_out[cbind(rep(x = 2 * length(all_terms) + c(1:length(all_terms)*2)-1, each = length(all_terms)), i)] <- emerg.rsquared
+    vec_out[cbind(rep(x = 2 * length(all_terms) + c(1:length(all_terms)*2),   each = length(all_terms)), i)] <- emerg_anova[target_emerg_interactions,5]
 
   }
 
-  return(vec_out)
+  return(list(vec_full = vec_full, vec_out = vec_out))
 }
 
 
@@ -198,7 +204,7 @@ collate_model_output_argonaut <- function(web, stats_out, all_terms){
   #Create result container matrices. We take advantage of the fact that true interactions are coded as TRUE, which corresponds to 1,
   #automatically setting all non-canonical interactions as p = 1 and estimate = 0.
 
-  strat_dic = web@dictionary[,rep(1:ncol(web@dictionary), argonaut::apply_by(web@tableX.sft, 3, length)[1,])]
+  strat_dict = web@strat_dict
   colnames(strat_dict) = paste(colnames(strat_dict), unlist(argonaut::apply_by(web@tableX.sft, 3, names)[1,], use.names = F), sep = ".")
 
   out_rvals      <- web@dictionary
@@ -208,8 +214,11 @@ collate_model_output_argonaut <- function(web, stats_out, all_terms){
   out_emergrvals <- strat_dict
   out_emergpvals <- !strat_dict
 
-  out_rvals[web@dictionary]      <- stats_out[1,]
-  out_pvals[web@dictionary]      <- stats_out[2,]
+  stats_full = argonaut_parse_full(stats_out = stats_out)
+  stats_diff = argonaut_parse_diff(stats_out = stats_out)
+
+  out_rvals[web@dictionary]      <- stats_full[,1]
+  out_pvals[web@dictionary]      <- stats_full[,2]
 
   #Adjust for multiple comparisons
   out_qvals                      <- out_pvals
@@ -222,32 +231,19 @@ collate_model_output_argonaut <- function(web, stats_out, all_terms){
                                p.values   = out_pvals,
                                q.values   = out_qvals))
 
-  n_subtypes = (length(stats_out) - 2)/ (4 * length(all_terms))
-
-  #Can't assume model structure, so use grep to count colons to deduce interactions and order.
-  ranks = rle(unlist(lapply(strsplit(all_terms, paste0(all_terms[!grepl(all_terms, pattern = "\\:")], collapse = "|"), ""), length)))
-  n_subtypes
-
-  indx <- unlist(sapply(X = 1:length(ranks), FUN = function(x){
-    rep((cumsum(ranks$lengths)[x] - ranks$lengths[x]) + 1:ranks$lengths[x], n_subtypes)
-    }))
-
-
-  which(indx == t) * 2 + 1
-
   out_disjointed = vector(mode =  "list", length = length(all_terms))
 
-  for(t in 1:length(all_terms)){0
-    out_disjrvals[strat_dic]  <- stats_out[1 + which(indx == t) * 2, ]
-    out_disjpvals[strat_dic]  <- stats_out[2 + which(indx == t) * 2, ]
+  for(i in 1:length(all_terms)){
+    out_disjrvals[strat_dict]  <- stats_diff[(i*2) -1,]
+    out_disjpvals[strat_dict]  <- stats_diff[(i*2),   ]
 
     #Adjust for multiple comparisons
     out_disjqvals             <- out_disjpvals
-    out_disjqvals[strat_dic]  <- NA
+    out_disjqvals[strat_dict]  <- NA
 
 
-    out_disjointed[[t]] <- new("anansiTale",
-                               subject    = paste("model_disjointed", all_terms[t], sep = "_"),
+    out_disjointed[[i]] <- new("anansiTale",
+                               subject    = paste("model_disjointed", all_terms[i], sep = "_"),
                                type       = "r.squared",
                                estimates  = out_disjrvals,
                                p.values   = out_disjpvals,
@@ -257,17 +253,17 @@ collate_model_output_argonaut <- function(web, stats_out, all_terms){
 
   out_emergent = vector(mode =  "list", length = length(all_terms))
 
-  for(t in 1:length(all_terms)){
-    out_emergrvals[strat_dic]  <- stats_out[1 + 2 * length(indx) + which(indx == t) * 2,]
-    out_emergpvals[strat_dic]  <- stats_out[2 + 2 * length(indx) + which(indx == t) * 2,]
+  for(i in 1:length(all_terms)){
+    out_emergrvals[strat_dict]  <- stats_diff[(i*2) + (i*2) -1,]
+    out_emergpvals[strat_dict]  <- stats_diff[(i*2) + (i*2)   ,]
 
     #Adjust for multiple comparisons
-    out_emergqvals             <- out_emergpvals
-    out_emergqvals[strat_dic]  <- NA
+    out_emergqvals              <- out_emergpvals
+    out_emergqvals[strat_dict]  <- NA
 
 
-    out_emergent[[t]] <- new("anansiTale",
-                             subject    = paste("model_emergent", all_terms[t], sep = "_"),
+    out_emergent[[i]] <- new("anansiTale",
+                             subject    = paste("model_emergent", all_terms[i], sep = "_"),
                              type       = "r.squared",
                              estimates  = out_emergrvals,
                              p.values   = out_emergpvals,
@@ -281,6 +277,25 @@ collate_model_output_argonaut <- function(web, stats_out, all_terms){
               disjointed = out_disjointed,
               emergent   = out_emergent))
 }
+
+#' Parse argonansi output
+#' @description Typically, the main \code{anansi()} function will run this for you.
+#' @param stats_out A vector containing all statistical output from \code{model_picker}.
+#' @return a matrix, containing the parameters for the full models.
+#'
+argonaut_parse_full <- function(stats_out){
+  do.call(rbind,lapply(stats_out, FUN = function(x){x$vec_full}))
+}
+
+#' Parse argonansi output
+#' @description Typically, the main \code{anansi()} function will run this for you.
+#' @param stats_out A vector containing all statistical output from \code{model_picker}.
+#' @return a matrix, containing the parameters for the differential association models.
+#'
+argonaut_parse_diff <- function(stats_out){
+  do.call(cbind,lapply(stats_out, FUN = function(x){x$vec_out}))
+}
+
 
 
 #
