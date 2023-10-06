@@ -32,6 +32,9 @@ anansiAdjustP <- function(x, method = "BH", resampling = F, locality = T, verbos
 
   #extract dictionary for convenience
   dictionary = x@input@web@dictionary
+  if(is(x@input@web, "stratifiedFeatureTable")){
+    dictionary = x@input@web@strat_dict
+  }
 
   #Take inventory of where to find p-values.
   pval_df = data.frame(model = c(

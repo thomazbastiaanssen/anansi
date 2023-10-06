@@ -94,7 +94,6 @@ weaveWebFromStratifiedTables <- function(tableY, stratifiedTableX, dictionary = 
   stratifiedTableX <- argonaut::sft(stratifiedTableX[,colnames(dictionary),])
   strat_dict <- as.matrix(dictionary)[,rep(1:ncol(as.matrix(dictionary)), argonaut::apply_by(stratifiedTableX, 3, length)[1,])]
 
-
   #Return an argonansiWeb object with five slots: typically metabolites, functions, stratified functions, a stratified adjacency matrix and aggregated an adjacency matrix
   return(new("argonansiWeb",
              tableY     = as.matrix(tableY),

@@ -53,9 +53,19 @@ spinToLong <- function(anansi_output, prune = T, translate = F, Y_translation = 
   long_out  = Reduce(rbind, flat_cor_list)
   colnames(long_out)[3] = "r.values"
 
+
+
   if(length(anansi_output@output@model_results) > 0){
     #Make a flat list of the model results in wide format
     flat_model_list = lapply(anansi_output@output@model_results, getAnansiResults, format = "wide")
+
+    if(is(anansi_output@input@web, "argonansiWeb")){
+      long_out = cbind(long_out, flat_model_list[["modelfit.full"]][,-c(1:2)])
+      flat_model_list[["modelfit.full"]] <- NULL
+
+      long_out = long_out[rep(1:ncol(anansi_output@input@web@dictionary),
+                              argonaut::apply_by(anansi_output@input@web@tableX.sft, 3, length)[1,]),]
+    }
 
     #Merge all model results in a single wide data.frame
     wide_model_df   = Reduce(function(x, y) merge(x, y, sort = F), flat_model_list)
@@ -73,7 +83,7 @@ spinToLong <- function(anansi_output, prune = T, translate = F, Y_translation = 
 
   if(prune){
     #If true, remove all non-canonical interactions.
-    long_out = long_out[c(anansi_output@input@web@dictionary),]
+    long_out = long_out[c(anansi_output@input@web@strat_dict),]
 
   }
 
@@ -86,7 +96,6 @@ spinToLong <- function(anansi_output, prune = T, translate = F, Y_translation = 
 #' @return A wide format data.frame. The first two columns are the features from tableY and tableX, respectively
 #' @seealso \code{\link{spinToWide}}\cr \code{\link{spinToLong}}
 #'
-
 getAnansiResults <- function(tale, format = "wide"){
   if(!format %in% c("wide", "long")){stop("format should be either `wide` or `long`.")}
   out_df =
@@ -203,8 +212,8 @@ spinToPlots <- function(anansiYarn, target = anansiYarn@input@web@dictionary, tr
                                        Y_translation = Y_translation,
                                        X_translation = X_translation))
       return(y)
-      }
-      )
+    }
+    )
 
   }
 

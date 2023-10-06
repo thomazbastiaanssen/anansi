@@ -297,6 +297,20 @@ assessModelType <- function(modeltype, reff, diff_cor){
 #'
 call_groupwise <- function(web, method, groups, verbose){
   if(method %in% c("pearson", "kendall", "spearman")){
+    if(is(anansi_output@input@web, "argonansiWeb")){
+
+      a = sapply(1:dim(web@tableX.sft)[3], web@tableX.sft,
+                 FUN = function(x){df = getFeature(web@tableX.sft, x);
+                 colnames(df) = paste(colnames(df), dimnames(web@tableX.sft)[3][x], sep = ".");
+                 return(df)})
+
+      return(anansiCorTestByGroup(web = new("anansiWeb",
+                                            tableY     = as.matrix(web@tableY),
+                                            tableX     = as.matrix(web@tableX),
+                                            dictionary = as.matrix(web@strat_dict))),
+             method = method, groups = groups, verbose = verbose)
+    }
+
     return(anansiCorTestByGroup(web = web, method = method, groups = groups, verbose = verbose))
   }
 
