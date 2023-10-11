@@ -59,13 +59,15 @@ spinToLong <- function(anansi_output, prune = T, translate = F, Y_translation = 
     #Make a flat list of the model results in wide format
     flat_model_list = lapply(anansi_output@output@model_results, getAnansiResults, format = "wide")
 
+    #Catch argonansi exception
     if(is(anansi_output@input@web, "argonansiWeb")){
-      long_out = cbind(long_out, flat_model_list[["modelfit.full"]][,-c(1:2)])
-      flat_model_list[["modelfit.full"]] <- NULL
+      full_out = flat_model_list[["modelfit.full"]][rep(1:ncol(as.matrix(anansi_output@input@web@dictionary)),
+                                                        argonaut::apply_by(anansi_output@input@web@tableX.sft, 3, length)[1,]),]
 
-      long_out = long_out[rep(1:ncol(anansi_output@input@web@dictionary),
-                              argonaut::apply_by(anansi_output@input@web@tableX.sft, 3, length)[1,]),]
-    }
+      #repeat to accomodate for length and append to flat_cor_list with cbind
+      long_out = cbind(long_out, full_out)
+
+      flat_model_list[["modelfit.full"]] <- NULL}
 
     #Merge all model results in a single wide data.frame
     wide_model_df   = Reduce(function(x, y) merge(x, y, sort = F), flat_model_list)
@@ -82,8 +84,16 @@ spinToLong <- function(anansi_output, prune = T, translate = F, Y_translation = 
   }
 
   if(prune){
-    #If true, remove all non-canonical interactions.
-    long_out = long_out[c(anansi_output@input@web@strat_dict),]
+
+    if( is(anansi_output@input@web, "argonansiWeb")){
+      #If true, remove all non-canonical interactions.
+      long_out = long_out[c(anansi_output@input@web@strat_dict),]
+    }
+    if(!is(anansi_output@input@web, "argonansiWeb")){
+      #If true, remove all non-canonical interactions.
+      long_out = long_out[c(anansi_output@input@web@dictionary),]
+
+    }
 
   }
 

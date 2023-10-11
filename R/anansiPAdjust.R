@@ -32,7 +32,7 @@ anansiAdjustP <- function(x, method = "BH", resampling = F, locality = T, verbos
 
   #extract dictionary for convenience
   dictionary = x@input@web@dictionary
-  if(is(x@input@web, "stratifiedFeatureTable")){
+  if(is(x@input@web, "argonansiWeb")){
     dictionary = x@input@web@strat_dict
   }
 
@@ -43,6 +43,35 @@ anansiAdjustP <- function(x, method = "BH", resampling = F, locality = T, verbos
                   group = c(
                     names(x@output@cor_results),
                     names(x@output@model_results)))
+
+  if(is(x@input@web, "argonansiWeb")){
+    pval_df = pval_df[pval_df$group != "modelfit.full",]
+    p = slot(slot(x@output, 'model_results')[['modelfit.full']], 'p.values')
+
+    #Resampling approach
+    if(resampling){
+      #Extract coordinates to cycle over relevant p-values using apply
+      coord <- which(x@input@web@dictionary, arr.ind = T)
+
+      #adjust p-values directly into the relevant slot
+      slot(slot(x@output, 'model_results')[['modelfit.full']], 'q.values')[x@input@web@dictionary] <-
+        apply(coord,
+              MARGIN = 1,
+              FUN = function(y){
+                compute_FDR(
+                  coord      = y,
+                  p          = p,
+                  dictionary = x@input@web@dictionary,
+                  locality   = locality,
+                  method     = method)})
+    }
+    else{
+      #adjust p-values directly into the relevant slot
+      slot(slot(x@output, 'model_results')[['modelfit.full']], 'q.values')[x@input@web@dictionary] <-
+        p.adjust(p[x@input@web@dictionary], method = method)
+    }
+
+  }
 
   #for each of those sources of p-values, do:
   for(i in 1:nrow(pval_df)){
@@ -113,7 +142,7 @@ compute_FDR <- function(coord, p, dictionary, locality, method){
 
   y = unlist(coord[1])
   x = unlist(coord[2])
-  source = determine_source(x = x, y = y, p = p, dictionary = dictionary , locality = locality)
+  source = determine_source(x = x, y = y, p = p, dictionary = dictionary, locality = locality)
 
   #Generate resampling matrix, as to keep resampling consistent between p-values
   resam_mat = replicate(n = 1000,

@@ -90,8 +90,9 @@ weaveWebFromStratifiedTables <- function(tableY, stratifiedTableX, dictionary = 
 
   #use the dictionary to clean input tables
   tableY = tableY[,rownames(dictionary)]
-  tableX = tableX[,colnames(dictionary)]
+  #tableX = tableX[,colnames(dictionary)]
   stratifiedTableX <- argonaut::sft(stratifiedTableX[,colnames(dictionary),])
+  tableX = get_strat_X(stratifiedTableX)
   strat_dict <- as.matrix(dictionary)[,rep(1:ncol(as.matrix(dictionary)), argonaut::apply_by(stratifiedTableX, 3, length)[1,])]
 
   #Return an argonansiWeb object with five slots: typically metabolites, functions, stratified functions, a stratified adjacency matrix and aggregated an adjacency matrix
@@ -125,8 +126,12 @@ glm_argonaut_calc_diff_cor <- function(web, which_dictionary, metadata, formula)
   all_terms    <- attr(terms(formula), "term.labels")
   all_subtypes <- colnames(meta_glm)[grep(x = colnames(meta_glm), pattern = "x\\.")]
 
-  vec_full = c(0,1)
-  vec_out  = matrix(rep(c(0, 1), (2 * length(all_subtypes)) * length(all_terms)), ncol = length(all_subtypes), byrow = F)
+  #All subtypes in one model
+  vec_combined = c(0, 1)
+  #One model per subtype
+  vec_full = matrix(rep(c(0,1), length(all_subtypes)), ncol = length(all_subtypes), byrow = F)
+  #Differential association per subtype
+  vec_out  = matrix(rep(c(0,1), (2 * length(all_subtypes)) * length(all_terms)), ncol = length(all_subtypes), byrow = F)
 
   #paste together all subtypes with plusses between them:
   collapsed_subtypes = paste(all_subtypes, collapse = " + ")
@@ -137,6 +142,28 @@ glm_argonaut_calc_diff_cor <- function(web, which_dictionary, metadata, formula)
 
   formula_full = update.formula(formula, internal_formula)
 
+  for(i in 1:length(all_subtypes)){
+    #paste together all subtypes with plusses between them:
+    collapsed_subtypes_i = paste(all_subtypes[i], collapse = " + ")
+
+    internal_formula_i = reformulate(
+      termlabels = paste0("(",collapsed_subtypes_i ,") * 1 * ."),
+      response    = "y")
+
+    formula_i = update.formula(formula, internal_formula_i)
+
+
+    # fit linear model
+    fit      <- lm(formula = formula_i, data = meta_glm)
+
+    # Calculate p-value for entire model
+    fstat    <- summary(fit)$fstatistic
+    p        <- pf(fstat[1], fstat[2], fstat[3], lower.tail = FALSE)
+
+    vec_full[1,i] <- summary(fit)$r.squared
+    vec_full[2,i] <- p
+  }
+
   # fit linear model
   fit      <- lm(formula = formula_full, data = meta_glm)
 
@@ -144,8 +171,8 @@ glm_argonaut_calc_diff_cor <- function(web, which_dictionary, metadata, formula)
   fstat    <- summary(fit)$fstatistic
   p        <- pf(fstat[1], fstat[2], fstat[3], lower.tail = FALSE)
 
-  vec_full[1] <- summary(fit)$r.squared
-  vec_full[2] <- p
+  vec_combined[1] <- summary(fit)$r.squared
+  vec_combined[2] <- p
 
   #run ANOVA to determine impact of group on SLOPE of association.
   disj_fit        <- anova(fit)
@@ -188,7 +215,7 @@ glm_argonaut_calc_diff_cor <- function(web, which_dictionary, metadata, formula)
 
   }
 
-  return(list(vec_full = vec_full, vec_out = vec_out))
+  return(list(vec_combined = vec_combined, vec_full = vec_full, vec_out = vec_out))
 }
 
 
@@ -202,29 +229,47 @@ glm_argonaut_calc_diff_cor <- function(web, which_dictionary, metadata, formula)
 collate_model_output_argonaut <- function(web, stats_out, all_terms){
   #Create result container matrices. We take advantage of the fact that true interactions are coded as TRUE, which corresponds to 1,
   #automatically setting all non-canonical interactions as p = 1 and estimate = 0.
-
+  dictionary = web@dictionary
   strat_dict = web@strat_dict
   colnames(strat_dict) = paste(colnames(strat_dict), unlist(argonaut::apply_by(web@tableX.sft, 3, names)[1,], use.names = F), sep = ".")
 
-  out_rvals      <- web@dictionary
-  out_pvals      <- !web@dictionary
+  out_rvals_tot  <- dictionary
+  out_pvals_tot  <- !dictionary
+  out_rvals      <- strat_dict
+  out_pvals      <- !strat_dict
   out_disjrvals  <- strat_dict
   out_disjpvals  <- !strat_dict
   out_emergrvals <- strat_dict
   out_emergpvals <- !strat_dict
 
+  stats_tot = argonaut_parse_tot(stats_out = stats_out)
+
+  out_rvals_tot[dictionary]      <- stats_tot[,1]
+  out_pvals_tot[dictionary]      <- stats_tot[,2]
+
+  #Adjust for multiple comparisons
+  out_qvals_tot                  <- out_pvals_tot
+  out_qvals_tot[dictionary]      <- NA
+
+  out_tot_tale  <- list(full = new("anansiTale",
+                                   subject    = "model_full",
+                                   type       = "r.squared",
+                                   estimates  = out_rvals_tot,
+                                   p.values   = out_pvals_tot,
+                                   q.values   = out_qvals_tot))
+
   stats_full = argonaut_parse_full(stats_out = stats_out)
   stats_diff = argonaut_parse_diff(stats_out = stats_out)
 
-  out_rvals[web@dictionary]      <- stats_full[,1]
-  out_pvals[web@dictionary]      <- stats_full[,2]
+  out_rvals[strat_dict]      <- stats_full[1,]
+  out_pvals[strat_dict]      <- stats_full[2,]
 
   #Adjust for multiple comparisons
-  out_qvals                      <- out_pvals
-  out_qvals[web@dictionary]      <- NA
+  out_qvals                  <- out_pvals
+  out_qvals[strat_dict]      <- NA
 
   out_tale  <- list(full = new("anansiTale",
-                               subject    = "model_full",
+                               subject    = "model_full_by_subtype",
                                type       = "r.squared",
                                estimates  = out_rvals,
                                p.values   = out_pvals,
@@ -237,7 +282,7 @@ collate_model_output_argonaut <- function(web, stats_out, all_terms){
     out_disjpvals[strat_dict]  <- stats_diff[(i*2),   ]
 
     #Adjust for multiple comparisons
-    out_disjqvals             <- out_disjpvals
+    out_disjqvals              <- out_disjpvals
     out_disjqvals[strat_dict]  <- NA
 
 
@@ -272,18 +317,28 @@ collate_model_output_argonaut <- function(web, stats_out, all_terms){
 
 
   #Collect into nested list and return results
-  return(list(modelfit   = out_tale,
-              disjointed = out_disjointed,
-              emergent   = out_emergent))
+  return(list(modelfit     = out_tot_tale,
+              modelfit_sub = out_tale,
+              disjointed   = out_disjointed,
+              emergent     = out_emergent))
 }
 
 #' Parse argonansi output
 #' @description Typically, the main \code{anansi()} function will run this for you.
 #' @param stats_out A vector containing all statistical output from \code{model_picker}.
-#' @return a matrix, containing the parameters for the full models.
+#' @return a matrix, containing the parameters for the full combined models.
+#'
+argonaut_parse_tot <- function(stats_out){
+  do.call(rbind,lapply(stats_out, FUN = function(x){x$vec_combined}))
+}
+
+#' Parse argonansi output
+#' @description Typically, the main \code{anansi()} function will run this for you.
+#' @param stats_out A vector containing all statistical output from \code{model_picker}.
+#' @return a matrix, containing the parameters for the full individual models.
 #'
 argonaut_parse_full <- function(stats_out){
-  do.call(rbind,lapply(stats_out, FUN = function(x){x$vec_full}))
+  do.call(cbind,lapply(stats_out, FUN = function(x){x$vec_full}))
 }
 
 #' Parse argonansi output
@@ -295,8 +350,26 @@ argonaut_parse_diff <- function(stats_out){
   do.call(cbind,lapply(stats_out, FUN = function(x){x$vec_out}))
 }
 
+#' Collapse tableX for Argonaut data
+#' @description Should not be run on its own. to be applied by \code{anansiDiffCor()}. Typically, the main \code{anansi()} function will handle this for you.
+#' @param tableX.sft A stratifiedFeatureTable object.
+#' @return a matrix with rows as samples and columns as ordered features per subtype.
+#'
+get_strat_X <- function(tableX.sft){
+  slice_list = lapply(1:dim(tableX.sft)[2],
+                      FUN = function(f){
+                        slic =  tableX.sft[, f, ][, !is.na(colSums(tableX.sft[, f, ]))];
+                        colnames(slic) = paste(dimnames(tableX.sft)[[2]][f],
+                                               colnames(slic), sep = ".");
+                        return(slic)
+                      })
+  slice_mat = do.call(cbind, slice_list)
+  slice_mat = slice_mat[,order(colnames(slice_mat))]
 
+  return(slice_mat)
+}
 
+#
 #
 # library(argonaut)
 # library(tidyverse)
@@ -311,7 +384,7 @@ argonaut_parse_diff <- function(stats_out){
 # z = sample(LETTERS[1:3], 100, replace = T)
 # u = sample(LETTERS[1:3], 100, replace = T)
 #
-# x = getFeature(x, "Philosophy")
+# x = getFeature(x, 1)
 # colnames(x) = paste0("x.", colnames(x))
 # metadata = data.frame(y, z, u)
 # f = ~ z *u
