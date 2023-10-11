@@ -134,7 +134,7 @@ getAnansiResults <- function(tale, format = "wide"){
 #'
 anansiTranslate <- function(x, Y_translation = Y_translation, X_translation = X_translation, argonansi = F){
   l_X = length(unique(x$feature_X))
-  l_Y = length(unique(x$feature_Y))
+  l_Y = rep(length(unique(x$feature_Y)), l_X)
   if(argonansi){
     x$feature_X_stratified = x$feature_X
     x$feature_X = gsub(x = x$feature_X_stratified, pattern = "\\..*", replacement = "")
