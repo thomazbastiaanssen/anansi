@@ -247,6 +247,12 @@ collate_model_output_argonaut <- function(web, stats_out, all_terms){
   out_rvals_tot[dictionary]      <- stats_tot[,1]
   out_pvals_tot[dictionary]      <- stats_tot[,2]
 
+  # #Expand to stratified dimensions
+  # out_rvals_tot = as.matrix(out_rvals_tot)[,rep(1:ncol(as.matrix(out_rvals_tot)), argonaut::apply_by(web@tableX.sft, 3, length)[1,])]
+  # colnames(out_rvals_tot) <- colnames(strat_dict)
+  # out_pvals_tot = as.matrix(out_pvals_tot)[,rep(1:ncol(as.matrix(out_pvals_tot)), argonaut::apply_by(web@tableX.sft, 3, length)[1,])]
+  # colnames(out_pvals_tot) <- colnames(strat_dict)
+
   #Adjust for multiple comparisons
   out_qvals_tot                  <- out_pvals_tot
   out_qvals_tot[dictionary]      <- NA
@@ -369,6 +375,25 @@ get_strat_X <- function(tableX.sft){
   return(slice_mat)
 }
 
+#' Expand a matrix of dictionary dimensions to stratified dictionary dimensions.
+#' @description Should not be run on its own.
+#' @param x An anansiTale object with result matrices of dictionary dimensions.
+#' @param web An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.
+#' @return An anansiTale object with result matrices with rows as tableX features and columns as ordered tableY features per subtype.
+#'
+argonaut_rep_to_strat <- function(x, web){
+
+  slot(x, 'estimates') <- as.matrix(slot(x, 'estimates'))[,rep(1:ncol(as.matrix(web@dictionary)), argonaut::apply_by(web@tableX.sft, 3, length)[1,])]
+  colnames(slot(x, 'estimates')) <- paste( colnames(slot(x, 'estimates')), unlist(argonaut::apply_by(web@tableX.sft, 3, names)[1,], use.names = F), sep = ".")
+
+  slot(x, 'p.values') <- as.matrix(slot(x, 'p.values'))[,rep(1:ncol(as.matrix(web@dictionary)), argonaut::apply_by(web@tableX.sft, 3, length)[1,])]
+  colnames(slot(x, 'p.values')) <- paste( colnames(slot(x, 'p.values')), unlist(argonaut::apply_by(web@tableX.sft, 3, names)[1,], use.names = F), sep = ".")
+
+  slot(x, 'q.values') <- as.matrix(slot(x, 'q.values'))[,rep(1:ncol(as.matrix(web@dictionary)), argonaut::apply_by(web@tableX.sft, 3, length)[1,])]
+  colnames(slot(x, 'q.values')) <- paste( colnames(slot(x, 'q.values')), unlist(argonaut::apply_by(web@tableX.sft, 3, names)[1,], use.names = F), sep = ".")
+
+  return(x)
+  }
 #
 #
 # library(argonaut)

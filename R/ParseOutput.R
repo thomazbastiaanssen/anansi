@@ -53,34 +53,30 @@ spinToLong <- function(anansi_output, prune = T, translate = F, Y_translation = 
   long_out  = Reduce(rbind, flat_cor_list)
   colnames(long_out)[3] = "r.values"
 
-
-
   if(length(anansi_output@output@model_results) > 0){
     #Make a flat list of the model results in wide format
-    flat_model_list = lapply(anansi_output@output@model_results, getAnansiResults, format = "wide")
-
     #Catch argonansi exception
     if(is(anansi_output@input@web, "argonansiWeb")){
-      full_out = flat_model_list[["modelfit.full"]][rep(1:ncol(as.matrix(anansi_output@input@web@dictionary)),
-                                                        argonaut::apply_by(anansi_output@input@web@tableX.sft, 3, length)[1,]),]
+      anansi_output@output@model_results[["modelfit.full"]] <- argonaut_rep_to_strat(x = anansi_output@output@model_results[["modelfit.full"]],
+                                                                                     web = anansi_output@input@web)
+    }
 
-      #repeat to accomodate for length and append to flat_cor_list with cbind
-      long_out = cbind(long_out, full_out)
-
-      flat_model_list[["modelfit.full"]] <- NULL}
+    flat_model_list = lapply(anansi_output@output@model_results, getAnansiResults, format = "wide")
 
     #Merge all model results in a single wide data.frame
     wide_model_df   = Reduce(function(x, y) merge(x, y, sort = F), flat_model_list)
 
     #Stack the model results so that they have the same number of rows as the correlation results
-    wide_model_df   = do.call("rbind", replicate(n_cors, wide_model_df, simplify = FALSE))
+    #wide_model_df   = do.call(rbind, replicate(n_cors, wide_model_df, simplify = FALSE))
 
     #Combine the results into a single data.frame
     long_out = cbind(long_out, wide_model_df[,-c(1, 2)])
   }
 
   if(translate){
-    long_out = anansiTranslate(long_out, Y_translation = Y_translation, X_translation = X_translation)
+    argonansi = FALSE
+    if(is(anansi_output@input@web, "argonansiWeb")){argonansi = TRUE}
+    long_out = anansiTranslate(long_out, Y_translation = Y_translation, X_translation = X_translation, argonansi = argonansi)
   }
 
   if(prune){
@@ -133,20 +129,30 @@ getAnansiResults <- function(tale, format = "wide"){
 #' @param x a table with a feature_Y and feature_X column.
 #' @param Y_translation data.frame, a lookup table with featureY names as the first column and human readable names as the second. See \code{cpd_translation} for an example file.
 #' @param X_translation data.frame, a lookup table with featureX names as the first column and human readable names as the second. See \code{KO_translation} for an example file.
+#' @param argonansi A boolean. Toggles whether we are dealing with stratified data.
 #' @return an expanded table with a column for the human readable names for the features in both tableY and tableX.
 #'
-anansiTranslate <- function(x, Y_translation = Y_translation, X_translation = X_translation){
+anansiTranslate <- function(x, Y_translation = Y_translation, X_translation = X_translation, argonansi = F){
+  l_X = length(unique(x$feature_X))
+  l_Y = length(unique(x$feature_Y))
+  if(argonansi){
+    x$feature_X_stratified = x$feature_X
+    x$feature_X = gsub(x = x$feature_X_stratified, pattern = "\\..*", replacement = "")
+    x$subtype_X = gsub(x = x$feature_X_stratified, pattern = ".*\\.", replacement = "")
+    l_Y = rle(paste(x$feature_X))$lengths[1:length(unique(x$feature_X))]
+  }
 
   relevant_Y = Y_translation[Y_translation[,1] %in% x$feature_Y,]
   x$feature_Y = rep(paste(relevant_Y[,1],
                           gsub(";.*", "", relevant_Y[,2]), sep = ": "),
-                    times = length(unique(x$feature_X)))
+                    times = l_X)
 
   relevant_X = X_translation[X_translation[,1] %in% x$feature_X,]
   x$feature_X = rep(paste(relevant_X[,1],
                           relevant_X[,2], sep = ": "),
-                    each = length(unique(x$feature_Y)))
+                   l_Y)
   return(x)
+
 }
 
 #' Take anansi output and wrangle it to a list of plottable objects.
