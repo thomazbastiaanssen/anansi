@@ -8,21 +8,40 @@
 #' @export
 #'
 spinToWide <- function(anansi_output, prune = T, translate = F, Y_translation = NULL, X_translation = NULL){
+  #in case of argonansi
+  if(is(anansi_output@input@web, "argonansiWeb")){
+    anansi_output@output@model_results[["modelfit.full"]] <- argonaut_rep_to_strat(x = anansi_output@output@model_results[["modelfit.full"]],
+                                                                                   web = anansi_output@input@web)
+  }
   #First flatten all types  of results (cor, model, etc) and create a list of individual wide data.frames.
   flat_list = lapply(unlist(list(anansi_output@output@cor_results,
                                  anansi_output@output@model_results)), getAnansiResults)
 
 
+
   #merge all data.frames in the list while keeping the row order.
   wide_df   = Reduce(function(x, y) merge(x, y, sort = F), flat_list)
 
+
   if(translate){
-    wide_df = anansiTranslate(wide_df, Y_translation = Y_translation, X_translation = X_translation)
+    argonansi = FALSE
+    if(is(anansi_output@input@web, "argonansiWeb")){argonansi = TRUE}
+    wide_df = anansiTranslate(wide_df, Y_translation = Y_translation, X_translation = X_translation, argonansi = argonansi)
   }
 
+
   if(prune){
-    #If true, remove all non-canonical interactions.
-    wide_df = wide_df[c(anansi_output@input@web@dictionary),]
+
+    if( is(anansi_output@input@web, "argonansiWeb")){
+      #If true, remove all non-canonical interactions.
+      wide_df = wide_df[c(anansi_output@input@web@strat_dict),]
+    }
+    if(!is(anansi_output@input@web, "argonansiWeb")){
+      #If true, remove all non-canonical interactions.
+      wide_df = wide_df[c(anansi_output@input@web@dictionary),]
+
+    }
+
   }
 
   #Sort the output by the first column
