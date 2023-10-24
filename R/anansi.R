@@ -136,6 +136,7 @@ anansi = function(web, method = "pearson", groups = NULL,  metadata = NULL, form
     if(verbose){print("Dictionary will be ignored. Running all vs all associations.")}
     #set dictionary to all TRUE
     web@dictionary <- web@dictionary == web@dictionary
+    if(is(web, "argonansiWeb")){web@strat_dict <- web@strat_dict == web@strat_dict}
   }
 
   #assess validity of input
