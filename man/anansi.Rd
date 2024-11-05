@@ -9,7 +9,7 @@ anansi(
   method = "pearson",
   groups = NULL,
   metadata = NULL,
-  formula = NULL,
+  formula = ~1,
   adjust.method = "BH",
   modeltype = "lm",
   resampling = F,

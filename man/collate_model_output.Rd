@@ -4,7 +4,7 @@
 \alias{collate_model_output}
 \title{Run differential correlation analysis for all interacting metabolites and functions.}
 \usage{
-collate_model_output(web, stats_out, all_terms, by.ls = FALSE)
+collate_model_output(web, stats_out, all_terms)
 }
 \arguments{
 \item{web}{An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.}
@@ -12,8 +12,6 @@ collate_model_output(web, stats_out, all_terms, by.ls = FALSE)
 \item{stats_out}{A vector containing all statistical output from \code{model_picker}.}
 
 \item{all_terms}{A vector containing all RHS terms of the supplied model formula, including interactions.}
-
-\item{by.ls}{Boolean to toggle ls calculation method.}
 }
 \value{
 a list of \code{anansiTale} result objects, one for the total model, one for emergent correlations and one for disjointed correlations.

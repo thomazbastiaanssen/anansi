@@ -10,7 +10,7 @@
 #' For general use, we recommend sticking to that one. You can access the dictionary like this: \code{data(dictionary)}
 #' @return an \code{anansiWeb} object. Web is used as input for most of the main workflow of anansi.
 #' @export
-weaveWebFromTables = function(tableY, tableX = NULL, dictionary = anansi::anansi_dic, verbose = T, mode = "interaction", prune = F, max_sds = 3){
+weaveWebFromTables <- function(tableY, tableX = NULL, dictionary = anansi::anansi_dic, verbose = T, mode = "interaction", prune = F, max_sds = 3){
 
   tableX <- assessWebCall(tableY = tableY, tableX = tableX, verbose = verbose)
 

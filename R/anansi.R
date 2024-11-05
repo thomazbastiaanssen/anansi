@@ -1,3 +1,4 @@
+
 #' Calculate an association network
 #' @description This is the main workspider function in the anansi package. It manages the individual functionalities of anansi, including correlation analysis, correlation by group and differential correlation.
 #' @param web An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.
@@ -99,16 +100,14 @@
 #' #See also ?spinToPlots
 #' }
 #'
-anansi = function(web, method = "pearson", groups = NULL,  metadata = NULL, formula = NULL,
+anansi = function(web, method = "pearson", groups = NULL,  metadata = NULL, formula = ~1,
                   adjust.method = "BH", modeltype = "lm", resampling = F, locality = F,
                   reff = NULL, verbose = T, diff_cor = T, ignore_dictionary = F){
-
-  #Ensure appropriate options for type III ANOVAs
-  contr.opt <- options(contrasts = c("contr.sum","contr.poly"))
 
   if(is.vector(metadata)){
     metadata = data.frame(metadata = metadata)
   }
+
 
   #If there is a formula that is not empty:
   if(!identical(all.vars(formula), character(0))){
@@ -165,19 +164,17 @@ anansi = function(web, method = "pearson", groups = NULL,  metadata = NULL, form
                                           groups  = groups, verbose = verbose)
 
   if(diff_cor){
-  if(verbose){print("Fitting models for differential correlation testing")
-    print(paste("Model type:", modeltype, sep = ""))}
-    output@model_results = unlist(anansiDiffCor(web = web, groups = groups, formula = formula,
-                                         metadata = metadata, reff = reff,
-                                         modeltype = modeltype, verbose = verbose))
+    if(verbose){print("Fitting models for differential correlation testing")
+      print(paste("Model type:", modeltype, sep = ""))}
+    output@model_results = unlist(anansiDiffCor(web = web, formula = formula,
+                                                metadata = metadata, reff = reff,
+                                                modeltype = modeltype, verbose = verbose))
   }
   outYarn@output = output
 
   #FDR
   outYarn <- anansiAdjustP(x = outYarn, method = adjust.method, resampling = resampling, locality = locality, verbose = verbose)
 
-  #Restore default options
-  on.exit(options(contr.opt))
   return(outYarn)
 }
 
