@@ -2,6 +2,7 @@
 
 export(adjust_web)
 export(anansi)
+export(anansi2)
 export(anansiAdjustP)
 export(clr_c)
 export(clr_lite)

@@ -99,7 +99,7 @@
 #' #See also ?spinToPlots
 #' }
 #'
-anansi = function(web, method = "pearson", groups = NULL,  metadata = NULL, formula = ~1,
+anansi = function(web, method = "pearson", groups = NULL,  metadata = NULL, formula = NULL,
                   adjust.method = "BH", modeltype = "lm", resampling = F, locality = F,
                   reff = NULL, verbose = T, diff_cor = T, ignore_dictionary = F){
 
@@ -112,7 +112,11 @@ anansi = function(web, method = "pearson", groups = NULL,  metadata = NULL, form
 
   #If there is a formula that is not empty:
   if(!identical(all.vars(formula), character(0))){
-    unique_factors = all.vars(update.formula(formula, 0~.))
+    unique_factors = intersect(
+      c(reff, all.vars(formula)),
+      names(which(sapply(metadata,
+                         function(x) is.character(x) || is.factor(x) || is.logical(x))))
+    )
 
     if(!is.null(groups)){
       unique_factors = groups

@@ -15,10 +15,14 @@
 \item{\code{type}}{A character that describes type of parameter contained in the \code{estimates} slot.
 For example r.values for correlations or r.squared for models.}
 
-\item{\code{estimates}}{A data.frame containing the estimates for the parameters named in the \code{type} slot.}
+\item{\code{df}}{a vector of length 2, containing df1 and df2 corresponding to the F-ratio considered.}
 
-\item{\code{p.values}}{A data.frame containing the p.values for the parameters named in the \code{type} slot.}
+\item{\code{F.valules}}{A matrix containing the f-values}
 
-\item{\code{q.values}}{A data.frame containing the q.values for the parameters named in the \code{type} slot.}
+\item{\code{estimates}}{A matrix containing the estimates for the parameters named in the \code{type} slot.}
+
+\item{\code{p.values}}{A matrix containing the p.values for the parameters named in the \code{type} slot.}
+
+\item{\code{q.values}}{A matrix containing the q.values for the parameters named in the \code{type} slot.}
 }}
 

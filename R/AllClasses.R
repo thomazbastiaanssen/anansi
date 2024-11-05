@@ -19,20 +19,26 @@ setClass("anansiWeb",
 #' @slot subject A character that describes the data that was queried.
 #' @slot type A character that describes type of parameter contained in the \code{estimates} slot.
 #' For example r.values for correlations or r.squared for models.
-#' @slot estimates A data.frame containing the estimates for the parameters named in the \code{type} slot.
-#' @slot p.values A data.frame containing the p.values for the parameters named in the \code{type} slot.
-#' @slot q.values A data.frame containing the q.values for the parameters named in the \code{type} slot.
+#' @slot df a vector of length 2, containing df1 and df2 corresponding to the F-ratio considered.
+#' @slot F.valules A matrix containing the f-values
+#' @slot estimates A matrix containing the estimates for the parameters named in the \code{type} slot.
+#' @slot p.values A matrix containing the p.values for the parameters named in the \code{type} slot.
+#' @slot q.values A matrix containing the q.values for the parameters named in the \code{type} slot.
 #' @description \code{anansiTale} is the main container that will hold your stats output data coming out of the \code{anansi} pipeline.
 #'
 setClass("anansiTale",
          slots = c(
            subject   = "character",
            type      = "character",
+           df        = "numeric",
            estimates = "matrix",
+           F.values  = "matrix",
            p.values  = "matrix",
            q.values  = "matrix"
            )
          )
+
+
 
 #' An S4 class to contain all \code{anansi} input so that they can easily be extracted.
 #'
@@ -159,3 +165,4 @@ setMethod("summary", "anansiYarn", function(object){
       or you can manually explore it by using the @ operator. ")
 }
 )
+

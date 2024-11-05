@@ -7,7 +7,8 @@
 anansiTranslate(
   x,
   Y_translation = Y_translation,
-  X_translation = X_translation
+  X_translation = X_translation,
+  argonansi = F
 )
 }
 \arguments{
@@ -16,6 +17,8 @@ anansiTranslate(
 \item{Y_translation}{data.frame, a lookup table with featureY names as the first column and human readable names as the second. See \code{cpd_translation} for an example file.}
 
 \item{X_translation}{data.frame, a lookup table with featureX names as the first column and human readable names as the second. See \code{KO_translation} for an example file.}
+
+\item{argonansi}{A boolean. Toggles whether we are dealing with stratified data.}
 }
 \value{
 an expanded table with a column for the human readable names for the features in both tableY and tableX.
