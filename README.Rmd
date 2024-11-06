@@ -139,13 +139,13 @@ anansiLong <- spinToLong(anansi_output = anansi_out, translate = T,
 #Now it's ready to be plugged into ggplot2, though let's clean up a bit more. 
 
 #Only consider interactions where the entire model fits well enough. 
-anansiLong <- anansiLong[anansiLong$model_full_q.values < 0.1,]
+anansiLong <- anansiLong[anansiLong$model_full_q.values < 0.2,]
 ```
 ## Plot the results
 
 The long format can be helpful to plug the data into `ggplot2`. Here, we recreate part of the results from the FMT Aging study.
 
-```{r plot_FMT, eval=TRUE, fig.width = 10, fig.height = 10}
+```{r plot_FMT, eval=TRUE, fig.width = 10, fig.height = 8}
 
 ggplot(data = anansiLong, 
        aes(x      = r.values, 

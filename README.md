@@ -31,7 +31,7 @@ citation("anansi")
     ## 
     ##   Bastiaanssen T (2024). _anansi: Annotation-based Analysis of Specific
     ##   Interactions_. R package version 0.5.0, commit
-    ##   01fa465627eb6e4fa2966b35e2d775f7b8942631,
+    ##   b67bcd359f00138c26a0a428b83037fb313364ae,
     ##   <https://github.com/thomazbastiaanssen/anansi>.
     ## 
     ## A BibTeX entry for LaTeX users is
@@ -40,7 +40,7 @@ citation("anansi")
     ##     title = {anansi: Annotation-based Analysis of Specific Interactions},
     ##     author = {Thomaz Bastiaanssen},
     ##     year = {2024},
-    ##     note = {R package version 0.5.0, commit 01fa465627eb6e4fa2966b35e2d775f7b8942631},
+    ##     note = {R package version 0.5.0, commit b67bcd359f00138c26a0a428b83037fb313364ae},
     ##     url = {https://github.com/thomazbastiaanssen/anansi},
     ##   }
 
@@ -169,7 +169,8 @@ anansi_out <- anansi(web      = web,          #Generated above
     ## [1] "Running correlations for the following groups: All, Aged yFMT, Aged oFMT, Young yFMT"
     ## [1] "Fitting models for differential correlation testing"
     ## [1] "Model type:lm"
-    ## [1] "Adjusting p-values using Benjamini & Hochberg's procedure."
+    ## Fitting least-squares for following model:
+    ## ~ x + Legend + x:Legend [1] "Adjusting p-values using Benjamini & Hochberg's procedure."
     ## [1] "Using theoretical distribution."
 
 ## Spin to a table📝
@@ -190,7 +191,7 @@ anansiLong <- spinToLong(anansi_output = anansi_out, translate = T,
 #Now it's ready to be plugged into ggplot2, though let's clean up a bit more. 
 
 #Only consider interactions where the entire model fits well enough. 
-anansiLong <- anansiLong[anansiLong$model_full_q.values < 0.1,]
+anansiLong <- anansiLong[anansiLong$model_full_q.values < 0.2,]
 ```
 
 ## Plot the results
