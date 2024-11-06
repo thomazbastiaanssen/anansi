@@ -60,10 +60,10 @@ anansiDiffCor = function(web, metadata, formula, reff, modeltype, verbose = T){
                                subject    = "model_full",
                                type       = "r.squared",
                                df         = df_mat[,1]),
-                               estimates  = get_dict.double() * Y.TSS, #start with RSS0
-                               F.values   = get_dict.double(),
-                               p.values   = !get_dict.double(),
-                               q.values   = !get_dict.double())
+                               estimates  = get_dict.double(web) * Y.TSS, #start with RSS0
+                               F.values   = get_dict.double(web),
+                               p.values   = !get_dict(web),
+                               q.values   = !get_dict(web))
 
   disjointed <- `names<-`(lapply(1:length(all_terms),
                                  function(x)
@@ -71,10 +71,10 @@ anansiDiffCor = function(web, metadata, formula, reff, modeltype, verbose = T){
                                        subject    = paste("model_disjointed", all_terms[x], sep = "_"),
                                        type       = "r.squared",
                                        df         = df_mat[,x + 1],
-                                       estimates  = get_dict.double(), #start with RSS0
-                                       F.values   = get_dict.double(),
-                                       p.values   = !get_dict.double(),
-                                       q.values   = !get_dict.double())), all_terms)
+                                       estimates  = get_dict.double(web), #start with RSS0
+                                       F.values   = get_dict.double(web),
+                                       p.values   = !get_dict(web),
+                                       q.values   = !get_dict(web))), all_terms)
 
   emergent <- `names<-`(lapply(1:length(all_terms),
                                  function(x)
@@ -82,10 +82,10 @@ anansiDiffCor = function(web, metadata, formula, reff, modeltype, verbose = T){
                                        subject    = paste("model_emergent", all_terms[x], sep = "_"),
                                        type       = "r.squared",
                                        df         = df_mat[,x + 1] + c(0, -1, -1/df_mat[1, x + 1]),
-                                       estimates  = get_dict.double(), #start with RSS0
-                                       F.values   = get_dict.double(),
-                                       p.values   = !get_dict.double(),
-                                       q.values   = !get_dict.double())), all_terms)
+                                       estimates  = get_dict.double(web), #start with RSS0
+                                       F.values   = get_dict.double(web),
+                                       p.values   = !get_dict(web),
+                                       q.values   = !get_dict(web))), all_terms)
 
 #Compute R^2 for full model
 modelfit$full@estimates <- 1 - (
