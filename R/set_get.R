@@ -13,8 +13,6 @@ get_dict.logical <- function(web = web)
 get_dict <- function(web = web)
   web@dictionary
 
-
-
 #' @noRd
 #'
 get_tableX <- function(web = web)

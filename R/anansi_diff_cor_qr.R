@@ -13,7 +13,7 @@
 #'
 anansiDiffCor = function(web, metadata, formula, reff, modeltype, verbose = T){
   #Create a matrix with row and column coordinates to cycle through the relevant comparisons in tableY and tableX.
-  which_dictionary <- which(get_dict(), arr.ind = T, useNames = F)
+  which_dictionary <- which(get_dict(web), arr.ind = T, useNames = F)
   lm.metadata      <- cbind(x = 1, metadata)
 
   all_terms  <- labels(terms.formula(formula))
@@ -106,17 +106,17 @@ for(t in seq_along(x.int)){
     y.vals <- `dimnames<-`(web@tableY[,y.ind], NULL)
 
     #straight to web!!
-    disjointed[[t]]@estimates[get_dict()[,y],y]  <- R_disj(y.vals, qr.mm, i.disj)
+    disjointed[[t]]@estimates[get_dict(web)[,y],y]  <- R_disj(y.vals, qr.mm, i.disj)
 
-    emergent  [[t]]@estimates[get_dict()[,y],y]  <- R_emerg(y.vals, qr.mm, i.disj)
+    emergent  [[t]]@estimates[get_dict(web)[,y],y]  <- R_emerg(y.vals, qr.mm, i.disj)
   }
 
 }
 
 #Add F and P statistics
-modelfit   <- lapply(modelfit,   get_PF, d = get_dict())
-disjointed <- lapply(disjointed, get_PF, d = get_dict())
-emergent   <- lapply(emergent,   get_PF, d = get_dict())
+modelfit   <- lapply(modelfit,   get_PF, d = get_dict(web))
+disjointed <- lapply(disjointed, get_PF, d = get_dict(web))
+emergent   <- lapply(emergent,   get_PF, d = get_dict(web))
 
 
 return(list(
@@ -200,7 +200,7 @@ R_disj_emerg <- function(y, x, mm, web, x.vars, i.disj){
   #adjust the input model.matrix by multiplying the relevant columns by x
   qr.mm  <- mm
   qr.mm[,x.vars] <- mm[,x.vars] * web@tableX[,y]
-  y.ind  <- get_dict()[,y]
+  y.ind  <- get_dict(web)[,y]
   y.vals <- `dimnames<-`(web@tableY[,y.ind], NULL)
 
   Rsq_d <- R_disj(y.vals, qr.mm, i.disj)
@@ -260,7 +260,7 @@ R_full <- function(y, mm, web, x.fct, x.vars){
   #adjust the input model.matrix by multiplying the relevant columns by x
   qr.mm  <- mm
   qr.mm[,x.vars] <- mm[,x.vars] * web@tableX[,y]
-  y.ind  <- get_dict()[,y]
+  y.ind  <- get_dict(web)[,y]
   y.vals <- `dimnames<-`(web@tableY[,y.ind], NULL)
 
   #Return H1 SSR
