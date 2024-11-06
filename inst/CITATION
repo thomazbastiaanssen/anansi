@@ -1,0 +1,16 @@
+citHeader("To cite anansi in publications use:")
+
+bibentry(bibtype="article",
+         title        = paste("Knowledge-based Integration of Multi-Omic Datasets with Anansi: Annotation-based Analysis of Specific Interactions"),
+         author       = c(person(given = c("Thomaz", "F S"), family = "Bastiaanssen"),
+                          person(given = c("Thomas", "P"),   family = "Quinn"),
+                          person(given = c("John",   "F"),   family = "Cryan")),
+         journal      = "arXiv",
+         year         = "2023",
+         doi          = "10.48550/arXiv.2305.10832",
+
+         textVersion  =
+           paste("Bastiaanssen TFS, Quinn TP, Cryan JF (2023)",
+                 "Knowledge-based Integration of Multi-Omic Datasets with Anansi: Annotation-based Analysis of Specific Interactions",
+                 "arXiv. doi: 10.48550/arXiv.2305.10832")
+)
