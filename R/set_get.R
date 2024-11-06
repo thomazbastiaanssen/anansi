@@ -5,13 +5,15 @@ get_dict.double <- function(web = web)
 
 #' @noRd
 #'
-get_dict <- function(web = web)
-  get_web.logical(web)
+get_dict.logical <- function(web = web)
+  `mode<-`(web@dictionary, "logical")
 
 #' @noRd
 #'
-get_dict.logical <- function(web = web)
+get_dict <- function(web = web)
   web@dictionary
+
+
 
 #' @noRd
 #'
