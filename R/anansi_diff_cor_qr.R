@@ -112,7 +112,6 @@ for(t in seq_along(x.int)){
   }
 
 }
-
 #Add F and P statistics
 modelfit   <- lapply(modelfit,   get_PF, d = get_dict(web))
 disjointed <- lapply(disjointed, get_PF, d = get_dict(web))
