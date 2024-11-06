@@ -237,7 +237,7 @@ R_disj_emerg <- function(y, x, mm, web, x.vars, i.disj){
     e.ord   <- order(rowSums(qr.mm[,i.disj[,3], drop = FALSE]))
     e.mm    <- cbind(1, diff(qr.mm[e.ord,-1]))
 
-    e.y     <- diff(y.vals[e.ord,])
+    e.y     <- diff(y.vals[e.ord, drop = FALSE])
 
     #use diff to look at var
     e.mm.0  <- e.mm[,i.disj[,1]]
