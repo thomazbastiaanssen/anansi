@@ -27,19 +27,21 @@ If you use this software, please cite our work.
 citation("anansi")
 ```
 
+    ## To cite anansi in publications use:
     ## 
-    ## To cite package 'anansi' in publications use:
-    ## 
-    ##   Bastiaanssen T (2023). _anansi: Annotation-based Analysis of Specific
-    ##   Interactions_. R package version 0.5.0.
+    ##   Bastiaanssen TFS, Quinn TP, Cryan JF (2023) Knowledge-based
+    ##   Integration of Multi-Omic Datasets with Anansi: Annotation-based
+    ##   Analysis of Specific Interactions arXiv. doi:
+    ##   10.48550/arXiv.2305.10832
     ## 
     ## A BibTeX entry for LaTeX users is
     ## 
-    ##   @Manual{,
-    ##     title = {anansi: Annotation-based Analysis of Specific Interactions},
-    ##     author = {Thomaz Bastiaanssen},
+    ##   @Article{,
+    ##     title = {Knowledge-based Integration of Multi-Omic Datasets with Anansi: Annotation-based Analysis of Specific Interactions},
+    ##     author = {Thomaz F S Bastiaanssen and Thomas P Quinn and John F Cryan},
+    ##     journal = {arXiv},
     ##     year = {2023},
-    ##     note = {R package version 0.5.0},
+    ##     doi = {10.48550/arXiv.2305.10832},
     ##   }
 
 ## Setup
@@ -167,7 +169,8 @@ anansi_out <- anansi(web      = web,          #Generated above
     ## [1] "Running correlations for the following groups: All, Aged yFMT, Aged oFMT, Young yFMT"
     ## [1] "Fitting models for differential correlation testing"
     ## [1] "Model type:lm"
-    ## [1] "Adjusting p-values using Benjamini & Hochberg's procedure."
+    ## Fitting least-squares for following model:
+    ## ~ x + Legend + x:Legend [1] "Adjusting p-values using Benjamini & Hochberg's procedure."
     ## [1] "Using theoretical distribution."
 
 ## Spin to a table📝
