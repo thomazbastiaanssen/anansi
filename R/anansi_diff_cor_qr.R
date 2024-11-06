@@ -59,11 +59,11 @@ anansiDiffCor = function(web, metadata, formula, reff, modeltype, verbose = T){
   modelfit  <- list(full = new("anansiTale",
                                subject    = "model_full",
                                type       = "r.squared",
-                               df         = df_mat[,1]),
+                               df         = df_mat[,1],
                                estimates  = get_dict.double(web) * Y.TSS, #start with RSS0
                                F.values   = get_dict.double(web),
                                p.values   = !get_dict(web),
-                               q.values   = !get_dict(web))
+                               q.values   = !get_dict(web)))
 
   disjointed <- `names<-`(lapply(1:length(all_terms),
                                  function(x)
@@ -102,7 +102,7 @@ for(t in seq_along(x.int)){
     #adjust the input model.matrix by multiplying the relevant columns by x
     qr.mm  <- mm
     qr.mm[,x.vars] <- mm[,x.vars] * web@tableX[,y]
-    y.ind  <- get_dict.double()[,y]
+    y.ind  <- get_dict.double(web)[,y]
     y.vals <- `dimnames<-`(web@tableY[,y.ind], NULL)
 
     #straight to web!!
