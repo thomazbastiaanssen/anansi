@@ -102,7 +102,7 @@ for(t in seq_along(x.int)){
     #adjust the input model.matrix by multiplying the relevant columns by x
     qr.mm  <- mm
     qr.mm[,x.vars] <- mm[,x.vars] * web@tableX[,y]
-    y.ind  <- get_dict.double(web)[,y]
+    y.ind  <- get_dict(web)[,y]
     y.vals <- `dimnames<-`(web@tableY[,y.ind], NULL)
 
     #straight to web!!
