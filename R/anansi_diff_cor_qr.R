@@ -13,7 +13,7 @@
 #'
 anansiDiffCor = function(web, metadata, formula, reff, modeltype, verbose = T){
   #Create a matrix with row and column coordinates to cycle through the relevant comparisons in tableY and tableX.
-  which_dictionary <- which(web@dictionary, arr.ind = T, useNames = F)
+  which_dictionary <- which(get_dict(), arr.ind = T, useNames = F)
   lm.metadata      <- cbind(x = 1, metadata)
 
   all_terms  <- labels(terms.formula(formula))
@@ -60,10 +60,10 @@ anansiDiffCor = function(web, metadata, formula, reff, modeltype, verbose = T){
                                subject    = "model_full",
                                type       = "r.squared",
                                df         = df_mat[,1]),
-                               estimates  = web@dictionary * Y.TSS, #start with RSS0
-                               F.values   = web@dictionary,
-                               p.values   = !web@dictionary,
-                               q.values   = !web@dictionary)
+                               estimates  = get_dict.double() * Y.TSS, #start with RSS0
+                               F.values   = get_dict.double(),
+                               p.values   = !get_dict.double(),
+                               q.values   = !get_dict.double())
 
   disjointed <- `names<-`(lapply(1:length(all_terms),
                                  function(x)
@@ -71,10 +71,10 @@ anansiDiffCor = function(web, metadata, formula, reff, modeltype, verbose = T){
                                        subject    = paste("model_disjointed", all_terms[x], sep = "_"),
                                        type       = "r.squared",
                                        df         = df_mat[,x + 1],
-                                       estimates  = web@dictionary, #start with RSS0
-                                       F.values   = web@dictionary,
-                                       p.values   = !web@dictionary,
-                                       q.values   = !web@dictionary)), all_terms)
+                                       estimates  = get_dict.double(), #start with RSS0
+                                       F.values   = get_dict.double(),
+                                       p.values   = !get_dict.double(),
+                                       q.values   = !get_dict.double())), all_terms)
 
   emergent <- `names<-`(lapply(1:length(all_terms),
                                  function(x)
@@ -82,10 +82,10 @@ anansiDiffCor = function(web, metadata, formula, reff, modeltype, verbose = T){
                                        subject    = paste("model_emergent", all_terms[x], sep = "_"),
                                        type       = "r.squared",
                                        df         = df_mat[,x + 1] + c(0, -1, -1/df_mat[1, x + 1]),
-                                       estimates  = web@dictionary, #start with RSS0
-                                       F.values   = web@dictionary,
-                                       p.values   = !web@dictionary,
-                                       q.values   = !web@dictionary)), all_terms)
+                                       estimates  = get_dict.double(), #start with RSS0
+                                       F.values   = get_dict.double(),
+                                       p.values   = !get_dict.double(),
+                                       q.values   = !get_dict.double())), all_terms)
 
 #Compute R^2 for full model
 modelfit$full@estimates <- 1 - (
@@ -102,21 +102,21 @@ for(t in seq_along(x.int)){
     #adjust the input model.matrix by multiplying the relevant columns by x
     qr.mm  <- mm
     qr.mm[,x.vars] <- mm[,x.vars] * web@tableX[,y]
-    y.ind  <- web@dictionary[,y]
+    y.ind  <- get_dict.double()[,y]
     y.vals <- `dimnames<-`(web@tableY[,y.ind], NULL)
 
     #straight to web!!
-    disjointed[[t]]@estimates[web@dictionary[,y],y]  <- R_disj(y.vals, qr.mm, i.disj)
+    disjointed[[t]]@estimates[get_dict()[,y],y]  <- R_disj(y.vals, qr.mm, i.disj)
 
-    emergent  [[t]]@estimates[web@dictionary[,y],y]  <- R_emerg(y.vals, qr.mm, i.disj)
+    emergent  [[t]]@estimates[get_dict()[,y],y]  <- R_emerg(y.vals, qr.mm, i.disj)
   }
 
 }
 
 #Add F and P statistics
-modelfit   <- lapply(modelfit,   get_PF, d = web@dictionary)
-disjointed <- lapply(disjointed, get_PF, d = web@dictionary)
-emergent   <- lapply(emergent,   get_PF, d = web@dictionary)
+modelfit   <- lapply(modelfit,   get_PF, d = get_dict())
+disjointed <- lapply(disjointed, get_PF, d = get_dict())
+emergent   <- lapply(emergent,   get_PF, d = get_dict())
 
 
 return(list(
@@ -200,7 +200,7 @@ R_disj_emerg <- function(y, x, mm, web, x.vars, i.disj){
   #adjust the input model.matrix by multiplying the relevant columns by x
   qr.mm  <- mm
   qr.mm[,x.vars] <- mm[,x.vars] * web@tableX[,y]
-  y.ind  <- web@dictionary[,y]
+  y.ind  <- get_dict()[,y]
   y.vals <- `dimnames<-`(web@tableY[,y.ind], NULL)
 
   Rsq_d <- R_disj(y.vals, qr.mm, i.disj)
@@ -260,7 +260,7 @@ R_full <- function(y, mm, web, x.fct, x.vars){
   #adjust the input model.matrix by multiplying the relevant columns by x
   qr.mm  <- mm
   qr.mm[,x.vars] <- mm[,x.vars] * web@tableX[,y]
-  y.ind  <- web@dictionary[,y]
+  y.ind  <- get_dict()[,y]
   y.vals <- `dimnames<-`(web@tableY[,y.ind], NULL)
 
   #Return H1 SSR
