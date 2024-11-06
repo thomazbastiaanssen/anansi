@@ -7,7 +7,7 @@
 #' @param modeltype A string, either "lm" or "lmer" depending on the type of model that should be ran.
 #' @param verbose A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.
 #' @return a list of \code{anansiTale} result objects, one for the total model, one for emergent correlations and one for disjointed correlations.
-#' @importFrom stats anova lm pf residuals terms model.matrix.default terms.formula
+#' @importFrom stats anova lm pf residuals model.matrix.default terms.formula
 #' @importFrom future.apply future_apply
 #' @importFrom methods is
 #'
@@ -29,7 +29,7 @@ anansiDiffCor = function(web, metadata, formula, reff, modeltype, verbose = T){
   )
 
   #identify the columns of the variables that change based on X-variable
-  x.fct  <- `dimnames<-`(attr(terms(sat_model), "factors"), NULL)
+  x.fct  <- `dimnames<-`(attr(terms.formula(sat_model), "factors"), NULL)
 
   #TODO This could be important for argonaut support; consider modifying row id 1.
   x.assign   <- as.integer(which(x.fct[1,] == 1))

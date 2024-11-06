@@ -49,7 +49,7 @@ glm_calc_diff_cor <- function(web, which_dictionary, metadata, formula){
   meta_glm$y = web@tableY[,which_dictionary[1]]
   meta_glm$x = web@tableX[,which_dictionary[2]]
 
-  all_terms <- attr(terms(formula), "term.labels")
+  all_terms <- attr(terms.formula(formula), "term.labels")
 
   vec_out = rep(c(0, 1), 1 + 2 * length(all_terms))
   formula_full = update.formula(formula, y ~ x * 1 * (.))
@@ -129,8 +129,8 @@ glmer_calc_diff_cor <- function(web, which_dictionary, metadata, formula, reff){
 
   formula_full = update.formula(formula, y ~ x * 1 * (.))
 
-  which_terms <- grep(pattern = "^x:", attr(terms(formula_full), "term.labels"))
-  all_terms <- attr(terms(formula_full), "term.labels")[which_terms]
+  which_terms <- grep(pattern = "^x:", attr(terms.formula(formula_full), "term.labels"))
+  all_terms <- attr(terms.formula(formula_full), "term.labels")[which_terms]
   #param      r, p, r, p, r, p
   vec_out = rep(c(0, 1), 1 + 2 * length(all_terms))
 
@@ -149,7 +149,7 @@ glmer_calc_diff_cor <- function(web, which_dictionary, metadata, formula, reff){
   vec_out[1] <- cor(meta_glmer$y, fitted(f.full), method = "pearson", use = "pairwise.complete.obs")^2
   vec_out[2] <- p
 
-  target_disj_interactions <- attr(terms(formula_full), "term.labels")[grep(pattern = "^x:", attr(terms(formula_full), "term.labels"))]
+  target_disj_interactions <- attr(terms.formula(formula_full), "term.labels")[grep(pattern = "^x:", attr(terms.formula(formula_full), "term.labels"))]
 
   #Fit a separate null model to compute effect of groups value on slope (ie interaction).
   target.list <- lapply(target_disj_interactions, FUN = function(x){as.formula(paste0(".~.-", x))})
@@ -209,7 +209,7 @@ glmer_calc_diff_cor <- function(web, which_dictionary, metadata, formula, reff){
 glm_calc_diff_prop <- function(web, which_dictionary, metadata, formula){
 
   meta_glm = metadata
-  all_terms <- attr(terms(formula), "term.labels")
+  all_terms <- attr(terms.formula(formula), "term.labels")
 
   # Extract relevant values
   y = web@tableY[,which_dictionary[1]]
@@ -279,7 +279,7 @@ glm_calc_diff_prop <- function(web, which_dictionary, metadata, formula){
 glmer_calc_diff_prop <- function(web, which_dictionary, metadata, formula, reff){
 
   meta_glmer = metadata
-  all_terms <- attr(terms(formula), "term.labels")
+  all_terms <- attr(terms.formula(formula), "term.labels")
 
   # Extract relevant values
   y = web@tableY[,which_dictionary[1]]

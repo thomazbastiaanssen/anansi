@@ -36,7 +36,7 @@
 #' Snippet of the CLR-transformed hippocampal metabolomics data from the FMT Aging study.
 #'
 #' @format A matrix object with three rows, compounds, and 36 columns, samples.
-#' @source \url{https://doi.org/10.1038/s43587-021-00093-9}
+#' @source \doi{10.1038/s43587-021-00093-9}
 #'
 "FMT_metab"
 
@@ -46,7 +46,7 @@
 #' Unfortunately, the Piphillin algorithm is proprietary and has since been taken down.
 #'
 #' @format A marix object with 6474 rows, KOs, and 36 columns, samples.
-#' @source \url{https://doi.org/10.1038/s43587-021-00093-9}
+#' @source \doi{10.1038/s43587-021-00093-9}
 #'
 "FMT_KOs"
 
@@ -57,6 +57,6 @@
 #' aged mice that received FMT from aged mice (Aged oFMT) and aged mice that received FMT from young mice (Aged yFMT).
 #'
 #' @format A data.frame object with 36 rows, samples, and two columns, denoting sample ID and treatemtn group, respectively.
-#' @source \url{https://doi.org/10.1038/s43587-021-00093-9}
+#' @source \doi{10.1038/s43587-021-00093-9}
 #'
 "FMT_metadata"

@@ -8,7 +8,7 @@
 A matrix object with three rows, compounds, and 36 columns, samples.
 }
 \source{
-\url{https://doi.org/10.1038/s43587-021-00093-9}
+\doi{10.1038/s43587-021-00093-9}
 }
 \usage{
 FMT_metab

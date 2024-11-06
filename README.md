@@ -31,7 +31,7 @@ citation("anansi")
     ## 
     ##   Bastiaanssen T (2024). _anansi: Annotation-based Analysis of Specific
     ##   Interactions_. R package version 0.5.0, commit
-    ##   b67bcd359f00138c26a0a428b83037fb313364ae,
+    ##   b1ce64a514946b6144781367b4f9032390280216,
     ##   <https://github.com/thomazbastiaanssen/anansi>.
     ## 
     ## A BibTeX entry for LaTeX users is
@@ -40,7 +40,7 @@ citation("anansi")
     ##     title = {anansi: Annotation-based Analysis of Specific Interactions},
     ##     author = {Thomaz Bastiaanssen},
     ##     year = {2024},
-    ##     note = {R package version 0.5.0, commit b67bcd359f00138c26a0a428b83037fb313364ae},
+    ##     note = {R package version 0.5.0, commit b1ce64a514946b6144781367b4f9032390280216},
     ##     url = {https://github.com/thomazbastiaanssen/anansi},
     ##   }
 

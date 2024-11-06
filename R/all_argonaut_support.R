@@ -123,7 +123,7 @@ glm_argonaut_calc_diff_cor <- function(web, which_dictionary, metadata, formula)
   meta_glm$y = web@tableY[,which_dictionary[1]]
   meta_glm = cbind(meta_glm, x = argonaut::getFeature(web@tableX.sft,which_dictionary[2]))
 
-  all_terms    <- attr(terms(formula), "term.labels")
+  all_terms    <- attr(terms.formula(formula), "term.labels")
   all_subtypes <- colnames(meta_glm)[grep(x = colnames(meta_glm), pattern = "x\\.")]
 
   #All subtypes in one model
