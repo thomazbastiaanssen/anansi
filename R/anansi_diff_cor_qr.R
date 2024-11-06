@@ -93,7 +93,7 @@ modelfit$full@estimates <- 1 - (
          function(x) R_full(y = x, mm, web, x.fct, x.vars)) /
     modelfit$full@estimates)
 
-#compute all disjointed R^2 values, return to matrix with rows a s values and columns as terms
+#compute all disjointed R^2 values, return to matrix with rows as values and columns as terms
 for(t in seq_along(x.int)){
 
   i.disj <- index.disj(x = x.int[t], all.assign, x.fct);
