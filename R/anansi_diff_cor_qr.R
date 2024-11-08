@@ -191,23 +191,6 @@ get_PF <- function(object, d){
   return(object)
 }
 
-#' #' @noRd
-#' #'
-#' R_disj_emerg <- function(y, x, mm, web, x.vars, i.disj){
-#'   #adjust the input model.matrix by multiplying the relevant columns by x
-#'   qr.mm  <- mm
-#'   qr.mm[,x.vars] <- mm[,x.vars] * web@tableX[,y]
-#'   y.ind  <- get_dict(web)[,y]
-#'   y.vals <- `dimnames<-`(web@tableY[,y.ind], NULL)
-#'
-#'   Rsq_d <- R_disj(y.vals, qr.mm, i.disj)
-#'
-#'   Rsq_e <- R_emerg(y.vals, qr.mm, i.disj)
-#'
-#'   return(cbind(Rsq_d,
-#'                Rsq_e))
-#'
-#' }
 
 #' @noRd
 #'
