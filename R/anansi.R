@@ -167,8 +167,7 @@ anansi = function(web, method = "pearson", groups = NULL,  metadata = NULL, form
     if(verbose){print("Fitting models for differential correlation testing")
       print(paste("Model type:", modeltype, sep = ""))}
     output@model_results = unlist(anansiDiffCor(web = web, formula = formula,
-                                                metadata = metadata, reff = reff,
-                                                modeltype = modeltype, verbose = verbose))
+                                                metadata = metadata, verbose = verbose))
   }
   outYarn@output = output
 

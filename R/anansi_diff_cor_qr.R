@@ -3,15 +3,13 @@
 #' @param web An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.
 #' @param metadata A vector or data.frame of categorical or continuous value necessary for differential correlations. Typically a state or treatment score. If no argument provided, anansi will let you know and still to regular correlations according to your dictionary.
 #' @param formula A formula object. Used to assess differential associations.
-#' @param reff A categorical vector typically depicting a shared ID between samples. Only for mixed effect models.
-#' @param modeltype A string, either "lm" or "lmer" depending on the type of model that should be ran.
 #' @param verbose A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.
 #' @return a list of \code{anansiTale} result objects, one for the total model, one for emergent correlations and one for disjointed correlations.
 #' @importFrom stats anova lm pf residuals model.matrix.default terms.formula
 #' @importFrom future.apply future_apply
 #' @importFrom methods is
 #'
-anansiDiffCor = function(web, metadata, formula, reff, modeltype, verbose = T){
+anansiDiffCor = function(web, metadata, formula, verbose = T){
   #Create a matrix with row and column coordinates to cycle through the relevant comparisons in tableY and tableX.
   which_dictionary <- which(get_dict(web), arr.ind = T, useNames = F)
   lm.metadata      <- cbind(x = 1, metadata)
