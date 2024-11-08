@@ -14,7 +14,7 @@ test_that("full model Rsq corresponds to stats::lm()", {
              dictionary = d)
 
 
-  anansi.res <- anansi:::anansiDiffCor(web, m, formula = ~ categorical)
+  anansi.res <- anansi:::anansiDiffCor(web, m, formula = ~ categorical, verbose = FALSE)
 
   a.full.F   <- tell_F(anansi.res$modelfit)[[1]]
   a.disj.F   <- tell_F(anansi.res$disjointed)[[1]]
