@@ -175,6 +175,10 @@ SS <- function(x) {
   .colSums(x^2,dn[1L], dn[2L], FALSE)
 }
 
+#' Transform to odds: `x / (1-x)`.
+#' @noRd
+#'
+oddify <- function(x) x/(1-x)
 
 #' Compute F and P statistic for \code{anansiTale} object.
 #' @description Populate \code{anansiTale} object with F statistics.
@@ -183,7 +187,7 @@ SS <- function(x) {
 #'
 get_PF <- function(object, d){
 
-  object@F.values[d] <- object@estimates[d] * object@df[3]
+  object@F.values[d] <- oddify(object@estimates[d]) * object@df[3]
   object@p.values[d] <- pf(object@F.values[d],
                            df1 = object@df[1], df2 = object@df[2],
                            lower.tail = FALSE)
