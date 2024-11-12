@@ -51,11 +51,11 @@ test_that("full and disjointed parameters correspond to stats::lm()", {
       ss.x = sum(residuals(f.x)^2)
 
       t.full  [y,x]  <- 1 - (ss.2/ss.1)
-      t.full.F[y,x]  <- t.full[y,x] * (df2/df1.f)
+      t.full.F[y,x]  <- oddify(t.full[y,x]) * (df2/df1.f)
       t.full.P[y,x]  <- pf(t.full.F[y,x], df1.f, df2, lower.tail = FALSE)
 
       t.disj  [y,x]  <- 1 - (ss.2/ss.x)
-      t.disj.F[y,x]  <- t.disj[y,x] * (df2/df1.x)
+      t.disj.F[y,x]  <- oddify(t.disj[y,x]) * (df2/df1.x)
       t.disj.P[y,x]  <- pf(t.disj.F[y,x], df1.x, df2, lower.tail = FALSE)
     }
   }
@@ -70,25 +70,3 @@ test_that("full and disjointed parameters correspond to stats::lm()", {
   expect_equal(t.full.F, a.full.F)
   expect_equal(t.disj.F, a.disj.F)
 })
-
-#
-# #Why does ANOVA not give the same F and corresponding p? What is the difference between the two methods?
-# #Are there certain conditions that make one method more reasonable to take?
-# #
-#
-# #We can recover same p-value from anova output:
-# fval.full <- (1- anova(f.1, f.2)$RSS[2]/anova(f.1, f.2)$RSS[1]) * (anova(f.1, f.2)[2, 1]/anova(f.1, f.2)$Df[2])
-# df2.full <- anova(f.1, f.2)[2, 1]
-# df1.full <- anova(f.1, f.2)$Df[2]
-#
-#
-# pf(fval.full, df1.full, df2.full, lower.tail = FALSE)
-#
-# t.full.P[3,5]
-# anova(f.1, f.2, scale = 1.0269) #check out scale argument!
-# t.full.F[3,5]
-#
-# t.full.F[3,5]/ anova(f.1, f.2, scale = 1)$F[2]
-#
-# stats:::anova.lmlist
-# ?stat.anova
