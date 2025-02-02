@@ -3,7 +3,9 @@ Type: Package
 Title: Annotation-Based Analysis of Specific Interactions
 Version: 0.6.0
 Authors@R: c(
-   person("Thomaz", "Bastiaanssen", email = "thomazbastiaanssen@gmail.com", role = c("aut", "cre"), comment = c(ORCID = "0000-0001-6891-734X"))
+   person("Thomaz", "Bastiaanssen", email = "thomazbastiaanssen@gmail.com", role = c("aut", "cre"), comment = c(ORCID = "0000-0001-6891-734X")), 
+   person("Thomas", "Quinn", email = "contacttomquinn@gmail.com", role = c("aut"), comment = c(ORCID = "0000-0003-0286-6329")),
+   person("Giulio", "Benedetti", email = "giulio.benedetti@utu.fi", role = c("aut"), comment = c(ORCID = "0000-0002-8732-7692"))
    )
 Maintainer: Thomaz Bastiaanssen <thomazbastiaanssen@gmail.com>
 Description: Studies including both microbiome and metabolomics data are becoming more common. 

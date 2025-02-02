@@ -13,7 +13,7 @@ getAnansi(x, ...)
   experiment2 = 2,
   assay.type1 = "counts",
   assay.type2 = "counts",
-  return.long = TRUE,
+  return.format = "long",
   ...
 )
 }
@@ -22,8 +22,8 @@ getAnansi(x, ...)
 \code{\link[MultiAssayExperiment:MultiAssayExperiment]{MultiAssayExperiment}}.}
 
 \item{...}{additional parameters that can be passed to
-\code{\link{weaveWebFromTables}}, \code{\link{anansi}} or
-\code{\link{spinToLong}}.}
+\code{\link{weaveWebFromTables}}, \code{\link{anansi}},
+\code{\link{spinToLong}} or \code{\link{spinToWide}}.}
 
 \item{experiment1}{\code{Character scalar} or \code{numeric scalar}.
 Selects the experiment 1 from \code{experiments(x)} of
@@ -39,14 +39,16 @@ in experiment 1 to be used. (Default: \code{"counts"})}
 \item{assay.type2}{\code{Character scalar}. Specifies the name of the
 assay in experiment 2 to be used. (Default: \code{"counts"})}
 
-\item{return.long}{\code{Logical scalar}. Should the output of
-\code{\link{anansi}} be passed to \code{\link{spinToLong}} for convenient
-use. (Default: \code{TRUE})}
+\item{return.format}{\code{Character scalar}. Should be one of \code{"long"},
+\code{"wide"}, or \code{"raw"}. Should the output of \code{\link{anansi}}
+be passed to \code{\link{spinToLong}} or \code{\link{spinToWide}} for
+convenient use. (Default: \code{"long"})}
 }
 \value{
-If \code{return.long} is TRUE (default), a long format data.frame intended to
-be compatible with ggplot2. If \code{return.long} is FALSE, a list of lists
-containing correlation coefficients, p-values and q-values for all operations.
+If \code{return.format} is long (default), a long format data.frame intended
+to be compatible with ggplot2. If \code{return.format} is wide, a wide format
+data.frame. If \code{return.format} is raw, a list of lists containing
+correlation coefficients, p-values and q-values for all operations.
 }
 \description{
 \code{getAnansi} provides a wrapper to execute the anansi pipeline on a
@@ -73,9 +75,8 @@ library(TreeSummarizedExperiment)
 library(MultiAssayExperiment)
 
 # Load data
-data("FMT_metab", package = "anansi")
-data("FMT_KOs", package = "anansi")
-data("anansi_dict", package = "anansi")
+data("FMT_data",  package = "anansi")
+data("dictionary", package = "anansi")
 
 # Convert to (Tree)SummarizedExperiment objects
 metab_se <- SummarizedExperiment(assays = SimpleList(conc = as.matrix(FMT_metab)))
@@ -95,7 +96,7 @@ KO_tse <- transformAssay(KO_tse,
                          assay.type = "counts",
                          method = "clr",
                          pseudocount = TRUE)
-                         
+
 # Prepare colData
 coldata <- FMT_metadata
 rownames(coldata) <- coldata$Sample_ID
@@ -124,4 +125,5 @@ head(out, 5)
 \code{\link{weaveWebFromTables}}
 \code{\link{anansi}}
 \code{\link{spinToLong}}
+\code{\link{spinToWide}}
 }

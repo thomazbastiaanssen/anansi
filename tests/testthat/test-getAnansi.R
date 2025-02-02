@@ -30,26 +30,35 @@ test_that("getAnansi", {
       fixed = TRUE)
   expect_error(getAnansi(mae, experiment1 = "metabolites",
       experiment2 = "functions", assay.type1 = "conc", assay.type2 = "clr",
-      return.long = "wrong_input"), "'return.long' must be TRUE or FALSE",
-      fixed = TRUE)
+      return.format = "wrong_input"), class = "error")
   expect_warning(getAnansi(mae, experiment1 = "metabolites",
       experiment2 = "functions", assay.type1 = "conc", assay.type2 = "clr",
       formula = ~ Legend, tableY = 0, tableX = 0),
       "The arguments 'tableY', 'tableX' should not be used, as they are extracted from 'x'",
       fixed = TRUE)
   ### Check identity with original anansi output ###
-  web <- weaveWebFromTables(tableY = t(assay(metab_se, "conc")), verbose = FALSE,
-      tableX = t(assay(KO_tse, "clr")), dictionary = anansi_dic)
-  out1 <- anansi(web = web, formula  = ~ Legend, metadata = FMT_metadata, verbose = FALSE)
-  long1 <- spinToLong(anansi_output = out1, translate = TRUE, 
+  web <- weaveWebFromTables(
+    tableY = t(assay(metab_se, "conc")), tableX = t(assay(KO_tse, "clr")),
+    dictionary = anansi_dic, verbose = FALSE)
+  raw1  <- anansi(
+    web = web, formula  = ~ Legend, metadata = FMT_metadata, verbose = FALSE)
+  long1 <- spinToLong(anansi_output = raw1, translate = TRUE,
       Y_translation = cpd_translation, X_translation = KO_translation)
-  out2 <- getAnansi(mae, experiment1 = "metabolites", experiment2 = "functions",
-      assay.type1 = "conc", assay.type2 = "clr", formula = ~ Legend,
-      return.long = FALSE, verbose = FALSE)
-  long2 <- getAnansi(mae, experiment1 = "metabolites", experiment2 = "functions",
-      assay.type1 = "conc", assay.type2 = "clr", formula = ~ Legend,
-      translate = TRUE, Y_translation = cpd_translation,
+  wide1 <- spinToWide(anansi_output = raw1, translate = TRUE,
+      Y_translation = cpd_translation, X_translation = KO_translation)
+  raw2  <- getAnansi(mae, experiment1 = "metabolites",
+      experiment2 = "functions", assay.type1 = "conc", assay.type2 = "clr",
+      formula = ~ Legend, return.format = "raw", verbose = FALSE)
+  long2 <- getAnansi(mae, experiment1 = "metabolites",
+      experiment2 = "functions", assay.type1 = "conc", assay.type2 = "clr",
+      formula = ~ Legend, translate = TRUE, Y_translation = cpd_translation,
       X_translation = KO_translation, verbose = FALSE)
-  expect_identical(out1, out2)
+  wide2 <- getAnansi(mae, experiment1 = "metabolites",
+      experiment2 = "functions", assay.type1 = "conc", assay.type2 = "clr",
+      formula = ~ Legend, translate = TRUE, Y_translation = cpd_translation,
+      X_translation = KO_translation, return.format = "wide", verbose = FALSE)
+
+  expect_identical(raw1,  raw2)
   expect_identical(long1, long2)
+  expect_identical(wide1, wide2)
 })
