@@ -1,7 +1,7 @@
 Package: anansi
 Type: Package
 Title: Annotation-Based Analysis of Specific Interactions
-Version: 0.5.0
+Version: 0.6.0
 Authors@R: c(
    person("Thomaz", "Bastiaanssen", email = "thomazbastiaanssen@gmail.com", role = c("aut", "cre"), comment = c(ORCID = "0000-0001-6891-734X"))
    )
@@ -15,20 +15,24 @@ Description: Studies including both microbiome and metabolomics data are becomin
     association. 
 Depends: R (>= 3.5.0)
 Imports:
-    stats, 
+    stats,
     methods,
     utils,
     lme4,
-    future.apply, 
+    future.apply,
     propr, 
-    argonaut  
+    argonaut,
+    SummarizedExperiment,
+    MultiAssayExperiment
 Additional_repositories: 
     https://github.com/tpq/propr/, 
     https://github.com/thomazbastiaanssen/argonaut/
 Suggests:
     ggplot2,
     ggforce,
+    mia,
     patchwork,
+    TreeSummarizedExperiment,
     testthat (>= 3.0.0)
 License: file LICENSE
 Encoding: UTF-8
