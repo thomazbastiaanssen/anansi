@@ -18,32 +18,36 @@
 #' doi:https://doi.org/10.1016/j.chemolab.2021.104248
 #' @export
 #'
-clr_lite = function(counts, samples_are = "cols", method = "logunif", replicates = 1000)
-{
-  temp_counts = counts
+clr_lite <- function(counts, samples_are = "cols", method = "logunif", replicates = 1000) {
+  temp_counts <- counts
 
-  if(! method %in% c("logunif", "unif", "const"))
-  {stop("`method` must be exactly `logunif`, `unif` or `const`")}
-
-  if(method == "const"){replicates = 1}
-
-  if(samples_are == "rows"){
-    temp_counts = data.frame(t(temp_counts))
+  if (!method %in% c("logunif", "unif", "const")) {
+    stop("`method` must be exactly `logunif`, `unif` or `const`")
   }
 
-  temp_counts = apply(X          = temp_counts,
-                      MARGIN     = 2,
-                      FUN        = clr_imputed,
-                      method     = method,
-                      replicates = replicates)
-
-  if(samples_are == "rows"){
-    temp_counts = data.frame(t(temp_counts))
+  if (method == "const") {
+    replicates <- 1
   }
 
-  clr_counts = data.frame(temp_counts)
-  rownames(clr_counts) = rownames(counts)
-  colnames(clr_counts) = colnames(counts)
+  if (samples_are == "rows") {
+    temp_counts <- data.frame(t(temp_counts))
+  }
+
+  temp_counts <- apply(
+    X = temp_counts,
+    MARGIN = 2,
+    FUN = clr_imputed,
+    method = method,
+    replicates = replicates
+  )
+
+  if (samples_are == "rows") {
+    temp_counts <- data.frame(t(temp_counts))
+  }
+
+  clr_counts <- data.frame(temp_counts)
+  rownames(clr_counts) <- rownames(counts)
+  colnames(clr_counts) <- colnames(counts)
   return(clr_counts)
 }
 
@@ -53,9 +57,9 @@ clr_lite = function(counts, samples_are = "cols", method = "logunif", replicates
 #' @param x A vector of compositional data without zeroes.
 #' @return A vector of CLR-transformed data
 #'
-anansi_compute_clr = function(x){
-  #compute CLR using Aitchison's method
-  return(log(x/exp(mean(log(x)))))
+anansi_compute_clr <- function(x) {
+  # compute CLR using Aitchison's method
+  return(log(x / exp(mean(log(x)))))
 }
 
 #' Replace zeroes with non-zero values in order to perform a CLR-transformation
@@ -66,19 +70,19 @@ anansi_compute_clr = function(x){
 #' @return A vector with all the zeroes replaced with non-zero values.
 #' @importFrom stats runif
 #'
-impute_zeroes = function(vec, method = "logunif"){
-  if(! method %in% c("logunif", "unif", "const")){stop("`method` must be exactly `logunif`, `unif` or `const`")}
+impute_zeroes <- function(vec, method = "logunif") {
+  if (!method %in% c("logunif", "unif", "const")) {
+    stop("`method` must be exactly `logunif`, `unif` or `const`")
+  }
 
-  #Find detection limit
-  DL = min(vec[vec != 0])
-  if(method == "logunif"){
-    vec[vec == 0] = DL/(10^(runif(n = sum(vec == 0), min =  0, max = 1)))
-  }
-  else if(method == "unif"){
-    vec[vec == 0] = runif(n = sum(vec == 0), min =  0.1*DL, max = DL)
-  }
-  else if(method == "const"){
-    vec[vec == 0] = 0.65 * DL
+  # Find detection limit
+  DL <- min(vec[vec != 0])
+  if (method == "logunif") {
+    vec[vec == 0] <- DL / (10^(runif(n = sum(vec == 0), min = 0, max = 1)))
+  } else if (method == "unif") {
+    vec[vec == 0] <- runif(n = sum(vec == 0), min = 0.1 * DL, max = DL)
+  } else if (method == "const") {
+    vec[vec == 0] <- 0.65 * DL
   }
   return(vec)
 }
@@ -92,8 +96,10 @@ impute_zeroes = function(vec, method = "logunif"){
 #' @return a vector of CLR-transformed data
 #' @importFrom stats median
 #'
-clr_imputed = function(vec, method = "logunif", replicates = 1000){
-  if(! method %in% c("logunif", "unif", "const")){stop("`method` must be exactly `logunif`, `unif` or `const`")}
+clr_imputed <- function(vec, method = "logunif", replicates = 1000) {
+  if (!method %in% c("logunif", "unif", "const")) {
+    stop("`method` must be exactly `logunif`, `unif` or `const`")
+  }
   return(apply(replicate(replicates, anansi_compute_clr(impute_zeroes(vec = vec, method = method))), 1, median))
 }
 
@@ -110,7 +116,7 @@ softmax <- function(x) exp(x) / sum(exp(x))
 #'  A wrapper for \code{clr_lite(counts, method = "const", replicates = 1)}.
 #' @export
 #'
-clr_c <- function(counts, samples_are = "cols"){
+clr_c <- function(counts, samples_are = "cols") {
   clr_lite(counts, samples_are = samples_are, method = "const", replicates = 1)
 }
 
@@ -120,7 +126,7 @@ clr_c <- function(counts, samples_are = "cols"){
 #'  A wrapper for \code{clr_lite(counts, method = "unif")}.
 #' @export
 #'
-clr_unif <- function(counts, samples_are = "cols", replicates = 1000){
+clr_unif <- function(counts, samples_are = "cols", replicates = 1000) {
   clr_lite(counts, samples_are = samples_are, method = "unif", replicates = replicates)
 }
 
@@ -130,8 +136,6 @@ clr_unif <- function(counts, samples_are = "cols", replicates = 1000){
 #'  A wrapper for \code{clr_lite(counts, method = "logunif")}.
 #' @export
 #'
-clr_logunif <- function(counts, samples_are = "cols", replicates = 1000){
+clr_logunif <- function(counts, samples_are = "cols", replicates = 1000) {
   clr_lite(counts, samples_are = samples_are, method = "logunif", replicates = replicates)
 }
-
-

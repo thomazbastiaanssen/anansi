@@ -8,45 +8,49 @@
 #' @importFrom propr propr
 #' @seealso \code{\link{anansi}}
 #'
-wrap_propr = function(web, groups, verbose = T){
+wrap_propr <- function(web, groups, verbose = T) {
+  # Determine all groups
+  all_groups <- unique(groups)
+  # If there are numbers here, we cannot do propr by group, so we'll substitute a groups called "All" for this part.
+  if (!inherits(all_groups, "character")) {
+    all_groups <- "All"
+    groups <- rep("All", nrow(web@tableY))
+  }
 
-  #Determine all groups
-  all_groups = unique(groups)
-  #If there are numbers here, we cannot do propr by group, so we'll substitute a groups called "All" for this part.
-  if(!inherits(all_groups, "character")){all_groups = "All" ; groups = rep("All", nrow(web@tableY))}
+  # If that's all fine, we can determine the size of the output
+  else if (length(all_groups) > 1) {
+    all_groups <- c("All", all_groups)
+  }
 
-  #If that's all fine, we can determine the size of the output
-  else if(length(all_groups) > 1)
-  {all_groups = c("All", all_groups)}
+  # Generate container list of suitable length for all results
+  out_list <- vector(mode = "list", length = length(all_groups))
+  names(out_list) <- c(all_groups)
 
-  #Generate container list of suitable length for all results
-  out_list = vector(mode = "list", length = length(all_groups))
-  names(out_list) = c(all_groups)
-
-  #first run for all groups together
-  out_list$All = propr_by_group(web, groups = rep(T, nrow(web@tableY)), verbose = verbose)
-  out_list$All@subject = "All"
+  # first run for all groups together
+  out_list$All <- propr_by_group(web, groups = rep(T, nrow(web@tableY)), verbose = verbose)
+  out_list$All@subject <- "All"
 
 
-  #If verbose, verbalize.
-  if(length(all_groups) > 1){
+  # If verbose, verbalize.
+  if (length(all_groups) > 1) {
+    if (verbose) {
+      print(paste(
+        "Running proportionality for the following groups:",
+        paste(all_groups, collapse = ", ")
+      ))
+    }
 
-    if(verbose)
-    {print(paste("Running proportionality for the following groups:",
-                 paste(all_groups, collapse = ", ")))}
+    # Assess proportions for subsets if applicable.
+    # Skip 1 since that's taken by "All".
+    for (i in 2:length(all_groups)) {
+      out_by_group <- propr_by_group(web, groups = groups == all_groups[i], verbose = verbose)
+      out_by_group@subject <- all_groups[i]
 
-    #Assess proportions for subsets if applicable.
-    #Skip 1 since that's taken by "All".
-    for(i in 2:length(all_groups)){
-      out_by_group = propr_by_group(web, groups = groups == all_groups[i], verbose = verbose)
-      out_by_group@subject = all_groups[i]
-
-      out_list[[i]] = out_by_group
+      out_list[[i]] <- out_by_group
     }
   }
-  #Return results
+  # Return results
   return(out_list)
-
 }
 
 #' Run propr for all interacting features such as metabolites or functions.
@@ -60,41 +64,41 @@ wrap_propr = function(web, groups, verbose = T){
 #' @importFrom methods new
 #' @importFrom propr propr getMatrix
 #'
-propr_by_group = function(web, groups, verbose = T){
+propr_by_group <- function(web, groups, verbose = T) {
+  # Compute Rho
+  pr <- propr::propr(web@tableY[groups, ], # rows as samples, like it should be
+    metric = "rho", # or "phi", "phs", "cor", "vlr"
+    ivar = NA
+  ) # used by updateCutoffs
 
-#Compute Rho
-pr <- propr::propr(web@tableY[groups,], # rows as samples, like it should be
-                   metric = "rho",      # or "phi", "phs", "cor", "vlr"
-                   ivar = NA)           # used by updateCutoffs
+  # Extract Rho statistic
+  r <- propr::getMatrix(pr) * web@dictionary
 
-#Extract Rho statistic
-r    <- propr::getMatrix(pr) * web@dictionary
+  # Compute t-statistics based on the n and the correlation coefficient
+  n <- web@dictionary
+  n[T] <- nrow(web@tableY[groups, ])
+  t <- (r * sqrt(n - 2)) / sqrt(1 - r^2)
 
-#Compute t-statistics based on the n and the correlation coefficient
-n    <- web@dictionary
-n[T] <- nrow(web@tableY[groups,])
-t    <- (r*sqrt(n-2))/sqrt(1-r^2)
+  # Compute p-values based on t and n.
+  p <- 2 * (1 - pt(abs(t), (n - 2)))
 
-#Compute p-values based on t and n.
-p    <- 2*(1 - pt(abs(t),(n-2)))
+  # Compute naive adjusted p-values
+  q <- p
+  q[web@dictionary] <- NA
 
-#Compute naive adjusted p-values
-q    <- p
-q[web@dictionary] <- NA
-
-#Collate correlation coefficients, p-values and q-values into an anansiTale
-out  <- new("anansiTale",
-            subject    = "All",
-            type       = "rho.values",
-            estimates  = r,
-            p.values   = p,
-            q.values   = q)
-return(out)
-
+  # Collate correlation coefficients, p-values and q-values into an anansiTale
+  out <- new("anansiTale",
+    subject    = "All",
+    type       = "rho.values",
+    estimates  = r,
+    p.values   = p,
+    q.values   = q
+  )
+  return(out)
 }
 
 
-#Disabling propd for now, leaving this to be sure:
+# Disabling propd for now, leaving this to be sure:
 #'
 #' #' Run differential proportionality analysis using propr for all interacting features such as metabolites or functions.
 #' #' Wraps around the propd function.

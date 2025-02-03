@@ -7,7 +7,7 @@
 #' @return An anansiWeb object with updated tableY.
 #' @export
 #'
-adjust_web <- function(web, formula, metadata, verbose = T){
+adjust_web <- function(web, formula, metadata, verbose = T) {
   web@tableY <- pre_partial(web = web, formula = formula, metadata, verbose = verbose)
   return(web)
 }
@@ -21,13 +21,14 @@ adjust_web <- function(web, formula, metadata, verbose = T){
 #' @return An anansiWeb object with updated tableY.
 #' @importFrom stats lm residuals update.formula
 #'
-pre_partial <- function(web, formula, metadata, verbose){
-  if(verbose){print(paste("Partialling out the following terms:", paste(formula, collapse = " ")))}
-  Ypre  = web@tableY
-  Ypost = apply(Ypre, 2, FUN = function(y){
-    temp_meta = cbind(y_to_meta = y, metadata);
+pre_partial <- function(web, formula, metadata, verbose) {
+  if (verbose) {
+    print(paste("Partialling out the following terms:", paste(formula, collapse = " ")))
+  }
+  Ypre <- web@tableY
+  Ypost <- apply(Ypre, 2, FUN = function(y) {
+    temp_meta <- cbind(y_to_meta = y, metadata)
     residuals(lm(formula = update.formula(formula, new = y_to_meta ~ .), data = temp_meta))
-    }
-    )
+  })
   return(Ypost)
 }

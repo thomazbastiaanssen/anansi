@@ -56,7 +56,7 @@
 #' library(MultiAssayExperiment)
 #'
 #' # Load data
-#' data("FMT_data",  package = "anansi")
+#' data("FMT_data", package = "anansi")
 #' data("dictionary", package = "anansi")
 #'
 #' # Convert to (Tree)SummarizedExperiment objects
@@ -69,14 +69,16 @@
 #'
 #' # Remove features with less than 10% prevalence
 #' KO_tse <- subsetByPrevalent(KO_tse,
-#'                             assay.type = "counts",
-#'                             prevalence = 0.1)
+#'   assay.type = "counts",
+#'   prevalence = 0.1
+#' )
 #'
 #' # Perform a centered log-ratio transformation on the functional counts assay
 #' KO_tse <- transformAssay(KO_tse,
-#'                          assay.type = "counts",
-#'                          method = "clr",
-#'                          pseudocount = TRUE)
+#'   assay.type = "counts",
+#'   method = "clr",
+#'   pseudocount = TRUE
+#' )
 #'
 #' # Prepare colData
 #' coldata <- FMT_metadata
@@ -85,15 +87,16 @@
 #'
 #' # Combine experiments into MultiAssayExperiment object
 #' mae <- MultiAssayExperiment(
-#'     experiments = ExperimentList(metabolites = metab_se, functions = KO_tse),
-#'     colData = coldata
+#'   experiments = ExperimentList(metabolites = metab_se, functions = KO_tse),
+#'   colData = coldata
 #' )
 #'
 #' # Perform anansi analysis
 #' out <- getAnansi(mae,
-#'                  experiment1 = "metabolites", experiment2 = "functions",
-#'                  assay.type1 = "conc", assay.type2 = "clr",
-#'                  formula = ~ Legend)
+#'   experiment1 = "metabolites", experiment2 = "functions",
+#'   assay.type1 = "conc", assay.type2 = "clr",
+#'   formula = ~Legend
+#' )
 #'
 #' # Select significant interactions
 #' out <- out[out$model_full_q.values < 0.1, ]
@@ -107,38 +110,46 @@
 #' \code{\link{spinToLong}}
 #' \code{\link{spinToWide}}
 #'
-#'@name getAnansi
+#' @name getAnansi
 #'
 NULL
 
 #' @rdname getAnansi
 #' @export
-setGeneric("getAnansi", signature = c("x"),
-    function(x, ...) standardGeneric("getAnansi"))
+setGeneric("getAnansi",
+  signature = c("x"),
+  function(x, ...) standardGeneric("getAnansi")
+)
 
 #' @rdname getAnansi
 #' @export
 #' @importFrom MultiAssayExperiment MultiAssayExperiment
 #' @importFrom SummarizedExperiment assay colData
-setMethod("getAnansi", signature = c(x = "MultiAssayExperiment"),
-    function(x, experiment1 = 1, experiment2 = 2, assay.type1 = "counts",
-    assay.type2 = "counts", return.format = "long", ...) {
+setMethod("getAnansi",
+  signature = c(x = "MultiAssayExperiment"),
+  function(
+      x, experiment1 = 1, experiment2 = 2, assay.type1 = "counts",
+      assay.type2 = "counts", return.format = "long", ...) {
     # Retrieve kwargs as list
     kwargs <- list(...)
     # Check fixed arguments
     fixed_args <- c("tableY", "tableX", "web", "metadata", "anansi_output")
     remove <- names(kwargs) %in% fixed_args
     # If fixed arguments in kwargs, remove them
-    if( any(remove) ){
-        removed <- paste0(names(kwargs[remove]), sep = "'", collapse = ", '")
-        kwargs <- kwargs[!remove]
-        warning("The arguments '", removed, " should not be used, as they are ",
-        "extracted from 'x'.", call. = FALSE)
+    if (any(remove)) {
+      removed <- paste0(names(kwargs[remove]), sep = "'", collapse = ", '")
+      kwargs <- kwargs[!remove]
+      warning("The arguments '", removed, " should not be used, as they are ",
+        "extracted from 'x'.",
+        call. = FALSE
+      )
     }
     # Determine and check return.format
-    return.format <- match.arg(arg = return.format,
-                               choices = c("long", "wide", "raw"),
-                               several.ok = FALSE)
+    return.format <- match.arg(
+      arg = return.format,
+      choices = c("long", "wide", "raw"),
+      several.ok = FALSE
+    )
     # Check experiments
     mia:::.test_experiment_of_mae(x, experiment1)
     mia:::.test_experiment_of_mae(x, experiment2)
@@ -155,41 +166,52 @@ setMethod("getAnansi", signature = c(x = "MultiAssayExperiment"),
     coldata <- colData(x)
     # Combine weaveWebFromTables args into list
     web_args <- c(list(tableY = t1, tableX = t2), kwargs)
-    keep <- names(web_args) %in% c("tableY", "tableX", "dictionary",
-        "verbose", "mode", "prune", "max_sds")
+    keep <- names(web_args) %in% c(
+      "tableY", "tableX", "dictionary",
+      "verbose", "mode", "prune", "max_sds"
+    )
     web_args <- web_args[keep]
     # Generate web object
     web <- do.call(weaveWebFromTables, web_args)
     # Combine anansi args into list
     anansi_args <- c(list(web = web, metadata = coldata), kwargs)
-    keep <- names(anansi_args) %in% c("web", "method", "groups", "metadata",
-        "formula", "adjust.method", "modeltype", "resampling", "locality",
-        "reff", "verbose", "diff_cor", "ignore_dictionary")
+    keep <- names(anansi_args) %in% c(
+      "web", "method", "groups", "metadata",
+      "formula", "adjust.method", "modeltype", "resampling", "locality",
+      "reff", "verbose", "diff_cor", "ignore_dictionary"
+    )
     anansi_args <- anansi_args[keep]
     # Generate anansi output
     out <- do.call(anansi, anansi_args)
     # Based on chosen return.format
     switch(return.format,
-        long = {
-          # return output as long data.frame
-          # Combine spinToLong args into list
-          spin_args <- c(list(anansi_output = out), kwargs)
-          keep <- names(spin_args) %in% c("anansi_output", "prune", "translate",
-                                          "Y_translation", "X_translation")
-          spin_args <- spin_args[keep]
-          # Simplify anansi output
-          out <- do.call(spinToLong, spin_args)},
-        wide = {
-          # return output as wide data.frame
-          # Combine spinToWide args into list
-          spin_args <- c(list(anansi_output = out), kwargs)
-          keep <- names(spin_args) %in% c("anansi_output", "prune", "translate",
-                                          "Y_translation", "X_translation")
-          spin_args <- spin_args[keep]
-          # Simplify anansi output
-          out <- do.call(spinToWide, spin_args)},
-        raw = {}
-          # No wrangling needed if raw output is chosen
+      long = {
+        # return output as long data.frame
+        # Combine spinToLong args into list
+        spin_args <- c(list(anansi_output = out), kwargs)
+        keep <- names(spin_args) %in% c(
+          "anansi_output", "prune", "translate",
+          "Y_translation", "X_translation"
         )
+        spin_args <- spin_args[keep]
+        # Simplify anansi output
+        out <- do.call(spinToLong, spin_args)
+      },
+      wide = {
+        # return output as wide data.frame
+        # Combine spinToWide args into list
+        spin_args <- c(list(anansi_output = out), kwargs)
+        keep <- names(spin_args) %in% c(
+          "anansi_output", "prune", "translate",
+          "Y_translation", "X_translation"
+        )
+        spin_args <- spin_args[keep]
+        # Simplify anansi output
+        out <- do.call(spinToWide, spin_args)
+      },
+      raw = {}
+      # No wrangling needed if raw output is chosen
+    )
     return(out)
-})
+  }
+)
