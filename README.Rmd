@@ -12,6 +12,8 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 library(anansi)
 ```
+# Knowledge-based integration <img src="inst/assets/anansi_hex.png" align="right" width="120" />
+
 ## Introduction
 The `anansi` package computes and compares the association between the features of two 'omics datasets that are known to interact based on a database such as KEGG. Studies including both microbiome and metabolomics data are becoming more common. 
 Often, it would be helpful to integrate both datasets in order to see if they corroborate 
