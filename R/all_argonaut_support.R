@@ -121,7 +121,7 @@ weaveWebFromStratifiedTables <- function(tableY, stratifiedTableX, dictionary = 
 #' @param metadata A vector or data.frame of categorical or continuous value necessary for differential correlations. Typically a state or treatment score. If no argument provided, anansi will let you know and still to regular correlations according to your dictionary.
 #' @param formula A formula object. Used to assess differential associations.
 #' @return a list of \code{anansiTale} result objects, one for the total model, one for emergent correlations and one for disjointed correlations.
-#' @importFrom stats anova lm pf residuals na.exclude
+#' @importFrom stats anova lm pf residuals na.exclude reformulate
 #'
 glm_argonaut_calc_diff_cor <- function(web, which_dictionary, metadata, formula) {
   meta_glm <- metadata

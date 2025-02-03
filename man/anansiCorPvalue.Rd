@@ -5,12 +5,10 @@
 \title{Compute r-statistics for each featureY-featureX pair in the dictionary.
 Typically, the main \code{anansi()} function will run this for you.}
 \usage{
-anansiCorPvalue(web, method = "pearson", groups = NULL, verbose = verbose)
+anansiCorPvalue(web, groups = NULL, verbose = verbose)
 }
 \arguments{
 \item{web}{An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.}
-
-\item{method}{Correlation method. \code{method = "pearson"} is the default value. The alternatives to be passed to \code{cor()} are "spearman" and "kendall".}
 
 \item{groups}{A categorical or continuous value necessary for differential correlations. Typically a state or treatment score. If no argument provided, anansi will let you know and still to regular correlations according to your dictionary.}
 

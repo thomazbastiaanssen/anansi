@@ -6,15 +6,12 @@
 \usage{
 anansi(
   web,
-  method = "pearson",
   groups = NULL,
   metadata = NULL,
   formula = ~1,
   adjust.method = "BH",
-  modeltype = "lm",
   resampling = F,
   locality = F,
-  reff = NULL,
   verbose = T,
   diff_cor = T,
   ignore_dictionary = F
@@ -22,8 +19,6 @@ anansi(
 }
 \arguments{
 \item{web}{An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.}
-
-\item{method}{Correlation method. \code{method = "pearson"} is the default value. The alternatives to be passed to \code{cor()} are "spearman" and "kendall".}
 
 \item{groups}{A vector of the column names of categorical values in the metadata object to control which groups should be assessed for simple correlations. If no argument provided, anansi will let you know and still to regular correlations according to your dictionary.}
 
@@ -33,13 +28,9 @@ anansi(
 
 \item{adjust.method}{Method to adjust p-values for multiple comparisons. \code{adjust.method = "BH"} is the default value. See \code{p.adjust()} in the base R \code{stats} package.}
 
-\item{modeltype}{A string, either "lm" or "lmer" depending on the type of model that should be ran, or "propr" in the case of within-composition associations..}
-
 \item{resampling}{A boolean. For p-value adjustment. Toggles the resampling of p-values to help reduce the influence of dependence of p-values. Will take more time on large datasets.}
 
 \item{locality}{A boolean. For p-value adjustment. Toggles whether to prefer sampling from p-values from a comparison that shares an x or y feature. In a nutshell, considers the local p-value landscape when more important when correcting for FDR.}
-
-\item{reff}{A categorical vector typically depicting a shared ID between samples. Only for mixed effect models.}
 
 \item{verbose}{A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.}
 
@@ -88,7 +79,6 @@ web <- weaveWebFromTables(
 
 anansi_out <- anansi(
   web = web,
-  method = "pearson",
   groups = FMT_metadata$Legend,
   adjust.method = "BH",
   verbose = TRUE

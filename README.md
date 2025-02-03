@@ -160,7 +160,6 @@ object, the Third argument.
 ``` r
 anansi_out <- anansi(
   web = web,
-  method = "pearson",
   formula = ~Legend,
   metadata = FMT_metadata,
   adjust.method = "BH",

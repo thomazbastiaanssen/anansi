@@ -3,6 +3,9 @@ test_that("getAnansi", {
   library(mia)
   library(TreeSummarizedExperiment)
   library(MultiAssayExperiment)
+  ### Load data ###
+  data("FMT_data", package = "anansi")
+  data("dictionary", package = "anansi")
   ### Prepare objects ###
   metab_se <- SummarizedExperiment(assays = SimpleList(conc = as.matrix(FMT_metab)))
   KO_tse <- TreeSummarizedExperiment(assays = SimpleList(counts = as.matrix(FMT_KOs)))

@@ -1,12 +1,9 @@
 #' Calculate an association network
 #' @description This is the main workspider function in the anansi package. It manages the individual functionalities of anansi, including correlation analysis, correlation by group and differential correlation.
 #' @param web An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.
-#' @param method Correlation method. \code{method = "pearson"} is the default value. The alternatives to be passed to \code{cor()} are "spearman" and "kendall".
 #' @param metadata A vector or data.frame of categorical or continuous value necessary for differential correlations. Typically a state or treatment score. If no argument provided, anansi will let you know and still to regular correlations according to your dictionary.
 #' @param groups A vector of the column names of categorical values in the metadata object to control which groups should be assessed for simple correlations. If no argument provided, anansi will let you know and still to regular correlations according to your dictionary.
 #' @param formula A formula object. Used to assess differential associations.
-#' @param reff A categorical vector typically depicting a shared ID between samples. Only for mixed effect models.
-#' @param modeltype A string, either "lm" or "lmer" depending on the type of model that should be ran, or "propr" in the case of within-composition associations..
 #' @param adjust.method Method to adjust p-values for multiple comparisons. \code{adjust.method = "BH"} is the default value. See \code{p.adjust()} in the base R \code{stats} package.
 #' @param resampling A boolean. For p-value adjustment. Toggles the resampling of p-values to help reduce the influence of dependence of p-values. Will take more time on large datasets.
 #' @param locality A boolean. For p-value adjustment. Toggles whether to prefer sampling from p-values from a comparison that shares an x or y feature. In a nutshell, considers the local p-value landscape when more important when correcting for FDR.
@@ -50,7 +47,6 @@
 #'
 #' anansi_out <- anansi(
 #'   web = web,
-#'   method = "pearson",
 #'   groups = FMT_metadata$Legend,
 #'   adjust.method = "BH",
 #'   verbose = TRUE
@@ -113,9 +109,9 @@
 #' # See also ?spinToPlots
 #' }
 #'
-anansi <- function(web, method = "pearson", groups = NULL, metadata = NULL, formula = ~1,
-                   adjust.method = "BH", modeltype = "lm", resampling = F, locality = F,
-                   reff = NULL, verbose = T, diff_cor = T, ignore_dictionary = F) {
+anansi <- function(web, groups = NULL, metadata = NULL, formula = ~1,
+                   adjust.method = "BH", resampling = F, locality = F,
+                   verbose = T, diff_cor = T, ignore_dictionary = F) {
   if (is.vector(metadata)) {
     metadata <- data.frame(metadata = metadata)
   }
@@ -124,7 +120,7 @@ anansi <- function(web, method = "pearson", groups = NULL, metadata = NULL, form
   # If there is a formula that is not empty:
   if (!identical(all.vars(formula), character(0))) {
     unique_factors <- intersect(
-      c(reff, all.vars(formula)),
+      all.vars(formula),
       names(which(sapply(
         metadata,
         function(x) is.character(x) || is.factor(x) || is.logical(x)
@@ -143,14 +139,9 @@ anansi <- function(web, method = "pearson", groups = NULL, metadata = NULL, form
     }
   }
 
-  if (!is.null(reff)) {
-    reff <- metadata[, reff]
-  }
-
-
   if (ignore_dictionary) {
     if (verbose) {
-      print("Dictionary will be ignored. Running all vs all associations.")
+      message("Dictionary will be ignored. Running all vs all associations.")
     }
     # set dictionary to all TRUE
     web@dictionary <- web@dictionary == web@dictionary
@@ -161,35 +152,32 @@ anansi <- function(web, method = "pearson", groups = NULL, metadata = NULL, form
 
   # assess validity of input
   assess_res <- assessAnansiCall(
-    web = web, groups = groups, diff_cor = diff_cor,
-    modeltype = modeltype, reff = reff, method = method
+    web = web, groups = groups,
+    diff_cor = diff_cor
   )
 
   # adjust model call if appropriate
   groups <- assess_res$groups
   diff_cor <- assess_res$diff_cor
-  reff <- assess_res$reff
-  method <- assess_res$method
 
   # generate anansiYarn output object
-  outYarn <- new("anansiYarn", input = new("anansiInput", web = web, groups = groups, formula = formula, reff = reff))
+  outYarn <- new("anansiYarn", input = new("anansiInput", web = web, groups = groups, formula = formula))
 
   if (verbose) {
-    print("Running annotation-based correlations")
+    message("Running annotation-based correlations")
   }
 
   # initialize cor_output list object
   output <- new("anansiOutput")
 
   output@cor_results <- call_groupwise(
-    web = web, method = method,
-    groups = groups, verbose = verbose
+    web = web, groups = groups,
+    verbose = verbose
   )
 
   if (diff_cor) {
     if (verbose) {
-      print("Fitting models for differential correlation testing")
-      print(paste("Model type:", modeltype, sep = ""))
+      message("Fitting models for differential correlation testing")
     }
     output@model_results <- unlist(anansiDiffCor(
       web = web, formula = formula,
@@ -211,29 +199,17 @@ anansi <- function(web, method = "pearson", groups = NULL, metadata = NULL, form
 #' @param web web An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.
 #' @param groups A vector of categorical or continuous value necessary for differential correlations. Typically a state or treatment score. If no argument provided, anansi will let you know and still to regular correlations according to your dictionary.
 #' @param diff_cor A boolean. Toggles whether to compute differential correlations. Default is \code{TRUE}.
-#' @param reff A categorical vector typically depicting a shared ID between samples. Only for mixed effect models.
-#' @param modeltype A string, either "lm" or "lmer" depending on the type of model that should be ran.
-#' @param method Correlation method. \code{method = "pearson"} is the default value. The alternatives to be passed to \code{cor()} are "spearman" and "kendall".
 #' @return a list including a modified \code{groups} and \code{diff_cor} argument.
 #'
-assessAnansiCall <- function(web, groups, diff_cor = diff_cor, modeltype, reff, method) {
+assessAnansiCall <- function(web, groups, diff_cor = diff_cor) {
   # create output list
-  assess_out <- list(groups = groups, diff_cor = diff_cor, reff = reff, method = method)
+  assess_out <- list(groups = groups, diff_cor = diff_cor)
 
   # assess validity of input
   assessG <- assessGroups(web = web, groups = groups, diff_cor = diff_cor)
 
   assess_out$groups <- assessG$groups
   assess_out$diff_cor <- assessG$diff_cor
-
-  assessM <- assessModelType(modeltype = modeltype, reff = reff, diff_cor = diff_cor)
-
-  assess_out$diff_cor <- assessM$diff_cor
-  assess_out$reff <- assessM$reff
-
-  if (identical(web@tableY, web@tableX)) {
-    assess_out$method <- "propr"
-  }
 
   return(assess_out)
 }
@@ -289,61 +265,23 @@ assessGroups <- function(web, groups, diff_cor = diff_cor) {
   ))
 }
 
-#' Investigate validity of the model call
-#' @description checks the model call is legitimate
-#' @param reff A categorical vector typically depicting a shared ID between samples. Only for mixed effect models.
-#' @param modeltype A string, either "lm" or "lmer" depending on the type of model that should be ran.
-#' @param diff_cor A boolean. Toggles whether to compute differential correlations. Default is \code{TRUE}.
-#'
-assessModelType <- function(modeltype, reff, diff_cor) {
-  if (diff_cor) {
-    if (!modeltype %in% c("lmer", "lm")) {
-      warning("modeltype was not recognised. Needs to be exaclty `lm`, or `lmer`. Disabling differential association analysis. ")
-      diff_cor <- FALSE
-    }
-    if (modeltype == "lmer" & is.null(reff)) {
-      warning("lmer needs a categorical value for reff depicting group membership. Disabling differential association analysis. ")
-      diff_cor <- FALSE
-    }
-    if (modeltype != "lmer" & !is.null(reff)) {
-      warning("Only lmer can take a random effect. Either activate lmer or remove the reff argument. Disabling differential association analysis. ")
-      diff_cor <- FALSE
-    }
-  }
-  if (is.null(reff)) {
-    reff <- NA
-  }
-  return(list(
-    diff_cor = diff_cor,
-    reff = reff
-  ))
-}
-
 #' Manages group-wise association calls
 #' @description If the \code{groups} argument is suitable, will also run correlation analysis per group. Typically, the main \code{anansi()} function will run this for you.
 #' @param web An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.
-#' @param method Correlation method.
 #' @param groups A categorical or continuous value necessary for differential correlations. Typically a state or treatment score.
 #' @param verbose A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.
 #'
-call_groupwise <- function(web, method, groups, verbose) {
-  if (method %in% c("pearson", "kendall", "spearman")) {
+call_groupwise <- function(web, groups, verbose) {
+
     if (is(web, "argonansiWeb")) {
       return(anansiCorTestByGroup(
         web = new("anansiWeb",
           tableY     = as.matrix(web@tableY),
           tableX     = as.matrix(web@tableX),
           dictionary = as.matrix(web@strat_dict)
-        ),
-        method = method, groups = groups, verbose = verbose
+        ), groups = groups, verbose = verbose
       ))
     }
 
-    return(anansiCorTestByGroup(web = web, method = method, groups = groups, verbose = verbose))
+    return(anansiCorTestByGroup(web = web, groups = groups, verbose = verbose))
   }
-
-  if (method == "propr") {
-    stopifnot("Two different tables detected, propr is meant for within-composition association testing." = identical(web@tableY, web@tableX))
-    return(wrap_propr(web = web, groups = groups, verbose = verbose))
-  }
-}

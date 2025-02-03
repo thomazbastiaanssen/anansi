@@ -9,26 +9,24 @@
 #' @importFrom future.apply future_apply
 #' @importFrom methods is
 #'
-anansiDiffCor <- function(web, metadata, formula, verbose = T) {
+anansiDiffCor <- function(web, metadata, formula, verbose = TRUE) {
   # Create a matrix with row and column coordinates to cycle through the
   # relevant comparisons in tableY and tableX.
-  which_dictionary <- which(get_dict(web), arr.ind = T, useNames = F)
+  which_dictionary <- which(get_dict(web), arr.ind = TRUE, useNames = FALSE)
 
   raw_terms <- terms.formula(formula, "Error", data = metadata)
   indError <- attr(raw_terms, "specials")$Error
   all_terms <- labels(raw_terms)
+  stopifnot("hue" = length(all_terms) > length(indError))
   if (!is.null(indError)) all_terms <- all_terms[-indError]
 
-  lm.metadata <- cbind(x = 1, metadata)
-
+  lm.metadata <- subset_metadata(metadata, all_terms, raw_terms, indError)
   # Make saturated model
   sat_model <- make_saturated_model(formula, raw_terms, indError, verbose)
 
   # Compute shape of model.matrix and initialize qr.mm
   contr <- make_contrasts(lm.metadata)
-  base.mm <- suppressWarnings(
-    model.matrix.default(sat_model, lm.metadata, contrasts.arg = contr)
-  )
+  base.mm <- model.matrix.default(sat_model, lm.metadata, contrasts.arg = contr)
 
   # identify the columns of the variables that change based on X-variable
   x.fct <- get_x.fct(sat_model, indError, raw_terms)
@@ -162,7 +160,9 @@ fast.qr.resid <- function(x, y) {
 #' @noRd
 #'
 dfmat <- function(x.assign, x.int, all.assign, x.fct, n) {
-  df0 <- colSums(!sapply(x.assign, function(x) index.self.high(x, all.assign, x.fct)))
+  df0 <- colSums(
+    !sapply(x.assign, function(x) index.self.high(x, all.assign, x.fct))
+    )
   df1 <- c(
     sum(index.self.high(x.assign[1], all.assign, x.fct)),
     sapply(x.int, function(x) sum(all.assign %in% x))
@@ -302,6 +302,7 @@ index.disj <- function(x, all.assign, x.fct) {
 
 #' Prepare saturated model, deal with \code{Error} terms.
 #' @noRd
+#' @importFrom stats as.formula
 #'
 make_saturated_model <- function(formula, raw_terms, indError, verbose) {
   # Simple case; No random intercept; make regular saturated model
@@ -369,4 +370,15 @@ get_x.fct <- function(sat_model, indError, raw_terms) {
   }
 
   return(`dimnames<-`(x.fct, NULL))
+}
+
+#' Generate table, to compute contrasts, basis for base.mm
+#' @noRd
+#'
+subset_metadata <- function(metadata, keep, raw_terms, indError){
+
+  if (!is.null(indError)) {keep =
+      c(keep, deparse1(attr(raw_terms, "variables")[[1L + indError]][[2L]],
+                       backtick = TRUE))}
+  return(cbind(x = 1, metadata[, colnames(metadata) %in% keep, drop = FALSE] ))
 }

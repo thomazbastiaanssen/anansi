@@ -119,7 +119,6 @@ The main workspider in this package is called `anansi`. Generally, you want to g
 ```{r, eval=TRUE}
 anansi_out <- anansi(
   web = web,
-  method = "pearson",
   formula = ~Legend,
   metadata = FMT_metadata,
   adjust.method = "BH",

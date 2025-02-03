@@ -176,9 +176,9 @@ setMethod("getAnansi",
     # Combine anansi args into list
     anansi_args <- c(list(web = web, metadata = coldata), kwargs)
     keep <- names(anansi_args) %in% c(
-      "web", "method", "groups", "metadata",
-      "formula", "adjust.method", "modeltype", "resampling", "locality",
-      "reff", "verbose", "diff_cor", "ignore_dictionary"
+      "web", "groups", "metadata", "formula",
+      "adjust.method", "resampling", "locality",
+      "verbose", "diff_cor", "ignore_dictionary"
     )
     anansi_args <- anansi_args[keep]
     # Generate anansi output
