@@ -1,7 +1,7 @@
 <p align="justify">
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# Knowledge-based integration <img src="inst/assets/anansi_hex.png" align="right" width="120" />
+# Knowledge-based multi-modal integration using anansi <img src="inst/assets/anansi_hex.png" align="right" width="120" />
 
 ## Introduction
 
