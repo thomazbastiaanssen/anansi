@@ -4,7 +4,7 @@
 \alias{anansiCorTestByGroup}
 \title{Run correlations for all interacting metabolites and functions.}
 \usage{
-anansiCorTestByGroup(web, groups, verbose = T)
+anansiCorTestByGroup(web, groups, verbose = TRUE)
 }
 \arguments{
 \item{web}{An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.}

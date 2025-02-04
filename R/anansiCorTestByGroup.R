@@ -6,7 +6,7 @@
 #' @return a list of \code{anansiTale} result objects, one for the total dataset and per group if applicable.
 #' @seealso \code{\link{anansi}}
 #'
-anansiCorTestByGroup <- function(web, groups, verbose = T) {
+anansiCorTestByGroup <- function(web, groups, verbose = TRUE) {
   # Determine all groups
   all_groups <- unique(groups)
   # If there are numbers here, we cannot do cor by group, so we'll substitute a groups called "All" for this part.
@@ -25,14 +25,14 @@ anansiCorTestByGroup <- function(web, groups, verbose = T) {
   names(out_list) <- c(all_groups)
 
   # first run for all groups together
-  out_list$All <- anansiCorPvalue(web, groups = rep(T, nrow(web@tableY)), verbose = verbose)
+  out_list$All <- anansiCorPvalue(web, groups = rep(TRUE, nrow(web@tableY)), verbose = verbose)
   out_list$All@subject <- "All"
 
 
   # If verbose, verbalize.
   if (length(all_groups) > 1) {
     if (verbose) {
-      print(paste(
+      message(paste(
         "Running correlations for the following groups:",
         paste(all_groups, collapse = ", ")
       ))
@@ -67,7 +67,7 @@ anansiCorPvalue <- function(web, groups = NULL, verbose = verbose) {
 
   # Compute t-statistics based on the n and the correlation coefficient
   n <- web@dictionary
-  n[T] <- nrow(web@tableY[groups, ])
+  n[TRUE] <- nrow(web@tableY[groups, ])
   t <- (r * sqrt(n - 2)) / sqrt(1 - r^2)
 
   # Compute p-values based on t and n.
@@ -100,7 +100,7 @@ anansiCor <- function(web, groups = NULL) {
   # Run correlations on subsections of your data
   merge <- cbind(web@tableY[groups, ], web@tableX[groups, ])
   cors <- cor(merge, method = "pearson", use = "pairwise.complete.obs")
-  cors_bipartite <- cors[1:ncol(web@tableY), (ncol(web@tableY) + 1):ncol(cors)]
+  cors_bipartite <- cors[seq_len(NCOL(web@tableY)), (ncol(web@tableY) + 1):ncol(cors)]
   # set non-canonical correlations to zero using the binary adjacency matrix.
   return(cors_bipartite * web@dictionary)
 }

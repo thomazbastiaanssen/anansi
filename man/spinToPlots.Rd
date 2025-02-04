@@ -7,7 +7,7 @@
 spinToPlots(
   anansiYarn,
   target = anansiYarn@input@web@dictionary,
-  translate = F,
+  translate = FALSE,
   Y_translation = NULL,
   X_translation = NULL
 )
