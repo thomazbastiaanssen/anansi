@@ -242,13 +242,7 @@ make_saturated_model <- function(formula, raw_terms, indErr, verbose) {
   }
 
   # Case with repeated measures:
-  if (length(indErr) > 1L) {
-    stop(sprintf(ngettext(
-      length(indErr),
-      "there are %d Error terms: only 1 is allowed"
-    ), length(indErr)), domain = NA)
-  }
-
+ stopifnot("Only one Error() term allowed; more detected." = length(indErr) < 2)
   errorterm <- attr(raw_terms, "variables")[[1L + indErr]]
   sat_model <- update.formula(old = formula, new = as.formula(
     paste(
@@ -272,6 +266,5 @@ make_saturated_model <- function(formula, raw_terms, indErr, verbose) {
       "' as random intercept."
     ))
   }
-
   return(sat_model)
 }
