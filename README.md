@@ -1,6 +1,8 @@
 <p align="justify">
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
+# Knowledge-based multi-modal integration using anansi <img src="inst/assets/anansi_hex.png" align="right" width="120" />
+
 ## Introduction
 
 The `anansi` package computes and compares the association between the
@@ -54,21 +56,21 @@ A very early version of `anansi` was used to generate “Extended Data
 Fig. 7” in that paper.
 
 ``` r
-#install and load anansi
-#devtools::install_github("thomazbastiaanssen/anansi")
+# install and load anansi
+# devtools::install_github("thomazbastiaanssen/anansi")
 library(anansi)
 
-#load ggplot2 and ggforce to plot results
+# load ggplot2 and ggforce to plot results
 library(ggplot2)
 library(ggforce)
 
-#Anansi supports parallelisation through the future.apply framework. You can call it like this:
-#plan(multisession)
+# Anansi supports parallelisation through the future.apply framework. You can call it like this:
+# plan(multisession)
 
-#load anansi dictionary and complementary human-readable names for KEGG compounds and orthologues
+# load anansi dictionary and complementary human-readable names for KEGG compounds and orthologues
 data(dictionary)
 
-#load example data + metadata from FMT Aging study
+# load example data + metadata from FMT Aging study
 data(FMT_data)
 ```
 
@@ -109,26 +111,26 @@ KEGG Orthologues (KOs). These tables can be directly plugged in to
 `anansi`.
 
 ``` r
-#Clean and CLR-transform the KEGG orthologue table.
+# Clean and CLR-transform the KEGG orthologue table.
 
-#Only keep functions that are represented in the dictionary.
-KOs     <- FMT_KOs[row.names(FMT_KOs) %in% sort(unique(unlist(anansi_dic))),]
+# Only keep functions that are represented in the dictionary.
+KOs <- FMT_KOs[row.names(FMT_KOs) %in% sort(unique(unlist(anansi_dic))), ]
 
-#Cut the decimal part off.
-KOs     <- floor(KOs)
+# Cut the decimal part off.
+KOs <- floor(KOs)
 
-#Ensure all entires are numbers.
-KOs     <- apply(KOs,c(1,2),function(x) as.numeric(as.character(x)))
+# Ensure all entires are numbers.
+KOs <- apply(KOs, c(1, 2), function(x) as.numeric(as.character(x)))
 
-#Remove all features with < 10% prevalence in the dataset.
-KOs     <- KOs[apply(KOs == 0, 1, sum) <= (ncol(KOs) * 0.90), ] 
+# Remove all features with < 10% prevalence in the dataset.
+KOs <- KOs[apply(KOs == 0, 1, sum) <= (ncol(KOs) * 0.90), ]
 
-#Perform a centered log-ratio transformation on the functional count table.
+# Perform a centered log-ratio transformation on the functional count table.
 KOs.exp <- clr_c(KOs)
 
-#anansi expects samples to be rows and features to be columns. 
-t1      <- t(FMT_metab)
-t2      <- t(KOs.exp)
+# anansi expects samples to be rows and features to be columns.
+t1 <- t(FMT_metab)
+t2 <- t(KOs.exp)
 ```
 
 ## Weave a web🕸️
@@ -156,13 +158,13 @@ assess differential associations between treatments, we use the formula
 object, the Third argument.
 
 ``` r
-anansi_out <- anansi(web      = web,          #Generated above
-                     method   = "pearson",    #Define the type of correlation used
-                     formula  = ~ Legend,     #Compare associations between treatments
-                     metadata = FMT_metadata, #With data referred to in the formula as column
-                     adjust.method = "BH",    #Apply the Benjamini-Hochberg procedure for FDR
-                     verbose  = T             #To let you know what's happening
-                     )
+anansi_out <- anansi(
+  web = web,
+  formula = ~Legend,
+  metadata = FMT_metadata,
+  adjust.method = "BH",
+  verbose = TRUE
+)
 ```
 
     ## [1] "Running annotation-based correlations"
@@ -185,13 +187,15 @@ to gain some insights in the state of your p, q, R and R<sup>2</sup>
 parameters.
 
 ``` r
-anansiLong <- spinToLong(anansi_output = anansi_out, translate = T, 
-                         Y_translation = anansi::cpd_translation, 
-                         X_translation = anansi::KO_translation)  
-#Now it's ready to be plugged into ggplot2, though let's clean up a bit more. 
+anansiLong <- spinToLong(
+  anansi_output = anansi_out, translate = T,
+  Y_translation = anansi::cpd_translation,
+  X_translation = anansi::KO_translation
+)
 
-#Only consider interactions where the entire model fits well enough. 
-anansiLong <- anansiLong[anansiLong$model_full_q.values < 0.1,]
+# Now it's ready to be plugged into ggplot2, though let's clean up a bit more.
+# Only consider interactions where the entire model fits well enough.
+anansiLong <- anansiLong[anansiLong$model_full_q.values < 0.1, ]
 ```
 
 ## Plot the results
@@ -200,31 +204,40 @@ The long format can be helpful to plug the data into `ggplot2`. Here, we
 recreate part of the results from the FMT Aging study.
 
 ``` r
-ggplot(data = anansiLong, 
-       aes(x      = r.values, 
-           y      = feature_X, 
-           fill   = type, 
-           alpha  = model_disjointed_Legend_p.values < 0.05)) + 
-  
-  #Make a vertical dashed red line at x = 0
-  geom_vline(xintercept = 0, linetype = "dashed", colour = "red")+
-  
-  #Points show  raw correlation coefficients
-  geom_point(shape = 21, size = 3) + 
-  
-  #facet per compound
-  ggforce::facet_col(~feature_Y, space = "free", scales = "free_y") + 
-  
-  #fix the scales, labels, theme and other layout
+ggplot(anansiLong) +
+
+  # Define aesthetics
+  aes(
+    x = r.values, y = feature_X,
+    fill = type, alpha = model_disjointed_Legend_p.values < 0.05
+  ) +
+
+  # Make a vertical dashed red line at x = 0
+  geom_vline(xintercept = 0, linetype = "dashed", colour = "red") +
+
+  # Points show  raw correlation coefficients
+  geom_point(shape = 21, size = 3) +
+
+  # facet per compound
+  ggforce::facet_col(~feature_Y, space = "free", scales = "free_y") +
+
+  # fix the scales, labels, theme and other layout
   scale_y_discrete(limits = rev, position = "right") +
-  scale_alpha_manual(values = c("TRUE" = 1, "FALSE" = 1/3), "Disjointed association\np < 0.05") +
-  scale_fill_manual(values = c("Young yFMT" = "#2166ac", 
-                               "Aged oFMT"  = "#b2182b", 
-                               "Aged yFMT"  = "#ef8a62", 
-                               "All"        = "gray"), 
-                    breaks = c("Young yFMT", "Aged oFMT", "Aged yFMT", "All"), "Treatment")+
-  theme_bw() + 
-  ylab("") + 
+  scale_alpha_manual(
+    values = c("TRUE" = 1, "FALSE" = 1 / 3),
+    "Disjointed association\np < 0.05"
+  ) +
+  scale_fill_manual(
+    values = c(
+      "Young yFMT" = "#2166ac",
+      "Aged oFMT" = "#b2182b",
+      "Aged yFMT" = "#ef8a62",
+      "All" = "gray"
+    ),
+    breaks = c("Young yFMT", "Aged oFMT", "Aged yFMT", "All"), "Treatment"
+  ) +
+  theme_bw() +
+  ylab("") +
   xlab("Pearson's \u03c1")
 ```
 

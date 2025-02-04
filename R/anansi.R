@@ -1,13 +1,9 @@
-
 #' Calculate an association network
 #' @description This is the main workspider function in the anansi package. It manages the individual functionalities of anansi, including correlation analysis, correlation by group and differential correlation.
 #' @param web An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.
-#' @param method Correlation method. \code{method = "pearson"} is the default value. The alternatives to be passed to \code{cor()} are "spearman" and "kendall".
 #' @param metadata A vector or data.frame of categorical or continuous value necessary for differential correlations. Typically a state or treatment score. If no argument provided, anansi will let you know and still to regular correlations according to your dictionary.
 #' @param groups A vector of the column names of categorical values in the metadata object to control which groups should be assessed for simple correlations. If no argument provided, anansi will let you know and still to regular correlations according to your dictionary.
 #' @param formula A formula object. Used to assess differential associations.
-#' @param reff A categorical vector typically depicting a shared ID between samples. Only for mixed effect models.
-#' @param modeltype A string, either "lm" or "lmer" depending on the type of model that should be ran, or "propr" in the case of within-composition associations..
 #' @param adjust.method Method to adjust p-values for multiple comparisons. \code{adjust.method = "BH"} is the default value. See \code{p.adjust()} in the base R \code{stats} package.
 #' @param resampling A boolean. For p-value adjustment. Toggles the resampling of p-values to help reduce the influence of dependence of p-values. Will take more time on large datasets.
 #' @param locality A boolean. For p-value adjustment. Toggles whether to prefer sampling from p-values from a comparison that shares an x or y feature. In a nutshell, considers the local p-value landscape when more important when correcting for FDR.
@@ -18,160 +14,179 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' #Load example data:
+#' # Load example data:
 #'
 #' data(dictionary)
 #' data(FMT_data)
 #'
-#' #Clean and prepare the example data.
-#' #In the example dataset, the metabolites are already cleaned.
+#' # Clean and prepare the example data.
+#' # In the example dataset, the metabolites are already cleaned.
 #'
-#' KOs   <- floor(FMT_KOs)
-#' KOs   <- apply(KOs,c(1,2),function(x) as.numeric(as.character(x)))
-#' KOs   <- KOs[apply(KOs == 0, 1, sum) <= (ncol(KOs) * 0.90), ]
+#' KOs <- floor(FMT_KOs)
+#' KOs <- apply(KOs, c(1, 2), function(x) as.numeric(as.character(x)))
+#' KOs <- KOs[apply(KOs == 0, 1, sum) <= (ncol(KOs) * 0.90), ]
 #'
-#' KOs   <- KOs[row.names(KOs) %in% sort(unique(unlist(anansi_dic))),]
+#' KOs <- KOs[row.names(KOs) %in% sort(unique(unlist(anansi_dic))), ]
 #'
-#' #CLR-transform.
+#' # CLR-transform.
 #'
-#' KOs.exp = clr_c(KOs)
+#' KOs.exp <- clr_c(KOs)
 #'
-#' #Make sure that columns are features and rows are samples.
+#' # Make sure that columns are features and rows are samples.
 #'
-#' t1 = t(FMT_metab)
-#' t2 = t(KOs.exp)
+#' t1 <- t(FMT_metab)
+#' t2 <- t(KOs.exp)
 #'
-#' #Run anansi pipeline.
+#' # Run anansi pipeline.
 #'
-#' web        = weaveWebFromTables(tableY     = t1,
-#'                                 tableX     = t2,
-#'                                 dictionary = anansi_dic)
+#' web <- weaveWebFromTables(
+#'   tableY = t1,
+#'   tableX = t2,
+#'   dictionary = anansi_dic
+#' )
 #'
-#' anansi_out = anansi(web     = web,
-#'                     method  = "pearson",
-#'                     groups  = FMT_metadata$Legend,
-#'                     adjust.method = "BH",
-#'                     verbose = TRUE)
+#' anansi_out <- anansi(
+#'   web = web,
+#'   groups = FMT_metadata$Legend,
+#'   adjust.method = "BH",
+#'   verbose = TRUE
+#' )
 #'
-#' results    = spinToWide(anansi_output = anansi_out, translate = T,
-#'                         Y_translation = anansi::cpd_translation,
-#'                         X_translation = anansi::KO_translation)
+#' results <- spinToWide(
+#'   anansi_output = anansi_out, translate = T,
+#'   Y_translation = anansi::cpd_translation,
+#'   X_translation = anansi::KO_translation
+#' )
 #'
-#' #To recreate the long plot:
+#' # To recreate the long plot:
 #' library(ggplot2)
 #'
-#' anansiLong <- spinToLong(anansi_output = anansi_out, translate = T,
-#'                          Y_translation = anansi::cpd_translation,
-#'                          X_translation = anansi::KO_translation)
+#' anansiLong <- spinToLong(
+#'   anansi_output = anansi_out, translate = T,
+#'   Y_translation = anansi::cpd_translation,
+#'   X_translation = anansi::KO_translation
+#' )
 #'
-#' #Now it's ready to be plugged into ggplot2, though let's clean up a bit more.
+#' # Now it's ready to be plugged into ggplot2, though let's clean up a bit more.
 #'
-#' #Only consider interactions where the entire model fits well enough.
-#' anansiLong <- anansiLong[anansiLong$model_full_q.values < 0.1,]
+#' # Only consider interactions where the entire model fits well enough.
+#' anansiLong <- anansiLong[anansiLong$model_full_q.values < 0.1, ]
 #'
 #'
 #'
-#' ggplot(data = anansiLong,
-#'        aes(x      = r.values,
-#'            y      = feature_X,
-#'            fill   = type,
-#'            alpha  = model_disjointed_p.values < 0.05)) +
+#' ggplot(
+#'   data = anansiLong,
+#'   aes(
+#'     x = r.values,
+#'     y = feature_X,
+#'     fill = type,
+#'     alpha = model_disjointed_p.values < 0.05
+#'   )
+#' ) +
 #'
-#' #Make a vertical dashed red line at x = 0
-#' geom_vline(xintercept = 0, linetype = "dashed", colour = "red")+
+#'   # Make a vertical dashed red line at x = 0
+#'   geom_vline(xintercept = 0, linetype = "dashed", colour = "red") +
 #'
-#' #Points show  raw correlation coefficients
-#' geom_point(shape = 21, size = 3) +
+#'   # Points show  raw correlation coefficients
+#'   geom_point(shape = 21, size = 3) +
 #'
-#' #facet per compound
-#' ggforce::facet_col(~feature_Y, space = "free", scales = "free_y") +
+#'   # facet per compound
+#'   ggforce::facet_col(~feature_Y, space = "free", scales = "free_y") +
 #'
-#' #fix the scales, labels, theme and other layout
-#' scale_y_discrete(limits = rev, position = "right") +
-#' scale_alpha_manual(values = c("TRUE" = 1, "FALSE" = 1/3)) +
-#' scale_fill_manual(values = c("Young yFMT" = "#2166ac",
-#'                              "Aged oFMT"  = "#b2182b",
-#'                              "Aged yFMT"  = "#ef8a62",
-#'                              "All"        = "gray"))+
-#' theme_bw() +
-#' ylab("") +
-#' xlab("Pearson's rho")
+#'   # fix the scales, labels, theme and other layout
+#'   scale_y_discrete(limits = rev, position = "right") +
+#'   scale_alpha_manual(values = c("TRUE" = 1, "FALSE" = 1 / 3)) +
+#'   scale_fill_manual(values = c(
+#'     "Young yFMT" = "#2166ac",
+#'     "Aged oFMT" = "#b2182b",
+#'     "Aged yFMT" = "#ef8a62",
+#'     "All" = "gray"
+#'   )) +
+#'   theme_bw() +
+#'   ylab("") +
+#'   xlab("Pearson's rho")
 #'
-#' #See also ?spinToPlots
+#' # See also ?spinToPlots
 #' }
 #'
-anansi = function(web, method = "pearson", groups = NULL,  metadata = NULL, formula = ~1,
-                  adjust.method = "BH", modeltype = "lm", resampling = F, locality = F,
-                  reff = NULL, verbose = T, diff_cor = T, ignore_dictionary = F){
-
-  if(is.vector(metadata)){
-    metadata = data.frame(metadata = metadata)
+anansi <- function(web, groups = NULL, metadata = NULL, formula = ~1,
+                   adjust.method = "BH", resampling = F, locality = F,
+                   verbose = T, diff_cor = T, ignore_dictionary = F) {
+  if (is.vector(metadata)) {
+    metadata <- data.frame(metadata = metadata)
   }
 
 
-  #If there is a formula that is not empty:
-  if(!identical(all.vars(formula), character(0))){
-    unique_factors = intersect(
-      c(reff, all.vars(formula)),
-      names(which(sapply(metadata,
-                         function(x) is.character(x) || is.factor(x) || is.logical(x))))
+  # If there is a formula that is not empty:
+  if (!identical(all.vars(formula), character(0))) {
+    unique_factors <- intersect(
+      all.vars(formula),
+      names(which(sapply(
+        metadata,
+        function(x) is.character(x) || is.factor(x) || is.logical(x)
+      )))
     )
 
-    if(!is.null(groups)){
-      unique_factors = groups
+    if (!is.null(groups)) {
+      unique_factors <- groups
     }
 
-    metadata_factors = metadata[,unique_factors]
-    groups = do.call(paste, c(data.frame(metadata_factors), sep = "_"))
+    metadata_factors <- metadata[, unique_factors]
+    groups <- do.call(paste, c(data.frame(metadata_factors), sep = "_"))
 
-    if(length(c(groups)) == 0){
+    if (length(c(groups)) == 0) {
       groups <- NULL
     }
-
   }
 
-  if(!is.null(reff)){
-    reff = metadata[,reff]
-  }
-
-
-  if(ignore_dictionary){
-    if(verbose){print("Dictionary will be ignored. Running all vs all associations.")}
-    #set dictionary to all TRUE
+  if (ignore_dictionary) {
+    if (verbose) {
+      message("Dictionary will be ignored. Running all vs all associations.")
+    }
+    # set dictionary to all TRUE
     web@dictionary <- web@dictionary == web@dictionary
-    if(is(web, "argonansiWeb")){web@strat_dict <- web@strat_dict == web@strat_dict}
+    if (is(web, "argonansiWeb")) {
+      web@strat_dict <- web@strat_dict == web@strat_dict
+    }
   }
 
-  #assess validity of input
-  assess_res      = assessAnansiCall(web = web, groups = groups, diff_cor = diff_cor,
-                                     modeltype = modeltype, reff = reff, method = method)
+  # assess validity of input
+  assess_res <- assessAnansiCall(
+    web = web, groups = groups,
+    diff_cor = diff_cor
+  )
 
-  #adjust model call if appropriate
-  groups          = assess_res$groups
-  diff_cor        = assess_res$diff_cor
-  reff            = assess_res$reff
-  method          = assess_res$method
+  # adjust model call if appropriate
+  groups <- assess_res$groups
+  diff_cor <- assess_res$diff_cor
 
-  #generate anansiYarn output object
-  outYarn = new("anansiYarn", input = new("anansiInput", web = web, groups = groups, formula = formula, reff = reff))
+  # generate anansiYarn output object
+  outYarn <- new("anansiYarn", input = new("anansiInput", web = web, groups = groups, formula = formula))
 
-  if(verbose){print("Running annotation-based correlations")}
-
-  #initialize cor_output list object
-  output = new("anansiOutput")
-
-  output@cor_results     = call_groupwise(web     = web, method  = method,
-                                          groups  = groups, verbose = verbose)
-
-  if(diff_cor){
-    if(verbose){print("Fitting models for differential correlation testing")
-      print(paste("Model type:", modeltype, sep = ""))}
-    output@model_results = unlist(anansiDiffCor(web = web, formula = formula,
-                                                metadata = metadata, verbose = verbose))
+  if (verbose) {
+    message("Running annotation-based correlations")
   }
-  outYarn@output = output
 
-  #FDR
+  # initialize cor_output list object
+  output <- new("anansiOutput")
+
+  output@cor_results <- call_groupwise(
+    web = web, groups = groups,
+    verbose = verbose
+  )
+
+  if (diff_cor) {
+    if (verbose) {
+      message("Fitting models for differential correlation testing")
+    }
+    output@model_results <- unlist(anansiDiffCor(
+      web = web, formula = formula,
+      metadata = metadata, verbose = verbose
+    ))
+  }
+  outYarn@output <- output
+
+  # FDR
   outYarn <- anansiAdjustP(x = outYarn, method = adjust.method, resampling = resampling, locality = locality, verbose = verbose)
 
   return(outYarn)
@@ -184,29 +199,17 @@ anansi = function(web, method = "pearson", groups = NULL,  metadata = NULL, form
 #' @param web web An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.
 #' @param groups A vector of categorical or continuous value necessary for differential correlations. Typically a state or treatment score. If no argument provided, anansi will let you know and still to regular correlations according to your dictionary.
 #' @param diff_cor A boolean. Toggles whether to compute differential correlations. Default is \code{TRUE}.
-#' @param reff A categorical vector typically depicting a shared ID between samples. Only for mixed effect models.
-#' @param modeltype A string, either "lm" or "lmer" depending on the type of model that should be ran.
-#' @param method Correlation method. \code{method = "pearson"} is the default value. The alternatives to be passed to \code{cor()} are "spearman" and "kendall".
 #' @return a list including a modified \code{groups} and \code{diff_cor} argument.
 #'
-assessAnansiCall <- function(web, groups, diff_cor = diff_cor, modeltype, reff, method){
-  #create output list
-  assess_out <- list(groups = groups, diff_cor = diff_cor, reff = reff, method = method)
+assessAnansiCall <- function(web, groups, diff_cor = diff_cor) {
+  # create output list
+  assess_out <- list(groups = groups, diff_cor = diff_cor)
 
-  #assess validity of input
-  assessG         = assessGroups(web = web, groups = groups, diff_cor = diff_cor)
+  # assess validity of input
+  assessG <- assessGroups(web = web, groups = groups, diff_cor = diff_cor)
 
-  assess_out$groups          = assessG$groups
-  assess_out$diff_cor        = assessG$diff_cor
-
-  assessM         = assessModelType(modeltype = modeltype, reff = reff, diff_cor = diff_cor)
-
-  assess_out$diff_cor        = assessM$diff_cor
-  assess_out$reff            = assessM$reff
-
-  if(identical(web@tableY, web@tableX)){
-    assess_out$method = "propr"
-  }
+  assess_out$groups <- assessG$groups
+  assess_out$diff_cor <- assessG$diff_cor
 
   return(assess_out)
 }
@@ -220,98 +223,65 @@ assessAnansiCall <- function(web, groups, diff_cor = diff_cor, modeltype, reff, 
 #' @param diff_cor A boolean. Toggles whether to compute differential correlations. Default is \code{TRUE}.
 #' @return a list including a modified \code{groups} and \code{diff_cor} argument.
 #'
-assessGroups <- function(web, groups, diff_cor = diff_cor){
-
-  #first let's catch any trouble with factors.
-if (inherits(groups, "factor")){
-  groups <- as.character(groups)
+assessGroups <- function(web, groups, diff_cor = diff_cor) {
+  # first let's catch any trouble with factors.
+  if (inherits(groups, "factor")) {
+    groups <- as.character(groups)
   }
-  #Three main options for data coming in:
-  #1) groups is empty/NA
-  #2) groups is numerical for diff_cor only
-  #3) groups is categorical for diff_cor and cor_by_group
+  # Three main options for data coming in:
+  # 1) groups is empty/NA
+  # 2) groups is numerical for diff_cor only
+  # 3) groups is categorical for diff_cor and cor_by_group
 
-#Check if groups has the same length as the number of observations.
-if(!is.null(groups) & length(groups) != nrow(web@tableY)){
-  warning("The `groups` argument has a different length than your input tables. \nSomething is likely wrong, please check your input. ")
-  diff_cor = F
-  groups = rep("All", nrow(web@tableY))
-}
-
-#check if groups is missing or broken
-if(diff_cor){
-
-  if(is.null(groups) | any(is.na(groups))){
-    message("Please be aware that the `groups` argument is missing or contains NAs. \nAnansi will proceed without differential association testing")
-    diff_cor = F
-    groups = rep("All", nrow(web@tableY))
+  # Check if groups has the same length as the number of observations.
+  if (!is.null(groups) & length(groups) != nrow(web@tableY)) {
+    warning("The `groups` argument has a different length than your input tables. \nSomething is likely wrong, please check your input. ")
+    diff_cor <- F
+    groups <- rep("All", nrow(web@tableY))
   }
-}
 
-#In the case that groups is categorical, check if there are enough observations per group.
-if(inherits(groups, "character")){
-  if(!all(table(groups) > 3)) {
-    warning("The `groups` argument is categorical, but not all groups have at least three observations.
+  # check if groups is missing or broken
+  if (diff_cor) {
+    if (is.null(groups) | any(is.na(groups))) {
+      message("Please be aware that the `groups` argument is missing or contains NAs. \nAnansi will proceed without differential association testing")
+      diff_cor <- F
+      groups <- rep("All", nrow(web@tableY))
+    }
+  }
+
+  # In the case that groups is categorical, check if there are enough observations per group.
+  if (inherits(groups, "character")) {
+    if (!all(table(groups) > 3)) {
+      warning("The `groups` argument is categorical, but not all groups have at least three observations.
               Correlations per group cannot be done. Please check your groups. ")
-    diff_cor = F
-    groups = rep("All", nrow(web@tableY))
-  }
-
-}
-
-return(list(diff_cor = diff_cor,
-            groups   = groups))
-}
-
-#' Investigate validity of the model call
-#' @description checks the model call is legitimate
-#' @param reff A categorical vector typically depicting a shared ID between samples. Only for mixed effect models.
-#' @param modeltype A string, either "lm" or "lmer" depending on the type of model that should be ran.
-#' @param diff_cor A boolean. Toggles whether to compute differential correlations. Default is \code{TRUE}.
-#'
-assessModelType <- function(modeltype, reff, diff_cor){
-  if(diff_cor){
-    if(!modeltype %in% c("lmer", "lm")){
-      warning("modeltype was not recognised. Needs to be exaclty `lm`, or `lmer`. Disabling differential association analysis. ")
-      diff_cor = FALSE
-    }
-    if(modeltype == "lmer" & is.null(reff)){
-      warning("lmer needs a categorical value for reff depicting group membership. Disabling differential association analysis. ")
-      diff_cor = FALSE
-    }
-    if(modeltype != "lmer" & !is.null(reff)){
-      warning("Only lmer can take a random effect. Either activate lmer or remove the reff argument. Disabling differential association analysis. ")
-      diff_cor = FALSE
+      diff_cor <- F
+      groups <- rep("All", nrow(web@tableY))
     }
   }
-  if(is.null(reff)){reff = NA}
-  return(list(diff_cor = diff_cor,
-              reff     = reff))
+
+  return(list(
+    diff_cor = diff_cor,
+    groups = groups
+  ))
 }
 
 #' Manages group-wise association calls
 #' @description If the \code{groups} argument is suitable, will also run correlation analysis per group. Typically, the main \code{anansi()} function will run this for you.
 #' @param web An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.
-#' @param method Correlation method.
 #' @param groups A categorical or continuous value necessary for differential correlations. Typically a state or treatment score.
 #' @param verbose A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.
 #'
-call_groupwise <- function(web, method, groups, verbose){
-  if(method %in% c("pearson", "kendall", "spearman")){
-    if(is(web, "argonansiWeb")){
+call_groupwise <- function(web, groups, verbose) {
 
-      return(anansiCorTestByGroup(web = new("anansiWeb",
-                                            tableY     = as.matrix(web@tableY),
-                                            tableX     = as.matrix(web@tableX),
-                                            dictionary = as.matrix(web@strat_dict)),
-             method = method, groups = groups, verbose = verbose))}
+    if (is(web, "argonansiWeb")) {
+      return(anansiCorTestByGroup(
+        web = new("anansiWeb",
+          tableY     = as.matrix(web@tableY),
+          tableX     = as.matrix(web@tableX),
+          dictionary = as.matrix(web@strat_dict)
+        ), groups = groups, verbose = verbose
+      ))
+    }
 
-    return(anansiCorTestByGroup(web = web, method = method, groups = groups, verbose = verbose))
+    return(anansiCorTestByGroup(web = web, groups = groups, verbose = verbose))
   }
-
-  if(method == "propr"){
-    stopifnot("Two different tables detected, propr is meant for within-composition association testing." = identical(web@tableY, web@tableX))
-    return(wrap_propr(web = web, groups = groups, verbose = verbose))
-  }
-
-}

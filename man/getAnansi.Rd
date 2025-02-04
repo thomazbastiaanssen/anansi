@@ -75,7 +75,7 @@ library(TreeSummarizedExperiment)
 library(MultiAssayExperiment)
 
 # Load data
-data("FMT_data",  package = "anansi")
+data("FMT_data", package = "anansi")
 data("dictionary", package = "anansi")
 
 # Convert to (Tree)SummarizedExperiment objects
@@ -88,14 +88,16 @@ KO_tse <- KO_tse[keep, ]
 
 # Remove features with less than 10\% prevalence
 KO_tse <- subsetByPrevalent(KO_tse,
-                            assay.type = "counts",
-                            prevalence = 0.1)
+  assay.type = "counts",
+  prevalence = 0.1
+)
 
 # Perform a centered log-ratio transformation on the functional counts assay
 KO_tse <- transformAssay(KO_tse,
-                         assay.type = "counts",
-                         method = "clr",
-                         pseudocount = TRUE)
+  assay.type = "counts",
+  method = "clr",
+  pseudocount = TRUE
+)
 
 # Prepare colData
 coldata <- FMT_metadata
@@ -104,15 +106,16 @@ coldata <- coldata[match(colnames(KO_tse), rownames(coldata)), ]
 
 # Combine experiments into MultiAssayExperiment object
 mae <- MultiAssayExperiment(
-    experiments = ExperimentList(metabolites = metab_se, functions = KO_tse),
-    colData = coldata
+  experiments = ExperimentList(metabolites = metab_se, functions = KO_tse),
+  colData = coldata
 )
 
 # Perform anansi analysis
 out <- getAnansi(mae,
-                 experiment1 = "metabolites", experiment2 = "functions",
-                 assay.type1 = "conc", assay.type2 = "clr",
-                 formula = ~ Legend)
+  experiment1 = "metabolites", experiment2 = "functions",
+  assay.type1 = "conc", assay.type2 = "clr",
+  formula = ~Legend
+)
 
 # Select significant interactions
 out <- out[out$model_full_q.values < 0.1, ]

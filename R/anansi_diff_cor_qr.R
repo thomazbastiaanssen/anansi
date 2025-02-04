@@ -9,117 +9,131 @@
 #' @importFrom future.apply future_apply
 #' @importFrom methods is
 #'
-anansiDiffCor = function(web, metadata, formula, verbose = T){
-  #Create a matrix with row and column coordinates to cycle through the relevant comparisons in tableY and tableX.
-  which_dictionary <- which(get_dict(web), arr.ind = T, useNames = F)
-  lm.metadata      <- cbind(x = 1, metadata)
+anansiDiffCor <- function(web, metadata, formula, verbose = TRUE) {
+  # Create a matrix with row and column coordinates to cycle through the
+  # relevant comparisons in tableY and tableX.
+  which_dictionary <- which(get_dict(web), arr.ind = TRUE, useNames = FALSE)
 
-  all_terms  <- labels(terms.formula(formula))
+  raw_terms <- terms.formula(formula, "Error", data = metadata)
+  indError <- attr(raw_terms, "specials")$Error
+  all_terms <- labels(raw_terms)
+  stopifnot("hue" = length(all_terms) > length(indError))
+  if (!is.null(indError)) all_terms <- all_terms[-indError]
 
-  #make saturated model
-  sat_model = update.formula(old = formula, ~ x * 1 * (.))
-  if(verbose){cat(paste0("Fitting least-squares for following model:\n", paste0(as.character(sat_model), " ", collapse = "")))}
+  lm.metadata <- subset_metadata(metadata, all_terms, raw_terms, indError)
+  # Make saturated model
+  sat_model <- make_saturated_model(formula, raw_terms, indError, verbose)
 
-  #compute shape of model.matrix and initialize qr.mm
+  # Compute shape of model.matrix and initialize qr.mm
   contr <- make_contrasts(lm.metadata)
-  base.mm <- suppressWarnings(
-    model.matrix.default(sat_model, lm.metadata, contrasts.arg = contr)
-  )
+  base.mm <- model.matrix.default(sat_model, lm.metadata, contrasts.arg = contr)
 
-  #identify the columns of the variables that change based on X-variable
-  x.fct  <- `dimnames<-`(attr(terms.formula(sat_model), "factors"), NULL)
+  # identify the columns of the variables that change based on X-variable
+  x.fct <- get_x.fct(sat_model, indError, raw_terms)
 
-  #TODO This could be important for argonaut support; consider modifying row id 1.
-  x.assign   <- as.integer(which(x.fct[1,] == 1))
+  # TODO This could be important for argonaut support; consider modifying row id 1.
+  x.assign <- as.integer(which(x.fct[1, ] == 1))
   all.assign <- attr(base.mm, "assign")
+  x.vars <- all.assign %in% x.assign
 
-  x.vars     <- all.assign %in% x.assign
-  #prevent the first round from removing anything.
-  x.int      <- x.assign[-1]
+  # prevent the first round from removing anything.
+  x.int <- x.assign[-1]
 
-  #set up F-tests
-  #number of samples in full model
+  # set up F-tests
+  # number of samples in full model
   n <- nrow(web@tableY)
-  #number of parameters in full model
+  # number of parameters in full model
   sat_params <- colnames(base.mm)
   p_1 <- length(sat_params)
 
-  #strip mm of attributes
-  mm = matrix(base.mm, ncol = p_1)
+  # strip mm of attributes
+  mm <- matrix(base.mm, ncol = p_1)
 
-  #Null models for general association of y and x: Remove all components with x.
-  Y.TSS <- SS(fast.qr.resid(y = web@tableY,
-                            x = mm[,!x.vars]))
+  # Null models for general association of y and x: Remove all components with x.
+  Y.TSS <- SS(fast.qr.resid(
+    y = web@tableY,
+    x = mm[, !x.vars]
+  ))
 
-  #prepare output
+  # prepare output
   df_mat <- dfmat(x.assign, x.int, all.assign, x.fct, n)
 
-  modelfit  <- list(full = new("anansiTale",
-                               subject    = "model_full",
-                               type       = "r.squared",
-                               df         = df_mat[,1],
-                               estimates  = get_dict.double(web) * Y.TSS, #start with RSS0
-                               F.values   = get_dict.double(web),
-                               p.values   = !get_dict(web),
-                               q.values   = !get_dict(web)))
+  modelfit <- list(full = new("anansiTale",
+    subject    = "model_full",
+    type       = "r.squared",
+    df         = df_mat[, 1],
+    estimates  = get_dict.double(web) * Y.TSS, # start with RSS0
+    F.values   = get_dict.double(web),
+    p.values   = !get_dict(web),
+    q.values   = !get_dict(web)
+  ))
 
-  disjointed <- `names<-`(lapply(1:length(all_terms),
-                                 function(x)
-                                   new("anansiTale",
-                                       subject    = paste("model_disjointed", all_terms[x], sep = "_"),
-                                       type       = "r.squared",
-                                       df         = df_mat[,x + 1],
-                                       estimates  = get_dict.double(web), #start with RSS0
-                                       F.values   = get_dict.double(web),
-                                       p.values   = !get_dict(web),
-                                       q.values   = !get_dict(web))), all_terms)
+  disjointed <- `names<-`(lapply(
+    1:length(all_terms),
+    function(x) {
+      new("anansiTale",
+        subject    = paste("model_disjointed", all_terms[x], sep = "_"),
+        type       = "r.squared",
+        df         = df_mat[, x + 1],
+        estimates  = get_dict.double(web), # start with RSS0
+        F.values   = get_dict.double(web),
+        p.values   = !get_dict(web),
+        q.values   = !get_dict(web)
+      )
+    }
+  ), all_terms)
 
-  emergent <- `names<-`(lapply(1:length(all_terms),
-                                 function(x)
-                                   new("anansiTale",
-                                       subject    = paste("model_emergent", all_terms[x], sep = "_"),
-                                       type       = "r.squared",
-                                       df         = df_mat[,x + 1] + c(0, -1, -1/df_mat[1, x + 1]),
-                                       estimates  = get_dict.double(web), #start with RSS0
-                                       F.values   = get_dict.double(web),
-                                       p.values   = !get_dict(web),
-                                       q.values   = !get_dict(web))), all_terms)
+  emergent <- `names<-`(lapply(
+    1:length(all_terms),
+    function(x) {
+      new("anansiTale",
+        subject    = paste("model_emergent", all_terms[x], sep = "_"),
+        type       = "r.squared",
+        df         = df_mat[, x + 1] + c(0, -1, -1 / df_mat[1, x + 1]),
+        estimates  = get_dict.double(web), # start with RSS0
+        F.values   = get_dict.double(web),
+        p.values   = !get_dict(web),
+        q.values   = !get_dict(web)
+      )
+    }
+  ), all_terms)
 
-#Compute R^2 for full model
-modelfit$full@estimates <- 1 - (
-  sapply(seq_len(NCOL(web@tableX)),
-         function(x) R_full(y = x, mm, web, x.fct, x.vars)) /
-    modelfit$full@estimates)
+  # Compute R^2 for full model
+  modelfit$full@estimates <- 1 - (
+    sapply(
+      seq_len(NCOL(web@tableX)),
+      function(x) R_full(y = x, mm, web, x.fct, x.vars)
+    ) /
+      modelfit$full@estimates)
 
-#compute all disjointed R^2 values, return to matrix with rows as values and columns as terms
-for(t in seq_along(x.int)){
+  # compute all disjointed R^2 values, return to matrix with rows as values and columns as terms
+  for (t in seq_along(x.int)) {
+    i.disj <- index.disj(x = x.int[t], all.assign, x.fct)
 
-  i.disj <- index.disj(x = x.int[t], all.assign, x.fct);
+    for (y in seq_len(NCOL(web@tableX))) {
+      # adjust the input model.matrix by multiplying the relevant columns by x
+      qr.mm <- mm
+      qr.mm[, x.vars] <- mm[, x.vars] * web@tableX[, y]
+      y.ind <- get_dict(web)[, y]
+      y.vals <- `dimnames<-`(web@tableY[, y.ind], NULL)
 
-  for(y in seq_len(NCOL(web@tableX))){
-    #adjust the input model.matrix by multiplying the relevant columns by x
-    qr.mm  <- mm
-    qr.mm[,x.vars] <- mm[,x.vars] * web@tableX[,y]
-    y.ind  <- get_dict(web)[,y]
-    y.vals <- `dimnames<-`(web@tableY[,y.ind], NULL)
+      # straight to web!!
+      disjointed[[t]]@estimates[get_dict(web)[, y], y] <- R_disj(y.vals, qr.mm, i.disj)
 
-    #straight to web!!
-    disjointed[[t]]@estimates[get_dict(web)[,y],y]  <- R_disj(y.vals, qr.mm, i.disj)
-
-    emergent  [[t]]@estimates[get_dict(web)[,y],y]  <- R_emerg(y.vals, qr.mm, i.disj)
+      emergent[[t]]@estimates[get_dict(web)[, y], y] <- R_emerg(y.vals, qr.mm, i.disj)
+    }
   }
-
-}
-#Add F and P statistics
-modelfit   <- lapply(modelfit,   get_PF, d = get_dict(web))
-disjointed <- lapply(disjointed, get_PF, d = get_dict(web))
-emergent   <- lapply(emergent,   get_PF, d = get_dict(web))
+  # Add F and P statistics
+  modelfit <- lapply(modelfit, get_PF, d = get_dict(web))
+  disjointed <- lapply(disjointed, get_PF, d = get_dict(web))
+  emergent <- lapply(emergent, get_PF, d = get_dict(web))
 
 
-return(list(
-  modelfit = modelfit,
-  disjointed = disjointed,
-  emergent = emergent))
+  return(list(
+    modelfit = modelfit,
+    disjointed = disjointed,
+    emergent = emergent
+  ))
 }
 
 #' Get total sum of squares for residual
@@ -130,14 +144,14 @@ colwiseTSS <- function(x) apply(x, 2, function(x) sum((x - mean(x))^2))
 #' fast resids
 #' @noRd
 #'
-fast.qr.resid <- function(x,y) {
+fast.qr.resid <- function(x, y) {
   y - crossprod(t(x), qr.coef(qr(x), y))
 }
 
 #' fast resids with sorted rolling
 #' @noRd
 #'
-fast.qr.resid <- function(x,y) {
+fast.qr.resid <- function(x, y) {
   y - crossprod(t(x), qr.coef(qr(x), y))
 }
 
@@ -145,25 +159,29 @@ fast.qr.resid <- function(x,y) {
 #' Get df1 & 2 for f-ratio
 #' @noRd
 #'
-dfmat <- function(x.assign, x.int, all.assign, x.fct, n){
-  df0   <- colSums(!sapply(x.assign, function(x) index.self.high(x, all.assign, x.fct)))
-  df1   <- c(sum(index.self.high(x.assign[1], all.assign, x.fct)),
-             sapply(x.int, function(x) sum(all.assign %in% x)))
-  df2 = n - (df0 + df1)
-  dfr = df2/df1
-  return(rbind(df1,df2, dfr))
+dfmat <- function(x.assign, x.int, all.assign, x.fct, n) {
+  df0 <- colSums(
+    !sapply(x.assign, function(x) index.self.high(x, all.assign, x.fct))
+    )
+  df1 <- c(
+    sum(index.self.high(x.assign[1], all.assign, x.fct)),
+    sapply(x.int, function(x) sum(all.assign %in% x))
+  )
+  df2 <- n - (df0 + df1)
+  dfr <- df2 / df1
+  return(rbind(df1, df2, dfr))
 }
 
 #' @noRd
 #'
-make_contrasts <- function(lm.metadata){
+make_contrasts <- function(lm.metadata) {
   contr.in <- NULL
-f.names <- names(which(sapply(lm.metadata, function(x) is.character(x) || is.factor(x) || is.logical(x))))
-if(length(f.names) > 0){
-  contr.in <- `names<-`(rep("contr.sum", times = length(f.names)), f.names)
-  contr.in[names(which(sapply(lm.metadata, is.ordered)))] <- "contr.poly"
-}
-return(as.list(contr.in))
+  f.names <- names(which(sapply(lm.metadata, function(x) is.character(x) || is.factor(x) || is.logical(x))))
+  if (length(f.names) > 0) {
+    contr.in <- `names<-`(rep("contr.sum", times = length(f.names)), f.names)
+    contr.in[names(which(sapply(lm.metadata, is.ordered)))] <- "contr.poly"
+  }
+  return(as.list(contr.in))
 }
 
 #' Calculate sums of squares by column
@@ -172,25 +190,25 @@ return(as.list(contr.in))
 #'
 SS <- function(x) {
   dn <- dim(x)
-  .colSums(x^2,dn[1L], dn[2L], FALSE)
+  .colSums(x^2, dn[1L], dn[2L], FALSE)
 }
 
 #' Transform to odds: `x / (1-x)`.
 #' @noRd
 #'
-oddify <- function(x) x/(1-x)
+oddify <- function(x) x / (1 - x)
 
 #' Compute F and P statistic for \code{anansiTale} object.
 #' @description Populate \code{anansiTale} object with F statistics.
 #' @param object An \code{anansiTale} object.
 #' @param d A binary adjacency matrix, corresponding to the relevant dictionary
 #'
-get_PF <- function(object, d){
-
+get_PF <- function(object, d) {
   object@F.values[d] <- oddify(object@estimates[d]) * object@df[3]
   object@p.values[d] <- pf(object@F.values[d],
-                           df1 = object@df[1], df2 = object@df[2],
-                           lower.tail = FALSE)
+    df1 = object@df[1], df2 = object@df[2],
+    lower.tail = FALSE
+  )
 
   return(object)
 }
@@ -198,88 +216,169 @@ get_PF <- function(object, d){
 
 #' @noRd
 #'
-  R_disj <- function(y.vals, qr.mm, i.disj){
-# Disjointed
-  mm.0 <- qr.mm[,i.disj[,1]]
-  mm.1 <- qr.mm[,i.disj[,2]]
+R_disj <- function(y.vals, qr.mm, i.disj) {
+  # Disjointed
+  mm.0 <- qr.mm[, i.disj[, 1]]
+  mm.1 <- qr.mm[, i.disj[, 2]]
 
 
-    #Cycle through dropping interactions with x, including higher order interactions.
-    RSS_i0 <- SS(fast.qr.resid(y = y.vals,x = mm.0))
+  # Cycle through dropping interactions with x, including higher order interactions.
+  RSS_i0 <- SS(fast.qr.resid(y = y.vals, x = mm.0))
 
-    #Cycle through returning interactions with x, but not higher order interactions.
-    RSS_i1 <- SS(fast.qr.resid(y = y.vals, x = mm.1))
+  # Cycle through returning interactions with x, but not higher order interactions.
+  RSS_i1 <- SS(fast.qr.resid(y = y.vals, x = mm.1))
 
-    return(1 - (RSS_i1 / RSS_i0))
+  return(1 - (RSS_i1 / RSS_i0))
+}
 
-  }
+#' @noRd
+#'
+R_emerg <- function(y.vals, qr.mm, i.disj) {
+  # Emergent
+  e.ord <- order(rowSums(qr.mm[, i.disj[, 3], drop = FALSE]))
+  e.mm <- cbind(1, diff(qr.mm[e.ord, -1]))
 
-  #' @noRd
-  #'
-  R_emerg <- function(y.vals, qr.mm, i.disj){
-    #Emergent
-    e.ord   <- order(rowSums(qr.mm[,i.disj[,3], drop = FALSE]))
-    e.mm    <- cbind(1, diff(qr.mm[e.ord,-1]))
+  e.y <- diff(y.vals[e.ord, drop = FALSE])
 
-    e.y     <- diff(y.vals[e.ord, drop = FALSE])
+  # use diff to look at var
+  e.mm.0 <- e.mm[, i.disj[, 1]]
+  e.mm.1 <- e.mm[, i.disj[, 2]]
 
-    #use diff to look at var
-    e.mm.0  <- e.mm[,i.disj[,1]]
-    e.mm.1  <- e.mm[,i.disj[,2]]
+  # Cycle through dropping interactions with x, including higher order interactions.
+  RSS_i0 <- SS(fast.qr.resid(y = e.y, x = e.mm.0))
 
-    #Cycle through dropping interactions with x, including higher order interactions.
-    RSS_i0 <- SS(fast.qr.resid(y = e.y, x = e.mm.0))
+  # Cycle through returning interactions with x, but not higher order interactions.
+  RSS_i1 <- SS(fast.qr.resid(y = e.y, x = e.mm.1))
 
-    #Cycle through returning interactions with x, but not higher order interactions.
-    RSS_i1 <- SS(fast.qr.resid(y = e.y, x = e.mm.1))
-
-    return(1 - (RSS_i1 / RSS_i0))
-
-  }
+  return(1 - (RSS_i1 / RSS_i0))
+}
 
 
-  #' @noRd
-  #'
-R_full <- function(y, mm, web, x.fct, x.vars){
-  #adjust the input model.matrix by multiplying the relevant columns by x
-  qr.mm  <- mm
-  qr.mm[,x.vars] <- mm[,x.vars] * web@tableX[,y]
-  y.ind  <- get_dict(web)[,y]
-  y.vals <- `dimnames<-`(web@tableY[,y.ind], NULL)
+#' @noRd
+#'
+R_full <- function(y, mm, web, x.fct, x.vars) {
+  # adjust the input model.matrix by multiplying the relevant columns by x
+  qr.mm <- mm
+  qr.mm[, x.vars] <- mm[, x.vars] * web@tableX[, y]
+  y.ind <- get_dict(web)[, y]
+  y.vals <- `dimnames<-`(web@tableY[, y.ind], NULL)
 
-  #Return H1 SSR
+  # Return H1 SSR
   SS(fast.qr.resid(y = y.vals, x = qr.mm))
-
 }
 
 #' @noRd
 #'
-index.self.high <- function(x, all.assign, x.fct){
+index.self.high <- function(x, all.assign, x.fct) {
   all.assign %in% which(apply(
-    x.fct * x.fct[,x] == x.fct[,x],
-    MARGIN =  2, all))
+    x.fct * x.fct[, x] == x.fct[, x],
+    MARGIN = 2, all
+  ))
 }
 
 #' @noRd
 #'
-index.high <- function(x, all.assign, x.fct){
-
+index.high <- function(x, all.assign, x.fct) {
   all.assign %in% which(
     `[[<-`(apply(
-    x.fct * x.fct[,x] == x.fct[,x],
-    MARGIN =  2, all), subscript = x, FALSE)
-    )
+      x.fct * x.fct[, x] == x.fct[, x],
+      MARGIN = 2, all
+    ), subscript = x, FALSE)
+  )
 }
 
 #' @noRd
 #'
-index.disj <- function(x, all.assign, x.fct){
-  #first is full null,
-  #second is parameter to investigate returned
+index.disj <- function(x, all.assign, x.fct) {
+  # first is full null,
+  # second is parameter to investigate returned
   i0 <- !all.assign %in% which(apply(
-    x.fct * x.fct[,x] == x.fct[,x],
-    MARGIN =  2, all))
+    x.fct * x.fct[, x] == x.fct[, x],
+    MARGIN = 2, all
+  ))
   ix <- all.assign %in% x
   cbind(i0, i1 = i0 | ix, ix)
 }
 
+#' Prepare saturated model, deal with \code{Error} terms.
+#' @noRd
+#' @importFrom stats as.formula
+#'
+make_saturated_model <- function(formula, raw_terms, indError, verbose) {
+  # Simple case; No random intercept; make regular saturated model
+  if (is.null(indError)) {
+    sat_model <- update.formula(old = formula, ~ x * 1 * (.))
+    if (verbose) {
+      message(
+        paste0(
+          "Fitting least-squares for following model:\n",
+          paste0(as.character(sat_model), " ", collapse = "")
+        )
+      )
+    }
+    return(sat_model)
+  }
+
+  # Case with repeated measures:
+  if (length(indError) > 1L) {
+    stop(sprintf(ngettext(
+      length(indError),
+      "there are %d Error terms: only 1 is allowed",
+      "there are %d Error terms: only 1 is allowed"
+    ), length(indError)), domain = NA)
+  }
+
+  errorterm <- attr(raw_terms, "variables")[[1L + indError]]
+  sat_model <- update.formula(old = formula, new = as.formula(
+    paste(
+      "~",
+      deparse1(errorterm[[2L]], backtick = TRUE),
+      "+ x * 1 * (. -",
+      deparse1(errorterm, backtick = TRUE),
+      ")"
+    ),
+    env = environment(formula)
+  ))
+  if (verbose) {
+    message(paste0(
+      "Fitting least-squares for following model:\n",
+      paste0(as.character(update.formula(old = formula, new = as.formula(
+        paste("~ x * 1 * (. -", deparse1(errorterm, backtick = TRUE), ")"),
+        env = environment(formula)
+      ))), " ", collapse = ""),
+      "\nwith '",
+      deparse1(errorterm[[2L]], backtick = TRUE),
+      "' as random intercept."
+    ))
+  }
+
+  return(sat_model)
+}
+
+#' Generate x.fct table, deal with \code{Error} terms.
+#' @noRd
+#'
+get_x.fct <- function(sat_model, indError, raw_terms) {
+  x.fct <- attr(terms.formula(sat_model), "factors")
+
+  if (!is.null(indError)) {
+    # Trim off the random effect to have x be the top row.
+    errorterm <- deparse1(attr(raw_terms, "variables")[[1L + indError]][[2]],
+      backtick = TRUE
+    )
+    x.fct <- x.fct[rownames(x.fct) != errorterm, ]
+  }
+
+  return(`dimnames<-`(x.fct, NULL))
+}
+
+#' Generate table, to compute contrasts, basis for base.mm
+#' @noRd
+#'
+subset_metadata <- function(metadata, keep, raw_terms, indError){
+
+  if (!is.null(indError)) {keep =
+      c(keep, deparse1(attr(raw_terms, "variables")[[1L + indError]][[2L]],
+                       backtick = TRUE))}
+  return(cbind(x = 1, metadata[, colnames(metadata) %in% keep, drop = FALSE] ))
+}

@@ -31,49 +31,51 @@ Take anansi output and wrangle it to a list of plottable objects.
 }
 \examples{
 \dontrun{
-#Starting off at the example in ?anansi
+# Starting off at the example in ?anansi
 
-anansi_out = anansi(web     = web,
-                    method  = "pearson",
-                    groups  = FMT_metadata$Legend,
-                    adjust.method = "BH",
-                    verbose = TRUE)
+anansi_out <- anansi(
+  web = web,
+  method = "pearson",
+  groups = FMT_metadata$Legend,
+  adjust.method = "BH",
+  verbose = TRUE
+)
 
-#Let's look at all canonical interactions that also have a sufficiently well-fitting model:
+# Let's look at all canonical interactions that also have a sufficiently well-fitting model:
 
-outPlots = spinToPlots(anansi_out,
-                       target = anansi_out@input@web@dictionary &
-                                anansi_out@output@model_results$modelfit@q.values < 0.1)
+outPlots <- spinToPlots(anansi_out,
+  target = anansi_out@input@web@dictionary &
+    anansi_out@output@model_results$modelfit@q.values < 0.1
+)
 
-#load ggplot2 and patchwork for plotting
+# load ggplot2 and patchwork for plotting
 
 library(ggplot2)
 library(patchwork)
 
-plotted = lapply(outPlots, FUN = function(p){
+plotted <- lapply(outPlots, FUN = function(p) {
+  # Main ggplot call
+  ggplot(data = p$data, aes(x = X, y = Y, fill = groups)) +
 
-    #Main ggplot call
-    ggplot(data = p$data, aes(x = X, y = Y, fill = groups)) +
-
-    #Establish geoms:
+    # Establish geoms:
     geom_point(shape = 21) +
     geom_smooth(method = "lm") +
     theme_bw() +
 
-    #Improve annotation:
-    scale_fill_manual(values = c("Young yFMT" = "#2166ac",
-                                 "Aged oFMT"  = "#b2182b",
-                                 "Aged yFMT"  = "#ef8a62")) +
+    # Improve annotation:
+    scale_fill_manual(values = c(
+      "Young yFMT" = "#2166ac",
+      "Aged oFMT" = "#b2182b",
+      "Aged yFMT" = "#ef8a62"
+    )) +
     ylab(p$name[1]) +
     xlab(p$name[2]) +
     ggtitle(paste(p$name[1], "vs", p$name[2]))
+})
 
- })
+# Call patchwork to unify and arrange the first 6 plots
 
-#Call patchwork to unify and arrange the first 6 plots
-
-wrap_plots(plotted[1:6]) + plot_layout(guides = 'collect')
-
+wrap_plots(plotted[1:6]) + plot_layout(guides = "collect")
 }
 
 }

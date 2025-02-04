@@ -4,12 +4,10 @@
 \alias{call_groupwise}
 \title{Manages group-wise association calls}
 \usage{
-call_groupwise(web, method, groups, verbose)
+call_groupwise(web, groups, verbose)
 }
 \arguments{
 \item{web}{An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.}
-
-\item{method}{Correlation method.}
 
 \item{groups}{A categorical or continuous value necessary for differential correlations. Typically a state or treatment score.}
 

@@ -7,7 +7,6 @@ Authors@R: c(
    person("Thomas", "Quinn", email = "contacttomquinn@gmail.com", role = c("aut"), comment = c(ORCID = "0000-0003-0286-6329")),
    person("Giulio", "Benedetti", email = "giulio.benedetti@utu.fi", role = c("aut"), comment = c(ORCID = "0000-0002-8732-7692"))
    )
-Maintainer: Thomaz Bastiaanssen <thomazbastiaanssen@gmail.com>
 Description: Studies including both microbiome and metabolomics data are becoming more common. 
     Often, it would be helpful to integrate both datasets in order to see if they corroborate 
     each others patterns. All vs all association is imprecise and likely to yield spurious 
@@ -20,14 +19,11 @@ Imports:
     stats,
     methods,
     utils,
-    lme4,
     future.apply,
-    propr, 
     argonaut,
     SummarizedExperiment,
     MultiAssayExperiment
 Additional_repositories: 
-    https://github.com/tpq/propr/, 
     https://github.com/thomazbastiaanssen/argonaut/
 Suggests:
     ggplot2,
@@ -36,8 +32,11 @@ Suggests:
     patchwork,
     TreeSummarizedExperiment,
     testthat (>= 3.0.0)
-License: file LICENSE
+License: GPL-3
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.3.2
 Config/testthat/edition: 3
+biocViews: Regression, Pathways
+URL: https://github.com/thomazbastiaanssen/anansi
+BugReports: https://github.com/thomazbastiaanssen/anansi/issues
