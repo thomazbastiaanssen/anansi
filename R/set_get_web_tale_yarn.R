@@ -35,6 +35,17 @@ tell_e <- function(tale) {
 
 #' @noRd
 #'
+tell_Q <- function(tale) {
+  if (is(tale, "anansiTale")) {
+    return(tale@q.values)
+  }
+  if (is.list(tale)) {
+    return(lapply(tale, tell_Q))
+  }
+}
+
+#' @noRd
+#'
 tell_df1 <- function(tale) {
   if (is(tale, "anansiTale")) {
     return(tale@df[1])
@@ -128,6 +139,18 @@ yarn.web <- function(yarn) {
 
 #' @noRd
 #'
+yarn.cor <- function(yarn) {
+  yarn@output@cor_results
+}
+
+#' @noRd
+#'
+yarn.model <- function(yarn) {
+  yarn@output@model_results
+}
+
+#' @noRd
+#'
 yarn.dic <- function(yarn) {
   get_dict(yarn.web(yarn))
 }
@@ -144,7 +167,6 @@ yarn.dic.logical <- function(yarn) {
   get_dict.logical(yarn.web(yarn))
 }
 
-
 #' @noRd
 #'
 yarn.tX <- function(yarn) {
@@ -157,6 +179,15 @@ yarn.tY <- function(yarn) {
   get_tableY(yarn.web(yarn))
 }
 
+#' @noRd
+#'
+yarn.tY <- function(yarn) {
+  get_tableY(yarn.web(yarn))
+}
 
-
+#' @noRd
+#'
+yarn.Q <- function(yarn) {
+  get_tableY(yarn.web(yarn))
+}
 

@@ -11,7 +11,6 @@
 #' @importFrom stats model.frame
 #' @export
 #' @examples
-#' \dontrun{
 #' # Load example data:
 #'
 #' data(dictionary)
@@ -45,13 +44,15 @@
 #'
 #' anansi_out <- anansi(
 #'   web = web,
+#'   formula = ~Legend,
 #'   groups = FMT_metadata$Legend,
+#'   metadata = FMT_metadata,
 #'   adjust.method = "BH",
 #'   verbose = TRUE
 #' )
 #'
 #' results <- spinToWide(
-#'   anansi_output = anansi_out, translate = T,
+#'   anansi_output = anansi_out, translate = TRUE,
 #'   Y_translation = anansi::cpd_translation,
 #'   X_translation = anansi::KO_translation
 #' )
@@ -60,7 +61,7 @@
 #' library(ggplot2)
 #'
 #' anansiLong <- spinToLong(
-#'   anansi_output = anansi_out, translate = T,
+#'   anansi_output = anansi_out, translate = TRUE,
 #'   Y_translation = anansi::cpd_translation,
 #'   X_translation = anansi::KO_translation
 #' )
@@ -78,7 +79,7 @@
 #'     x = r.values,
 #'     y = feature_X,
 #'     fill = type,
-#'     alpha = model_disjointed_p.values < 0.05
+#'     alpha = model_disjointed_Legend_p.values < 0.05
 #'   )
 #' ) +
 #'
@@ -105,42 +106,15 @@
 #'   xlab("Pearson's rho")
 #'
 #' # See also ?spinToPlots
-#' }
 #'
-anansi <- function(web, groups = NULL, metadata = NULL, formula = ~1,
+anansi <- function(web, formula = ~1, groups = NULL, metadata,
                    adjust.method = "BH", verbose = TRUE, ignore_dictionary = FALSE) {
 
   # generate anansiYarn output object
-  outYarn <- prepYarn(web = web,
-                      formula = formula,
-                      metadata = metadata,
-                      verbose = verbose)
+  outYarn <- prepYarn(web = web, formula = formula, groups = groups,
+                      metadata = metadata, verbose = verbose)
   # sort out metadata
-  lm.metadata <- model.frame(formula = yarn.f(outYarn), cbind(x = 1, metadata))
-
-  # If there is a formula that is not empty:
-  # TODO get groups argument in the prepYarn object. Second snippet isn't too bad.
-#
-#   if (!identical(all.vars(formula), character(0))) {
-#     unique_factors <- intersect(
-#       all.vars(formula),
-#       names(which(sapply(
-#         metadata,
-#         function(x) is.character(x) || is.factor(x) || is.logical(x)
-#       )))
-#     )
-#
-#     if (!is.null(groups)) {
-#       unique_factors <- groups
-#     }
-#
-#     metadata_factors <- metadata[, unique_factors]
-#     groups <- do.call(paste, c(data.frame(metadata_factors), sep = "_"))
-#
-#     if (length(c(groups)) == 0) {
-#       groups <- NULL
-#     }
-#   }
+  metadata <- model.frame(formula = yarn.f(outYarn), cbind(x = 1, metadata))
 
   if (ignore_dictionary) {
     if (verbose) {
@@ -157,12 +131,12 @@ anansi <- function(web, groups = NULL, metadata = NULL, formula = ~1,
   output <- new("anansiOutput")
 
   output@cor_results <- call_groupwise(
-    web = web, groups = groups,
+    web = web, groups = yarn.grp(outYarn),
     verbose = verbose
   )
 
   output@model_results <- unlist(anansiDiffCor(
-      yarn = outYarn, metadata = lm.metadata,
+      yarn = outYarn, metadata = metadata,
       verbose = verbose
     ))
   outYarn@output <- output
@@ -180,6 +154,7 @@ anansi <- function(web, groups = NULL, metadata = NULL, formula = ~1,
 #' @param web An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.
 #' @param groups A categorical or continuous value necessary for differential correlations. Typically a state or treatment score.
 #' @param verbose A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.
+#' @noRd
 #'
 call_groupwise <- function(web, groups, verbose) {
 
@@ -201,10 +176,12 @@ call_groupwise <- function(web, groups, verbose) {
 #' @description Initialize anansiYarn output Should not be called by user.
 #' @noRd
 #'
-prepYarn <- function(web, formula, metadata, verbose){
+prepYarn <- function(web, formula, groups, metadata, verbose){
 
   raw_terms <- terms.formula(formula, "Error", data = metadata)
   indErr  <- attr(raw_terms, "specials")$Error
+
+  groups <- check_groups(groups, raw_terms, indErr, metadata)
 
   all_terms <- if(is.null(indErr)) {labels(raw_terms)
     } else {labels(raw_terms)[-indErr]}
@@ -217,9 +194,31 @@ prepYarn <- function(web, formula, metadata, verbose){
                              web = web,
                              lm.formula = sat_model,
                              error.term = error.term,
-                             int.terms  = all_terms)
+                             int.terms  = all_terms,
+                             groups = groups)
                  )
   return(outYarn)
+}
+
+#' Check group argument.
+#' @noRd
+#' @importFrom stats as.formula update.formula
+#'
+check_groups <- function(groups, raw_terms, indErr, metadata){
+  if(!is.null(groups)) return(unname(groups))
+
+  order_1 <- attr(raw_terms, "order") == 1
+  if( !is.null(indErr) ) {order_1[indErr] <- FALSE}
+  if( length(order_1) == !is.null(indErr) ) {return(NULL)}
+
+  sub_meta <- metadata[, labels(raw_terms)[order_1], drop = FALSE]
+  sub_meta <- sub_meta[,unname(apply(
+    sub_meta, 2, function(x) {
+      is.character(x) || is.factor(x) || is.ordered(x) })), drop = FALSE]
+
+  if(NCOL(sub_meta) == 0) {return(groups = NULL)}
+  groups <- apply(sub_meta, 1, paste, collapse = "_")
+  return(unname(groups))
 }
 
 #' Prepare saturated model, deal with \code{Error} terms.

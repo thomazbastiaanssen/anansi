@@ -198,6 +198,7 @@ oddify <- function(x) x / (1 - x)
 #' @description Populate \code{anansiTale} object with F statistics.
 #' @param object An \code{anansiTale} object.
 #' @param d A binary adjacency matrix, corresponding to the relevant dictionary
+#' @noRd
 #'
 get_PF <- function(object, d) {
   object@F.values[d] <- oddify(object@estimates[d]) * object@df[3]

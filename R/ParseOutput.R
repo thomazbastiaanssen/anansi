@@ -198,23 +198,42 @@ anansiTranslate <- function(x, Y_translation = Y_translation, X_translation = X_
 #' @return a list of ready to plot data.frames and their names.
 #' @export
 #' @examples
-#' \dontrun{
-#' # Starting off at the example in ?anansi
+#' # Starting off from the example in ?anansi
+#'
+#' data(dictionary)
+#' data(FMT_data)
+#'
+#' # Clean and prepare the example data.
+#' # In the example dataset, the metabolites are already cleaned.
+#'
+#' KOs <- floor(FMT_KOs)
+#' KOs <- apply(KOs, c(1, 2), function(x) as.numeric(as.character(x)))
+#' KOs <- KOs[apply(KOs == 0, 1, sum) <= (ncol(KOs) * 0.90), ]
+#' KOs.exp <- clr_c(KOs[row.names(KOs) %in% sort(unique(unlist(anansi_dic))), ])
+#'
+#' t1 <- t(FMT_metab)
+#' t2 <- t(KOs.exp)
+#'
+#' # Run anansi pipeline.
+#'
+#' web <- weaveWebFromTables(
+#'   tableY = t1,
+#'   tableX = t2,
+#'   dictionary = anansi_dic
+#' )
 #'
 #' anansi_out <- anansi(
 #'   web = web,
-#'   method = "pearson",
+#'   formula = ~Legend,
 #'   groups = FMT_metadata$Legend,
+#'   metadata = FMT_metadata,
 #'   adjust.method = "BH",
 #'   verbose = TRUE
 #' )
 #'
 #' # Let's look at all canonical interactions that also have a sufficiently well-fitting model:
 #'
-#' outPlots <- spinToPlots(anansi_out,
-#'   target = anansi_out@input@web@dictionary &
-#'     anansi_out@output@model_results$modelfit@q.values < 0.1
-#' )
+#' outPlots <- spinToPlots(anansi_out)
 #'
 #' # load ggplot2 and patchwork for plotting
 #'
@@ -225,7 +244,7 @@ anansiTranslate <- function(x, Y_translation = Y_translation, X_translation = X_
 #'   # Main ggplot call
 #'   ggplot(data = p$data, aes(x = X, y = Y, fill = groups)) +
 #'
-#'     # Establish geoms:
+#'     # Define geoms:
 #'     geom_point(shape = 21) +
 #'     geom_smooth(method = "lm") +
 #'     theme_bw() +
@@ -244,10 +263,13 @@ anansiTranslate <- function(x, Y_translation = Y_translation, X_translation = X_
 #' # Call patchwork to unify and arrange the first 6 plots
 #'
 #' wrap_plots(plotted[1:6]) + plot_layout(guides = "collect")
-#' }
 #'
-spinToPlots <- function(anansiYarn, target = anansiYarn@input@web@dictionary, translate = FALSE, Y_translation = NULL, X_translation = NULL) {
-  pairs_of_interest <- which(target, arr.ind = TRUE, useNames = FALSE)
+spinToPlots <- function(anansiYarn, target = NULL, translate = FALSE, Y_translation = NULL, X_translation = NULL) {
+
+  if(is.null(target)) {target = yarn.dic.logical(anansiYarn)} else {
+    target = yarn.dic.logical(anansiYarn)& target}
+
+   pairs_of_interest <- which(target, arr.ind = TRUE, useNames = FALSE)
 
   out_list <- apply(X = pairs_of_interest, MARGIN = 1, FUN = gather_plot, anansiYarn = anansiYarn, simplify = FALSE)
 
@@ -283,8 +305,7 @@ gather_plot <- function(pair_of_interest, anansiYarn) {
   df_out <- data.frame(
     Y = anansiYarn@input@web@tableY[, pair_of_interest[1]],
     X = anansiYarn@input@web@tableX[, pair_of_interest[2]],
-    groups = anansiYarn@input@groups,
-    reff = anansiYarn@input@reff
+    groups = anansiYarn@input@groups
   )
   return(list(
     data = df_out,
@@ -297,6 +318,7 @@ gather_plot <- function(pair_of_interest, anansiYarn) {
 
 #' Helper function to translate feature names in spinToPlot()
 #' @param x a vector of two names, to be wrangled to a 1x2 data.frame.
+#' @noRd
 #'
 tiny_df <- function(x) {
   return(data.frame(matrix(x$name, nrow = 1, dimnames = list("", c("feature_Y", "feature_X")))))

@@ -51,7 +51,7 @@ setClass("anansiInput",
     lm.formula = "formula",
     error.term = "ANY",
     int.terms = "vector",
-    groups = "vector"
+    groups = "ANY"
   )
 )
 

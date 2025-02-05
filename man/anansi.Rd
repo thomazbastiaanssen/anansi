@@ -6,9 +6,9 @@
 \usage{
 anansi(
   web,
-  groups = NULL,
-  metadata = NULL,
   formula = ~1,
+  groups = NULL,
+  metadata,
   adjust.method = "BH",
   verbose = TRUE,
   ignore_dictionary = FALSE
@@ -17,11 +17,11 @@ anansi(
 \arguments{
 \item{web}{An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.}
 
+\item{formula}{A formula object. Used to assess differential associations.}
+
 \item{groups}{A vector of the column names of categorical values in the metadata object to control which groups should be assessed for simple correlations. If no argument provided, anansi will let you know and still to regular correlations according to your dictionary.}
 
 \item{metadata}{A vector or data.frame of categorical or continuous value necessary for differential correlations. Typically a state or treatment score. If no argument provided, anansi will let you know and still to regular correlations according to your dictionary.}
-
-\item{formula}{A formula object. Used to assess differential associations.}
 
 \item{adjust.method}{Method to adjust p-values for multiple comparisons. \code{adjust.method = "BH"} is the default value. See \code{p.adjust()} in the base R \code{stats} package.}
 
@@ -36,7 +36,6 @@ A list of lists containing correlation coefficients, p-values and q-values for a
 This is the main workspider function in the anansi package. It manages the individual functionalities of anansi, including correlation analysis, correlation by group and differential correlation.
 }
 \examples{
-\dontrun{
 # Load example data:
 
 data(dictionary)
@@ -70,13 +69,15 @@ web <- weaveWebFromTables(
 
 anansi_out <- anansi(
   web = web,
+  formula = ~Legend,
   groups = FMT_metadata$Legend,
+  metadata = FMT_metadata,
   adjust.method = "BH",
   verbose = TRUE
 )
 
 results <- spinToWide(
-  anansi_output = anansi_out, translate = T,
+  anansi_output = anansi_out, translate = TRUE,
   Y_translation = anansi::cpd_translation,
   X_translation = anansi::KO_translation
 )
@@ -85,7 +86,7 @@ results <- spinToWide(
 library(ggplot2)
 
 anansiLong <- spinToLong(
-  anansi_output = anansi_out, translate = T,
+  anansi_output = anansi_out, translate = TRUE,
   Y_translation = anansi::cpd_translation,
   X_translation = anansi::KO_translation
 )
@@ -103,7 +104,7 @@ ggplot(
     x = r.values,
     y = feature_X,
     fill = type,
-    alpha = model_disjointed_p.values < 0.05
+    alpha = model_disjointed_Legend_p.values < 0.05
   )
 ) +
 
@@ -130,6 +131,5 @@ ggplot(
   xlab("Pearson's rho")
 
 # See also ?spinToPlots
-}
 
 }

@@ -4,7 +4,7 @@
 #' @param verbose A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.
 #' @importFrom stats p.adjust
 #' @importFrom methods slot slot<-
-#' @export
+#' @noRd
 #'
 anansiAdjustP <- function(x, method = "BH", verbose = TRUE) {
   # first check if the settings make sense

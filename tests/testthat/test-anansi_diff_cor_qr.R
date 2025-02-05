@@ -5,7 +5,6 @@ test_that("full and disjointed parameters correspond to stats::lm()", {
   d <- matrix(TRUE, nrow = NCOL(tY), ncol = NCOL(tX), dimnames = list(colnames(tY), colnames(tX)))
 
   m <- data.frame(
-    x = 1,
     continuous = scale(rnorm(36)),
     categorical = sample(c("X", "Y", "Z"), size = 36, replace = TRUE)
   )
