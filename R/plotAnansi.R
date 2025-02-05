@@ -1,5 +1,21 @@
 #' Dissociation plot
 #' 
+#' @param df
+#'
+#' @param colour_by
+#'
+#' @param color_by
+#' 
+#' @param fill_by
+#' 
+#' @param size_by
+#' 
+#' @param shape_by
+#' 
+#' @param signif.threshold
+#' 
+#' @param x_lab
+#' 
 #' @name plotAnansi
 #' 
 NULL
@@ -14,50 +30,35 @@ setGeneric("plotAnansi", signature = c("df"),
 #' @rdname plotAnansi
 #' @export
 #' @importFrom ggplot2 ggplot theme guides labs geom_vline geom_point
-#'   scale_x_continuous scale_y_discrete scale_alpha_manual
+#'   scale_x_continuous scale_y_discrete scale_alpha_manual element_blank
 #' @importFrom ggforce facet_col
 setMethod("plotAnansi", signature = c(df = "data.frame"),
-    function(df, signif.threshold = NULL, colour_by = NULL,
-    color_by = colour_by, fill_by = NULL, size_by = NULL, shape_by = NULL) {
-
+    function(df, colour_by = NULL, color_by = colour_by, fill_by = NULL,
+    size_by = NULL, shape_by = NULL, signif.threshold = NULL, x_lab = "cor") {
+    
     if( !all(c("r.values", "feature_X", "feature_Y") %in% colnames(df)) ){
         stop("'df' must be the output of 'getAnansi' in the long format and ",
         "must contain columns 'r.values', 'feature_X', 'feature_Y' and ",
         "'model_disjointed_Legend_p.values'", call. = FALSE)
     }
+      
+    if (!is.null(color_by) && is.null(colour_by)) {
+        colour_by <- color_by
+    }
+    
+    colour_defined <- .check_aes(df, colour_by, "colour_by")
+    fill_defined <- .check_aes(df, fill_by, "fill_by")
+    size_defined <- .check_aes(df, size_by, "size_by")
+    shape_defined <- .check_aes(df, shape_by, "shape_by")
+    
+    signif_defined <- !is.null(signif.threshold)
+    if( signif_defined && !is.numeric(signif.threshold) ){
+        stop("'signif.threshold' must be a number between 0 and 1", call. = FALSE)
+    }
     
     pData <- data.frame(x = df[["r.values"]], y = df[["feature_X"]],
         colour = NA, fill = NA, size = NA, shape = NA, alpha = NA,
         facet = df[["feature_Y"]])
-  
-    colour_by <- ifelse(is.null(color_by), colour_by, color_by)
-    
-    colour_defined <- !is.null(colour_by)
-    fill_defined <- !is.null(fill_by)
-    size_defined <- !is.null(size_by)
-    shape_defined <- !is.null(shape_by)
-    signif_defined <- !is.null(signif.threshold)
-    
-    if( colour_defined && !(colour_by %in% colnames(df) && is.character(colour_by)) ){
-        stop("'colour_by' must be a character string specifiying the name of a",
-            " column in 'df'", call. = FALSE)
-    }
-    if( fill_defined && !(fill_by %in% colnames(df) && is.character(fill_by)) ){
-        stop("'fill_by' must be a character string specifiying the name of a",
-            " column in 'df'", call. = FALSE)
-    }
-    if( size_defined && !(size_by %in% colnames(df) && is.character(size_by)) ){
-        stop("'size_by' must be a character string specifiying the name of a",
-            " column in 'df'", call. = FALSE)
-    }
-    if( shape_defined && !(shape_by %in% colnames(df) && is.character(shape_by)) ){
-        stop("'shape_by' must be a character string specifiying the name of a",
-            " column in 'df'", call. = FALSE)
-    }
-    
-    if( signif_defined && !is.numeric(signif.threshold) ){
-        stop("'signif.threshold' must be a number between 0 and 1", call. = FALSE)
-    }
   
     if( colour_defined ){
         pData["colour"] <- df[[colour_by]]
@@ -103,7 +104,7 @@ setMethod("plotAnansi", signature = c(df = "data.frame"),
     }
     
     p <- p + theme_bw() +
-        labs(x = "Pearson's \u03c1", fill = fill_by, colour = colour_by,
+        labs(x = x_lab, fill = fill_by, colour = colour_by,
             shape = shape_by, size = size_by) +
         theme(axis.title.y = element_blank())
     
@@ -122,3 +123,17 @@ setMethod("plotAnansi", signature = c(df = "data.frame"),
     
     return(p)
 })
+
+
+.check_aes <- function(df, aes_var, aes_name) {
+  
+    aes_defined <- !is.null(aes_var)
+    
+    if( aes_defined && !(aes_var %in% colnames(df) && is.character(aes_var)) ){
+        stop("'", aes_name, "' must be a character string specifiying the",
+            " name of a column in 'df'", call. = FALSE)
+    }
+
+    return(aes_defined)
+}
+  

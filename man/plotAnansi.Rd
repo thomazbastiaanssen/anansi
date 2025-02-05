@@ -9,13 +9,31 @@ plotAnansi(df, ...)
 
 \S4method{plotAnansi}{data.frame}(
   df,
-  signif.threshold = NULL,
   colour_by = NULL,
   color_by = colour_by,
   fill_by = NULL,
   size_by = NULL,
-  shape_by = NULL
+  shape_by = NULL,
+  signif.threshold = NULL,
+  x_lab = "cor"
 )
+}
+\arguments{
+\item{df}{}
+
+\item{colour_by}{}
+
+\item{color_by}{}
+
+\item{fill_by}{}
+
+\item{size_by}{}
+
+\item{shape_by}{}
+
+\item{signif.threshold}{}
+
+\item{x_lab}{}
 }
 \description{
 Dissociation plot
