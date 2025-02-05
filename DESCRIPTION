@@ -22,12 +22,12 @@ Imports:
     future.apply,
     argonaut,
     SummarizedExperiment,
-    MultiAssayExperiment
+    MultiAssayExperiment,
+    ggplot2,
+    ggforce
 Additional_repositories: 
     https://github.com/thomazbastiaanssen/argonaut/
 Suggests:
-    ggplot2,
-    ggforce,
     mia,
     patchwork,
     TreeSummarizedExperiment,
