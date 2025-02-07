@@ -4,7 +4,7 @@
 \alias{makeAdjacencyMatrix}
 \title{Starting point to wrangle anansi dictionary list into binary adjacency matrix}
 \usage{
-makeAdjacencyMatrix(dict_list, tableY = NULL, verbose = T, mode = mode)
+makeAdjacencyMatrix(dict_list, tableY = NULL, verbose = TRUE, mode = mode)
 }
 \arguments{
 \item{dict_list}{A list that has tableY names as entries in the case of mode == "interaction" and group names in the case of mode == "membership". For general use, we recommend using the one provided in this package.}

@@ -4,14 +4,12 @@
 \alias{anansiCorTestByGroup}
 \title{Run correlations for all interacting metabolites and functions.}
 \usage{
-anansiCorTestByGroup(web, method = "pearson", groups, verbose = T)
+anansiCorTestByGroup(web, group.vec, verbose = TRUE)
 }
 \arguments{
 \item{web}{An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.}
 
-\item{method}{Correlation method. \code{method = "pearson"} is the default value. The alternatives to be passed to \code{cor()} are "spearman" and "kendall".}
-
-\item{groups}{A categorical or continuous value necessary for differential correlations. Typically a state or treatment score.}
+\item{group.vec}{A character vector denoting group membership. Typically a state or treatment score.}
 
 \item{verbose}{A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.}
 }

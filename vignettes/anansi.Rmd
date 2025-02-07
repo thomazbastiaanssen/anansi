@@ -1,20 +1,24 @@
 ---
+title: "Getting started with anansi"
 output:
-  md_document:
-    variant: gfm
-
+    BiocStyle::html_document:
+        toc: true
+        toc_float: true
+        toc_depth: 2
+        number_sections: true
+vignette: >
+  %\VignetteIndexEntry{1. Getting started with anansi}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 <p align="justify">    
-
-<!-- README.md is generated from README.Rmd. Please edit that file -->
 
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(anansi)
 ```
-# Knowledge-based multi-modal integration using anansi <img src="inst/assets/anansi_hex.png" align="right" width="120" />
 
-## Introduction
+# Introduction
 The `anansi` package computes and compares the association between the features of two 'omics datasets that are known to interact based on a database such as KEGG. Studies including both microbiome and metabolomics data are becoming more common. 
 Often, it would be helpful to integrate both datasets in order to see if they corroborate 
 each others patterns. All vs all association is imprecise and likely to yield spurious 
@@ -25,19 +29,7 @@ association.
 
 While `anansi` is geared towards metabolite-function interactions in the context of host-microbe interactions, it is perfectly capable of handling any other pair of datasets where some features interact canonically. 
 
-Please note this package is in active development. 
-
-If you use this software, please cite our work.
-
-```{r, warning=FALSE}
-citation("anansi")
-```
-## Setup
-
-OK, now let's get started.
-We'll load a complementary training dataset using `data(FMT_data)`. This loads a curated snippet from the dataset described in more detail here: https://doi.org/10.1038/s43587-021-00093-9  
 A very early version of `anansi` was used to generate "Extended Data Fig. 7" in that paper. 
-
 
 ```{r, eval=TRUE}
 # install and load anansi
@@ -58,7 +50,7 @@ data(dictionary)
 data(FMT_data)
 ```
 
-## Data preparation
+# Data preparation
 
 The main `anansi` function expects data in the `anansiWeb` format; Basically a list with exactly three tables: 
 The first table, `tableY`, should be a count table of metabolites.
@@ -103,7 +95,7 @@ t1 <- t(FMT_metab)
 t2 <- t(KOs.exp)
 ```
 
-## Weave a web🕸️
+# Weave a web🕸️
 
 The `weaveWebFromTables()` function can be used to parse the tables that we prepared above into an `anansiWeb` object. 
 The `anansiWeb` format is a necessary input file for the main `anansi` workflow. 
@@ -112,7 +104,7 @@ The `anansiWeb` format is a necessary input file for the main `anansi` workflow.
 web <- weaveWebFromTables(tableY = t1, tableX = t2, dictionary = anansi_dic)
 ```
 
-## Run anansi🕷️
+# Run anansi🕷️
 
 The main workspider in this package is called `anansi`. Generally, you want to give it three arguments. First, there's `web`, which is an `anansiWeb` object, such as the one we generated in the above step. Second, there's `formula`, which should be a formula. For instance, to assess differential associations between treatments, we use the formula `~Legend`, provided we have a column with that name in our `metadata` object, the Third argument. 
 
@@ -125,7 +117,8 @@ anansi_out <- anansi(
   verbose = TRUE
 )
 ```
-## Spin to a table📝
+
+# Spin to a table📝
 
 `anansi` gives a complex nested `anansiYarn` object as an output. Two functions exist that will wrangle your data to more friendly formats for you. 
 You can either use `spinToLong()` or `spinToWide()`. They will give you long or wide format data.frames, respectively.
@@ -142,7 +135,7 @@ anansiLong <- spinToLong(
 # Only consider interactions where the entire model fits well enough.
 anansiLong <- anansiLong[anansiLong$model_full_q.values < 0.1, ]
 ```
-## Plot the results
+# Plot the results
 
 The long format can be helpful to plug the data into `ggplot2`. Here, we recreate part of the results from the FMT Aging study.
 

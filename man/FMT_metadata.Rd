@@ -8,7 +8,7 @@
 A data.frame object with 36 rows, samples, and two columns, denoting sample ID and treatemtn group, respectively.
 }
 \source{
-\url{https://doi.org/10.1038/s43587-021-00093-9}
+\doi{10.1038/s43587-021-00093-9}
 }
 \usage{
 FMT_metadata

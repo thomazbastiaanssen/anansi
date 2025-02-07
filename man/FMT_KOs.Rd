@@ -8,13 +8,13 @@
 A marix object with 6474 rows, KOs, and 36 columns, samples.
 }
 \source{
-\url{https://doi.org/10.1038/s43587-021-00093-9}
+\doi{10.1038/s43587-021-00093-9}
 }
 \usage{
 FMT_KOs
 }
 \description{
-Piphillin was used to infer funcitons from the 16S sequencing data in terms of KOs.
+Piphillin was used to infer functions from the 16S sequencing data in terms of KOs.
 Unfortunately, the Piphillin algorithm is proprietary and has since been taken down.
 }
 \keyword{datasets}

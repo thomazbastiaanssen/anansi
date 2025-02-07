@@ -4,7 +4,7 @@
 \alias{prune_dictionary_for_exclusivity}
 \title{Kick out particularly large groups before wrangling the dictionary list into a binary adjacency matrix.}
 \usage{
-prune_dictionary_for_exclusivity(dict_list, max_sds = 3, verbose = T)
+prune_dictionary_for_exclusivity(dict_list, max_sds = 3, verbose = TRUE)
 }
 \arguments{
 \item{dict_list}{A list that has tableY names as entries in the case of mode == "interaction" and group names in the case of mode == "membership". For general use, we recommend using the one provided in this package.}

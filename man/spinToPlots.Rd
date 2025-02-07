@@ -6,8 +6,8 @@
 \usage{
 spinToPlots(
   anansiYarn,
-  target = anansiYarn@input@web@dictionary,
-  translate = F,
+  target = NULL,
+  translate = FALSE,
   Y_translation = NULL,
   X_translation = NULL
 )
@@ -30,50 +30,70 @@ a list of ready to plot data.frames and their names.
 Take anansi output and wrangle it to a list of plottable objects.
 }
 \examples{
-\dontrun{
-#Starting off at the example in ?anansi
+# Starting off from the example in ?anansi
 
-anansi_out = anansi(web     = web,
-                    method  = "pearson",
-                    groups  = FMT_metadata$Legend,
-                    adjust.method = "BH",
-                    verbose = TRUE)
+data(dictionary)
+data(FMT_data)
 
-#Let's look at all canonical interactions that also have a sufficiently well-fitting model:
+# Clean and prepare the example data.
+# In the example dataset, the metabolites are already cleaned.
 
-outPlots = spinToPlots(anansi_out,
-                       target = anansi_out@input@web@dictionary &
-                                anansi_out@output@model_results$modelfit@q.values < 0.1)
+KOs <- floor(FMT_KOs)
+KOs <- apply(KOs, c(1, 2), function(x) as.numeric(as.character(x)))
+KOs <- KOs[apply(KOs == 0, 1, sum) <= (ncol(KOs) * 0.90), ]
+KOs.exp <- clr_c(KOs[row.names(KOs) \%in\% sort(unique(unlist(anansi_dic))), ])
 
-#load ggplot2 and patchwork for plotting
+t1 <- t(FMT_metab)
+t2 <- t(KOs.exp)
+
+# Run anansi pipeline.
+
+web <- weaveWebFromTables(
+  tableY = t1,
+  tableX = t2,
+  dictionary = anansi_dic
+)
+
+anansi_out <- anansi(
+  web = web,
+  formula = ~Legend,
+  groups = "Legend",
+  metadata = FMT_metadata,
+  adjust.method = "BH",
+  verbose = TRUE
+)
+
+# Let's look at all canonical interactions that also have a sufficiently well-fitting model:
+
+outPlots <- spinToPlots(anansi_out)
+
+# load ggplot2 and patchwork for plotting
 
 library(ggplot2)
 library(patchwork)
 
-plotted = lapply(outPlots, FUN = function(p){
+plotted <- lapply(outPlots, FUN = function(p) {
+  # Main ggplot call
+  ggplot(data = p$data, aes(x = X, y = Y, fill = groups)) +
 
-    #Main ggplot call
-    ggplot(data = p$data, aes(x = X, y = Y, fill = groups)) +
-
-    #Establish geoms:
+    # Define geoms:
     geom_point(shape = 21) +
     geom_smooth(method = "lm") +
     theme_bw() +
 
-    #Improve annotation:
-    scale_fill_manual(values = c("Young yFMT" = "#2166ac",
-                                 "Aged oFMT"  = "#b2182b",
-                                 "Aged yFMT"  = "#ef8a62")) +
+    # Improve annotation:
+    scale_fill_manual(values = c(
+      "Young yFMT" = "#2166ac",
+      "Aged oFMT" = "#b2182b",
+      "Aged yFMT" = "#ef8a62"
+    )) +
     ylab(p$name[1]) +
     xlab(p$name[2]) +
     ggtitle(paste(p$name[1], "vs", p$name[2]))
+})
 
- })
+# Call patchwork to unify and arrange the first 6 plots
 
-#Call patchwork to unify and arrange the first 6 plots
-
-wrap_plots(plotted[1:6]) + plot_layout(guides = 'collect')
-
-}
+wrap_plots(plotted[1:6]) + plot_layout(guides = "collect")
 
 }

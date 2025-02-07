@@ -1,0 +1,25 @@
+---
+title: "Differential association testing with anansi"
+output:
+    BiocStyle::html_document:
+        toc: true
+        toc_float: true
+        toc_depth: 2
+        number_sections: true
+vignette: >
+  %\VignetteIndexEntry{2. Differential association testing}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+<p align="justify">    
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(anansi)
+```
+
+# Differential associations
+
+## Disjointed associations
+
+## Emergent associations

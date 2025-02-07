@@ -1,11 +1,12 @@
 Package: anansi
 Type: Package
-Title: Annotation-based Analysis of Specific Interactions
-Version: 0.5.0
+Title: Annotation-Based Analysis of Specific Interactions
+Version: 0.6.0
 Authors@R: c(
-   person("Thomaz", "Bastiaanssen", email = "thomaz.bastiaanssen@ucc.ie", role = c("aut", "cre"), comment = c(ORCID = "0000-0001-6891-734X"))
+   person("Thomaz", "Bastiaanssen", email = "thomazbastiaanssen@gmail.com", role = c("aut", "cre"), comment = c(ORCID = "0000-0001-6891-734X")), 
+   person("Thomas", "Quinn", email = "contacttomquinn@gmail.com", role = c("aut"), comment = c(ORCID = "0000-0003-0286-6329")),
+   person("Giulio", "Benedetti", email = "giulio.benedetti@utu.fi", role = c("aut"), comment = c(ORCID = "0000-0002-8732-7692"))
    )
-Maintainer: Thomaz Bastiaanssen <thomaz.bastiaanssen@ucc.ie>
 Description: Studies including both microbiome and metabolomics data are becoming more common. 
     Often, it would be helpful to integrate both datasets in order to see if they corroborate 
     each others patterns. All vs all association is imprecise and likely to yield spurious 
@@ -13,23 +14,33 @@ Description: Studies including both microbiome and metabolomics data are becomin
     search space, only considering metabolite-function interactions that have been recorded
     in a pathway database. This package also provides a framework to assess differential 
     association. 
-Depends: R (>= 3.5.0)
+Depends: R (>= 4.4.0)
 Imports:
-    stats, 
+    stats,
     methods,
     utils,
-    lme4,
-    future.apply, 
-    propr, 
-    argonaut  
+    future.apply,
+    argonaut,
+    SummarizedExperiment,
+    MultiAssayExperiment
 Additional_repositories: 
-    https://github.com/tpq/propr/, 
     https://github.com/thomazbastiaanssen/argonaut/
 Suggests:
-    ggplot2, 
-    ggforce, 
-    patchwork
-License: GPL (>= 3) | BSD_3_clause + file LICENSE
+    BiocStyle,
+    ggplot2,
+    ggforce,
+    mia,
+    patchwork,
+    TreeSummarizedExperiment,
+    testthat (>= 3.0.0),
+    knitr,
+    rmarkdown
+License: GPL-3
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.2
+Config/testthat/edition: 3
+biocViews: Microbiome, Metabolomics, Regression, Pathways
+URL: https://github.com/thomazbastiaanssen/anansi
+BugReports: https://github.com/thomazbastiaanssen/anansi/issues
+VignetteBuilder: knitr
