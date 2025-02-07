@@ -15,16 +15,19 @@ test_that("full and disjointed parameters correspond to stats::lm()", {
     dictionary = d
   )
 
-  anansi.res <- anansi:::anansiDiffCor(web, m, formula = ~categorical, verbose = FALSE)
+  anansi.res <- anansi(
+    web = web, metadata = m,
+    formula = ~categorical, verbose = FALSE
+  )@output@model_results
 
-  a.full.F <- tell_F(anansi.res$modelfit)[[1]]
-  a.disj.F <- tell_F(anansi.res$disjointed)[[1]]
+  a.full.F <- tell_F(anansi.res$modelfit)
+  a.disj.F <- tell_F(anansi.res$disjointed)
 
-  a.full.Rsq <- tell_e(anansi.res$modelfit)[[1]]
-  a.disj.Rsq <- tell_e(anansi.res$disjointed)[[1]]
+  a.full.Rsq <- tell_e(anansi.res$modelfit)
+  a.disj.Rsq <- tell_e(anansi.res$disjointed)
 
-  a.full.P <- tell_P(anansi.res$modelfit)[[1]]
-  a.disj.P <- tell_P(anansi.res$disjointed)[[1]]
+  a.full.P <- tell_P(anansi.res$modelfit)
+  a.disj.P <- tell_P(anansi.res$disjointed)
 
   t.full <- matrix(
     nrow = NCOL(tY),
@@ -76,21 +79,22 @@ test_that("full and disjointed parameters correspond to stats::lm()", {
   expect_equal(t.disj.F, a.disj.F)
 
 
-  ### And test multiple testing through random intercepts with Error() notation
+  ### And test repeated measurements through random intercepts with Error() notation
 
-  anansi.res <- anansi:::anansiDiffCor(
-    web, m,
-    formula = ~ continuous + Error(categorical), verbose = FALSE
-  )
+  anansi.res <- anansi(
+    web = web, metadata = m,
+    formula = ~ continuous + Error(categorical),
+    verbose = FALSE
+  )@output@model_results
 
-  a.full.F <- tell_F(anansi.res$modelfit)[[1]]
-  a.disj.F <- tell_F(anansi.res$disjointed)[[1]]
+  a.full.F <- tell_F(anansi.res$modelfit)
+  a.disj.F <- tell_F(anansi.res$disjointed)
 
-  a.full.Rsq <- tell_e(anansi.res$modelfit)[[1]]
-  a.disj.Rsq <- tell_e(anansi.res$disjointed)[[1]]
+  a.full.Rsq <- tell_e(anansi.res$modelfit)
+  a.disj.Rsq <- tell_e(anansi.res$disjointed)
 
-  a.full.P <- tell_P(anansi.res$modelfit)[[1]]
-  a.disj.P <- tell_P(anansi.res$disjointed)[[1]]
+  a.full.P <- tell_P(anansi.res$modelfit)
+  a.disj.P <- tell_P(anansi.res$disjointed)
 
   t.full <- matrix(
     nrow = NCOL(tY),
@@ -101,7 +105,6 @@ test_that("full and disjointed parameters correspond to stats::lm()", {
     )
   )
   t.disj.F <- t.full.F <- t.full.P <- t.disj.P <- t.disj <- t.full
-
 
   for (y in 1:NCOL(tY)) {
     m$y.val <- y.val <- tY[, y]

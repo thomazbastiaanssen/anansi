@@ -10,14 +10,14 @@
 #' For general use, we recommend sticking to that one. You can access the dictionary like this: \code{data(dictionary)}
 #' @return an \code{anansiWeb} object. Web is used as input for most of the main workflow of anansi.
 #' @export
-weaveWebFromTables <- function(tableY, tableX = NULL, dictionary = anansi::anansi_dic, verbose = T, mode = "interaction", prune = F, max_sds = 3) {
+weaveWebFromTables <- function(tableY, tableX = NULL, dictionary = anansi::anansi_dic, verbose = TRUE, mode = "interaction", prune = FALSE, max_sds = 3) {
   tableX <- assessWebCall(tableY = tableY, tableX = tableX, verbose = verbose)
 
   if (identical(tableX, tableY)) {
     if (verbose) {
-      print("Using softmax to undo CLR transformation while keeping the zero imputation. ")
+      message("Using softmax to undo CLR transformation while keeping the zero imputation. ")
     }
-    ct.list <- apply(tableY, 1, softmax, simplify = F)
+    ct.list <- apply(tableY, 1, softmax, simplify = FALSE)
     tableX <- do.call(rbind, ct.list)
     tableY <- tableX
   }
@@ -25,7 +25,7 @@ weaveWebFromTables <- function(tableY, tableX = NULL, dictionary = anansi::anans
   if (length(dictionary) == 1) {
     if (dictionary == "none") {
       if (verbose) {
-        print("No dictionary provided, preparing for all vs all analysis. ")
+        message("No dictionary provided, preparing for all vs all analysis. ")
       }
       dictionary <- mock_dictionary(tableY = tableY, tableX = tableX)
     }
@@ -60,7 +60,7 @@ weaveWebFromTables <- function(tableY, tableX = NULL, dictionary = anansi::anans
 
   # If we're looking at single data set, don't do associations with yourself. Set diagonal to FALSE.
   if (identical(tableX, tableY)) {
-    diag(dictionary) <- F
+    diag(dictionary) <- FALSE
   }
 
   # Check if input tables have the same names and the same length.
@@ -75,8 +75,8 @@ weaveWebFromTables <- function(tableY, tableX = NULL, dictionary = anansi::anans
   available_tableX <- sort(intersect(colnames(tableX), colnames(dictionary)))
 
   if (verbose) {
-    print(paste(length(available_tableY), "were matched between table 1 and the columns of the adjacency matrix"))
-    print(paste(length(available_tableX), "were matched between table 2 and the rows of the adjacency matrix"))
+    message(paste(length(available_tableY), "were matched between table 1 and the columns of the adjacency matrix"))
+    message(paste(length(available_tableX), "were matched between table 2 and the rows of the adjacency matrix"))
   }
   # Select the relevant part of the adjacency matrix
   dictionary <- dictionary[available_tableY, available_tableX]
@@ -91,9 +91,9 @@ weaveWebFromTables <- function(tableY, tableX = NULL, dictionary = anansi::anans
   # Disable the diagonal for within-dataset testing.
   if (identical(tableX, tableY)) {
     if (verbose) {
-      print("X and Y tables are identical. Setting the diagonal of the dictionary to FALSE.")
+      message("X and Y tables are identical. Setting the diagonal of the dictionary to FALSE.")
     }
-    diag(dictionary) <- F
+    diag(dictionary) <- FALSE
   }
 
   # Return an anansiWeb object with three slots: typically metabolites, functions and adjacency matrix
@@ -117,7 +117,7 @@ assessWebCall <- function(tableY, tableX, verbose) {
   }
 
   if (identical(tableX, tableY) & verbose) {
-    print("Single feature table detected. Preparing web for within-table analysis.")
+    message("Single feature table detected. Preparing web for within-table analysis.")
   }
   return(tableX)
 }
@@ -131,15 +131,15 @@ assessWebCall <- function(tableY, tableX, verbose) {
 #' @param mode A character vector. Can be "interaction" or "membership". Toggles whether to link two datasets based on their interactions or based on shared group membership.
 #' @return a binary adjacency matrix with features from tableY as rows and features from tableX as columns.
 #'
-makeAdjacencyMatrix <- function(dict_list, tableY = NULL, verbose = T, mode = mode) {
+makeAdjacencyMatrix <- function(dict_list, tableY = NULL, verbose = TRUE, mode = mode) {
   if (mode == "interaction") {
     if (verbose) {
-      print("Operating in interaction mode")
+      message("Operating in interaction mode")
     }
     makeAdjacencyMatrixFromList(tableY = tableY, dict_list = dict_list, mode = mode)
   } else if (mode == "membership") {
     if (verbose) {
-      print("Operating in membership mode")
+      message("Operating in membership mode")
     }
     makeAdjacencyMatrixFromGroupMemberList(dict_list = dict_list, mode = mode)
   }
@@ -166,11 +166,11 @@ makeAdjacencyMatrixFromList <- function(tableY = NULL, dict_list, mode = "intera
   dict_out <- matrix(
     nrow = length(ynames),
     ncol = length(xnames),
-    dimnames = list(ynames, xnames), data = F
+    dimnames = list(ynames, xnames), data = FALSE
   )
   # Fill in the canonical associations by row
-  for (y in 1:length(dict_list)) {
-    dict_out[y, dict_list[[y]]] <- T
+  for (y in seq_len(length(dict_list))) {
+    dict_out[y, dict_list[[y]]] <- TRUE
   }
   # Return the resulting matrix
   return(dict_out)
@@ -202,13 +202,13 @@ makeAdjacencyMatrixFromGroupMemberList <- function(dict_list, mode = mode) {
 #' @return a pruned anansi dictionary list object.
 #' @importFrom stats sd
 #'
-prune_dictionary_for_exclusivity <- function(dict_list, max_sds = 3, verbose = T) {
+prune_dictionary_for_exclusivity <- function(dict_list, max_sds = 3, verbose = TRUE) {
   mem_sizes <- unlist(lapply(dict_list, length))
   discard <- mem_sizes > (median(mem_sizes) + (max_sds * sd(mem_sizes)))
 
   if (verbose) {
-    print(paste(sum(discard), "groups were", max_sds, "sds larger than the median group size and were kicked out. "))
-    print(paste("These include", paste(names(dict_list[discard]), collapse = ", ")))
+    message(paste(sum(discard), "groups were", max_sds, "sds larger than the median group size and were kicked out. "))
+    message(paste("These include", paste(names(dict_list[discard]), collapse = ", ")))
   }
 
   return(dict_list[!discard])

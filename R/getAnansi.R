@@ -127,9 +127,8 @@ setGeneric("getAnansi",
 #' @importFrom SummarizedExperiment assay colData
 setMethod("getAnansi",
   signature = c(x = "MultiAssayExperiment"),
-  function(
-      x, experiment1 = 1, experiment2 = 2, assay.type1 = "counts",
-      assay.type2 = "counts", return.format = "long", ...) {
+  function(x, experiment1 = 1, experiment2 = 2, assay.type1 = "counts",
+           assay.type2 = "counts", return.format = "long", ...) {
     # Retrieve kwargs as list
     kwargs <- list(...)
     # Check fixed arguments
@@ -177,8 +176,8 @@ setMethod("getAnansi",
     anansi_args <- c(list(web = web, metadata = coldata), kwargs)
     keep <- names(anansi_args) %in% c(
       "web", "groups", "metadata", "formula",
-      "adjust.method", "resampling", "locality",
-      "verbose", "diff_cor", "ignore_dictionary"
+      "adjust.method", "verbose",
+      "ignore_dictionary"
     )
     anansi_args <- anansi_args[keep]
     # Generate anansi output

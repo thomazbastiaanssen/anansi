@@ -114,7 +114,7 @@ web <- weaveWebFromTables(tableY = t1, tableX = t2, dictionary = anansi_dic)
 
 ## Run anansi🕷️
 
-The main workspider in this package is called `anansi`. Generally, you want to give it three arguments. First, there's `web`, which is an `anansiWeb` object, such as the one we generated in the above step. Second, there's `formula`, which should be a formula. For instance, to assess differential associations between treatments, we use the formula `~Treatment`, provided we have a column with that name in our `metadata` object, the Third argument. 
+The main workspider in this package is called `anansi`. Generally, you want to give it three arguments. First, there's `web`, which is an `anansiWeb` object, such as the one we generated in the above step. Second, there's `formula`, which should be a formula. For instance, to assess differential associations between treatments, we use the formula `~Legend`, provided we have a column with that name in our `metadata` object, the Third argument. 
 
 ```{r, eval=TRUE}
 anansi_out <- anansi(
