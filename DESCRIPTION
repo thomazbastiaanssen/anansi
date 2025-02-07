@@ -14,7 +14,7 @@ Description: Studies including both microbiome and metabolomics data are becomin
     search space, only considering metabolite-function interactions that have been recorded
     in a pathway database. This package also provides a framework to assess differential 
     association. 
-Depends: R (>= 3.5.0)
+Depends: R (>= 4.4.0)
 Imports:
     stats,
     methods,
@@ -37,6 +37,6 @@ Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.3.2
 Config/testthat/edition: 3
-biocViews: Regression, Pathways
+biocViews: Microbiome, Metabolomics, Regression, Pathways
 URL: https://github.com/thomazbastiaanssen/anansi
 BugReports: https://github.com/thomazbastiaanssen/anansi/issues

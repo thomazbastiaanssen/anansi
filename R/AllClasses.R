@@ -42,15 +42,16 @@ setClass("anansiTale",
 
 #' An S4 class to contain all \code{anansi} input so that they can easily be extracted.
 #'
-#' @slot input A list that holds the input data in \code{anansiWeb} format, as well as the \code{groups}, formula and \code{reff} argument(s) if provided.
+#' @slot input A list that holds the input data in \code{anansiWeb} format, as well as the \code{int.terms} and corresponding \code{groups}, the equivalent \code{lm.formula} and \code{error.term} argument(s) if provided.
 #' @description \code{anansiInput} is the container that will hold your input data in the \code{anansiYarn} output file coming out of the \code{anansi} pipeline.
 #'
 setClass("anansiInput",
   slots = c(
     web = "anansiWeb",
-    groups = "vector",
-    formula = "formula",
-    reff = "vector"
+    lm.formula = "formula",
+    error.term = "ANY",
+    int.terms = "vector",
+    groups = "ANY"
   )
 )
 
@@ -92,7 +93,7 @@ setMethod("plot", "anansiYarn", function(x) {
   plotlist <- list(unlist(x@output@cor_results), unlist(x@output@model_results))
   dictionary <- x@input@web@dictionary
 
-  for (p in 1:(length(plotnames))) {
+  for (p in seq_len(length(plotnames))) {
     tale <- unlist(plotlist)[[plotnames[p]]]
 
     # figure out if we're plotting r.values or r.squared.

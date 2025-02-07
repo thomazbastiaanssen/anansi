@@ -174,8 +174,8 @@ setMethod("getAnansi", signature = c(x = "MultiAssayExperiment"), function(
     anansi_args <- c(list(web = web, metadata = coldata), kwargs)
     keep <- names(anansi_args) %in% c(
       "web", "groups", "metadata", "formula",
-      "adjust.method", "resampling", "locality",
-      "verbose", "diff_cor", "ignore_dictionary"
+      "adjust.method", "verbose",
+      "ignore_dictionary"
     )
     anansi_args <- anansi_args[keep]
     # Generate anansi output

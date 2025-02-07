@@ -8,9 +8,9 @@ weaveWebFromTables(
   tableY,
   tableX = NULL,
   dictionary = anansi::anansi_dic,
-  verbose = T,
+  verbose = TRUE,
   mode = "interaction",
-  prune = F,
+  prune = FALSE,
   max_sds = 3
 )
 }

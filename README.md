@@ -143,9 +143,11 @@ a necessary input file for the main `anansi` workflow.
 web <- weaveWebFromTables(tableY = t1, tableX = t2, dictionary = anansi_dic)
 ```
 
-    ## [1] "Operating in interaction mode"
-    ## [1] "3 were matched between table 1 and the columns of the adjacency matrix"
-    ## [1] "50 were matched between table 2 and the rows of the adjacency matrix"
+    ## Operating in interaction mode
+
+    ## 3 were matched between table 1 and the columns of the adjacency matrix
+
+    ## 50 were matched between table 2 and the rows of the adjacency matrix
 
 ## Run anansi🕷️
 
@@ -154,26 +156,25 @@ want to give it three arguments. First, there’s `web`, which is an
 `anansiWeb` object, such as the one we generated in the above step.
 Second, there’s `formula`, which should be a formula. For instance, to
 assess differential associations between treatments, we use the formula
-`~Treatment`, provided we have a column with that name in our `metadata`
+`~Legend`, provided we have a column with that name in our `metadata`
 object, the Third argument.
 
 ``` r
 anansi_out <- anansi(
   web = web,
-  formula = ~Legend,
+  formula = ~ Legend,
   metadata = FMT_metadata,
   adjust.method = "BH",
   verbose = TRUE
 )
 ```
 
-    ## [1] "Running annotation-based correlations"
-    ## [1] "Running correlations for the following groups: All, Aged yFMT, Aged oFMT, Young yFMT"
-    ## [1] "Fitting models for differential correlation testing"
-    ## [1] "Model type:lm"
     ## Fitting least-squares for following model:
-    ## ~ x + Legend + x:Legend [1] "Adjusting p-values using Benjamini & Hochberg's procedure."
-    ## [1] "Using theoretical distribution."
+    ## ~ x + Legend + x:Legend
+
+    ## Running correlations for the following groups: Aged yFMT, Aged oFMT, Young yFMT
+
+    ## Adjusting p-values using Benjamini & Hochberg's procedure.
 
 ## Spin to a table📝
 

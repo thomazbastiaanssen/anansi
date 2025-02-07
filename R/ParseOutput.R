@@ -7,7 +7,7 @@
 #' @return a wide format data.frame
 #' @export
 #'
-spinToWide <- function(anansi_output, prune = T, translate = F, Y_translation = NULL, X_translation = NULL) {
+spinToWide <- function(anansi_output, prune = TRUE, translate = FALSE, Y_translation = NULL, X_translation = NULL) {
   # in case of argonansi
   if (is(anansi_output@input@web, "argonansiWeb")) {
     anansi_output@output@model_results[["modelfit.full"]] <- argonaut_rep_to_strat(
@@ -24,7 +24,7 @@ spinToWide <- function(anansi_output, prune = T, translate = F, Y_translation = 
 
 
   # merge all data.frames in the list while keeping the row order.
-  wide_df <- Reduce(function(x, y) merge(x, y, sort = F), flat_list)
+  wide_df <- Reduce(function(x, y) merge(x, y, sort = FALSE), flat_list)
 
 
   if (translate) {
@@ -63,7 +63,7 @@ spinToWide <- function(anansi_output, prune = T, translate = F, Y_translation = 
 #' @return a long format data.frame intended to be compatible with \code{ggplot2}
 #' @export
 #'
-spinToLong <- function(anansi_output, prune = T, translate = F, Y_translation = NULL, X_translation = NULL) {
+spinToLong <- function(anansi_output, prune = TRUE, translate = FALSE, Y_translation = NULL, X_translation = NULL) {
   # Figure out how many groups were present in the correlations.
   n_cors <- length(anansi_output@output@cor_results)
 
@@ -87,7 +87,7 @@ spinToLong <- function(anansi_output, prune = T, translate = F, Y_translation = 
     flat_model_list <- lapply(anansi_output@output@model_results, getAnansiResults, format = "wide")
 
     # Merge all model results in a single wide data.frame
-    wide_model_df <- Reduce(function(x, y) merge(x, y, sort = F), flat_model_list)
+    wide_model_df <- Reduce(function(x, y) merge(x, y, sort = FALSE), flat_model_list)
 
     # Stack the model results so that they have the same number of rows as the correlation results
     # wide_model_df   = do.call(rbind, replicate(n_cors, wide_model_df, simplify = FALSE))
@@ -132,7 +132,7 @@ getAnansiResults <- function(tale, format = "wide") {
     cbind(
       expand.grid(
         feature_Y = row.names(tale@estimates),
-        feature_X = colnames(tale@estimates), stringsAsFactors = F
+        feature_X = colnames(tale@estimates), stringsAsFactors = FALSE
       ),
       estimates = c(tale@estimates),
       p.values = c(tale@p.values),
@@ -141,7 +141,7 @@ getAnansiResults <- function(tale, format = "wide") {
 
   if (format == "wide") {
     names(out_df)[3] <- tale@type
-    names(out_df)[-c(1:2)] <- paste(tale@subject, names(out_df)[-c(1:2)], sep = "_")
+    names(out_df)[-c(1,2)] <- paste(tale@subject, names(out_df)[-c(1,2)], sep = "_")
   }
   if (format == "long") {
     out_df$type <- paste(tale@subject, sep = "_")
@@ -159,14 +159,14 @@ getAnansiResults <- function(tale, format = "wide") {
 #' @param argonansi A boolean. Toggles whether we are dealing with stratified data.
 #' @return an expanded table with a column for the human readable names for the features in both tableY and tableX.
 #'
-anansiTranslate <- function(x, Y_translation = Y_translation, X_translation = X_translation, argonansi = F) {
+anansiTranslate <- function(x, Y_translation = Y_translation, X_translation = X_translation, argonansi = FALSE) {
   l_X <- length(unique(x$feature_X))
   l_Y <- rep(length(unique(x$feature_Y)), l_X)
   if (argonansi) {
     x$feature_X_stratified <- x$feature_X
     x$feature_X <- gsub(x = x$feature_X_stratified, pattern = "\\..*", replacement = "")
     x$subtype_X <- gsub(x = x$feature_X_stratified, pattern = ".*\\.", replacement = "")
-    l_Y <- rle(paste(x$feature_X))$lengths[1:length(unique(x$feature_X))]
+    l_Y <- rle(paste(x$feature_X))$lengths[seq_len(length(unique(x$feature_X)))]
   }
 
   relevant_Y <- Y_translation[Y_translation[, 1] %in% x$feature_Y, ]
@@ -198,23 +198,42 @@ anansiTranslate <- function(x, Y_translation = Y_translation, X_translation = X_
 #' @return a list of ready to plot data.frames and their names.
 #' @export
 #' @examples
-#' \dontrun{
-#' # Starting off at the example in ?anansi
+#' # Starting off from the example in ?anansi
+#'
+#' data(dictionary)
+#' data(FMT_data)
+#'
+#' # Clean and prepare the example data.
+#' # In the example dataset, the metabolites are already cleaned.
+#'
+#' KOs <- floor(FMT_KOs)
+#' KOs <- apply(KOs, c(1, 2), function(x) as.numeric(as.character(x)))
+#' KOs <- KOs[apply(KOs == 0, 1, sum) <= (ncol(KOs) * 0.90), ]
+#' KOs.exp <- clr_c(KOs[row.names(KOs) %in% sort(unique(unlist(anansi_dic))), ])
+#'
+#' t1 <- t(FMT_metab)
+#' t2 <- t(KOs.exp)
+#'
+#' # Run anansi pipeline.
+#'
+#' web <- weaveWebFromTables(
+#'   tableY = t1,
+#'   tableX = t2,
+#'   dictionary = anansi_dic
+#' )
 #'
 #' anansi_out <- anansi(
 #'   web = web,
-#'   method = "pearson",
+#'   formula = ~Legend,
 #'   groups = FMT_metadata$Legend,
+#'   metadata = FMT_metadata,
 #'   adjust.method = "BH",
 #'   verbose = TRUE
 #' )
 #'
 #' # Let's look at all canonical interactions that also have a sufficiently well-fitting model:
 #'
-#' outPlots <- spinToPlots(anansi_out,
-#'   target = anansi_out@input@web@dictionary &
-#'     anansi_out@output@model_results$modelfit@q.values < 0.1
-#' )
+#' outPlots <- spinToPlots(anansi_out)
 #'
 #' # load ggplot2 and patchwork for plotting
 #'
@@ -225,7 +244,7 @@ anansiTranslate <- function(x, Y_translation = Y_translation, X_translation = X_
 #'   # Main ggplot call
 #'   ggplot(data = p$data, aes(x = X, y = Y, fill = groups)) +
 #'
-#'     # Establish geoms:
+#'     # Define geoms:
 #'     geom_point(shape = 21) +
 #'     geom_smooth(method = "lm") +
 #'     theme_bw() +
@@ -244,12 +263,15 @@ anansiTranslate <- function(x, Y_translation = Y_translation, X_translation = X_
 #' # Call patchwork to unify and arrange the first 6 plots
 #'
 #' wrap_plots(plotted[1:6]) + plot_layout(guides = "collect")
-#' }
 #'
-spinToPlots <- function(anansiYarn, target = anansiYarn@input@web@dictionary, translate = F, Y_translation = NULL, X_translation = NULL) {
-  pairs_of_interest <- which(target, arr.ind = T, useNames = F)
+spinToPlots <- function(anansiYarn, target = NULL, translate = FALSE, Y_translation = NULL, X_translation = NULL) {
 
-  out_list <- apply(X = pairs_of_interest, MARGIN = 1, FUN = gather_plot, anansiYarn = anansiYarn, simplify = F)
+  if(is.null(target)) {target = yarn.dic.logical(anansiYarn)} else {
+    target = yarn.dic.logical(anansiYarn)& target}
+
+   pairs_of_interest <- which(target, arr.ind = TRUE, useNames = FALSE)
+
+  out_list <- apply(X = pairs_of_interest, MARGIN = 1, FUN = gather_plot, anansiYarn = anansiYarn, simplify = FALSE)
 
   names(out_list) <- paste(
     colnames(anansiYarn@input@web@tableY)[pairs_of_interest[, 1]],
@@ -283,8 +305,7 @@ gather_plot <- function(pair_of_interest, anansiYarn) {
   df_out <- data.frame(
     Y = anansiYarn@input@web@tableY[, pair_of_interest[1]],
     X = anansiYarn@input@web@tableX[, pair_of_interest[2]],
-    groups = anansiYarn@input@groups,
-    reff = anansiYarn@input@reff
+    groups = anansiYarn@input@groups
   )
   return(list(
     data = df_out,
@@ -297,6 +318,7 @@ gather_plot <- function(pair_of_interest, anansiYarn) {
 
 #' Helper function to translate feature names in spinToPlot()
 #' @param x a vector of two names, to be wrangled to a 1x2 data.frame.
+#' @noRd
 #'
 tiny_df <- function(x) {
   return(data.frame(matrix(x$name, nrow = 1, dimnames = list("", c("feature_Y", "feature_X")))))

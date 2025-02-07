@@ -6,8 +6,8 @@
 \usage{
 spinToWide(
   anansi_output,
-  prune = T,
-  translate = F,
+  prune = TRUE,
+  translate = FALSE,
   Y_translation = NULL,
   X_translation = NULL
 )
