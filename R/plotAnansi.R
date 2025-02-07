@@ -45,7 +45,7 @@
 #'
 #' @examples
 #' 
-#' #' # Import libraries
+#' # Import libraries
 #' library(mia)
 #' library(TreeSummarizedExperiment)
 #' library(MultiAssayExperiment)
@@ -131,6 +131,8 @@ setMethod("plotAnansi", signature = c(df = "data.frame"),
         "must contain columns 'r.values', 'feature_X', 'feature_Y' and ",
         "'model_disjointed_Legend_p.values'", call. = FALSE)
     }
+    # Check y_position
+    match.arg(y_position, choices = c("left", "right"))
     # Update colour_by if color_by is defined
     if (!is.null(color_by) && is.null(colour_by)) {
         colour_by <- color_by
@@ -152,7 +154,7 @@ setMethod("plotAnansi", signature = c(df = "data.frame"),
         size = if (size_defined) df[[size_by]] else NA,
         shape = if (shape_defined) df[[shape_by]] else NA,
         alpha = if (signif_defined)
-            factor(df["model_disjointed_Legend_p.values"] < signif.threshold,
+            factor(df["model_full_p.values"] < signif.threshold,
             levels = c(TRUE, FALSE)) else NA,
         facet = df[["feature_Y"]]
     )
