@@ -45,7 +45,7 @@
 #' anansi_out <- anansi(
 #'   web = web,
 #'   formula = ~Legend,
-#'   groups = FMT_metadata$Legend,
+#'   groups = "Legend",
 #'   metadata = FMT_metadata,
 #'   adjust.method = "BH",
 #'   verbose = TRUE
@@ -109,12 +109,13 @@
 #'
 anansi <- function(web, formula = ~1, groups = NULL, metadata,
                    adjust.method = "BH", verbose = TRUE, ignore_dictionary = FALSE) {
-
   # generate anansiYarn output object
-  outYarn <- prepYarn(web = web, formula = formula, groups = groups,
-                      metadata = metadata, verbose = verbose)
+  outYarn <- prepYarn(
+    web = web, formula = formula, groups = groups,
+    metadata = metadata, verbose = verbose
+  )
   # sort out metadata
-  metadata <- model.frame(formula = yarn.f(outYarn), cbind(x = 1, metadata))
+  lm.metadata <- model.frame(formula = yarn.f(outYarn), cbind(x = 1, metadata))
 
   if (ignore_dictionary) {
     if (verbose) {
@@ -132,18 +133,20 @@ anansi <- function(web, formula = ~1, groups = NULL, metadata,
 
   output@cor_results <- call_groupwise(
     web = web, groups = yarn.grp(outYarn),
-    verbose = verbose
+    metadata, verbose = verbose
   )
 
   output@model_results <- unlist(anansiDiffCor(
-      yarn = outYarn, metadata = metadata,
-      verbose = verbose
-    ))
+    yarn = outYarn, metadata = lm.metadata,
+    verbose = verbose
+  ))
   outYarn@output <- output
 
   # FDR
-  outYarn <- anansiAdjustP(x = outYarn,
-                           method = adjust.method, verbose = verbose)
+  outYarn <- anansiAdjustP(
+    x = outYarn,
+    method = adjust.method, verbose = verbose
+  )
 
   return(outYarn)
 }
@@ -153,50 +156,62 @@ anansi <- function(web, formula = ~1, groups = NULL, metadata,
 #' @description If the \code{groups} argument is suitable, will also run correlation analysis per group. Typically, the main \code{anansi()} function will run this for you.
 #' @param web An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.
 #' @param groups A categorical or continuous value necessary for differential correlations. Typically a state or treatment score.
+#' @param metadata A vector or data.frame of categorical or continuous value necessary for differential correlations. Typically a state or treatment score.
 #' @param verbose A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.
 #' @noRd
 #'
-call_groupwise <- function(web, groups, verbose) {
-
-    if (is(web, "argonansiWeb")) {
-      return(anansiCorTestByGroup(
-        web = new("anansiWeb",
-          tableY     = as.matrix(get_tableY(web)),
-          tableX     = as.matrix(get_tableX(web)),
-          dictionary = as.matrix(web@strat_dict)
-        ), groups = groups, verbose = verbose
-      ))
-    }
-
-    return(anansiCorTestByGroup(web = web, groups = groups, verbose = verbose))
+call_groupwise <- function(web, groups, verbose, metadata) {
+  if(is.null(groups)) {group.vec <- NULL} else {
+  group.vec <- apply(metadata[,groups, drop = FALSE], 1, paste, collapse = "_")
   }
+
+  if (is(web, "argonansiWeb")) {
+    return(anansiCorTestByGroup(
+      web = new("anansiWeb",
+        tableY     = as.matrix(get_tableY(web)),
+        tableX     = as.matrix(get_tableX(web)),
+        dictionary = as.matrix(web@strat_dict)
+      ), group.vec = group.vec, verbose = verbose
+    ))
+  }
+
+  return(
+    anansiCorTestByGroup(web = web, group.vec = group.vec, verbose = verbose)
+    )
+}
 
 
 #' Assess formula, trim metadata and prepare output for anansi workflow
 #' @description Initialize anansiYarn output Should not be called by user.
 #' @noRd
 #'
-prepYarn <- function(web, formula, groups, metadata, verbose){
-
+prepYarn <- function(web, formula, groups, metadata, verbose) {
   raw_terms <- terms.formula(formula, "Error", data = metadata)
-  indErr  <- attr(raw_terms, "specials")$Error
+  indErr <- attr(raw_terms, "specials")$Error
 
-  groups <- check_groups(groups, raw_terms, indErr, metadata)
+  groups <- check_groups(groups, raw_terms, indErr, metadata, verbose)
 
-  all_terms <- if(is.null(indErr)) {labels(raw_terms)
-    } else {labels(raw_terms)[-indErr]}
+  all_terms <- if (is.null(indErr)) {
+    labels(raw_terms)
+  } else {
+    labels(raw_terms)[-indErr]
+  }
 
   sat_model <- make_saturated_model(formula, raw_terms, indErr, verbose)
-  error.term <- if( is.null(indErr))  {NULL} else {
-    deparse1(attr(raw_terms, "variables")[[1L + indErr]][[2L]], backtick = TRUE)}
+  error.term <- if (is.null(indErr)) {
+    NULL
+  } else {
+    deparse1(attr(raw_terms, "variables")[[1L + indErr]][[2L]], backtick = TRUE)
+  }
   outYarn <- new("anansiYarn",
-                 input = new("anansiInput",
-                             web = web,
-                             lm.formula = sat_model,
-                             error.term = error.term,
-                             int.terms  = all_terms,
-                             groups = groups)
-                 )
+    input = new("anansiInput",
+      web = web,
+      lm.formula = sat_model,
+      error.term = error.term,
+      int.terms = all_terms,
+      groups = groups
+    )
+  )
   return(outYarn)
 }
 
@@ -204,21 +219,44 @@ prepYarn <- function(web, formula, groups, metadata, verbose){
 #' @noRd
 #' @importFrom stats as.formula update.formula
 #'
-check_groups <- function(groups, raw_terms, indErr, metadata){
-  if(!is.null(groups)) return(unname(groups))
+check_groups <- function(groups, raw_terms, indErr, metadata, verbose) {
+  # If user input, check it
+  if (!is.null(groups)) {
 
-  order_1 <- attr(raw_terms, "order") == 1
-  if( !is.null(indErr) ) {order_1[indErr] <- FALSE}
-  if( length(order_1) == !is.null(indErr) ) {return(NULL)}
+    missing_groups <- !groups %in% colnames(metadata)
+    stopifnot(
+      "Grouping variable(s) not recognised. Please check input and labels. " =
+        !any(missing_groups)
+      )
 
-  sub_meta <- metadata[, labels(raw_terms)[order_1], drop = FALSE]
-  sub_meta <- sub_meta[,unname(apply(
+    return(groups)
+  }
+
+  # If no input, look for categorical variables
+  ind_o1 <- attr(raw_terms, "order") == 1
+  if (!is.null(indErr)) {
+    ind_o1[indErr] <- FALSE
+  }
+  if (!any(ind_o1)) {
+    if(verbose){message("No grouping variable found for groupwise correlations. ")}
+    return(NULL)
+  }
+  groups <- labels(raw_terms)[ind_o1]
+
+
+  sub_meta <- metadata[, groups, drop = FALSE]
+  sub_meta <- sub_meta[, unname(apply(
     sub_meta, 2, function(x) {
-      is.character(x) || is.factor(x) || is.ordered(x) })), drop = FALSE]
+      is.character(x) || is.factor(x) || is.ordered(x)
+    }
+  )), drop = FALSE]
 
-  if(NCOL(sub_meta) == 0) {return(groups = NULL)}
-  groups <- apply(sub_meta, 1, paste, collapse = "_")
-  return(unname(groups))
+  if (NCOL(sub_meta) == 0) {
+    if(verbose){message("No grouping variable found for groupwise correlations. ")}
+    return(NULL)
+  }
+
+  return(groups)
 }
 
 #' Prepare saturated model, deal with \code{Error} terms.
@@ -241,7 +279,7 @@ make_saturated_model <- function(formula, raw_terms, indErr, verbose) {
   }
 
   # Case with repeated measures:
- stopifnot("Only one Error() term allowed; more detected." = length(indErr) < 2)
+  stopifnot("Only one Error() term allowed; more detected." = length(indErr) < 2)
   errorterm <- attr(raw_terms, "variables")[[1L + indErr]]
   sat_model <- update.formula(old = formula, new = as.formula(
     paste(

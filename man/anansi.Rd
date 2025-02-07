@@ -70,7 +70,7 @@ web <- weaveWebFromTables(
 anansi_out <- anansi(
   web = web,
   formula = ~Legend,
-  groups = FMT_metadata$Legend,
+  groups = "Legend",
   metadata = FMT_metadata,
   adjust.method = "BH",
   verbose = TRUE

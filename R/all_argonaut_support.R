@@ -88,7 +88,8 @@ weaveWebFromStratifiedTables <- function(tableY, stratifiedTableX, dictionary = 
   if (verbose) {
     m1 <- paste(
       length(available_tableY), "were matched between table 1 and the columns of the adjacency matrix,\n",
-    length(available_tableX), "were matched between table 2 and the rows of the adjacency matrix")
+      length(available_tableX), "were matched between table 2 and the rows of the adjacency matrix"
+    )
 
     message(m1)
   }

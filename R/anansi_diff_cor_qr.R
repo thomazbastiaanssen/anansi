@@ -144,9 +144,11 @@ fast.qr.resid <- function(x, y) {
 #'
 dfmat <- function(x.assign, x.int, all.assign, x.fct, n) {
   df0 <- colSums(
-    !vapply(x.assign, FUN.VALUE = vector("logical", length = length(all.assign)),
-            function(x) index.self.high(x, all.assign, x.fct))
+    !vapply(x.assign,
+      FUN.VALUE = vector("logical", length = length(all.assign)),
+      function(x) index.self.high(x, all.assign, x.fct)
     )
+  )
   df1 <- c(
     sum(index.self.high(x.assign[1], all.assign, x.fct)),
     vapply(x.int, FUN.VALUE = 2, function(x) sum(all.assign %in% x))
@@ -160,8 +162,10 @@ dfmat <- function(x.assign, x.int, all.assign, x.fct, n) {
 #'
 make_contrasts <- function(metadata) {
   contr.in <- NULL
-  f.names <- colnames(metadata)[unlist(lapply(metadata,
-           function(x) (is.character(x) || is.factor(x) || is.logical(x) )))]
+  f.names <- colnames(metadata)[unlist(lapply(
+    metadata,
+    function(x) (is.character(x) || is.factor(x) || is.logical(x))
+  ))]
   if (length(f.names) > 0) {
     contr.in <- `names<-`(rep("contr.sum", times = length(f.names)), f.names)
     contr.in[names(which(vapply(metadata, FUN.VALUE = FALSE, is.ordered)))] <- "contr.poly"
@@ -171,13 +175,14 @@ make_contrasts <- function(metadata) {
 
 #' @noRd
 #'
-build.mm <- function(sat_model, metadata){
+build.mm <- function(sat_model, metadata) {
   contr <- make_contrasts(metadata)
 
   return(model.matrix.default(
-    sat_model, metadata, contrasts.arg = contr
-    ))
-  }
+    sat_model, metadata,
+    contrasts.arg = contr
+  ))
+}
 
 
 #' Calculate sums of squares by column
@@ -313,10 +318,13 @@ get_x.fct <- function(sat_model, errorterm) {
 #' Generate table, to compute contrasts, basis for base.mm
 #' @noRd
 #'
-subset_metadata <- function(metadata, keep, raw_terms, indErr){
-
-  if (!is.null(indErr)) {all_terms <-c(
-    all_terms, deparse1(attr(raw_terms, "variables")[[1L + indErr]][[2L]],
-                       backtick = TRUE))}
-  return(cbind(x = 1, metadata[, colnames(metadata) %in% all_terms, drop = FALSE] ))
+subset_metadata <- function(metadata, keep, raw_terms, indErr) {
+  if (!is.null(indErr)) {
+    all_terms <- c(
+      all_terms, deparse1(attr(raw_terms, "variables")[[1L + indErr]][[2L]],
+        backtick = TRUE
+      )
+    )
+  }
+  return(cbind(x = 1, metadata[, colnames(metadata) %in% all_terms, drop = FALSE]))
 }

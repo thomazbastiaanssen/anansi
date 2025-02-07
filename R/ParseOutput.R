@@ -141,7 +141,7 @@ getAnansiResults <- function(tale, format = "wide") {
 
   if (format == "wide") {
     names(out_df)[3] <- tale@type
-    names(out_df)[-c(1,2)] <- paste(tale@subject, names(out_df)[-c(1,2)], sep = "_")
+    names(out_df)[-c(1, 2)] <- paste(tale@subject, names(out_df)[-c(1, 2)], sep = "_")
   }
   if (format == "long") {
     out_df$type <- paste(tale@subject, sep = "_")
@@ -225,7 +225,7 @@ anansiTranslate <- function(x, Y_translation = Y_translation, X_translation = X_
 #' anansi_out <- anansi(
 #'   web = web,
 #'   formula = ~Legend,
-#'   groups = FMT_metadata$Legend,
+#'   groups = "Legend",
 #'   metadata = FMT_metadata,
 #'   adjust.method = "BH",
 #'   verbose = TRUE
@@ -265,11 +265,13 @@ anansiTranslate <- function(x, Y_translation = Y_translation, X_translation = X_
 #' wrap_plots(plotted[1:6]) + plot_layout(guides = "collect")
 #'
 spinToPlots <- function(anansiYarn, target = NULL, translate = FALSE, Y_translation = NULL, X_translation = NULL) {
+  if (is.null(target)) {
+    target <- yarn.dic.logical(anansiYarn)
+  } else {
+    target <- yarn.dic.logical(anansiYarn) & target
+  }
 
-  if(is.null(target)) {target = yarn.dic.logical(anansiYarn)} else {
-    target = yarn.dic.logical(anansiYarn)& target}
-
-   pairs_of_interest <- which(target, arr.ind = TRUE, useNames = FALSE)
+  pairs_of_interest <- which(target, arr.ind = TRUE, useNames = FALSE)
 
   out_list <- apply(X = pairs_of_interest, MARGIN = 1, FUN = gather_plot, anansiYarn = anansiYarn, simplify = FALSE)
 

@@ -41,9 +41,9 @@ anansiAdjustP <- function(x, method = "BH", verbose = TRUE) {
     pval_df <- pval_df[pval_df$group != "modelfit.full", ]
     p <- slot(slot(x@output, "model_results")[["modelfit.full"]], "p.values")
 
-      # adjust p-values directly into the relevant slot
-      slot(slot(x@output, "model_results")[["modelfit.full"]], "q.values")[x@input@web@dictionary] <-
-        p.adjust(p[x@input@web@dictionary], method = method)
+    # adjust p-values directly into the relevant slot
+    slot(slot(x@output, "model_results")[["modelfit.full"]], "q.values")[x@input@web@dictionary] <-
+      p.adjust(p[x@input@web@dictionary], method = method)
   }
 
   # for each of those sources of p-values, do:
@@ -54,8 +54,6 @@ anansiAdjustP <- function(x, method = "BH", verbose = TRUE) {
     # adjust p-values directly into the relevant slot
     slot(slot(x@output, pval_df[i, 1])[[pval_df[i, 2]]], "q.values")[dictionary] <-
       p.adjust(p[dictionary], method = method)
-
   }
   return(x)
 }
-
