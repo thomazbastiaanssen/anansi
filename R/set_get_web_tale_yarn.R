@@ -190,4 +190,3 @@ yarn.tY <- function(yarn) {
 yarn.Q <- function(yarn) {
   get_tableY(yarn.web(yarn))
 }
-

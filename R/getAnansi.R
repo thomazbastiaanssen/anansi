@@ -127,9 +127,8 @@ setGeneric("getAnansi",
 #' @importFrom SummarizedExperiment assay colData
 setMethod("getAnansi",
   signature = c(x = "MultiAssayExperiment"),
-  function(
-      x, experiment1 = 1, experiment2 = 2, assay.type1 = "counts",
-      assay.type2 = "counts", return.format = "long", ...) {
+  function(x, experiment1 = 1, experiment2 = 2, assay.type1 = "counts",
+           assay.type2 = "counts", return.format = "long", ...) {
     # Retrieve kwargs as list
     kwargs <- list(...)
     # Check fixed arguments

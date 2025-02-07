@@ -1,14 +1,14 @@
 #' Run correlations for all interacting metabolites and functions.
 #' @description If the \code{groups} argument is suitable, will also run correlation analysis per group. Typically, the main \code{anansi()} function will run this for you.
 #' @param web An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.
-#' @param groups A categorical or continuous value necessary for differential correlations. Typically a state or treatment score.
+#' @param group.vec A character vector denoting group membership. Typically a state or treatment score.
 #' @param verbose A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.
 #' @return a list of \code{anansiTale} result objects, one for the total dataset and per group if applicable.
 #' @seealso \code{\link{anansi}}
 #'
-anansiCorTestByGroup <- function(web, groups, verbose = TRUE) {
+anansiCorTestByGroup <- function(web, group.vec, verbose = TRUE) {
   # Determine all groups
-  all_groups <- unique(groups)
+  all_groups <- unique(group.vec)
 
   # Generate container list of suitable length for all results
   out_list <- vector(mode = "list", length = 1 + length(all_groups))
@@ -16,11 +16,13 @@ anansiCorTestByGroup <- function(web, groups, verbose = TRUE) {
 
   # first run for all groups together
   out_list$All <- anansiCorPvalue(
-    web, group.bool = rep(TRUE, NROW(get_tableY(web))), verbose = verbose)
+    web,
+    group.bool = rep(TRUE, NROW(get_tableY(web))), verbose = verbose
+  )
 
   out_list$All@subject <- "All"
 
-  if(!is.null(all_groups)){
+  if (!is.null(all_groups)) {
     # If verbose, verbalize.
     if (verbose) {
       message(paste(
@@ -29,7 +31,7 @@ anansiCorTestByGroup <- function(web, groups, verbose = TRUE) {
       ))
     }
     for (i in seq_len(length(all_groups))) {
-      out_by_group <- anansiCorPvalue(web, group.bool = groups == all_groups[i], verbose = verbose)
+      out_by_group <- anansiCorPvalue(web, group.bool = group.vec == all_groups[i], verbose = verbose)
       out_by_group@subject <- all_groups[i]
 
       out_list[[i + 1]] <- out_by_group
@@ -86,9 +88,11 @@ anansiCorPvalue <- function(web, group.bool, verbose = verbose) {
 #'
 anansiCor <- function(web, group.bool) {
   # Run correlations on subsections of your data
-  cors <- cor(x = get_tableY(web)[group.bool, ],
-              y = get_tableX(web)[group.bool, ],
-              method = "pearson", use = "pairwise.complete.obs")
+  cors <- cor(
+    x = get_tableY(web)[group.bool, ],
+    y = get_tableX(web)[group.bool, ],
+    method = "pearson", use = "pairwise.complete.obs"
+  )
   # set non-canonical correlations to zero using the binary adjacency matrix.
   return(cors * get_dict(web))
 }

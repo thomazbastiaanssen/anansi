@@ -15,8 +15,10 @@ test_that("full and disjointed parameters correspond to stats::lm()", {
     dictionary = d
   )
 
-  anansi.res <- anansi(web = web, metadata = m,
-                       formula = ~categorical, verbose = FALSE)@output@model_results
+  anansi.res <- anansi(
+    web = web, metadata = m,
+    formula = ~categorical, verbose = FALSE
+  )@output@model_results
 
   a.full.F <- tell_F(anansi.res$modelfit)
   a.disj.F <- tell_F(anansi.res$disjointed)
@@ -77,11 +79,13 @@ test_that("full and disjointed parameters correspond to stats::lm()", {
   expect_equal(t.disj.F, a.disj.F)
 
 
-  ### And test multiple testing through random intercepts with Error() notation
+  ### And test repeated measurements through random intercepts with Error() notation
 
-  anansi.res <- anansi(web = web, metadata = m,
-                       formula = ~continuous + Error(categorical),
-                       verbose = FALSE)@output@model_results
+  anansi.res <- anansi(
+    web = web, metadata = m,
+    formula = ~ continuous + Error(categorical),
+    verbose = FALSE
+  )@output@model_results
 
   a.full.F <- tell_F(anansi.res$modelfit)
   a.disj.F <- tell_F(anansi.res$disjointed)
