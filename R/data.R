@@ -42,7 +42,7 @@
 
 #' Snippet of the untransformed inferred functional data from the FMT Aging study.
 #'
-#' @description Piphillin was used to infer funcitons from the 16S sequencing data in terms of KOs.
+#' @description Piphillin was used to infer functions from the 16S sequencing data in terms of KOs.
 #' Unfortunately, the Piphillin algorithm is proprietary and has since been taken down.
 #'
 #' @format A marix object with 6474 rows, KOs, and 36 columns, samples.

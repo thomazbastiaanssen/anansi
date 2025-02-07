@@ -28,7 +28,7 @@ setClass("argonansiWeb",
 #' For general use, we recommend sticking to that one. You can access the dictionary like this: \code{data(dictionary)}
 #' @return an \code{anansiWeb} object. Web is used as input for most of the main workflow of anansi.
 #' @export
-weaveWebFromStratifiedTables <- function(tableY, stratifiedTableX, dictionary = anansi::anansi_dic, verbose = T, mode = "interaction", prune = F, max_sds = 3) {
+weaveWebFromStratifiedTables <- function(tableY, stratifiedTableX, dictionary = anansi::anansi_dic, verbose = TRUE, mode = "interaction", prune = FALSE, max_sds = 3) {
   stopifnot("stratifiedTableX needs to be a stratifiedFeatureTable object from the argonaut package." = "stratifiedFeatureTable" %in% class(stratifiedTableX))
 
   tableX <- argonaut::apply_by(X = stratifiedTableX, MARGIN = 3, mean)
@@ -36,7 +36,7 @@ weaveWebFromStratifiedTables <- function(tableY, stratifiedTableX, dictionary = 
   if (length(dictionary) == 1) {
     if (dictionary == "none") {
       if (verbose) {
-        print("No dictionary provided, preparing for all vs all analysis. ")
+        message("No dictionary provided, preparing for all vs all analysis. ")
       }
       dictionary <- mock_dictionary(tableY = tableY, tableX = tableX)
     }
@@ -71,7 +71,7 @@ weaveWebFromStratifiedTables <- function(tableY, stratifiedTableX, dictionary = 
 
   # If we're looking at single data set, don't do associations with yourself. Set diagonal to FALSE.
   if (identical(tableX, tableY)) {
-    diag(dictionary) <- F
+    diag(dictionary) <- FALSE
   }
 
   # Check if input tables have the same names and the same length.
@@ -86,8 +86,12 @@ weaveWebFromStratifiedTables <- function(tableY, stratifiedTableX, dictionary = 
   available_tableX <- sort(intersect(colnames(tableX), colnames(dictionary)))
 
   if (verbose) {
-    print(paste(length(available_tableY), "were matched between table 1 and the columns of the adjacency matrix"))
-    print(paste(length(available_tableX), "were matched between table 2 and the rows of the adjacency matrix"))
+    m1 <- paste(
+      length(available_tableY), "were matched between table 1 and the columns of the adjacency matrix,\n",
+      length(available_tableX), "were matched between table 2 and the rows of the adjacency matrix"
+    )
+
+    message(m1)
   }
   # Select the relevant part of the adjacency matrix
   dictionary <- dictionary[available_tableY, available_tableX]
@@ -100,7 +104,7 @@ weaveWebFromStratifiedTables <- function(tableY, stratifiedTableX, dictionary = 
   # tableX = tableX[,colnames(dictionary)]
   stratifiedTableX <- argonaut::sft(stratifiedTableX[, colnames(dictionary), ])
   tableX <- get_strat_X(stratifiedTableX)
-  strat_dict <- as.matrix(dictionary)[, rep(1:ncol(as.matrix(dictionary)), argonaut::apply_by(stratifiedTableX, 3, length)[1, ])]
+  strat_dict <- as.matrix(dictionary)[, rep(seq_len(ncol(as.matrix(dictionary))), argonaut::apply_by(stratifiedTableX, 3, length)[1, ])]
 
   # Return an argonansiWeb object with five slots: typically metabolites, functions, stratified functions, a stratified adjacency matrix and aggregated an adjacency matrix
   return(new("argonansiWeb",
@@ -117,7 +121,7 @@ weaveWebFromStratifiedTables <- function(tableY, stratifiedTableX, dictionary = 
 #' Run differential correlation analysis for all interacting metabolites and functions.
 #' @description Should not be run on its own. to be applied by \code{anansiDiffCor()}. Typically, the main \code{anansi()} function will handle this for you.
 #' @param web An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.
-#' @param which_dictionary A matrix derived from calling \code{which(web@dictionary, arr.ind = T)}. It contains coordinates for the relevant measurements to be compared.
+#' @param which_dictionary A matrix derived from calling \code{which(web@dictionary, arr.ind = TRUE)}. It contains coordinates for the relevant measurements to be compared.
 #' @param metadata A vector or data.frame of categorical or continuous value necessary for differential correlations. Typically a state or treatment score. If no argument provided, anansi will let you know and still to regular correlations according to your dictionary.
 #' @param formula A formula object. Used to assess differential associations.
 #' @return a list of \code{anansiTale} result objects, one for the total model, one for emergent correlations and one for disjointed correlations.
@@ -136,9 +140,9 @@ glm_argonaut_calc_diff_cor <- function(web, which_dictionary, metadata, formula)
   # All subtypes in one model
   vec_combined <- c(0, 1)
   # One model per subtype
-  vec_full <- matrix(rep(c(0, 1), length(all_subtypes)), ncol = length(all_subtypes), byrow = F)
+  vec_full <- matrix(rep(c(0, 1), length(all_subtypes)), ncol = length(all_subtypes), byrow = FALSE)
   # Differential association per subtype
-  vec_out <- matrix(rep(c(0, 1), (2 * length(all_subtypes)) * length(all_terms)), ncol = length(all_subtypes), byrow = F)
+  vec_out <- matrix(rep(c(0, 1), (2 * length(all_subtypes)) * length(all_terms)), ncol = length(all_subtypes), byrow = FALSE)
 
   # paste together all subtypes with plusses between them:
   collapsed_subtypes <- paste(all_subtypes, collapse = " + ")
@@ -150,7 +154,7 @@ glm_argonaut_calc_diff_cor <- function(web, which_dictionary, metadata, formula)
 
   formula_full <- update.formula(formula, internal_formula)
 
-  for (i in 1:length(all_subtypes)) {
+  for (i in seq_len((all_subtypes))) {
     # paste together all subtypes with plusses between them:
     collapsed_subtypes_i <- paste(all_subtypes[i], collapse = " + ")
 
@@ -192,12 +196,12 @@ glm_argonaut_calc_diff_cor <- function(web, which_dictionary, metadata, formula)
   target_disj_interactions <- grep(paste(paste0("^", all_subtypes, ":"), collapse = "|"), row.names(disj_fit))
   disj.rsquared <- disj_fit[target_disj_interactions, 2] / (disj_fit[target_disj_interactions, 2] + resid.ss)
 
-  vec_out[cbind(rep(x = c(1:length(all_terms) * 2) - 1, each = length(all_subtypes)), 1:(length(all_subtypes)))] <- disj.rsquared
-  vec_out[cbind(rep(x = c(1:length(all_terms) * 2), each = length(all_subtypes)), 1:(length(all_subtypes)))] <- disj_fit[target_disj_interactions, 5]
+  vec_out[cbind(rep(x = c(seq_len(length(all_terms)) * 2) - 1, each = length(all_subtypes)), seq_len(length(all_subtypes)))] <- disj.rsquared
+  vec_out[cbind(rep(x = c(seq_len(length(all_terms)) * 2), each = length(all_subtypes)), seq_len(length(all_subtypes)))] <- disj_fit[target_disj_interactions, 5]
 
   # For each subtype, run ANOVA to determine impact of group on STRENGTH of association.
 
-  for (i in 1:length(all_subtypes)) {
+  for (i in seq_len(length(all_subtypes))) {
     f_get_resid <- reformulate(
       termlabels = all_subtypes[i],
       response   = "y"
@@ -221,8 +225,8 @@ glm_argonaut_calc_diff_cor <- function(web, which_dictionary, metadata, formula)
     target_emerg_interactions <- grep(paste(paste0("^", all_terms, "$"), collapse = "|"), row.names(emerg_anova))
     emerg.rsquared <- emerg_anova[target_emerg_interactions, 2] / (emerg_anova[target_emerg_interactions, 2] + resid_emerg.ss)
 
-    vec_out[cbind(rep(x = 2 * length(all_terms) + c(1:length(all_terms) * 2) - 1, each = length(all_terms)), i)] <- emerg.rsquared
-    vec_out[cbind(rep(x = 2 * length(all_terms) + c(1:length(all_terms) * 2), each = length(all_terms)), i)] <- emerg_anova[target_emerg_interactions, 5]
+    vec_out[cbind(rep(x = 2 * length(all_terms) + c(seq_len(length(all_terms)) * 2) - 1, each = length(all_terms)), i)] <- emerg.rsquared
+    vec_out[cbind(rep(x = 2 * length(all_terms) + c(seq_len(length(all_terms)) * 2), each = length(all_terms)), i)] <- emerg_anova[target_emerg_interactions, 5]
   }
 
   return(list(vec_combined = vec_combined, vec_full = vec_full, vec_out = vec_out))
@@ -241,7 +245,7 @@ collate_model_output_argonaut <- function(web, stats_out, all_terms) {
   # automatically setting all non-canonical interactions as p = 1 and estimate = 0.
   dictionary <- web@dictionary
   strat_dict <- web@strat_dict
-  colnames(strat_dict) <- paste(colnames(strat_dict), unlist(argonaut::apply_by(web@tableX.sft, 3, names)[1, ], use.names = F), sep = ".")
+  colnames(strat_dict) <- paste(colnames(strat_dict), unlist(argonaut::apply_by(web@tableX.sft, 3, names)[1, ], use.names = FALSE), sep = ".")
 
   out_rvals_tot <- dictionary
   out_pvals_tot <- !dictionary
@@ -258,9 +262,9 @@ collate_model_output_argonaut <- function(web, stats_out, all_terms) {
   out_pvals_tot[dictionary] <- stats_tot[, 2]
 
   # #Expand to stratified dimensions
-  # out_rvals_tot = as.matrix(out_rvals_tot)[,rep(1:ncol(as.matrix(out_rvals_tot)), argonaut::apply_by(web@tableX.sft, 3, length)[1,])]
+  # out_rvals_tot = as.matrix(out_rvals_tot)[,rep(seq_len(ncol(as.matrix(out_rvals_tot))), argonaut::apply_by(web@tableX.sft, 3, length)[1,])]
   # colnames(out_rvals_tot) <- colnames(strat_dict)
-  # out_pvals_tot = as.matrix(out_pvals_tot)[,rep(1:ncol(as.matrix(out_pvals_tot)), argonaut::apply_by(web@tableX.sft, 3, length)[1,])]
+  # out_pvals_tot = as.matrix(out_pvals_tot)[,rep(seq_len(ncol(as.matrix(out_pvals_tot))), argonaut::apply_by(web@tableX.sft, 3, length)[1,])]
   # colnames(out_pvals_tot) <- colnames(strat_dict)
 
   # Adjust for multiple comparisons
@@ -295,7 +299,7 @@ collate_model_output_argonaut <- function(web, stats_out, all_terms) {
 
   out_disjointed <- vector(mode = "list", length = length(all_terms))
 
-  for (i in 1:length(all_terms)) {
+  for (i in seq_len(length(all_terms))) {
     out_disjrvals[strat_dict] <- stats_diff[(i * 2) - 1, ]
     out_disjpvals[strat_dict] <- stats_diff[(i * 2), ]
 
@@ -316,7 +320,7 @@ collate_model_output_argonaut <- function(web, stats_out, all_terms) {
 
   out_emergent <- vector(mode = "list", length = length(all_terms))
 
-  for (i in 1:length(all_terms)) {
+  for (i in seq_len(length(all_terms))) {
     out_emergrvals[strat_dict] <- stats_diff[(i * 2) + (i * 2) - 1, ]
     out_emergpvals[strat_dict] <- stats_diff[(i * 2) + (i * 2), ]
 
@@ -384,7 +388,7 @@ argonaut_parse_diff <- function(stats_out) {
 #' @return a matrix with rows as samples and columns as ordered features per subtype.
 #'
 get_strat_X <- function(tableX.sft) {
-  slice_list <- lapply(1:dim(tableX.sft)[2],
+  slice_list <- lapply(seq_len(dim(tableX.sft)[2]),
     FUN = function(f) {
       slic <- tableX.sft[, f, ][, !is.na(colSums(tableX.sft[, f, ]))]
       colnames(slic) <- paste(dimnames(tableX.sft)[[2]][f],
@@ -407,14 +411,14 @@ get_strat_X <- function(tableX.sft) {
 #' @return An anansiTale object with result matrices with rows as tableX features and columns as ordered tableY features per subtype.
 #'
 argonaut_rep_to_strat <- function(x, web) {
-  slot(x, "estimates") <- as.matrix(slot(x, "estimates"))[, rep(1:ncol(as.matrix(web@dictionary)), argonaut::apply_by(web@tableX.sft, 3, length)[1, ])]
-  colnames(slot(x, "estimates")) <- paste(colnames(slot(x, "estimates")), unlist(argonaut::apply_by(web@tableX.sft, 3, names)[1, ], use.names = F), sep = ".")
+  slot(x, "estimates") <- as.matrix(slot(x, "estimates"))[, rep(seq_len(ncol(as.matrix(web@dictionary))), argonaut::apply_by(web@tableX.sft, 3, length)[1, ])]
+  colnames(slot(x, "estimates")) <- paste(colnames(slot(x, "estimates")), unlist(argonaut::apply_by(web@tableX.sft, 3, names)[1, ], use.names = FALSE), sep = ".")
 
-  slot(x, "p.values") <- as.matrix(slot(x, "p.values"))[, rep(1:ncol(as.matrix(web@dictionary)), argonaut::apply_by(web@tableX.sft, 3, length)[1, ])]
-  colnames(slot(x, "p.values")) <- paste(colnames(slot(x, "p.values")), unlist(argonaut::apply_by(web@tableX.sft, 3, names)[1, ], use.names = F), sep = ".")
+  slot(x, "p.values") <- as.matrix(slot(x, "p.values"))[, rep(seq_len(ncol(as.matrix(web@dictionary))), argonaut::apply_by(web@tableX.sft, 3, length)[1, ])]
+  colnames(slot(x, "p.values")) <- paste(colnames(slot(x, "p.values")), unlist(argonaut::apply_by(web@tableX.sft, 3, names)[1, ], use.names = FALSE), sep = ".")
 
-  slot(x, "q.values") <- as.matrix(slot(x, "q.values"))[, rep(1:ncol(as.matrix(web@dictionary)), argonaut::apply_by(web@tableX.sft, 3, length)[1, ])]
-  colnames(slot(x, "q.values")) <- paste(colnames(slot(x, "q.values")), unlist(argonaut::apply_by(web@tableX.sft, 3, names)[1, ], use.names = F), sep = ".")
+  slot(x, "q.values") <- as.matrix(slot(x, "q.values"))[, rep(seq_len(ncol(as.matrix(web@dictionary))), argonaut::apply_by(web@tableX.sft, 3, length)[1, ])]
+  colnames(slot(x, "q.values")) <- paste(colnames(slot(x, "q.values")), unlist(argonaut::apply_by(web@tableX.sft, 3, names)[1, ], use.names = FALSE), sep = ".")
 
   return(x)
 }
@@ -430,8 +434,8 @@ argonaut_rep_to_strat <- function(x, web) {
 #                nfeatures = 10,
 #                nsamples = 100, p_missing = 0.3) %>%
 #   as.sft()
-# z = sample(LETTERS[1:3], 100, replace = T)
-# u = sample(LETTERS[1:3], 100, replace = T)
+# z = sample(LETTERS[1:3], 100, replace = TRUE)
+# u = sample(LETTERS[1:3], 100, replace = TRUE)
 #
 # x = getFeature(x, 1)
 # colnames(x) = paste0("x.", colnames(x))

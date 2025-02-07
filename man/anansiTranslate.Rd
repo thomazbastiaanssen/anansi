@@ -8,7 +8,7 @@ anansiTranslate(
   x,
   Y_translation = Y_translation,
   X_translation = X_translation,
-  argonansi = F
+  argonansi = FALSE
 )
 }
 \arguments{

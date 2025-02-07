@@ -6,35 +6,26 @@
 \usage{
 anansi(
   web,
-  groups = NULL,
-  metadata = NULL,
   formula = ~1,
+  groups = NULL,
+  metadata,
   adjust.method = "BH",
-  resampling = F,
-  locality = F,
-  verbose = T,
-  diff_cor = T,
-  ignore_dictionary = F
+  verbose = TRUE,
+  ignore_dictionary = FALSE
 )
 }
 \arguments{
 \item{web}{An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.}
 
+\item{formula}{A formula object. Used to assess differential associations.}
+
 \item{groups}{A vector of the column names of categorical values in the metadata object to control which groups should be assessed for simple correlations. If no argument provided, anansi will let you know and still to regular correlations according to your dictionary.}
 
 \item{metadata}{A vector or data.frame of categorical or continuous value necessary for differential correlations. Typically a state or treatment score. If no argument provided, anansi will let you know and still to regular correlations according to your dictionary.}
 
-\item{formula}{A formula object. Used to assess differential associations.}
-
 \item{adjust.method}{Method to adjust p-values for multiple comparisons. \code{adjust.method = "BH"} is the default value. See \code{p.adjust()} in the base R \code{stats} package.}
 
-\item{resampling}{A boolean. For p-value adjustment. Toggles the resampling of p-values to help reduce the influence of dependence of p-values. Will take more time on large datasets.}
-
-\item{locality}{A boolean. For p-value adjustment. Toggles whether to prefer sampling from p-values from a comparison that shares an x or y feature. In a nutshell, considers the local p-value landscape when more important when correcting for FDR.}
-
 \item{verbose}{A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.}
-
-\item{diff_cor}{A boolean. Toggles whether to compute differential correlations. Default is \code{TRUE}.}
 
 \item{ignore_dictionary}{A boolean. Default is FALSE. If set to TRUE, regular all vs all associations will be tested regardless of the dictionary.}
 }
@@ -45,7 +36,6 @@ A list of lists containing correlation coefficients, p-values and q-values for a
 This is the main workspider function in the anansi package. It manages the individual functionalities of anansi, including correlation analysis, correlation by group and differential correlation.
 }
 \examples{
-\dontrun{
 # Load example data:
 
 data(dictionary)
@@ -79,13 +69,15 @@ web <- weaveWebFromTables(
 
 anansi_out <- anansi(
   web = web,
-  groups = FMT_metadata$Legend,
+  formula = ~Legend,
+  groups = "Legend",
+  metadata = FMT_metadata,
   adjust.method = "BH",
   verbose = TRUE
 )
 
 results <- spinToWide(
-  anansi_output = anansi_out, translate = T,
+  anansi_output = anansi_out, translate = TRUE,
   Y_translation = anansi::cpd_translation,
   X_translation = anansi::KO_translation
 )
@@ -94,7 +86,7 @@ results <- spinToWide(
 library(ggplot2)
 
 anansiLong <- spinToLong(
-  anansi_output = anansi_out, translate = T,
+  anansi_output = anansi_out, translate = TRUE,
   Y_translation = anansi::cpd_translation,
   X_translation = anansi::KO_translation
 )
@@ -112,7 +104,7 @@ ggplot(
     x = r.values,
     y = feature_X,
     fill = type,
-    alpha = model_disjointed_p.values < 0.05
+    alpha = model_disjointed_Legend_p.values < 0.05
   )
 ) +
 
@@ -139,6 +131,5 @@ ggplot(
   xlab("Pearson's rho")
 
 # See also ?spinToPlots
-}
 
 }
