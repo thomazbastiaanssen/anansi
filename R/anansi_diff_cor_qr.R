@@ -9,9 +9,6 @@
 #' @importFrom methods is
 #'
 anansiDiffCor <- function(yarn, metadata, verbose = TRUE) {
-  # Create a matrix with row and column coordinates to cycle through the
-  # relevant comparisons in tableY and tableX.
-  which_dictionary <- which(yarn.dic(yarn), arr.ind = TRUE, useNames = FALSE)
 
   # Compute shape of model.matrix and initialize qr.mm
   base.mm <- build.mm(sat_model = yarn.f(yarn), metadata)

@@ -169,6 +169,7 @@ anansi_out <- anansi(
 )
 ```
 
+
     ## Fitting least-squares for following model:
     ## ~ x + Legend + x:Legend
 
