@@ -124,16 +124,9 @@ setGeneric("getAnansi", signature = c("x"),
 #' @export
 #' @importFrom MultiAssayExperiment MultiAssayExperiment
 #' @importFrom SummarizedExperiment assay colData
-<<<<<<< HEAD
-setMethod("getAnansi",
-  signature = c(x = "MultiAssayExperiment"),
-  function(x, experiment1 = 1, experiment2 = 2, assay.type1 = "counts",
-           assay.type2 = "counts", return.format = "long", ...) {
-=======
 setMethod("getAnansi", signature = c(x = "MultiAssayExperiment"), function(
       x, experiment1 = 1, experiment2 = 2, assay.type1 = "counts",
       assay.type2 = "counts", return.format = "long", ...) {
->>>>>>> origin/viz
     # Retrieve kwargs as list
     kwargs <- list(...)
     # Check fixed arguments

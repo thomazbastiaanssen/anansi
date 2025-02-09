@@ -9,6 +9,9 @@ plotAnansi(df, ...)
 
 \S4method{plotAnansi}{data.frame}(
   df,
+  x = "r.values",
+  association.type = "disjointed",
+  model.var = NULL,
   colour_by = NULL,
   color_by = colour_by,
   fill_by = NULL,
@@ -23,6 +26,18 @@ plotAnansi(df, ...)
 \arguments{
 \item{df}{a \code{data.frame} object output of \code{\link{getAnansi}} in
 the long format.}
+
+\item{x}{\code{Character scalar}. Specifies the type of coefficient to
+show in the plot. One of \code{"r.values"}, \code{"r.squared"} and
+  \code{"q.values"}. (Default: \code{"r.values"})}
+
+\item{association.type}{\code{Character scalar}. Specifies the type of
+association to show in the plot. One of \code{"disjointed"},
+  \code{"emergent"} and \code{"full"}. (Default: \code{"disjointed"})}
+
+\item{model.var}{\code{Character scalar}. Specifies the name of a variable
+in the anansi model. It is relevant only when \code{association.type} is
+  \code{"disjointed"} or \code{"emergent"}. (Default: \code{NULL})}
 
 \item{colour_by}{\code{Character scalar}. Specifies the name of a column in
 \code{df} by which points should be coloured. (Default: \code{NULL})}
@@ -67,7 +82,7 @@ or from \code{\link{anansi}} followed by \code{\link{spinToLong}}.
 }
 \examples{
 
-#' # Import libraries
+# Import libraries
 library(mia)
 library(TreeSummarizedExperiment)
 library(MultiAssayExperiment)

@@ -6,33 +6,45 @@
 #' 
 #' @param df a \code{data.frame} object output of \code{\link{getAnansi}} in
 #'   the long format.
+#'   
+#' @param x \code{Character scalar}. Specifies the type of coefficient to
+#' show in the plot. One of \code{"r.values"}, \code{"r.squared"} and
+#'   \code{"q.values"}. (Default: \code{"r.values"})
+#' 
+#' @param association.type \code{Character scalar}. Specifies the type of
+#' association to show in the plot. One of \code{"disjointed"},
+#'   \code{"emergent"} and \code{"full"}. (Default: \code{"disjointed"})
+#' 
+#' @param model.var \code{Character scalar}. Specifies the name of a variable
+#' in the anansi model. It is relevant only when \code{association.type} is
+#'   \code{"disjointed"} or \code{"emergent"}. (Default: \code{NULL})
+#'   
+#' @param signif.threshold \code{Numeric scalar}. Specifies the significance
+#'   threshold to show in the plot. (Default: \code{NULL})
 #'
 #' @param colour_by \code{Character scalar}. Specifies the name of a column in
-#' \code{df} by which points should be coloured. (Default: \code{NULL})
+#'   \code{df} by which points should be coloured. (Default: \code{NULL})
 #'
 #' @param color_by \code{Character scalar}. Alias to \code{colour_by}.
 #' 
 #' @param fill_by \code{Character scalar}. Specifies the name of a column in
-#' \code{df} by which points should be filled (Default: \code{NULL})
+#'   \code{df} by which points should be filled (Default: \code{NULL})
 #' 
 #' @param size_by \code{Character scalar}. Specifies the name of a column in
-#' \code{df} by which points should be sized (Default: \code{NULL})
+#'   \code{df} by which points should be sized (Default: \code{NULL})
 #' 
 #' @param shape_by \code{Character scalar}. Specifies the name of a column in
-#' \code{df} by which points should be shaped (Default: \code{NULL})
-#' 
-#' @param signif.threshold \code{Numeric scalar}. Specifies the significance
-#'   threshold to show in the plot. (Default: \code{NULL})
-#' 
-#' @param y_position \code{Character scalar}. Specifies the position of the y
-#'   labels. It should be either \code{"left"} or \code{"right"}.
-#'   (Default: \code{"right"})
+#'   \code{df} by which points should be shaped (Default: \code{NULL})
 #' 
 #' @param x_lab \code{Character scalar}. Specifies the label of the x axis.
 #'   (Default: \code{"cor"})
 #' 
 #' @param y_lab \code{Character scalar}. Specifies the label of the y axis.
 #'   (Default: \code{""})
+#' 
+#' @param y_position \code{Character scalar}. Specifies the position of the y
+#'   labels. It should be either \code{"left"} or \code{"right"}.
+#'   (Default: \code{"right"})
 #' 
 #' @details
 #' \code{plotAnansi} provides a standardised method to visualise the results
@@ -122,14 +134,32 @@ setGeneric("plotAnansi", signature = c("df"),
 #' @importFrom ggforce facet_col
 #' @importFrom stats setNames
 setMethod("plotAnansi", signature = c(df = "data.frame"),
-    function(df, colour_by = NULL, color_by = colour_by, fill_by = NULL,
-    size_by = NULL, shape_by = NULL, signif.threshold = NULL,
-    y_position = "right", x_lab = "cor", y_lab = "") {
+    function(df, x = "r.values", association.type = "disjointed", model.var = NULL,
+    colour_by = NULL, color_by = colour_by, fill_by = NULL, size_by = NULL,
+    shape_by = NULL, signif.threshold = NULL, y_position = "right",
+    x_lab = "cor", y_lab = ""){
+      
+    match.arg(x, choices = c("r.values", "r.squared", "q.values"))
+    match.arg(association.type, choices = c("disjointed", "emergent", "full"))
+    
+    if( association.type %in% c("disjointed", "emergent") && is.null(model.var) ){
+        stop("'model.var' must specify a variable of the anansi model when ",
+            "'association type' is set to ", association.type, call. = FALSE)
+    }
+    if( association.type == "full" && !is.null(model.var) ){
+        warning("'model.var' is ingored when 'association type' is set to ",
+            association.type, call. = FALSE)
+    }
+      
+    pval <- paste0(c("model", association.type, model.var, "p.values"),
+        collapse = "_")
+    x <- paste0(c("model", association.type, model.var, x), collapse = "_")
+    
     # Check df
-    if( !all(c("r.values", "feature_X", "feature_Y", "model_disjointed_Legend_p.values") %in% colnames(df)) ){
+    if( !all(c(x, pval, "feature_X", "feature_Y") %in% colnames(df)) ){
         stop("'df' must be the output of 'getAnansi' in the long format and ",
-        "must contain columns 'r.values', 'feature_X', 'feature_Y' and ",
-        "'model_disjointed_Legend_p.values'", call. = FALSE)
+        "must contain columns '", x, "' ,'", pval, "', 'feature_X', 'feature_Y'",
+        call. = FALSE)
     }
     # Check y_position
     match.arg(y_position, choices = c("left", "right"))
@@ -148,13 +178,13 @@ setMethod("plotAnansi", signature = c(df = "data.frame"),
         stop("'signif.threshold' must be a number between 0 and 1", call. = FALSE)
     }
     # Assemple plot data
-    pData <- data.frame(x = df[["r.values"]], y = df[["feature_X"]],
+    pData <- data.frame(x = df[[x]], y = df[["feature_X"]],
         colour = if (colour_defined) df[[colour_by]] else NA,
         fill = if (fill_defined) df[[fill_by]] else NA,
         size = if (size_defined) df[[size_by]] else NA,
         shape = if (shape_defined) df[[shape_by]] else NA,
         alpha = if (signif_defined)
-            factor(df["model_full_p.values"] < signif.threshold,
+            factor(df[[pval]] < signif.threshold,
             levels = c(TRUE, FALSE)) else NA,
         facet = df[["feature_Y"]]
     )
@@ -179,7 +209,7 @@ setMethod("plotAnansi", signature = c(df = "data.frame"),
     # Add significance legend
     if( signif_defined ){
         p <- p + scale_alpha_manual(values = c("TRUE" = 1, "FALSE" = 1/3),
-            paste("Disjointed association\np <", signif.threshold))
+            paste(association.type, "association\np <", signif.threshold))
     }
     # Add labels
     p <- p + theme_bw() +
