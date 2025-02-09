@@ -108,14 +108,21 @@
 #' # See also ?spinToPlots
 #'
 anansi <- function(web, formula = ~1, groups = NULL, metadata,
-                   adjust.method = "BH", verbose = TRUE, ignore_dictionary = FALSE) {
-  # generate anansiYarn output object
-  outYarn <- prepYarn(
+                   adjust.method = "BH", verbose = TRUE,
+                   ignore_dictionary = FALSE, keep.input = TRUE) {
+  # generate anansiYarn input object
+  input <- prepInput(
     web = web, formula = formula, groups = groups,
     metadata = metadata, verbose = verbose
   )
+  int.terms <- input@int.terms; groups <- input@groups; n.grps <- input@n.grps;
+  errorterm <- input@error.term; sat_model <- input@lm.formula
+
+  out.list <- vector(
+    "list", length = 2 + n.grps + (2 * length(int.terms))
+    )
   # sort out metadata
-  lm.metadata <- model.frame(formula = yarn.f(outYarn), cbind(x = 1, metadata))
+  lm.metadata <- model.frame(formula = sat_model, cbind(x = 1, metadata))
 
   if (ignore_dictionary) {
     if (verbose) {
@@ -128,27 +135,25 @@ anansi <- function(web, formula = ~1, groups = NULL, metadata,
     }
   }
 
-  # initialize cor_output list object
-  output <- new("anansiOutput")
-
-  output@cor_results <- call_groupwise(
-    web = web, groups = yarn.grp(outYarn),
-    metadata, verbose = verbose
+  out.list[seq_len(1 + n.grps)] <- call_groupwise(
+    web, groups,
+    metadata, verbose
   )
 
-  output@model_results <- unlist(anansiDiffCor(
-    yarn = outYarn, metadata = lm.metadata,
-    verbose = verbose
-  ))
-  outYarn@output <- output
+  out.list[1 + n.grps +
+           seq_len(1 + (2 * length(int.terms)))] <- anansiDiffCor(
+             web, sat_model, errorterm, int.terms, lm.metadata, verbose)
 
-  # FDR
-  outYarn <- anansiAdjustP(
-    x = outYarn,
-    method = adjust.method, verbose = verbose
-  )
+  results <- result.df(out.list, dic)
 
-  return(outYarn)
+  # # FDR
+  # outYarn <- anansiAdjustP(
+  #   x = outYarn,
+  #   method = adjust.method, verbose = verbose
+  # )
+if(keep.input) return(list(results = output, input = input))
+return(results)
+
 }
 
 
@@ -160,7 +165,7 @@ anansi <- function(web, formula = ~1, groups = NULL, metadata,
 #' @param verbose A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.
 #' @noRd
 #'
-call_groupwise <- function(web, groups, verbose, metadata) {
+call_groupwise <- function(web, groups, metadata, verbose) {
   if(is.null(groups)) {group.vec <- NULL} else {
   group.vec <- apply(metadata[,groups, drop = FALSE], 1, paste, collapse = "_")
   }
@@ -176,16 +181,17 @@ call_groupwise <- function(web, groups, verbose, metadata) {
   }
 
   return(
-    anansiCorTestByGroup(web = web, group.vec = group.vec, verbose = verbose)
+    anansiCorTestByGroup(web, group.vec, verbose)
     )
 }
 
 
 #' Assess formula, trim metadata and prepare output for anansi workflow
-#' @description Initialize anansiYarn output Should not be called by user.
+#' @description Initialize `anansiInput` component of output. Should not be
+#' called by user.
 #' @noRd
 #'
-prepYarn <- function(web, formula, groups, metadata, verbose) {
+prepInput <- function(web, formula, groups, metadata, verbose) {
   raw_terms <- terms.formula(formula, "Error", data = metadata)
   indErr <- attr(raw_terms, "specials")$Error
 
@@ -203,16 +209,16 @@ prepYarn <- function(web, formula, groups, metadata, verbose) {
   } else {
     deparse1(attr(raw_terms, "variables")[[1L + indErr]][[2L]], backtick = TRUE)
   }
-  outYarn <- new("anansiYarn",
     input = new("anansiInput",
       web = web,
       lm.formula = sat_model,
       error.term = error.term,
       int.terms = all_terms,
-      groups = groups
+      groups = groups[[1]],
+      n.grps = groups[[2]]
     )
-  )
-  return(outYarn)
+
+  return(input)
 }
 
 #' Check group argument.
@@ -228,8 +234,8 @@ check_groups <- function(groups, raw_terms, indErr, metadata, verbose) {
       "Grouping variable(s) not recognised. Please check input and labels. " =
         !any(missing_groups)
       )
-
-    return(groups)
+    n.groups <- length(unique(do.call(paste0, c(metadata[groups]))))
+    return(list(groups, n.groups))
   }
 
   # If no input, look for categorical variables
@@ -239,10 +245,9 @@ check_groups <- function(groups, raw_terms, indErr, metadata, verbose) {
   }
   if (!any(ind_o1)) {
     if(verbose){message("No grouping variable found for groupwise correlations. ")}
-    return(NULL)
+    return(list(NULL, 0))
   }
   groups <- labels(raw_terms)[ind_o1]
-
 
   sub_meta <- metadata[, groups, drop = FALSE]
   sub_meta <- sub_meta[, unname(apply(
@@ -252,11 +257,12 @@ check_groups <- function(groups, raw_terms, indErr, metadata, verbose) {
   )), drop = FALSE]
 
   if (NCOL(sub_meta) == 0) {
-    if(verbose){message("No grouping variable found for groupwise correlations. ")}
-    return(NULL)
+    if(verbose){message("No grouping variable found for groupwise correlations.")}
+    return(list(NULL, 0))
   }
+  n.groups <- length(unique(do.call(paste0, c(sub_meta))))
 
-  return(groups)
+  return(list(groups, n.groups))
 }
 
 #' Prepare saturated model, deal with \code{Error} terms.

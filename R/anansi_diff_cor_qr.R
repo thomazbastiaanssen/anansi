@@ -8,13 +8,17 @@
 #' @importFrom future.apply future_apply
 #' @importFrom methods is
 #'
-anansiDiffCor <- function(yarn, metadata, verbose = TRUE) {
+anansiDiffCor <- function(web, sat_model, errorterm, int.terms, metadata, verbose) {
+
+  tY  <- get_tableY(web)
+  tX  <- get_tableX(web)
+  dic <- get_dict(web)
 
   # Compute shape of model.matrix and initialize qr.mm
-  base.mm <- build.mm(sat_model = yarn.f(yarn), metadata)
+  base.mm <- build.mm(sat_model, metadata)
 
   # identify the columns of the variables that change based on X-variable
-  x.fct <- get_x.fct(yarn.f(yarn), errorterm = yarn.e(yarn))
+  x.fct <- get_x.fct(sat_model, errorterm)
 
   # TODO This could be important for argonaut support; consider modifying row id 1.
   x.assign <- as.integer(which(x.fct[1, ] == 1))
@@ -24,96 +28,87 @@ anansiDiffCor <- function(yarn, metadata, verbose = TRUE) {
 
   # set up F-tests
   # number of samples in full model
-  n <- nrow(yarn.tY(yarn))
+  n <- nrow(tY)
 
   # strip mm of attributes
   mm <- matrix(base.mm, ncol = NCOL(base.mm))
 
   # Null models for general association of y and x: Remove all components with x.
   Y.TSS <- SS(fast.qr.resid(
-    y = yarn.tY(yarn),
+    y = tY,
     x = mm[, !x.vars]
   ))
 
   # prepare output
   df_mat <- dfmat(x.assign, x.int, all.assign, x.fct, n)
 
-  modelfit <- list(full = new("anansiTale",
-    subject    = "model_full",
+d.dim <- matrix(0, ncol = NCOL(dic), nrow = NROW(dic))
+full_model <- new("anansiTale",
+    subject    = "full",
     type       = "r.squared",
     df         = df_mat[, 1],
-    estimates  = yarn.dic.double(yarn) * Y.TSS, # start with RSS0
-    F.values   = yarn.dic.double(yarn),
-    p.values   = !yarn.dic(yarn),
-    q.values   = !yarn.dic(yarn)
-  ))
+    estimates  = dic * Y.TSS, # start with RSS0
+    F.values   = d.dim,
+    p.values   = d.dim
+  )
 
-  disjointed <- `names<-`(lapply(
-    seq_len(length(yarn.int(yarn))),
+disjointed <- lapply(
+    seq_len(length(int.terms)),
     function(x) {
       new("anansiTale",
-        subject    = paste("model_disjointed", yarn.int(yarn)[x], sep = "_"),
+        subject    = paste("disjointed", int.terms[x], sep = "_"),
         type       = "r.squared",
         df         = df_mat[, x + 1],
-        estimates  = yarn.dic.double(yarn), # start with RSS0
-        F.values   = yarn.dic.double(yarn),
-        p.values   = !yarn.dic(yarn),
-        q.values   = !yarn.dic(yarn)
+        estimates  = d.dim,
+        F.values   = d.dim,
+        p.values   = d.dim
       )
     }
-  ), yarn.int(yarn))
+  )
 
-  emergent <- `names<-`(lapply(
-    seq_len(length(yarn.int(yarn))),
+  emergent <- lapply(
+    seq_len(length(int.terms)),
     function(x) {
       new("anansiTale",
-        subject    = paste("model_emergent", yarn.int(yarn)[x], sep = "_"),
+        subject    = paste("emergent", int.terms[x], sep = "_"),
         type       = "r.squared",
         df         = df_mat[, x + 1] + c(0, -1, -1 / df_mat[1, x + 1]),
-        estimates  = yarn.dic.double(yarn), # start with RSS0
-        F.values   = yarn.dic.double(yarn),
-        p.values   = !yarn.dic(yarn),
-        q.values   = !yarn.dic(yarn)
-      )
+        estimates  = d.dim,
+        F.values   = d.dim,
+        p.values   = d.dim
+        )
     }
-  ), yarn.int(yarn))
+  )
 
   # Compute R^2 for full model
-  modelfit$full@estimates <- 1 - (
+  full_model@estimates <- 1 - (
     sapply(
-      seq_len(NCOL(yarn.tX(yarn))),
-      function(x) R_full(y = x, mm, yarn, x.fct, x.vars)
+      seq_len(NCOL(tX)),
+      function(x) R_full(y = x, mm, tY, tX, dic, x.fct, x.vars)
     ) /
-      modelfit$full@estimates)
+      full_model@estimates)
 
   # compute all disjointed R^2 values, return to matrix with rows as values and columns as terms
   for (t in seq_along(x.int)) {
     i.disj <- index.disj(x = x.int[t], all.assign, x.fct)
 
-    for (y in seq_len(NCOL(yarn.tX(yarn)))) {
+    for (y in seq_len(NCOL(tX))) {
       # adjust the input model.matrix by multiplying the relevant columns by x
       qr.mm <- mm
-      qr.mm[, x.vars] <- mm[, x.vars] * yarn.tX(yarn)[, y]
-      y.ind <- yarn.dic(yarn)[, y]
-      y.vals <- `dimnames<-`(yarn.tY(yarn)[, y.ind], NULL)
+      qr.mm[, x.vars] <- mm[, x.vars] * tX[, y]
+      y.ind <- dic[, y]
+      y.vals <- `dimnames<-`(tY[, y.ind], NULL)
 
       # straight to web!!
-      disjointed[[t]]@estimates[yarn.dic(yarn)[, y], y] <- R_disj(y.vals, qr.mm, i.disj)
-
-      emergent[[t]]@estimates[yarn.dic(yarn)[, y], y] <- R_emerg(y.vals, qr.mm, i.disj)
+      disjointed[[t]]@estimates[dic[, y], y] <- R_disj(y.vals, qr.mm, i.disj)
+      emergent[[t]]@estimates[dic[, y], y] <- R_emerg(y.vals, qr.mm, i.disj)
     }
   }
+  model.list <- c(full_model, disjointed, emergent)
   # Add F and P statistics
-  modelfit <- lapply(modelfit, get_PF, d = yarn.dic(yarn))
-  disjointed <- lapply(disjointed, get_PF, d = yarn.dic(yarn))
-  emergent <- lapply(emergent, get_PF, d = yarn.dic(yarn))
+  out.list   <- lapply(model.list, get_PF, dic)
 
-
-  return(list(
-    modelfit = modelfit,
-    disjointed = disjointed,
-    emergent = emergent
-  ))
+  return(out.list)
 }
 
 #' Get total sum of squares for residual
@@ -255,12 +250,12 @@ R_emerg <- function(y.vals, qr.mm, i.disj) {
 
 #' @noRd
 #'
-R_full <- function(y, mm, yarn, x.fct, x.vars) {
+R_full <- function(y, mm, tY, tX, dic, x.fct, x.vars) {
   # adjust the input model.matrix by multiplying the relevant columns by x
   qr.mm <- mm
-  qr.mm[, x.vars] <- mm[, x.vars] * yarn.tX(yarn)[, y]
-  y.ind <- yarn.dic(yarn)[, y]
-  y.vals <- `dimnames<-`(yarn.tY(yarn)[, y.ind], NULL)
+  qr.mm[, x.vars] <- mm[, x.vars] * tX[, y]
+  y.ind <- dic[, y]
+  y.vals <- `dimnames<-`(tY[, y.ind], NULL)
 
   # Return H1 SSR
   SS(fast.qr.resid(y = y.vals, x = qr.mm))

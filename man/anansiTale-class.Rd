@@ -22,7 +22,5 @@ For example r.values for correlations or r.squared for models.}
 \item{\code{estimates}}{A matrix containing the estimates for the parameters named in the \code{type} slot.}
 
 \item{\code{p.values}}{A matrix containing the p.values for the parameters named in the \code{type} slot.}
-
-\item{\code{q.values}}{A matrix containing the q.values for the parameters named in the \code{type} slot.}
 }}
 

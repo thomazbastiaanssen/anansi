@@ -33,16 +33,6 @@ tell_e <- function(tale) {
   }
 }
 
-#' @noRd
-#'
-tell_Q <- function(tale) {
-  if (is(tale, "anansiTale")) {
-    return(tale@q.values)
-  }
-  if (is.list(tale)) {
-    return(lapply(tale, tell_Q))
-  }
-}
 
 #' @noRd
 #'
@@ -179,14 +169,5 @@ yarn.tY <- function(yarn) {
   get_tableY(yarn.web(yarn))
 }
 
-#' @noRd
-#'
-yarn.tY <- function(yarn) {
-  get_tableY(yarn.web(yarn))
-}
 
-#' @noRd
-#'
-yarn.Q <- function(yarn) {
-  get_tableY(yarn.web(yarn))
-}
+

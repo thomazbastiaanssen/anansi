@@ -64,9 +64,6 @@ spinToWide <- function(anansi_output, prune = TRUE, translate = FALSE, Y_transla
 #' @export
 #'
 spinToLong <- function(anansi_output, prune = TRUE, translate = FALSE, Y_translation = NULL, X_translation = NULL) {
-  # Figure out how many groups were present in the correlations.
-  n_cors <- length(anansi_output@output@cor_results)
-
   # Flatten all types  of the correlations and create a list of individual wide data.frames.
   flat_cor_list <- lapply(anansi_output@output@cor_results, getAnansiResults, format = "long")
 
@@ -324,4 +321,53 @@ gather_plot <- function(pair_of_interest, anansiYarn) {
 #'
 tiny_df <- function(x) {
   return(data.frame(matrix(x$name, nrow = 1, dimnames = list("", c("feature_Y", "feature_X")))))
+}
+
+#' Extract information from an anansiTale object and parse it into a neat table
+#' @param tale An \code{anansiTale} object
+#' @return A wide format data.frame with summary statistics by feature pair.
+#' @seealso \code{\link{spinToWide}}\cr \code{\link{spinToLong}}
+#'
+frame.tale <- function(tale, dic){
+  switch(tale@type,
+         "r.values"  = frame.tale.cor(tale, dic),
+         "r.squared" = frame.tale.ols(tale, dic))
+}
+
+#' @noRd
+#'
+frame.tale.cor <- function(tale, dic){
+  out.df <- data.frame(
+    r.values = tale@estimates[dic],
+    p.values =  tale@p.values[dic]
+    #q.values =  tale@q.values[dic]
+    )
+  colnames(out.df) <- paste(tale@subject, colnames(out.df), sep = "_")
+  return(out.df)
+}
+
+#' @noRd
+#'
+frame.tale.ols <- function(tale, dic){
+  out.df <- data.frame(
+    r.squared = tale@estimates[dic],
+    f.values =  tale@F.values[dic],
+    p.values =  tale@p.values[dic]
+    #q.values =  tale@q.values[dic]
+    )
+  colnames(out.df) <- paste(tale@subject, colnames(out.df), sep = "_")
+  return(out.df)
+}
+
+#' Shape list of `anansiTale` results into a data.frame.
+#' @noRd
+#'
+result.df <- function(output, dic) {
+  feature_labs <- expand.grid(
+         feature_Y = row.names(dic),
+         feature_X = colnames(dic), stringsAsFactors = FALSE
+     )[dic,]
+
+  df.list <- c(feature_labs, lapply(output, frame.tale, dic))
+  do.call("cbind.data.frame", df.list, quote = TRUE)
 }
