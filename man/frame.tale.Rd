@@ -8,13 +8,12 @@ frame.tale(tale, dic)
 }
 \arguments{
 \item{tale}{An \code{anansiTale} object}
+
+\item{dic}{A dictionary.}
 }
 \value{
 A wide format data.frame with summary statistics by feature pair.
 }
 \description{
 Extract information from an anansiTale object and parse it into a neat table
-}
-\seealso{
-\code{\link{spinToWide}}\cr \code{\link{spinToLong}}
 }

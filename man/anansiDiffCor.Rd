@@ -2,20 +2,38 @@
 % Please edit documentation in R/anansi_diff_cor_qr.R
 \name{anansiDiffCor}
 \alias{anansiDiffCor}
-\title{Run differential correlation analysis for all interacting metabolites and functions.}
+\title{Run differential correlation analysis for all interacting metabolites and
+functions.}
 \usage{
 anansiDiffCor(web, sat_model, errorterm, int.terms, metadata, verbose)
 }
 \arguments{
-\item{metadata}{A vector or data.frame of categorical or continuous value necessary for differential correlations. Typically a state or treatment score. If no argument provided, anansi will let you know and still to regular correlations according to your dictionary.}
+\item{web}{An \code{anansiWeb} object, containing two tables with omics
+data and a dictionary that links them. See \code{weaveWebFromTables()} for
+how to weave a web.}
 
-\item{verbose}{A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.}
+\item{sat_model}{A \code{formula} object, containing the full model}
 
-\item{yarn}{An \code{anansiYarn} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.}
+\item{errorterm}{A \code{character vector}, containing the metadata col.name
+denoting repeated measures.}
+
+\item{int.terms}{A \code{character vector}, containing the metadata col.names
+denoting covariates interacting with X to be tested for differential
+associations.}
+
+\item{metadata}{A vector or data.frame of categorical or continuous value
+necessary for differential correlations. Often a state or treatment score. If
+no argument provided, anansi will let you know and still to regular
+correlations according to your dictionary.}
+
+\item{verbose}{A boolean. Toggles whether to print diagnostic information
+while running. Useful for debugging errors on large datasets.}
 }
 \value{
-a list of \code{anansiTale} result objects, one for the total model, one for emergent correlations and one for disjointed correlations.
+a list of \code{anansiTale} result objects, one for the total model,
+one for emergent correlations and one for disjointed correlations.
 }
 \description{
-Can either take continuous or categorical data for \code{groups}. Typically, the main \code{anansi()} function will run this for you.
+Can either take continuous or categorical data.
+Typically, the main \code{anansi()} function will run this for you.
 }

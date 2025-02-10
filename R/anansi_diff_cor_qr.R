@@ -1,14 +1,31 @@
-#' Run differential correlation analysis for all interacting metabolites and functions.
-#' @description Can either take continuous or categorical data for \code{groups}. Typically, the main \code{anansi()} function will run this for you.
-#' @param yarn An \code{anansiYarn} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.
-#' @param metadata A vector or data.frame of categorical or continuous value necessary for differential correlations. Typically a state or treatment score. If no argument provided, anansi will let you know and still to regular correlations according to your dictionary.
-#' @param verbose A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.
-#' @return a list of \code{anansiTale} result objects, one for the total model, one for emergent correlations and one for disjointed correlations.
+#' Run differential correlation analysis for all interacting metabolites and
+#' functions.
+#' @description Can either take continuous or categorical data.
+#' Typically, the main \code{anansi()} function will run this for you.
+#' @param web An \code{anansiWeb} object, containing two tables with omics
+#' data and a dictionary that links them. See \code{weaveWebFromTables()} for
+#' how to weave a web.
+#' @param sat_model A \code{formula} object, containing the full model
+#' @param errorterm A \code{character vector}, containing the metadata col.name
+#' denoting repeated measures.
+#' @param int.terms A \code{character vector}, containing the metadata col.names
+#' denoting covariates interacting with X to be tested for differential
+#' associations.
+#' @param metadata A vector or data.frame of categorical or continuous value
+#' necessary for differential correlations. Often a state or treatment score. If
+#' no argument provided, anansi will let you know and still to regular
+#' correlations according to your dictionary.
+#' @param verbose A boolean. Toggles whether to print diagnostic information
+#' while running. Useful for debugging errors on large datasets.
+#' @return a list of \code{anansiTale} result objects, one for the total model,
+#' one for emergent correlations and one for disjointed correlations.
 #' @importFrom stats anova lm pf residuals model.matrix.default terms.formula
 #' @importFrom future.apply future_apply
 #' @importFrom methods is
 #'
-anansiDiffCor <- function(web, sat_model, errorterm, int.terms, metadata, verbose) {
+anansiDiffCor <- function(
+    web, sat_model, errorterm, int.terms, metadata, verbose
+    ) {
 
   tY  <- get_tableY(web)
   tX  <- get_tableX(web)
@@ -42,13 +59,13 @@ anansiDiffCor <- function(web, sat_model, errorterm, int.terms, metadata, verbos
   # prepare output
   df_mat <- dfmat(x.assign, x.int, all.assign, x.fct, n)
 
-d.dim <- matrix(0, ncol = NCOL(dic), nrow = NROW(dic))
+d.dim <- matrix(1, ncol = NCOL(dic), nrow = NROW(dic))
 full_model <- new("anansiTale",
     subject    = "full",
     type       = "r.squared",
     df         = df_mat[, 1],
-    estimates  = dic * Y.TSS, # start with RSS0
-    F.values   = d.dim,
+    estimates  = d.dim * Y.TSS, # start with RSS0
+    f.values   = d.dim,
     p.values   = d.dim
   )
 
@@ -60,7 +77,7 @@ disjointed <- lapply(
         type       = "r.squared",
         df         = df_mat[, x + 1],
         estimates  = d.dim,
-        F.values   = d.dim,
+        f.values   = d.dim,
         p.values   = d.dim
       )
     }
@@ -74,7 +91,7 @@ disjointed <- lapply(
         type       = "r.squared",
         df         = df_mat[, x + 1] + c(0, -1, -1 / df_mat[1, x + 1]),
         estimates  = d.dim,
-        F.values   = d.dim,
+        f.values   = d.dim,
         p.values   = d.dim
         )
     }
@@ -198,8 +215,8 @@ oddify <- function(x) x / (1 - x)
 #' @noRd
 #'
 get_PF <- function(object, d) {
-  object@F.values[d] <- oddify(object@estimates[d]) * object@df[3]
-  object@p.values[d] <- pf(object@F.values[d],
+  object@f.values[d] <- oddify(object@estimates[d]) * object@df[3]
+  object@p.values[d] <- pf(object@f.values[d],
     df1 = object@df[1], df2 = object@df[2],
     lower.tail = FALSE
   )

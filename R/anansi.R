@@ -1,13 +1,34 @@
 #' Calculate an association network
-#' @description This is the main workspider function in the anansi package. It manages the individual functionalities of anansi, including correlation analysis, correlation by group and differential correlation.
-#' @param web An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.
-#' @param metadata A vector or data.frame of categorical or continuous value necessary for differential correlations. Typically a state or treatment score. If no argument provided, anansi will let you know and still to regular correlations according to your dictionary.
-#' @param groups A vector of the column names of categorical values in the metadata object to control which groups should be assessed for simple correlations. If no argument provided, anansi will let you know and still to regular correlations according to your dictionary.
+#' @description This is the main workspider function in the anansi package. It
+#' manages the individual functionalities of anansi, including correlation
+#' analysis, correlation by group and differential correlation.
+#' @param web An \code{anansiWeb} object, containing two tables with 'omics data
+#' and a dictionary that links them. See \code{weaveWebFromTables()} for how to
+#' weave a web.
+#' @param metadata A vector or data.frame of categorical or continuous value
+#' necessary for differential correlations. Typically a state or treatment.
+#' If no argument provided, anansi will let you know and still to regular
+#' correlations according to your dictionary.
+#' @param groups A vector of the column names of categorical values in the
+#' metadata object to control which groups should be assessed for simple
+#' correlations.
+#' If no argument provided, anansi will let you know and still to regular
+#' correlations according to your dictionary.
 #' @param formula A formula object. Used to assess differential associations.
-#' @param adjust.method Method to adjust p-values for multiple comparisons. \code{adjust.method = "BH"} is the default value. See \code{p.adjust()} in the base R \code{stats} package.
-#' @param verbose A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.
-#' @param ignore_dictionary A boolean. Default is FALSE. If set to TRUE, regular all vs all associations will be tested regardless of the dictionary.
-#' @return A list of lists containing correlation coefficients, p-values and q-values for all operations.
+#' @param adjust.method Method to adjust p-values for multiple comparisons.
+#' \code{adjust.method = "BH"} is the default value. See \code{p.adjust()} in
+#' the base R \code{stats} package.
+#' @param verbose A boolean. Toggles whether to print diagnostic information
+#' while running. Useful for debugging errors on large datasets.
+#' @param ignore_dictionary A boolean. Default is FALSE. If set to TRUE, regular
+#' all vs all associations will be tested regardless of the dictionary.
+#' @param return.format \code{Character scalar}. Should be one of \code{"table"}
+#' , \code{"list"}, or \code{"raw"}. Should the output of \code{\link{anansi}}
+#' respectively be a wide `data.frame` of results, a list containing the results
+#' and input, or a list of raw output (used for testing purposes).
+#' convenient use. (Default: \code{"table"})
+#' @return A list of lists containing correlation coefficients, p-values and
+#' q-values for all operations.
 #' @importFrom stats model.frame
 #' @export
 #' @examples
@@ -51,25 +72,21 @@
 #'   verbose = TRUE
 #' )
 #'
-#' results <- spinToWide(
-#'   anansi_output = anansi_out, translate = TRUE,
-#'   Y_translation = anansi::cpd_translation,
-#'   X_translation = anansi::KO_translation
-#' )
-#'
 #' # To recreate the long plot:
+#' library(tidyr)
 #' library(ggplot2)
 #'
-#' anansiLong <- spinToLong(
-#'   anansi_output = anansi_out, translate = TRUE,
-#'   Y_translation = anansi::cpd_translation,
-#'   X_translation = anansi::KO_translation
-#' )
+#'anansiLong <- anansi_out |>
+#'    pivot_longer(starts_with("All") | contains("FMT")) |>
+#'    separate_wider_delim(
+#'        name, delim = "_", names = c("cor_group", "cor_param")
+#'            ) |>
+#'            pivot_wider(names_from = cor_param, values_from = value)
 #'
-#' # Now it's ready to be plugged into ggplot2, though let's clean up a bit more.
+#' # Now it's ready to be plugged into ggplot2, though let's filter a bit more.
 #'
 #' # Only consider interactions where the entire model fits well enough.
-#' anansiLong <- anansiLong[anansiLong$model_full_q.values < 0.1, ]
+#' anansiLong <- anansiLong[anansiLong$full_q.values < 0.1, ]
 #'
 #'
 #'
@@ -78,8 +95,8 @@
 #'   aes(
 #'     x = r.values,
 #'     y = feature_X,
-#'     fill = type,
-#'     alpha = model_disjointed_Legend_p.values < 0.05
+#'     fill = cor_group,
+#'     alpha = disjointed_Legend_p.values < 0.05
 #'   )
 #' ) +
 #'
@@ -109,7 +126,8 @@
 #'
 anansi <- function(web, formula = ~1, groups = NULL, metadata,
                    adjust.method = "BH", verbose = TRUE,
-                   ignore_dictionary = FALSE, keep.input = TRUE) {
+                   ignore_dictionary = FALSE, return.format = "table") {
+
   # generate anansiYarn input object
   input <- prepInput(
     web = web, formula = formula, groups = groups,
@@ -119,10 +137,10 @@ anansi <- function(web, formula = ~1, groups = NULL, metadata,
   errorterm <- input@error.term; sat_model <- input@lm.formula
 
   out.list <- vector(
-    "list", length = 2 + n.grps + (2 * length(int.terms))
+    "list", length = 1 + n.grps + (2 * length(int.terms))
     )
-  # sort out metadata
-  lm.metadata <- model.frame(formula = sat_model, cbind(x = 1, metadata))
+  # Sort out metadata
+  metadata <- model.frame(formula = sat_model, cbind(x = 1, metadata))
 
   if (ignore_dictionary) {
     if (verbose) {
@@ -135,25 +153,24 @@ anansi <- function(web, formula = ~1, groups = NULL, metadata,
     }
   }
 
-  out.list[seq_len(1 + n.grps)] <- call_groupwise(
+  out.list[seq_len(n.grps)] <- call_groupwise(
     web, groups,
     metadata, verbose
   )
 
-  out.list[1 + n.grps +
+  out.list[n.grps +
            seq_len(1 + (2 * length(int.terms)))] <- anansiDiffCor(
-             web, sat_model, errorterm, int.terms, lm.metadata, verbose)
+             web, sat_model, errorterm, int.terms, metadata, verbose)
 
-  results <- result.df(out.list, dic)
+  if(return.format != "raw") {
+    results <- result.df(out.list, get_dict(web))
+    results <- anansi.p.adjust(results, adjust.method)
+  }
 
-  # # FDR
-  # outYarn <- anansiAdjustP(
-  #   x = outYarn,
-  #   method = adjust.method, verbose = verbose
-  # )
-if(keep.input) return(list(results = output, input = input))
-return(results)
-
+  switch(return.format,
+         "table" = return(results),
+         "list"  = return(list(results, input = input)),
+         "raw"   = return(out.list))
 }
 
 
@@ -215,7 +232,8 @@ prepInput <- function(web, formula, groups, metadata, verbose) {
       error.term = error.term,
       int.terms = all_terms,
       groups = groups[[1]],
-      n.grps = groups[[2]]
+      n.grps = groups[[2]],
+      metadata = `row.names<-.data.frame`(metadata, NULL)
     )
 
   return(input)
@@ -234,7 +252,7 @@ check_groups <- function(groups, raw_terms, indErr, metadata, verbose) {
       "Grouping variable(s) not recognised. Please check input and labels. " =
         !any(missing_groups)
       )
-    n.groups <- length(unique(do.call(paste0, c(metadata[groups]))))
+    n.groups <- 1 + length(unique(do.call(paste0, c(metadata[groups]))))
     return(list(groups, n.groups))
   }
 
@@ -245,7 +263,7 @@ check_groups <- function(groups, raw_terms, indErr, metadata, verbose) {
   }
   if (!any(ind_o1)) {
     if(verbose){message("No grouping variable found for groupwise correlations. ")}
-    return(list(NULL, 0))
+    return(list(NULL, 1))
   }
   groups <- labels(raw_terms)[ind_o1]
 
@@ -258,9 +276,9 @@ check_groups <- function(groups, raw_terms, indErr, metadata, verbose) {
 
   if (NCOL(sub_meta) == 0) {
     if(verbose){message("No grouping variable found for groupwise correlations.")}
-    return(list(NULL, 0))
+    return(list(NULL, 1))
   }
-  n.groups <- length(unique(do.call(paste0, c(sub_meta))))
+  n.groups <- 1 + length(unique(do.call(paste0, c(sub_meta))))
 
   return(list(groups, n.groups))
 }
