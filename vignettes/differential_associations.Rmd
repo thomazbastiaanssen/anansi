@@ -23,3 +23,10 @@ library(anansi)
 ## Disjointed associations
 
 ## Emergent associations
+
+
+# Session info
+
+```{r}
+sessionInfo()
+```

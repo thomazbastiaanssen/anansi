@@ -2,13 +2,23 @@
 #'
 tell_F <- function(tale) {
   if (is(tale, "anansiTale")) {
-    return(tale@F.values)
+    return(tale@f.values)
   }
   if (is.list(tale)) {
     return(lapply(tale, tell_F))
   }
 }
 
+#' @noRd
+#'
+tell_T <- function(tale) {
+  if (is(tale, "anansiTale")) {
+    return(tale@t.values)
+  }
+  if (is.list(tale)) {
+    return(lapply(tale, tell_T))
+  }
+}
 
 #' @noRd
 #'
@@ -96,78 +106,4 @@ get_tableX <- function(web) {
 get_tableY <- function(web) {
   web@tableY
 }
-
-#' @noRd
-#'
-yarn.e <- function(yarn) {
-  yarn@input@error.term
-}
-
-#' @noRd
-#'
-yarn.int <- function(yarn) {
-  yarn@input@int.terms
-}
-
-#' @noRd
-#'
-yarn.grp <- function(yarn) {
-  yarn@input@groups
-}
-
-#' @noRd
-#'
-yarn.f <- function(yarn) {
-  yarn@input@lm.formula
-}
-
-#' @noRd
-#'
-yarn.web <- function(yarn) {
-  yarn@input@web
-}
-
-#' @noRd
-#'
-yarn.cor <- function(yarn) {
-  yarn@output@cor_results
-}
-
-#' @noRd
-#'
-yarn.model <- function(yarn) {
-  yarn@output@model_results
-}
-
-#' @noRd
-#'
-yarn.dic <- function(yarn) {
-  get_dict(yarn.web(yarn))
-}
-
-#' @noRd
-#'
-yarn.dic.double <- function(yarn) {
-  get_dict.double(yarn.web(yarn))
-}
-
-#' @noRd
-#'
-yarn.dic.logical <- function(yarn) {
-  get_dict.logical(yarn.web(yarn))
-}
-
-#' @noRd
-#'
-yarn.tX <- function(yarn) {
-  get_tableX(yarn.web(yarn))
-}
-
-#' @noRd
-#'
-yarn.tY <- function(yarn) {
-  get_tableY(yarn.web(yarn))
-}
-
-
 

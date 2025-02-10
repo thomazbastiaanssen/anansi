@@ -12,29 +12,51 @@ anansi(
   adjust.method = "BH",
   verbose = TRUE,
   ignore_dictionary = FALSE,
-  keep.input = TRUE
+  return.format = "table"
 )
 }
 \arguments{
-\item{web}{An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.}
+\item{web}{An \code{anansiWeb} object, containing two tables with 'omics data
+and a dictionary that links them. See \code{weaveWebFromTables()} for how to
+weave a web.}
 
 \item{formula}{A formula object. Used to assess differential associations.}
 
-\item{groups}{A vector of the column names of categorical values in the metadata object to control which groups should be assessed for simple correlations. If no argument provided, anansi will let you know and still to regular correlations according to your dictionary.}
+\item{groups}{A vector of the column names of categorical values in the
+metadata object to control which groups should be assessed for simple
+correlations.
+If no argument provided, anansi will let you know and still to regular
+correlations according to your dictionary.}
 
-\item{metadata}{A vector or data.frame of categorical or continuous value necessary for differential correlations. Typically a state or treatment score. If no argument provided, anansi will let you know and still to regular correlations according to your dictionary.}
+\item{metadata}{A vector or data.frame of categorical or continuous value
+necessary for differential correlations. Typically a state or treatment.
+If no argument provided, anansi will let you know and still to regular
+correlations according to your dictionary.}
 
-\item{adjust.method}{Method to adjust p-values for multiple comparisons. \code{adjust.method = "BH"} is the default value. See \code{p.adjust()} in the base R \code{stats} package.}
+\item{adjust.method}{Method to adjust p-values for multiple comparisons.
+\code{adjust.method = "BH"} is the default value. See \code{p.adjust()} in
+the base R \code{stats} package.}
 
-\item{verbose}{A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.}
+\item{verbose}{A boolean. Toggles whether to print diagnostic information
+while running. Useful for debugging errors on large datasets.}
 
-\item{ignore_dictionary}{A boolean. Default is FALSE. If set to TRUE, regular all vs all associations will be tested regardless of the dictionary.}
+\item{ignore_dictionary}{A boolean. Default is FALSE. If set to TRUE, regular
+all vs all associations will be tested regardless of the dictionary.}
+
+\item{return.format}{\code{Character scalar}. Should be one of \code{"table"}
+, \code{"list"}, or \code{"raw"}. Should the output of \code{\link{anansi}}
+respectively be a wide `data.frame` of results, a list containing the results
+and input, or a list of raw output (used for testing purposes).
+convenient use. (Default: \code{"table"})}
 }
 \value{
-A list of lists containing correlation coefficients, p-values and q-values for all operations.
+A list of lists containing correlation coefficients, p-values and
+q-values for all operations.
 }
 \description{
-This is the main workspider function in the anansi package. It manages the individual functionalities of anansi, including correlation analysis, correlation by group and differential correlation.
+This is the main workspider function in the anansi package. It
+manages the individual functionalities of anansi, including correlation
+analysis, correlation by group and differential correlation.
 }
 \examples{
 # Load example data:
@@ -77,25 +99,21 @@ anansi_out <- anansi(
   verbose = TRUE
 )
 
-results <- spinToWide(
-  anansi_output = anansi_out, translate = TRUE,
-  Y_translation = anansi::cpd_translation,
-  X_translation = anansi::KO_translation
-)
-
 # To recreate the long plot:
+library(tidyr)
 library(ggplot2)
 
-anansiLong <- spinToLong(
-  anansi_output = anansi_out, translate = TRUE,
-  Y_translation = anansi::cpd_translation,
-  X_translation = anansi::KO_translation
-)
+anansiLong <- anansi_out |>
+   pivot_longer(starts_with("All") | contains("FMT")) |>
+   separate_wider_delim(
+       name, delim = "_", names = c("cor_group", "cor_param")
+           ) |>
+           pivot_wider(names_from = cor_param, values_from = value)
 
-# Now it's ready to be plugged into ggplot2, though let's clean up a bit more.
+# Now it's ready to be plugged into ggplot2, though let's filter a bit more.
 
 # Only consider interactions where the entire model fits well enough.
-anansiLong <- anansiLong[anansiLong$model_full_q.values < 0.1, ]
+anansiLong <- anansiLong[anansiLong$full_q.values < 0.1, ]
 
 
 
@@ -104,8 +122,8 @@ ggplot(
   aes(
     x = r.values,
     y = feature_X,
-    fill = type,
-    alpha = model_disjointed_Legend_p.values < 0.05
+    fill = cor_group,
+    alpha = disjointed_Legend_p.values < 0.05
   )
 ) +
 
