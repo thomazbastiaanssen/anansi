@@ -140,7 +140,7 @@ setMethod("plotAnansi", signature = c(df = "data.frame"),
     x_lab = "cor", y_lab = ""){
       
     match.arg(x, choices = c("r.values", "r.squared", "q.values"))
-    match.arg(association.type, choices = c("disjointed", "emergent", "full"))
+    match.arg(association.type, choices = c("disjointed", "emergent", "full", "cor"))
     
     if( association.type %in% c("disjointed", "emergent") && is.null(model.var) ){
         stop("'model.var' must specify a variable of the anansi model when ",
@@ -151,9 +151,9 @@ setMethod("plotAnansi", signature = c(df = "data.frame"),
             association.type, call. = FALSE)
     }
       
-    pval <- paste0(c("model", association.type, model.var, "p.values"),
+    pval <- paste0(c(association.type, model.var, "p.values"),
         collapse = "_")
-    x <- paste0(c("model", association.type, model.var, x), collapse = "_")
+    x <- paste0(c(association.type, model.var, x), collapse = "_")
     
     # Check df
     if( !all(c(x, pval, "feature_X", "feature_Y") %in% colnames(df)) ){
