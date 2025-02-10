@@ -63,17 +63,13 @@ anansiCorPvalue <- function(web, group.bool, verbose = verbose) {
   # Compute p-values based on t and n.
   p <- 2 * (1 - pt(abs(t), (n - 2)))
 
-  # Compute naive adjusted p-values
-  q <- p
-  q[web@dictionary] <- NA
 
   # Collate correlation coefficients, p-values and q-values into an anansiTale
   out <- new("anansiTale",
     subject    = "All",
     type       = "r.values",
     estimates  = r,
-    p.values   = p,
-    q.values   = q
+    p.values   = p
   )
   return(out)
 }

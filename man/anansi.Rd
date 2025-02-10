@@ -11,7 +11,8 @@ anansi(
   metadata,
   adjust.method = "BH",
   verbose = TRUE,
-  ignore_dictionary = FALSE
+  ignore_dictionary = FALSE,
+  keep.input = TRUE
 )
 }
 \arguments{

@@ -4,14 +4,14 @@
 \alias{anansiDiffCor}
 \title{Run differential correlation analysis for all interacting metabolites and functions.}
 \usage{
-anansiDiffCor(yarn, metadata, verbose = TRUE)
+anansiDiffCor(web, sat_model, errorterm, int.terms, metadata, verbose)
 }
 \arguments{
-\item{yarn}{An \code{anansiYarn} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.}
-
 \item{metadata}{A vector or data.frame of categorical or continuous value necessary for differential correlations. Typically a state or treatment score. If no argument provided, anansi will let you know and still to regular correlations according to your dictionary.}
 
 \item{verbose}{A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.}
+
+\item{yarn}{An \code{anansiYarn} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.}
 }
 \value{
 a list of \code{anansiTale} result objects, one for the total model, one for emergent correlations and one for disjointed correlations.

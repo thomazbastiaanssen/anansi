@@ -64,10 +64,12 @@ library(anansi)
 library(ggplot2)
 library(ggforce)
 
-# Anansi supports parallelisation through the future.apply framework. You can call it like this:
+# Anansi supports parallelisation through the future.apply framework. 
+# You can call it like this:
 # plan(multisession)
 
-# load anansi dictionary and complementary human-readable names for KEGG compounds and orthologues
+# load anansi dictionary and complementary human-readable 
+# names for KEGG compounds and orthologues
 data(dictionary)
 
 # load example data + metadata from FMT Aging study
@@ -162,13 +164,12 @@ object, the Third argument.
 ``` r
 anansi_out <- anansi(
   web = web,
-  formula = ~ Legend,
+  formula = ~Legend,
   metadata = FMT_metadata,
   adjust.method = "BH",
   verbose = TRUE
 )
 ```
-
 
     ## Fitting least-squares for following model:
     ## ~ x + Legend + x:Legend
