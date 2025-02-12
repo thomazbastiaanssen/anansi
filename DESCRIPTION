@@ -27,8 +27,6 @@ Imports:
     MultiAssayExperiment
 Suggests:
     BiocStyle,
-    ggplot2,
-    ggforce,
     mia,
     tidyr,
     patchwork,

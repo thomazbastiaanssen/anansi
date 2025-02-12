@@ -108,9 +108,8 @@ NULL
 
 #' @rdname getAnansi
 #' @export
-setGeneric("getAnansi",
-  signature = c("x"),
-  function(x, ...) standardGeneric("getAnansi")
+setGeneric("getAnansi", signature = c("x"),
+    function(x, ...) standardGeneric("getAnansi")
 )
 
 #' @rdname getAnansi
