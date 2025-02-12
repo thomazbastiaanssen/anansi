@@ -3,17 +3,22 @@
 \docType{class}
 \name{anansiWeb-class}
 \alias{anansiWeb-class}
-\title{An S4 class to contain all metabolomics and functional input data as well as a dictionary to link them.}
+\title{An S4 class to contain all metabolomics and functional input data as well as
+a dictionary to link them.}
 \description{
-anansiWeb is the main container that will hold your input data thoughout the \code{anansi} pipeline.
+anansiWeb is the main container that will hold your input data
+thoughout the \code{anansi} pipeline.
 }
 \section{Slots}{
 
 \describe{
-\item{\code{tableY}}{A matrix of metabolomics data. Rows are samples and columns are features.}
+\item{\code{tableY}}{A matrix of metabolomics data. Rows are samples and columns are
+features.}
 
-\item{\code{tableX}}{A matrix of functional data. Rows are samples and columns are features.}
+\item{\code{tableX}}{A matrix of functional data. Rows are samples and columns are
+features.}
 
-\item{\code{dictionary}}{A binary adjacency matrix. Typically generated using the \code{weaveWebFromTables()} function.}
+\item{\code{dictionary}}{A binary adjacency matrix. Typically generated using the
+\code{weaveWebFromTables()} function.}
 }}
 

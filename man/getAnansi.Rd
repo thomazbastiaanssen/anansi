@@ -13,7 +13,6 @@ getAnansi(x, ...)
   experiment2 = 2,
   assay.type1 = "counts",
   assay.type2 = "counts",
-  return.format = "long",
   ...
 )
 }
@@ -22,8 +21,7 @@ getAnansi(x, ...)
 \code{\link[MultiAssayExperiment:MultiAssayExperiment]{MultiAssayExperiment}}.}
 
 \item{...}{additional parameters that can be passed to
-\code{\link{weaveWebFromTables}}, \code{\link{anansi}},
-\code{\link{spinToLong}} or \code{\link{spinToWide}}.}
+\code{\link{weaveWebFromTables}} or \code{\link{anansi}}.}
 
 \item{experiment1}{\code{Character scalar} or \code{numeric scalar}.
 Selects the experiment 1 from \code{experiments(x)} of
@@ -38,34 +36,29 @@ in experiment 1 to be used. (Default: \code{"counts"})}
 
 \item{assay.type2}{\code{Character scalar}. Specifies the name of the
 assay in experiment 2 to be used. (Default: \code{"counts"})}
-
-\item{return.format}{\code{Character scalar}. Should be one of \code{"long"},
-\code{"wide"}, or \code{"raw"}. Should the output of \code{\link{anansi}}
-be passed to \code{\link{spinToLong}} or \code{\link{spinToWide}} for
-convenient use. (Default: \code{"long"})}
 }
 \value{
-If \code{return.format} is long (default), a long format data.frame intended
-to be compatible with ggplot2. If \code{return.format} is wide, a wide format
-data.frame. If \code{return.format} is raw, a list of lists containing
-correlation coefficients, p-values and q-values for all operations.
+If \code{return.format} is \code{"table"} (default), a wide format data.frame
+intended to be compatible with `ggplot2`, or specialized plotting functions
+(See \code{\link{[plotAnansi:plotAnansi]}}). If \code{return.format} is
+\code{"list"}, a list with aforementioned table, as well as input and
+additional information. If \code{return.format} is \code{"raw"}, a list of
+raw output (used for testing purposes).
 }
 \description{
 \code{getAnansi} provides a wrapper to execute the anansi pipeline on a
 \code{\link[MultiAssayExperiment:MultiAssayExperiment]{MultiAssayExperiment}}
-object. It applies the functions \code{\link{weaveWebFromTables}},
-\code{\link{anansi}} and optionally \code{\link{spinToLong}} in the given
-order.
+object. It applies the functions \code{\link{weaveWebFromTables}} and
+\code{\link{anansi}} in the given order.
 }
 \details{
 This wrapper of \code{\link{anansi}} allows to perform a complete anansi
 analysis directly on objects of class
-\code{\link[MultiAssayExperiment:MultiAssayExperiment]{MultiAssayExperiment}}.
-First, the assays specified by \code{assay.type1} and \code{assay.type2}
-are passed to \code{\link{weaveWebFromTables}} to produce an anansiWeb object.
+\code{\link[MultiAssayExperiment:MultiAssayExperiment]{MultiAssayExperiment}}
+. First, the assays specified by \code{assay.type1} and \code{assay.type2}
+are passed to \code{\link{weaveWebFromTables}} to build an anansiWeb object.
 Next, this object is fed to the main \code{\link{anansi}} function to compute
-interactions between the two assays. Finally, the output can be simplified
-with \code{\link{spinToLong}} for easy manipulation and visualisation.
+interactions between the two assays.
 }
 \examples{
 
@@ -118,7 +111,7 @@ out <- getAnansi(mae,
 )
 
 # Select significant interactions
-out <- out[out$model_full_q.values < 0.1, ]
+out <- out[out$full_q.values < 0.1, ]
 
 # View subset of results
 head(out, 5)
@@ -127,6 +120,4 @@ head(out, 5)
 \seealso{
 \code{\link{weaveWebFromTables}}
 \code{\link{anansi}}
-\code{\link{spinToLong}}
-\code{\link{spinToWide}}
 }

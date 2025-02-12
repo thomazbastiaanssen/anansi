@@ -55,36 +55,38 @@ test_that("getAnansi", {
     tableY = t(assay(metab_se, "conc")), tableX = t(assay(KO_tse, "clr")),
     dictionary = anansi_dic, verbose = FALSE
   )
+  table1 <- anansi(
+    web = web, formula = ~Legend, metadata = FMT_metadata,
+    verbose = FALSE
+  )
+  list1 <- anansi(
+    web = web, formula = ~Legend, metadata = FMT_metadata,
+    verbose = FALSE, return.format = "list"
+  )
   raw1 <- anansi(
-    web = web, formula = ~Legend, metadata = FMT_metadata, verbose = FALSE
+    web = web, formula = ~Legend, metadata = FMT_metadata,
+    verbose = FALSE, return.format = "raw"
   )
-  long1 <- spinToLong(
-    anansi_output = raw1, translate = TRUE,
-    Y_translation = cpd_translation, X_translation = KO_translation
+
+  table2 <- getAnansi(mae,
+    experiment1 = "metabolites",
+    experiment2 = "functions", assay.type1 = "conc", assay.type2 = "clr",
+    formula = ~Legend, translate = TRUE, Y_translation = cpd_translation,
+    X_translation = KO_translation, verbose = FALSE
   )
-  wide1 <- spinToWide(
-    anansi_output = raw1, translate = TRUE,
-    Y_translation = cpd_translation, X_translation = KO_translation
+  list2 <- getAnansi(mae,
+    experiment1 = "metabolites",
+    experiment2 = "functions", assay.type1 = "conc", assay.type2 = "clr",
+    formula = ~Legend, translate = TRUE, Y_translation = cpd_translation,
+    X_translation = KO_translation, return.format = "list", verbose = FALSE
   )
   raw2 <- getAnansi(mae,
     experiment1 = "metabolites",
     experiment2 = "functions", assay.type1 = "conc", assay.type2 = "clr",
     formula = ~Legend, return.format = "raw", verbose = FALSE
   )
-  long2 <- getAnansi(mae,
-    experiment1 = "metabolites",
-    experiment2 = "functions", assay.type1 = "conc", assay.type2 = "clr",
-    formula = ~Legend, translate = TRUE, Y_translation = cpd_translation,
-    X_translation = KO_translation, verbose = FALSE
-  )
-  wide2 <- getAnansi(mae,
-    experiment1 = "metabolites",
-    experiment2 = "functions", assay.type1 = "conc", assay.type2 = "clr",
-    formula = ~Legend, translate = TRUE, Y_translation = cpd_translation,
-    X_translation = KO_translation, return.format = "wide", verbose = FALSE
-  )
 
+  expect_identical(table1, table2)
+  expect_identical(list1, list2)
   expect_identical(raw1, raw2)
-  expect_identical(long1, long2)
-  expect_identical(wide1, wide2)
 })

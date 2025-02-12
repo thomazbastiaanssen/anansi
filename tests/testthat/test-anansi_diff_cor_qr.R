@@ -16,34 +16,32 @@ test_that("full and disjointed parameters correspond to stats::lm()", {
   )
 
   anansi.res <- anansi(
-    web = web, metadata = m,
-    formula = ~categorical, verbose = FALSE
-  )@output@model_results
+    web = web, metadata = m, formula = ~categorical,
+    verbose = FALSE, return.format = "raw"
+    )
+  a.full <- anansi.res[[5]]
+  a.disj <- anansi.res[[6]]
 
-  a.full.F <- tell_F(anansi.res$modelfit)
-  a.disj.F <- tell_F(anansi.res$disjointed)
+  a.full.F <- tell_F(a.full)
+  a.disj.F <- tell_F(a.disj)
 
-  a.full.Rsq <- tell_e(anansi.res$modelfit)
-  a.disj.Rsq <- tell_e(anansi.res$disjointed)
+  a.full.Rsq <- tell_e(a.full)
+  a.disj.Rsq <- tell_e(a.disj)
 
-  a.full.P <- tell_P(anansi.res$modelfit)
-  a.disj.P <- tell_P(anansi.res$disjointed)
+  a.full.P <- tell_P(a.full)
+  a.disj.P <- tell_P(a.disj)
 
   t.full <- matrix(
     nrow = NCOL(tY),
-    ncol = NCOL(tX),
-    dimnames = list(
-      colnames(tY),
-      colnames(tX)
-    )
-  )
+    ncol = NCOL(tX))
+
   t.disj.F <- t.full.F <- t.full.P <- t.disj.P <- t.disj <- t.full
 
 
-  for (y in 1:NCOL(tY)) {
+  for (y in seq_len(NCOL(tY))) {
     m$y.val <- y.val <- tY[, y]
 
-    for (x in 1:NCOL(tX)) {
+    for (x in seq_len(NCOL(tX))) {
       m$x.val <- x.val <- tX[, x]
 
       f.1 <- lm(y.val ~ categorical, data = m)
@@ -78,32 +76,30 @@ test_that("full and disjointed parameters correspond to stats::lm()", {
   expect_equal(t.full.F, a.full.F)
   expect_equal(t.disj.F, a.disj.F)
 
-
-  ### And test repeated measurements through random intercepts with Error() notation
-
+  # And test repeated measurements through random intercepts
+  # with Error() notation
   anansi.res <- anansi(
     web = web, metadata = m,
     formula = ~ continuous + Error(categorical),
-    verbose = FALSE
-  )@output@model_results
+    verbose = FALSE, return.format = "raw"
+  )
+  a.full <- anansi.res[[2]]
+  a.disj <- anansi.res[[3]]
 
-  a.full.F <- tell_F(anansi.res$modelfit)
-  a.disj.F <- tell_F(anansi.res$disjointed)
 
-  a.full.Rsq <- tell_e(anansi.res$modelfit)
-  a.disj.Rsq <- tell_e(anansi.res$disjointed)
+  a.full.F <- tell_F(a.full)
+  a.disj.F <- tell_F(a.disj)
 
-  a.full.P <- tell_P(anansi.res$modelfit)
-  a.disj.P <- tell_P(anansi.res$disjointed)
+  a.full.Rsq <- tell_e(a.full)
+  a.disj.Rsq <- tell_e(a.disj)
+
+  a.full.P <- tell_P(a.full)
+  a.disj.P <- tell_P(a.disj)
 
   t.full <- matrix(
     nrow = NCOL(tY),
-    ncol = NCOL(tX),
-    dimnames = list(
-      colnames(tY),
-      colnames(tX)
-    )
-  )
+    ncol = NCOL(tX))
+
   t.disj.F <- t.full.F <- t.full.P <- t.disj.P <- t.disj <- t.full
 
   for (y in 1:NCOL(tY)) {

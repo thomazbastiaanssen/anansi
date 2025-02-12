@@ -3,33 +3,32 @@ Type: Package
 Title: Annotation-Based Analysis of Specific Interactions
 Version: 0.6.0
 Authors@R: c(
-   person("Thomaz", "Bastiaanssen", email = "thomazbastiaanssen@gmail.com", role = c("aut", "cre"), comment = c(ORCID = "0000-0001-6891-734X")), 
-   person("Thomas", "Quinn", email = "contacttomquinn@gmail.com", role = c("aut"), comment = c(ORCID = "0000-0003-0286-6329")),
-   person("Giulio", "Benedetti", email = "giulio.benedetti@utu.fi", role = c("aut"), comment = c(ORCID = "0000-0002-8732-7692"))
+   person("Thomaz", "Bastiaanssen", email = "thomazbastiaanssen@gmail.com", 
+       role = c("aut", "cre"), comment = c(ORCID = "0000-0001-6891-734X")), 
+   person("Thomas", "Quinn", email = "contacttomquinn@gmail.com", 
+       role = c("aut"), comment = c(ORCID = "0000-0003-0286-6329")),
+   person("Giulio", "Benedetti", email = "giulio.benedetti@utu.fi", 
+       role = c("aut"), comment = c(ORCID = "0000-0002-8732-7692"))
    )
-Description: Studies including both microbiome and metabolomics data are becoming more common. 
-    Often, it would be helpful to integrate both datasets in order to see if they corroborate 
-    each others patterns. All vs all association is imprecise and likely to yield spurious 
-    associations. This package takes a knowledge-based approach to constrain association 
-    search space, only considering metabolite-function interactions that have been recorded
-    in a pathway database. This package also provides a framework to assess differential 
-    association. 
+Description: Studies including both microbiome and metabolomics data are 
+    becoming more common. Often, it would be helpful to integrate both datasets 
+    in order to see if they corroborate each others patterns. All vs all 
+    association is imprecise and likely to yield spurious associations. This
+    package takes a knowledge-based approach to constrain association search 
+    space, only considering metabolite-function pairs that have been recorded in
+    a pathway database. This package also provides a framework to assess 
+    differential association. 
 Depends: R (>= 4.4.0)
 Imports:
     stats,
     methods,
-    utils,
     future.apply,
-    argonaut,
     SummarizedExperiment,
-    MultiAssayExperiment,
-    ggplot2,
-    ggforce
-Additional_repositories: 
-    https://github.com/thomazbastiaanssen/argonaut/
+    MultiAssayExperiment
 Suggests:
     BiocStyle,
     mia,
+    tidyr,
     patchwork,
     TreeSummarizedExperiment,
     testthat (>= 3.0.0),

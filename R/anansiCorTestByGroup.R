@@ -20,20 +20,19 @@ anansiCorTestByGroup <- function(web, group.vec, verbose = TRUE) {
     group.bool = rep(TRUE, NROW(get_tableY(web))), verbose = verbose
   )
 
-  out_list$All@subject <- "All"
-
   if (!is.null(all_groups)) {
     # If verbose, verbalize.
     if (verbose) {
       message(paste(
-        "Running correlations for the following groups:",
+        "Running correlations for the following groups:\n",
         paste(all_groups, collapse = ", ")
       ))
     }
-    for (i in seq_len(length(all_groups))) {
-      out_by_group <- anansiCorPvalue(web, group.bool = group.vec == all_groups[i], verbose = verbose)
+    for (i in seq_along(all_groups)) {
+      out_by_group <- anansiCorPvalue(
+        web, group.bool = group.vec == all_groups[i], verbose = verbose
+        )
       out_by_group@subject <- all_groups[i]
-
       out_list[[i + 1]] <- out_by_group
     }
   }
@@ -52,24 +51,23 @@ anansiCorTestByGroup <- function(web, group.vec, verbose = TRUE) {
 #' @importFrom stats pt
 #' @importFrom methods new
 #'
-anansiCorPvalue <- function(web, group.bool, verbose = verbose) {
+anansiCorPvalue <- function(web, group.bool, verbose) {
   # Compute correlation coefficients
   r <- anansiCor(web = web, group.bool = group.bool)
 
-  # Compute t-statistics based on the n and the correlation coefficient
+  # Compute p-value through t-statistic, based on n and correlation coefficient.
   n <- sum(group.bool)
-  t <- (r * sqrt(n - 2)) / sqrt(1 - r^2)
-
-  # Compute p-values based on t and n.
-  p <- 2 * (1 - pt(abs(t), (n - 2)))
-
+  t <- abs((r * sqrt(n - 2)) / sqrt(1 - r^2))
+  p <- 2 * (1 - pt(t, (n - 2)))
 
   # Collate correlation coefficients, p-values and q-values into an anansiTale
   out <- new("anansiTale",
-    subject    = "All",
-    type       = "r.values",
-    estimates  = r,
-    p.values   = p
+    subject     = "All",
+    type        = "r.values",
+    estimates   = r,
+    df          = n - 2,
+    t.values    = t,
+    p.values    = p
   )
   return(out)
 }
