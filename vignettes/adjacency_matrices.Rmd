@@ -1,0 +1,89 @@
+---
+title: "Adjacency matrices"
+output:
+    BiocStyle::html_document:
+        toc: true
+        toc_float: true
+        toc_depth: 2
+        number_sections: true
+vignette: >
+  %\VignetteIndexEntry{3. Working with (bi)adjacency matrices}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(anansi)
+library(ggplot2)
+```
+
+# Introduction
+A common challenge in integrative analysis of high-dimensional data sets is 
+subsequent biological interpretation. Anansi addresses this challenge by only 
+considering pairwise associations that are known to occur *a priori*. In order
+to achieve this, we need to provide this relational information to anansi in the
+form of a (bi)adjacency matrix. In this vignette, we provide some intuition on 
+(bi)adjacency and demonstrate how to provide custom relational information to 
+anansi. 
+
+# Understanding adjacency matrices
+
+## Example from Biology: The Krebs cycle
+
+```{r plot_krebs, echo=FALSE, fig.width=6, fig.height=6, fig.align="center", fig.cap="A simplified representation of the krebs cycle."}
+
+kd <- data.frame(
+  enzyme = c("Isocitrate\ndehydrogenase", "Aconitase", "Aconitase",  
+            "Citrate\ndehydrogenase", "Malate\ndehydrogenase", "Fumarase",  
+            "Succinate\ndehydrogenase","Succinyl-CoA\nsynthetase",
+            "α-Ketoglutarate\ndehydrogenase"), 
+  metab = c("Isocitrate","cis-Aconitate","Citrate","Oxaloacetate","L-Malate",
+             "Fumarate","Succinate","Succinyl-CoA", "α-Ketoglutarate"),
+           rad = seq(0, 2*pi * 8/9, length.out = 9)) 
+
+ggplot(kd) + 
+  annotate("path",
+           x=0.75*cos(seq(0,2*pi,length.out=100)),
+           y=0.75*sin(seq(0,2*pi,length.out=100))) +
+
+  geom_tile(aes(x = 0.8*cos(rad), y =0.8* sin(rad)), width = 0.45, height = 0.15, 
+            fill = "orange", color = "black", show.legend = FALSE) + 
+  geom_text(aes(x = 0.8*cos(rad), y =0.8* sin(rad), label = metab), size = 3,
+                show.legend = FALSE) + 
+  
+  geom_segment(aes(x = 0.75*cos(rad - pi/9), y =0.75* sin(rad - pi/9), 
+                   xend = cos(rad - pi/9), yend =sin(rad - pi/9))) +
+  
+  geom_point(aes(x = 0.75*cos(rad-pi/9), y =0.75* sin(rad-pi/9)), size = 3, 
+            fill = "dodgerblue", color = "black", show.legend = FALSE, 
+            shape = 21) + 
+  geom_text(aes(x = 1.2*cos(rad-pi/9), y =1.2* sin(rad-pi/9),label = enzyme), 
+            size = 3, show.legend = FALSE) + 
+  
+  scale_y_continuous(limits = c(-1.5, 1.5)) +
+  scale_x_continuous(limits = c(-1.5, 1.5)) +
+  
+  theme_void()
+
+  
+
+```
+All-vs-all analysis looks like two columns of length c(8, 9), all vs all -> 72 
+comparisons. 
+
+In most cases, only a subset of these comparisons is scientifically relevant to
+investigate. The others actively harms statistical power, as they these 
+comparisons will never be interpreted, but their p-values will still be tallied 
+for the purpose of FDR and FWER. 
+
+# Defining an adjacency matrix
+
+igraph support, adjacency as graph/network. 
+
+
+# Session info
+
+```{r}
+sessionInfo()
+```
