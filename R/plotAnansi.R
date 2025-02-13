@@ -1,24 +1,24 @@
 #' Dissociation plot
-#' 
+#'
 #' \code{plotAnansi} generates a standard dissociation plot from the output of
 #' \code{\link{getAnansi}} in the long format. It provides a convenient way to
 #' visually assess relevant results from the anansi analysis.
-#' 
+#'
 #' @param df a \code{data.frame} object output of \code{\link{getAnansi}} in
 #'   the long format.
-#'   
+#'
 #' @param x \code{Character scalar}. Specifies the type of coefficient to
 #' show in the plot. One of \code{"r.values"}, \code{"r.squared"} and
 #'   \code{"q.values"}. (Default: \code{"r.values"})
-#' 
+#'
 #' @param association.type \code{Character scalar}. Specifies the type of
 #' association to show in the plot. One of \code{"disjointed"},
 #'   \code{"emergent"} and \code{"full"}. (Default: \code{"disjointed"})
-#' 
+#'
 #' @param model.var \code{Character scalar}. Specifies the name of a variable
 #' in the anansi model. It is relevant only when \code{association.type} is
 #'   \code{"disjointed"} or \code{"emergent"}. (Default: \code{NULL})
-#'   
+#'
 #' @param signif.threshold \code{Numeric scalar}. Specifies the significance
 #'   threshold to show in the plot. (Default: \code{NULL})
 #'
@@ -26,37 +26,37 @@
 #'   \code{df} by which points should be coloured. (Default: \code{NULL})
 #'
 #' @param color_by \code{Character scalar}. Alias to \code{colour_by}.
-#' 
+#'
 #' @param fill_by \code{Character scalar}. Specifies the name of a column in
 #'   \code{df} by which points should be filled (Default: \code{NULL})
-#' 
+#'
 #' @param size_by \code{Character scalar}. Specifies the name of a column in
 #'   \code{df} by which points should be sized (Default: \code{NULL})
-#' 
+#'
 #' @param shape_by \code{Character scalar}. Specifies the name of a column in
 #'   \code{df} by which points should be shaped (Default: \code{NULL})
-#' 
+#'
 #' @param x_lab \code{Character scalar}. Specifies the label of the x axis.
 #'   (Default: \code{"cor"})
-#' 
+#'
 #' @param y_lab \code{Character scalar}. Specifies the label of the y axis.
 #'   (Default: \code{""})
-#' 
+#'
 #' @param y_position \code{Character scalar}. Specifies the position of the y
 #'   labels. It should be either \code{"left"} or \code{"right"}.
 #'   (Default: \code{"right"})
-#' 
+#'
 #' @details
 #' \code{plotAnansi} provides a standardised method to visualise the results
-#' of anansi by means of a dissociation plot. The input for this function should
-#' be generated from \code{\link{getAnansi}} with \code{return.format = "long"}
-#' or from \code{\link{anansi}} followed by \code{\link{spinToLong}}.
+#' of anansi by means of a differential association plot. The input for this
+#' function should be generated from \code{\link{getAnansi}} or
+#' \code{\link{anansi}}, with \code{return.format = "long"}
 #'
 #' @return
 #' A ggplot2 object.
 #'
 #' @examples
-#' 
+#' \dontrun{
 #' # Import libraries
 #' library(mia)
 #' library(TreeSummarizedExperiment)
@@ -111,14 +111,13 @@
 #'
 #' # Generate dissociation plot
 #' plotAnansi(out, fill_by = "type", signif.threshold = 0.05)
-#' 
+#' }
 #' @seealso
 #' \code{\link{getAnansi}}
 #' \code{\link{anansi}}
-#' \code{\link{spinToLong}}
-#' 
+#'
 #' @name plotAnansi
-#' 
+#'
 NULL
 
 #' @rdname plotAnansi
@@ -138,10 +137,10 @@ setMethod("plotAnansi", signature = c(df = "data.frame"),
     colour_by = NULL, color_by = colour_by, fill_by = NULL, size_by = NULL,
     shape_by = NULL, signif.threshold = NULL, y_position = "right",
     x_lab = "cor", y_lab = ""){
-      
+
     match.arg(x, choices = c("r.values", "r.squared", "q.values"))
     match.arg(association.type, choices = c("disjointed", "emergent", "full", "cor"))
-    
+
     if( association.type %in% c("disjointed", "emergent") && is.null(model.var) ){
         stop("'model.var' must specify a variable of the anansi model when ",
             "'association type' is set to ", association.type, call. = FALSE)
@@ -150,11 +149,11 @@ setMethod("plotAnansi", signature = c(df = "data.frame"),
         warning("'model.var' is ingored when 'association type' is set to ",
             association.type, call. = FALSE)
     }
-      
+
     pval <- paste0(c(association.type, model.var, "p.values"),
         collapse = "_")
     x <- paste0(c(association.type, model.var, x), collapse = "_")
-    
+
     # Check df
     if( !all(c(x, pval, "feature_X", "feature_Y") %in% colnames(df)) ){
         stop("'df' must be the output of 'getAnansi' in the long format and ",
@@ -191,7 +190,7 @@ setMethod("plotAnansi", signature = c(df = "data.frame"),
     # Create base plot
     p <- ggplot(data = pData, aes(x = .data$x, y = .data$y,
             colour = .data$colour, fill = .data$fill, shape = .data$shape,
-            size = .data$size, alpha = .data$alpha)) + 
+            size = .data$size, alpha = .data$alpha)) +
         geom_vline(xintercept = 0, linetype = "dashed", colour = "red")
     # Set point size and shape if not defined
     point_args <- list()
@@ -223,7 +222,7 @@ setMethod("plotAnansi", signature = c(df = "data.frame"),
     guide_names <- c("colour", "fill", "alpha")[!c(colour_defined, fill_defined, signif_defined)]
     guide_args <- setNames(as.list(rep("none", length(guide_names))), guide_names)
     p <- p + do.call(guides, guide_args)
-    
+
     return(p)
 })
 

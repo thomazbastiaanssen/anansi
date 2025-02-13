@@ -31,6 +31,7 @@ anansi.
 
 ## Example from Biology: The Krebs cycle
 
+
 ```{r plot_krebs, echo=FALSE, fig.width=6, fig.height=6, fig.align="center", fig.cap="A simplified representation of the krebs cycle."}
 
 kd <- data.frame(
@@ -69,6 +70,8 @@ ggplot(kd) +
   
 
 ```
+
+### notes to be expanded
 All-vs-all analysis looks like two columns of length c(8, 9), all vs all -> 72 
 comparisons. 
 
@@ -77,10 +80,78 @@ investigate. The others actively harms statistical power, as they these
 comparisons will never be interpreted, but their p-values will still be tallied 
 for the purpose of FDR and FWER. 
 
+
 # Defining an adjacency matrix
+There are numerous ways in which we can define an adjacency matrix. Here, we 
+demonstrate a graph-based and matrix based approach.
 
-igraph support, adjacency as graph/network. 
+```{r init_list, echo=FALSE}
+krebs_edge_df <- data.frame(
+ Enzyme = c("Aconitase", "Aconitase", "Citrate synthase", 
+"Fumarase", "Succinate dehydrogenase", "Aconitase", "Isocitrate dehydrogenase", 
+"Fumarase", "Malate dehydrogenase", "Citrate synthase", "Malate dehydrogenase", 
+"Succinate dehydrogenase", "Succinyl-CoA synthetase", "Succinyl-CoA synthetase", 
+"transsuccinytase", "α-Ketoglutarate dehydrogenase", "Isocitrate dehydrogenase", 
+"transsuccinytase", "α-Ketoglutarate dehydrogenase"), 
+ Metabolite = c("cis-Aconitate", 
+"Citrate", "Citrate", "Fumarate", "Fumarate", "Isocitrate", "Isocitrate", 
+"L-Malate", "L-Malate", "Oxaloacetate", "Oxaloacetate", "Succinate", 
+"Succinate", "Succinyl-CoA", "Succinyl-CoA", "Succinyl-CoA", 
+"α-Ketoglutarate", "α-Ketoglutarate", "α-Ketoglutarate"))
+```
 
+## The graph approach
+Importantly, (bi)adjacency matrices can be understood as graphs. Two common 
+packages that deal with graphs are [`igraph`](https://r.igraph.org/) and [`graph`](https://bioconductor.org/packages/graph/). 
+```{r igraph_1, message=FALSE}
+library(igraph)
+
+# Convert data.frame to graph
+g <- graph_from_data_frame(krebs_edge_df, directed = FALSE)
+
+```
+
+Now that we have constructed a graph, we still need to identify which features, 
+vertices, belong to which data modality, in this case either enzymes and 
+metabolites. `igraph` does this using a boolean vector, where `TRUE` values 
+become columns, which corresponds to `tableX`, whereas `FALSE` values become 
+rows, corresponding to `tableY`.
+
+```{r igraph_2, message=FALSE}
+V(g)$type <- V(g)$name %in% krebs_edge_df$Metabolite
+
+# Now that we've defined type, we can convert to biadjacency matrix: 
+bi_mat1 <- as_biadjacency_matrix(g)
+
+head(bi_mat1, n = c(4, 4))
+```
+Though biadjacency support in `graph` is currently limited, We note that igraph 
+and graph objects can be converted using the `graph_from_graphnel()` and 
+`as_graphnel()` functions in `igraph`.
+
+## The matrix approach
+We can also define a matrix directly. Conveniently, sparse matrices can be 
+defined easily from our starting data. The `Matrix` library provides fantastic 
+support for this.
+```{r Matrix, message=FALSE}
+library(Matrix)
+
+# For this approach, it's useful to prepare the input as two factors:
+enzymes     <- factor(krebs_edge_df$Enzyme)
+metabolites <- factor(krebs_edge_df$Metabolite)
+
+# We can get integers out of factors, corresponding to their level indices 
+bi_mat2 <- sparseMatrix(i = as.integer(enzymes), 
+             j = as.integer(metabolites), 
+             dimnames = list(
+               levels(enzymes),
+               levels(metabolites)
+               )
+             )
+
+head(bi_mat2, n = c(4, 4))
+
+```
 
 # Session info
 

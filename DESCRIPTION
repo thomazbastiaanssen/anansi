@@ -24,11 +24,15 @@ Imports:
     methods,
     future.apply,
     SummarizedExperiment,
-    MultiAssayExperiment
+    MultiAssayExperiment, 
+    ggplot2, 
+    ggforce
 Suggests:
     BiocStyle,
     mia,
     tidyr,
+    igraph,
+    Matrix,
     patchwork,
     TreeSummarizedExperiment,
     testthat (>= 3.0.0),

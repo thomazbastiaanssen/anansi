@@ -40,7 +40,7 @@ assay in experiment 2 to be used. (Default: \code{"counts"})}
 \value{
 If \code{return.format} is \code{"table"} (default), a wide format data.frame
 intended to be compatible with `ggplot2`, or specialized plotting functions
-(See \code{\link{[plotAnansi:plotAnansi]}}). If \code{return.format} is
+(See \code{\link{plotAnansi}}). If \code{return.format} is
 \code{"list"}, a list with aforementioned table, as well as input and
 additional information. If \code{return.format} is \code{"raw"}, a list of
 raw output (used for testing purposes).

@@ -76,12 +76,12 @@ visually assess relevant results from the anansi analysis.
 }
 \details{
 \code{plotAnansi} provides a standardised method to visualise the results
-of anansi by means of a dissociation plot. The input for this function should
-be generated from \code{\link{getAnansi}} with \code{return.format = "long"}
-or from \code{\link{anansi}} followed by \code{\link{spinToLong}}.
+of anansi by means of a differential association plot. The input for this
+function should be generated from \code{\link{getAnansi}} or
+\code{\link{anansi}}, with \code{return.format = "long"}
 }
 \examples{
-
+\dontrun{
 # Import libraries
 library(mia)
 library(TreeSummarizedExperiment)
@@ -136,10 +136,9 @@ out <- out[out$model_full_q.values < 0.1, ]
 
 # Generate dissociation plot
 plotAnansi(out, fill_by = "type", signif.threshold = 0.05)
-
+}
 }
 \seealso{
 \code{\link{getAnansi}}
 \code{\link{anansi}}
-\code{\link{spinToLong}}
 }
