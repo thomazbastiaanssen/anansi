@@ -3,13 +3,18 @@
 \docType{class}
 \name{anansiInput-class}
 \alias{anansiInput-class}
-\title{An S4 class to contain all \code{anansi} input so that they can easily be extracted.}
+\title{An S4 class to contain all \code{anansi} input so that they can easily be
+extracted.}
 \description{
-\code{anansiInput} is the container that will hold your input data in the \code{anansiYarn} output file coming out of the \code{anansi} pipeline.
+\code{anansiInput} is the container that will hold your input
+data in the \code{anansiYarn} output file coming out of the \code{anansi}
+pipeline.
 }
 \section{Slots}{
 
 \describe{
-\item{\code{input}}{A list that holds the input data in \code{anansiWeb} format, as well as the \code{int.terms} and corresponding \code{groups}, the equivalent \code{lm.formula} and \code{error.term} argument(s) if provided.}
+\item{\code{input}}{A list that holds the input data in \code{anansiWeb} format, as
+well as the \code{int.terms} and corresponding \code{groups}, the equivalent
+\code{lm.formula} and \code{error.term} argument(s) if provided.}
 }}
 

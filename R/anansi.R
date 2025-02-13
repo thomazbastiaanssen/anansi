@@ -134,7 +134,8 @@ anansi <- function(web, formula = ~1, groups = NULL, metadata,
     metadata = metadata, verbose = verbose
   )
   int.terms <- input@int.terms; groups <- input@groups; n.grps <- input@n.grps;
-  errorterm <- input@error.term; sat_model <- input@lm.formula
+  group.id <- input@group.id; errorterm <- input@error.term;
+  sat_model <- input@lm.formula
 
   out.list <- vector(
     "list", length = 1 + n.grps + (2 * length(int.terms))
@@ -165,6 +166,8 @@ anansi <- function(web, formula = ~1, groups = NULL, metadata,
   if(return.format != "raw") {
     results <- result.df(out.list, get_dict(web))
     results <- anansi.p.adjust(results, adjust.method)
+    attr(results, "group_terms") <- paste(group.id, "r.values", sep = "_")
+    attr(results, "model_terms") <- int.terms
   }
 
   switch(return.format,
@@ -233,6 +236,8 @@ prepInput <- function(web, formula, groups, metadata, verbose) {
       int.terms = all_terms,
       groups = groups[[1]],
       n.grps = groups[[2]],
+      group.id = c("All",unique(apply(metadata[,groups[[1]], drop = FALSE],
+                                       1, paste, collapse = "_"))),
       metadata = `row.names<-.data.frame`(metadata, NULL)
     )
 
