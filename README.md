@@ -55,7 +55,7 @@ remotes::install_github("vegandevs/vegan")
 ## Getting started using anansi
 
 [See the vignettes on the package
-site.](https://anansi.thomazbastiaanssen.io)
+site.](https://thomazbastiaanssen.github.io/anansi)
 
 ## Citation
 
