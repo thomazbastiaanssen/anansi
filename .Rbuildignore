@@ -5,3 +5,5 @@
 ^README_files$
 ^doc$
 ^Meta$
+^dev$
+^\.github$

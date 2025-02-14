@@ -24,6 +24,7 @@ library(anansi)
 
 ## Emergent associations
 
+</p>
 
 # Session info
 

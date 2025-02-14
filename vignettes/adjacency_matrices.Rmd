@@ -42,11 +42,10 @@ represent our two data sets like two sets of features, as shown in figure
 \@ref(fig:plot-krebs)B.
 
 ```{r}
-#| plot-krebs, echo=FALSE, fig.wide=TRUE, out.width='91.5%', fig.asp=3/5, 
+#| plot-krebs, echo=FALSE, fig.wide=TRUE, out.width='100%', fig.asp=3/5, 
 #| fig.cap="Two simplified representations of the krebs cycle. **A)** shows the 
 #| biomolecular pathway, whereas **B)** lists the features, repectively enzymes 
-#| and metabolites \\
-#| involved in the pathway. In both figures, orange marks 
+#| and metabolites involved in the pathway. In both figures, orange marks 
 #| metabolites and blue marks enzymes."
 library(patchwork)
 kd <- data.frame(
@@ -66,7 +65,7 @@ krebs <- ggplot(kd) +
     geom_tile(aes(x = 0.8*cos(rad), y =0.8* sin(rad)), width = 0.45, 
               height = 0.15, fill = "orange", color = "black", linewidth = 0.8, 
               show.legend = FALSE) + 
-    geom_text(aes(x = 0.8*cos(rad), y =0.8* sin(rad), label = metab), size = 3.5,
+    geom_text(aes(x = 0.8*cos(rad), y =0.8* sin(rad), label = metab), size =3,
               show.legend = FALSE) + 
     
     geom_segment(aes(x = 0.75*cos(rad - pi/9), y =0.75* sin(rad - pi/9), 
@@ -75,8 +74,8 @@ krebs <- ggplot(kd) +
     geom_point(aes(x = 0.75*cos(rad-pi/9), y =0.75* sin(rad-pi/9)), size = 3, 
                fill = "dodgerblue", color = "black", show.legend = FALSE, 
                shape = 21) + 
-    geom_text(aes(x = 1.15*cos(rad-pi/9), y =1.15* sin(rad-pi/9),label = enzyme), 
-              size = 3.5, show.legend = FALSE) + 
+    geom_text(aes(x = 1.15*cos(rad-pi/9), y =1.15* sin(rad-pi/9),label= enzyme), 
+              size = 3, show.legend = FALSE) + 
     
     scale_y_continuous(limits = c(-1.4, 1.2), expand = c(0, 0)) +
     scale_x_continuous(limits = c(-1.3, 1.3), expand = c(0, 0)) +
@@ -85,10 +84,10 @@ krebs <- ggplot(kd) +
 
 colmat <- data.frame(name = c(
   "Aconitase", "Citrate\nsynthase", "Fumarase", "Succinate\ndehydrogenase",
-  "Isocitrate\ndehydrogenase", "Malate\ndehydrogenase", "Succinyl-CoA\nsynthetase", 
-  "α-Ketoglutarate\ndehydrogenase", "cis-Aconitate", "Citrate", "Fumarate", 
-  "Isocitrate", "L-Malate", "Oxaloacetate", "Succinate", "Succinyl-CoA", 
-  "α-Ketoglutarate"), 
+  "Isocitrate\ndehydrogenase", "Malate\ndehydrogenase", 
+  "Succinyl-CoA\nsynthetase", "α-Ketoglutarate\ndehydrogenase", "cis-Aconitate",
+  "Citrate", "Fumarate", "Isocitrate", "L-Malate", "Oxaloacetate", "Succinate", 
+  "Succinyl-CoA", "α-Ketoglutarate"), 
   y = c(seq(9,1, length.out = 8), 9:1), 
   x = rep(c(0, 1), times = c(8, 9) ), 
   fill = rep(c("Enzyme", "Metabolite"), times = c(8, 9) ))
@@ -97,7 +96,7 @@ p_0 <- ggplot(colmat) +
   aes(x = (x + 1/2)/2, y = y) + 
   geom_tile(aes(fill = fill), width = 1/3, height = 0.85, colour = "black", 
             show.legend = FALSE, linewidth = 0.8) + 
-  geom_text(aes(label = name), colour = "black") + 
+  geom_text(aes(label = name), colour = "black", size = 3) + 
   scale_fill_manual(values = c(Metabolite = "orange", Enzyme = "dodgerblue")) +
   
   annotate("text", label = c("Enzymes","Metabolites"), 
@@ -110,7 +109,7 @@ p_a <- ggplot(colmat) +
   aes(x = (x + 1/2)/2, y = y) + 
   geom_tile(aes(fill = fill), width = 3/10, height = 0.85, colour = "black", 
             show.legend = FALSE, linewidth = 0.8) + 
-  geom_text(aes(label = name), colour = "black") + 
+  geom_text(aes(label = name), colour = "black", size = 2.75) + 
   scale_fill_manual(values = c(Metabolite = "orange", Enzyme = "dodgerblue")) +
   
   annotate("text", label = c("Enzymes","Metabolites"), 
@@ -131,11 +130,10 @@ sets, comprehensively testing every metabolite-enzyme pair, we'd test
 $8 \times 9 = 72$ hypotheses. Figure \@ref(fig:all-v-all-p1). 
 
 ```{r}
-#| all-v-all-p1, echo=FALSE, fig.wide=TRUE, out.width='91.5%', fig.asp=3/5, 
+#| all-v-all-p1, echo=FALSE, fig.wide=TRUE, out.width='100%', fig.asp=3/5, 
 #| fig.cap="All-vs-all association analysis of the krebs cycle. **A)** Graph 
 #| representation, with edges signifying tested feature-pairs. **B)** Matrix 
-#| representation, with cells \\
-#| marked with 'X' signifying tested feature-pairs."
+#| representation, with cells  marked with 'X' signifying tested feature-pairs."
 p_b <- p_a + geom_segment(data = expand.grid(seq(9,1, length.out = 8), 9:1), 
                aes(y = Var1, yend = Var2), x = 4/10, xend = 6/10)
 
@@ -164,11 +162,11 @@ their p-values will still be tallied for the purpose of FDR and FWER. Moreover,
 they tend to obscure any biologically interpretable findings. 
 
 ```{r}
-#| all-v-all-p2, echo=FALSE, fig.wide=TRUE, out.width='91.5%', fig.asp=3/5,
+#| all-v-all-p2, echo=FALSE, fig.wide=TRUE, out.width='100%', fig.asp=3/5,
 #| fig.cap="knowledge-constrained association analysis of the krebs cycle.
 #| **A)** Graph representation, with edges signifying tested feature-pairs.
-#| **B)** Matrix representation, with cells \\
-#| marked with 'X' signifying tested feature-pairs."
+#| **B)** Matrix representation, with cells marked with 'X' signifying tested 
+#| feature-pairs."
 p_c <- p_a + geom_segment(data = data.frame(
   Var1 = seq(1, 9, length.out = 8)[
     c(8, 8, 7, 6, 5, 8, 4, 6, 3, 7, 3, 5, 2, 2, 1, 4, 1)], 
