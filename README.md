@@ -1,5 +1,8 @@
 
-<p align="justify">
+<style>
+body {
+text-align: justify}
+</style>
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 # Knowledge-based multi-modal integration using anansi <img src="man/figures/anansi_hex.png" align="right" width="120" alt="The anansi hex sticker" />
@@ -49,13 +52,13 @@ And the development version from
 
 ``` r
 install.packages("remotes")
-remotes::install_github("vegandevs/vegan")
+remotes::install_github("thomazbastiaanssen/anansi")
 ```
 
 ## Getting started using anansi
 
 [See the vignettes on the package
-site.](https://thomazbastiaanssen.github.io/anansi)
+site.](https://thomazbastiaanssen.github.io/anansi/articles/anansi.html)
 
 ## Citation
 
@@ -86,5 +89,3 @@ print(citation('anansi'), bibtex = TRUE)
 Please note that the `anansi` project is released with a [Contributor
 Code of Conduct](http://bioconductor.org/about/code-of-conduct/). By
 contributing to this project, you agree to abide by its terms.
-
-</p>

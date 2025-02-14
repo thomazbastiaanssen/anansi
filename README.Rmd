@@ -1,7 +1,11 @@
 ---
 output: github_document
 ---
-<p align="justify">
+
+<style>
+body {
+text-align: justify}
+</style>
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
@@ -56,11 +60,11 @@ And the development version from
 
 ```{r, 'remotes-install', eval = FALSE}
 install.packages("remotes")
-remotes::install_github("vegandevs/vegan")
+remotes::install_github("thomazbastiaanssen/anansi")
 ```
 ## Getting started using anansi
 
-[See the vignettes on the package site.](https://thomazbastiaanssen.github.io/anansi)
+[See the vignettes on the package site.](https://thomazbastiaanssen.github.io/anansi/articles/anansi.html)
 
 ## Citation
 
@@ -74,5 +78,3 @@ print(citation('anansi'), bibtex = TRUE)
 
 Please note that the `anansi` project is released with a [Contributor Code of Conduct](http://bioconductor.org/about/code-of-conduct/). By contributing to 
 this project, you agree to abide by its terms.
-
-</p>
