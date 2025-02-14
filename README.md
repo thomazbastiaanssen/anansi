@@ -53,7 +53,8 @@ BiocManager::install("thomazbastiaanssen/anansi")
 
 ## Getting started using anansi
 
-See the [vignettes](https://anansi.thomazbastiaanssen.org).
+[See the vignettes on the package
+site.](https://anansi.thomazbastiaanssen.io)
 
 ## Citation
 
