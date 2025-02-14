@@ -44,6 +44,6 @@ LazyData: true
 RoxygenNote: 7.3.2
 Config/testthat/edition: 3
 biocViews: Microbiome, Metabolomics, Regression, Pathways
-URL: https://github.com/thomazbastiaanssen/anansi, https://anansi.thomazbastiaanssen.io
+URL: https://github.com/thomazbastiaanssen/anansi, https://thomazbastiaanssen.github.io/anansi
 BugReports: https://github.com/thomazbastiaanssen/anansi/issues
 VignetteBuilder: knitr
