@@ -45,15 +45,17 @@ BiocManager::install("anansi")
 ```
 
 And the development version from
-[GitHub](https://github.com/thomazbastiaanssen/anansi) with:
+[GitHub](https://github.com/thomazbastiaanssen/anansi) with `remotes`:
 
 ``` r
-BiocManager::install("thomazbastiaanssen/anansi")
+install.packages("remotes")
+remotes::install_github("vegandevs/vegan")
 ```
 
 ## Getting started using anansi
 
-See the [vignettes](https://anansi.thomazbastiaanssen.org).
+[See the vignettes on the package
+site.](https://anansi.thomazbastiaanssen.io)
 
 ## Citation
 
