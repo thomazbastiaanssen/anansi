@@ -11,7 +11,11 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
-<p align="justify">    
+
+<style>
+body {
+text-align: justify}
+</style>
 
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -24,7 +28,7 @@ library(anansi)
 
 ## Emergent associations
 
-</p>
+
 
 # Session info
 
