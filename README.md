@@ -1,8 +1,4 @@
 
-<style>
-body {
-text-align: justify}
-</style>
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 # Knowledge-based multi-modal integration using anansi <img src="man/figures/anansi_hex.png" align="right" width="120" alt="The anansi hex sticker" />

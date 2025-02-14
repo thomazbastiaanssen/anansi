@@ -2,11 +2,6 @@
 output: github_document
 ---
 
-<style>
-body {
-text-align: justify}
-</style>
-
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 ```{r, include = FALSE}
@@ -43,8 +38,8 @@ of data sets where some features interact canonically.
 
 ## Installation instructions
 
-Get the latest stable `R` release from [CRAN](http://cran.r-project.org/). Then 
-install `anansi` from [Bioconductor](http://bioconductor.org/) using the 
+Get the latest stable `R` release from [CRAN](http://cran.r-project.org/). Then
+install `anansi` from [Bioconductor](http://bioconductor.org/) using the
 following code:
 
 ```{r 'install', eval = FALSE}
