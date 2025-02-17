@@ -98,66 +98,58 @@ demonstrate how to provide custom relational information to anansi.</p>
 <h3 id="example-from-biology-the-krebs-cycle">Example from Biology: The Krebs cycle<a class="anchor" aria-label="anchor" href="#example-from-biology-the-krebs-cycle"></a>
 </h3>
 <p>Recall that the <a href="https://en.wikipedia.org/wiki/Citric_acid_cycle" class="external-link">citric acid
-cycle, or krebs cycle</a>, is a central piece of metabolic machinery. In
+cycle, or Krebs cycle</a>, is a central piece of metabolic machinery. In
 short, it enables oxidative phosphorylation. See figure
 @ref(fig:plot-krebs)A below for a simplified representation. In the
-figure, there are 8 unique enzymatic reactions and 9 unique metabolites.
-Let’s imagine we had (high-dimensional proxy) measurements available for
-both types. For instance, we could have transcription data for the
-enzymes and metabolomics data for the metabolites. We could represent
-our two data sets like two sets of features, as shown in figure
-@ref(fig:plot-krebs)B.</p>
+figure, there are 8 unique enzymatic reactions and 9 unique
+metabolites.</p>
 <div class="figure">
-<img src="adjacency_matrices_files/figure-html/plot-krebs-1.png" alt="Two simplified representations of the krebs cycle. **A)** shows the 
-biomolecular pathway, whereas **B)** lists the features, repectively enzymes 
-and metabolites involved in the pathway. In both figures, orange marks 
-metabolites and blue marks enzymes." width="100%"><p class="caption">
-Two simplified representations of the krebs cycle. <strong>A)</strong>
-shows the biomolecular pathway, whereas <strong>B)</strong> lists the
-features, repectively enzymes and metabolites involved in the pathway.
-In both figures, orange marks metabolites and blue marks enzymes.
+<img src="adjacency_matrices_files/figure-html/plot-krebs-1.png" alt="Two simplified representations of the Krebs cycle. Orange marks 
+metabolites and blue marks enzymes." width="700"><p class="caption">
+Two simplified representations of the Krebs cycle. Orange marks
+metabolites and blue marks enzymes.
 </p>
 </div>
 <div class="section level4">
 <h4 id="adjacency-matrices-allow-us-to-be-specific-in-our-questions">Adjacency matrices allow us to be specific in our questions<a class="anchor" aria-label="anchor" href="#adjacency-matrices-allow-us-to-be-specific-in-our-questions"></a>
 </h4>
+<p>Let’s imagine we had (high-dimensional proxy) measurements available
+for both types. For instance, we could have transcription data for the
+enzymes and metabolomics data for the metabolites. We could represent
+our two data sets like two sets of features.</p>
 <p>If we were to perform an all-vs-all integrative analysis between our
 two data sets, comprehensively testing every metabolite-enzyme pair,
-we’d test <span class="math inline">\(8 \times 9 = 72\)</span>
-hypotheses. Figure @ref(fig:all-v-all-p1).</p>
+we’d test <span class="math inline">\(8\times9=72\)</span> hypotheses.
+Figure @ref(fig:all-v-all-p1)A.</p>
 <div class="figure">
-<img src="adjacency_matrices_files/figure-html/all-v-all-p1-1.png" alt="All-vs-all association analysis of the krebs cycle. **A)** Graph 
-representation, with edges signifying tested feature-pairs. **B)** Matrix 
-representation, with cells  marked with 'X' signifying tested feature-pairs." width="100%"><p class="caption">
-All-vs-all association analysis of the krebs cycle. <strong>A)</strong>
-Graph representation, with edges signifying tested feature-pairs.
-<strong>B)</strong> Matrix representation, with cells marked with ‘X’
-signifying tested feature-pairs.
+<img src="adjacency_matrices_files/figure-html/all-v-all-p1-1.png" alt="Graph representation of possible association sctructures in the 
+Krebs cycle. **A)** All-vs-all, with a full graph. **B)** Constrained, only 
+linking metabolites an enzymes that are known to directly interact." width="100%" height="60%"><p class="caption">
+Graph representation of possible association sctructures in the Krebs
+cycle. <strong>A)</strong> All-vs-all, with a full graph.
+<strong>B)</strong> Constrained, only linking metabolites an enzymes
+that are known to directly interact.
 </p>
 </div>
 <p>Often however, only a subset of these comparisons is scientifically
 relevant to investigate. In this case for instance, only 17 associations
 between enzyme-metabolite pairs are likely to make sense. Figure
-@ref(fig:all-v-all-p2). Non-selectively testing all 72 associations
+@ref(fig:all-v-all-p1)B. Non-selectively testing all 72 associations
 actively harms statistical power, as 55 of these tests likely cannot be
 interpreted, but their p-values will still be tallied for the purpose of
 FDR and FWER. Moreover, they tend to obscure any biologically
 interpretable findings.</p>
+<p>In order to ‘know’ which features-pairs in your data set should be
+considered, anansi requires a <em>biadjacency matrix</em>. The
+biadjacency matrix for the above figure can be seen in figure
+@ref(fig:all-v-all-p2)B.</p>
 <div class="figure">
-<img src="adjacency_matrices_files/figure-html/all-v-all-p2-1.png" alt="knowledge-constrained association analysis of the krebs cycle.
-**A)** Graph representation, with edges signifying tested feature-pairs.
-**B)** Matrix representation, with cells marked with 'X' signifying tested 
-feature-pairs." width="100%"><p class="caption">
-knowledge-constrained association analysis of the krebs cycle.
-<strong>A)</strong> Graph representation, with edges signifying tested
-feature-pairs. <strong>B)</strong> Matrix representation, with cells
-marked with ‘X’ signifying tested feature-pairs.
+<img src="adjacency_matrices_files/figure-html/all-v-all-p2-1.png" alt="Matrix representation of the constrained analysis of the Krebs cycle, 
+with cells marked with 'X' signifying tested feature-pairs." width="700"><p class="caption">
+Matrix representation of the constrained analysis of the Krebs cycle,
+with cells marked with ‘X’ signifying tested feature-pairs.
 </p>
 </div>
-<p>In order to ‘know’ which features-pairs in your data set should be
-considered, anansi requires a <em>biadjacency matrix</em>. Examples of
-these types of matrices are can be seen in figures
-@ref(fig:all-v-all-p1)B &amp; @ref(fig:all-v-all-p2)B.</p>
 </div>
 </div>
 </div>
@@ -188,12 +180,12 @@ corresponding to <code>tableY</code>.</p>
 <span><span class="co"># Now that we've defined type, we can convert to biadjacency matrix: </span></span>
 <span><span class="va">bi_mat1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r.igraph.org/reference/as_biadjacency_matrix.html" class="external-link">as_biadjacency_matrix</a></span><span class="op">(</span><span class="va">g</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">bi_mat1</span>, n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##                         cis-Aconitate Citrate Fumarate Isocitrate</span></span>
-<span><span class="co">## Aconitase                           1       1        0          1</span></span>
-<span><span class="co">## Citrate synthase                    0       1        0          0</span></span>
-<span><span class="co">## Fumarase                            0       0        1          0</span></span>
-<span><span class="co">## Succinate dehydrogenase             0       0        1          0</span></span></code></pre>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">bi_mat1</span>, n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">5</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##                         cis-aconitate citrate fumarate isocitrate L-malate</span></span>
+<span><span class="co">## aconitase                           1       1        0          1        0</span></span>
+<span><span class="co">## citrate synthase                    0       1        0          0        0</span></span>
+<span><span class="co">## fumarase                            0       0        1          0        1</span></span>
+<span><span class="co">## succinate dehydrogenase             0       0        1          0        0</span></span></code></pre>
 <p>Though biadjacency support in <code>graph</code> is currently
 limited, We note that igraph and graph objects can be converted using
 the <code><a href="https://r.igraph.org/reference/graph_from_graphnel.html" class="external-link">graph_from_graphnel()</a></code> and <code><a href="https://r.igraph.org/reference/as_graphnel.html" class="external-link">as_graphnel()</a></code>
@@ -221,13 +213,18 @@ library provides fantastic support for this.</p>
 <span>               <span class="op">)</span></span>
 <span>             <span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">bi_mat2</span>, n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## 4 x 4 sparse Matrix of class "ngCMatrix"</span></span>
-<span><span class="co">##                          cis-Aconitate Citrate Fumarate Isocitrate</span></span>
-<span><span class="co">## Aconitase                            |       |        .          |</span></span>
-<span><span class="co">## Citrate synthase                     .       |        .          .</span></span>
-<span><span class="co">## Fumarase                             .       .        |          .</span></span>
-<span><span class="co">## Isocitrate dehydrogenase             .       .        .          |</span></span></code></pre>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">bi_mat2</span>, n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">5</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## 4 x 5 sparse Matrix of class "ngCMatrix"</span></span>
+<span><span class="co">##                          cis-aconitate citrate fumarate isocitrate</span></span>
+<span><span class="co">## aconitase                            |       |        .          |</span></span>
+<span><span class="co">## citrate synthase                     .       |        .          .</span></span>
+<span><span class="co">## fumarase                             .       .        |          .</span></span>
+<span><span class="co">## isocitrate dehydrogenase             .       .        .          |</span></span>
+<span><span class="co">##                          ketoglutarate</span></span>
+<span><span class="co">## aconitase                            .</span></span>
+<span><span class="co">## citrate synthase                     .</span></span>
+<span><span class="co">## fumarase                             .</span></span>
+<span><span class="co">## isocitrate dehydrogenase             |</span></span></code></pre>
 </div>
 </div>
 <div class="section level2">
