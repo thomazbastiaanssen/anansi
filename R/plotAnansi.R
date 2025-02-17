@@ -139,16 +139,17 @@ setMethod("plotAnansi", signature = c(df = "data.frame"),
     shape_by = NULL, signif.threshold = NULL, y_position = "right",
     x_lab = "cor", y_lab = ""){
       
-    match.arg(x, choices = c("r.values", "r.squared", "q.values"))
-    match.arg(association.type, choices = c("disjointed", "emergent", "full", "cor"))
+    match.arg(x, choices = c("r.values", "r.squared"))
+    match.arg(association.type, choices = c("disjointed", "emergent", "full"))
     
     if( association.type %in% c("disjointed", "emergent") && is.null(model.var) ){
         stop("'model.var' must specify a variable of the anansi model when ",
             "'association type' is set to ", association.type, call. = FALSE)
     }
     if( association.type == "full" && !is.null(model.var) ){
-        warning("'model.var' is ingored when 'association type' is set to ",
+        warning("'model.var' is ignored when 'association type' is set to ",
             association.type, call. = FALSE)
+        model.var <- NULL
     }
       
     pval <- paste0(c(association.type, model.var, "p.values"),
