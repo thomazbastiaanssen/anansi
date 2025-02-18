@@ -166,7 +166,7 @@ anansi <- function(web, formula = ~1, groups = NULL, metadata,
   if(return.format != "raw") {
     results <- result.df(out.list, get_dict(web))
     results <- anansi.p.adjust(results, adjust.method)
-    attr(results, "group_terms") <- paste(group.id, "r.values", sep = "_")
+    attr(results, "group_terms") <- group.id
     attr(results, "model_terms") <- int.terms
   }
 
