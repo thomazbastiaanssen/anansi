@@ -176,6 +176,18 @@
         <dd>Lookup table to convert KEGG compound IDs to their human-readable counterparts</dd>
       </dl><dl><dt>
 
+          <code><a href="ec2cpd.html">ec2cpd</a></code>
+
+        </dt>
+        <dd>data.frame linking KEGG compounds to IDs of interacting ecs</dd>
+      </dl><dl><dt>
+
+          <code><a href="ec2ko.html">ec2ko</a></code>
+
+        </dt>
+        <dd>data.frame linking KEGG orthologues to IDs of interacting ecs</dd>
+      </dl><dl><dt>
+
           <code><a href="frame.tale.html">frame.tale()</a></code>
 
         </dt>
@@ -240,6 +252,12 @@
 
         </dt>
         <dd>Create an anansiWeb object from two 'omics tables and a dictionary</dd>
+      </dl><dl><dt>
+
+          <code><a href="web.html">web()</a></code>
+
+        </dt>
+        <dd>web(x = "ko", y = "cpd", x.df = ec2ko, y.df = ec2cpd) web(ec ~ cpd, x.df = ec2cpd) web(ko ~ cpd, y.df = ec2cpd, x.df = ec2ko) kegg_web(ec~ko)</dd>
       </dl></div>
   </main></div>
 
