@@ -33,6 +33,31 @@
 #'
 "KO_translation"
 
+#' data.frame linking KEGG orthologues to IDs of interacting ecs
+#'
+#' @format a data.frame of two columns, named `ec` and `ko`. The IDs refer to
+#' KEGG orthologues. ecs typically describe reactions either captured by them.
+#'
+#' @source generated using `KEGGREST`, with following code
+#' ec2ko <- KEGGREST::keggLink("ec", "ko")
+#' ec2ko <- data.frame(ec = ec2ko,  ko = names(ec2ko), row.names = NULL)
+#'
+"ec2ko"
+
+#' data.frame linking KEGG compounds to IDs of interacting ecs
+#'
+#' @format a data.frame of two columns, named `ec` and `cpd`. The IDs refer to
+#' compounds in the KEGG database. ccs typically describe reactions either
+#' producing or requiring them.
+#'
+#' @source Adapted from \url{https://www.genome.jp/kegg/}, generated
+#' using `KEGGREST`, with following code:
+#' ec2cpd <- KEGGREST::keggLink("ec", "cpd")
+#' ec2cpd <- data.frame(ec = ec2ko,  cpd = names(ec2cpd), row.names = NULL)
+#'
+"ec2cpd"
+
+
 #' Snippet of the CLR-transformed hippocampal metabolomics data from the FMT Aging study.
 #'
 #' @format A matrix object with three rows, compounds, and 36 columns, samples.
