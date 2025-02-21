@@ -22,6 +22,8 @@ Depends: R (>= 4.4.0)
 Imports:
     stats,
     methods,
+    igraph,
+    Matrix,
     future.apply,
     SummarizedExperiment,
     MultiAssayExperiment, 
@@ -31,8 +33,6 @@ Suggests:
     BiocStyle,
     mia,
     tidyr,
-    igraph,
-    Matrix,
     patchwork,
     TreeSummarizedExperiment,
     testthat (>= 3.0.0),

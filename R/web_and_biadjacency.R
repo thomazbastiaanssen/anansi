@@ -1,74 +1,117 @@
+#' Make a web
+#' @description
+#' Generate a biadjacency matrix linking the features between two tables.
 #'
-#' web(x = "ko", y = "cpd", x.df = ec2ko, y.df = ec2cpd)
-#' web(ec ~ cpd, x.df = ec2cpd)
-#' web(ko ~ cpd, y.df = ec2cpd, x.df = ec2ko)
-#' kegg_web(ec~ko)
+#' @param x name of feature type that will determine columns, corresponding to
+#' `tableX`.
+#' @param y name of feature type that will determine rows, corresponding to
+#' `tableY`.
+#' @param formula a formula of the form y ~ x, denoting desired output
+#' format; assigns y to rows and columns to x. Equivalent to using \code{x} and
+#' \code{y} arguments.
+#' @param link a data.frame with two columns, as named in \code{x} and \code{y}.
+#' Sharing a row indicates a link between features. See \code{ec2ko} and
+#' \code{ec2cpd} for examples. Optionally a list with two such data.frames.
+#' @param x.ids a character vector of features of type \code{x}, which should be
+#' included. If left NULL (default), keep all features.
+#' @param y.ids a character vector of features of type \code{y}, which should be
+#' included. If left NULL (default), keep all features.
+#' @param ... further arguments to be passed to or from methods. Not used.
+#'
+#' @returns a sparse binary biadjacency matrix, with features from \code{y} as
+#' rows and features from \code{x} as columns.
+#'
+#' @export
+#' @examples
+#' # Basic usage
+#' web(x = "ko", y = "ec", link = ec2ko)
+#' web(ec ~ cpd, link = ec2cpd)
+#'
+#' # A wrapper is available for kegg ko, ec and cpd data
+#' generic      <- web(cpd ~ ko, link = list(ec2ko, ec2cpd))
+#' kegg_wrapper <- kegg_web(cpd ~ ko)
+#'
+#' identical(generic, kegg_wrapper)
+#'
+#' # The following are equivalent:
+#' a <- web(ko ~ cpd, link = list(ec2ko, ec2cpd))
+#' b <- web(cpd ~ ko, link = list(ec2ko, ec2cpd))
+#'
+#' identical(a, Matrix::t(b))
 #'
 web <- function(x, ...) UseMethod("web")
 
+#' @rdname web
 #' @export
 #'
 kegg_web <- function(x, ...){
-  web(x, x.df = anansi::ec2ko, y.df = anansi::ec2cpd, ...)
+  web(x, link = list(anansi::ec2ko, anansi::ec2cpd), ...)
 }
 
-#' @exportS3Method
+#' @rdname web
+#' @export
 #'
-web.default <- function(x, y, x.df, y.df = NULL, x.ids = NULL, y.ids = NULL){
+web.default <- function(x, y, link, x.ids = NULL, y.ids = NULL, ...){
   terms <- c(x, y)
   stopifnot("both 'x' and 'y' terms must be provided as character" =
-              is(terms, "character") & length(terms) == 2L)
+              is(terms, "character") && length(terms) == 2L)
 
-  stopifnot("both 'x' and 'y' terms must be found as colnames for x.df; y.df" =
-              all(terms %in% c(colnames(x.df), colnames(y.df))))
+  if(!is.null(dim(link)) ) df.names <- colnames(link)
 
-  if( is.null(y.df) | all(terms %in% colnames(x.df)) ){
-    x.df <- x.df[,terms]
+  if( is.null(dim(link)) ) {
+    df.names <- unique(unlist(lapply(link, colnames)))
+    cn.1 <- colnames(link[[1L]]); cn.2 <- colnames(link[[2L]])
+    if(all(cn.1 %in% terms)) link <- link[[1L]]
+    if(all(cn.2 %in% terms)) link <- link[[2L]]
+    }
 
-    if(!is.null(x.ids))  x.df <- x.df[x.df[,1L] %in% x.ids,]
-    if(!is.null(y.ids))  x.df <- y.df[y.df[,2L] %in% y.ids,]
+  stopifnot("both 'x' and 'y' terms must be found as colnames in 'link'" =
+              all(terms %in% df.names) )
 
-      df_to_sparse_biadjacency_matrix(x.df)
+  if(!is.null(dim(link)) ) {
 
-  } else if( all(terms %in% colnames(y.df)) ){
+    link <- link[,terms]
 
-    y.df <- y.df[,terms]
+    if(!is.null(x.ids))  link <- link[link[,1L] %in% x.ids,]
+    if(!is.null(y.ids))  link <- link[link[,2L] %in% y.ids,]
 
-    if(!is.null(x.ids))  y.df <- y.df[y.df[,1L] %in% x.ids,]
-    if(!is.null(y.ids))  y.df <- y.df[y.df[,2L] %in% y.ids,]
+    df_to_sparse_biadjacency_matrix(link)
 
-    df_to_sparse_biadjacency_matrix(y.df)
+  } else if (is.null(dim(link))) {
+    i <- intersect(cn.1, cn.2)
+    stopifnot("data.frames in 'link' must share a colname" = length(i) == 1L)
 
-  } else {
-    i <- intersect(colnames(x.df), colnames(y.df))
-    stopifnot("x.df and y.df must share a colname" = length(i) == 1L)
-    if(terms[1L] %in% colnames(x.df)){
-      web_from_2_dfs(x.df[, c(i, terms[1L])],
-                     y.df[, c(i, terms[2L])],
-                     x.ids, y.ids)
+    if(all(cn.1 %in% c(i, terms[1]))){
 
-    } else if(terms[1L] %in% colnames(y.df)){
-      web_from_2_dfs(y.df[, c(i, terms[1L])],
-                     x.df[, c(i, terms[2L])],
-                     x.ids, y.ids)
+      x.df <- link[[1L]][, c(i, terms[1L])]
+      y.df <- link[[2L]][, c(i, terms[2L])]
+
+    } else if(all(cn.1 %in% c(i, terms[2]))){
+
+      x.df <- link[[2L]][, c(i, terms[1L])]
+      y.df <- link[[1L]][, c(i, terms[2L])]
+    }
+      web_from_2_dfs(x.df, y.df, x.ids, y.ids)
     }
   }
-  }
 
-#' @exportS3Method
+#' @rdname web
+#' @export
 #'
-web.formula <- function(formula, x.df, y.df = NULL, y.ids = NULL, x.ids = NULL){
+web.formula <- function(formula, link, x.ids = NULL, y.ids = NULL, ...){
 
   if (missing(formula) || (length(formula) != 3L))
     stop("'formula' missing or incorrect")
 
   terms <- all.vars(formula)
-  df.names <- c(colnames(x.df), colnames(y.df))
+
+  if(!is.null(dim(link)) ) df.names <- colnames(link)
+  if( is.null(dim(link)) ) df.names <- unique(unlist(lapply(link, colnames)))
 
   if (sum(terms %in% df.names) != 2L)
     stop("Exactly both colnames should be used in 'formula'")
 
-  web.default(x = terms[2], y = terms[1], x.df, y.df, x.ids, y.ids)
+  web.default(x = terms[2], y = terms[1], link, x.ids, y.ids)
 }
 
 
@@ -86,7 +129,6 @@ web_from_2_dfs <- function(x.df, y.df, x.ids, y.ids){
 
   tcrossprod(y.mat, x.mat, boolArith = TRUE)
 }
-
 
 #' @importFrom igraph vertex_attr<- vertex_attr graph_from_data_frame as_biadjacency_matrix
 #'

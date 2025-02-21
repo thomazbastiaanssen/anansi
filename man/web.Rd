@@ -2,16 +2,64 @@
 % Please edit documentation in R/web_and_biadjacency.R
 \name{web}
 \alias{web}
-\title{web(x = "ko", y = "cpd", x.df = ec2ko, y.df = ec2cpd)
-web(ec ~ cpd, x.df = ec2cpd)
-web(ko ~ cpd, y.df = ec2cpd, x.df = ec2ko)
-kegg_web(ec~ko)}
+\alias{kegg_web}
+\alias{web.default}
+\alias{web.formula}
+\title{Make a web}
 \usage{
 web(x, ...)
+
+kegg_web(x, ...)
+
+\method{web}{default}(x, y, link, x.ids = NULL, y.ids = NULL, ...)
+
+\method{web}{formula}(formula, link, x.ids = NULL, y.ids = NULL, ...)
+}
+\arguments{
+\item{x}{name of feature type that will determine columns, corresponding to
+`tableX`.}
+
+\item{...}{further arguments to be passed to or from methods. Not used.}
+
+\item{y}{name of feature type that will determine rows, corresponding to
+`tableY`.}
+
+\item{link}{a data.frame with two columns, as named in \code{x} and \code{y}.
+Sharing a row indicates a link between features. See \code{ec2ko} and
+\code{ec2cpd} for examples. Optionally a list with two such data.frames.}
+
+\item{x.ids}{a character vector of features of type \code{x}, which should be
+included. If left NULL (default), keep all features.}
+
+\item{y.ids}{a character vector of features of type \code{y}, which should be
+included. If left NULL (default), keep all features.}
+
+\item{formula}{a formula of the form y ~ x, denoting desired output
+format; assigns y to rows and columns to x. Equivalent to using \code{x} and
+\code{y} arguments.}
+}
+\value{
+a sparse binary biadjacency matrix, with features from \code{y} as
+rows and features from \code{x} as columns.
 }
 \description{
-web(x = "ko", y = "cpd", x.df = ec2ko, y.df = ec2cpd)
-web(ec ~ cpd, x.df = ec2cpd)
-web(ko ~ cpd, y.df = ec2cpd, x.df = ec2ko)
-kegg_web(ec~ko)
+Generate a biadjacency matrix linking the features between two tables.
+}
+\examples{
+# Basic usage
+web(x = "ko", y = "ec", link = ec2ko)
+web(ec ~ cpd, link = ec2cpd)
+
+# A wrapper is available for kegg ko, ec and cpd data
+generic      <- web(cpd ~ ko, link = list(ec2ko, ec2cpd))
+kegg_wrapper <- kegg_web(cpd ~ ko)
+
+identical(generic, kegg_wrapper)
+
+# The following are equivalent:
+a <- web(ko ~ cpd, link = list(ec2ko, ec2cpd))
+b <- web(cpd ~ ko, link = list(ec2ko, ec2cpd))
+
+identical(a, Matrix::t(b))
+
 }
