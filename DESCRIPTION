@@ -29,11 +29,11 @@ Imports:
     MultiAssayExperiment, 
     ggplot2, 
     ggforce,
-    S4Vectors
+    S4Vectors,
+    tidyr
 Suggests:
     BiocStyle,
     mia,
-    tidyr,
     patchwork,
     TreeSummarizedExperiment,
     testthat (>= 3.0.0),
