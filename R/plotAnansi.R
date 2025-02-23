@@ -143,22 +143,26 @@ setMethod("plotAnansi", signature = c(x = "data.frame"),
     signif.threshold = NULL, colour_by = NULL, color_by = colour_by,
     fill_by = NULL, size_by = NULL, shape_by = NULL, y_position = "right",
     x_lab = "cor", y_lab = ""){
+    # Create list of Booleans whether args are defined
+    defined_args <- lapply(list(association = association.type,
+        model.var = model.var, signif = signif.threshold),
+        function(x) !is.null(x))
     # Check association.type
-    association_defined <- !is.null(association.type)
-    if( association_defined ){
+    if( defined_args[["association"]] ){
         match.arg(association.type, choices = c("disjointed", "emergent", "full"))
     }
     # Check model.var
-    var_defined <- !is.null(model.var)
-    if( var_defined ){
+    if( defined_args[["model.var"]] ){
         match.arg(model.var, attr(x, "model_terms"))
     }
     # Check association.type and model.var
-    if( association.type %in% c("disjointed", "emergent") && !var_defined ){
+    if( defined_args[["association"]] && !defined_args[["model.var"]] &&
+        association.type %in% c("disjointed", "emergent") ){
         stop("'model.var' must specify a variable of the anansi model when ",
             "'association type' is set to ", association.type, call. = FALSE)
     }
-    if( association.type == "full" && var_defined ){
+    if( defined_args[["association"]] && defined_args[["model.var"]] &&
+        association.type == "full" ){
         model.var <- NULL
         warning("'model.var' is ignored when 'association type' is set to ",
             association.type, call. = FALSE)
@@ -169,7 +173,8 @@ setMethod("plotAnansi", signature = c(x = "data.frame"),
     if( isEmpty(x) ){
         stop("'x' is an empty data.frame", call. = FALSE)
     }
-    if( !all(c("feature_X", "feature_Y", pval) %in% colnames(x)) ){
+    if( !all(c("feature_X", "feature_Y") %in% colnames(x)) ||
+        !any(grepl(pval, names(x)))){
         stop("'x' must be the output of 'anansi' in the table format and must ",
         "contain columns 'feature_X' ,'feature_Y', 'r.values' and '", pval, "'",
         call. = FALSE)
@@ -181,16 +186,17 @@ setMethod("plotAnansi", signature = c(x = "data.frame"),
         colour_by <- color_by
     }
     # Check aesthetics
-    colour_defined <- .check_aes(x, colour_by, "colour_by")
-    fill_defined <- .check_aes(x, fill_by, "fill_by")
-    size_defined <- .check_aes(x, size_by, "size_by")
-    shape_defined <- .check_aes(x, shape_by, "shape_by")
+    defined_args <- c(defined_args,
+        mapply(.check_aes,
+            aes_name = c("colour_by", "fill_by", "size_by", "shape_by"),
+            aes_var = list(colour_by, fill_by, size_by, shape_by),
+            MoreArgs = list(x = x), SIMPLIFY = FALSE))
     # Check signif.threshold
-    signif_defined <- !is.null(signif.threshold)
-    if( signif_defined && (!is.numeric(signif.threshold) || signif.threshold < 0 || signif.threshold > 1) ){
+    if( defined_args[["signif"]] && (!is.numeric(signif.threshold)
+        || signif.threshold < 0 || signif.threshold > 1) ){
         stop("'signif.threshold' must be a number between 0 and 1", call. = FALSE)
     }
-    if( !association_defined && signif_defined ){
+    if( !defined_args[["association"]] && defined_args[["signif"]] ){
         warning("'signif.threshold' is ignored when 'association type' is not",
             " defined", call. = FALSE)
     }
@@ -198,54 +204,21 @@ setMethod("plotAnansi", signature = c(x = "data.frame"),
     match.arg(y_position, choices = c("left", "right"))
     # Assemble plot data
     pData <- data.frame(x = x[["r.values"]], y = x[["feature_X"]],
-        colour = if (colour_defined) x[[colour_by]] else NA,
-        fill = if (fill_defined) x[[fill_by]] else NA,
-        size = if (size_defined) x[[size_by]] else NA,
-        shape = if (shape_defined) x[[shape_by]] else NA,
-        alpha = if (signif_defined)
+        colour = if (defined_args[["colour_by"]]) x[[colour_by]] else NA,
+        fill = if (defined_args[["fill_by"]]) x[[fill_by]] else NA,
+        size = if (defined_args[["size_by"]]) x[[size_by]] else NA,
+        shape = if (defined_args[["shape_by"]]) x[[shape_by]] else NA,
+        alpha = if (defined_args[["signif"]])
             factor(x[[pval]] < signif.threshold,
             levels = c(TRUE, FALSE)) else NA,
         facet = x[["feature_Y"]]
     )
-    # Create base plot
-    p <- ggplot(data = pData, aes(x = .data$x, y = .data$y,
-            colour = .data$colour, fill = .data$fill, shape = .data$shape,
-            size = .data$size, alpha = .data$alpha)) +
-        geom_vline(xintercept = 0, linetype = "dashed", colour = "red")
-    # Set point size and shape if not defined
-    point_args <- list()
-    if( !size_defined ){
-        point_args["size"] <- 3
-    }
-    if( !shape_defined ){
-        point_args["shape"] <- 21
-    }
-    # Add points and facets
-    p <- p + do.call(geom_point, point_args) +
-        facet_col(~ .data$facet, space = "free", scales = "free_y") +
-        scale_x_continuous(limits = c(-1, 1), n.breaks = 11, expand = c(0, 0)) +
-        scale_y_discrete(limits = rev, position = y_position)
-    # Add significance legend
-    if( association_defined && signif_defined ){
-        p <- p + scale_alpha_manual(values = c("TRUE" = 1, "FALSE" = 1/3),
-            paste(association.type, "association\np <", signif.threshold))
-    }
-    # Add labels
-    p <- p + theme_bw() +
-        labs(x = x_lab, y = y_lab, fill = fill_by, colour = colour_by,
-            shape = shape_by, size = size_by)
-    # Remove legend if aesthetics and significance are not defined
-    if( !(colour_defined || fill_defined || size_defined || shape_defined) && !signif_defined ){
-        p <- p + theme(legend.position = "none")
-    }
-    # Remove legend for undefined aesthetics
-    guide_names <- c("colour", "fill", "alpha")[!c(colour_defined, fill_defined, signif_defined)]
-    guide_args <- setNames(as.list(rep("none", length(guide_names))), guide_names)
-    p <- p + do.call(guides, guide_args)
-
+    # Generate dotplot
+    p <- .create_dotplot(pData, defined_args, association.type,
+        signif.threshold, colour_by, fill_by, shape_by, size_by, y_position,
+        x_lab, y_lab)
     return(p)
 })
-
 ################################ HELP FUNCTIONS ################################
 # Convert anansi wide to long format
 #' @importFrom tidyr pivot_longer pivot_wider separate_wider_regex
@@ -263,13 +236,57 @@ setMethod("plotAnansi", signature = c(x = "data.frame"),
     return(x_long)
 }
 # Check aesthetics
-.check_aes <- function(x, aes_var, aes_name){
+.check_aes <- function(x, aes_name, aes_var){
     # Check if aesthetic is defined
     aes_defined <- !is.null(aes_var)
     # Rise exception if aesthetic is not character or not in x
     if( aes_defined && !(aes_var %in% colnames(x) && is.character(aes_var)) ){
-        stop("'", aes_name, "' must be a character string specifiying the",
+        stop("'", aes_name, "' must be a character string specifying the",
             " name of a column in 'x'", call. = FALSE)
     }
     return(aes_defined)
+}
+# Create dotplot
+.create_dotplot <- function(pData, defined_args, association.type,
+        signif.threshold, colour_by, fill_by, shape_by, size_by, y_position,
+        x_lab, y_lab){
+    # Create base plot
+    p <- ggplot(data = pData, aes(x = .data$x, y = .data$y,
+            colour = .data$colour, fill = .data$fill, shape = .data$shape,
+            size = .data$size, alpha = .data$alpha)) +
+        geom_vline(xintercept = 0, linetype = "dashed", colour = "red")
+    # Set point size and shape if not defined
+    point_args <- list()
+    if( !defined_args[["size_by"]] ){
+        point_args["size"] <- 3
+    }
+    if( !defined_args[["shape_by"]] ){
+        point_args["shape"] <- 21
+    }
+    # Add points and facets
+    p <- p + do.call(geom_point, point_args) +
+        facet_col(~ .data$facet, space = "free", scales = "free_y") +
+        scale_x_continuous(limits = c(-1, 1), n.breaks = 11, expand = c(0, 0)) +
+        scale_y_discrete(limits = rev, position = y_position)
+    # Add significance legend
+    if( defined_args[["association"]] && defined_args[["signif"]] ){
+        p <- p + scale_alpha_manual(values = c("TRUE" = 1, "FALSE" = 1/3),
+            paste(association.type, "association\np <", signif.threshold))
+    }
+    # Add labels
+    p <- p + theme_bw() +
+        labs(x = x_lab, y = y_lab, fill = fill_by, colour = colour_by,
+            shape = shape_by, size = size_by)
+    # Remove legend if aesthetics and significance are not defined
+    if( !any(unlist(defined_args[c("colour_by", "fill_by", "size_by", "shape_by")])) &&
+        !defined_args[["signif"]] ){
+        p <- p + theme(legend.position = "none")
+    }
+    # Remove legend for undefined aesthetics
+    guide_names <- c("colour", "fill", "alpha")[
+        !unlist(defined_args[c("colour_by", "fill_by", "signif")])
+    ]
+    guide_args <- setNames(as.list(rep("none", length(guide_names))), guide_names)
+    p <- p + do.call(guides, guide_args)
+    return(p)
 }

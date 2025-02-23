@@ -99,55 +99,24 @@ anansi_out <- anansi(
   verbose = TRUE
 )
 
-# To recreate the long plot:
-library(tidyr)
+# Only consider interactions where the entire model fits well enough.
+anansi_out <- anansi_out[anansi_out$full_q.values < 0.1, ]
+
 library(ggplot2)
 
-anansiLong <- anansi_out |>
-   pivot_longer(starts_with("All") | contains("FMT")) |>
-   separate_wider_delim(
-       name, delim = "_", names = c("cor_group", "cor_param")
-           ) |>
-           pivot_wider(names_from = cor_param, values_from = value)
-
-# Now it's ready to be plugged into ggplot2, though let's filter a bit more.
-
-# Only consider interactions where the entire model fits well enough.
-anansiLong <- anansiLong[anansiLong$full_q.values < 0.1, ]
-
-
-
-ggplot(
-  data = anansiLong,
-  aes(
-    x = r.values,
-    y = feature_X,
-    fill = cor_group,
-    alpha = disjointed_Legend_p.values < 0.05
-  )
-) +
-
-  # Make a vertical dashed red line at x = 0
-  geom_vline(xintercept = 0, linetype = "dashed", colour = "red") +
-
-  # Points show  raw correlation coefficients
-  geom_point(shape = 21, size = 3) +
-
-  # facet per compound
-  ggforce::facet_col(~feature_Y, space = "free", scales = "free_y") +
-
-  # fix the scales, labels, theme and other layout
-  scale_y_discrete(limits = rev, position = "right") +
-  scale_alpha_manual(values = c("TRUE" = 1, "FALSE" = 1 / 3)) +
-  scale_fill_manual(values = c(
+p <- plotAnansi(anansi_out,
+                association.type = "disjointed",
+                model.var = "Legend",
+                fill_by = "group",
+                signif.threshold = 0.05,
+                x_lab = "Pearson's rho")
+p + scale_fill_manual(values = c(
     "Young yFMT" = "#2166ac",
     "Aged oFMT" = "#b2182b",
     "Aged yFMT" = "#ef8a62",
     "All" = "gray"
   )) +
-  theme_bw() +
-  ylab("") +
-  xlab("Pearson's rho")
+  theme_bw()
 
 # See also ?spinToPlots
 
