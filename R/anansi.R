@@ -140,8 +140,6 @@ anansi <- function(web, formula = ~1, groups = NULL, metadata,
   out.list <- vector(
     "list", length = 1 + n.grps + (2 * length(int.terms))
     )
-  # Sort out metadata
-  metadata <- model.frame(formula = sat_model, cbind(x = 1, metadata))
 
   if (ignore_dictionary) {
     if (verbose) {
@@ -158,6 +156,8 @@ anansi <- function(web, formula = ~1, groups = NULL, metadata,
     web, groups,
     metadata, verbose
   )
+  # Sort out metadata
+  metadata <- model.frame(formula = sat_model, cbind(x = 1, metadata))
 
   out.list[n.grps +
            seq_len(1 + (2 * length(int.terms)))] <- anansiDiffCor(
