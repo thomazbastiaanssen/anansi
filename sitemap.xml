@@ -34,10 +34,13 @@
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/getAnansi.html</loc></url>
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/impute_zeroes.html</loc></url>
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/index.html</loc></url>
+<url><loc>https://thomazbastiaanssen.github.io/anansi/reference/is.categorical.html</loc></url>
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/makeAdjacencyMatrix.html</loc></url>
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/makeAdjacencyMatrixFromGroupMemberList.html</loc></url>
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/makeAdjacencyMatrixFromList.html</loc></url>
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/mock_dictionary.html</loc></url>
+<url><loc>https://thomazbastiaanssen.github.io/anansi/reference/named_group_list.html</loc></url>
+<url><loc>https://thomazbastiaanssen.github.io/anansi/reference/named_term_list.html</loc></url>
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/plotAnansi.html</loc></url>
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/prune_dictionary_for_exclusivity.html</loc></url>
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/softmax.html</loc></url>
