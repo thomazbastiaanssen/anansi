@@ -126,18 +126,18 @@ anansi <- function(web, formula = ~1, groups = NULL, metadata,
     web, groups,
     metadata, verbose
   )
-  # Sort out metadata
-  metadata <- model.frame(formula = sat_model, cbind(x = 1, metadata))
+  # Sort out metadata formatting for differential association testing
+  meta.frame <- model.frame(formula = sat_model, cbind(x = 1, metadata))
 
   out.list[n.grps +
            seq_len(1 + (2 * length(int.terms)))] <- anansiDiffCor(
-             web, sat_model, errorterm, int.terms, metadata, verbose)
+             web, sat_model, errorterm, int.terms, meta.frame, verbose)
 
   if(return.format != "raw") {
     results <- result.df(out.list, get_dict(web))
     results <- anansi.p.adjust(results, adjust.method)
-    attr(results, "group_terms") <- group.id
-    attr(results, "model_terms") <- int.terms
+    attr(results, "group_terms") <- named_group_list(group.id, groups, metadata)
+    attr(results, "model_terms") <- named_term_list(int.terms, metadata)
   }
 
   switch(return.format,
@@ -243,14 +243,11 @@ check_groups <- function(groups, raw_terms, indErr, metadata, verbose) {
   groups <- labels(raw_terms)[ind_o1]
 
   sub_meta <- metadata[, groups, drop = FALSE]
-  sub_meta <- sub_meta[, unname(apply(
-    sub_meta, 2, function(x) {
-      is.character(x) || is.factor(x) || is.ordered(x)
-    }
-  )), drop = FALSE]
+  sub_meta <-
+    sub_meta[, unname(apply( sub_meta, 2, is.categorical)), drop = FALSE]
 
   if (NCOL(sub_meta) == 0) {
-    if(verbose){message("No grouping variable found for groupwise correlations.")}
+    if(verbose) message("No grouping variable found for groupwise correlations.")
     return(list(NULL, 1))
   }
   n.groups <- 1 + length(unique(do.call(paste0, c(sub_meta))))
@@ -303,4 +300,56 @@ make_saturated_model <- function(formula, raw_terms, indErr, verbose) {
     ))
   }
   return(sat_model)
+}
+
+#' Is character, factor or ordered factor
+#' @description wrapper around
+#' \code{is.character(x) || is.factor(x) || is.ordered(x)}
+#' @param x an object to be evaluated as being categorical
+#' @returns a boolean.
+#'
+is.categorical <- function(x) is.character(x) || is.factor(x) || is.ordered(x)
+
+#' Return levels or 'numeric'
+#' @noRd
+#'
+lvs_or_num <- function(x) {
+  if(is.character(x)) return(unique(x))
+  return("numeric")}
+
+#' Provide name and levels for categories for group terms
+#' @description convenience function to generate group terms output
+#' @param g character vector of all 'All' followed by all unique terms
+#' @param t character vector of term(s)
+#' @param m data.frame of provided metadata
+#' @returns a named list of character vectors, where names are terms and
+#' containing vectors are unique levels or 'numeric' if not categorical. First
+#' Entry is named 'All' and contains all levels.
+#'
+named_group_list <- function(g, t, m) c(list(All = g), lapply(m[t], lvs_or_num))
+
+#' Provide name and levels for categories
+#' @description convenience function to generate output
+#' @param t character vector of term(s)
+#' @param m data.frame of provided metadata
+#' @returns a named list of character vectors, where names are terms and
+#' containing vectors are unique levels or 'numeric' if not categorical.
+#'
+named_term_list <- function(t, m) {
+  order_one <- t %in% colnames(m)
+  f_order   <- t[ order_one]
+  h_order   <- t[!order_one]
+
+  f_list <- lapply(m[f_order], lvs_or_num)
+  h_list <- NULL
+  if(length(h_order) != 0) {
+    m_num <- !unlist(lapply(m, is.categorical))
+    m[m_num] <- "numeric"
+    h_terms <- strsplit(h_order, split = ":", fixed = TRUE)
+    h_list  <- lapply(h_terms,
+                      function(x) unique(do.call(paste, c(m[x], sep = "_"))))
+    names(h_list) <- h_order
+  }
+
+  return(c(f_list, h_list))
 }
