@@ -28,7 +28,8 @@ Imports:
     SummarizedExperiment,
     MultiAssayExperiment, 
     ggplot2, 
-    ggforce
+    ggforce,
+    S4Vectors
 Suggests:
     BiocStyle,
     mia,
