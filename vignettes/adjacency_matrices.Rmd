@@ -1,0 +1,262 @@
+---
+title: "Adjacency matrices"
+output:
+    BiocStyle::html_document:
+        toc: true
+        toc_float: true
+        toc_depth: 2
+        number_sections: true
+vignette: >
+  %\VignetteIndexEntry{3. Working with (bi)adjacency matrices}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+<style>
+body {
+text-align: justify}
+</style>
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(anansi)
+library(ggplot2)
+```
+
+# Introduction
+A common challenge in integrative analysis of high-dimensional data sets is 
+subsequent biological interpretation. Anansi addresses this challenge by only 
+considering pairwise associations that are known to occur *a priori*. In order
+to achieve this, we need to provide this relational information to anansi in the
+form of a (bi)adjacency matrix. In this vignette, we provide some intuition on 
+(bi)adjacency and demonstrate how to provide custom relational information to 
+anansi. 
+
+# Understanding adjacency matrices
+
+## Example from Biology: The Krebs cycle
+Recall that the [citric acid cycle, or Krebs cycle](https://en.wikipedia.org/wiki/Citric_acid_cycle),
+is a central piece of metabolic machinery. In short, it enables oxidative 
+phosphorylation. See figure \@ref(fig:plot-krebs)A below for a simplified 
+representation. In the figure, there are 8 unique enzymatic reactions and 9 
+unique metabolites. 
+
+```{r}
+#| plot-krebs, echo=FALSE,
+#| fig.cap="Two simplified representations of the Krebs cycle. Orange marks 
+#| metabolites and blue marks enzymes."
+library(patchwork)
+kd <- data.frame(
+    enzyme = c("isocitrate\ndehydrogenase", "aconitase", "aconitase",  
+               "citrate\ndehydrogenase", "malate\ndehydrogenase", "fumarase",  
+               "succinate\ndehydrogenase","succinyl-CoA\nsynthetase",
+               "ketoglutarate\ndehydrogenase"), 
+    metab = c("isocitrate","cis-aconitate","citrate","oxaloacetate","L-malate",
+              "fumarate","succinate","succinyl-CoA", "ketoglutarate"),
+    rad = seq(0, 2*pi * 8/9, length.out = 9)) 
+  
+ggplot(kd) + 
+    annotate("path",
+             x=0.75*cos(seq(0,2*pi,length.out=100)),
+             y=0.75*sin(seq(0,2*pi,length.out=100))) +
+    
+    geom_tile(aes(x = 0.8*cos(rad), y =0.8* sin(rad)), width = 0.45, 
+              height = 0.15, fill = "orange", color = "black", linewidth = 0.6, 
+              show.legend = FALSE) + 
+    geom_text(aes(x = 0.8*cos(rad), y =0.8* sin(rad), label = metab), 
+              size = 3, show.legend = FALSE) + 
+    
+    geom_segment(aes(x = 0.75*cos(rad - pi/9), y =0.75* sin(rad - pi/9), 
+                     xend = cos(rad - pi/9), yend = sin(rad - pi/9))) +
+    
+    geom_point(aes(x = 0.75*cos(rad-pi/9), y =0.75* sin(rad-pi/9)), size = 3, 
+               fill = "dodgerblue", color = "black", show.legend = FALSE, 
+               shape = 21) + 
+    geom_text(aes(x = 1.15*cos(rad-pi/9), y =1.15* sin(rad-pi/9),label=enzyme), 
+              lineheight = 7/10, size = 3, show.legend = FALSE) + 
+    
+    scale_y_continuous(limits = c(-1.4, 1.2), expand = c(0, 0)) +
+    scale_x_continuous(limits = c(-1.3, 1.3), expand = c(0, 0)) +
+    coord_equal(clip = "off") +
+    theme_void() 
+
+```
+
+### Adjacency matrices allow us to be specific in our questions
+
+Let's imagine we had (high-dimensional proxy) measurements 
+available for both types. For instance, we could have transcription data for the 
+enzymes and metabolomics data for the metabolites. We could represent our two 
+data sets like two sets of features.
+
+If we were to perform an all-vs-all integrative analysis between our two data 
+sets, comprehensively testing every metabolite-enzyme pair, we'd test 
+$8\times9=72$ hypotheses. Figure \@ref(fig:all-v-all-p1)A. 
+
+```{r}
+#| all-v-all-p1, echo=FALSE, fig.wide=TRUE, out.width='100%', out.height='60%',
+#| fig.cap="Graph representation of possible association sctructures in the 
+#| Krebs cycle. **A)** All-vs-all, with a full graph. **B)** Constrained, only 
+#| linking metabolites an enzymes that are known to directly interact."
+
+
+colmat <- data.frame(name = c(
+  "aconitase", "citrate\nsynthase", "fumarase", "succinate\ndehydrogenase",
+  "isocitrate\ndehydrogenase", "malate\ndehydrogenase", 
+  "succinyl-CoA\nsynthetase", "ketoglutarate\ndehydrogenase", "cis-aconitate",
+  "citrate", "fumarate", "isocitrate", "L-malate", "oxaloacetate", "succinate", 
+  "succinyl-CoA", "ketoglutarate"), 
+  y = c(seq(9,1, length.out = 8), 9:1), 
+  x = rep(c(0.3, 0.7), times = c(8, 9) ), 
+  fill = rep(c("Enzyme", "Metabolite"), times = c(8, 9) ))
+
+p_0 <- ggplot() +
+  annotate("segment", x = c(0.28, 0.72), y = 0.875, 
+           xend = c(0.28, 0.72), yend = 9.125, color = "gray") + 
+  geom_text(data = colmat, aes(y = y, x = x, label = name), colour = "black", 
+            size = 3.25, hjust = c(rep(1, 8), rep(0, 9)), lineheight = 7/10, 
+            nudge_x = c(rep(-0.03, 8), rep(0.03, 9))) + 
+  
+  scale_fill_manual(values = c(Metabolite = "orange", Enzyme = "dodgerblue")) +
+  coord_cartesian(xlim = c(1/10, 9/10), clip = "off") +
+  annotate("text", label = c("Enzymes","Metabolites"), 
+           x = c(2/8, 6/8), y = 9.6, size = 4) +  
+  ylab(NULL) + xlab(NULL) +
+  theme_void()  
+
+p_a <- p_0 + 
+  geom_point(data = colmat, aes(y = y, x = x, fill = fill), 
+             color = "black", shape = 21, size = 4, show.legend = FALSE)
+
+
+
+p_b <- p_0 + geom_segment(data = expand.grid(seq(9,1, length.out = 8), 9:1), 
+               aes(y = Var1, yend = Var2), x = 3/10, xend = 7/10, 
+               color = "#393D47", inherit.aes = FALSE) + 
+  geom_point(data = colmat, aes(y = y, x = x, fill = fill), 
+             color = "black", 
+             shape = 21, size = 4,  show.legend = FALSE) 
+p_c <- p_0 + geom_segment(data = data.frame(
+  Var1 = seq(1, 9, length.out = 8)[
+    c(8, 8, 7, 6, 5, 8, 4, 6, 3, 7, 3, 5, 2, 2, 1, 4, 1)], 
+  Var2 = 
+    c(9, 8, 8, 7, 7, 6, 6, 5, 5, 4, 4, 3, 3, 2, 2, 1, 1)), 
+  aes(y = Var1, yend = Var2), x = 3/10, xend = 7/10, 
+  color = "#393D47", inherit.aes = FALSE) +
+  geom_point(data = colmat, aes(y = y, x = x, fill = fill), 
+             color = "black", shape = 21, size = 4,  show.legend = FALSE) 
+
+
+(p_b | p_c) + plot_annotation(tag_levels = "A")
+
+```
+
+Often however, only a subset of these comparisons is scientifically relevant to
+investigate. In this case for instance, only 17 associations between 
+enzyme-metabolite pairs are likely to make sense. Figure 
+\@ref(fig:all-v-all-p1)B. Non-selectively testing all 72 associations actively 
+harms statistical power, as 55 of these tests likely cannot be interpreted, but 
+their p-values will still be tallied for the purpose of FDR and FWER. Moreover, 
+they tend to obscure any biologically interpretable findings. 
+
+In order to 'know' which features-pairs in your data set should be considered, 
+anansi requires a *biadjacency matrix*. The biadjacency matrix for the above 
+figure can be seen in figure \@ref(fig:all-v-all-p2)B. 
+
+```{r}
+#| all-v-all-p2, echo=FALSE,
+#| fig.cap="Matrix representation of the constrained analysis of the Krebs cycle, 
+#| with cells marked with 'X' signifying tested feature-pairs."
+
+kd$lab <- "X"
+ggplot(kd) +
+  geom_text(aes(label = lab), x = I(0.5), y = I(0.5)) +
+  facet_grid(enzyme ~ metab , switch = "y", space = "free_x") + 
+  theme_bw() +
+  theme(strip.text.y.left = element_text(
+    angle = 0, size = 10, lineheight = 7/10, hjust = 1),
+        strip.text.x.top = element_text(angle = 90, size = 10, hjust = 0),
+        strip.background.x = element_rect(fill = "orange", color = "black"), 
+        strip.background.y = element_rect(fill = "dodgerblue", color = "black"), 
+        panel.spacing = unit(0.1, "lines")) +
+  labs(x = NULL, y = NULL)
+
+```
+
+# Defining an adjacency matrix
+There are numerous ways in which we can define an adjacency matrix. Here, we 
+demonstrate a graph-based and matrix based approach.
+
+```{r init-list, echo=FALSE}
+krebs_edge_df <- data.frame(
+ Enzyme = c("aconitase", "aconitase", "citrate synthase", 
+"fumarase", "succinate dehydrogenase", "aconitase", "isocitrate dehydrogenase", 
+"fumarase", "malate dehydrogenase", "citrate synthase", "malate dehydrogenase", 
+"succinate dehydrogenase", "succinyl-CoA synthetase", "succinyl-CoA synthetase", 
+"ketoglutarate dehydrogenase", "isocitrate dehydrogenase", 
+"ketoglutarate dehydrogenase"), 
+ Metabolite = c("cis-aconitate", 
+"citrate", "citrate", "fumarate", "fumarate", "isocitrate", "isocitrate", 
+"L-malate", "L-malate", "oxaloacetate", "oxaloacetate", "succinate", 
+"succinate", "succinyl-CoA", "succinyl-CoA", 
+"ketoglutarate", "ketoglutarate"))
+```
+
+## The graph approach
+Importantly, (bi)adjacency matrices can be understood as graphs. Two common 
+packages that deal with graphs are [`igraph`](https://r.igraph.org/) and [`graph`](https://bioconductor.org/packages/graph/). 
+```{r igraph-1, message=FALSE}
+library(igraph)
+
+# Convert data.frame to graph
+g <- graph_from_data_frame(krebs_edge_df, directed = FALSE)
+
+```
+
+Now that we have constructed a graph, we still need to identify which features, 
+vertices, belong to which data modality, in this case either enzymes and 
+metabolites. `igraph` does this using a boolean vector, where `TRUE` values 
+become columns, which corresponds to `tableX`, whereas `FALSE` values become 
+rows, corresponding to `tableY`.
+
+```{r igraph-2, message=FALSE}
+V(g)$type <- V(g)$name %in% krebs_edge_df$Metabolite
+
+# Now that we've defined type, we can convert to biadjacency matrix: 
+bi_mat1 <- as_biadjacency_matrix(g)
+
+head(bi_mat1, n = c(4, 5))
+```
+Though biadjacency support in `graph` is currently limited, We note that igraph 
+and graph objects can be converted using the `graph_from_graphnel()` and 
+`as_graphnel()` functions in `igraph`.
+
+## The matrix approach
+We can also define a matrix directly. Conveniently, sparse matrices can be 
+defined easily from our starting data. The `Matrix` library provides fantastic 
+support for this.
+```{r Matrix, message=FALSE}
+library(Matrix)
+
+# For this approach, it's useful to prepare the input as two factors:
+enzymes     <- factor(krebs_edge_df$Enzyme)
+metabolites <- factor(krebs_edge_df$Metabolite)
+
+# We can get integers out of factors, corresponding to their level indices 
+bi_mat2 <- sparseMatrix(i = as.integer(enzymes), 
+             j = as.integer(metabolites), 
+             dimnames = list(
+               levels(enzymes),
+               levels(metabolites)
+               )
+             )
+
+head(bi_mat2, n = c(4, 5))
+
+```
+
+# Session info
+
+```{r}
+sessionInfo()
+```

@@ -22,9 +22,14 @@ Depends: R (>= 4.4.0)
 Imports:
     stats,
     methods,
+    igraph,
+    Matrix,
     future.apply,
     SummarizedExperiment,
-    MultiAssayExperiment
+    MultiAssayExperiment, 
+    ggplot2, 
+    ggforce,
+    S4Vectors
 Suggests:
     BiocStyle,
     mia,
@@ -40,6 +45,6 @@ LazyData: true
 RoxygenNote: 7.3.2
 Config/testthat/edition: 3
 biocViews: Microbiome, Metabolomics, Regression, Pathways
-URL: https://github.com/thomazbastiaanssen/anansi
+URL: https://github.com/thomazbastiaanssen/anansi, https://thomazbastiaanssen.github.io/anansi
 BugReports: https://github.com/thomazbastiaanssen/anansi/issues
 VignetteBuilder: knitr

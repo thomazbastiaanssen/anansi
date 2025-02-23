@@ -116,7 +116,7 @@ assessWebCall <- function(tableY, tableX, verbose) {
     tableX <- tableY
   }
 
-  if (identical(tableX, tableY) & verbose) {
+  if (identical(tableX, tableY) && verbose) {
     message("Single feature table detected. Preparing web for within-table analysis.")
   }
   return(tableX)

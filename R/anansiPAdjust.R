@@ -9,5 +9,5 @@ anansi.p.adjust <- function(results, method){
   q.cols <- apply(results[,p.cols, drop = FALSE], 2, p.adjust, method)
   colnames(q.cols) = gsub(
     "_p.values", "_q.values", x = colnames(q.cols), fixed = TRUE)
-  cbind.data.frame(results, q.cols, quote = TRUE)
+  cbind.data.frame(results, q.cols)
 }

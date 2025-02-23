@@ -45,7 +45,7 @@ result.df <- function(out.list, dic) {
      )[dic,]
 
   df.list <- c(feature_labs, lapply(out.list, frame.tale, dic))
-  do.call("cbind.data.frame", df.list, quote = TRUE)
+  do.call(what = "cbind.data.frame", args = df.list, quote = TRUE)
 }
 
 # ## Translate tableY and tableX columns column to human readable names

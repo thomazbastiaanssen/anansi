@@ -5,56 +5,51 @@
 \alias{plotAnansi,data.frame-method}
 \title{Dissociation plot}
 \usage{
-plotAnansi(df, ...)
+plotAnansi(x, ...)
 
 \S4method{plotAnansi}{data.frame}(
-  df,
-  x = "r.values",
-  association.type = "disjointed",
+  x,
+  association.type = NULL,
   model.var = NULL,
+  signif.threshold = NULL,
   colour_by = NULL,
   color_by = colour_by,
   fill_by = NULL,
   size_by = NULL,
   shape_by = NULL,
-  signif.threshold = NULL,
   y_position = "right",
   x_lab = "cor",
   y_lab = ""
 )
 }
 \arguments{
-\item{df}{a \code{data.frame} object output of \code{\link{getAnansi}} in
-the long format.}
-
-\item{x}{\code{Character scalar}. Specifies the type of coefficient to
-show in the plot. One of \code{"r.values"}, \code{"r.squared"} and
-  \code{"q.values"}. (Default: \code{"r.values"})}
+\item{x}{a \code{data.frame} object output of \code{\link{getAnansi}} in
+the table format.}
 
 \item{association.type}{\code{Character scalar}. Specifies the type of
 association to show in the plot. One of \code{"disjointed"},
-  \code{"emergent"} and \code{"full"}. (Default: \code{"disjointed"})}
+  \code{"emergent"} and \code{"full"}. (Default: \code{NULL})}
 
 \item{model.var}{\code{Character scalar}. Specifies the name of a variable
 in the anansi model. It is relevant only when \code{association.type} is
   \code{"disjointed"} or \code{"emergent"}. (Default: \code{NULL})}
 
+\item{signif.threshold}{\code{Numeric scalar}. Specifies the threshold to
+mark the significance of \code{association.type}. (Default: \code{NULL})}
+
 \item{colour_by}{\code{Character scalar}. Specifies the name of a column in
-\code{df} by which points should be coloured. (Default: \code{NULL})}
+\code{x} by which points should be coloured. (Default: \code{NULL})}
 
 \item{color_by}{\code{Character scalar}. Alias to \code{colour_by}.}
 
 \item{fill_by}{\code{Character scalar}. Specifies the name of a column in
-\code{df} by which points should be filled (Default: \code{NULL})}
+\code{x} by which points should be filled (Default: \code{NULL})}
 
 \item{size_by}{\code{Character scalar}. Specifies the name of a column in
-\code{df} by which points should be sized (Default: \code{NULL})}
+\code{x} by which points should be sized (Default: \code{NULL})}
 
 \item{shape_by}{\code{Character scalar}. Specifies the name of a column in
-\code{df} by which points should be shaped (Default: \code{NULL})}
-
-\item{signif.threshold}{\code{Numeric scalar}. Specifies the significance
-threshold to show in the plot. (Default: \code{NULL})}
+\code{x} by which points should be shaped (Default: \code{NULL})}
 
 \item{y_position}{\code{Character scalar}. Specifies the position of the y
 labels. It should be either \code{"left"} or \code{"right"}.
@@ -71,17 +66,16 @@ A ggplot2 object.
 }
 \description{
 \code{plotAnansi} generates a standard dissociation plot from the output of
-\code{\link{getAnansi}} in the long format. It provides a convenient way to
+\code{\link{getAnansi}} in the table format. It provides a convenient way to
 visually assess relevant results from the anansi analysis.
 }
 \details{
 \code{plotAnansi} provides a standardised method to visualise the results
-of anansi by means of a dissociation plot. The input for this function should
-be generated from \code{\link{getAnansi}} with \code{return.format = "long"}
-or from \code{\link{anansi}} followed by \code{\link{spinToLong}}.
+of anansi by means of a differential association plot. The input for this
+function should be generated from \code{\link{getAnansi}} or
+\code{\link{anansi}}, with \code{return.format = "table"}
 }
 \examples{
-
 # Import libraries
 library(mia)
 library(TreeSummarizedExperiment)
@@ -132,14 +126,23 @@ out <- getAnansi(mae,
 )
 
 # Select significant interactions
-out <- out[out$model_full_q.values < 0.1, ]
+out <- out[out$full_q.values < 0.1, ]
 
-# Generate dissociation plot
-plotAnansi(out, fill_by = "type", signif.threshold = 0.05)
-
+# Visualise disjointed associations coloured by group
+plotAnansi(out,
+           association.type = "disjointed",
+           model.var = "Legend",
+           signif.threshold = 0.05,
+           fill_by = "group")
+           
+# Visualise full associations coloured by group
+plotAnansi(out,
+           association.type = "full",
+           signif.threshold = 0.05,
+           fill_by = "group")
+           
 }
 \seealso{
 \code{\link{getAnansi}}
 \code{\link{anansi}}
-\code{\link{spinToLong}}
 }

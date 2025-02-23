@@ -1,0 +1,14 @@
+url: https://thomazbastiaanssen.github.io/anansi
+
+template:
+  bootstrap: 5
+  math-rendering: mathjax
+  light-switch: true
+  bslib:
+    primary: "#0054AD"
+    border-radius: 0.5rem
+    btn-border-radius: 0.25rem
+    danger: "#A6081A"
+
+development:
+  mode: auto

@@ -47,10 +47,15 @@ setClass("anansiTale",
   )
 )
 
-#' An S4 class to contain all \code{anansi} input so that they can easily be extracted.
+#' An S4 class to contain all \code{anansi} input so that they can easily be
+#' extracted.
 #'
-#' @slot input A list that holds the input data in \code{anansiWeb} format, as well as the \code{int.terms} and corresponding \code{groups}, the equivalent \code{lm.formula} and \code{error.term} argument(s) if provided.
-#' @description \code{anansiInput} is the container that will hold your input data in the \code{anansiYarn} output file coming out of the \code{anansi} pipeline.
+#' @slot input A list that holds the input data in \code{anansiWeb} format, as
+#' well as the \code{int.terms} and corresponding \code{groups}, the equivalent
+#'\code{lm.formula} and \code{error.term} argument(s) if provided.
+#' @description \code{anansiInput} is the container that will hold your input
+#' data in the \code{anansiYarn} output file coming out of the \code{anansi}
+#' pipeline.
 #'
 setClass("anansiInput",
   slots = c(
@@ -60,6 +65,7 @@ setClass("anansiInput",
     int.terms = "vector",
     groups = "ANY",
     n.grps = "vector",
+    group.id = "vector",
     metadata = "ANY"
   )
 )
