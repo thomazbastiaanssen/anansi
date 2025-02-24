@@ -116,7 +116,6 @@ rows and features from <code>x</code> as columns.</p>
 <span class="r-in"><span><span class="fu">web</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"ko"</span>, y <span class="op">=</span> <span class="st">"ec"</span>, link <span class="op">=</span> <span class="va">ec2ko</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> An object of class "anansiWeb"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Slot "tableY":</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 x 5581 Matrix of class "lgeMatrix"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      ec:1.1.1.1 ec:1.1.1.2 ec:1.1.1.3 ec:1.1.1.4 ec:1.1.1.303 ec:1.1.1.6</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1,]         NA         NA         NA         NA           NA         NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      ec:1.1.1.8 ec:1.1.1.11 ec:1.1.1.14 ec:1.1.1.17 ec:1.1.1.18 ec:1.1.1.369</span>
@@ -2137,7 +2136,6 @@ rows and features from <code>x</code> as columns.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1,]            NA            NA           NA             NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Slot "tableX":</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 x 8817 Matrix of class "lgeMatrix"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      ko:K00001 ko:K00002 ko:K00003 ko:K00004 ko:K00005 ko:K00006 ko:K00007</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1,]        NA        NA        NA        NA        NA        NA        NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      ko:K00008 ko:K00009 ko:K00010 ko:K00011 ko:K00012 ko:K00013 ko:K00014</span>
@@ -7798,7 +7796,6 @@ rows and features from <code>x</code> as columns.</p>
 <span class="r-in"><span><span class="fu">web</span><span class="op">(</span><span class="va">ec</span> <span class="op">~</span> <span class="va">cpd</span>, link <span class="op">=</span> <span class="va">ec2cpd</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> An object of class "anansiWeb"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Slot "tableY":</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 x 5934 Matrix of class "lgeMatrix"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      ec:1.1.1.1 ec:1.1.1.115 ec:1.1.1.132 ec:1.1.1.136 ec:1.1.1.170</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1,]         NA           NA           NA           NA           NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      ec:1.1.1.186 ec:1.1.1.192 ec:1.1.1.205 ec:1.1.1.22 ec:1.1.1.23</span>
@@ -9935,7 +9932,6 @@ rows and features from <code>x</code> as columns.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1,]           NA           NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Slot "tableX":</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 x 7802 Matrix of class "lgeMatrix"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      cpd:C00001 cpd:C00002 cpd:C00003 cpd:C00004 cpd:C00005 cpd:C00006</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1,]         NA         NA         NA         NA         NA         NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      cpd:C00007 cpd:C00008 cpd:C00009 cpd:C00010 cpd:C00011 cpd:C00012</span>
@@ -15678,17 +15674,17 @@ rows and features from <code>x</code> as columns.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># A wrapper is available for kegg ko, ec and cpd data</span></span></span>
 <span class="r-in"><span><span class="va">generic</span>      <span class="op">&lt;-</span> <span class="fu">web</span><span class="op">(</span><span class="va">cpd</span> <span class="op">~</span> <span class="va">ko</span>, link <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">ec2ko</span>, <span class="va">ec2cpd</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">kegg_wrapper</span> <span class="op">&lt;-</span> <span class="fu">kegg_web</span><span class="op">(</span><span class="va">cpd</span> <span class="op">~</span> <span class="va">ko</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">kegg_wrapper</span> <span class="op">&lt;-</span> <span class="fu">kegg_web</span><span class="op">(</span> <span class="va">cpd</span> <span class="op">~</span> <span class="va">ko</span> <span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/identical.html" class="external-link">identical</a></span><span class="op">(</span><span class="va">generic</span>, <span class="va">kegg_wrapper</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># The following are equivalent:</span></span></span>
-<span class="r-in"><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu">web</span><span class="op">(</span><span class="va">ko</span> <span class="op">~</span> <span class="va">cpd</span>, link <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">ec2ko</span>, <span class="va">ec2cpd</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">b</span> <span class="op">&lt;-</span> <span class="fu">web</span><span class="op">(</span><span class="va">cpd</span> <span class="op">~</span> <span class="va">ko</span>, link <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">ec2ko</span>, <span class="va">ec2cpd</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># The following are equivalent to transposition:</span></span></span>
+<span class="r-in"><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu">anansi</span><span class="fu">:::</span><span class="fu">get_dict</span><span class="op">(</span> <span class="fu">web</span><span class="op">(</span><span class="va">ko</span> <span class="op">~</span> <span class="va">cpd</span>, link <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">ec2ko</span>, <span class="va">ec2cpd</span><span class="op">)</span><span class="op">)</span> <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">b</span> <span class="op">&lt;-</span> <span class="fu">anansi</span><span class="fu">:::</span><span class="fu">get_dict</span><span class="op">(</span> <span class="fu">web</span><span class="op">(</span><span class="va">cpd</span> <span class="op">~</span> <span class="va">ko</span>, link <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">ec2ko</span>, <span class="va">ec2cpd</span><span class="op">)</span><span class="op">)</span> <span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/identical.html" class="external-link">identical</a></span><span class="op">(</span><span class="va">a</span>, <span class="fu">Matrix</span><span class="fu">::</span><span class="fu">t</span><span class="op">(</span><span class="va">b</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in t.default(b):</span> argument is not a matrix</span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/identical.html" class="external-link">identical</a></span><span class="op">(</span><span class="va">a</span>, <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">b</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
