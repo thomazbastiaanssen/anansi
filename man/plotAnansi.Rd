@@ -37,19 +37,23 @@ in the anansi model. It is relevant only when \code{association.type} is
 \item{signif.threshold}{\code{Numeric scalar}. Specifies the threshold to
 mark the significance of \code{association.type}. (Default: \code{NULL})}
 
-\item{colour_by}{\code{Character scalar}. Specifies the name of a column in
-\code{x} by which points should be coloured. (Default: \code{NULL})}
+\item{colour_by}{\code{Character scalar}. Specifies one of the \code{groups}
+terms used in the original \code{anansi} call, \code{x} by which points
+should be coloured. (Default: \code{NULL})}
 
 \item{color_by}{\code{Character scalar}. Alias to \code{colour_by}.}
 
-\item{fill_by}{\code{Character scalar}. Specifies the name of a column in
-\code{x} by which points should be filled (Default: \code{NULL})}
+\item{fill_by}{\code{Character scalar}. Specifies one of the \code{groups}
+terms used in the original \code{anansi} call, \code{x} by which points
+should be filled (Default: \code{NULL})}
 
-\item{size_by}{\code{Character scalar}. Specifies the name of a column in
-\code{x} by which points should be sized (Default: \code{NULL})}
+\item{size_by}{\code{Character scalar}. Specifies one of the \code{groups}
+terms used in the original \code{anansi} call, \code{x} by which points
+should be sized. (Default: \code{NULL})}
 
-\item{shape_by}{\code{Character scalar}. Specifies the name of a column in
-\code{x} by which points should be shaped (Default: \code{NULL})}
+\item{shape_by}{\code{Character scalar}. Specifies one of the \code{groups}
+terms used in the original \code{anansi} call, \code{x} by which points
+should be shaped. (Default: \code{NULL})}
 
 \item{y_position}{\code{Character scalar}. Specifies the position of the y
 labels. It should be either \code{"left"} or \code{"right"}.
@@ -128,18 +132,18 @@ out <- getAnansi(mae,
 # Select significant interactions
 out <- out[out$full_q.values < 0.1, ]
 
-# Visualise disjointed associations coloured by group
+# Visualise disjointed associations filled by group
 plotAnansi(out,
            association.type = "disjointed",
            model.var = "Legend",
            signif.threshold = 0.05,
            fill_by = "group")
            
-# Visualise full associations coloured by group
+# Visualise full associations filled by Legend
 plotAnansi(out,
            association.type = "full",
            signif.threshold = 0.05,
-           fill_by = "group")
+           fill_by = "Legend")
            
 }
 \seealso{

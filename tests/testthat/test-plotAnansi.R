@@ -33,6 +33,12 @@ test_that("plotAnansi", {
   expect_error(plotAnansi(out, association.type = "emergent"),
       "'model.var' must specify a variable of the anansi model when 'association type' is set to emergent",
       fixed = TRUE)
+  expect_error(plotAnansi(out, association.type = "disjointed",
+      model.var = "Legend", shape_by = "wrong"),
+      "'shape_by' must be a character string specifying the name of a 'groups' term used in the original anansi call",
+      fixed = TRUE)
+  expect_no_error(plotAnansi(out, association.type = "disjointed",
+      model.var = "Legend", shape_by = "Legend"))
   # Check output plot
   p <- plotAnansi(out, association.type = "emergent", model.var = "Legend",
       fill_by = "group")

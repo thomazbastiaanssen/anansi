@@ -30,7 +30,9 @@ Imports:
     ggplot2, 
     ggforce,
     S4Vectors,
-    tidyr
+    tidyr,
+    dplyr,
+    tidyselect
 Suggests:
     BiocStyle,
     mia,

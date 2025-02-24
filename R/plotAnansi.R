@@ -18,19 +18,23 @@
 #' @param signif.threshold \code{Numeric scalar}. Specifies the threshold to
 #'   mark the significance of \code{association.type}. (Default: \code{NULL})
 #'
-#' @param colour_by \code{Character scalar}. Specifies the name of a column in
-#'   \code{x} by which points should be coloured. (Default: \code{NULL})
+#' @param colour_by \code{Character scalar}. Specifies one of the \code{groups}
+#'    terms used in the original \code{anansi} call, \code{x} by which points
+#'    should be coloured. (Default: \code{NULL})
 #'
 #' @param color_by \code{Character scalar}. Alias to \code{colour_by}.
 #'
-#' @param fill_by \code{Character scalar}. Specifies the name of a column in
-#'   \code{x} by which points should be filled (Default: \code{NULL})
+#' @param fill_by \code{Character scalar}. Specifies one of the \code{groups}
+#'    terms used in the original \code{anansi} call, \code{x} by which points
+#'    should be filled (Default: \code{NULL})
 #'
-#' @param size_by \code{Character scalar}. Specifies the name of a column in
-#'   \code{x} by which points should be sized (Default: \code{NULL})
+#' @param size_by \code{Character scalar}. Specifies one of the \code{groups}
+#'    terms used in the original \code{anansi} call, \code{x} by which points
+#'    should be sized. (Default: \code{NULL})
 #'
-#' @param shape_by \code{Character scalar}. Specifies the name of a column in
-#'   \code{x} by which points should be shaped (Default: \code{NULL})
+#' @param shape_by \code{Character scalar}. Specifies one of the \code{groups}
+#'    terms used in the original \code{anansi} call, \code{x} by which points
+#'    should be shaped. (Default: \code{NULL})
 #'
 #' @param x_lab \code{Character scalar}. Specifies the label of the x axis.
 #'   (Default: \code{"cor"})
@@ -104,18 +108,18 @@
 #' # Select significant interactions
 #' out <- out[out$full_q.values < 0.1, ]
 #'
-#' # Visualise disjointed associations coloured by group
+#' # Visualise disjointed associations filled by group
 #' plotAnansi(out,
 #'            association.type = "disjointed",
 #'            model.var = "Legend",
 #'            signif.threshold = 0.05,
 #'            fill_by = "group")
 #'            
-#' # Visualise full associations coloured by group
+#' # Visualise full associations filled by Legend
 #' plotAnansi(out,
 #'            association.type = "full",
 #'            signif.threshold = 0.05,
-#'            fill_by = "group")
+#'            fill_by = "Legend")
 #'            
 #' @seealso
 #' \code{\link{getAnansi}}
@@ -153,7 +157,7 @@ setMethod("plotAnansi", signature = c(x = "data.frame"),
     }
     # Check model.var
     if( defined_args[["model.var"]] ){
-        match.arg(model.var, attr(x, "model_terms"))
+        match.arg(model.var, names(attr(x, "model_terms")))
     }
     # Check association.type and model.var
     if( defined_args[["association"]] && !defined_args[["model.var"]] &&
@@ -222,18 +226,25 @@ setMethod("plotAnansi", signature = c(x = "data.frame"),
 })
 ################################ HELP FUNCTIONS ################################
 # Convert anansi wide to long format
-#' @importFrom tidyr pivot_longer pivot_wider separate_wider_regex
+#' @importFrom dplyr across
+#' @importFrom tidyr pivot_longer pivot_wider separate_wider_regex replace_na
+#' @importFrom tidyselect all_of matches
 .wide2long <- function(x){
-    # Fetch group terms
-    group_terms <- attr(x, "group_terms")
     # Create regex pattern to match group terms
-    patterns <- paste0("^(?:", paste(group_terms, collapse = "|"), ")")
+    patterns <- lapply(attr(x, "group_terms"),
+        function(term) paste0("(?:", paste(term, collapse = "|"), ")_?"))
+    group_cols <- c("group", names(patterns[-1]))
     # Convert anansi wide to long format
     x_long <- x |>
-        pivot_longer(matches(patterns)) |>
+        pivot_longer(matches(paste0("^", patterns[["All"]]))) |>
         separate_wider_regex(name,
-            c(group = patterns, "_", cor_param = ".\\.values$")) |>
-        pivot_wider(names_from = cor_param, values_from = value)
+            c(group = patterns[["All"]], cor_param = ".\\.values$")) |>
+        pivot_wider(names_from = cor_param, values_from = value) |>
+    # Separate the group column into the original group terms
+        separate_wider_regex(group, unlist(patterns[-1]),
+            too_few = "align_start", cols_remove = FALSE) |>
+        mutate(across(all_of(group_cols),
+            ~ gsub("_$", "", replace_na(., "All"))))
     return(x_long)
 }
 # Check aesthetics
@@ -243,7 +254,8 @@ setMethod("plotAnansi", signature = c(x = "data.frame"),
     # Rise exception if aesthetic is not character or not in x
     if( aes_defined && !(aes_var %in% colnames(x) && is.character(aes_var)) ){
         stop("'", aes_name, "' must be a character string specifying the",
-            " name of a column in 'x'", call. = FALSE)
+            " name of a 'groups' term used in the original anansi call",
+            call. = FALSE)
     }
     return(aes_defined)
 }
