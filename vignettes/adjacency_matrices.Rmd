@@ -118,7 +118,7 @@ p_0 <- ggplot() +
             nudge_x = c(rep(-0.03, 8), rep(0.03, 9))) + 
   
   scale_fill_manual(values = c(Metabolite = "orange", Enzyme = "dodgerblue")) +
-  coord_cartesian(xlim = c(1/10, 9/10), clip = "off") +
+  coord_cartesian(xlim = c(1/20, 19/20), clip = "off") +
   annotate("text", label = c("Enzymes","Metabolites"), 
            x = c(2/8, 6/8), y = 9.6, size = 4) +  
   ylab(NULL) + xlab(NULL) +
@@ -144,7 +144,7 @@ p_c <- p_0 + geom_segment(data = data.frame(
   aes(y = Var1, yend = Var2), x = 3/10, xend = 7/10, 
   color = "#393D47", inherit.aes = FALSE) +
   geom_point(data = colmat, aes(y = y, x = x, fill = fill), 
-             color = "black", shape = 21, size = 4,  show.legend = FALSE) 
+             color = "black", shape = 21, size = 4, show.legend = FALSE) 
 
 
 (p_b | p_c) + plot_annotation(tag_levels = "A")
