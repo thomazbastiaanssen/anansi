@@ -100,7 +100,7 @@ anansi_out <- anansi(
 )
 
 # Only consider interactions where the entire model fits well enough.
-anansi_out <- anansi_out[anansi_out$full_q.values < 0.1, ]
+anansiLong <- anansiLong[anansiLong$full_q.values < 0.2, ]
 
 library(ggplot2)
 

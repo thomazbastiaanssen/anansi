@@ -73,9 +73,29 @@
 #' )
 #'
 #' # Only consider interactions where the entire model fits well enough.
-#' anansi_out <- anansi_out[anansi_out$full_q.values < 0.1, ]
-#' 
 #' library(ggplot2)
+#' anansiLong <- anansiLong[anansiLong$full_q.values < 0.2, ]
+#'
+#'
+#'
+#' ggplot(
+#'   data = anansiLong,
+#'   aes(
+#'     x = r.values,
+#'     y = feature_X,
+#'     fill = cor_group,
+#'     alpha = disjointed_Legend_p.values < 0.05
+#'   )
+#' ) +
+#'
+#'   # Make a vertical dashed red line at x = 0
+#'   geom_vline(xintercept = 0, linetype = "dashed", colour = "red") +
+#'
+#'   # Points show  raw correlation coefficients
+#'   geom_point(shape = 21, size = 3) +
+#'
+#'   # facet per compound
+#'   ggforce::facet_col(~feature_Y, space = "free", scales = "free_y") +
 #'
 #' p <- plotAnansi(anansi_out,
 #'                 association.type = "disjointed",
@@ -144,35 +164,6 @@ anansi <- function(web, formula = ~1, groups = NULL, metadata,
          "table" = return(results),
          "list"  = return(list(results, input = input)),
          "raw"   = return(out.list))
-}
-
-
-#' Manages group-wise association calls
-#' @description If the \code{groups} argument is suitable, will also run correlation analysis per group. Typically, the main \code{anansi()} function will run this for you.
-#' @param web An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.
-#' @param groups A categorical or continuous value necessary for differential correlations. Typically a state or treatment score.
-#' @param metadata A vector or data.frame of categorical or continuous value necessary for differential correlations. Typically a state or treatment score.
-#' @param verbose A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.
-#' @noRd
-#'
-call_groupwise <- function(web, groups, metadata, verbose) {
-  if(is.null(groups)) {group.vec <- NULL} else {
-  group.vec <- apply(metadata[,groups, drop = FALSE], 1, paste, collapse = "_")
-  }
-
-  if (is(web, "argonansiWeb")) {
-    return(anansiCorTestByGroup(
-      web = new("anansiWeb",
-        tableY     = as.matrix(get_tableY(web)),
-        tableX     = as.matrix(get_tableX(web)),
-        dictionary = as.matrix(web@strat_dict)
-      ), group.vec = group.vec, verbose = verbose
-    ))
-  }
-
-  return(
-    anansiCorTestByGroup(web, group.vec, verbose)
-    )
 }
 
 

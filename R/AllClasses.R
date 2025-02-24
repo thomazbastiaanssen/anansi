@@ -1,19 +1,26 @@
+#' base or Matrix
+#' @description To allow anansi containers like \code{anansiWeb} to take either
+#' matrix or Matrix objects.
+#' @importClassesFrom Matrix Matrix
+#'
+setClassUnion("matrixOrMatrix", c("matrix", "Matrix"))
+
 #' An S4 class to contain all metabolomics and functional input data as well as
 #' a dictionary to link them.
 #' @slot tableY A matrix of metabolomics data. Rows are samples and columns are
 #' features.
-#' @slot tableX A matrix of functional data. Rows are samples and columns are
+#' @slot tableX A Matrix of functional data. Rows are samples and columns are
 #' features.
 #' @slot dictionary A binary adjacency matrix. Typically generated using the
 #' \code{weaveWebFromTables()} function.
-#' @description anansiWeb is the main container that will hold your input data
-#' thoughout the \code{anansi} pipeline.
+#' @description \code{anansiWeb} is the main container that will hold your input
+#' data throughout the \code{anansi} pipeline.
 #'
 setClass("anansiWeb",
   slots = c(
     tableY     = "matrix",
     tableX     = "matrix",
-    dictionary = "matrix"
+    dictionary = "matrixOrMatrix"
   )
 )
 

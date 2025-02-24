@@ -6,8 +6,8 @@
 \title{An S4 class to contain all metabolomics and functional input data as well as
 a dictionary to link them.}
 \description{
-anansiWeb is the main container that will hold your input data
-thoughout the \code{anansi} pipeline.
+\code{anansiWeb} is the main container that will hold your input
+data throughout the \code{anansi} pipeline.
 }
 \section{Slots}{
 
@@ -15,7 +15,7 @@ thoughout the \code{anansi} pipeline.
 \item{\code{tableY}}{A matrix of metabolomics data. Rows are samples and columns are
 features.}
 
-\item{\code{tableX}}{A matrix of functional data. Rows are samples and columns are
+\item{\code{tableX}}{A Matrix of functional data. Rows are samples and columns are
 features.}
 
 \item{\code{dictionary}}{A binary adjacency matrix. Typically generated using the

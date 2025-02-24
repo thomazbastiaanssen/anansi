@@ -84,15 +84,15 @@ get_dict.double <- function(web) {
 }
 
 #' @noRd
-#'
+#' @importFrom Matrix as.matrix
 get_dict.logical <- function(web) {
-  `mode<-`(web@dictionary, "logical")
+  `mode<-`(Matrix::as.matrix(web@dictionary), "logical")
 }
 
 #' @noRd
-#'
+#' @importFrom Matrix as.matrix
 get_dict <- function(web) {
-  web@dictionary
+  Matrix::as.matrix(web@dictionary)
 }
 
 #' @noRd

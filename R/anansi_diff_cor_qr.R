@@ -37,7 +37,6 @@ anansiDiffCor <- function(
   # identify the columns of the variables that change based on X-variable
   x.fct <- get_x.fct(sat_model, errorterm)
 
-  # TODO This could be important for argonaut support; consider modifying row id 1.
   x.assign <- as.integer(which(x.fct[1, ] == 1))
   all.assign <- attr(base.mm, "assign")
   x.vars <- all.assign %in% x.assign
@@ -98,12 +97,12 @@ disjointed <- lapply(
   )
 
   # Compute R^2 for full model
-  full_model@estimates <- 1 - (
-    sapply(
+  full_model@estimates[dic] <- 1 - (
+    unlist(lapply(
       seq_len(NCOL(tX)),
       function(x) R_full(y = x, mm, tY, tX, dic, x.fct, x.vars)
-    ) /
-      full_model@estimates)
+    )) /
+      full_model@estimates[dic])
 
   # compute all disjointed R^2 values, return to matrix with rows as values and columns as terms
   for (t in seq_along(x.int)) {
