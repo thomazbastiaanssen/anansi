@@ -54,14 +54,14 @@ web(ec ~ cpd, link = ec2cpd)
 
 # A wrapper is available for kegg ko, ec and cpd data
 generic      <- web(cpd ~ ko, link = list(ec2ko, ec2cpd))
-kegg_wrapper <- kegg_web(cpd ~ ko)
+kegg_wrapper <- kegg_web( cpd ~ ko )
 
 identical(generic, kegg_wrapper)
 
-# The following are equivalent:
-a <- web(ko ~ cpd, link = list(ec2ko, ec2cpd))
-b <- web(cpd ~ ko, link = list(ec2ko, ec2cpd))
+# The following are equivalent to transposition:
+a <- anansi:::get_dict( web(ko ~ cpd, link = list(ec2ko, ec2cpd)) )
+b <- anansi:::get_dict( web(cpd ~ ko, link = list(ec2ko, ec2cpd)) )
 
-identical(a, Matrix::t(b))
+identical(a, t(b))
 
 }

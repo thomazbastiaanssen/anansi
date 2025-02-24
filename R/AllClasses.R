@@ -1,3 +1,10 @@
+#' base or Matrix
+#' @description To allow anansi containers like \code{anansiWeb} to take either
+#' matrix or Matrix objects.
+#' @importClassesFrom Matrix Matrix
+#'
+setClassUnion("matrixOrMatrix", c("matrix", "Matrix"))
+
 #' An S4 class to contain all metabolomics and functional input data as well as
 #' a dictionary to link them.
 #' @slot tableY A matrix of metabolomics data. Rows are samples and columns are
@@ -11,9 +18,9 @@
 #'
 setClass("anansiWeb",
   slots = c(
-    tableY     = "ANY",
-    tableX     = "ANY",
-    dictionary = "ANY"
+    tableY     = "matrix",
+    tableX     = "matrix",
+    dictionary = "matrixOrMatrix"
   )
 )
 
@@ -40,10 +47,10 @@ setClass("anansiTale",
     subject   = "character",
     type      = "character",
     df        = "numeric",
-    estimates = "ANY",
-    f.values  = "ANY",
-    t.values  = "ANY",
-    p.values  = "ANY"
+    estimates = "matrix",
+    f.values  = "matrix",
+    t.values  = "matrix",
+    p.values  = "matrix"
   )
 )
 

@@ -113,7 +113,7 @@ anansiLong <- anansi_out |>
 # Now it's ready to be plugged into ggplot2, though let's filter a bit more.
 
 # Only consider interactions where the entire model fits well enough.
-anansiLong <- anansiLong[anansiLong$full_q.values < 0.1, ]
+anansiLong <- anansiLong[anansiLong$full_q.values < 0.2, ]
 
 
 

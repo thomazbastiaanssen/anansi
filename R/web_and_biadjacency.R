@@ -31,15 +31,15 @@
 #'
 #' # A wrapper is available for kegg ko, ec and cpd data
 #' generic      <- web(cpd ~ ko, link = list(ec2ko, ec2cpd))
-#' kegg_wrapper <- kegg_web(cpd ~ ko)
+#' kegg_wrapper <- kegg_web( cpd ~ ko )
 #'
 #' identical(generic, kegg_wrapper)
 #'
-#' # The following are equivalent:
-#' a <- web(ko ~ cpd, link = list(ec2ko, ec2cpd))
-#' b <- web(cpd ~ ko, link = list(ec2ko, ec2cpd))
+#' # The following are equivalent to transposition:
+#' a <- anansi:::get_dict( web(ko ~ cpd, link = list(ec2ko, ec2cpd)) )
+#' b <- anansi:::get_dict( web(cpd ~ ko, link = list(ec2ko, ec2cpd)) )
 #'
-#' identical(a, Matrix::t(b))
+#' identical(a, t(b))
 #'
 web <- function(x, ...) UseMethod("web")
 
@@ -76,12 +76,12 @@ web.default <- function(x, y, link = NULL, tableX = NULL, tableY = NULL, ...){
   d <- deliver_web_cases(link, terms, tableX, tableY, link_is_list)
   if(is.null(tableX) && is.null(tableY)) return(
     new("anansiWeb",
-      tableY     = Matrix(ncol = NROW(d), dimnames = list(NULL, rownames(d))),
-      tableX     = Matrix(ncol = NCOL(d), dimnames = list(NULL, colnames(d))),
+      tableY     = matrix(ncol = NROW(d), dimnames = list(NULL, rownames(d))),
+      tableX     = matrix(ncol = NCOL(d), dimnames = list(NULL, colnames(d))),
       dictionary = d)) else return(
         new("anansiWeb",
-        tableY     = Matrix(tableY)[,rownames(d)],
-        tableX     = Matrix(tableX)[,colnames(d)],
+        tableY     = tableY[,rownames(d)],
+        tableX     = tableX[,colnames(d)],
         dictionary = d))
 }
 
@@ -199,8 +199,8 @@ web_missing_link <- function(tableX, tableY) {
     )
 
   new("anansiWeb",
-      tableY     = Matrix(tableY)[,rownames(d)],
-      tableX     = Matrix(tableX)[,colnames(d)],
+      tableY     = tableY[,rownames(d)],
+      tableX     = tableX[,colnames(d)],
       dictionary = d)
 
 }

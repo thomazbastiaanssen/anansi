@@ -1,3 +1,31 @@
+#' Manages group-wise association calls
+#' @description If the \code{groups} argument is suitable, will also run correlation analysis per group. Typically, the main \code{anansi()} function will run this for you.
+#' @param web An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.
+#' @param groups A categorical or continuous value necessary for differential correlations. Typically a state or treatment score.
+#' @param metadata A vector or data.frame of categorical or continuous value necessary for differential correlations. Typically a state or treatment score.
+#' @param verbose A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.
+#' @noRd
+#'
+call_groupwise <- function(web, groups, metadata, verbose) {
+  if(is.null(groups)) {group.vec <- NULL} else {
+    group.vec <- apply(metadata[,groups, drop = FALSE], 1, paste, collapse = "_")
+  }
+
+  if (is(web, "argonansiWeb")) {
+    return(anansiCorTestByGroup(
+      web = new("anansiWeb",
+                tableY     = as.matrix(get_tableY(web)),
+                tableX     = as.matrix(get_tableX(web)),
+                dictionary = as.matrix(web@strat_dict)
+      ), group.vec = group.vec, verbose = verbose
+    ))
+  }
+
+  return(
+    anansiCorTestByGroup(web, group.vec, verbose)
+  )
+}
+
 #' Run correlations for all interacting metabolites and functions.
 #' @description If the \code{groups} argument is suitable, will also run correlation analysis per group. Typically, the main \code{anansi()} function will run this for you.
 #' @param web An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.
@@ -87,6 +115,7 @@ anansiCor <- function(web, group.bool) {
     y = get_tableX(web)[group.bool, ],
     method = "pearson", use = "pairwise.complete.obs"
   )
+  cors[!get_dict.logical(web)] <- 0
   # set non-canonical correlations to zero using the binary adjacency matrix.
-  return(cors * get_dict(web))
+  return(cors)
 }
