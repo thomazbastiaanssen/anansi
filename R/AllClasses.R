@@ -2,18 +2,18 @@
 #' a dictionary to link them.
 #' @slot tableY A matrix of metabolomics data. Rows are samples and columns are
 #' features.
-#' @slot tableX A matrix of functional data. Rows are samples and columns are
+#' @slot tableX A Matrix of functional data. Rows are samples and columns are
 #' features.
 #' @slot dictionary A binary adjacency matrix. Typically generated using the
 #' \code{weaveWebFromTables()} function.
-#' @description anansiWeb is the main container that will hold your input data
-#' thoughout the \code{anansi} pipeline.
+#' @description \code{anansiWeb} is the main container that will hold your input
+#' data throughout the \code{anansi} pipeline.
 #'
 setClass("anansiWeb",
   slots = c(
-    tableY     = "matrix",
-    tableX     = "matrix",
-    dictionary = "matrix"
+    tableY     = "ANY",
+    tableX     = "ANY",
+    dictionary = "ANY"
   )
 )
 
@@ -40,10 +40,10 @@ setClass("anansiTale",
     subject   = "character",
     type      = "character",
     df        = "numeric",
-    estimates = "matrix",
-    f.values  = "matrix",
-    t.values  = "matrix",
-    p.values  = "matrix"
+    estimates = "ANY",
+    f.values  = "ANY",
+    t.values  = "ANY",
+    p.values  = "ANY"
   )
 )
 

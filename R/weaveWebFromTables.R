@@ -96,7 +96,8 @@ weaveWebFromTables <- function(tableY, tableX = NULL, dictionary = anansi::anans
     diag(dictionary) <- FALSE
   }
 
-  # Return an anansiWeb object with three slots: typically metabolites, functions and adjacency matrix
+  # Return an anansiWeb object with three slots:
+  # For instance, metabolites, functions and adjacency matrix
   return(new("anansiWeb",
     tableY     = as.matrix(tableY),
     tableX     = as.matrix(tableX),

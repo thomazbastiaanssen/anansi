@@ -11,9 +11,9 @@ web(x, ...)
 
 kegg_web(x, ...)
 
-\method{web}{default}(x, y, link, x.ids = NULL, y.ids = NULL, ...)
+\method{web}{default}(x, y, link = NULL, tableX = NULL, tableY = NULL, ...)
 
-\method{web}{formula}(formula, link, x.ids = NULL, y.ids = NULL, ...)
+\method{web}{formula}(formula, link = NULL, tableX = NULL, tableY = NULL, ...)
 }
 \arguments{
 \item{x}{name of feature type that will determine columns, corresponding to
@@ -28,11 +28,13 @@ kegg_web(x, ...)
 Sharing a row indicates a link between features. See \code{ec2ko} and
 \code{ec2cpd} for examples. Optionally a list with two such data.frames.}
 
-\item{x.ids}{a character vector of features of type \code{x}, which should be
-included. If left NULL (default), keep all features.}
+\item{tableX}{A table containing features of interest. Rows should be samples
+and columns should be features. The Y and X refer to the position of the
+features in a formula: Y ~ X.}
 
-\item{y.ids}{a character vector of features of type \code{y}, which should be
-included. If left NULL (default), keep all features.}
+\item{tableY}{A table containing features of interest. Rows should be samples
+and columns should be features. The Y and X refer to the position of the
+features in a formula: Y ~ X.}
 
 \item{formula}{a formula of the form y ~ x, denoting desired output
 format; assigns y to rows and columns to x. Equivalent to using \code{x} and
