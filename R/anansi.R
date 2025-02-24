@@ -72,20 +72,8 @@
 #'   verbose = TRUE
 #' )
 #'
-#' # To recreate the long plot:
-#' library(tidyr)
-#' library(ggplot2)
-#'
-#'anansiLong <- anansi_out |>
-#'    pivot_longer(starts_with("All") | contains("FMT")) |>
-#'    separate_wider_delim(
-#'        name, delim = "_", names = c("cor_group", "cor_param")
-#'            ) |>
-#'            pivot_wider(names_from = cor_param, values_from = value)
-#'
-#' # Now it's ready to be plugged into ggplot2, though let's filter a bit more.
-#'
 #' # Only consider interactions where the entire model fits well enough.
+#' library(ggplot2)
 #' anansiLong <- anansiLong[anansiLong$full_q.values < 0.2, ]
 #'
 #'
@@ -109,18 +97,20 @@
 #'   # facet per compound
 #'   ggforce::facet_col(~feature_Y, space = "free", scales = "free_y") +
 #'
-#'   # fix the scales, labels, theme and other layout
-#'   scale_y_discrete(limits = rev, position = "right") +
-#'   scale_alpha_manual(values = c("TRUE" = 1, "FALSE" = 1 / 3)) +
-#'   scale_fill_manual(values = c(
+#' p <- plotAnansi(anansi_out,
+#'                 association.type = "disjointed",
+#'                 model.var = "Legend",
+#'                 fill_by = "group",
+#'                 signif.threshold = 0.05,
+#'                 x_lab = "Pearson's rho")
+
+#' p + scale_fill_manual(values = c(
 #'     "Young yFMT" = "#2166ac",
 #'     "Aged oFMT" = "#b2182b",
 #'     "Aged yFMT" = "#ef8a62",
 #'     "All" = "gray"
 #'   )) +
-#'   theme_bw() +
-#'   ylab("") +
-#'   xlab("Pearson's rho")
+#'   theme_bw()
 #'
 #' # See also ?spinToPlots
 #'

@@ -30,11 +30,14 @@ Imports:
     SummarizedExperiment,
     MultiAssayExperiment, 
     ggplot2, 
-    ggforce
+    ggforce,
+    S4Vectors,
+    tidyr,
+    dplyr,
+    tidyselect
 Suggests:
     BiocStyle,
     mia,
-    tidyr,
     patchwork,
     TreeSummarizedExperiment,
     testthat (>= 3.0.0),
