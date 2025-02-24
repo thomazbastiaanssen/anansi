@@ -7,8 +7,8 @@ See https://github.com/lcolladotor/biocthis/issues/34 for more details.
 /*
 #0092ac   blue
 #00758a   darker blue (active menu)
-#c4d931   green (on blue)
-#87b13f   green (on white)
+#08519c   green (on blue)
+#08519c   green (on white)
 */
 
 .headroom {
@@ -20,37 +20,37 @@ See https://github.com/lcolladotor/biocthis/issues/34 for more details.
 }
 
 .navbar-default .navbar-link:hover {
-    color: #c4d931;
+    color: #08519c;
 }
 
 .navbar-default .navbar-nav>.active>a,
 .navbar-default .navbar-nav>.active>a:hover,
 .navbar-default .navbar-nav>.active>a:focus {
-    color: #c4d931;
+    color: #08519c;
     background-color: #00758a;
 }
 
 .navbar-default .navbar-nav>.open>a,
 .navbar-default .navbar-nav>.open>a:hover,
 .navbar-default .navbar-nav>.open>a:focus {
-    color: #c4d931;
+    color: #08519c;
     background-color: #00758a;
 }
 
 .dropdown-menu>.active>a,
 .dropdown-menu>.active>a:hover,
 .dropdown-menu>.active>a:focus {
-    color: #c4d931;
+    color: #08519c;
     background-color: #00758a;
 }
 
 .navbar-default .navbar-nav>li>a:hover,
 .navbar-default .navbar-nav>li>a:focus {
-    color: #c4d931;
+    color: #08519c;
 }
 
 .dropdown-menu>li>a:hover {
-    color: #87b13f;
+    color: #08519c;
     background-color: #ffffff;
 }
 
@@ -59,7 +59,7 @@ See https://github.com/lcolladotor/biocthis/issues/34 for more details.
 }
 
 h1 {
-  color: #87b13f;
+  color: #08519c;
 }
 
 h2 {
