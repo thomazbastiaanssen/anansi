@@ -3,7 +3,7 @@
 \docType{class}
 \name{matrixOrMatrix-class}
 \alias{matrixOrMatrix-class}
-\title{base or Matrix}
+\title{Utility class containing base::matrix and Matrix::Matrix}
 \description{
 To allow anansi containers like \code{anansiWeb} to take either
 matrix or Matrix objects.

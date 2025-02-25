@@ -15,7 +15,7 @@ data throughout the \code{anansi} pipeline.
 \item{\code{tableY}}{A matrix of metabolomics data. Rows are samples and columns are
 features.}
 
-\item{\code{tableX}}{A Matrix of functional data. Rows are samples and columns are
+\item{\code{tableX}}{A matrix of functional data. Rows are samples and columns are
 features.}
 
 \item{\code{dictionary}}{A binary adjacency matrix. Typically generated using the

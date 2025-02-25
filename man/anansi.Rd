@@ -100,9 +100,29 @@ anansi_out <- anansi(
 )
 
 # Only consider interactions where the entire model fits well enough.
+library(ggplot2)
 anansiLong <- anansiLong[anansiLong$full_q.values < 0.2, ]
 
-library(ggplot2)
+
+
+ggplot(
+  data = anansiLong,
+  aes(
+    x = r.values,
+    y = feature_X,
+    fill = cor_group,
+    alpha = disjointed_Legend_p.values < 0.05
+  )
+) +
+
+  # Make a vertical dashed red line at x = 0
+  geom_vline(xintercept = 0, linetype = "dashed", colour = "red") +
+
+  # Points show  raw correlation coefficients
+  geom_point(shape = 21, size = 3) +
+
+  # facet per compound
+  ggforce::facet_col(~feature_Y, space = "free", scales = "free_y") +
 
 p <- plotAnansi(anansi_out,
                 association.type = "disjointed",
