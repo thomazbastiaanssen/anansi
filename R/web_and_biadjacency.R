@@ -1,57 +1,70 @@
 #' Make a web
+#' @name web
+#' @rdname web
 #' @description
-#' Generate a biadjacency matrix linking the features between two tables.
+#' Generate a biadjacency matrix linking the features between two tables. 
+#' 
+#' \code{weaveWeb()} is for general use and has flexible default settings. 
+#' 
+#' \code{kegg_web()} is a wrapper that sets \code{link} to \code{kegg_link()}. 
+#' All variants are special cases of \code{web()}.   
 #'
-#' @param x name of feature type that will determine columns, corresponding to
-#' `tableX`.
-#' @param y name of feature type that will determine rows, corresponding to
-#' `tableY`.
+#' @param x name of column, \code{tableX}, feature type.
+#' @param y name of row, \code{tableY}, feature type.
 #' @param formula a formula of the form y ~ x, denoting desired output
 #' format; assigns y to rows and columns to x. Equivalent to using \code{x} and
 #' \code{y} arguments.
-#' @param link a data.frame with two columns, as named in \code{x} and \code{y}.
-#' Sharing a row indicates a link between features. See \code{ec2ko} and
-#' \code{ec2cpd} for examples. Optionally a list with two such data.frames.
+#' @param link 
+#'   * a character vector, \code{"none"}, or
+#'    
+#'   * a \code{data.frame} with two columns, or
+#'   
+#'   * a list of two such \code{data.frame}s.
 #' @param tableY A table containing features of interest. Rows should be samples
-#' and columns should be features. The Y and X refer to the position of the
-#' features in a formula: Y ~ X.
+#' and columns should be features. The Y refers to the position of the features 
+#' in a formula: Y ~ X.
 #' @param tableX A table containing features of interest. Rows should be samples
-#' and columns should be features. The Y and X refer to the position of the
-#' features in a formula: Y ~ X.
-#' @param ... further arguments to be passed to or from methods. Not used.
-#'
-#' @returns a sparse binary biadjacency matrix, with features from \code{y} as
-#' rows and features from \code{x} as columns.
-#'
-#' @export
+#' and columns should be features. The X refer to the position of the features 
+#' in a formula: Y ~ X.
+#' @param ... further arguments.
+#' @details 
+#' If the \code{link} argument is \code{"none"}, all features will be considered
+#'  linked. If one or more \code{data.frame}s, colnames should be as specified 
+#'  in \code{x} and \code{y}.
+#' @seealso [kegg_link()] as well as \code{ec2ko} and \code{ec2cpd} for examples
+#'  of input for \code{link}. 
+#' @returns an \code{anansiWeb} object, with sparse binary biadjacency matrix 
+#' with features from \code{y} as rows and features from \code{x} as columns in 
+#' \code{dictionary} slot.
 #' @examples
 #' # Basic usage
+#' weaveWeb(cpd ~ ko)
 #' web(x = "ko", y = "ec", link = ec2ko)
 #' web(ec ~ cpd, link = ec2cpd)
 #'
 #' # A wrapper is available for kegg ko, ec and cpd data
-#' generic      <- web(cpd ~ ko, link = list(ec2ko, ec2cpd))
+#' generic      <- web(cpd ~ ko, link = kegg_link())
 #' kegg_wrapper <- kegg_web( cpd ~ ko )
 #'
 #' identical(generic, kegg_wrapper)
 #'
 #' # The following are equivalent to transposition:
-#' a <- anansi:::get_dict( web(ko ~ cpd, link = list(ec2ko, ec2cpd)) )
-#' b <- anansi:::get_dict( web(cpd ~ ko, link = list(ec2ko, ec2cpd)) )
+#' a <- anansi:::get_dict( web(ko ~ cpd, link = kegg_link()) )
+#' b <- anansi:::get_dict( web(cpd ~ ko, link = kegg_link()) )
 #'
 #' identical(a, t(b))
+#'
+NULL
+
+#' @rdname web
+#' @usage NULL
+#' @export
 #'
 web <- function(x, ...) UseMethod("web")
 
 #' @rdname web
-#' @export
-#'
-kegg_web <- function(x, ...){
-  web(x, link = list(anansi::ec2ko, anansi::ec2cpd), ...)
-}
-
-#' @rdname web
 #' @importFrom Matrix Matrix
+#' @order 1
 #' @export
 #'
 web.default <- function(x, y, link = NULL, tableX = NULL, tableY = NULL, ...){
@@ -80,17 +93,18 @@ web.default <- function(x, y, link = NULL, tableX = NULL, tableY = NULL, ...){
       tableX     = matrix(ncol = NCOL(d), dimnames = list(NULL, colnames(d))),
       dictionary = d)) else return(
         new("anansiWeb",
-        tableY     = tableY[,rownames(d)],
-        tableX     = tableX[,colnames(d)],
+        tableY     = as.matrix(tableY)[,rownames(d)],
+        tableX     = as.matrix(tableX)[,colnames(d)],
         dictionary = d))
 }
 
 #' @rdname web
 #' @export
+#' @order 0
 #'
-web.formula <- function(formula, link = NULL, tableX = NULL, tableY = NULL,
-                        ...){
-
+web.formula <- function(
+    formula, link = NULL, tableX = NULL, tableY = NULL, ...
+    ) {
   if (missing(formula) || (length(formula) != 3L))
     stop("'formula' missing or incorrect")
 
@@ -108,6 +122,17 @@ web.formula <- function(formula, link = NULL, tableX = NULL, tableY = NULL,
   web.default(x = terms[2], y = terms[1], link, tableX, tableY)
 }
 
+#' @rdname web
+#' @export
+#'
+kegg_web <- function(x, ...) web(x, link = kegg_link(), ...)
+
+#' @rdname web
+#' @export
+#'
+weaveWeb <- 
+  function(x, link = kegg_link(), ...) web(x, link, ...)
+
 #' Produce a biadjacency matrix given tables and a dictionary
 #' @description calculates a biadjacency matrix for the cases where
 #' \code{link} is a single - or a \code{list} of two - \code{data.frame}(s).
@@ -122,6 +147,7 @@ web.formula <- function(formula, link = NULL, tableX = NULL, tableY = NULL,
 #' @param link_is_list a boolean, is a \code{list} (or \code{FALSE}: a
 #' \code{data.frame})
 #' @returns a sparse boolean biadjacency matrix, for use in main anansi workflow
+#' @noRd
 #'
 deliver_web_cases <- function(link, terms, tableX, tableY, link_is_list){
   if(is.data.frame(link)) {
@@ -139,10 +165,10 @@ deliver_web_cases <- function(link, terms, tableX, tableY, link_is_list){
 
   } else if (link_is_list) {
     cn.1 <- colnames(link[[1L]]); cn.2 <- colnames(link[[2L]])
-    i <- intersect(cn.1, cn.2)
+    i <- intersect(cn.1,cn.2) 
     stopifnot("data.frames in 'link' must share a colname" = length(i) == 1L)
-
-    if(all(cn.1 %in% c(i, terms[1]))){
+    
+    if(all(cn.1 %in% c(i, terms[1]))) {
 
       x.df <- link[[1L]][, c(i, terms[1L])]
       y.df <- link[[2L]][, c(i, terms[2L])]
@@ -153,19 +179,22 @@ deliver_web_cases <- function(link, terms, tableX, tableY, link_is_list){
       y.df <- link[[1L]][, c(i, terms[2L])]
 
     }
+       
     web_from_2_dfs(x.df, y.df, colnames(tableX), colnames(tableY))
   }
 }
 
 #' @importFrom Matrix tcrossprod
+#' @noRd
 #'
 web_from_2_dfs <- function(x.df, y.df, x.ids, y.ids){
   if(!is.null(x.ids)) { x.df <- x.df[x.df[,2L] %in% x.ids,] }
   if(!is.null(y.ids)) { y.df <- y.df[y.df[,2L] %in% y.ids,] }
 
-  i <- intersect(x.df[,1L], y.df[,1L])
+  i <- sort(intersect(x.df[,1L],y.df[,1L]))
   x.df <- x.df[x.df[,1L] %in% i,]
   y.df <- y.df[y.df[,1L] %in% i,]
+
   x.mat <- df_to_sparse_biadjacency_matrix(x.df)
   y.mat <- df_to_sparse_biadjacency_matrix(y.df)
 
@@ -173,11 +202,14 @@ web_from_2_dfs <- function(x.df, y.df, x.ids, y.ids){
 }
 
 #' @importFrom igraph vertex_attr<- vertex_attr graph_from_data_frame as_biadjacency_matrix
+#' @noRd
 #'
 df_to_sparse_biadjacency_matrix <- function(x){
   x.g <- graph_from_data_frame(x, directed = FALSE)
   vertex_attr(x.g, name = "type") <- vertex_attr(x.g, "name") %in% x[,1L]
-  as_biadjacency_matrix(x.g, sparse = TRUE)
+  m <- as_biadjacency_matrix(x.g, sparse = TRUE)
+  m <- m[order(rownames(m)),order(colnames(m))]
+  return(m)
 }
 
 #' Make a full web; for all vs all association testing
@@ -188,6 +220,7 @@ df_to_sparse_biadjacency_matrix <- function(x){
 #' @returns An \code{anansiWeb} object with both tables and a fully \code{TRUE}
 #' (non-sparse) matrix from the \code{Matrix} package.
 #' @importFrom Matrix Matrix
+#' @noRd
 #'
 web_missing_link <- function(tableX, tableY) {
 
@@ -199,9 +232,8 @@ web_missing_link <- function(tableX, tableY) {
     )
 
   new("anansiWeb",
-      tableY     = tableY[,rownames(d)],
-      tableX     = tableX[,colnames(d)],
+      tableY     = as.matrix(tableY)[,rownames(d)],
+      tableX     = as.matrix(tableX)[,colnames(d)],
       dictionary = d)
 
 }
-

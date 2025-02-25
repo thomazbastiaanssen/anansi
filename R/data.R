@@ -33,30 +33,63 @@
 #'
 "KO_translation"
 
-#' data.frame linking KEGG orthologues to IDs of interacting ecs
+#' @rdname kegg_link
+#' @format \code{ec2ko}: a \code{data.frame} of two columns, named \code{"ec"} 
+#' and \code{"ko"}. 
+#' The IDs refer to KEGG orthologues. Enzyme commission numbers, ecs, typically
+#' describe reactions captured by them.
 #'
-#' @format a data.frame of two columns, named `ec` and `ko`. The IDs refer to
-#' KEGG orthologues. ecs typically describe reactions either captured by them.
-#'
-#' @source generated using `KEGGREST`, with following code
-#' ec2ko <- KEGGREST::keggLink("ec", "ko")
-#' ec2ko <- data.frame(ec = ec2ko,  ko = names(ec2ko), row.names = NULL)
-#'
+#' @source \code{ec2ko}: Adapted from \url{https://www.genome.jp/kegg/}, using 
+#' \code{KEGGREST}. Script to generate available in example. 
+#'                     
 "ec2ko"
 
-#' data.frame linking KEGG compounds to IDs of interacting ecs
+#' @rdname kegg_link
+#' @format \code{ec2cpd}: a \code{data.frame} of two columns, named \code{"ec"} 
+#' and \code{"cpd"}. 
+#' The IDs refer to compounds in the KEGG database. Enzyme commission numbers, 
+#' ecs, typically describe reactions either producing or requiring them.
 #'
-#' @format a data.frame of two columns, named `ec` and `cpd`. The IDs refer to
-#' compounds in the KEGG database. ccs typically describe reactions either
-#' producing or requiring them.
-#'
-#' @source Adapted from \url{https://www.genome.jp/kegg/}, generated
-#' using `KEGGREST`, with following code:
-#' ec2cpd <- KEGGREST::keggLink("ec", "cpd")
-#' ec2cpd <- data.frame(ec = ec2ko,  cpd = names(ec2cpd), row.names = NULL)
+#' @source \code{ec2cpd}: Adapted from \url{https://www.genome.jp/kegg/} using 
+#' \code{KEGGREST}. Script to generate available in example. 
 #'
 "ec2cpd"
 
+#' Use linking data from the KEGG database. 
+#' @description 
+#' \code{kegg_links} is a convenience function to return a list 
+#' containing two \code{data.frame}s; \code{ec2cpd} and \code{ec2ko}. This will 
+#' be their most likely use.
+#'  
+#' \code{ec2cpd} and \code{ec2ko} are two \code{data.frame}s, used 
+#' to link ko, ecs and cpd identifiers in the KEGG database.  
+#' 
+
+#' @returns \code{kegg_link} returns a list containing the two aforementioned 
+#' data.frames, \code{ec2cpd} and \code{ec2ko}.
+#' @examples
+#' kegg_link()
+#' 
+#' # Generate ec2ko and ec2cpd: 
+#' # Don't download during tests. set to `TRUE` to download. 
+#' dry_run <- TRUE 
+#' 
+#' if(!dry_run) {
+#' 
+#' ec2ko <- KEGGREST::keggLink("ec", "ko")
+#' ec2ko <- data.frame(ec = gsub("ec:","",  x = ec2ko, fixed = TRUE),
+#'                     ko = gsub("ko:", "", x = names(ec2ko), fixed = TRUE),
+#'                     row.names = NULL)
+#'                     
+#' ec2cpd <- KEGGREST::keggLink("ec", "cpd")
+#' ec2cpd <- data.frame(ec  = gsub("ec:","",   x = ec2cpd, fixed = TRUE),
+#'                      cpd = gsub("cpd:", "", x = names(ec2cpd), fixed = TRUE),
+#'                      row.names = NULL)
+#' }
+#' 
+#' @export
+#' 
+kegg_link <- function() list(anansi::ec2ko, anansi::ec2cpd)
 
 #' Snippet of the CLR-transformed hippocampal metabolomics data from the FMT Aging study.
 #'

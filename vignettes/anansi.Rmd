@@ -52,10 +52,6 @@ library(ggforce)
 # You can call it like this:
 # plan(multisession)
 
-# load anansi dictionary and complementary human-readable names for 
-# KEGG compounds and orthologues
-data(dictionary)
-
 # load example data + metadata from FMT Aging study
 data(FMT_data)
 ```
@@ -118,12 +114,23 @@ t2 <- t(KOs.exp)
 
 # Weave a web🕸️
 
-The `weaveWebFromTables()` function can be used to parse the tables that 
-we prepared above into an `anansiWeb` object. 
-The `anansiWeb` format is a necessary input file for the main `anansi` workflow. 
+The `weaveWeb()` function can be used to parse the tables that 
+we prepared above into an `anansiWeb` object. The `anansiWeb` format is a 
+necessary input file for the main `anansi` workflow. It allows `anansi` to keep 
+track of which features from the two input data sets should should be considered
+as pairs. 
+
+With `anansi`, we provide a pre-built map between ko, cpd and ec features of the
+KEGG database, but users can provide their own maps. [See vignette on adjacency matrices.](https://thomazbastiaanssen.github.io/anansi/articles/adjacency_matrices.html)
+
 
 ```{r, eval=TRUE}
-web <- weaveWebFromTables(tableY = t1, tableX = t2, dictionary = anansi_dic)
+web <- weaveWeb(
+  cpd ~ ko,
+  tableY = t1,
+  tableX = t2,
+  link = kegg_link()
+)
 ```
 
 # Run anansi🕷️

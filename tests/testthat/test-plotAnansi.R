@@ -1,6 +1,5 @@
 test_that("plotAnansi", {
   library(ggplot2)
-  data(dictionary)
   data(FMT_data)
   KOs <- floor(FMT_KOs)
   KOs <- apply(KOs, c(1, 2), function(x) as.numeric(as.character(x)))
@@ -9,11 +8,11 @@ test_that("plotAnansi", {
   KOs.exp <- clr_c(KOs)
   t1 <- t(FMT_metab)
   t2 <- t(KOs.exp)
-  web <- weaveWebFromTables(
+  web <- weaveWeb(
+    x = cpd ~ ko,
     tableY = t1,
     tableX = t2,
-    dictionary = anansi_dic
-  )
+    link = kegg_link())
   out <- anansi(
     web = web,
     formula = ~Legend,
@@ -43,6 +42,6 @@ test_that("plotAnansi", {
   p <- plotAnansi(out, association.type = "emergent", model.var = "Legend",
       fill_by = "group")
   expect_length(p$guides$guides, 2)
-  expect_equal(dim(p$data), c(200, 8))
+  expect_equal(dim(p$data), c(196, 8))
   expect_false(any(is.na(p$data[["fill"]])))
 })

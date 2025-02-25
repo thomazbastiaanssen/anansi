@@ -26,6 +26,8 @@ plotAnansi(x, ...)
 \item{x}{a \code{data.frame} object output of \code{\link{getAnansi}} in
 the table format.}
 
+\item{...}{additional arguments}
+
 \item{association.type}{\code{Character scalar}. Specifies the type of
 association to show in the plot. One of \code{"disjointed"},
   \code{"emergent"} and \code{"full"}. (Default: \code{NULL})}
@@ -117,20 +119,20 @@ coldata <- coldata[match(colnames(KO_tse), rownames(coldata)), ]
 
 # Combine experiments into MultiAssayExperiment object
 mae <- MultiAssayExperiment(
-  experiments = ExperimentList(metabolites = metab_se, functions = KO_tse),
+  experiments = ExperimentList(cpd = metab_se, ko = KO_tse),
   colData = coldata
 )
 
 # Perform anansi analysis
 out <- getAnansi(mae,
-  experiment1 = "metabolites", experiment2 = "functions",
-  assay.type1 = "conc", assay.type2 = "clr",
+  experimentY = "cpd", experimentX = "ko",
+  assay.typeY = "conc", assay.typeX = "clr",
   formula = ~Legend, translate = TRUE,
   X_translation = KO_translation, Y_translation = cpd_translation
 )
 
 # Select significant interactions
-out <- out[out$full_q.values < 0.1, ]
+out <- out[out$full_p.values < 0.05, ]
 
 # Visualise disjointed associations filled by group
 plotAnansi(out,

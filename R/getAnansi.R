@@ -2,35 +2,37 @@
 #'
 #' \code{getAnansi} provides a wrapper to execute the anansi pipeline on a
 #' \code{\link[MultiAssayExperiment:MultiAssayExperiment]{MultiAssayExperiment}}
-#' object. It applies the functions \code{\link{weaveWebFromTables}} and
+#' object. It applies the functions \code{\link{weaveWeb}} and
 #' \code{\link{anansi}} in the given order.
 #'
 #' @param x a
 #' \code{\link[MultiAssayExperiment:MultiAssayExperiment]{MultiAssayExperiment}}.
 #'
-#' @param experiment1 \code{Character scalar} or \code{numeric scalar}.
-#'   Selects the experiment 1 from \code{experiments(x)} of
-#'   \code{MultiassayExperiment} object. (Default: \code{1})
+#' @param experimentY \code{Character scalar} or \code{numeric scalar}.
+#'   Selects experiment corresponding to \code{tableY} from 
+#'   \code{experiments(x)} of \code{MultiassayExperiment} object. (Default: 
+#'   \code{1}, the first slot.)
 #'
-#' @param experiment2 \code{Character scalar} or \code{numeric scalar}.
-#'   Selects the experiment 2 from\code{experiments(x)} of
-#'   \code{MultiAssayExperiment} object. (Default: \code{2})
+#' @param experimentX \code{Character scalar} or \code{numeric scalar}.
+#'   Selects experiment corresponding to \code{tableX} from 
+#'   \code{experiments(x)} of \code{MultiAssayExperiment} object. (Default: 
+#'   \code{2}, the second slot.)
 #'
-#' @param assay.type1 \code{Character scalar}. Specifies the name of the assay
-#'   in experiment 1 to be used. (Default: \code{"counts"})
+#' @param assay.typeY \code{Character scalar}. Specifies the name of the assay
+#'   in experiment Y to be used. (Default: \code{"counts"})
 #'
-#' @param assay.type2  \code{Character scalar}. Specifies the name of the
-#'   assay in experiment 2 to be used. (Default: \code{"counts"})
+#' @param assay.typeX  \code{Character scalar}. Specifies the name of the
+#'   assay in experiment X to be used. (Default: \code{"counts"})
 #'
 #' @param ... additional parameters that can be passed to
-#'   \code{\link{weaveWebFromTables}} or \code{\link{anansi}}.
+#'   \code{\link{web}} or \code{\link{anansi}}.
 #'
 #' @details
 #' This wrapper of \code{\link{anansi}} allows to perform a complete anansi
 #' analysis directly on objects of class
 #' \code{\link[MultiAssayExperiment:MultiAssayExperiment]{MultiAssayExperiment}}
-#' . First, the assays specified by \code{assay.type1} and \code{assay.type2}
-#' are passed to \code{\link{weaveWebFromTables}} to build an anansiWeb object.
+#' . First, the assays specified by \code{assay.typeY} and \code{assay.typeX}
+#' are passed to \code{\link{web}} to build an anansiWeb object.
 #' Next, this object is fed to the main \code{\link{anansi}} function to compute
 #' interactions between the two assays.
 #'
@@ -81,25 +83,25 @@
 #'
 #' # Combine experiments into MultiAssayExperiment object
 #' mae <- MultiAssayExperiment(
-#'   experiments = ExperimentList(metabolites = metab_se, functions = KO_tse),
+#'   experiments = ExperimentList(cpd = metab_se, ko = KO_tse),
 #'   colData = coldata
 #' )
 #'
 #' # Perform anansi analysis
 #' out <- getAnansi(mae,
-#'   experiment1 = "metabolites", experiment2 = "functions",
-#'   assay.type1 = "conc", assay.type2 = "clr",
+#'   experimentY = "cpd", experimentX = "ko",
+#'   assay.typeY = "conc", assay.typeX = "clr",
 #'   formula = ~Legend
 #' )
 #'
 #' # Select significant interactions
-#' out <- out[out$full_q.values < 0.1, ]
+#' out <- out[out$full_p.values < 0.05, ]
 #'
 #' # View subset of results
 #' head(out, 5)
 #'
 #' @seealso
-#' \code{\link{weaveWebFromTables}}
+#' \code{\link{web}}
 #' \code{\link{anansi}}
 #'
 #' @name getAnansi
@@ -118,8 +120,8 @@ setGeneric("getAnansi", signature = c("x"),
 #' @importFrom SummarizedExperiment assay colData
 setMethod("getAnansi",
   signature = c(x = "MultiAssayExperiment"),
-  function(x, experiment1 = 1, experiment2 = 2, assay.type1 = "counts",
-           assay.type2 = "counts", ...) {
+  function(x, experimentY = 1, experimentX = 2, assay.typeY = "counts",
+           assay.typeX = "counts", ...) {
     # Retrieve kwargs as list
     kwargs <- list(...)
     # Check fixed arguments
@@ -135,33 +137,32 @@ setMethod("getAnansi",
       )
     }
     # Check experiments
-    mia:::.test_experiment_of_mae(x, experiment1)
-    mia:::.test_experiment_of_mae(x, experiment2)
+    mia:::.test_experiment_of_mae(x, experimentY)
+    mia:::.test_experiment_of_mae(x, experimentX)
     # Extract experiments
-    x1 <- x[[experiment1]]
-    x2 <- x[[experiment2]]
+    x1 <- x[[experimentY]]
+    x2 <- x[[experimentX]]
     # Check assays
-    mia:::.check_assay_present(assay.type1, x1)
-    mia:::.check_assay_present(assay.type2, x2)
+    mia:::.check_assay_present(assay.typeY, x1)
+    mia:::.check_assay_present(assay.typeX, x2)
     # Extract assays
-    t1 <- t(assay(x1, assay.type1))
-    t2 <- t(assay(x2, assay.type2))
+    t1 <- t(assay(x1, assay.typeY))
+    t2 <- t(assay(x2, assay.typeX))
     # Extract colData (metadata)
     coldata <- colData(x)
-    # Combine weaveWebFromTables args into list
-    web_args <- c(list(tableY = t1, tableX = t2), kwargs)
-    keep <- names(web_args) %in% c(
-      "tableY", "tableX", "dictionary",
-      "verbose", "mode", "prune", "max_sds"
-    )
+    # Combine web.default args into list
+    web_args <- c(list(x = experimentX, y = experimentY, tableX = t2, tableY = t1), kwargs)
+    # Add kegg as a default link to match anansi()
+    if(!"link" %in% names(web_args)) web_args[["link"]] <- kegg_link()
+    keep <- names(web_args) %in% c("x", "y", "tableX", "tableY", "link")
     web_args <- web_args[keep]
     # Generate web object
-    web <- do.call(weaveWebFromTables, web_args)
+    web <- do.call(web.default, web_args)
     # Combine anansi args into list
     anansi_args <- c(list(web = web, metadata = as.data.frame(coldata)), kwargs)
     keep <- names(anansi_args) %in% c(
-      "web", "formula", "groups", "metadata", "adjust.method",
-      "verbose", "ignore_dictionary", "return.format"
+      "web", "formula", "groups", "metadata", 
+      "adjust.method", "verbose", "return.format"
     )
     anansi_args <- anansi_args[keep]
     # Generate anansi output

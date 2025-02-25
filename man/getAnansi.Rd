@@ -9,10 +9,10 @@ getAnansi(x, ...)
 
 \S4method{getAnansi}{MultiAssayExperiment}(
   x,
-  experiment1 = 1,
-  experiment2 = 2,
-  assay.type1 = "counts",
-  assay.type2 = "counts",
+  experimentY = 1,
+  experimentX = 2,
+  assay.typeY = "counts",
+  assay.typeX = "counts",
   ...
 )
 }
@@ -21,21 +21,23 @@ getAnansi(x, ...)
 \code{\link[MultiAssayExperiment:MultiAssayExperiment]{MultiAssayExperiment}}.}
 
 \item{...}{additional parameters that can be passed to
-\code{\link{weaveWebFromTables}} or \code{\link{anansi}}.}
+\code{\link{web}} or \code{\link{anansi}}.}
 
-\item{experiment1}{\code{Character scalar} or \code{numeric scalar}.
-Selects the experiment 1 from \code{experiments(x)} of
-\code{MultiassayExperiment} object. (Default: \code{1})}
+\item{experimentY}{\code{Character scalar} or \code{numeric scalar}.
+Selects experiment corresponding to \code{tableY} from 
+\code{experiments(x)} of \code{MultiassayExperiment} object. (Default: 
+\code{1}, the first slot.)}
 
-\item{experiment2}{\code{Character scalar} or \code{numeric scalar}.
-Selects the experiment 2 from\code{experiments(x)} of
-\code{MultiAssayExperiment} object. (Default: \code{2})}
+\item{experimentX}{\code{Character scalar} or \code{numeric scalar}.
+Selects experiment corresponding to \code{tableX} from 
+\code{experiments(x)} of \code{MultiAssayExperiment} object. (Default: 
+\code{2}, the second slot.)}
 
-\item{assay.type1}{\code{Character scalar}. Specifies the name of the assay
-in experiment 1 to be used. (Default: \code{"counts"})}
+\item{assay.typeY}{\code{Character scalar}. Specifies the name of the assay
+in experiment Y to be used. (Default: \code{"counts"})}
 
-\item{assay.type2}{\code{Character scalar}. Specifies the name of the
-assay in experiment 2 to be used. (Default: \code{"counts"})}
+\item{assay.typeX}{\code{Character scalar}. Specifies the name of the
+assay in experiment X to be used. (Default: \code{"counts"})}
 }
 \value{
 If \code{return.format} is \code{"table"} (default), a wide format data.frame
@@ -48,15 +50,15 @@ raw output (used for testing purposes).
 \description{
 \code{getAnansi} provides a wrapper to execute the anansi pipeline on a
 \code{\link[MultiAssayExperiment:MultiAssayExperiment]{MultiAssayExperiment}}
-object. It applies the functions \code{\link{weaveWebFromTables}} and
+object. It applies the functions \code{\link{weaveWeb}} and
 \code{\link{anansi}} in the given order.
 }
 \details{
 This wrapper of \code{\link{anansi}} allows to perform a complete anansi
 analysis directly on objects of class
 \code{\link[MultiAssayExperiment:MultiAssayExperiment]{MultiAssayExperiment}}
-. First, the assays specified by \code{assay.type1} and \code{assay.type2}
-are passed to \code{\link{weaveWebFromTables}} to build an anansiWeb object.
+. First, the assays specified by \code{assay.typeY} and \code{assay.typeX}
+are passed to \code{\link{web}} to build an anansiWeb object.
 Next, this object is fed to the main \code{\link{anansi}} function to compute
 interactions between the two assays.
 }
@@ -99,25 +101,25 @@ coldata <- coldata[match(colnames(KO_tse), rownames(coldata)), ]
 
 # Combine experiments into MultiAssayExperiment object
 mae <- MultiAssayExperiment(
-  experiments = ExperimentList(metabolites = metab_se, functions = KO_tse),
+  experiments = ExperimentList(cpd = metab_se, ko = KO_tse),
   colData = coldata
 )
 
 # Perform anansi analysis
 out <- getAnansi(mae,
-  experiment1 = "metabolites", experiment2 = "functions",
-  assay.type1 = "conc", assay.type2 = "clr",
+  experimentY = "cpd", experimentX = "ko",
+  assay.typeY = "conc", assay.typeX = "clr",
   formula = ~Legend
 )
 
 # Select significant interactions
-out <- out[out$full_q.values < 0.1, ]
+out <- out[out$full_p.values < 0.05, ]
 
 # View subset of results
 head(out, 5)
 
 }
 \seealso{
-\code{\link{weaveWebFromTables}}
+\code{\link{web}}
 \code{\link{anansi}}
 }

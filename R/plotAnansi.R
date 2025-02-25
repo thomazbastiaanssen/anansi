@@ -45,6 +45,8 @@
 #' @param y_position \code{Character scalar}. Specifies the position of the y
 #'   labels. It should be either \code{"left"} or \code{"right"}.
 #'   (Default: \code{"right"})
+#'   
+#' @param ... additional arguments
 #'
 #' @details
 #' \code{plotAnansi} provides a standardised method to visualise the results
@@ -93,20 +95,20 @@
 #'
 #' # Combine experiments into MultiAssayExperiment object
 #' mae <- MultiAssayExperiment(
-#'   experiments = ExperimentList(metabolites = metab_se, functions = KO_tse),
+#'   experiments = ExperimentList(cpd = metab_se, ko = KO_tse),
 #'   colData = coldata
 #' )
 #'
 #' # Perform anansi analysis
 #' out <- getAnansi(mae,
-#'   experiment1 = "metabolites", experiment2 = "functions",
-#'   assay.type1 = "conc", assay.type2 = "clr",
+#'   experimentY = "cpd", experimentX = "ko",
+#'   assay.typeY = "conc", assay.typeX = "clr",
 #'   formula = ~Legend, translate = TRUE,
 #'   X_translation = KO_translation, Y_translation = cpd_translation
 #' )
 #'
 #' # Select significant interactions
-#' out <- out[out$full_q.values < 0.1, ]
+#' out <- out[out$full_p.values < 0.05, ]
 #'
 #' # Visualise disjointed associations filled by group
 #' plotAnansi(out,
@@ -137,7 +139,7 @@ setGeneric("plotAnansi", signature = c("x"),
 
 #' @rdname plotAnansi
 #' @export
-#' @importFrom ggplot2 ggplot theme guides labs geom_vline geom_point
+#' @importFrom ggplot2 ggplot aes theme guides labs geom_vline geom_point
 #'   scale_x_continuous scale_y_discrete scale_alpha_manual theme_bw
 #' @importFrom ggforce facet_col
 #' @importFrom stats setNames
@@ -226,7 +228,7 @@ setMethod("plotAnansi", signature = c(x = "data.frame"),
 })
 ################################ HELP FUNCTIONS ################################
 # Convert anansi wide to long format
-#' @importFrom dplyr across
+#' @importFrom dplyr across mutate
 #' @importFrom tidyr pivot_longer pivot_wider separate_wider_regex replace_na
 #' @importFrom tidyselect all_of matches
 .wide2long <- function(x){
@@ -264,10 +266,11 @@ setMethod("plotAnansi", signature = c(x = "data.frame"),
         signif.threshold, colour_by, fill_by, shape_by, size_by, y_position,
         x_lab, y_lab){
     # Create base plot
-    p <- ggplot(data = pData, aes(x = .data$x, y = .data$y,
-            colour = .data$colour, fill = .data$fill, shape = .data$shape,
-            size = .data$size, alpha = .data$alpha)) +
-        geom_vline(xintercept = 0, linetype = "dashed", colour = "red")
+    p <- ggplot(data = pData) + 
+      aes(x = .data$x, y = .data$y, colour = .data$colour, 
+          fill = .data$fill, shape = .data$shape,
+          size = .data$size, alpha = .data$alpha) +
+      geom_vline(xintercept = 0, linetype = "dashed", colour = "red")
     # Set point size and shape if not defined
     point_args <- list()
     if( !defined_args[["size_by"]] ){

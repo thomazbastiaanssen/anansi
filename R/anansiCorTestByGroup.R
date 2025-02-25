@@ -45,7 +45,7 @@ anansiCorTestByGroup <- function(web, group.vec, verbose = TRUE) {
   # first run for all groups together
   out_list$All <- anansiCorPvalue(
     web,
-    group.bool = rep(TRUE, NROW(get_tableY(web))), verbose = verbose
+    group.bool = rep(TRUE, NROW(get_tableY(web))), verbose
   )
 
   if (!is.null(all_groups)) {
@@ -58,7 +58,7 @@ anansiCorTestByGroup <- function(web, group.vec, verbose = TRUE) {
     }
     for (i in seq_along(all_groups)) {
       out_by_group <- anansiCorPvalue(
-        web, group.bool = group.vec == all_groups[i], verbose = verbose
+        web, group.bool = group.vec == all_groups[i], verbose
         )
       out_by_group@subject <- all_groups[i]
       out_list[[i + 1]] <- out_by_group

@@ -11,7 +11,6 @@ anansi(
   metadata,
   adjust.method = "BH",
   verbose = TRUE,
-  ignore_dictionary = FALSE,
   return.format = "table"
 )
 }
@@ -39,9 +38,6 @@ the base R \code{stats} package.}
 
 \item{verbose}{A boolean. Toggles whether to print diagnostic information
 while running. Useful for debugging errors on large datasets.}
-
-\item{ignore_dictionary}{A boolean. Default is FALSE. If set to TRUE, regular
-all vs all associations will be tested regardless of the dictionary.}
 
 \item{return.format}{\code{Character scalar}. Should be one of \code{"table"}
 , \code{"list"}, or \code{"raw"}. Should the output of \code{\link{anansi}}
@@ -84,10 +80,10 @@ t2 <- t(KOs.exp)
 
 # Run anansi pipeline.
 
-web <- weaveWebFromTables(
+web <- weaveWeb(
+  cpd ~ ko,
   tableY = t1,
   tableX = t2,
-  dictionary = anansi_dic
 )
 
 anansi_out <- anansi(
@@ -99,9 +95,17 @@ anansi_out <- anansi(
   verbose = TRUE
 )
 
+library(tidyr)
+
+# Use tidyr to wrangle the correlation r-values to a single column
+anansiLong <- anansi_out |> 
+  pivot_longer(starts_with("All") | contains("FMT")) |>
+  separate_wider_delim(name, delim = "_", names = c("cor_group", "param")) |> 
+  pivot_wider(names_from = param, values_from = value) 
+  
 # Only consider interactions where the entire model fits well enough.
 library(ggplot2)
-anansiLong <- anansiLong[anansiLong$full_q.values < 0.2, ]
+anansiLong <- anansiLong[anansiLong$full_p.values < 0.05, ]
 
 
 
@@ -123,14 +127,7 @@ ggplot(
 
   # facet per compound
   ggforce::facet_col(~feature_Y, space = "free", scales = "free_y") +
-
-p <- plotAnansi(anansi_out,
-                association.type = "disjointed",
-                model.var = "Legend",
-                fill_by = "group",
-                signif.threshold = 0.05,
-                x_lab = "Pearson's rho")
-p + scale_fill_manual(values = c(
+  scale_fill_manual(values = c(
     "Young yFMT" = "#2166ac",
     "Aged oFMT" = "#b2182b",
     "Aged yFMT" = "#ef8a62",
@@ -138,6 +135,24 @@ p + scale_fill_manual(values = c(
   )) +
   theme_bw()
 
-# See also ?spinToPlots
+# Using miaViz style function:
+ 
+p <- plotAnansi(anansi_out,
+                association.type = "disjointed",
+                model.var = "Legend",
+                fill_by = "group",
+                signif.threshold = 0.05,
+                x_lab = "Pearson's rho")
+p <- p +
+  scale_fill_manual(values = c(
+    "Young yFMT" = "#2166ac",
+    "Aged oFMT" = "#b2182b",
+    "Aged yFMT" = "#ef8a62",
+    "All" = "gray"
+  )) +
+  theme_bw()
+  
+  p
+
 
 }

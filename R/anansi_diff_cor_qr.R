@@ -139,14 +139,6 @@ fast.qr.resid <- function(x, y) {
   y - crossprod(t(x), qr.coef(qr(x), y))
 }
 
-#' fast resids with sorted rolling
-#' @noRd
-#'
-fast.qr.resid <- function(x, y) {
-  y - crossprod(t(x), qr.coef(qr(x), y))
-}
-
-
 #' Get df1 & 2 for f-ratio
 #' @noRd
 #'
