@@ -81,18 +81,30 @@ body {
 text-align: justify}
 </style>
 <div class="section level2">
-<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+<h2 class="unnumbered" id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
 <p>A common challenge in integrative analysis of high-dimensional data
 sets is subsequent biological interpretation. Anansi addresses this
 challenge by only considering pairwise associations that are known to
 occur <em>a priori</em>. In order to achieve this, we need to provide
 this relational information to anansi in the form of a (bi)adjacency
-matrix. In this vignette, we provide some intuition on (bi)adjacency and
-demonstrate how to provide custom relational information to anansi.</p>
+matrix.</p>
+<p>This vignette contains several sections:</p>
+<ul>
+<li>
+<a href="#sec-1">Section 1</a> introduces (bi)adjacency matrices in
+the context of the anansi framework.<br>
+</li>
+<li>
+<a href="#sec-2">Section 2</a> introduces the <code>anansiWeb</code>
+object and demonstrates how to work with it</li>
+<li>
+<a href="#sec-3">Section 3</a> discusses additional methods to
+generate (bi)adjacency matrices.</li>
+</ul>
 </div>
 <div class="section level2">
-<h2 id="understanding-adjacency-matrices">Understanding adjacency matrices<a class="anchor" aria-label="anchor" href="#understanding-adjacency-matrices"></a>
+<h2 id="sec-1">Understanding adjacency matrices<a class="anchor" aria-label="anchor" href="#sec-1"></a>
 </h2>
 <div class="section level3">
 <h3 id="example-from-biology-the-krebs-cycle">Example from Biology: The Krebs cycle<a class="anchor" aria-label="anchor" href="#example-from-biology-the-krebs-cycle"></a>
@@ -110,9 +122,10 @@ Two simplified representations of the Krebs cycle. Orange marks
 metabolites and blue marks enzymes.
 </p>
 </div>
-<div class="section level4">
-<h4 id="adjacency-matrices-allow-us-to-be-specific-in-our-questions">Adjacency matrices allow us to be specific in our questions<a class="anchor" aria-label="anchor" href="#adjacency-matrices-allow-us-to-be-specific-in-our-questions"></a>
-</h4>
+</div>
+<div class="section level3">
+<h3 id="adjacency-matrices-allow-us-to-be-specific-in-our-questions">Adjacency matrices allow us to be specific in our questions<a class="anchor" aria-label="anchor" href="#adjacency-matrices-allow-us-to-be-specific-in-our-questions"></a>
+</h3>
 <p>Let’s imagine we had (high-dimensional proxy) measurements available
 for both types. For instance, we could have transcription data for the
 enzymes and metabolomics data for the metabolites. We could represent
@@ -152,9 +165,185 @@ with cells marked with ‘X’ signifying tested feature-pairs.
 </div>
 </div>
 </div>
+<div class="section level2">
+<h2 id="sec-2">General use in anansi<a class="anchor" aria-label="anchor" href="#sec-2"></a>
+</h2>
+<p>In anansi, we work with biadjacency matrices in the
+<code>anansiWeb</code> S4 class, which consists of a biadjacency matrix,
+in this case we call it a <code>dictionary</code>, as well as two tables
+of observations that should be analysed jointly.</p>
+<p>The anansi package offers some functions that should be sufficient
+for basic analysis. To enable more advanced users to pursue non-standard
+applications, our methodology is compatible with several popular
+interfaces.</p>
+<div class="section level3">
+<h3 id="make-a-biadjacency-matrix-with-weaveweb">Make a biadjacency matrix with <code>weaveWeb()</code><a class="anchor" aria-label="anchor" href="#make-a-biadjacency-matrix-with-weaveweb"></a>
+</h3>
+<p>The recommended default interface to generate an
+<code>anansiWeb</code> object is <code><a href="../reference/web.html">weaveWeb()</a></code>. Besides a
+traditional interface, it also accepts R <code>formula</code>
+syntax.</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">form.web</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/web.html">weaveWeb</a></span><span class="op">(</span><span class="va">ec</span> <span class="op">~</span> <span class="va">ko</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">trad.web</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/web.html">weaveWeb</a></span><span class="op">(</span>y <span class="op">=</span> <span class="st">"ec"</span>, x <span class="op">=</span> <span class="st">"ko"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/identical.html" class="external-link">identical</a></span><span class="op">(</span><span class="va">form.web</span>, <span class="va">trad.web</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] TRUE</span></span></code></pre>
+<div class="section level4">
+<h4 id="weaveweb-input-link">
+<code>weaveWeb()</code> input: <code>link</code><a class="anchor" aria-label="anchor" href="#weaveweb-input-link"></a>
+</h4>
+<p><code><a href="../reference/web.html">weaveWeb()</a></code> takes additional arguments, let’s focus on
+<code>link</code>, which will take the information necessary to link
+features between input data sets. The anansi package includes such data
+for the <a href="https://www.genome.jp/kegg/" class="external-link">KEGG database</a>, two
+<code>data.frames</code>, in fact. Let’s take a look at them:</p>
+<div class="columns">
+<div class="column" style="width:45%;">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">ec2ko</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##          ec     ko</span></span>
+<span><span class="co">## 1   1.1.1.1 K00001</span></span>
+<span><span class="co">## 2   1.1.1.2 K00002</span></span>
+<span><span class="co">## 3   1.1.1.3 K00003</span></span>
+<span><span class="co">## 4   1.1.1.4 K00004</span></span>
+<span><span class="co">## 5 1.1.1.303 K00004</span></span>
+<span><span class="co">## 6   1.1.1.6 K00005</span></span></code></pre>
+</div>
+<div class="column" style="width:45%;">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">ec2cpd</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##          ec    cpd</span></span>
+<span><span class="co">## 1   1.1.1.1 C00001</span></span>
+<span><span class="co">## 2 1.1.1.115 C00001</span></span>
+<span><span class="co">## 3 1.1.1.132 C00001</span></span>
+<span><span class="co">## 4 1.1.1.136 C00001</span></span>
+<span><span class="co">## 5 1.1.1.170 C00001</span></span>
+<span><span class="co">## 6 1.1.1.186 C00001</span></span></code></pre>
+</div>
+</div>
+</div>
+<div class="section level4">
+<h4 id="structure-of-link-input">structure of <code>link</code> input<a class="anchor" aria-label="anchor" href="#structure-of-link-input"></a>
+</h4>
+<p>The <code>data.frame</code>s are structures similarly; Each column
+contains feature IDs of one type. The column names correspond to the
+types of feature IDs. If two IDs are adjacent, on the same row, it means
+the features are paired.</p>
+</div>
+</div>
+<div class="section level3">
+<h3 id="the-pre-packaged-kegg-linking-map">The pre-packaged kegg linking map<a class="anchor" aria-label="anchor" href="#the-pre-packaged-kegg-linking-map"></a>
+</h3>
+<p>By default, <code><a href="../reference/web.html">weaveWeb()</a></code> will assume to use the kegg link
+map, which consists of both <code>data.frame</code>s in a list. We can
+call it directly using <code><a href="../reference/kegg_link.html">kegg_link()</a></code>:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Only print the first few entries</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span> <span class="fu"><a href="../reference/kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">head</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [[1]]</span></span>
+<span><span class="co">##          ec     ko</span></span>
+<span><span class="co">## 1   1.1.1.1 K00001</span></span>
+<span><span class="co">## 2   1.1.1.2 K00002</span></span>
+<span><span class="co">## 3   1.1.1.3 K00003</span></span>
+<span><span class="co">## 4   1.1.1.4 K00004</span></span>
+<span><span class="co">## 5 1.1.1.303 K00004</span></span>
+<span><span class="co">## 6   1.1.1.6 K00005</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## [[2]]</span></span>
+<span><span class="co">##          ec    cpd</span></span>
+<span><span class="co">## 1   1.1.1.1 C00001</span></span>
+<span><span class="co">## 2 1.1.1.115 C00001</span></span>
+<span><span class="co">## 3 1.1.1.132 C00001</span></span>
+<span><span class="co">## 4 1.1.1.136 C00001</span></span>
+<span><span class="co">## 5 1.1.1.170 C00001</span></span>
+<span><span class="co">## 6 1.1.1.186 C00001</span></span></code></pre>
+<div class="section level4">
+<h4 id="linking-across-two-data-frame">linking across two <code>data.frame</code><a class="anchor" aria-label="anchor" href="#linking-across-two-data-frame"></a>
+</h4>
+<p>Note the column names in the two dataframes: <code>ec</code>,
+<code>cpd</code> and <code>ko</code>. Two of these correspond to the
+formula we used just used: <code>weaveWeb(ec ~ ko)</code>. We didn’t use
+the term <code>cpd</code>. Further, <code>ec</code> is present in both
+<code>data.frame</code>s.</p>
+<p>We can use weaveWeb to make a biadjacency matrix between any
+combination of one or two similarly structured <code>data.frame</code>s,
+presented as a list. In this example, other words, we can link between
+any two of <code>ec</code>, <code>cpd</code> and <code>ko</code>, in
+either order.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Formula notation</span></span>
+<span><span class="va">form.web</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/web.html">weaveWeb</a></span><span class="op">(</span><span class="va">cpd</span> <span class="op">~</span> <span class="va">ko</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Traditional</span></span>
+<span><span class="va">form.trad</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/web.html">weaveWeb</a></span><span class="op">(</span>y <span class="op">=</span> <span class="st">"ko"</span>, x <span class="op">=</span> <span class="st">"cpd"</span><span class="op">)</span></span></code></pre></div>
+</div>
+</div>
+<div class="section level3">
+<h3 id="use-custom-biadjacency-matrices-with-as_web">Use custom biadjacency matrices with as_web()<a class="anchor" aria-label="anchor" href="#use-custom-biadjacency-matrices-with-as_web"></a>
+</h3>
+<p>The most flexible way to make an <code>anansiWeb</code> object is
+through <code><a href="../reference/web.html">as_web()</a></code>:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Prep some dummy input tables</span></span>
+<span>  <span class="va">tX</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">6</span><span class="op">)</span></span>
+<span>  <span class="va">tY</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">6</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Prep biadjacency matrix    </span></span>
+<span><span class="co"># base::matrix is fine too, but will get coerced to Matrix::Matrix.</span></span>
+<span>  <span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span></span>
+<span>    data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">FALSE</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">35</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, </span>
+<span>    nrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">NCOL</a></span><span class="op">(</span><span class="va">tY</span><span class="op">)</span>, </span>
+<span>    ncol <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">NCOL</a></span><span class="op">(</span><span class="va">tX</span><span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span>  </span>
+<span><span class="co"># make the anansiWeb</span></span>
+<span>  <span class="fu"><a href="../reference/web.html">as_web</a></span><span class="op">(</span></span>
+<span>    tableY <span class="op">=</span> <span class="va">tY</span>, </span>
+<span>    tableX <span class="op">=</span> <span class="va">tX</span>,</span>
+<span>    dictionary <span class="op">=</span> <span class="va">d</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## An object of class "anansiWeb"</span></span>
+<span><span class="co">## Slot "tableY":</span></span>
+<span><span class="co">##            [,1]        [,2]        [,3]        [,4]        [,5]       [,6]</span></span>
+<span><span class="co">## [1,]  0.9353632 -1.91008747 -0.04996490  0.11819487  0.02956075  1.0743459</span></span>
+<span><span class="co">## [2,]  0.1764886 -0.27923724 -0.25148344 -1.91172049  0.54982754 -0.6650882</span></span>
+<span><span class="co">## [3,]  0.2436855 -0.31344598  0.44479712  0.86208648 -2.27411486  1.1139524</span></span>
+<span><span class="co">## [4,]  1.6235489  1.06730788  2.75541758 -0.24323674  2.68255718 -0.2458964</span></span>
+<span><span class="co">## [5,]  0.1120381  0.07003485  0.04653138 -0.20608719 -0.36122126 -1.1775633</span></span>
+<span><span class="co">## [6,] -0.1339970 -0.63912332  0.57770907  0.01917759  0.21335575 -0.9758506</span></span>
+<span><span class="co">##            [,7]</span></span>
+<span><span class="co">## [1,]  1.0650573</span></span>
+<span><span class="co">## [2,]  0.1316706</span></span>
+<span><span class="co">## [3,]  0.4886288</span></span>
+<span><span class="co">## [4,] -1.6994506</span></span>
+<span><span class="co">## [5,] -1.4707363</span></span>
+<span><span class="co">## [6,]  0.2841503</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Slot "tableX":</span></span>
+<span><span class="co">##              [,1]       [,2]        [,3]       [,4]        [,5]</span></span>
+<span><span class="co">## [1,] -1.400043517 -1.8218177  2.06502490  0.5429963  1.88850493</span></span>
+<span><span class="co">## [2,]  0.255317055 -0.2473253 -1.63098940 -0.9140748 -0.09744510</span></span>
+<span><span class="co">## [3,] -2.437263611 -0.2441996  0.51242695  0.4681544 -0.93584735</span></span>
+<span><span class="co">## [4,] -0.005571287 -0.2827054 -1.86301149  0.3629513 -0.01595031</span></span>
+<span><span class="co">## [5,]  0.621552721 -0.5536994 -0.52201251 -1.3045435 -0.82678895</span></span>
+<span><span class="co">## [6,]  1.148411606  0.6289820 -0.05260191  0.7377763 -1.51239965</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Slot "dictionary":</span></span>
+<span><span class="co">## 7 x 5 sparse Matrix of class "lgCMatrix"</span></span>
+<span><span class="co">##               </span></span>
+<span><span class="co">## [1,] . . . | |</span></span>
+<span><span class="co">## [2,] | . . | |</span></span>
+<span><span class="co">## [3,] . | | | .</span></span>
+<span><span class="co">## [4,] | . . | .</span></span>
+<span><span class="co">## [5,] . | | . .</span></span>
+<span><span class="co">## [6,] . . | | |</span></span>
+<span><span class="co">## [7,] | | . . .</span></span></code></pre>
+</div>
 </div>
 <div class="section level2">
-<h2 id="defining-an-adjacency-matrix">Defining an adjacency matrix<a class="anchor" aria-label="anchor" href="#defining-an-adjacency-matrix"></a>
+<h2 id="sec-3">Defining an adjacency matrix<a class="anchor" aria-label="anchor" href="#sec-3"></a>
 </h2>
 <p>There are numerous ways in which we can define an adjacency matrix.
 Here, we demonstrate a graph-based and matrix based approach.</p>
@@ -163,7 +352,7 @@ Here, we demonstrate a graph-based and matrix based approach.</p>
 </h3>
 <p>Importantly, (bi)adjacency matrices can be understood as graphs. Two
 common packages that deal with graphs are <a href="https://r.igraph.org/" class="external-link"><code>igraph</code></a> and <a href="https://bioconductor.org/packages/graph/" class="external-link"><code>graph</code></a>.</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r.igraph.org/" class="external-link">igraph</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Convert data.frame to graph</span></span>
@@ -174,18 +363,24 @@ enzymes and metabolites. <code>igraph</code> does this using a boolean
 vector, where <code>TRUE</code> values become columns, which corresponds
 to <code>tableX</code>, whereas <code>FALSE</code> values become rows,
 corresponding to <code>tableY</code>.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://r.igraph.org/reference/V.html" class="external-link">V</a></span><span class="op">(</span><span class="va">g</span><span class="op">)</span><span class="op">$</span><span class="va">type</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r.igraph.org/reference/V.html" class="external-link">V</a></span><span class="op">(</span><span class="va">g</span><span class="op">)</span><span class="op">$</span><span class="va">name</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">krebs_edge_df</span><span class="op">$</span><span class="va">Metabolite</span></span>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://r.igraph.org/reference/V.html" class="external-link">V</a></span><span class="op">(</span><span class="va">g</span><span class="op">)</span><span class="op">$</span><span class="va">type</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r.igraph.org/reference/V.html" class="external-link">V</a></span><span class="op">(</span><span class="va">g</span><span class="op">)</span><span class="op">$</span><span class="va">name</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">krebs_edge_df</span><span class="op">$</span><span class="va">Enzyme</span></span>
 <span></span>
 <span><span class="co"># Now that we've defined type, we can convert to biadjacency matrix: </span></span>
-<span><span class="va">bi_mat1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r.igraph.org/reference/as_biadjacency_matrix.html" class="external-link">as_biadjacency_matrix</a></span><span class="op">(</span><span class="va">g</span><span class="op">)</span></span>
+<span><span class="va">bi_mat1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r.igraph.org/reference/as_biadjacency_matrix.html" class="external-link">as_biadjacency_matrix</a></span><span class="op">(</span><span class="va">g</span>, sparse <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">bi_mat1</span>, n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">5</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##                         cis-aconitate citrate fumarate isocitrate L-malate</span></span>
-<span><span class="co">## aconitase                           1       1        0          1        0</span></span>
-<span><span class="co">## citrate synthase                    0       1        0          0        0</span></span>
-<span><span class="co">## fumarase                            0       0        1          0        1</span></span>
-<span><span class="co">## succinate dehydrogenase             0       0        1          0        0</span></span></code></pre>
+<pre><code><span><span class="co">## 4 x 5 sparse Matrix of class "dgTMatrix"</span></span>
+<span><span class="co">##               aconitase citrate synthase fumarase succinate dehydrogenase</span></span>
+<span><span class="co">## cis-aconitate         1                .        .                       .</span></span>
+<span><span class="co">## citrate               1                1        .                       .</span></span>
+<span><span class="co">## fumarate              .                .        1                       1</span></span>
+<span><span class="co">## isocitrate            1                .        .                       .</span></span>
+<span><span class="co">##               isocitrate dehydrogenase</span></span>
+<span><span class="co">## cis-aconitate                        .</span></span>
+<span><span class="co">## citrate                              .</span></span>
+<span><span class="co">## fumarate                             .</span></span>
+<span><span class="co">## isocitrate                           1</span></span></code></pre>
 <p>Though biadjacency support in <code>graph</code> is currently
 limited, We note that igraph and graph objects can be converted using
 the <code><a href="https://r.igraph.org/reference/graph_from_graphnel.html" class="external-link">graph_from_graphnel()</a></code> and <code><a href="https://r.igraph.org/reference/as_graphnel.html" class="external-link">as_graphnel()</a></code>
@@ -197,7 +392,7 @@ functions in <code>igraph</code>.</p>
 <p>We can also define a matrix directly. Conveniently, sparse matrices
 can be defined easily from our starting data. The <code>Matrix</code>
 library provides fantastic support for this.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://Matrix.R-forge.R-project.org" class="external-link">Matrix</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># For this approach, it's useful to prepare the input as two factors:</span></span>
@@ -230,7 +425,7 @@ library provides fantastic support for this.</p>
 <div class="section level2">
 <h2 id="session-info">Session info<a class="anchor" aria-label="anchor" href="#session-info"></a>
 </h2>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## R version 4.4.2 (2024-10-31)</span></span>
 <span><span class="co">## Platform: x86_64-pc-linux-gnu</span></span>
