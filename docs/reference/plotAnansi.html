@@ -85,6 +85,10 @@ visually assess relevant results from the anansi analysis.</p>
 the table format.</p></dd>
 
 
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
+<dd><p>additional arguments</p></dd>
+
+
 <dt id="arg-association-type">association.type<a class="anchor" aria-label="anchor" href="#arg-association-type"></a></dt>
 <dd><p><code>Character scalar</code>. Specifies the type of
 association to show in the plot. One of <code>"disjointed"</code>,
@@ -203,27 +207,24 @@ function should be generated from <code><a href="getAnansi.html">getAnansi</a></
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Combine experiments into MultiAssayExperiment object</span></span></span>
 <span class="r-in"><span><span class="va">mae</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://github.com/waldronlab/MultiAssayExperiment/reference/MultiAssayExperiment.html" class="external-link">MultiAssayExperiment</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  experiments <span class="op">=</span> <span class="fu"><a href="https://github.com/waldronlab/MultiAssayExperiment/reference/ExperimentList.html" class="external-link">ExperimentList</a></span><span class="op">(</span>metabolites <span class="op">=</span> <span class="va">metab_se</span>, functions <span class="op">=</span> <span class="va">KO_tse</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  experiments <span class="op">=</span> <span class="fu"><a href="https://github.com/waldronlab/MultiAssayExperiment/reference/ExperimentList.html" class="external-link">ExperimentList</a></span><span class="op">(</span>cpd <span class="op">=</span> <span class="va">metab_se</span>, ko <span class="op">=</span> <span class="va">KO_tse</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  colData <span class="op">=</span> <span class="va">coldata</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Perform anansi analysis</span></span></span>
 <span class="r-in"><span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="getAnansi.html">getAnansi</a></span><span class="op">(</span><span class="va">mae</span>,</span></span>
-<span class="r-in"><span>  experiment1 <span class="op">=</span> <span class="st">"metabolites"</span>, experiment2 <span class="op">=</span> <span class="st">"functions"</span>,</span></span>
-<span class="r-in"><span>  assay.type1 <span class="op">=</span> <span class="st">"conc"</span>, assay.type2 <span class="op">=</span> <span class="st">"clr"</span>,</span></span>
+<span class="r-in"><span>  experimentY <span class="op">=</span> <span class="st">"cpd"</span>, experimentX <span class="op">=</span> <span class="st">"ko"</span>,</span></span>
+<span class="r-in"><span>  assay.typeY <span class="op">=</span> <span class="st">"conc"</span>, assay.typeX <span class="op">=</span> <span class="st">"clr"</span>,</span></span>
 <span class="r-in"><span>  formula <span class="op">=</span> <span class="op">~</span><span class="va">Legend</span>, translate <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
 <span class="r-in"><span>  X_translation <span class="op">=</span> <span class="va">KO_translation</span>, Y_translation <span class="op">=</span> <span class="va">cpd_translation</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Operating in interaction mode</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 3 were matched between table 1 and the columns of the adjacency matrix</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 53 were matched between table 2 and the rows of the adjacency matrix</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Fitting least-squares for following model:</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ~ x + Legend + x:Legend </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Running correlations for the following groups:</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>  Aged yFMT, Aged oFMT, Young yFMT</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Select significant interactions</span></span></span>
-<span class="r-in"><span><span class="va">out</span> <span class="op">&lt;-</span> <span class="va">out</span><span class="op">[</span><span class="va">out</span><span class="op">$</span><span class="va">full_q.values</span> <span class="op">&lt;</span> <span class="fl">0.1</span>, <span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">out</span> <span class="op">&lt;-</span> <span class="va">out</span><span class="op">[</span><span class="va">out</span><span class="op">$</span><span class="va">full_p.values</span> <span class="op">&lt;</span> <span class="fl">0.05</span>, <span class="op">]</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Visualise disjointed associations filled by group</span></span></span>
 <span class="r-in"><span><span class="fu">plotAnansi</span><span class="op">(</span><span class="va">out</span>,</span></span>
@@ -231,14 +232,14 @@ function should be generated from <code><a href="getAnansi.html">getAnansi</a></
 <span class="r-in"><span>           model.var <span class="op">=</span> <span class="st">"Legend"</span>,</span></span>
 <span class="r-in"><span>           signif.threshold <span class="op">=</span> <span class="fl">0.05</span>,</span></span>
 <span class="r-in"><span>           fill_by <span class="op">=</span> <span class="st">"group"</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> 'x' is an empty data.frame</span>
+<span class="r-plt img"><img src="plotAnansi-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span>           </span></span>
 <span class="r-in"><span><span class="co"># Visualise full associations filled by Legend</span></span></span>
 <span class="r-in"><span><span class="fu">plotAnansi</span><span class="op">(</span><span class="va">out</span>,</span></span>
 <span class="r-in"><span>           association.type <span class="op">=</span> <span class="st">"full"</span>,</span></span>
 <span class="r-in"><span>           signif.threshold <span class="op">=</span> <span class="fl">0.05</span>,</span></span>
 <span class="r-in"><span>           fill_by <span class="op">=</span> <span class="st">"Legend"</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> 'x' is an empty data.frame</span>
+<span class="r-plt img"><img src="plotAnansi-2.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span>           </span></span>
 </code></pre></div>
     </div>

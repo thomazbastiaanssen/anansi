@@ -152,12 +152,6 @@
         <dd>Dictionary to link KEGG compounds to KEGG orthologues</dd>
       </dl><dl><dt>
 
-          <code><a href="assessWebCall.html">assessWebCall()</a></code>
-
-        </dt>
-        <dd>Helper function to assess the input feature tables</dd>
-      </dl><dl><dt>
-
           <code><a href="clr_imputed.html">clr_imputed()</a></code>
 
         </dt>
@@ -176,24 +170,6 @@
         <dd>Lookup table to convert KEGG compound IDs to their human-readable counterparts</dd>
       </dl><dl><dt>
 
-          <code><a href="deliver_web_cases.html">deliver_web_cases()</a></code>
-
-        </dt>
-        <dd>Produce a biadjacency matrix given tables and a dictionary</dd>
-      </dl><dl><dt>
-
-          <code><a href="ec2cpd.html">ec2cpd</a></code>
-
-        </dt>
-        <dd>data.frame linking KEGG compounds to IDs of interacting ecs</dd>
-      </dl><dl><dt>
-
-          <code><a href="ec2ko.html">ec2ko</a></code>
-
-        </dt>
-        <dd>data.frame linking KEGG orthologues to IDs of interacting ecs</dd>
-      </dl><dl><dt>
-
           <code><a href="frame.tale.html">frame.tale()</a></code>
 
         </dt>
@@ -204,6 +180,12 @@
 
         </dt>
         <dd>anansi wrapper for the MultiAssayExperiment class</dd>
+      </dl><dl><dt>
+
+          <code><a href="getWeb.html">getWeb(<i>&lt;MultiAssayExperiment&gt;</i>)</a></code>
+
+        </dt>
+        <dd>weaveWeb wrapper for the MultiAssayExperiment class</dd>
       </dl><dl><dt>
 
           <code><a href="impute_zeroes.html">impute_zeroes()</a></code>
@@ -218,34 +200,10 @@
         <dd>Is character, factor or ordered factor</dd>
       </dl><dl><dt>
 
-          <code><a href="makeAdjacencyMatrix.html">makeAdjacencyMatrix()</a></code>
+          <code><a href="kegg_link.html">ec2ko</a></code> <code><a href="kegg_link.html">ec2cpd</a></code> <code><a href="kegg_link.html">kegg_link()</a></code>
 
         </dt>
-        <dd>Starting point to wrangle anansi dictionary list into binary adjacency matrix</dd>
-      </dl><dl><dt>
-
-          <code><a href="makeAdjacencyMatrixFromGroupMemberList.html">makeAdjacencyMatrixFromGroupMemberList()</a></code>
-
-        </dt>
-        <dd>Wrangle anansi dictionary list into binary adjacency matrix</dd>
-      </dl><dl><dt>
-
-          <code><a href="makeAdjacencyMatrixFromList.html">makeAdjacencyMatrixFromList()</a></code>
-
-        </dt>
-        <dd>Wrangle anansi dictionary list into binary adjacency matrix</dd>
-      </dl><dl><dt>
-
-          <code><a href="matrixOrMatrix-class.html">matrixOrMatrix-class</a></code>
-
-        </dt>
-        <dd>base or Matrix</dd>
-      </dl><dl><dt>
-
-          <code><a href="mock_dictionary.html">mock_dictionary()</a></code>
-
-        </dt>
-        <dd>Helper function to make a mock dictionary</dd>
+        <dd>Use linking data from the KEGG database.</dd>
       </dl><dl><dt>
 
           <code><a href="named_group_list.html">named_group_list()</a></code>
@@ -266,34 +224,16 @@
         <dd>Dissociation plot</dd>
       </dl><dl><dt>
 
-          <code><a href="prune_dictionary_for_exclusivity.html">prune_dictionary_for_exclusivity()</a></code>
-
-        </dt>
-        <dd>Kick out particularly large groups before wrangling the dictionary list into a binary adjacency matrix.</dd>
-      </dl><dl><dt>
-
           <code><a href="softmax.html">softmax()</a></code>
 
         </dt>
         <dd>Undo CLR transformation with softmax</dd>
       </dl><dl><dt>
 
-          <code><a href="weaveWebFromTables.html">weaveWebFromTables()</a></code>
-
-        </dt>
-        <dd>Create an anansiWeb object from two 'omics tables and a dictionary</dd>
-      </dl><dl><dt>
-
-          <code><a href="web.html">web()</a></code> <code><a href="web.html">kegg_web()</a></code>
+          <code><a href="web.html">web(<i>&lt;formula&gt;</i>)</a></code> <code><a href="web.html">web(<i>&lt;default&gt;</i>)</a></code> <code><a href="web.html">as_web()</a></code> <code><a href="web.html">kegg_web()</a></code> <code><a href="web.html">weaveWeb()</a></code>
 
         </dt>
         <dd>Make a web</dd>
-      </dl><dl><dt>
-
-          <code><a href="web_missing_link.html">web_missing_link()</a></code>
-
-        </dt>
-        <dd>Make a full web; for all vs all association testing</dd>
       </dl></div>
   </main></div>
 

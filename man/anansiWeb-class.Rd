@@ -12,13 +12,13 @@ data throughout the \code{anansi} pipeline.
 \section{Slots}{
 
 \describe{
-\item{\code{tableY}}{A matrix of metabolomics data. Rows are samples and columns are
-features.}
+\item{\code{tableY}}{\code{matrix} of metabolomics data. Rows are samples and columns
+are features.}
 
-\item{\code{tableX}}{A matrix of functional data. Rows are samples and columns are
-features.}
+\item{\code{tableX}}{\code{matrix} of functional data. Rows are samples and columns 
+are features.}
 
-\item{\code{dictionary}}{A binary adjacency matrix. Typically generated using the
-\code{weaveWebFromTables()} function.}
+\item{\code{dictionary}}{\code{Matrix}, binary adjacency matrix. Optionally sparse. 
+Typically generated using the\code{weaveWeb()} function.}
 }}
 

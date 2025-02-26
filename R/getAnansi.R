@@ -119,28 +119,12 @@ setMethod("getAnansi",
         call. = FALSE
       )
     }
-    # Check experiments
-    mia:::.test_experiment_of_mae(x, experimentY)
-    mia:::.test_experiment_of_mae(x, experimentX)
-    # Extract experiments
-    x1 <- x[[experimentY]]
-    x2 <- x[[experimentX]]
-    # Check assays
-    mia:::.check_assay_present(assay.typeY, x1)
-    mia:::.check_assay_present(assay.typeX, x2)
-    # Extract assays
-    t1 <- t(assay(x1, assay.typeY))
-    t2 <- t(assay(x2, assay.typeX))
+    # Add kegg as a default link to match anansi()
+    if(!"link" %in% names(kwargs)) link <- kegg_link()
+    # Generate web object
+    web <- getWeb(x, experimentY, experimentX, assay.typeY, assay.typeX, link)
     # Extract colData (metadata)
     coldata <- colData(x)
-    # Combine web.default args into list
-    web_args <- c(list(x = experimentX, y = experimentY, tableX = t2, tableY = t1), kwargs)
-    # Add kegg as a default link to match anansi()
-    if(!"link" %in% names(web_args)) web_args[["link"]] <- kegg_link()
-    keep <- names(web_args) %in% c("x", "y", "tableX", "tableY", "link")
-    web_args <- web_args[keep]
-    # Generate web object
-    web <- do.call(web.default, web_args)
     # Combine anansi args into list
     anansi_args <- c(list(web = web, metadata = as.data.frame(coldata)), kwargs)
     keep <- names(anansi_args) %in% c(

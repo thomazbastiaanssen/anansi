@@ -42,14 +42,14 @@
 #' web(x = "ko", y = "ec", link = ec2ko)
 #' web(ec ~ cpd, link = ec2cpd)
 #' 
-#' # Constuct an anansiWeb object from components:
+#' # use as_web() to Constuct an anansiWeb object from components:
 #' 
 #' tX <- `colnames<-`(replicate(5, (rnorm(36))), letters[1:5])
 #' tY <- `colnames<-`(replicate(3, (rnorm(36))), LETTERS[1:3])
 #' d <- matrix(TRUE, nrow = NCOL(tY), ncol = NCOL(tX),
 #'             dimnames = list(colnames(tY), colnames(tX)))
 #' 
-#' as_web(tY, tX, d)
+#' as_web(tableX = tX, tableY = tY, dictionary = d)
 #'
 #' # A wrapper is available for kegg ko, ec and cpd data
 #' generic      <- web(cpd ~ ko, link = kegg_link())
@@ -138,14 +138,15 @@ web.formula <- function(
 #' @returns an \code{anansiWeb} object
 #' @export
 #' 
-as_web <- function(tableY, tableX, dictionary) {
+as_web <- function(tableX, tableY, dictionary) {
   # coerce
   if(!is(dictionary, "Matrix")) dictionary <- Matrix(dictionary)
-  if(!is(tableY, "matrix")) tableY <- as.matrix(tableY)
   if(!is(tableX, "matrix")) tableX <- as.matrix(tableX)
+  if(!is(tableY, "matrix")) tableY <- as.matrix(tableY)
+  
   # check validity
-  stopifnot("'tableY' and 'tableX' need same number of rows (observations)" =
-            NROW(tableY) == NROW(tableX))
+  stopifnot("'tableX' and 'tableY' need same number of rows (observations)" =
+            NROW(tableX) == NROW(tableY))
   stopifnot("cols in 'tableY' need same amount as rows in dictionary" =
               NCOL(tableY) == NROW(dictionary))
   stopifnot("cols in 'tableX' need same amount as rows in dictionary" =

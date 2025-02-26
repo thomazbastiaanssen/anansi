@@ -9,7 +9,7 @@ test_that("full and disjointed parameters correspond to stats::lm()", {
     categorical = sample(c("X", "Y", "Z"), size = 36, replace = TRUE)
   )
 
-  web <- new("anansiWeb",
+  web <- as_web(
     tableY = tY,
     tableX = tX,
     dictionary = d

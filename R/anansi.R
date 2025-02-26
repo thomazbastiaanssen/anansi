@@ -133,6 +133,7 @@
 anansi <- function(web, formula = ~1, groups = NULL, metadata,
                    adjust.method = "BH", verbose = TRUE, 
                    return.format = "table") {
+  return.format <- match.arg(return.format, choices = c("table", "list", "raw"))
 
   # generate anansiYarn input object
   input <- prepInput(

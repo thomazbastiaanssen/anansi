@@ -13,7 +13,7 @@
 
 \method{web}{default}(x, y, link = NULL, tableX = NULL, tableY = NULL, ...)
 
-as_web(tableY, tableX, dictionary)
+as_web(tableX, tableY, dictionary)
 
 kegg_web(x, ...)
 
@@ -73,14 +73,14 @@ weaveWeb(cpd ~ ko)
 web(x = "ko", y = "ec", link = ec2ko)
 web(ec ~ cpd, link = ec2cpd)
 
-# Constuct an anansiWeb object from components:
+# use as_web() to Constuct an anansiWeb object from components:
 
 tX <- `colnames<-`(replicate(5, (rnorm(36))), letters[1:5])
 tY <- `colnames<-`(replicate(3, (rnorm(36))), LETTERS[1:3])
 d <- matrix(TRUE, nrow = NCOL(tY), ncol = NCOL(tX),
             dimnames = list(colnames(tY), colnames(tX)))
 
-as_web(tY, tX, d)
+as_web(tableX = tX, tableY = tY, dictionary = d)
 
 # A wrapper is available for kegg ko, ec and cpd data
 generic      <- web(cpd ~ ko, link = kegg_link())

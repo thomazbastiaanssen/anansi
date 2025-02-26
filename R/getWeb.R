@@ -105,16 +105,14 @@ setMethod("getWeb",
             # Extract assays
             tableY <- t(assay(tableY, assay.typeY))
             tableX <- t(assay(tableX, assay.typeX))
-            # Extract colData (metadata)
-            coldata <- colData(x)
             # Combine web.default args into list
             web_args <- c(list(x = experimentX, y = experimentY, 
-                               tableX, tableY, link), kwargs)
+                               tableX = tableX, tableY = tableY), kwargs)
             # Add kegg as a default link to match anansi()
             if(!"link" %in% names(web_args)) web_args[["link"]] <- kegg_link()
             keep <- names(web_args) %in% c("x", "y", "tableX", "tableY", "link")
             web_args <- web_args[keep]
             # Generate web object
-            web <- do.call(web.default, web_args)
+            do.call(web.default, web_args)
           }
 )
