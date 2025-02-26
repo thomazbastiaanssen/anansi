@@ -4,25 +4,9 @@
 #' \code{\link[MultiAssayExperiment:MultiAssayExperiment]{MultiAssayExperiment}}
 #' object. It applies the functions \code{\link{weaveWeb}} and
 #' \code{\link{anansi}} in the given order.
+#' @usage NULL
 #'
-#' @param x a
-#' \code{\link[MultiAssayExperiment:MultiAssayExperiment]{MultiAssayExperiment}}.
-#'
-#' @param experimentY \code{Character scalar} or \code{numeric scalar}.
-#'   Selects experiment corresponding to \code{tableY} from 
-#'   \code{experiments(x)} of \code{MultiassayExperiment} object. (Default: 
-#'   \code{1}, the first slot.)
-#'
-#' @param experimentX \code{Character scalar} or \code{numeric scalar}.
-#'   Selects experiment corresponding to \code{tableX} from 
-#'   \code{experiments(x)} of \code{MultiAssayExperiment} object. (Default: 
-#'   \code{2}, the second slot.)
-#'
-#' @param assay.typeY \code{Character scalar}. Specifies the name of the assay
-#'   in experiment Y to be used. (Default: \code{"counts"})
-#'
-#' @param assay.typeX  \code{Character scalar}. Specifies the name of the
-#'   assay in experiment X to be used. (Default: \code{"counts"})
+#' @inheritParams getWeb
 #'
 #' @param ... additional parameters that can be passed to
 #'   \code{\link{web}} or \code{\link{anansi}}.
@@ -53,7 +37,6 @@
 #'
 #' # Load data
 #' data("FMT_data", package = "anansi")
-#' data("dictionary", package = "anansi")
 #'
 #' # Convert to (Tree)SummarizedExperiment objects
 #' metab_se <- SummarizedExperiment(assays = SimpleList(conc = as.matrix(FMT_metab)))

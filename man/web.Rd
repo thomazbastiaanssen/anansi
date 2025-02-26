@@ -4,6 +4,7 @@
 \alias{web.formula}
 \alias{web.default}
 \alias{web}
+\alias{as_web}
 \alias{kegg_web}
 \alias{weaveWeb}
 \title{Make a web}
@@ -11,6 +12,8 @@
 \method{web}{formula}(formula, link = NULL, tableX = NULL, tableY = NULL, ...)
 
 \method{web}{default}(x, y, link = NULL, tableX = NULL, tableY = NULL, ...)
+
+as_web(tableY, tableX, dictionary)
 
 kegg_web(x, ...)
 
@@ -21,38 +24,43 @@ weaveWeb(x, link = kegg_link(), ...)
 format; assigns y to rows and columns to x. Equivalent to using \code{x} and
 \code{y} arguments.}
 
-\item{link}{* a character vector, \code{"none"}, or
- 
-* a \code{data.frame} with two columns, or
+\item{link}{One of the following:
+\itemize{
+ \item Character scalar with value "none"
+ \item data.frame with two columns
+ \item list with two such data.frames
+}}
 
-* a list of two such \code{data.frame}s.}
-
-\item{tableX}{A table containing features of interest. Rows should be samples
-and columns should be features. The X refer to the position of the features 
-in a formula: Y ~ X.}
-
-\item{tableY}{A table containing features of interest. Rows should be samples
-and columns should be features. The Y refers to the position of the features 
-in a formula: Y ~ X.}
+\item{tableY, tableX}{A table containing features of interest. Rows should be 
+samples and columns should be features. Y and X refer to the position of the 
+features in a formula: Y ~ X.}
 
 \item{...}{further arguments.}
 
 \item{x}{name of column, \code{tableX}, feature type.}
 
 \item{y}{name of row, \code{tableY}, feature type.}
+
+\item{dictionary}{A binary adjacency matrix of class \code{Matrix}, or 
+coercible to \code{Matrix}}
 }
 \value{
 an \code{anansiWeb} object, with sparse binary biadjacency matrix 
 with features from \code{y} as rows and features from \code{x} as columns in 
 \code{dictionary} slot.
+
+an \code{anansiWeb} object
 }
 \description{
-Generate a biadjacency matrix linking the features between two tables. 
+Generate a biadjacency matrix, linking the features between two tables. 
+Return an \code{anansiWeb} object which contains all three. 
 
 \code{weaveWeb()} is for general use and has flexible default settings. 
 
 \code{kegg_web()} is a wrapper that sets \code{link} to \code{kegg_link()}. 
-All variants are special cases of \code{web()}.
+All variants are special cases of \code{web()}.  
+
+\code{as_web()} constructs an \code{anansiWeb} object from three tables.
 }
 \details{
 If the \code{link} argument is \code{"none"}, all features will be considered
@@ -64,6 +72,15 @@ If the \code{link} argument is \code{"none"}, all features will be considered
 weaveWeb(cpd ~ ko)
 web(x = "ko", y = "ec", link = ec2ko)
 web(ec ~ cpd, link = ec2cpd)
+
+# Constuct an anansiWeb object from components:
+
+tX <- `colnames<-`(replicate(5, (rnorm(36))), letters[1:5])
+tY <- `colnames<-`(replicate(3, (rnorm(36))), LETTERS[1:3])
+d <- matrix(TRUE, nrow = NCOL(tY), ncol = NCOL(tX),
+            dimnames = list(colnames(tY), colnames(tX)))
+
+as_web(tY, tX, d)
 
 # A wrapper is available for kegg ko, ec and cpd data
 generic      <- web(cpd ~ ko, link = kegg_link())

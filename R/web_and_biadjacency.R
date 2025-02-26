@@ -2,30 +2,30 @@
 #' @name web
 #' @rdname web
 #' @description
-#' Generate a biadjacency matrix linking the features between two tables. 
+#' Generate a biadjacency matrix, linking the features between two tables. 
+#' Return an \code{anansiWeb} object which contains all three. 
 #' 
 #' \code{weaveWeb()} is for general use and has flexible default settings. 
 #' 
 #' \code{kegg_web()} is a wrapper that sets \code{link} to \code{kegg_link()}. 
-#' All variants are special cases of \code{web()}.   
+#' All variants are special cases of \code{web()}.  
+#' 
+#' \code{as_web()} constructs an \code{anansiWeb} object from three tables.  
 #'
 #' @param x name of column, \code{tableX}, feature type.
 #' @param y name of row, \code{tableY}, feature type.
 #' @param formula a formula of the form y ~ x, denoting desired output
 #' format; assigns y to rows and columns to x. Equivalent to using \code{x} and
 #' \code{y} arguments.
-#' @param link 
-#'   * a character vector, \code{"none"}, or
-#'    
-#'   * a \code{data.frame} with two columns, or
-#'   
-#'   * a list of two such \code{data.frame}s.
-#' @param tableY A table containing features of interest. Rows should be samples
-#' and columns should be features. The Y refers to the position of the features 
-#' in a formula: Y ~ X.
-#' @param tableX A table containing features of interest. Rows should be samples
-#' and columns should be features. The X refer to the position of the features 
-#' in a formula: Y ~ X.
+#' @param link One of the following:
+#' \itemize{
+#'  \item Character scalar with value "none"
+#'  \item data.frame with two columns
+#'  \item list with two such data.frames
+#' }
+#' @param tableY,tableX A table containing features of interest. Rows should be 
+#' samples and columns should be features. Y and X refer to the position of the 
+#' features in a formula: Y ~ X.
 #' @param ... further arguments.
 #' @details 
 #' If the \code{link} argument is \code{"none"}, all features will be considered
@@ -41,6 +41,15 @@
 #' weaveWeb(cpd ~ ko)
 #' web(x = "ko", y = "ec", link = ec2ko)
 #' web(ec ~ cpd, link = ec2cpd)
+#' 
+#' # Constuct an anansiWeb object from components:
+#' 
+#' tX <- `colnames<-`(replicate(5, (rnorm(36))), letters[1:5])
+#' tY <- `colnames<-`(replicate(3, (rnorm(36))), LETTERS[1:3])
+#' d <- matrix(TRUE, nrow = NCOL(tY), ncol = NCOL(tX),
+#'             dimnames = list(colnames(tY), colnames(tX)))
+#' 
+#' as_web(tY, tX, d)
 #'
 #' # A wrapper is available for kegg ko, ec and cpd data
 #' generic      <- web(cpd ~ ko, link = kegg_link())
@@ -121,6 +130,32 @@ web.formula <- function(
 
   web.default(x = terms[2], y = terms[1], link, tableX, tableY)
 }
+
+#' @rdname web
+#' @param dictionary A binary adjacency matrix of class \code{Matrix}, or 
+#' coercible to \code{Matrix}
+#' @importFrom Matrix Matrix
+#' @returns an \code{anansiWeb} object
+#' @export
+#' 
+as_web <- function(tableY, tableX, dictionary) {
+  # coerce
+  if(!is(dictionary, "Matrix")) dictionary <- Matrix(dictionary)
+  if(!is(tableY, "matrix")) tableY <- as.matrix(tableY)
+  if(!is(tableX, "matrix")) tableX <- as.matrix(tableX)
+  # check validity
+  stopifnot("'tableY' and 'tableX' need same number of rows (observations)" =
+            NROW(tableY) == NROW(tableX))
+  stopifnot("cols in 'tableY' need same amount as rows in dictionary" =
+              NCOL(tableY) == NROW(dictionary))
+  stopifnot("cols in 'tableX' need same amount as rows in dictionary" =
+              NCOL(tableX) == NCOL(dictionary))
+  # return anansiWeb 
+    new("anansiWeb",
+        tableY     = tableY,
+        tableX     = tableX,
+        dictionary = dictionary)
+    }
 
 #' @rdname web
 #' @export

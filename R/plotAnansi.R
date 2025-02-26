@@ -139,7 +139,7 @@ setGeneric("plotAnansi", signature = c("x"),
 
 #' @rdname plotAnansi
 #' @export
-#' @importFrom ggplot2 ggplot aes theme guides labs geom_vline geom_point
+#' @importFrom ggplot2 ggplot aes .data theme guides labs geom_vline geom_point
 #'   scale_x_continuous scale_y_discrete scale_alpha_manual theme_bw
 #' @importFrom ggforce facet_col
 #' @importFrom stats setNames
