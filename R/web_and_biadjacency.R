@@ -134,13 +134,14 @@ web.formula <- function(
 #' @rdname web
 #' @param dictionary A binary adjacency matrix of class \code{Matrix}, or 
 #' coercible to \code{Matrix}
-#' @importFrom Matrix Matrix
+#' @importFrom Matrix Matrix drop0
 #' @returns an \code{anansiWeb} object
 #' @export
 #' 
 as_web <- function(tableX, tableY, dictionary) {
   # coerce
-  if(!is(dictionary, "Matrix")) dictionary <- Matrix(dictionary)
+  if(!is(dictionary, "Matrix")) dictionary <- 
+      drop0(Matrix(dictionary, sparse = TRUE))
   if(!is(tableX, "matrix")) tableX <- as.matrix(tableX)
   if(!is(tableY, "matrix")) tableY <- as.matrix(tableY)
   
@@ -238,12 +239,13 @@ web_from_2_dfs <- function(x.df, y.df, x.ids, y.ids){
 }
 
 #' @importFrom igraph vertex_attr<- vertex_attr graph_from_data_frame as_biadjacency_matrix
+#' @importFrom Matrix drop0
 #' @noRd
 #'
 df_to_sparse_biadjacency_matrix <- function(x){
   x.g <- graph_from_data_frame(x, directed = FALSE)
   vertex_attr(x.g, name = "type") <- vertex_attr(x.g, "name") %in% x[,1L]
-  m <- as_biadjacency_matrix(x.g, sparse = TRUE)
+  m <- drop0(as_biadjacency_matrix(x.g, sparse = TRUE))
   m <- m[order(rownames(m)),order(colnames(m))]
   return(m)
 }

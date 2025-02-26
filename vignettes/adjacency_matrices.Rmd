@@ -23,16 +23,23 @@ library(anansi)
 library(ggplot2)
 ```
 
-# Introduction
+# Introduction {-}
 A common challenge in integrative analysis of high-dimensional data sets is 
 subsequent biological interpretation. Anansi addresses this challenge by only 
 considering pairwise associations that are known to occur *a priori*. In order
 to achieve this, we need to provide this relational information to anansi in the
-form of a (bi)adjacency matrix. In this vignette, we provide some intuition on 
-(bi)adjacency and demonstrate how to provide custom relational information to 
-anansi. 
+form of a (bi)adjacency matrix. 
 
-# Understanding adjacency matrices
+This vignette contains several sections:
+
+* [Section 1](#sec-1) introduces (bi)adjacency matrices in the context of the 
+anansi framework.  
+* [Section 2](#sec-2) introduces the `anansiWeb` object and demonstrates how to 
+work with it
+* [Section 3](#sec-3) discusses additional methods to generate (bi)adjacency 
+matrices. 
+
+# Understanding adjacency matrices {#sec-1}
 
 ## Example from Biology: The Krebs cycle
 Recall that the [citric acid cycle, or Krebs cycle](https://en.wikipedia.org/wiki/Citric_acid_cycle),
@@ -82,7 +89,7 @@ ggplot(kd) +
 
 ```
 
-### Adjacency matrices allow us to be specific in our questions
+## Adjacency matrices allow us to be specific in our questions
 
 Let's imagine we had (high-dimensional proxy) measurements 
 available for both types. For instance, we could have transcription data for the 
@@ -183,7 +190,106 @@ ggplot(kd) +
 
 ```
 
-# Defining an adjacency matrix
+# General use in anansi {#sec-2}
+In anansi, we work with biadjacency matrices in the `anansiWeb` S4 class, which 
+consists of a biadjacency matrix, in this case we call it a `dictionary`, as 
+well as two tables of observations that should be analysed jointly. 
+
+The anansi package offers some functions that should be sufficient for basic 
+analysis. To enable more advanced users to pursue non-standard applications, our
+methodology is compatible with several popular interfaces. 
+
+## Make a biadjacency matrix with `weaveWeb()`
+The recommended default interface to generate an `anansiWeb` object is 
+`weaveWeb()`. Besides a traditional interface, it also accepts R `formula` 
+syntax.  
+```{r weaveWeb-intro}
+form.web <- weaveWeb(ec ~ ko)
+
+trad.web <- weaveWeb(y = "ec", x = "ko")
+
+identical(form.web, trad.web)
+```
+### `weaveWeb()` input: `link`
+
+`weaveWeb()` takes additional arguments, let's focus on `link`, which will take 
+the information necessary to link features between input data sets. The anansi 
+package includes such data for the [KEGG database](https://www.genome.jp/kegg/), 
+two `data.frames`, in fact. Let's take a look at them:
+
+:::::::::::::: {.columns}
+::: {.column width="45%"}
+
+```{r peakleft}
+head(ec2ko)
+```
+
+:::
+::: {.column width="45%"}
+
+```{r peakright}
+head(ec2cpd)
+```
+
+:::
+::::::::::::::
+
+### structure of `link` input
+The `data.frame`s are structures similarly; Each column contains feature IDs of 
+one type. The column names correspond to the types of feature IDs. If two IDs 
+are adjacent, on the same row, it means the features are paired. 
+
+## The pre-packaged kegg linking map
+By default, `weaveWeb()` will assume to use the kegg link map, which consists of
+both `data.frame`s in a list. We can call it directly using `kegg_link()`: 
+```{r kegg_web}
+# Only print the first few entries
+lapply( kegg_link(), head)
+
+```
+
+### linking across two `data.frame`
+Note the column names in the two dataframes: `ec`, `cpd` and `ko`. Two of these 
+correspond to the formula we used just used: `weaveWeb(ec ~ ko)`. We didn't use 
+the term `cpd`. Further, `ec` is present in both `data.frame`s. 
+
+We can use weaveWeb to make a biadjacency matrix between any combination of one 
+or two similarly structured `data.frame`s, presented as a list. In this example,
+other words, we can link between any two of `ec`, `cpd` and `ko`, in either 
+order. 
+
+```{r web_formula}
+# Formula notation
+form.web <- weaveWeb(cpd ~ ko)
+
+# Traditional
+form.trad <- weaveWeb(y = "ko", x = "cpd")
+```
+
+## Use custom biadjacency matrices with as_web()
+The most flexible way to make an `anansiWeb` object is through `as_web()`: 
+```{r as_web}
+# Prep some dummy input tables
+  tX <- matrix(rnorm(30), nrow = 6)
+  tY <- matrix(rnorm(42), nrow = 6)
+
+# Prep biadjacency matrix    
+# base::matrix is fine too, but will get coerced to Matrix::Matrix.
+  d <- matrix(
+    data = sample(x = c(TRUE, FALSE), size = 35, replace = TRUE), 
+    nrow = NCOL(tY), 
+    ncol = NCOL(tX)
+    )
+  
+# make the anansiWeb
+  as_web(
+    tableY = tY, 
+    tableX = tX,
+    dictionary = d
+  )
+```
+
+# Defining an adjacency matrix {#sec-3}
 There are numerous ways in which we can define an adjacency matrix. Here, we 
 demonstrate a graph-based and matrix based approach.
 
@@ -220,10 +326,10 @@ become columns, which corresponds to `tableX`, whereas `FALSE` values become
 rows, corresponding to `tableY`.
 
 ```{r igraph-2, message=FALSE}
-V(g)$type <- V(g)$name %in% krebs_edge_df$Metabolite
+V(g)$type <- V(g)$name %in% krebs_edge_df$Enzyme
 
 # Now that we've defined type, we can convert to biadjacency matrix: 
-bi_mat1 <- as_biadjacency_matrix(g)
+bi_mat1 <- as_biadjacency_matrix(g, sparse = TRUE)
 
 head(bi_mat1, n = c(4, 5))
 ```

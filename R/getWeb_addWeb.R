@@ -29,10 +29,18 @@ setGeneric("getWeb", signature = c("x"),
 #'  \item list with two such data.frames
 #' }
 #' 
+#' @param force_new \code{boolean} If x already has a dictionary \code{Matrix} 
+#' in metadata, ignore it and generate a new object anyway? (Default: FALSE).
 #' @param ... additional parameters that can be passed to \code{\link{web}}.
 #'
-#' @importFrom MultiAssayExperiment MultiAssayExperiment
+#' @returns an \code{anansiWeb} object, with sparse binary biadjacency matrix 
+#' with features from \code{y} as rows and features from \code{x} as columns in 
+#' \code{dictionary} slot. If x already contains a dictionary in metadata, use 
+#' that one, unless \code{force_new = TRUE}.
+#' 
+#' @importFrom MultiAssayExperiment MultiAssayExperiment metadata metadata<-
 #' @importFrom SummarizedExperiment assay colData
+#' @importClassesFrom Matrix Matrix
 #' 
 #' @details
 #' This wrapper of \code{\link{weaveWeb}} allows to generate an 
@@ -90,7 +98,7 @@ setMethod("getWeb",
           signature = c(x = "MultiAssayExperiment"),
           function(x, experimentY = 1, experimentX = 2, 
                    assay.typeY = "counts", assay.typeX = "counts", 
-                   link = NULL, ...) {
+                   link = NULL, force_new = FALSE, ...) {
             # Retrieve kwargs as list
             kwargs <- list(...)
             # Check experiments
@@ -105,6 +113,11 @@ setMethod("getWeb",
             # Extract assays
             tableY <- t(assay(tableY, assay.typeY))
             tableX <- t(assay(tableX, assay.typeX))
+            # Check if x already contains a dictionary
+            m <- metadata(x)
+            if(!force_new && "dictionary" %in% names(m)) return(
+              as_web( tableX, tableY, m[["dictionary"]] )
+              )             
             # Combine web.default args into list
             web_args <- c(list(x = experimentX, y = experimentY, 
                                tableX = tableX, tableY = tableY), kwargs)
