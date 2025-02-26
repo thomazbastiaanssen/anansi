@@ -78,8 +78,7 @@ object. It applies the functions <code><a href="web.html">weaveWeb</a></code> an
 
 
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
-<dd><p>a
-<code><a href="https://github.com/waldronlab/MultiAssayExperiment/reference/MultiAssayExperiment.html" class="external-link">MultiAssayExperiment</a></code>.</p></dd>
+<dd><p>a <code><a href="https://github.com/waldronlab/MultiAssayExperiment/reference/MultiAssayExperiment.html" class="external-link">MultiAssayExperiment</a></code>.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
@@ -87,28 +86,16 @@ object. It applies the functions <code><a href="web.html">weaveWeb</a></code> an
 <code><a href="web.html">web</a></code> or <code><a href="anansi.html">anansi</a></code>.</p></dd>
 
 
-<dt id="arg-experimenty">experimentY<a class="anchor" aria-label="anchor" href="#arg-experimenty"></a></dt>
-<dd><p><code>Character scalar</code> or <code>numeric scalar</code>.
-Selects experiment corresponding to <code>tableY</code> from
-<code>experiments(x)</code> of <code>MultiassayExperiment</code> object. (Default:
-<code>1</code>, the first slot.)</p></dd>
+<dt id="arg-experimenty-experimentx">experimentY, experimentX<a class="anchor" aria-label="anchor" href="#arg-experimenty-experimentx"></a></dt>
+<dd><p><code>Character scalar</code> or <code>numeric scalar</code>. Selects experiment
+corresponding to <code>tableY</code> and <code>tableX</code> from <code>experiments(x)</code>
+of <code>MultiAssayExperiment</code> object by name or index, name is recommended.
+(Default slots: <code>Y = 1</code>, <code>X = 2</code>).</p></dd>
 
 
-<dt id="arg-experimentx">experimentX<a class="anchor" aria-label="anchor" href="#arg-experimentx"></a></dt>
-<dd><p><code>Character scalar</code> or <code>numeric scalar</code>.
-Selects experiment corresponding to <code>tableX</code> from
-<code>experiments(x)</code> of <code>MultiAssayExperiment</code> object. (Default:
-<code>2</code>, the second slot.)</p></dd>
-
-
-<dt id="arg-assay-typey">assay.typeY<a class="anchor" aria-label="anchor" href="#arg-assay-typey"></a></dt>
-<dd><p><code>Character scalar</code>. Specifies the name of the assay
-in experiment Y to be used. (Default: <code>"counts"</code>)</p></dd>
-
-
-<dt id="arg-assay-typex">assay.typeX<a class="anchor" aria-label="anchor" href="#arg-assay-typex"></a></dt>
-<dd><p><code>Character scalar</code>. Specifies the name of the
-assay in experiment X to be used. (Default: <code>"counts"</code>)</p></dd>
+<dt id="arg-assay-typey-assay-typex">assay.typeY, assay.typeX<a class="anchor" aria-label="anchor" href="#arg-assay-typey-assay-typex"></a></dt>
+<dd><p><code>Character scalar</code>. Specifies the name of the assay in experiments Y and
+X to be used. (Default: <code>"counts"</code>)</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -225,7 +212,6 @@ interactions between the two assays.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Load data</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"FMT_data"</span>, package <span class="op">=</span> <span class="st">"anansi"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"dictionary"</span>, package <span class="op">=</span> <span class="st">"anansi"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Convert to (Tree)SummarizedExperiment objects</span></span></span>
 <span class="r-in"><span><span class="va">metab_se</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">SummarizedExperiment</a></span><span class="op">(</span>assays <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/SimpleList-class.html" class="external-link">SimpleList</a></span><span class="op">(</span>conc <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">FMT_metab</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
