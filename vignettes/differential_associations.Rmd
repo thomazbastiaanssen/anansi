@@ -49,7 +49,7 @@ terms(anansiWeb)
 ```
 
 ```{r formula-anansi-full} 
-out <- anansi(anansiWeb, formula = ~ treatment * temperature, metadata = metadata)
+# out <- anansi(anansiWeb, formula = ~ treatment * temperature, metadata = metadata)
 ```
 
 full is the `x` part of `y ~ x * (a + b + c)`:
@@ -81,7 +81,7 @@ disjointed is term interaction with `x`, namely, drop `x:a`, `x:b`, `x:c`.
 
 ### compare to `lm()` outcome.
 
-```{r lm-disj, echo=FALSE} 
+```{r lm-disj} 
 
 ```
 
@@ -94,7 +94,7 @@ disjointed is term interaction with `x`, namely, drop `x:a`, `x:b`, `x:c`.
 
 ```{r intro-error} 
 
-out <- anansi(anansiWeb, formula = ~ treatment * temperature + Error(participant_id), metadata = metadata)
+# out <- anansi(anansiWeb, formula = ~ treatment * temperature + Error(participant_id), metadata = metadata)
 
 ```
 
