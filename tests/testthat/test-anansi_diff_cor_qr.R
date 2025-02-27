@@ -2,7 +2,8 @@ test_that("full and disjointed parameters correspond to stats::lm()", {
   tX <- `colnames<-`(replicate(5, c(scale(rnorm(36)))), letters[1:5])
   tY <- `colnames<-`(replicate(3, c(scale(rnorm(36)))), LETTERS[1:3])
 
-  d <- matrix(TRUE, nrow = NCOL(tY), ncol = NCOL(tX), dimnames = list(colnames(tY), colnames(tX)))
+  d <- matrix(TRUE, nrow = NCOL(tY), ncol = NCOL(tX), 
+              dimnames = list(y = colnames(tY), x = colnames(tX)))
 
   m <- data.frame(
     continuous = scale(rnorm(36)),

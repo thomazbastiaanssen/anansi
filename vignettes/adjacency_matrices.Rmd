@@ -7,7 +7,7 @@ output:
         toc_depth: 2
         number_sections: true
 vignette: >
-  %\VignetteIndexEntry{3. Working with (bi)adjacency matrices}
+  %\VignetteIndexEntry{2. Working with (bi)adjacency matrices}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -23,33 +23,31 @@ library(anansi)
 library(ggplot2)
 ```
 
-# Introduction {-}
+# Overview {-}
 A common challenge in integrative analysis of high-dimensional data sets is 
 subsequent biological interpretation. Anansi addresses this challenge by only 
 considering pairwise associations that are known to occur *a priori*. In order
 to achieve this, we need to provide this relational information to anansi in the
 form of a (bi)adjacency matrix. 
 
-This vignette contains several sections:
+This vignette is divided by two sections:
 
 * [Section 1](#sec-1) introduces (bi)adjacency matrices in the context of the 
 anansi framework.  
 * [Section 2](#sec-2) introduces the `anansiWeb` object and demonstrates how to 
 work with it
-* [Section 3](#sec-3) discusses additional methods to generate (bi)adjacency 
-matrices. 
 
 # Understanding adjacency matrices {#sec-1}
 
 ## Example from Biology: The Krebs cycle
 Recall that the [citric acid cycle, or Krebs cycle](https://en.wikipedia.org/wiki/Citric_acid_cycle),
 is a central piece of metabolic machinery. In short, it enables oxidative 
-phosphorylation. See figure \@ref(fig:plot-krebs)A below for a simplified 
+phosphorylation. See figure \@ref(fig:plot-krebs) below for a simplified 
 representation. In the figure, there are 8 unique enzymatic reactions and 9 
 unique metabolites. 
 
 ```{r}
-#| plot-krebs, echo=FALSE,
+#| plot-krebs, echo=FALSE, fig.small=TRUE,
 #| fig.cap="Two simplified representations of the Krebs cycle. Orange marks 
 #| metabolites and blue marks enzymes."
 library(patchwork)
@@ -96,12 +94,13 @@ available for both types. For instance, we could have transcription data for the
 enzymes and metabolomics data for the metabolites. We could represent our two 
 data sets like two sets of features.
 
+### All vs-all testing 
 If we were to perform an all-vs-all integrative analysis between our two data 
 sets, comprehensively testing every metabolite-enzyme pair, we'd test 
-$8\times9=72$ hypotheses. Figure \@ref(fig:all-v-all-p1)A. 
+$8\times9=72$ hypotheses. Figure \@ref(fig:all-v-all) A. 
 
 ```{r}
-#| all-v-all-p1, echo=FALSE, fig.wide=TRUE, out.width='100%', out.height='60%',
+#| all-v-all, echo=FALSE, fig.wide=TRUE, out.width='100%', out.height='60%',
 #| fig.cap="Graph representation of possible association sctructures in the 
 #| Krebs cycle. **A)** All-vs-all, with a full graph. **B)** Constrained, only 
 #| linking metabolites an enzymes that are known to directly interact."
@@ -157,21 +156,22 @@ p_c <- p_0 + geom_segment(data = data.frame(
 (p_b | p_c) + plot_annotation(tag_levels = "A")
 
 ```
-
+### Knowledge-informed analyis of specific interactions
 Often however, only a subset of these comparisons is scientifically relevant to
 investigate. In this case for instance, only 17 associations between 
-enzyme-metabolite pairs are likely to make sense. Figure 
-\@ref(fig:all-v-all-p1)B. Non-selectively testing all 72 associations actively 
-harms statistical power, as 55 of these tests likely cannot be interpreted, but 
-their p-values will still be tallied for the purpose of FDR and FWER. Moreover, 
-they tend to obscure any biologically interpretable findings. 
+enzyme-metabolite pairs are likely to make sense. Figure \@ref(fig:all-v-all)
+A. Non-selectively testing all 72 associations actively harms statistical power, 
+as 55 of these tests likely cannot be interpreted, but their p-values will still
+be tallied for the purpose of FDR and FWER. Moreover, they tend to obscure any 
+biologically interpretable findings. 
 
 In order to 'know' which features-pairs in your data set should be considered, 
-anansi requires a *biadjacency matrix*. The biadjacency matrix for the above 
-figure can be seen in figure \@ref(fig:all-v-all-p2)B. 
+anansi requires a *biadjacency matrix*. The biadjacency matrix corresponding to
+to the sparse graph in figure \@ref(fig:all-v-all) B can be seen in figure 
+\@ref(fig:krebs-biadj). 
 
 ```{r}
-#| all-v-all-p2, echo=FALSE,
+#| krebs-biadj, echo=FALSE, fig.small=TRUE,
 #| fig.cap="Matrix representation of the constrained analysis of the Krebs cycle, 
 #| with cells marked with 'X' signifying tested feature-pairs."
 
@@ -202,46 +202,62 @@ methodology is compatible with several popular interfaces.
 ## Make a biadjacency matrix with `weaveWeb()`
 The recommended default interface to generate an `anansiWeb` object is 
 `weaveWeb()`. Besides a traditional interface, it also accepts R `formula` 
-syntax.  
+syntax. Once we have an `anansiWeb` object, we can use the $ operator to access 
+the biadjacency matrix in the 'dictionary' slot.
+
 ```{r weaveWeb-intro}
+# Two interfaces
 form.web <- weaveWeb(ec ~ ko)
 
 trad.web <- weaveWeb(y = "ec", x = "ko")
 
+# Same output
 identical(form.web, trad.web)
-```
-### `weaveWeb()` input: `link`
 
+# Get the biadjacency matrix using the $ operator
+head( form.web$dictionary,  c(10, 10) )
+```
+Note that the majority of this matrix consists of dots, it's a sparse matrix, 
+which is a format that can considerably speed up calculations involving huge, 
+mostly empty matrices. For further reading, see the 
+[Matrix package website](https://matrix.r-forge.r-project.org/). 
+
+### `weaveWeb()` input: `link`
 `weaveWeb()` takes additional arguments, let's focus on `link`, which will take 
 the information necessary to link features between input data sets. The anansi 
 package includes such data for the [KEGG database](https://www.genome.jp/kegg/), 
-two `data.frames`, in fact. Let's take a look at them:
+let's take a look at some of it:
 
-:::::::::::::: {.columns}
-::: {.column width="45%"}
-
-```{r peakleft}
+```{r peakec2ko}
 head(ec2ko)
 ```
 
-:::
-::: {.column width="45%"}
+### Structure of `link` input
+The format of the `data.frame` is important: It should have two named columns. 
+Each column contains feature IDs of one type (in this case, `ec` and `ko`, which
+is how the KEGG database refers to 
+[Enzyme Commission numbers](https://enzyme.expasy.org/) and [kegg orthologes](https://www.genome.jp/kegg/ko.html), respectively. If two feature 
+IDs are on the same row of the `data.frame`, it means those features are paired
+(hence adjacency). 
 
-```{r peakright}
-head(ec2cpd)
+### linking between terms
+The column names correspond to the types of feature IDs that should be linked. 
+These names are used throughout the `anansiWeb` workflow. They can be directly 
+called from an `anansiWeb` object:
+
+```{r terms}
+# Note that the formula controls the order 
+names(dimnames(
+  weaveWeb(ko~ec)$dictionary
+  ))
+
+# terms() is short for the above
+terms(weaveWeb(ec~ko))
 ```
-
-:::
-::::::::::::::
-
-### structure of `link` input
-The `data.frame`s are structures similarly; Each column contains feature IDs of 
-one type. The column names correspond to the types of feature IDs. If two IDs 
-are adjacent, on the same row, it means the features are paired. 
-
 ## The pre-packaged kegg linking map
-By default, `weaveWeb()` will assume to use the kegg link map, which consists of
-both `data.frame`s in a list. We can call it directly using `kegg_link()`: 
+By default, `weaveWeb()` will assume to use the pre-packaged kegg link map, 
+which consists of two similarly structured `data.frame`s in a list, one of which
+we just inspected. We can call it directly using `kegg_link()`: 
 ```{r kegg_web}
 # Only print the first few entries
 lapply( kegg_link(), head)
@@ -249,21 +265,21 @@ lapply( kegg_link(), head)
 ```
 
 ### linking across two `data.frame`
-Note the column names in the two dataframes: `ec`, `cpd` and `ko`. Two of these 
-correspond to the formula we used just used: `weaveWeb(ec ~ ko)`. We didn't use 
-the term `cpd`. Further, `ec` is present in both `data.frame`s. 
+Note the column names in the two `data.frames`: `ec`, `cpd` and `ko`. Two of 
+these correspond to the formula we used just used: `weaveWeb(ec ~ ko)`. We 
+didn't use the term `cpd`. Further, `ec` is present in both `data.frame`s. 
 
-We can use weaveWeb to make a biadjacency matrix between any combination of one 
-or two similarly structured `data.frame`s, presented as a list. In this example,
-other words, we can link between any two of `ec`, `cpd` and `ko`, in either 
-order. 
+We can use `weaveWeb()` to make a biadjacency matrix between any combination of 
+one or two similarly structured `data.frame`s, presented as a list. For the pre-
+packaged data set, this means we can link between any two of `ec`, `cpd` and 
+`ko`, in either order. 
 
 ```{r web_formula}
 # Formula notation
-form.web <- weaveWeb(cpd ~ ko)
+head( weaveWeb(cpd ~ ko)$dictionary, c(10, 10) )
 
-# Traditional
-form.trad <- weaveWeb(y = "ko", x = "cpd")
+# Character notation
+head( weaveWeb(y = "ko", x = "cpd")$dictionary, c(10, 10) )
 ```
 
 ## Use custom biadjacency matrices with as_web()
@@ -282,14 +298,16 @@ The most flexible way to make an `anansiWeb` object is through `as_web()`:
     )
   
 # make the anansiWeb
-  as_web(
+ w <- as_web(
     tableY = tY, 
     tableX = tX,
     dictionary = d
   )
-```
 
-# Defining an adjacency matrix {#sec-3}
+# Confirm the warning:  
+  terms(w)
+```
+## Additional approaches
 There are numerous ways in which we can define an adjacency matrix. Here, we 
 demonstrate a graph-based and matrix based approach.
 
@@ -308,7 +326,7 @@ krebs_edge_df <- data.frame(
 "ketoglutarate", "ketoglutarate"))
 ```
 
-## The graph approach
+### adjacency matrices with `igraph`
 Importantly, (bi)adjacency matrices can be understood as graphs. Two common 
 packages that deal with graphs are [`igraph`](https://r.igraph.org/) and [`graph`](https://bioconductor.org/packages/graph/). 
 ```{r igraph-1, message=FALSE}
@@ -337,7 +355,7 @@ Though biadjacency support in `graph` is currently limited, We note that igraph
 and graph objects can be converted using the `graph_from_graphnel()` and 
 `as_graphnel()` functions in `igraph`.
 
-## The matrix approach
+### adjacency matrices with `Matrix`
 We can also define a matrix directly. Conveniently, sparse matrices can be 
 defined easily from our starting data. The `Matrix` library provides fantastic 
 support for this.

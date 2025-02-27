@@ -55,6 +55,8 @@ remotes::install_github("thomazbastiaanssen/anansi")
 
 [See the vignettes on the package
 site.](https://thomazbastiaanssen.github.io/anansi/articles/anansi.html)
+Additionally, a [preprint](https://arxiv.org/abs/2305.10832) is
+available.
 
 ## Citation
 

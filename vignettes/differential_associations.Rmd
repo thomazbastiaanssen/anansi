@@ -7,7 +7,7 @@ output:
         toc_depth: 2
         number_sections: true
 vignette: >
-  %\VignetteIndexEntry{2. Differential association testing}
+  %\VignetteIndexEntry{3. Differential association testing}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -21,6 +21,9 @@ text-align: justify}
 knitr::opts_chunk$set(echo = TRUE)
 library(anansi)
 ```
+# Overview [-]
+
+# Full model
 
 # Differential associations
 
@@ -28,7 +31,7 @@ library(anansi)
 
 ## Emergent associations
 
-
+# Repeated measures with `Error()` 
 
 # Session info
 

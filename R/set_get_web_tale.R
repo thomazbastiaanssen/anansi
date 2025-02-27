@@ -1,3 +1,62 @@
+#' Accessing and modifying information in anansiWeb S4 class
+#' @name anansiWeb-methods
+#' @description \code{anansiWeb} supports \code{$} operator for getting and 
+#' assigning values.
+#' 
+#' \code{ dimnames( x ) } is shorthand for \code{dimnames( x$dictionary )} and 
+#' \code{terms( x )} is in turn shorthand for \code{names( dimnames(x) )}. 
+#' 
+#' @seealso \itemize{
+#' \item \code{\link{anansiWeb-class}}. 
+#' \item \code{\link{weaveWeb}}: for general use.
+#'}
+#' @importFrom methods slotNames slot slot<- 
+#' @examples
+#' # prepare an anansiWeb
+#' w <- weaveWeb(cpd ~ ko)
+#' 
+#' w$dictionary
+#' 
+#' terms(w) 
+#'   
+NULL
+
+#' @noRd
+#' @export
+#' @importFrom utils .DollarNames
+.DollarNames.anansiWeb <- function(x, pattern = "")
+  grep(pattern, slotNames(x), value = TRUE)
+
+#' @exportMethod $
+#' @inheritParams base::`$`
+#' @rdname anansiWeb-methods
+#' 
+setMethod("$", "anansiWeb", definition = function(x, name) slot(x, name) )
+
+#' @exportMethod $<-
+#' @inheritParams base::`$<-`
+#' @rdname anansiWeb-methods
+#' 
+setReplaceMethod("$", "anansiWeb", def = function(x, name, value) {
+  slot(x, name) <- value
+  return(x)}
+ )
+
+#' @exportMethod dimnames
+#' @rdname anansiWeb-methods
+#' 
+setMethod("dimnames", "anansiWeb", 
+          function(x) dimnames(x@dictionary)
+)
+
+#' @rdname anansiWeb-methods
+#' @inheritParams stats::terms
+#' @exportMethod terms
+#' 
+setMethod("terms", "anansiWeb", 
+          function(x) names( dimnames( x@dictionary) ) 
+)
+
 #' @noRd
 #'
 tell_F <- function(tale) {
@@ -79,31 +138,25 @@ tell_dfr <- function(tale) {
 
 #' @noRd
 #'
-get_dict.double <- function(web) {
-  `mode<-`(web@dictionary, "double")
-}
+get_dict.double <- function(web) `mode<-`(web@dictionary, "double")
+
 
 #' @noRd
 #' @importFrom Matrix as.matrix
-get_dict.logical <- function(web) {
-  `mode<-`(Matrix::as.matrix(web@dictionary), "logical")
-}
+get_dict.logical <- function(web) `mode<-`(
+  Matrix::as.matrix(web@dictionary), "logical"
+  )
+
 
 #' @noRd
 #' @importFrom Matrix as.matrix
-get_dict <- function(web) {
-  Matrix::as.matrix(web@dictionary)
-}
+get_dict <- function(web) Matrix::as.matrix(web@dictionary)
 
 #' @noRd
 #'
-get_tableX <- function(web) {
-  web@tableX
-}
+get_tableX <- function(web) web@tableX
+
 
 #' @noRd
 #'
-get_tableY <- function(web) {
-  web@tableY
-}
-
+get_tableY <- function(web) web@tableY
