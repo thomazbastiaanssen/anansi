@@ -1,4 +1,4 @@
-#' Make a web
+#' Make an anansiWeb
 #' @name web
 #' @rdname web
 #' @description
@@ -12,27 +12,32 @@
 #' 
 #' \code{as_web()} constructs an \code{anansiWeb} object from three tables.  
 #'
-#' @param x name of column, \code{tableX}, feature type.
-#' @param y name of row, \code{tableY}, feature type.
-#' @param formula a formula of the form y ~ x, denoting desired output
-#' format; assigns y to rows and columns to x. Equivalent to using \code{x} and
-#' \code{y} arguments.
+#' @param x,y \code{Character scalar}, names of feature types that should be 
+#'     linked. Should be found in the column names of \code{link}.
+#' @param formula \code{formula} of the form y ~ x, denoting desired output
+#'     format; assigns y to rows and columns to x. Equivalent to using \code{x} 
+#'     and \code{y} arguments.
 #' @param link One of the following:
 #' \itemize{
-#'  \item Character scalar with value "none"
-#'  \item data.frame with two columns
-#'  \item list with two such data.frames
+#'  \item \code{Character scalar} with value \code{"none"}.
+#'  \item \code{data.frame} with two columns
+#'  \item \code{list} with two such \code{data.frame}s.
 #' }
 #' @param tableY,tableX A table containing features of interest. Rows should be 
-#' samples and columns should be features. Y and X refer to the position of the 
-#' features in a formula: Y ~ X.
+#'     samples and columns should be features. Y and X refer to the position of 
+#'     the features in a formula: Y ~ X.
 #' @param ... further arguments.
 #' @details 
 #' If the \code{link} argument is \code{"none"}, all features will be considered
-#'  linked. If one or more \code{data.frame}s, colnames should be as specified 
-#'  in \code{x} and \code{y}.
-#' @seealso [kegg_link()] as well as \code{ec2ko} and \code{ec2cpd} for examples
-#'  of input for \code{link}. 
+#' linked. If one or more \code{data.frame}s, colnames should be as specified in 
+#' \code{x} and \code{y}.
+#' @seealso \itemize{
+#'  \item \code{\link{anansiWeb-methods}}: For utility functions to get and set.
+#'  \item \code{\link{kegg_link}}: For examples of input for link argument.
+#'  \item \code{\link{getWeb}}: For 
+#'  \code{\link[MultiAssayExperiment]{MultiAssayExperiment}} methods.
+#' }
+#' 
 #' @returns an \code{anansiWeb} object, with sparse binary biadjacency matrix 
 #' with features from \code{y} as rows and features from \code{x} as columns in 
 #' \code{dictionary} slot.
@@ -47,7 +52,7 @@
 #' tX <- `colnames<-`(replicate(5, (rnorm(36))), letters[1:5])
 #' tY <- `colnames<-`(replicate(3, (rnorm(36))), LETTERS[1:3])
 #' d <- matrix(TRUE, nrow = NCOL(tY), ncol = NCOL(tX),
-#'             dimnames = list(colnames(tY), colnames(tX)))
+#'             dimnames = list(y = colnames(tY), x = colnames(tX)))
 #' 
 #' as_web(tableX = tX, tableY = tY, dictionary = d)
 #'
@@ -66,6 +71,7 @@
 NULL
 
 #' @rdname web
+#' @order 0
 #' @usage NULL
 #' @export
 #'
@@ -73,7 +79,7 @@ web <- function(x, ...) UseMethod("web")
 
 #' @rdname web
 #' @importFrom Matrix Matrix
-#' @order 1
+#' @order 2
 #' @export
 #'
 web.default <- function(x, y, link = NULL, tableX = NULL, tableY = NULL, ...){
@@ -96,6 +102,7 @@ web.default <- function(x, y, link = NULL, tableX = NULL, tableY = NULL, ...){
     link_is_list <- is.list(link) && !is.data.frame(link)
   }
   d <- deliver_web_cases(link, terms, tableX, tableY, link_is_list)
+  names(dimnames(d)) <- c(y, x)
   if(is.null(tableX) && is.null(tableY)) return(
     new("anansiWeb",
       tableY     = matrix(ncol = NROW(d), dimnames = list(NULL, rownames(d))),
@@ -109,7 +116,7 @@ web.default <- function(x, y, link = NULL, tableX = NULL, tableY = NULL, ...){
 
 #' @rdname web
 #' @export
-#' @order 0
+#' @order 1
 #'
 web.formula <- function(
     formula, link = NULL, tableX = NULL, tableY = NULL, ...
@@ -135,7 +142,6 @@ web.formula <- function(
 #' @param dictionary A binary adjacency matrix of class \code{Matrix}, or 
 #' coercible to \code{Matrix}
 #' @importFrom Matrix Matrix drop0
-#' @returns an \code{anansiWeb} object
 #' @export
 #' 
 as_web <- function(tableX, tableY, dictionary) {
@@ -152,6 +158,12 @@ as_web <- function(tableX, tableY, dictionary) {
               NCOL(tableY) == NROW(dictionary))
   stopifnot("cols in 'tableX' need same amount as rows in dictionary" =
               NCOL(tableX) == NCOL(dictionary))
+  if( is.null( names(dimnames(dictionary)) ) || 
+      any( names(dimnames(dictionary)) %in% "")) {
+    warning("Dimnames of 'dictionary' were missing; Assigned 'y' and 'x'.")  
+       names(dimnames(dictionary)) <- c("y", "x")
+    }
+    
   # return anansiWeb 
     new("anansiWeb",
         tableY     = tableY,
@@ -253,14 +265,14 @@ df_to_sparse_biadjacency_matrix <- function(x){
 #' Make a full web; for all vs all association testing
 #' @description
 #' Make a fully TRUE biadjacency matrix with dimensions of the two input tables.
-#' @param tableX a matrix of features of table \code{X}.
-#' @param tableY a matrix of features of table \code{Y}.
+#' @param tableX,tableY \code{matrix} of features of table \code{X}.
+#' @param x,y \code{character scalar} names of x & y terms
 #' @returns An \code{anansiWeb} object with both tables and a fully \code{TRUE}
 #' (non-sparse) matrix from the \code{Matrix} package.
 #' @importFrom Matrix Matrix
 #' @noRd
 #'
-web_missing_link <- function(tableX, tableY) {
+web_missing_link <- function(tableX, tableY, x, y) {
 
   d <- Matrix(
     data = TRUE,

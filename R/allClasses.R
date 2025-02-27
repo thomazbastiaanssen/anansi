@@ -1,8 +1,9 @@
-#' An S4 class to contain all metabolomics and functional input data as well as
-#' a dictionary to link them.
-#' 
-#' @description \code{anansiWeb} is the main container that will hold your input
-#' data throughout the \code{anansi} pipeline.
+#' anansiWeb S4 container class
+#' @name anansiWeb-class
+#' @description 
+#' \code{anansiWeb} is an S4 class containing two feature tables as well as a 
+#' dictionary to link them. \code{anansiWeb} is the main container that will 
+#' hold your input data throughout the \code{anansi} pipeline.
 #' @slot tableY \code{matrix} of metabolomics data. Rows are samples and columns
 #' are features.
 #' @slot tableX \code{matrix} of functional data. Rows are samples and columns 
@@ -10,15 +11,19 @@
 #' @slot dictionary \code{Matrix}, binary adjacency matrix. Optionally sparse. 
 #' Typically generated using the\code{weaveWeb()} function.
 #' @importClassesFrom Matrix Matrix
-#'
+#' @seealso \itemize{
+#' \item \code{\link{weaveWeb}}: for general use.
+#' \item \code{\link{anansiWeb-methods}} for methods, including \code{$} 
+#' operator.
+#'}
 setClass("anansiWeb",
-  slots = c(
-    tableY     = "matrix",
-    tableX     = "matrix",
-    dictionary = "Matrix"
-  )
+         slots = c(
+           tableY     = "matrix",
+           tableX     = "matrix",
+           dictionary = "Matrix"
+         )
 )
-
+ 
 #' An S4 class to contain all \code{anansi} stats results so that they can
 #' easily be extracted.
 #'
