@@ -21,17 +21,94 @@ text-align: justify}
 knitr::opts_chunk$set(echo = TRUE)
 library(anansi)
 ```
+
 # Overview [-]
 
-# Full model
+### summary 
 
-# Differential associations
+### link three parts. 
 
-## Disjointed associations
+# Getting started though the full model
+Overview
+full model estimates the effect of x on y.
 
-## Emergent associations
+## formula syntax. 
 
-# Repeated measures with `Error()` 
+```{r formula-web-full} 
+# setup anansiWeb
+cpd_mat <- matrix(rnorm(60*10), nrow = 60)
+ko_mat  <- matrix(rnorm(60*20), nrow = 60)
+
+anansiWeb <- weaveWeb(cpd ~ ko, tableY = cpd_mat, tableX = ko_mat) 
+```
+
+### link to adjacency matrix vignette
+
+```{r link-terms} 
+terms(anansiWeb) 
+```
+
+```{r formula-anansi-full} 
+out <- anansi(anansiWeb, formula = ~ treatment * temperature, metadata = metadata)
+```
+
+full is the `x` part of `y ~ x * (a + b + c)`:
+
+drop `x + x:a + x:b + x:c`. 
+
+### compare to `lm()`. 
+
+```{r lm-compare-full} 
+
+```
+
+# Differential association 
+Overview:
+
+figures from preprint - already in `R/`. 
+
+```{r fig-diffab, echo=FALSE} 
+library ggplot2() 
+```
+
+### ref `propr` paper.
+
+## Disjointed association
+Overview
+
+### Interpretation:
+disjointed is term interaction with `x`, namely, drop `x:a`, `x:b`, `x:c`. 
+
+### compare to `lm()` outcome.
+
+```{r lm-disj, echo=FALSE} 
+
+```
+
+## Emergent association
+    decide on action. 
+
+# Repeated measures with `Error()`
+
+## Random slopes through `Error()`
+
+```{r intro-error} 
+
+out <- anansi(anansiWeb, formula = ~ treatment * temperature + Error(participant_id), metadata = metadata)
+
+```
+
+### compare to `aov( Error() )`.
+
+```{r aov-error} 
+
+```
+
+### corresponding `lm()`
+
+``{r lm-error} 
+
+```
 
 # Session info
 
