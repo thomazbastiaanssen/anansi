@@ -27,9 +27,9 @@ anansiDiffCor <- function(
     web, sat_model, errorterm, int.terms, metadata, verbose
     ) {
 
-  tY  <- get_tableY(web)
-  tX  <- get_tableX(web)
-  dic <- get_dict(web)
+  tY  <- web@tableY
+  tX  <- web@tableX
+  dic <- Matrix::as.matrix(web@dictionary)
 
   # Compute shape of model.matrix and initialize qr.mm
   base.mm <- build.mm(sat_model, metadata)

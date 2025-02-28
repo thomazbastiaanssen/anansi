@@ -37,6 +37,9 @@
 \item{value}{typically an array-like \R object of a similar class as
     \code{x}.}
 }
+\value{
+a specified \code{anansiWeb} object.
+}
 \description{
 \code{anansiWeb} supports \code{$} operator for getting and 
 assigning values.

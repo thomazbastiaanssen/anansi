@@ -135,28 +135,3 @@ tell_dfr <- function(tale) {
     return(lapply(tale, tell_dfr))
   }
 }
-
-#' @noRd
-#'
-get_dict.double <- function(web) `mode<-`(web@dictionary, "double")
-
-
-#' @noRd
-#' @importFrom Matrix as.matrix
-get_dict.logical <- function(web) `mode<-`(
-  Matrix::as.matrix(web@dictionary), "logical"
-  )
-
-
-#' @noRd
-#' @importFrom Matrix as.matrix
-get_dict <- function(web) Matrix::as.matrix(web@dictionary)
-
-#' @noRd
-#'
-get_tableX <- function(web) web@tableX
-
-
-#' @noRd
-#'
-get_tableY <- function(web) web@tableY

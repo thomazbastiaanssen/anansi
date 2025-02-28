@@ -89,7 +89,7 @@
 #' 
 #' @export
 #' 
-kegg_link <- function() list(anansi::ec2ko, anansi::ec2cpd)
+kegg_link <- function() list(ec2ko = anansi::ec2ko, ec2cpd = anansi::ec2cpd)
 
 #' Snippet of the CLR-transformed hippocampal metabolomics data from the FMT Aging study.
 #'

@@ -160,7 +160,7 @@ anansi <- function(web, formula = ~1, groups = NULL, metadata,
              web, sat_model, errorterm, int.terms, meta.frame, verbose)
 
   if(return.format != "raw") {
-    results <- result.df(out.list, get_dict(web))
+    results <- result.df(out.list, Matrix::as.matrix(web@dictionary))
     results <- anansi.p.adjust(results, adjust.method)
     attr(results, "group_terms") <- named_group_list(group.id, groups, metadata)
     attr(results, "model_terms") <- named_term_list(int.terms, metadata)
@@ -196,7 +196,7 @@ prepInput <- function(web, formula, groups, metadata, verbose) {
   } else {
     deparse1(attr(raw_terms, "variables")[[1L + indErr]][[2L]], backtick = TRUE)
   }
-    input = list(
+    input <- list(
       web = web,
       lm.formula = sat_model,
       error.term = error.term,

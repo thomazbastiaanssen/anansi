@@ -93,12 +93,6 @@ NULL
 
 #' @rdname getAnansi
 #' @export
-setGeneric("getAnansi", signature = c("x"),
-    function(x, ...) standardGeneric("getAnansi")
-)
-
-#' @rdname getAnansi
-#' @export
 #' @importFrom MultiAssayExperiment MultiAssayExperiment
 #' @importFrom SummarizedExperiment assay colData
 setMethod("getAnansi",

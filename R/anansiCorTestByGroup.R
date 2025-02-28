@@ -10,17 +10,6 @@ call_groupwise <- function(web, groups, metadata, verbose) {
   if(is.null(groups)) {group.vec <- NULL} else {
     group.vec <- apply(metadata[,groups, drop = FALSE], 1, paste, collapse = "_")
   }
-
-  if (is(web, "argonansiWeb")) {
-    return(anansiCorTestByGroup(
-      web = new("anansiWeb",
-                tableY     = as.matrix(get_tableY(web)),
-                tableX     = as.matrix(get_tableX(web)),
-                dictionary = as.matrix(web@strat_dict)
-      ), group.vec = group.vec, verbose = verbose
-    ))
-  }
-
   return(
     anansiCorTestByGroup(web, group.vec, verbose)
   )
@@ -45,7 +34,7 @@ anansiCorTestByGroup <- function(web, group.vec, verbose = TRUE) {
   # first run for all groups together
   out_list$All <- anansiCorPvalue(
     web,
-    group.bool = rep(TRUE, NROW(get_tableY(web))), verbose
+    group.bool = rep(TRUE, NROW(web@tableY)), verbose
   )
 
   if (!is.null(all_groups)) {
@@ -111,11 +100,11 @@ anansiCorPvalue <- function(web, group.bool, verbose) {
 anansiCor <- function(web, group.bool) {
   # Run correlations on subsections of your data
   cors <- cor(
-    x = get_tableY(web)[group.bool, ],
-    y = get_tableX(web)[group.bool, ],
+    x = web@tableY[group.bool, ],
+    y = web@tableX[group.bool, ],
     method = "pearson", use = "pairwise.complete.obs"
   )
-  cors[!get_dict.logical(web)] <- 0
+  cors[! Matrix::as.matrix(web@dictionary) ] <- 0
   # set non-canonical correlations to zero using the binary adjacency matrix.
   return(cors)
 }

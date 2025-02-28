@@ -6,6 +6,8 @@
 #' \code{ dimnames( x ) } is shorthand for \code{dimnames( x$dictionary )} and 
 #' \code{terms( x )} is in turn shorthand for \code{names( dimnames(x) )}. 
 #' 
+#' @returns a specified \code{anansiWeb} object. 
+#' 
 #' @seealso \itemize{
 #' \item \code{\link{anansiWeb-class}}. 
 #' \item \code{\link{weaveWeb}}: for general use.
@@ -135,28 +137,3 @@ tell_dfr <- function(tale) {
     return(lapply(tale, tell_dfr))
   }
 }
-
-#' @noRd
-#'
-get_dict.double <- function(web) `mode<-`(web@dictionary, "double")
-
-
-#' @noRd
-#' @importFrom Matrix as.matrix
-get_dict.logical <- function(web) `mode<-`(
-  Matrix::as.matrix(web@dictionary), "logical"
-  )
-
-
-#' @noRd
-#' @importFrom Matrix as.matrix
-get_dict <- function(web) Matrix::as.matrix(web@dictionary)
-
-#' @noRd
-#'
-get_tableX <- function(web) web@tableX
-
-
-#' @noRd
-#'
-get_tableY <- function(web) web@tableY
