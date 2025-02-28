@@ -87,7 +87,7 @@ web.default <- function(x, y, link = NULL, tableX = NULL, tableY = NULL, ...){
   stopifnot("both 'x' and 'y' terms must be provided as character" =
               is(terms, "character") && length(terms) == 2L)
 
-  if(identical(link,"none")) return(web_missing_link(tableX, tableY))
+  if(identical(link,"none")) return(web_missing_link(tableX, tableY, x, y))
   link_is_list <- is.list(link) && !is.data.frame(link)
 
   if(link_is_list) {
@@ -125,7 +125,7 @@ web.formula <- function(
     stop("'formula' missing or incorrect")
 
   terms <- all.vars(formula)
-  if(is.null(link)) return(
+  if(is.null(link) || identical(link, "none")) return(
     web.default(x = terms[2], y = terms[1], link, tableX, tableY)
     )
 
@@ -276,10 +276,11 @@ web_missing_link <- function(tableX, tableY, x, y) {
 
   d <- Matrix(
     data = TRUE,
-    nrow = NROW(tableY),
-    ncol = NROW(tableX),
+    nrow = NCOL(tableY),
+    ncol = NCOL(tableX),
     dimnames = list(sort(colnames(tableY)), sort(colnames(tableX)))
     )
+  names(dimnames(d)) <- c(y, x)
 
   new("anansiWeb",
       tableY     = as.matrix(tableY)[,rownames(d)],
