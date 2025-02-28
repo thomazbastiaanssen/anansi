@@ -99,27 +99,17 @@ a detectable association in all cases, but the quality of that association
 differs. Emergent associations describe the case where an association can be 
 detected in one case but not in another. 
 
-The features Y and X are from different data sets and differential associations 
-can be expressed in the style of R classical linear models: 
-$lm(Y \sim X \underline{\times Phenotype})$ and 
-$lm(abs(residuals( lm(Y \sim X)) ) \sim \underline{Phenotype})$ for disjointed 
-and emergent associations, respectively.
-
 ```{r} 
-#| fig-diffab, fig.wide=TRUE, warning=FALSE,message=FALSE,echo=FALSE,
-#| fig.cap = "An example of differential associations between hypothetical
+#| fig-diffab, fig.wide=TRUE, warning=FALSE, message=FALSE, echo=FALSE,
+#| fig.cap="An example of differential associations between hypothetical
 #| features Y and X. In both cases, phenotype C illustrates the differential 
 #| association compared to phenotypes A & B. Disjointed associations describe 
 #| the scenario where there is a detectable association in all cases, but the 
 #| quality of the association differs. Emergent associations describe the case 
 #| where an association can be detected in one case but not in another." 
 
-<<<<<<< HEAD
-=======
-library(tidyverse)
->>>>>>> 84748030ec9deae722e963c5cd3ca5a7d89ed5e2
 library(patchwork)
-library(tidyverse)
+library(ggplot2)
 
 set.seed(1)
 a = data.frame(Y  = c(1:10, (1:10)*3/2, 10:1) + runif(30, -1, 1),
@@ -140,6 +130,12 @@ b = data.frame(Y  = c(1:10, (1:10)*3/2, (1:10)*5/4) + c(runif(20, -1, 1), runif(
   theme_bw() 
 
 ```
+
+The features Y and X are from different data sets and differential associations 
+can be expressed in the style of R classical linear models: 
+$lm(Y \sim X \underline{\times Phenotype})$ and 
+$lm( abs( residuals( lm(Y \sim X)) ) \sim \underline{Phenotype})$ for disjointed 
+and emergent associations, respectively. 
 
 ### ref `propr` paper.
 
