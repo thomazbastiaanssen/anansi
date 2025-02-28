@@ -5,7 +5,11 @@ articles:
   adjacency_matrices: adjacency_matrices.html
   anansi: anansi.html
   differential_associations: differential_associations.html
+<<<<<<< HEAD
 last_built: 2025-02-28T08:39Z
+=======
+last_built: 2025-02-28T08:30Z
+>>>>>>> 84748030ec9deae722e963c5cd3ca5a7d89ed5e2
 urls:
   reference: https://thomazbastiaanssen.github.io/anansi/reference
   article: https://thomazbastiaanssen.github.io/anansi/articles

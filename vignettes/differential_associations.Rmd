@@ -114,6 +114,10 @@ and emergent associations, respectively.
 #| quality of the association differs. Emergent associations describe the case 
 #| where an association can be detected in one case but not in another." 
 
+<<<<<<< HEAD
+=======
+library(tidyverse)
+>>>>>>> 84748030ec9deae722e963c5cd3ca5a7d89ed5e2
 library(patchwork)
 library(tidyverse)
 
