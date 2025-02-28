@@ -32,12 +32,12 @@ form of a (bi)adjacency matrix.
 
 This vignette is divided by two sections:
 
-* [Section 1](#sec-1) introduces (bi)adjacency matrices in the context of the 
+* [Section 1](#sec-mat-1) introduces (bi)adjacency matrices in the context of the 
 anansi framework.  
-* [Section 2](#sec-2) introduces the `anansiWeb` object and demonstrates how to 
+* [Section 2](#sec-mat-2) introduces the `anansiWeb` object and demonstrates how to 
 work with it
 
-# Understanding adjacency matrices {#sec-1}
+# Understanding adjacency matrices {#sec-mat-1}
 
 ## Example from Biology: The Krebs cycle
 Recall that the [citric acid cycle, or Krebs cycle](https://en.wikipedia.org/wiki/Citric_acid_cycle),
@@ -190,7 +190,7 @@ ggplot(kd) +
 
 ```
 
-# General use in anansi {#sec-2}
+# General use in anansi {#sec-mat-2}
 In anansi, we work with biadjacency matrices in the `anansiWeb` S4 class, which 
 consists of a biadjacency matrix, in this case we call it a `dictionary`, as 
 well as two tables of observations that should be analysed jointly. 
