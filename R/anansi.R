@@ -140,9 +140,9 @@ anansi <- function(web, formula = ~1, groups = NULL, metadata,
     web = web, formula = formula, groups = groups,
     metadata = metadata, verbose = verbose
   )
-  int.terms <- input@int.terms; groups <- input@groups; n.grps <- input@n.grps;
-  group.id <- input@group.id; errorterm <- input@error.term;
-  sat_model <- input@lm.formula
+  int.terms <- input$int.terms; groups <- input$groups; n.grps <- input$n.grps;
+  group.id <- input$group.id; errorterm <- input$error.term;
+  sat_model <- input$lm.formula
 
   out.list <- vector(
     "list", length = 1 + n.grps + (2 * length(int.terms))
@@ -196,7 +196,7 @@ prepInput <- function(web, formula, groups, metadata, verbose) {
   } else {
     deparse1(attr(raw_terms, "variables")[[1L + indErr]][[2L]], backtick = TRUE)
   }
-    input = new("anansiInput",
+    input = list(
       web = web,
       lm.formula = sat_model,
       error.term = error.term,
