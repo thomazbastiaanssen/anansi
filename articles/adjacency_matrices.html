@@ -36,7 +36,7 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><a class="dropdown-item" href="../articles/adjacency_matrices.html">Adjacency matrices</a></li>
-    <li><a class="dropdown-item" href="../articles/differential_associations.html">Differential association testing with anansi</a></li>
+    <li><a class="dropdown-item" href="../articles/differential_associations.html">Association testing</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -92,16 +92,16 @@ matrix.</p>
 <p>This vignette is divided by two sections:</p>
 <ul>
 <li>
-<a href="#sec-1">Section 1</a> introduces (bi)adjacency matrices in
-the context of the anansi framework.<br>
+<a href="#sec-mat-1">Section 1</a> introduces (bi)adjacency matrices
+in the context of the anansi framework.<br>
 </li>
 <li>
-<a href="#sec-2">Section 2</a> introduces the <code>anansiWeb</code>
-object and demonstrates how to work with it</li>
+<a href="#sec-mat-2">Section 2</a> introduces the
+<code>anansiWeb</code> object and demonstrates how to work with it</li>
 </ul>
 </div>
 <div class="section level2">
-<h2 id="sec-1">Understanding adjacency matrices<a class="anchor" aria-label="anchor" href="#sec-1"></a>
+<h2 id="sec-mat-1">Understanding adjacency matrices<a class="anchor" aria-label="anchor" href="#sec-mat-1"></a>
 </h2>
 <div class="section level3">
 <h3 id="example-from-biology-the-krebs-cycle">Example from Biology: The Krebs cycle<a class="anchor" aria-label="anchor" href="#example-from-biology-the-krebs-cycle"></a>
@@ -171,7 +171,7 @@ with cells marked with ‘X’ signifying tested feature-pairs.
 </div>
 </div>
 <div class="section level2">
-<h2 id="sec-2">General use in anansi<a class="anchor" aria-label="anchor" href="#sec-2"></a>
+<h2 id="sec-mat-2">General use in anansi<a class="anchor" aria-label="anchor" href="#sec-mat-2"></a>
 </h2>
 <p>In anansi, we work with biadjacency matrices in the
 <code>anansiWeb</code> S4 class, which consists of a biadjacency matrix,
