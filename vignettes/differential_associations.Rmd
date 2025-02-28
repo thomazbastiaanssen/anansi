@@ -36,10 +36,15 @@ full model estimates the effect of x on y.
 
 ```{r formula-web-full} 
 # setup anansiWeb
-cpd_mat <- matrix(rnorm(60*10), nrow = 60)
-ko_mat  <- matrix(rnorm(60*20), nrow = 60)
+Y_MAT <- matrix( rnorm(60*10), nrow = 60, colnames = LETTERS[1:10] )
 
-anansiWeb <- weaveWeb(cpd ~ ko, tableY = cpd_mat, tableX = ko_mat) 
+X_mat  <- matrix( rnorm(60*20), nrow = 60, colnames = letters[1:20] ) 
+
+anansiWeb <- weaveWeb(
+y ~ x, 
+tableY = Y_MAT, 
+tableX = x_mat
+link = "none") 
 ```
 
 ### link to adjacency matrix vignette
