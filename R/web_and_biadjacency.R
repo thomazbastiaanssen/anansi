@@ -47,7 +47,7 @@
 #' web(x = "ko", y = "ec", link = ec2ko)
 #' web(ec ~ cpd, link = ec2cpd)
 #' 
-#' # use as_web() to Constuct an anansiWeb object from components:
+#' # use as_web() to constuct an anansiWeb object from components:
 #' 
 #' tX <- `colnames<-`(replicate(5, (rnorm(36))), letters[1:5])
 #' tY <- `colnames<-`(replicate(3, (rnorm(36))), LETTERS[1:3])
@@ -63,10 +63,10 @@
 #' identical(generic, kegg_wrapper)
 #'
 #' # The following are equivalent to transposition:
-#' a <- anansi:::get_dict( web(ko ~ cpd, link = kegg_link()) )
-#' b <- anansi:::get_dict( web(cpd ~ ko, link = kegg_link()) )
+#' a <- web(ko ~ cpd, link = kegg_link())$dictionary
+#' b <- web(cpd ~ ko, link = kegg_link())$dictionary
 #'
-#' identical(a, t(b))
+#' identical(a, Matrix::t(b))
 #'
 NULL
 

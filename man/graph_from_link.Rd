@@ -7,7 +7,8 @@
 graph_from_link(link)
 }
 \arguments{
-\item{link}{\code{data.frame} with exactly two, named, columns, or a}
+\item{link}{\code{data.frame} with exactly two, named, columns, or a \code{list} of 
+several such \code{data.frame}s}
 }
 \value{
 an \code{igraph} graph.
@@ -26,5 +27,6 @@ plot(g)
 
 }
 \seealso{
-\code{\link[igraph:igraph]{igraph}}
+\code{\link{weaveWeb}} for the anansiWeb constructor functions that 
+take link data frames, \code{\link[igraph:igraph]{igraph}} for output object.
 }
