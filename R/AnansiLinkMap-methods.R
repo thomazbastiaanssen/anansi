@@ -56,6 +56,7 @@ setMethod("names", "anansiLinkMap", function(x) lapply(x, names) )
 #' \code{logical expression} indicating rows to keep. Must contain variables 
 #' found as column names.
 #' @inheritParams BiocGenerics::subset
+#' @importMethodsFrom BiocGenerics subset
 #' @export
 #' @seealso \code{\link[BiocGenerics:subset]{subset}}. 
 #' \code{\link{weaveWeb}} for the anansiWeb constructor functions that 
@@ -99,6 +100,7 @@ setMethod("subset", "anansiLinkMap",
 #' @description
 #' \code{clean}: Remove all unpaired feature names from an \code{anansiLinkMap}. 
 #' @inheritParams ShortRead::clean
+#' @importMethodsFrom ShortRead clean
 #' @export
 #' @returns 
 #' \code{clean}: An instance of \code{class(object)}, containing only feature 
