@@ -8,7 +8,7 @@ test_that("getAnansi", {
   ### Prepare objects ###
   metab_se <- SummarizedExperiment(assays = SimpleList(conc = as.matrix(FMT_metab)))
   KO_tse <- TreeSummarizedExperiment(assays = SimpleList(counts = as.matrix(FMT_KOs)))
-  keep <- row.names(KO_tse) %in% sort(unique(unlist(anansi_dic)))
+  keep <- row.names(KO_tse) %in% sort(unique(ec2ko$ko))
   KO_tse <- KO_tse[keep, ]
   KO_tse <- subsetByPrevalent(KO_tse,
     assay.type = "counts",
@@ -51,7 +51,7 @@ test_that("getAnansi", {
   )
   ### Check identity with original anansi output ###
   web <- weaveWeb(
-    cpd ~ ko, 
+    cpd ~ ko,
     tableY = t(assay(metab_se, "conc")), tableX = t(assay(KO_tse, "clr")),
     link = kegg_link()
   )
@@ -71,14 +71,11 @@ test_that("getAnansi", {
   table2 <- getAnansi(mae,
     experimentY = "cpd",
     experimentX = "ko", assay.typeY = "conc", assay.typeX = "clr",
-    formula = ~Legend, translate = TRUE, Y_translation = cpd_translation,
-    X_translation = KO_translation, verbose = FALSE
-  )
+    formula = ~Legend, verbose = FALSE)
   list2 <- getAnansi(mae,
     experimentY = "cpd",
     experimentX = "ko", assay.typeY = "conc", assay.typeX = "clr",
-    formula = ~Legend, translate = TRUE, Y_translation = cpd_translation,
-    X_translation = KO_translation, return.format = "list", verbose = FALSE
+    formula = ~Legend, return.format = "list", verbose = FALSE
   )
   raw2 <- getAnansi(mae,
     experimentY = "cpd",

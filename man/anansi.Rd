@@ -57,7 +57,6 @@ analysis, correlation by group and differential correlation.
 \examples{
 # Load example data:
 
-data(dictionary)
 data(FMT_data)
 
 # Clean and prepare the example data.
@@ -67,7 +66,7 @@ KOs <- floor(FMT_KOs)
 KOs <- apply(KOs, c(1, 2), function(x) as.numeric(as.character(x)))
 KOs <- KOs[apply(KOs == 0, 1, sum) <= (ncol(KOs) * 0.90), ]
 
-KOs <- KOs[row.names(KOs) \%in\% sort(unique(unlist(anansi_dic))), ]
+KOs <- KOs[row.names(KOs) \%in\% sort(unique(ec2ko$ko)), ]
 
 # CLR-transform.
 
@@ -98,11 +97,11 @@ anansi_out <- anansi(
 library(tidyr)
 
 # Use tidyr to wrangle the correlation r-values to a single column
-anansiLong <- anansi_out |> 
+anansiLong <- anansi_out |>
   pivot_longer(starts_with("All") | contains("FMT")) |>
-  separate_wider_delim(name, delim = "_", names = c("cor_group", "param")) |> 
-  pivot_wider(names_from = param, values_from = value) 
-  
+  separate_wider_delim(name, delim = "_", names = c("cor_group", "param")) |>
+  pivot_wider(names_from = param, values_from = value)
+
 # Only consider interactions where the entire model fits well enough.
 library(ggplot2)
 anansiLong <- anansiLong[anansiLong$full_p.values < 0.05, ]
@@ -136,7 +135,7 @@ ggplot(
   theme_bw()
 
 # Using miaViz style function:
- 
+
 p <- plotAnansi(anansi_out,
                 association.type = "disjointed",
                 model.var = "Legend",
@@ -151,7 +150,7 @@ p <- p +
     "All" = "gray"
   )) +
   theme_bw()
-  
+
   p
 
 

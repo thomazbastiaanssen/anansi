@@ -93,7 +93,7 @@ Orthologues (KOs). These tables can be directly plugged in to `anansi`.
 # Clean and CLR-transform the KEGG orthologue table.
 
 # Only keep functions that are represented in the dictionary.
-KOs <- FMT_KOs[row.names(FMT_KOs) %in% sort(unique(unlist(anansi_dic))), ]
+KOs <- FMT_KOs[row.names(FMT_KOs) %in% sort(unique(ec2ko$ko)), ]
 
 # Cut the decimal part off.
 KOs <- floor(KOs)

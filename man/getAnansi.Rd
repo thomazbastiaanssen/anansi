@@ -68,7 +68,7 @@ metab_se <- SummarizedExperiment(assays = SimpleList(conc = as.matrix(FMT_metab)
 KO_tse <- TreeSummarizedExperiment(assays = SimpleList(counts = as.matrix(FMT_KOs)))
 
 # Select functions that are represented in the dictionary
-keep <- row.names(KO_tse) \%in\% sort(unique(unlist(anansi_dic)))
+keep <- row.names(KO_tse) \%in\% sort(unique(ec2ko$ko))
 KO_tse <- KO_tse[keep, ]
 
 # Remove features with less than 10\% prevalence

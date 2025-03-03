@@ -6,7 +6,7 @@
 #'
 #' @param x a \code{data.frame} object output of \code{\link{getAnansi}} in
 #'   the table format.
-#'  
+#'
 #' @param association.type \code{Character scalar}. Specifies the type of
 #' association to show in the plot. One of \code{"disjointed"},
 #'   \code{"emergent"} and \code{"full"}. (Default: \code{NULL})
@@ -45,7 +45,7 @@
 #' @param y_position \code{Character scalar}. Specifies the position of the y
 #'   labels. It should be either \code{"left"} or \code{"right"}.
 #'   (Default: \code{"right"})
-#'   
+#'
 #' @param ... additional arguments
 #'
 #' @details
@@ -65,14 +65,13 @@
 #'
 #' # Load data
 #' data("FMT_data", package = "anansi")
-#' data("dictionary", package = "anansi")
 #'
 #' # Convert to (Tree)SummarizedExperiment objects
 #' metab_se <- SummarizedExperiment(assays = SimpleList(conc = as.matrix(FMT_metab)))
 #' KO_tse <- TreeSummarizedExperiment(assays = SimpleList(counts = as.matrix(FMT_KOs)))
 #'
 #' # Select functions that are represented in the dictionary
-#' keep <- row.names(KO_tse) %in% sort(unique(unlist(anansi_dic)))
+#' keep <- row.names(KO_tse) %in% sort(unique(ec2ko$ko))
 #' KO_tse <- KO_tse[keep, ]
 #'
 #' # Remove features with less than 10% prevalence
@@ -103,9 +102,7 @@
 #' out <- getAnansi(mae,
 #'   experimentY = "cpd", experimentX = "ko",
 #'   assay.typeY = "conc", assay.typeX = "clr",
-#'   formula = ~Legend, translate = TRUE,
-#'   X_translation = KO_translation, Y_translation = cpd_translation
-#' )
+#'   formula = ~Legend)
 #'
 #' # Select significant interactions
 #' out <- out[out$full_p.values < 0.05, ]
@@ -116,13 +113,13 @@
 #'            model.var = "Legend",
 #'            signif.threshold = 0.05,
 #'            fill_by = "group")
-#'            
+#'
 #' # Visualise full associations filled by Legend
 #' plotAnansi(out,
 #'            association.type = "full",
 #'            signif.threshold = 0.05,
 #'            fill_by = "Legend")
-#'            
+#'
 #' @seealso
 #' \code{\link{getAnansi}}
 #' \code{\link{anansi}}
@@ -266,8 +263,8 @@ setMethod("plotAnansi", signature = c(x = "data.frame"),
         signif.threshold, colour_by, fill_by, shape_by, size_by, y_position,
         x_lab, y_lab){
     # Create base plot
-    p <- ggplot(data = pData) + 
-      aes(x = .data$x, y = .data$y, colour = .data$colour, 
+    p <- ggplot(data = pData) +
+      aes(x = .data$x, y = .data$y, colour = .data$colour,
           fill = .data$fill, shape = .data$shape,
           size = .data$size, alpha = .data$alpha) +
       geom_vline(xintercept = 0, linetype = "dashed", colour = "red")

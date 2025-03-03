@@ -91,14 +91,13 @@ library(MultiAssayExperiment)
 
 # Load data
 data("FMT_data", package = "anansi")
-data("dictionary", package = "anansi")
 
 # Convert to (Tree)SummarizedExperiment objects
 metab_se <- SummarizedExperiment(assays = SimpleList(conc = as.matrix(FMT_metab)))
 KO_tse <- TreeSummarizedExperiment(assays = SimpleList(counts = as.matrix(FMT_KOs)))
 
 # Select functions that are represented in the dictionary
-keep <- row.names(KO_tse) \%in\% sort(unique(unlist(anansi_dic)))
+keep <- row.names(KO_tse) \%in\% sort(unique(ec2ko$ko))
 KO_tse <- KO_tse[keep, ]
 
 # Remove features with less than 10\% prevalence
@@ -129,9 +128,7 @@ mae <- MultiAssayExperiment(
 out <- getAnansi(mae,
   experimentY = "cpd", experimentX = "ko",
   assay.typeY = "conc", assay.typeX = "clr",
-  formula = ~Legend, translate = TRUE,
-  X_translation = KO_translation, Y_translation = cpd_translation
-)
+  formula = ~Legend)
 
 # Select significant interactions
 out <- out[out$full_p.values < 0.05, ]
@@ -142,13 +139,13 @@ plotAnansi(out,
            model.var = "Legend",
            signif.threshold = 0.05,
            fill_by = "group")
-           
+
 # Visualise full associations filled by Legend
 plotAnansi(out,
            association.type = "full",
            signif.threshold = 0.05,
            fill_by = "Legend")
-           
+
 }
 \seealso{
 \code{\link{getAnansi}}

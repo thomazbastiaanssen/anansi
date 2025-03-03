@@ -3,212 +3,98 @@
 #' @rdname LinkMap
 #' @aliases anansiLinkMap asLinkMap
 #' @description
-#' \code{asLinkMap()} constructs an \code{anansiLinkMap} object from a validly 
-#' formed data frame or list of such data.frames.  
-#' @param x \code{any} object, most likely \code{list} of data frames. 
+#' \code{asLinkMap()} constructs an \code{anansiLinkMap} object from a validly
+#' formed data frame or list of such data.frames.
+#' @param x \code{any} object, most likely \code{list} of data frames.
 #' @export
 #' @seealso \itemize{
-#' \item \code{\link{kegg_link}}: for an example of valid input. 
+#' \item \code{\link{kegg_link}}: for an example of valid input.
 #' \item \code{\link{anansiLinkMap-class}}: for class.
 #' \item \code{\link{anansiLinkMap-methods}} for methods.
 #'}
 #' @examples
 #' asLinkMap( kegg_link() )
-#' 
+#'
 asLinkMap <- function(x) {
   if(validLinkDF(x)) x <- list(link = x)
-  
+
   linkMap <- new("anansiLinkMap", x)
-  
+
   linkMap@edgelist <- as.data.frame(do.call(rbind, names(linkMap)))
-  
+
   return(linkMap)
 }
 
-#' Methods for anansiLinkMap S4 class
-#' @rdname anansiLinkMap-methods
-#' @description
-#' \code{clean}: Remove all unpaired feature names from an \code{anansiLinkMap}. 
-#' @inheritParams ShortRead::clean
-#' @export
-#' @returns 
-#' \code{clean}: An instance of \code{class(object)}, containing only feature 
-#' names that are present in all constituent data frames with that column. 
-#' 
-setMethod("clean", "anansiLinkMap", 
-          function(object, ...) {
-            return(  "hue"    )
-          })
-
-#' @description \code{names}: Display a list of column names from anansiLinkMap 
+#' S4 Methods for anansiLinkMap
+#' @description \code{names}: Display a list of column names from anansiLinkMap
 #' @rdname anansiLinkMap-methods
 #' @export
 #'
 setMethod("names", "anansiLinkMap", function(x) lapply(x, names) )
 
+#' S4 Methods for anansiLinkMap
 #' @rdname anansiLinkMap-methods
 #' @details
-#' \code{subset}: For \code{anansiLinkMap objects}, sub-setting is only applied 
-#' to data frames compatible with the expression. The rest are returned 
-#' unaltered. Modeled after \code{subset()}. 
-#' 
-#' @param subset 
-#' \code{logical expression} indicating rows to keep. Must contain variables 
+#' \code{subset}: For \code{anansiLinkMap objects}, sub-setting is only applied
+#' to data frames compatible with the expression. The rest are returned
+#' unaltered. Modeled after \code{subset()}.
+#'
+#' @param subset
+#' \code{logical expression} indicating rows to keep. Must contain variables
 #' found as column names.
+#' @param select \code{expression}. Which column names to consider. If missing
+#' (Default), consider all column names.
 #' @inheritParams BiocGenerics::subset
 #' @importMethodsFrom BiocGenerics subset
 #' @export
-#' @seealso \code{\link[BiocGenerics:subset]{subset}}. 
-#' \code{\link{weaveWeb}} for the anansiWeb constructor functions that 
+#' @seealso \code{\link[BiocGenerics:subset]{subset}}.
+#' \code{\link{weaveWeb}} for the anansiWeb constructor functions that
 #' take link data frames.
 #' @examples
 #' # prep input
 #' l <- asLinkMap(kegg_link())
-#' 
-#' # Sub-setting is only performed on data frames that contain the arguments
-#' str(subset(x = l, cpd %in% c("C00001", "C00002")))
-#' 
-#' # Several data frames at the same time:
-#' str(subset(x = l, ec %in% c("1.2.3.4", "4.3.2.1")))
-#' 
-setMethod("subset", "anansiLinkMap", 
-          function(x, subset, ...) {
-            stopifnot("'link' must be one or several data.frame objects." =
-                        validLinkMap(x))
-            
-            # Mimic missing behaviour of base::subset 
-            if(missing(subset)) subset <- quote(TRUE) else subset <- substitute(subset)
-            
-            # Now handle list, start with selection
-            sub.vars <- all.vars(subset)
-            x.names <- names(x)
-            
-            # Select those data frames where all terms are mentioned
-            sub.ind <- unlist(lapply(x.names, function(y) all( sub.vars %in% y )))
-            
-            # Subset
-            x[sub.ind] <- lapply(x[sub.ind], function(y) {
-              r <- eval(subset, y, parent.frame() )
-              return(y[r,]) })
-            
-            return(x)
-          }
-)
-
-#' Methods for anansiLinkMap S4 class
-#' @rdname anansiLinkMap-methods
-#' @description
-#' \code{clean}: Remove all unpaired feature names from an \code{anansiLinkMap}. 
-#' @inheritParams ShortRead::clean
-#' @importMethodsFrom ShortRead clean
-#' @export
-#' @returns 
-#' \code{clean}: An instance of \code{class(object)}, containing only feature 
-#' names that are present in all constituent data frames with that column. 
-#' 
-setMethod("clean", "anansiLinkMap", 
-          function(object, ...) {
-            return(  "hue"    )
-          })
-
-#' @description \code{names}: Display a list of column names from anansiLinkMap 
-#' @rdname anansiLinkMap-methods
-#' @export
 #'
-setMethod("names", "anansiLinkMap", function(x) lapply(x, names) )
-
-#' @rdname anansiLinkMap-methods
-#' @details
-#' \code{subset}: For \code{anansiLinkMap objects}, sub-setting is only applied 
-#' to data frames compatible with the expression. The rest are returned 
-#' unaltered. Modeled after \code{subset()}. 
-#' 
-#' @param subset 
-#' \code{logical expression} indicating rows to keep. Must contain variables 
-#' found as column names.
-#' @inheritParams BiocGenerics::subset
-#' @export
-#' @seealso \code{\link[BiocGenerics:subset]{subset}}. 
-#' \code{\link{weaveWeb}} for the anansiWeb constructor functions that 
-#' take link data frames.
-#' @examples
-#' # prep input
-#' l <- asLinkMap(kegg_link())
-#' 
 #' # Sub-setting is only performed on data frames that contain the arguments
 #' str(subset(x = l, cpd %in% c("C00001", "C00002")))
-#' 
+#'
 #' # Several data frames at the same time:
 #' str(subset(x = l, ec %in% c("1.2.3.4", "4.3.2.1")))
-#' 
-setMethod("subset", "anansiLinkMap", 
-          function(x, subset, ...) {
-            stopifnot("'link' must be one or several data.frame objects." =
-                        validLinkMap(x))
-            
-            # Mimic missing behaviour of base::subset 
-            if(missing(subset)) subset <- quote(TRUE) else subset <- substitute(subset)
-            
-            # Now handle list, start with selection
-            sub.vars <- all.vars(subset)
-            x.names <- names(x)
-            
-            # Select those data frames where all terms are mentioned
-            sub.ind <- unlist(lapply(x.names, function(y) all( sub.vars %in% y )))
-            
-            # Subset
-            x[sub.ind] <- lapply(x[sub.ind], function(y) {
-              r <- eval(subset, y, parent.frame() )
-              return(y[r,]) })
-            
-            return(x)
-          }
-)
+#'
+setMethod("subset", "anansiLinkMap", function(x, subset, select, ...) {
+  validObject(x); x.names <- names(x)
+  # PART I: SUBSETTING
+  if(!missing(subset)) {
+    subset <- substitute(subset); sub.vars <- all.vars(subset)
+    # Select those data frames where all terms are mentioned
+    sub.ind <- unlist(lapply(x.names, function(y) all( sub.vars %in% y )))
+    # Subset them
+    x[sub.ind] <- lapply(x[sub.ind], function(y) {
+      r <- eval(subset, y, parent.frame() )
+      return(y[r,]) })  }
+  # Return now if only one df.
+  if(length(x) == 1L) return(x)
 
-#' Get a graph object out of an anansiLinkMap. 
-#' @rdname anansiLinkMap-methods
-#' @param x \code{anansiLinkMap}
-#' @param format 
-#' \code{Character scalar}, controls output format by package name. 
-#' \code{"igraph"} and \code{"graph"} are supported. 
-#' 
-#' @param ... additional arguments (currently not used). 
-#' @importFrom igraph graph_from_data_frame as_graphnel
-#' @seealso 
-#' \code{\link[igraph:graph_from_data_frame]{graph_from_data_frame}} and 
-#' \code{\link[igraph:as_graphnel]{as_graphnel}}, which are used under the hood, 
-#' from \code{\link[igraph:igraph]{igraph}} package.
-#' @export
-#' @examples 
-#' # Generate a regular igraph object
-#' g <- getGraph( kegg_link() )
-#' plot(g)
-#' 
-#' # Output formats
-#' getGraph( ec2cpd, format =  "graph" )
-#' getGraph( ec2cpd, format = "igraph" )
-#' 
-#' 
-setMethod("getGraph", "anansiLinkMap", 
-          function(x, format = "igraph", ...) {
-            validObject(x)
-            
-            g <- graph_from_data_frame(x@edgelist, directed = FALSE)
-            
-            switch(format, 
-                   "igraph" = {}, 
-                   "graph"  = g <- as_graphnel(g) 
-            )
-            return(g)
-          }
-)
+  # PART II: SELECTING
+  if(missing(select)) {
+    id.vec   <- unlist(x.names, use.names = FALSE)
+    id.share <- id.vec[duplicated(id.vec)]
+    sel.vars <- id.share} else sel.vars <- all.vars(substitute(select))
+  for(v in sel.vars) {
+    # Select those data frames where all terms are mentioned
+    s.ind <- unlist(lapply(x.names, function(y) v %in% y ))
+    sel.obj <- x[s.ind]
+    keep    <- Reduce(intersect, lapply(sel.obj, function(df) df[,v]))
+    # Filter feature ids in each df to only include universally shared ones.
+    x[s.ind] <- lapply(sel.obj, function(df) return( df[df[[v]] %in% keep,] ))
+  }
+  return(x)
+})
 
-setMethod("getGraph", "list", 
-          function(x, format = "igraph", ...) getGraph( asLinkMap(x), format)
-)
+################################################################################
+################################################################################
 
 #' Is this a data.frame with exactly two columns that are named?
 #' @noRd
-validLinkDF <- function(x) is.data.frame(x) && 
+validLinkDF <- function(x) is.data.frame(x) &&
   NCOL(x) == 2L &&
   length(colnames(x)) == 2L

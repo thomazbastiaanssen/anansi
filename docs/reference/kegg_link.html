@@ -97,7 +97,7 @@ data.frames, <code>ec2cpd</code> and <code>ec2ko</code>.</p>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">kegg_link</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ec2ko</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>               ec     ko</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1        1.1.1.1 K00001</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2        1.1.1.2 K00002</span>
@@ -9892,7 +9892,7 @@ data.frames, <code>ec2cpd</code> and <code>ec2ko</code>.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 9791    2.7.11.1 K28089</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 9792     4.6.1.2 K28089</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ec2cpd</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                ec    cpd</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1         1.1.1.1 C00001</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2       1.1.1.115 C00001</span>
@@ -43148,9 +43148,9 @@ data.frames, <code>ec2cpd</code> and <code>ec2ko</code>.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 33252  1.14.20.16 C23000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Generate ec2ko and ec2cpd: </span></span></span>
-<span class="r-in"><span><span class="co"># Don't download during tests. set to `TRUE` to download. </span></span></span>
-<span class="r-in"><span><span class="va">dry_run</span> <span class="op">&lt;-</span> <span class="cn">TRUE</span> </span></span>
+<span class="r-in"><span><span class="co"># Generate ec2ko and ec2cpd:</span></span></span>
+<span class="r-in"><span><span class="co"># Don't download during tests. set to `TRUE` to download.</span></span></span>
+<span class="r-in"><span><span class="va">dry_run</span> <span class="op">&lt;-</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="kw">if</span><span class="op">(</span><span class="op">!</span><span class="va">dry_run</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span></span></span>
@@ -43158,7 +43158,7 @@ data.frames, <code>ec2cpd</code> and <code>ec2ko</code>.</p>
 <span class="r-in"><span><span class="va">ec2ko</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>ec <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">"ec:"</span>,<span class="st">""</span>,  x <span class="op">=</span> <span class="va">ec2ko</span>, fixed <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                    ko <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">"ko:"</span>, <span class="st">""</span>, x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">ec2ko</span><span class="op">)</span>, fixed <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                    row.names <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></span>
-<span class="r-in"><span>                    </span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">ec2cpd</span> <span class="op">&lt;-</span> <span class="fu">KEGGREST</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/KEGGREST/man/keggLink.html" class="external-link">keggLink</a></span><span class="op">(</span><span class="st">"ec"</span>, <span class="st">"cpd"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">ec2cpd</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>ec  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">"ec:"</span>,<span class="st">""</span>,   x <span class="op">=</span> <span class="va">ec2cpd</span>, fixed <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                     cpd <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">"cpd:"</span>, <span class="st">""</span>, x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">ec2cpd</span><span class="op">)</span>, fixed <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span></span>

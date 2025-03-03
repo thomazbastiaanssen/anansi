@@ -4,7 +4,7 @@ test_that("plotAnansi", {
   KOs <- floor(FMT_KOs)
   KOs <- apply(KOs, c(1, 2), function(x) as.numeric(as.character(x)))
   KOs <- KOs[apply(KOs == 0, 1, sum) <= (ncol(KOs) * 0.90), ]
-  KOs <- KOs[row.names(KOs) %in% sort(unique(unlist(anansi_dic))), ]
+  KOs <- KOs[row.names(KOs) %in% sort(unique(ec2ko$ko)), ]
   KOs.exp <- clr_c(KOs)
   t1 <- t(FMT_metab)
   t2 <- t(KOs.exp)

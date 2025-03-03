@@ -43,7 +43,7 @@
 #' KO_tse <- TreeSummarizedExperiment(assays = SimpleList(counts = as.matrix(FMT_KOs)))
 #'
 #' # Select functions that are represented in the dictionary
-#' keep <- row.names(KO_tse) %in% sort(unique(unlist(anansi_dic)))
+#' keep <- row.names(KO_tse) %in% sort(unique(ec2ko$ko))
 #' KO_tse <- KO_tse[keep, ]
 #'
 #' # Remove features with less than 10% prevalence
@@ -122,7 +122,7 @@ setMethod("getAnansi",
     # Combine anansi args into list
     anansi_args <- c(list(web = web, metadata = as.data.frame(coldata)), kwargs)
     keep <- names(anansi_args) %in% c(
-      "web", "formula", "groups", "metadata", 
+      "web", "formula", "groups", "metadata",
       "adjust.method", "verbose", "return.format"
     )
     anansi_args <- anansi_args[keep]

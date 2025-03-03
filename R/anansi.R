@@ -32,7 +32,6 @@
 #' @examples
 #' # Load example data:
 #'
-#' data(dictionary)
 #' data(FMT_data)
 #'
 #' # Clean and prepare the example data.
@@ -42,7 +41,7 @@
 #' KOs <- apply(KOs, c(1, 2), function(x) as.numeric(as.character(x)))
 #' KOs <- KOs[apply(KOs == 0, 1, sum) <= (ncol(KOs) * 0.90), ]
 #'
-#' KOs <- KOs[row.names(KOs) %in% sort(unique(unlist(anansi_dic))), ]
+#' KOs <- KOs[row.names(KOs) %in% sort(unique(ec2ko$ko)), ]
 #'
 #' # CLR-transform.
 #'
@@ -71,13 +70,13 @@
 #' )
 #'
 #' library(tidyr)
-#' 
+#'
 #' # Use tidyr to wrangle the correlation r-values to a single column
-#' anansiLong <- anansi_out |> 
+#' anansiLong <- anansi_out |>
 #'   pivot_longer(starts_with("All") | contains("FMT")) |>
-#'   separate_wider_delim(name, delim = "_", names = c("cor_group", "param")) |> 
-#'   pivot_wider(names_from = param, values_from = value) 
-#'   
+#'   separate_wider_delim(name, delim = "_", names = c("cor_group", "param")) |>
+#'   pivot_wider(names_from = param, values_from = value)
+#'
 #' # Only consider interactions where the entire model fits well enough.
 #' library(ggplot2)
 #' anansiLong <- anansiLong[anansiLong$full_p.values < 0.05, ]
@@ -111,7 +110,7 @@
 #'   theme_bw()
 #'
 #' # Using miaViz style function:
-#'  
+#'
 #' p <- plotAnansi(anansi_out,
 #'                 association.type = "disjointed",
 #'                 model.var = "Legend",
@@ -126,12 +125,12 @@
 #'     "All" = "gray"
 #'   )) +
 #'   theme_bw()
-#'   
+#'
 #'   p
 #'
 #'
 anansi <- function(web, formula = ~1, groups = NULL, metadata,
-                   adjust.method = "BH", verbose = TRUE, 
+                   adjust.method = "BH", verbose = TRUE,
                    return.format = "table") {
   return.format <- match.arg(return.format, choices = c("table", "list", "raw"))
 

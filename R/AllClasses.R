@@ -53,6 +53,7 @@ setClass("anansiLinkMap",
 #' @param object 
 #' \code{any} object, but not much will happen unless the object's class has a 
 #' formal definition.
+#' @importFrom methods validObject
 #' @returns \code{TRUE} if passes, character vector otherwise. 
 #' 
 setValidity("anansiLinkMap", method = function(object) 

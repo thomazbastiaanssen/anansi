@@ -1,4 +1,5 @@
-#' @rdname anansiLinkMap-methods
+#' extract or make a graph
+#' @rdname getGraph
 #' @usage NULL
 #' @export
 #' 

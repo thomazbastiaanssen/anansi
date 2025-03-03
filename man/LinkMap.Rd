@@ -12,7 +12,7 @@ asLinkMap(x)
 \item{x}{\code{any} object, most likely \code{list} of data frames.}
 }
 \description{
-\code{asLinkMap()} constructs an \code{anansiLinkMap} object from a validly 
+\code{asLinkMap()} constructs an \code{anansiLinkMap} object from a validly
 formed data frame or list of such data.frames.
 }
 \examples{
@@ -21,7 +21,7 @@ asLinkMap( kegg_link() )
 }
 \seealso{
 \itemize{
-\item \code{\link{kegg_link}}: for an example of valid input. 
+\item \code{\link{kegg_link}}: for an example of valid input.
 \item \code{\link{anansiLinkMap-class}}: for class.
 \item \code{\link{anansiLinkMap-methods}} for methods.
 }

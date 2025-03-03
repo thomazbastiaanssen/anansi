@@ -60,8 +60,8 @@ anansiWeb <- weaveWeb( y ~ x, link = "none",
 
 ### link to adjacency matrix vignette
 
-```{r link-terms} 
-terms(anansiWeb) 
+```{r link-names} 
+names(anansiWeb) 
 ```
 
 ```{r formula-anansi-full} 

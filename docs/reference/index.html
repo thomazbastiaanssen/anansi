@@ -74,28 +74,16 @@
         <dd>Snippet of the metadata from the FMT Aging study.</dd>
       </dl><dl><dt>
 
-          <code><a href="KO_member_dic.html">KO_member_dic</a></code>
+          <code><a href="LinkMap.html">asLinkMap()</a></code>
 
         </dt>
-        <dd>Dictionary to link KEGG orthologues based on their pathway membership.</dd>
-      </dl><dl><dt>
-
-          <code><a href="KO_translation.html">KO_translation</a></code>
-
-        </dt>
-        <dd>Lookup table to convert KEGG orthologue (KO) IDs to their human-readable counterparts</dd>
+        <dd>Make and anansiLinkMap</dd>
       </dl><dl><dt>
 
           <code><a href="anansi.html">anansi()</a></code>
 
         </dt>
         <dd>Calculate an association network</dd>
-      </dl><dl><dt>
-
-          <code><a href="anansi.p.adjust.html">anansi.p.adjust()</a></code>
-
-        </dt>
-        <dd>Handle FDR methods for anansi.</dd>
       </dl><dl><dt>
 
           <code><a href="anansiCor.html">anansiCor()</a></code>
@@ -122,10 +110,16 @@
         <dd>Run differential correlation analysis for all interacting metabolites and functions.</dd>
       </dl><dl><dt>
 
-          <code><a href="anansiInput-class.html">anansiInput-class</a></code>
+          <code><a href="anansiLinkMap-class.html">anansiLinkMap-class</a></code>
 
         </dt>
-        <dd>An S4 class to contain all <code>anansi</code> input so that they can easily be extracted.</dd>
+        <dd>anansiLinkMap S4 container class</dd>
+      </dl><dl><dt>
+
+          <code><a href="anansiLinkMap-methods.html">names(<i>&lt;anansiLinkMap&gt;</i>)</a></code> <code><a href="anansiLinkMap-methods.html">subset(<i>&lt;anansiLinkMap&gt;</i>)</a></code>
+
+        </dt>
+        <dd>S4 Methods for anansiLinkMap</dd>
       </dl><dl><dt>
 
           <code><a href="anansiTale-class.html">anansiTale-class</a></code>
@@ -140,7 +134,7 @@
         <dd>anansiWeb S4 container class</dd>
       </dl><dl><dt>
 
-          <code><a href="anansiWeb-methods.html">`$`(<i>&lt;anansiWeb&gt;</i>)</a></code> <code><a href="anansiWeb-methods.html">`$&lt;-`(<i>&lt;anansiWeb&gt;</i>)</a></code> <code><a href="anansiWeb-methods.html">dimnames(<i>&lt;anansiWeb&gt;</i>)</a></code> <code><a href="anansiWeb-methods.html">terms(<i>&lt;anansiWeb&gt;</i>)</a></code>
+          <code><a href="anansiWeb-methods.html">`$`(<i>&lt;anansiWeb&gt;</i>)</a></code> <code><a href="anansiWeb-methods.html">`$&lt;-`(<i>&lt;anansiWeb&gt;</i>)</a></code> <code><a href="anansiWeb-methods.html">dimnames(<i>&lt;anansiWeb&gt;</i>)</a></code> <code><a href="anansiWeb-methods.html">names(<i>&lt;anansiWeb&gt;</i>)</a></code>
 
         </dt>
         <dd>Accessing and modifying information in anansiWeb S4 class</dd>
@@ -150,12 +144,6 @@
 
         </dt>
         <dd>compute CLR using Aitchison's method</dd>
-      </dl><dl><dt>
-
-          <code><a href="anansi_dic.html">anansi_dic</a></code>
-
-        </dt>
-        <dd>Dictionary to link KEGG compounds to KEGG orthologues</dd>
       </dl><dl><dt>
 
           <code><a href="clr_imputed.html">clr_imputed()</a></code>
@@ -170,22 +158,16 @@
         <dd>Impute zeroes and perform a centered log-ratio (CLR) transformation</dd>
       </dl><dl><dt>
 
-          <code><a href="cpd_translation.html">cpd_translation</a></code>
-
-        </dt>
-        <dd>Lookup table to convert KEGG compound IDs to their human-readable counterparts</dd>
-      </dl><dl><dt>
-
-          <code><a href="frame.tale.html">frame.tale()</a></code>
-
-        </dt>
-        <dd>Extract information from an anansiTale object and parse it into a neat table</dd>
-      </dl><dl><dt>
-
           <code><a href="getAnansi.html">getAnansi()</a></code>
 
         </dt>
         <dd>anansi wrapper for the MultiAssayExperiment class</dd>
+      </dl><dl><dt>
+
+          <code><a href="getGraph.html">getGraph(<i>&lt;anansiLinkMap&gt;</i>)</a></code> <code><a href="getGraph.html">getGraph(<i>&lt;list&gt;</i>)</a></code>
+
+        </dt>
+        <dd>extract or make a graph</dd>
       </dl><dl><dt>
 
           <code><a href="getWeb.html">getWeb(<i>&lt;MultiAssayExperiment&gt;</i>)</a></code>
@@ -227,7 +209,7 @@
           <code><a href="plotAnansi.html">plotAnansi()</a></code>
 
         </dt>
-        <dd>Dissociation plot</dd>
+        <dd>miaViz style plotting wrapper for anansi output</dd>
       </dl><dl><dt>
 
           <code><a href="softmax.html">softmax()</a></code>

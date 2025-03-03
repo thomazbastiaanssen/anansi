@@ -1,26 +1,26 @@
 #' Accessing and modifying information in anansiWeb S4 class
 #' @name anansiWeb-methods
-#' @description \code{anansiWeb} supports \code{$} operator for getting and 
+#' @description \code{anansiWeb} supports \code{$} operator for getting and
 #' assigning values.
-#' 
-#' \code{ dimnames( x ) } is shorthand for \code{dimnames( x$dictionary )} and 
-#' \code{terms( x )} is in turn shorthand for \code{names( dimnames(x) )}. 
-#' 
-#' @returns a specified \code{anansiWeb} object. 
-#' 
+#'
+#' \code{ dimnames( x ) } is shorthand for \code{dimnames( x$dictionary )} and
+#' \code{names( x )} is in turn shorthand for \code{names( dimnames(x) )}.
+#'
+#' @returns a specified \code{anansiWeb} object.
+#'
 #' @seealso \itemize{
-#' \item \code{\link{anansiWeb-class}}. 
+#' \item \code{\link{anansiWeb-class}}.
 #' \item \code{\link{weaveWeb}}: for general use.
 #'}
-#' @importFrom methods slotNames slot slot<- 
+#' @importFrom methods slotNames slot slot<-
 #' @examples
 #' # prepare an anansiWeb
 #' w <- weaveWeb(cpd ~ ko)
-#' 
+#'
 #' w$dictionary
-#' 
-#' terms(w) 
-#'   
+#'
+#' names(w)
+#'
 NULL
 
 #' @noRd
@@ -32,31 +32,31 @@ NULL
 #' @exportMethod $
 #' @inheritParams base::`$`
 #' @rdname anansiWeb-methods
-#' 
+#'
 setMethod("$", "anansiWeb", definition = function(x, name) slot(x, name) )
 
 #' @exportMethod $<-
 #' @inheritParams base::`$<-`
 #' @rdname anansiWeb-methods
-#' 
+#'
 setReplaceMethod("$", "anansiWeb", def = function(x, name, value) {
   slot(x, name) <- value
   return(x)}
  )
 
 #' @rdname anansiWeb-methods
+#' @inheritParams base::dimnames
 #' @export
-#' 
-setMethod("dimnames", "anansiWeb", 
+#'
+setMethod("dimnames", "anansiWeb",
           function(x) dimnames(x@dictionary)
 )
 
 #' @rdname anansiWeb-methods
+#' @inheritParams base::names
 #' @export
-#' 
-setMethod("names", "anansiWeb", 
-          function(x) names( dimnames( x@dictionary) ) 
-)
+#'
+setMethod("names", "anansiWeb", function(x) names( dimnames( x@dictionary) ))
 
 #' @noRd
 #'

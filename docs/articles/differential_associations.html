@@ -126,7 +126,7 @@ measures through <code>Error()</code> notation.</li>
 <h4 id="link-to-adjacency-matrix-vignette">link to adjacency matrix vignette<a class="anchor" aria-label="anchor" href="#link-to-adjacency-matrix-vignette"></a>
 </h4>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/terms.html" class="external-link">terms</a></span><span class="op">(</span><span class="va">anansiWeb</span><span class="op">)</span> </span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">anansiWeb</span><span class="op">)</span> </span></code></pre></div>
 <pre><code><span><span class="co">## [1] "y" "x"</span></span></code></pre>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># out &lt;- anansi(anansiWeb, formula = ~ treatment * temperature, </span></span>
@@ -161,12 +161,6 @@ describe the scenario where there is a detectable association in all
 cases, but the quality of that association differs. Emergent
 associations describe the case where an association can be detected in
 one case but not in another.</p>
-<p>The features Y and X are from different data sets and differential
-associations can be expressed in the style of R classical linear models:
-<span class="math inline">\(lm(Y \sim X \underline{\times
-Phenotype})\)</span> and <span class="math inline">\(lm(abs(residuals(
-lm(Y \sim X)) ) \sim \underline{Phenotype})\)</span> for disjointed and
-emergent associations, respectively.</p>
 <div class="figure">
 <img src="differential_associations_files/figure-html/fig-diffab-1.png" alt="An example of differential associations between hypothetical
 features Y and X. In both cases, phenotype C illustrates the differential 
@@ -183,6 +177,12 @@ describe the case where an association can be detected in one case but
 not in another.
 </p>
 </div>
+<p>The features Y and X are from different data sets and differential
+associations can be expressed in the style of R classical linear models:
+<span class="math inline">\(lm(Y \sim X \underline{\times
+Phenotype})\)</span> and <span class="math inline">\(lm( abs( residuals(
+lm(Y \sim X)) ) \sim \underline{Phenotype})\)</span> for disjointed and
+emergent associations, respectively.</p>
 <div class="section level4">
 <h4 id="ref-propr-paper-">ref <code>propr</code> paper.<a class="anchor" aria-label="anchor" href="#ref-propr-paper-"></a>
 </h4>

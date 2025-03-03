@@ -17,6 +17,8 @@
 \S4method{names}{anansiWeb}(x)
 }
 \arguments{
+\item{x}{an \R object, for example a matrix, array or data frame.}
+
 \item{name}{
     a literal character string or a \link[base]{name} (possibly \link[base]{backtick}
     quoted).  For extraction, this is normally (see under
@@ -31,11 +33,11 @@
 a specified \code{anansiWeb} object.
 }
 \description{
-\code{anansiWeb} supports \code{$} operator for getting and 
+\code{anansiWeb} supports \code{$} operator for getting and
 assigning values.
 
-\code{ dimnames( x ) } is shorthand for \code{dimnames( x$dictionary )} and 
-\code{terms( x )} is in turn shorthand for \code{names( dimnames(x) )}.
+\code{ dimnames( x ) } is shorthand for \code{dimnames( x$dictionary )} and
+\code{names( x )} is in turn shorthand for \code{names( dimnames(x) )}.
 }
 \examples{
 # prepare an anansiWeb
@@ -43,12 +45,12 @@ w <- weaveWeb(cpd ~ ko)
 
 w$dictionary
 
-terms(w) 
-  
+names(w)
+
 }
 \seealso{
 \itemize{
-\item \code{\link{anansiWeb-class}}. 
+\item \code{\link{anansiWeb-class}}.
 \item \code{\link{weaveWeb}}: for general use.
 }
 }

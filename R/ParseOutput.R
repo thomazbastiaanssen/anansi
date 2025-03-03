@@ -1,6 +1,7 @@
 #' Extract information from an anansiTale object and parse it into a neat table
 #' @param tale An \code{anansiTale} object
 #' @param dic A dictionary.
+#' @noRd
 #' @return A wide format data.frame with summary statistics by feature pair.
 #'
 frame.tale <- function(tale, dic){
@@ -46,4 +47,19 @@ result.df <- function(out.list, dic) {
 
   df.list <- c(feature_labs, lapply(out.list, frame.tale, dic))
   do.call(what = "cbind.data.frame", args = df.list, quote = TRUE)
+}
+
+#' Handle FDR methods for anansi.
+#' @param results The results table containing p-values to be adjusted.
+#' @param method The p-value adjustment method. See ?p.adjust.
+#' @return The `results` table, extended with adjusted p.values.
+#' @importFrom stats p.adjust
+#' @noRd
+#'
+anansi.p.adjust <- function(results, method){
+    p.cols <- grep("p.values", colnames(results))
+    q.cols <- apply(results[,p.cols, drop = FALSE], 2, p.adjust, method)
+    colnames(q.cols) <- gsub(
+        "_p.values", "_q.values", x = colnames(q.cols), fixed = TRUE)
+    cbind.data.frame(results, q.cols)
 }

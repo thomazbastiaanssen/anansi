@@ -240,19 +240,17 @@ is how the KEGG database refers to
 IDs are on the same row of the `data.frame`, it means those features are paired
 (hence adjacency). 
 
-### linking between terms
+### linking between feature names
 The column names correspond to the types of feature IDs that should be linked. 
 These names are used throughout the `anansiWeb` workflow. They can be directly 
 called from an `anansiWeb` object:
 
-```{r terms}
+```{r names}
 # Note that the formula controls the order 
-names(dimnames(
-  weaveWeb(ko~ec)$dictionary
-  ))
+names(dimnames( weaveWeb(ko~ec)$dictionary ))
 
-# terms() is short for the above
-terms(weaveWeb(ec~ko))
+# names() is short for the above
+names(weaveWeb(ec~ko))
 ```
 ## The pre-packaged kegg linking map
 By default, `weaveWeb()` will assume to use the pre-packaged kegg link map, 
@@ -305,7 +303,7 @@ The most flexible way to make an `anansiWeb` object is through `as_web()`:
   )
 
 # Confirm the warning:  
-  terms(w)
+  names(w)
 ```
 ## Additional approaches
 There are numerous ways in which we can define an adjacency matrix. Here, we 
