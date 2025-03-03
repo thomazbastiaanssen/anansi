@@ -1,3 +1,11 @@
+#' @rdname anansiLinkMap-methods
+#' @usage NULL
+#' @export
+#' 
+setGeneric("getGraph", signature = c("x"),
+           function(x, ...) standardGeneric("getGraph")
+)
+
 #' weaveWeb wrapper for the MultiAssayExperiment class
 #' @rdname getWeb
 #' @usage NULL
@@ -13,4 +21,12 @@ setGeneric("getWeb", signature = c("x"),
 #' @export
 setGeneric("getAnansi", signature = c("x"),
            function(x, ...) standardGeneric("getAnansi")
+)
+
+#' miaViz style plotting wrapper for anansi output
+#'
+#' @rdname plotAnansi
+#' @export
+setGeneric("plotAnansi", signature = c("x"),
+           function(x, ...) standardGeneric("plotAnansi")
 )

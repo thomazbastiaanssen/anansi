@@ -44,18 +44,17 @@ setReplaceMethod("$", "anansiWeb", def = function(x, name, value) {
   return(x)}
  )
 
-#' @exportMethod dimnames
 #' @rdname anansiWeb-methods
+#' @export
 #' 
 setMethod("dimnames", "anansiWeb", 
           function(x) dimnames(x@dictionary)
 )
 
 #' @rdname anansiWeb-methods
-#' @inheritParams stats::terms
-#' @exportMethod terms
+#' @export
 #' 
-setMethod("terms", "anansiWeb", 
+setMethod("names", "anansiWeb", 
           function(x) names( dimnames( x@dictionary) ) 
 )
 

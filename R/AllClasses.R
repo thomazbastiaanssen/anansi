@@ -16,6 +16,7 @@
 #' \item \code{\link{anansiWeb-methods}} for methods, including \code{$} 
 #' operator.
 #'}
+#'
 setClass("anansiWeb",
          slots = c(
            tableY     = "matrix",
@@ -23,6 +24,43 @@ setClass("anansiWeb",
            dictionary = "Matrix"
          )
 )
+
+#' anansiLinkMap S4 container class
+#' @name anansiLinkMap-class
+#' @description 
+#' \code{anansiLinkMap} is an S4 class containing one or several data frames 
+#' structured as edge lists from the \code{igraph} package. 
+#' @slot edgelist \code{data.frame}, a two column character data frame 
+#' describing the relation of the data frames contained.
+#' @export
+#' @seealso \itemize{
+#' \item \code{\link{LinkMap}}: for general use.
+#' \item \code{\link{anansiLinkMap-methods}} for methods
+#' \item \code{\link[igraph:igraph]{igraph}}.
+#'}
+#'
+setClass("anansiLinkMap",
+         contains = "list",
+         slots = c(
+           edgelist = "data.frame"
+         ), 
+)
+
+#' is valid anansiLinkMap?
+#' @noRd
+#' @description
+#' returns TRUE if input is in the right format to be an anansiLinkMap object
+#' @param object 
+#' \code{any} object, but not much will happen unless the object's class has a 
+#' formal definition.
+#' @returns \code{TRUE} if passes, character vector otherwise. 
+#' 
+setValidity("anansiLinkMap", method = function(object) 
+  ifelse(
+  test = validLinkDF(object) || all(unlist(lapply(object, validLinkDF))), 
+  yes = TRUE, 
+  no = "object is not in a valid format.")
+  )
  
 #' An S4 class to contain all \code{anansi} stats results so that they can
 #' easily be extracted.
