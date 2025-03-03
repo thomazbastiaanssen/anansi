@@ -251,7 +251,7 @@ respectively. If two feature IDs are on the same row of the
 adjacency).</p>
 </div>
 <div class="section level4">
-<h4 id="linking-between-terms">linking between terms<a class="anchor" aria-label="anchor" href="#linking-between-terms"></a>
+<h4 id="linking-between-feature-names">linking between feature names<a class="anchor" aria-label="anchor" href="#linking-between-feature-names"></a>
 </h4>
 <p>The column names correspond to the types of feature IDs that should
 be linked. These names are used throughout the <code>anansiWeb</code>
@@ -259,13 +259,11 @@ workflow. They can be directly called from an <code>anansiWeb</code>
 object:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Note that the formula controls the order </span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/dimnames.html" class="external-link">dimnames</a></span><span class="op">(</span></span>
-<span>  <span class="fu"><a href="../reference/web.html">weaveWeb</a></span><span class="op">(</span><span class="va">ko</span><span class="op">~</span><span class="va">ec</span><span class="op">)</span><span class="op">$</span><span class="va">dictionary</span></span>
-<span>  <span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/dimnames.html" class="external-link">dimnames</a></span><span class="op">(</span> <span class="fu"><a href="../reference/web.html">weaveWeb</a></span><span class="op">(</span><span class="va">ko</span><span class="op">~</span><span class="va">ec</span><span class="op">)</span><span class="op">$</span><span class="va">dictionary</span> <span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] "ko" "ec"</span></span></code></pre>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># terms() is short for the above</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/stats/terms.html" class="external-link">terms</a></span><span class="op">(</span><span class="fu"><a href="../reference/web.html">weaveWeb</a></span><span class="op">(</span><span class="va">ec</span><span class="op">~</span><span class="va">ko</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># names() is short for the above</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="../reference/web.html">weaveWeb</a></span><span class="op">(</span><span class="va">ec</span><span class="op">~</span><span class="va">ko</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] "ec" "ko"</span></span></code></pre>
 </div>
 </div>
@@ -374,7 +372,7 @@ through <code><a href="../reference/web.html">as_web()</a></code>:</p>
 <span><span class="co">## 'dictionary' were missing; Assigned 'y' and 'x'.</span></span></code></pre>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Confirm the warning:  </span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/stats/terms.html" class="external-link">terms</a></span><span class="op">(</span><span class="va">w</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">w</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] "y" "x"</span></span></code></pre>
 </div>
 <div class="section level3">

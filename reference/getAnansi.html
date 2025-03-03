@@ -47,7 +47,7 @@ anansi in the given order."></head><body>
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>anansi wrapper for the MultiAssayExperiment class</h1>
-      <small class="dont-index">Source: <a href="https://github.com/thomazbastiaanssen/anansi/blob/beta/R/AllGenerics.R" class="external-link"><code>R/AllGenerics.R</code></a>, <a href="https://github.com/thomazbastiaanssen/anansi/blob/beta/R/getAnansi.R" class="external-link"><code>R/getAnansi.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/thomazbastiaanssen/anansi/blob/beta/R/AllGenerics.R" class="external-link"><code>R/AllGenerics.R</code></a>, <a href="https://github.com/thomazbastiaanssen/anansi/blob/beta/R/getAnansi-methods.R" class="external-link"><code>R/getAnansi-methods.R</code></a></small>
       <div class="d-none name"><code>getAnansi.Rd</code></div>
     </div>
 
@@ -218,7 +218,7 @@ interactions between the two assays.</p>
 <span class="r-in"><span><span class="va">KO_tse</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/TreeSummarizedExperiment/man/TreeSummarizedExperiment-constructor.html" class="external-link">TreeSummarizedExperiment</a></span><span class="op">(</span>assays <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/SimpleList-class.html" class="external-link">SimpleList</a></span><span class="op">(</span>counts <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">FMT_KOs</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Select functions that are represented in the dictionary</span></span></span>
-<span class="r-in"><span><span class="va">keep</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/row.names.html" class="external-link">row.names</a></span><span class="op">(</span><span class="va">KO_tse</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/sort.html" class="external-link">sort</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="va">anansi_dic</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">keep</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/row.names.html" class="external-link">row.names</a></span><span class="op">(</span><span class="va">KO_tse</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/sort.html" class="external-link">sort</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">ec2ko</span><span class="op">$</span><span class="va">ko</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">KO_tse</span> <span class="op">&lt;-</span> <span class="va">KO_tse</span><span class="op">[</span><span class="va">keep</span>, <span class="op">]</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Remove features with less than 10% prevalence</span></span></span>
@@ -263,41 +263,41 @@ interactions between the two assays.</p>
 <span class="r-in"><span><span class="co"># View subset of results</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">out</span>, <span class="fl">5</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    feature_Y feature_X All_r.values All_t.values All_p.values</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17    C00064    K01665   -0.5690175    4.0347936 0.0002930505</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 35    C00064    K02500    0.1420097    0.8365295 0.4086982334</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 36    C00064    K02501    0.1405873    0.8279813 0.4134553584</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17    C00064    K01665   -0.5693164    4.0379296 0.0002904218</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 35    C00064    K02500    0.1363534    0.8025659 0.4278002898</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 36    C00064    K02501    0.1349050    0.7938818 0.4327703764</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Aged yFMT_r.values Aged yFMT_t.values Aged yFMT_p.values Aged oFMT_r.values</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17       -0.002416446        0.007641496          0.9940533         -0.7598952</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 35       -0.289315329        0.955770008          0.3617227          0.6817212</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 36       -0.291604566        0.964032459          0.3577628          0.6804792</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17        -0.01132232         0.03580661          0.9721412         -0.7590030</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 35        -0.30753895         1.02205702          0.3308428          0.6823789</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 36        -0.30982380         1.03045337          0.3270757          0.6811466</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Aged oFMT_t.values Aged oFMT_p.values Young yFMT_r.values</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17           3.696663        0.004131173          -0.1802465</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 35           2.946633        0.014618646          -0.3269920</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 36           2.936626        0.014871139          -0.3180176</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17           3.686417        0.004201625          -0.1842965</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 35           2.951950        0.014486249          -0.3401768</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 36           2.941998        0.014735054          -0.3311831</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Young yFMT_t.values Young yFMT_p.values full_r.squared full_f.values</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17           0.5794807           0.5750863      0.2719237      3.734824</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 35           1.0941904           0.2995266      0.2637154      3.581704</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 36           1.0607277           0.3137604      0.2613745      3.538660</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17           0.5929537           0.5663795      0.2718152      3.732778</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 35           1.1439573           0.2792858      0.2694013      3.687405</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 36           1.1099303           0.2930057      0.2670031      3.642623</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    full_p.values disjointed_Legend_r.squared disjointed_Legend_f.values</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17    0.02156234                   0.0852863                   1.398574</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 35    0.02519618                   0.2567029                   5.180356</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 36    0.02632996                   0.2539936                   5.107066</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17    0.02160709                   0.0833114                   1.363245</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 35    0.02262470                   0.2637960                   5.374789</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 36    0.02367867                   0.2610698                   5.299618</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    disjointed_Legend_p.values emergent_Legend_r.squared</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17                 0.26258975                 0.1016649</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 35                 0.01167983                 0.1378023</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 36                 0.01233498                 0.1428195</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17                 0.27122359                 0.1152378</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 35                 0.01011515                 0.1619624</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 36                 0.01069181                 0.1648405</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    emergent_Legend_f.values emergent_Legend_p.values All_q.values</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17                 1.640971                0.2112788   0.01523863</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 35                 2.317488                0.1164930   0.65886427</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 36                 2.415923                0.1070405   0.65886427</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17                 1.888585               0.16942785   0.01510194</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 35                 2.802326               0.07714733   0.68616587</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 36                 2.861952               0.07339338   0.68616587</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Aged yFMT_q.values Aged oFMT_q.values Young yFMT_q.values full_q.values</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17          0.9940533         0.07160699           0.8732682     0.4563859</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 35          0.5374165         0.15465984           0.7829785     0.4563859</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 36          0.5374165         0.15465984           0.7829785     0.4563859</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17          0.9809225         0.07282817           0.8621558     0.4104303</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 35          0.4915379         0.15324457           0.7763630     0.4104303</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 36          0.4915379         0.15324457           0.7763630     0.4104303</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    disjointed_Legend_q.values emergent_Legend_q.values</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17                  0.5251795                0.5331936</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 35                  0.3207094                0.5331936</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 36                  0.3207094                0.5331936</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17                  0.5280090                0.5182499</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 35                  0.2779869                0.3646965</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 36                  0.2779869                0.3646965</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
