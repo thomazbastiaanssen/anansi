@@ -2,20 +2,20 @@
 #' @name web
 #' @rdname web
 #' @description
-#' Generate a biadjacency matrix, linking the features between two tables. 
-#' Return an \code{anansiWeb} object which contains all three. 
-#' 
-#' \code{weaveWeb()} is for general use and has flexible default settings. 
-#' 
-#' \code{kegg_web()} is a wrapper that sets \code{link} to \code{kegg_link()}. 
-#' All variants are special cases of \code{web()}.  
-#' 
-#' \code{as_web()} constructs an \code{anansiWeb} object from three tables.  
+#' Generate a biadjacency matrix, linking the features between two tables.
+#' Return an \code{anansiWeb} object which contains all three.
 #'
-#' @param x,y \code{Character scalar}, names of feature types that should be 
+#' \code{weaveWeb()} is for general use and has flexible default settings.
+#'
+#' \code{kegg_web()} is a wrapper that sets \code{link} to \code{kegg_link()}.
+#' All variants are special cases of \code{web()}.
+#'
+#' \code{as_web()} constructs an \code{anansiWeb} object from three tables.
+#'
+#' @param x,y \code{Character scalar}, names of feature types that should be
 #'     linked. Should be found in the column names of \code{link}.
 #' @param formula \code{formula} of the form y ~ x, denoting desired output
-#'     format; assigns y to rows and columns to x. Equivalent to using \code{x} 
+#'     format; assigns y to rows and columns to x. Equivalent to using \code{x}
 #'     and \code{y} arguments.
 #' @param link One of the following:
 #' \itemize{
@@ -23,37 +23,37 @@
 #'  \item \code{data.frame} with two columns
 #'  \item \code{list} with two such \code{data.frame}s.
 #' }
-#' @param tableY,tableX A table containing features of interest. Rows should be 
-#'     samples and columns should be features. Y and X refer to the position of 
+#' @param tableY,tableX A table containing features of interest. Rows should be
+#'     samples and columns should be features. Y and X refer to the position of
 #'     the features in a formula: Y ~ X.
 #' @param ... further arguments.
-#' @details 
+#' @details
 #' If the \code{link} argument is \code{"none"}, all features will be considered
-#' linked. If one or more \code{data.frame}s, colnames should be as specified in 
+#' linked. If one or more \code{data.frame}s, colnames should be as specified in
 #' \code{x} and \code{y}.
 #' @seealso \itemize{
 #'  \item \code{\link{anansiWeb-methods}}: For utility functions to get and set.
 #'  \item \code{\link{kegg_link}}: For examples of input for link argument.
-#'  \item \code{\link{getWeb}}: For 
+#'  \item \code{\link{getWeb}}: For
 #'  \code{\link[MultiAssayExperiment]{MultiAssayExperiment}} methods.
 #' }
-#' 
-#' @returns an \code{anansiWeb} object, with sparse binary biadjacency matrix 
-#' with features from \code{y} as rows and features from \code{x} as columns in 
+#'
+#' @returns an \code{anansiWeb} object, with sparse binary biadjacency matrix
+#' with features from \code{y} as rows and features from \code{x} as columns in
 #' \code{dictionary} slot.
 #' @examples
 #' # Basic usage
 #' weaveWeb(cpd ~ ko)
 #' web(x = "ko", y = "ec", link = ec2ko)
 #' web(ec ~ cpd, link = ec2cpd)
-#' 
+#'
 #' # use as_web() to constuct an anansiWeb object from components:
-#' 
+#'
 #' tX <- `colnames<-`(replicate(5, (rnorm(36))), letters[1:5])
 #' tY <- `colnames<-`(replicate(3, (rnorm(36))), LETTERS[1:3])
 #' d <- matrix(TRUE, nrow = NCOL(tY), ncol = NCOL(tX),
 #'             dimnames = list(y = colnames(tY), x = colnames(tX)))
-#' 
+#'
 #' as_web(tableX = tX, tableY = tY, dictionary = d)
 #'
 #' # A wrapper is available for kegg ko, ec and cpd data
@@ -139,18 +139,18 @@ web.formula <- function(
 }
 
 #' @rdname web
-#' @param dictionary A binary adjacency matrix of class \code{Matrix}, or 
+#' @param dictionary A binary adjacency matrix of class \code{Matrix}, or
 #' coercible to \code{Matrix}
 #' @importFrom Matrix Matrix drop0
 #' @export
-#' 
+#'
 as_web <- function(tableX, tableY, dictionary) {
   # coerce
-  if(!is(dictionary, "Matrix")) dictionary <- 
+  if(!is(dictionary, "Matrix")) dictionary <-
       drop0(Matrix(dictionary, sparse = TRUE))
   if(!is(tableX, "matrix")) tableX <- as.matrix(tableX)
   if(!is(tableY, "matrix")) tableY <- as.matrix(tableY)
-  
+
   # check validity
   stopifnot("'tableX' and 'tableY' need same number of rows (observations)" =
             NROW(tableX) == NROW(tableY))
@@ -158,13 +158,13 @@ as_web <- function(tableX, tableY, dictionary) {
               NCOL(tableY) == NROW(dictionary))
   stopifnot("cols in 'tableX' need same amount as rows in dictionary" =
               NCOL(tableX) == NCOL(dictionary))
-  if( is.null( names(dimnames(dictionary)) ) || 
+  if( is.null( names(dimnames(dictionary)) ) ||
       any( names(dimnames(dictionary)) %in% "")) {
-    warning("Dimnames of 'dictionary' were missing; Assigned 'y' and 'x'.")  
+    warning("Dimnames of 'dictionary' were missing; Assigned 'y' and 'x'.")
        names(dimnames(dictionary)) <- c("y", "x")
     }
-    
-  # return anansiWeb 
+
+  # return anansiWeb
     new("anansiWeb",
         tableY     = tableY,
         tableX     = tableX,
@@ -179,8 +179,13 @@ kegg_web <- function(x, ...) web(x, link = kegg_link(), ...)
 #' @rdname web
 #' @export
 #'
-weaveWeb <- 
+weaveWeb <-
   function(x, link = kegg_link(), ...) web(x, link, ...)
+
+
+
+###############################################################################
+###############################################################################
 
 #' Produce a biadjacency matrix given tables and a dictionary
 #' @description calculates a biadjacency matrix for the cases where
@@ -214,21 +219,21 @@ deliver_web_cases <- function(link, terms, tableX, tableY, link_is_list){
 
   } else if (link_is_list) {
     cn.1 <- colnames(link[[1L]]); cn.2 <- colnames(link[[2L]])
-    i <- intersect(cn.1,cn.2) 
+    i <- intersect(cn.1,cn.2)
     stopifnot("data.frames in 'link' must share a colname" = length(i) == 1L)
-    
+
     if(all(cn.1 %in% c(i, terms[1]))) {
 
       x.df <- link[[1L]][, c(i, terms[1L])]
       y.df <- link[[2L]][, c(i, terms[2L])]
 
-    } else if(all(cn.1 %in% c(i, terms[2]))){
+    } else   if(all(cn.1 %in% c(i, terms[2]))) {
 
       x.df <- link[[2L]][, c(i, terms[1L])]
       y.df <- link[[1L]][, c(i, terms[2L])]
 
     }
-       
+
     web_from_2_dfs(x.df, y.df, colnames(tableX), colnames(tableY))
   }
 }
@@ -237,8 +242,8 @@ deliver_web_cases <- function(link, terms, tableX, tableY, link_is_list){
 #' @noRd
 #'
 web_from_2_dfs <- function(x.df, y.df, x.ids, y.ids){
-  if(!is.null(x.ids)) { x.df <- x.df[x.df[,2L] %in% x.ids,] }
-  if(!is.null(y.ids)) { y.df <- y.df[y.df[,2L] %in% y.ids,] }
+    if(!is.null(x.ids)) { x.df <- x.df[x.df[, 2L] %in% x.ids, ] }
+    if(!is.null(y.ids)) { y.df <- y.df[y.df[, 2L] %in% y.ids, ] }
 
   i <- sort(intersect(x.df[,1L],y.df[,1L]))
   x.df <- x.df[x.df[,1L] %in% i,]
