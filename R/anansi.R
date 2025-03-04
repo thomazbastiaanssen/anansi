@@ -240,7 +240,7 @@ check_groups <- function(groups, raw_terms, indErr, metadata, verbose) {
 
   sub_meta <- metadata[, groups, drop = FALSE]
   sub_meta <-
-    sub_meta[, unname(apply( sub_meta, 2, is.categorical)), drop = FALSE]
+    sub_meta[, unlist(lapply( sub_meta, is.categorical)), drop = FALSE]
 
   if (NCOL(sub_meta) == 0) {
     if(verbose) message("No grouping variable found for groupwise correlations.")
@@ -309,9 +309,10 @@ is.categorical <- function(x) is.character(x) || is.factor(x) || is.ordered(x)
 #' Return levels or 'numeric'
 #' @noRd
 #'
-lvs_or_num <- function(x) {
-  if(is.character(x)) return(unique(x))
-  return("numeric")}
+lvs_or_num <- function(x) ifelse(
+    test = is.categorical(x),
+    yes = unique(as.character(x)),
+    no = "numeric")
 
 #' Provide name and levels for categories for group terms
 #' @description convenience function to generate group terms output

@@ -38,42 +38,53 @@ model*.
 * [Section 3](#sec-da-3) Discusses incorporating repeated measures through 
 `Error()` notation. 
 
-# Getting started though the full model {#sec-da-1}
+# Getting started: The full model {#sec-da-1}
 Overview
 full model estimates the effect of x on y.
 
 ## formula syntax. 
 
 ```{r formula-web-full} 
-# setup anansiWeb
-tableY <- matrix( 
-rnorm(60*10), nrow = 60, dimnames = list(ids = 1:60, y = LETTERS[1:10] )
-) 
+# Setup anansiWeb with some dummy data
+tableY <- matrix(rnorm(60*10), nrow = 60, 
+                 dimnames = list(ids = 1:60, y = LETTERS[1:10] ) ) 
 
-tableX <- matrix( 
-rnorm(60*20), nrow = 60, dimnames = list(ids = 1:60, x = letters[1:20] )
-) 
+tableX <- matrix(rnorm(60*20), nrow = 60, 
+                 dimnames = list(ids = 1:60, x = letters[1:20] ) ) 
+
+metadata <- data.frame(sample_id = format(1:60),
+                       treat_cat = rep(c("A", "B", "C"), each = 20), 
+                       score_num = rnorm(60))
 
 anansiWeb <- weaveWeb( y ~ x, link = "none", 
                        tableY = tableY, tableX = tableX ) 
 ```
 
 ### link to adjacency matrix vignette
-
+The variables mentioned in the formula, `y ~ x`, control the feature types to be
+investigated. they can be found back using `names()`. 
 ```{r link-names} 
 names(anansiWeb) 
 ```
+[See the vignette on adjacency matrices.](https://thomazbastiaanssen.github.io/anansi/articles/adjacency_matrices.html) 
 
 ```{r formula-anansi-full} 
-# out <- anansi(anansiWeb, formula = ~ treatment * temperature, 
-# metadata = metadata)
+out <- anansi(anansiWeb, 
+              formula = ~ treat_cat * score_num, groups = "treat_cat",
+              metadata = metadata)
 ```
 Anansi supports arbitrarily complex linear models as well as longitudinal models
 using the R formula syntax. 
 
-full is the `x` part of `y ~ x * (a + b + c)`:
-
-drop `x + x:a + x:b + x:c`. 
+With 'full' model, we mean the total influence of `x`, including all of its 
+interaction terms, on `y`.
+For example, if our input formula was: 
+`y ~ x * (a + b + c)`. R rewrites this as follows: 
+```{r, reformulate}
+update.formula(y ~ x * (a + b + c), .~.)
+```
+The variables that constitute the 'full' effect of x would be: 
+`x + x:a + x:b + x:c`. 
 
 ### compare to `lm()`. 
 
