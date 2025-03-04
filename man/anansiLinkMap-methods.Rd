@@ -62,6 +62,6 @@ subset(x = l, ec \%in\% c("1.2.3.4", "4.3.2.1"))
 }
 \seealso{
 \code{\link[BiocGenerics:subset]{subset}}.
-\code{\link{weaveWeb}} for the anansiWeb constructor functions that
+\code{\link{weaveWeb}} for the AnansiWeb constructor functions that
 take link data frames.
 }

@@ -2,7 +2,7 @@
 #' @description This is the main workspider function in the anansi package. It
 #' manages the individual functionalities of anansi, including correlation
 #' analysis, correlation by group and differential correlation.
-#' @param web An \code{anansiWeb} object, containing two tables with 'omics data
+#' @param web An \code{AnansiWeb} object, containing two tables with 'omics data
 #' and a dictionary that links them. See \code{weaveWebFromTables()} for how to
 #' weave a web.
 #' @param metadata A vector or data.frame of categorical or continuous value
@@ -55,9 +55,10 @@
 #' # Run anansi pipeline.
 #'
 #' web <- weaveWeb(
-#'   cpd ~ ko,
+#'   formula = cpd ~ ko,
 #'   tableY = t1,
 #'   tableX = t2,
+#'   link = kegg_link()
 #' )
 #'
 #' anansi_out <- anansi(
@@ -68,6 +69,7 @@
 #'   adjust.method = "BH",
 #'   verbose = TRUE
 #' )
+#'
 #'
 #' library(tidyr)
 #'

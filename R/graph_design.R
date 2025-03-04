@@ -24,7 +24,7 @@
 #     color=blue;
 #   }
 #
-#   data4 [label = "anansiWeb\nobject", shape = folder, fillcolor = Beige];
+#   data4 [label = "AnansiWeb\nobject", shape = folder, fillcolor = Beige];
 #
 #   subgraph cluster_1 {
 #

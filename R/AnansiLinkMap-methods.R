@@ -1,29 +1,3 @@
-#' Make and anansiLinkMap
-#' @name LinkMap
-#' @rdname LinkMap
-#' @aliases anansiLinkMap asLinkMap
-#' @description
-#' \code{asLinkMap()} constructs an \code{anansiLinkMap} object from a validly
-#' formed data frame or list of such data.frames.
-#' @param x \code{any} object, most likely \code{list} of data frames.
-#' @export
-#' @seealso \itemize{
-#' \item \code{\link{kegg_link}}: for an example of valid input.
-#' \item \code{\link{anansiLinkMap-class}}: for class.
-#' \item \code{\link{anansiLinkMap-methods}} for methods.
-#'}
-#' @examples
-#' asLinkMap( kegg_link() )
-#'
-asLinkMap <- function(x) {
-  if(validLinkDF(x)) x <- list(link = x)
-
-  linkMap <- new("anansiLinkMap", x)
-  validObject(linkMap)
-
-  return(linkMap)
-}
-
 #' S4 Methods for anansiLinkMap
 #' @name anansiLinkMap-methods
 #' @description
@@ -79,7 +53,7 @@ setMethod("getEdgeList", "anansiLinkMap",
 #' @importMethodsFrom BiocGenerics subset
 #' @export
 #' @seealso \code{\link[BiocGenerics:subset]{subset}}.
-#' \code{\link{weaveWeb}} for the anansiWeb constructor functions that
+#' \code{\link{weaveWeb}} for the AnansiWeb constructor functions that
 #' take link data frames.
 #' @examples
 #' # prep input

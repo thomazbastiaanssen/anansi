@@ -123,7 +123,7 @@ paper.</p>
 <h2 id="data-preparation">Data preparation<a class="anchor" aria-label="anchor" href="#data-preparation"></a>
 </h2>
 <p>The main <code>anansi</code> function expects data in the
-<code>anansiWeb</code> format; Basically a list with exactly three
+<code>AnansiWeb</code> format; Basically a list with exactly three
 tables: The first table, <code>tableY</code>, should be a count table of
 metabolites. The second table, <code>tableX</code>, should be a count
 table of functions. Both tables should have columns as features and rows
@@ -182,9 +182,9 @@ KEGG Orthologues (KOs). These tables can be directly plugged in to
 <div class="section level2">
 <h2 id="weave-a-web">Weave a web🕸️<a class="anchor" aria-label="anchor" href="#weave-a-web"></a>
 </h2>
-<p>The <code><a href="../reference/web.html">weaveWeb()</a></code> function can be used to parse the tables
-that we prepared above into an <code>anansiWeb</code> object. The
-<code>anansiWeb</code> format is a necessary input file for the main
+<p>The <code><a href="../reference/AnansiWeb.html">weaveWeb()</a></code> function can be used to parse the tables
+that we prepared above into an <code>AnansiWeb</code> object. The
+<code>AnansiWeb</code> format is a necessary input file for the main
 <code>anansi</code> workflow. It allows <code>anansi</code> to keep
 track of which features from the two input data sets should should be
 considered as pairs.</p>
@@ -193,7 +193,7 @@ and ec features of the KEGG database, but users can provide their own
 maps. <a href="https://thomazbastiaanssen.github.io/anansi/articles/adjacency_matrices.html">See
 vignette on adjacency matrices.</a></p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">web</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/web.html">weaveWeb</a></span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="va">web</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/AnansiWeb.html">weaveWeb</a></span><span class="op">(</span></span>
 <span>  <span class="va">cpd</span> <span class="op">~</span> <span class="va">ko</span>,</span>
 <span>  tableY <span class="op">=</span> <span class="va">t1</span>,</span>
 <span>  tableX <span class="op">=</span> <span class="va">t2</span>,</span>
@@ -205,7 +205,7 @@ vignette on adjacency matrices.</a></p>
 </h2>
 <p>The main workspider in this package is called <code>anansi</code>.
 Generally, you want to give it three arguments. First, there’s
-<code>web</code>, which is an <code>anansiWeb</code> object, such as the
+<code>web</code>, which is an <code>AnansiWeb</code> object, such as the
 one we generated in the above step. Second, there’s
 <code>formula</code>, which should be a formula. For instance, to assess
 differential associations between treatments, we use the formula

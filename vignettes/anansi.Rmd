@@ -58,7 +58,7 @@ data(FMT_data)
 
 # Data preparation
 
-The main `anansi` function expects data in the `anansiWeb` format; Basically a 
+The main `anansi` function expects data in the `AnansiWeb` format; Basically a 
 list with exactly three tables: 
 The first table, `tableY`, should be a count table of metabolites.
 The second table, `tableX`, should be a count table of functions. 
@@ -115,7 +115,7 @@ t2 <- t(KOs.exp)
 # Weave a web🕸️
 
 The `weaveWeb()` function can be used to parse the tables that 
-we prepared above into an `anansiWeb` object. The `anansiWeb` format is a 
+we prepared above into an `AnansiWeb` object. The `AnansiWeb` format is a 
 necessary input file for the main `anansi` workflow. It allows `anansi` to keep 
 track of which features from the two input data sets should should be considered
 as pairs. 
@@ -136,7 +136,7 @@ web <- weaveWeb(
 # Run anansi🕷️
 
 The main workspider in this package is called `anansi`. Generally, you want to 
-give it three arguments. First, there's `web`, which is an `anansiWeb` object, 
+give it three arguments. First, there's `web`, which is an `AnansiWeb` object, 
 such as the one we generated in the above step. Second, there's `formula`, which
 should be a formula. For instance, to assess differential associations between 
 treatments, we use the formula `~Legend`, provided we have a column with that 

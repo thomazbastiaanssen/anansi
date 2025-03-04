@@ -19,7 +19,7 @@
 #     color=blue;
 #     width=100;
 #   }
-#   data4 [label = "anansiWeb\nobject", shape = folder, fillcolor = Beige];
+#   data4 [label = "AnansiWeb\nobject", shape = folder, fillcolor = Beige];
 #   {data1 data2 data3} -> "Filter and\ncheck input";
 #   "Filter and\ncheck input" -> {"Membership\nmode" "Interaction\nmode"} -> "Return Web";
 #   "Return Web" -> "data4";
@@ -30,7 +30,7 @@
 # b = DiagrammeR::grViz('digraph {
 #   graph [fontsize=11 fontname="Verdana" compound = true rankdir = LR];
 #   node [shape=record fontsize=12 fontname="Verdana" style = filled layout=fdp];
-#   data4 [label = "anansiWeb\nobject", shape = folder, fillcolor = Beige];
+#   data4 [label = "AnansiWeb\nobject", shape = folder, fillcolor = Beige];
 #   subgraph cluster_1 {
 #     "Check call" "Pairwise\nassociations" "Differential\nassociations"
 #     subgraph cluster_diff {

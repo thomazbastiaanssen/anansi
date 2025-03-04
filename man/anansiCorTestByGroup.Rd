@@ -7,7 +7,7 @@
 anansiCorTestByGroup(web, group.vec, verbose = TRUE)
 }
 \arguments{
-\item{web}{An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.}
+\item{web}{An \code{AnansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.}
 
 \item{group.vec}{A character vector denoting group membership. Typically a state or treatment score.}
 

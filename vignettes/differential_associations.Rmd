@@ -45,7 +45,7 @@ full model estimates the effect of x on y.
 ## formula syntax. 
 
 ```{r formula-web-full} 
-# Setup anansiWeb with some dummy data
+# Setup AnansiWeb with some dummy data
 tableY <- matrix(rnorm(60*10), nrow = 60, 
                  dimnames = list(ids = 1:60, y = LETTERS[1:10] ) ) 
 
@@ -56,7 +56,7 @@ metadata <- data.frame(sample_id = format(1:60),
                        treat_cat = rep(c("A", "B", "C"), each = 20), 
                        score_num = rnorm(60))
 
-anansiWeb <- weaveWeb( y ~ x, link = "none", 
+AnansiWeb <- weaveWeb( y ~ x, link = "none", 
                        tableY = tableY, tableX = tableX ) 
 ```
 
@@ -64,12 +64,12 @@ anansiWeb <- weaveWeb( y ~ x, link = "none",
 The variables mentioned in the formula, `y ~ x`, control the feature types to be
 investigated. they can be found back using `names()`. 
 ```{r link-names} 
-names(anansiWeb) 
+names(AnansiWeb) 
 ```
 [See the vignette on adjacency matrices.](https://thomazbastiaanssen.github.io/anansi/articles/adjacency_matrices.html) 
 
 ```{r formula-anansi-full} 
-out <- anansi(anansiWeb, 
+out <- anansi(AnansiWeb, 
               formula = ~ treat_cat * score_num, groups = "treat_cat",
               metadata = metadata)
 ```
@@ -171,7 +171,7 @@ disjointed is term interaction with `x`, namely, drop `x:a`, `x:b`, `x:c`.
 
 ```{r intro-error} 
 
-# out <- anansi(anansiWeb, formula = ~ treatment * temperature + Error(participant_id), metadata = metadata)
+# out <- anansi(AnansiWeb, formula = ~ treatment * temperature + Error(participant_id), metadata = metadata)
 
 ```
 

@@ -34,7 +34,7 @@ This vignette is divided by two sections:
 
 * [Section 1](#sec-mat-1) introduces (bi)adjacency matrices in the context of the 
 anansi framework.  
-* [Section 2](#sec-mat-2) introduces the `anansiWeb` object and demonstrates how to 
+* [Section 2](#sec-mat-2) introduces the `AnansiWeb` object and demonstrates how to 
 work with it
 
 # Understanding adjacency matrices {#sec-mat-1}
@@ -191,7 +191,7 @@ ggplot(kd) +
 ```
 
 # General use in anansi {#sec-mat-2}
-In anansi, we work with biadjacency matrices in the `anansiWeb` S4 class, which 
+In anansi, we work with biadjacency matrices in the `AnansiWeb` S4 class, which 
 consists of a biadjacency matrix, in this case we call it a `dictionary`, as 
 well as two tables of observations that should be analysed jointly. 
 
@@ -200,16 +200,16 @@ analysis. To enable more advanced users to pursue non-standard applications, our
 methodology is compatible with several popular interfaces. 
 
 ## Make a biadjacency matrix with `weaveWeb()`
-The recommended default interface to generate an `anansiWeb` object is 
+The recommended default interface to generate an `AnansiWeb` object is 
 `weaveWeb()`. Besides a traditional interface, it also accepts R `formula` 
-syntax. Once we have an `anansiWeb` object, we can use the $ operator to access 
+syntax. Once we have an `AnansiWeb` object, we can use the $ operator to access 
 the biadjacency matrix in the 'dictionary' slot.
 
 ```{r weaveWeb-intro}
 # Two interfaces
-form.web <- weaveWeb(ec ~ ko)
+form.web <- weaveWeb(ec ~ ko, link = kegg_link())
 
-trad.web <- weaveWeb(y = "ec", x = "ko")
+trad.web <- weaveWeb(y = "ec", x = "ko", link = kegg_link())
 
 # Same output
 identical(form.web, trad.web)
@@ -242,21 +242,22 @@ IDs are on the same row of the `data.frame`, it means those features are paired
 
 ### linking between feature names
 The column names correspond to the types of feature IDs that should be linked. 
-These names are used throughout the `anansiWeb` workflow. They can be directly 
-called from an `anansiWeb` object:
+These names are used throughout the `AnansiWeb` workflow. They can be directly 
+called from an `AnansiWeb` object:
 
 ```{r names}
 # Note that the formula controls the order 
-names(dimnames( weaveWeb(ko~ec)$dictionary ))
+names(dimnames( weaveWeb(ko~ec, link = kegg_link())$dictionary ))
 
 # names() is short for the above
-names(weaveWeb(ec~ko))
+names(weaveWeb(ec~ko, link = kegg_link()))
 ```
 ## The pre-packaged kegg linking map
-By default, `weaveWeb()` will assume to use the pre-packaged kegg link map, 
-which consists of two similarly structured `data.frame`s in a list, one of which
-we just inspected. We can call it directly using `kegg_link()`: 
-```{r kegg_web}
+We need to provide `weaveWeb()` with a map of which features are linked. We can 
+use the pre-packaged kegg link map, which consists of two similarly structured 
+`data.frame`s in a list, one of which we just inspected. We can call it directly
+using `kegg_link()`: 
+```{r weaveKEGG}
 # Only print the first few entries
 lapply( kegg_link(), head)
 
@@ -274,15 +275,15 @@ packaged data set, this means we can link between any two of `ec`, `cpd` and
 
 ```{r web_formula}
 # Formula notation
-head( weaveWeb(cpd ~ ko)$dictionary, c(10, 10) )
+head( weaveWeb(cpd ~ ko, link = kegg_link())$dictionary, c(10, 10) )
 
 # Character notation
-head( weaveWeb(y = "ko", x = "cpd")$dictionary, c(10, 10) )
+head( weaveWeb(y = "ko", x = "cpd", link = kegg_link())$dictionary, c(10, 10) )
 ```
 
-## Use custom biadjacency matrices with as_web()
-The most flexible way to make an `anansiWeb` object is through `as_web()`: 
-```{r as_web}
+## Use custom biadjacency matrices with AnansiWeb()
+The most flexible way to make an `AnansiWeb` object is through `AnansiWeb()`: 
+```{r AnansiWeb}
 # Prep some dummy input tables
   tX <- matrix(rnorm(30), nrow = 6)
   tY <- matrix(rnorm(42), nrow = 6)
@@ -295,8 +296,8 @@ The most flexible way to make an `anansiWeb` object is through `as_web()`:
     ncol = NCOL(tX)
     )
   
-# make the anansiWeb
- w <- as_web(
+# make the AnansiWeb
+ w <- AnansiWeb(
     tableY = tY, 
     tableX = tX,
     dictionary = d

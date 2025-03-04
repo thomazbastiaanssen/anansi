@@ -15,7 +15,7 @@ anansi(
 )
 }
 \arguments{
-\item{web}{An \code{anansiWeb} object, containing two tables with 'omics data
+\item{web}{An \code{AnansiWeb} object, containing two tables with 'omics data
 and a dictionary that links them. See \code{weaveWebFromTables()} for how to
 weave a web.}
 
@@ -80,9 +80,10 @@ t2 <- t(KOs.exp)
 # Run anansi pipeline.
 
 web <- weaveWeb(
-  cpd ~ ko,
+  formula = cpd ~ ko,
   tableY = t1,
   tableX = t2,
+  link = kegg_link()
 )
 
 anansi_out <- anansi(
@@ -93,6 +94,7 @@ anansi_out <- anansi(
   adjust.method = "BH",
   verbose = TRUE
 )
+
 
 library(tidyr)
 

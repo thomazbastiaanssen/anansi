@@ -1,21 +1,21 @@
-#' Accessing and modifying information in anansiWeb S4 class
-#' @name anansiWeb-methods
-#' @description \code{anansiWeb} supports \code{$} operator for getting and
+#' Accessing and modifying information in AnansiWeb S4 class
+#' @name AnansiWeb-methods
+#' @description \code{AnansiWeb} supports \code{$} operator for getting and
 #' assigning values.
 #'
 #' \code{ dimnames( x ) } is shorthand for \code{dimnames( x$dictionary )} and
 #' \code{names( x )} is in turn shorthand for \code{names( dimnames(x) )}.
 #'
-#' @returns a specified \code{anansiWeb} object.
+#' @returns a specified \code{AnansiWeb} object.
 #'
 #' @seealso \itemize{
-#' \item \code{\link{anansiWeb-class}}.
+#' \item \code{\link{AnansiWeb-class}}.
 #' \item \code{\link{weaveWeb}}: for general use.
 #'}
 #' @importFrom methods slotNames slot slot<-
 #' @examples
-#' # prepare an anansiWeb
-#' w <- weaveWeb(cpd ~ ko)
+#' # prepare an AnansiWeb
+#' w <- weaveWeb(cpd ~ ko, link = kegg_link())
 #'
 #' w$dictionary
 #'
@@ -26,37 +26,78 @@ NULL
 #' @noRd
 #' @export
 #' @importFrom utils .DollarNames
-.DollarNames.anansiWeb <- function(x, pattern = "")
+.DollarNames.AnansiWeb <- function(x, pattern = "")
   grep(pattern, slotNames(x), value = TRUE)
 
 #' @exportMethod $
 #' @inheritParams base::`$`
-#' @rdname anansiWeb-methods
+#' @rdname AnansiWeb-methods
 #'
-setMethod("$", "anansiWeb", definition = function(x, name) slot(x, name) )
+setMethod("$", "AnansiWeb", definition = function(x, name) slot(x, name) )
 
 #' @exportMethod $<-
 #' @inheritParams base::`$<-`
-#' @rdname anansiWeb-methods
+#' @rdname AnansiWeb-methods
 #'
-setReplaceMethod("$", "anansiWeb", def = function(x, name, value) {
+setReplaceMethod("$", "AnansiWeb", def = function(x, name, value) {
   slot(x, name) <- value
   return(x)}
  )
 
-#' @rdname anansiWeb-methods
+#' @rdname AnansiWeb-methods
 #' @inheritParams base::dimnames
 #' @export
 #'
-setMethod("dimnames", "anansiWeb",
+setMethod("dimnames", "AnansiWeb",
           function(x) dimnames(x@dictionary)
 )
 
-#' @rdname anansiWeb-methods
+#' @rdname AnansiWeb-methods
 #' @inheritParams base::names
 #' @export
 #'
-setMethod("names", "anansiWeb", function(x) names( dimnames( x@dictionary) ))
+setMethod("names", "AnansiWeb", function(x) names( dimnames( x@dictionary) ))
+
+
+
+###############################################################################
+###############################################################################
+# setAs
+
+#' Accessing and modifying information in AnansiWeb S4 class
+#' @name as
+#' @rdname AnansiWeb-methods
+#' @importFrom methods as
+#' @export
+#'
+setAs(from = "AnansiWeb", to = "list", def = function(from) {
+  out <- list(from@tableY, from@tableX, dictionary = from@dictionary)
+  names(out)[c(1L, 2L)] <- names(from)
+  out
+})
+
+#' Accessing and modifying information in AnansiWeb S4 class
+#' @name as
+#' @rdname AnansiWeb-methods
+#' @importClassesFrom MultiAssayExperiment MultiAssayExperiment
+#' @importFrom MultiAssayExperiment MultiAssayExperiment ExperimentList
+#' @importFrom SummarizedExperiment SummarizedExperiment
+#' @export
+#'
+setAs(from = "AnansiWeb", to = "MultiAssayExperiment", def = function(from) {
+  weblist <- as(from, "list")
+  experiments <- ExperimentList(
+    y = SummarizedExperiment(t(weblist[[1L]])),
+    x = SummarizedExperiment(t(weblist[[2L]]))
+  )
+  names(experiments) <- names(weblist)[c(1L, 2L)]
+  metadata <- weblist[3L]
+
+  MultiAssayExperiment(
+    experiments = experiments,
+    metadata = metadata)
+})
+
 
 #' @noRd
 #'
