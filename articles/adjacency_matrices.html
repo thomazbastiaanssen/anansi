@@ -97,7 +97,7 @@ in the context of the anansi framework.<br>
 </li>
 <li>
 <a href="#sec-mat-2">Section 2</a> introduces the
-<code>anansiWeb</code> object and demonstrates how to work with it</li>
+<code>AnansiWeb</code> object and demonstrates how to work with it</li>
 </ul>
 </div>
 <div class="section level2">
@@ -174,7 +174,7 @@ with cells marked with ‘X’ signifying tested feature-pairs.
 <h2 id="sec-mat-2">General use in anansi<a class="anchor" aria-label="anchor" href="#sec-mat-2"></a>
 </h2>
 <p>In anansi, we work with biadjacency matrices in the
-<code>anansiWeb</code> S4 class, which consists of a biadjacency matrix,
+<code>AnansiWeb</code> S4 class, which consists of a biadjacency matrix,
 in this case we call it a <code>dictionary</code>, as well as two tables
 of observations that should be analysed jointly.</p>
 <p>The anansi package offers some functions that should be sufficient
@@ -185,15 +185,15 @@ interfaces.</p>
 <h3 id="make-a-biadjacency-matrix-with-weaveweb">Make a biadjacency matrix with <code>weaveWeb()</code><a class="anchor" aria-label="anchor" href="#make-a-biadjacency-matrix-with-weaveweb"></a>
 </h3>
 <p>The recommended default interface to generate an
-<code>anansiWeb</code> object is <code><a href="../reference/web.html">weaveWeb()</a></code>. Besides a
+<code>AnansiWeb</code> object is <code><a href="../reference/AnansiWeb.html">weaveWeb()</a></code>. Besides a
 traditional interface, it also accepts R <code>formula</code> syntax.
-Once we have an <code>anansiWeb</code> object, we can use the $ operator
+Once we have an <code>AnansiWeb</code> object, we can use the $ operator
 to access the biadjacency matrix in the ‘dictionary’ slot.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Two interfaces</span></span>
-<span><span class="va">form.web</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/web.html">weaveWeb</a></span><span class="op">(</span><span class="va">ec</span> <span class="op">~</span> <span class="va">ko</span><span class="op">)</span></span>
+<span><span class="va">form.web</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/AnansiWeb.html">weaveWeb</a></span><span class="op">(</span><span class="va">ec</span> <span class="op">~</span> <span class="va">ko</span>, link <span class="op">=</span> <span class="fu"><a href="../reference/kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">trad.web</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/web.html">weaveWeb</a></span><span class="op">(</span>y <span class="op">=</span> <span class="st">"ec"</span>, x <span class="op">=</span> <span class="st">"ko"</span><span class="op">)</span></span>
+<span><span class="va">trad.web</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/AnansiWeb.html">weaveWeb</a></span><span class="op">(</span>y <span class="op">=</span> <span class="st">"ec"</span>, x <span class="op">=</span> <span class="st">"ko"</span>, link <span class="op">=</span> <span class="fu"><a href="../reference/kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Same output</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/identical.html" class="external-link">identical</a></span><span class="op">(</span><span class="va">form.web</span>, <span class="va">trad.web</span><span class="op">)</span></span></code></pre></div>
@@ -223,7 +223,7 @@ website</a>.</p>
 <h4 id="weaveweb-input-link">
 <code>weaveWeb()</code> input: <code>link</code><a class="anchor" aria-label="anchor" href="#weaveweb-input-link"></a>
 </h4>
-<p><code><a href="../reference/web.html">weaveWeb()</a></code> takes additional arguments, let’s focus on
+<p><code><a href="../reference/AnansiWeb.html">weaveWeb()</a></code> takes additional arguments, let’s focus on
 <code>link</code>, which will take the information necessary to link
 features between input data sets. The anansi package includes such data
 for the <a href="https://www.genome.jp/kegg/" class="external-link">KEGG database</a>, let’s
@@ -254,26 +254,27 @@ adjacency).</p>
 <h4 id="linking-between-feature-names">linking between feature names<a class="anchor" aria-label="anchor" href="#linking-between-feature-names"></a>
 </h4>
 <p>The column names correspond to the types of feature IDs that should
-be linked. These names are used throughout the <code>anansiWeb</code>
-workflow. They can be directly called from an <code>anansiWeb</code>
+be linked. These names are used throughout the <code>AnansiWeb</code>
+workflow. They can be directly called from an <code>AnansiWeb</code>
 object:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Note that the formula controls the order </span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/dimnames.html" class="external-link">dimnames</a></span><span class="op">(</span> <span class="fu"><a href="../reference/web.html">weaveWeb</a></span><span class="op">(</span><span class="va">ko</span><span class="op">~</span><span class="va">ec</span><span class="op">)</span><span class="op">$</span><span class="va">dictionary</span> <span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/dimnames.html" class="external-link">dimnames</a></span><span class="op">(</span> <span class="fu"><a href="../reference/AnansiWeb.html">weaveWeb</a></span><span class="op">(</span><span class="va">ko</span><span class="op">~</span><span class="va">ec</span>, link <span class="op">=</span> <span class="fu"><a href="../reference/kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">dictionary</span> <span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] "ko" "ec"</span></span></code></pre>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># names() is short for the above</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="../reference/web.html">weaveWeb</a></span><span class="op">(</span><span class="va">ec</span><span class="op">~</span><span class="va">ko</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="../reference/AnansiWeb.html">weaveWeb</a></span><span class="op">(</span><span class="va">ec</span><span class="op">~</span><span class="va">ko</span>, link <span class="op">=</span> <span class="fu"><a href="../reference/kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] "ec" "ko"</span></span></code></pre>
 </div>
 </div>
 <div class="section level3">
 <h3 id="the-pre-packaged-kegg-linking-map">The pre-packaged kegg linking map<a class="anchor" aria-label="anchor" href="#the-pre-packaged-kegg-linking-map"></a>
 </h3>
-<p>By default, <code><a href="../reference/web.html">weaveWeb()</a></code> will assume to use the
-pre-packaged kegg link map, which consists of two similarly structured
-<code>data.frame</code>s in a list, one of which we just inspected. We
-can call it directly using <code><a href="../reference/kegg_link.html">kegg_link()</a></code>:</p>
+<p>We need to provide <code><a href="../reference/AnansiWeb.html">weaveWeb()</a></code> with a map of which
+features are linked. We can use the pre-packaged kegg link map, which
+consists of two similarly structured <code>data.frame</code>s in a list,
+one of which we just inspected. We can call it directly using
+<code><a href="../reference/kegg_link.html">kegg_link()</a></code>:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Only print the first few entries</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span> <span class="fu"><a href="../reference/kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">head</span><span class="op">)</span></span></code></pre></div>
@@ -303,14 +304,14 @@ correspond to the formula we used just used:
 <code>weaveWeb(ec ~ ko)</code>. We didn’t use the term <code>cpd</code>.
 Further, <code>ec</code> is present in both
 <code>data.frame</code>s.</p>
-<p>We can use <code><a href="../reference/web.html">weaveWeb()</a></code> to make a biadjacency matrix
+<p>We can use <code><a href="../reference/AnansiWeb.html">weaveWeb()</a></code> to make a biadjacency matrix
 between any combination of one or two similarly structured
 <code>data.frame</code>s, presented as a list. For the pre- packaged
 data set, this means we can link between any two of <code>ec</code>,
 <code>cpd</code> and <code>ko</code>, in either order.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Formula notation</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span> <span class="fu"><a href="../reference/web.html">weaveWeb</a></span><span class="op">(</span><span class="va">cpd</span> <span class="op">~</span> <span class="va">ko</span><span class="op">)</span><span class="op">$</span><span class="va">dictionary</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">10</span><span class="op">)</span> <span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span> <span class="fu"><a href="../reference/AnansiWeb.html">weaveWeb</a></span><span class="op">(</span><span class="va">cpd</span> <span class="op">~</span> <span class="va">ko</span>, link <span class="op">=</span> <span class="fu"><a href="../reference/kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">dictionary</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">10</span><span class="op">)</span> <span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## 10 x 10 sparse Matrix of class "ngCMatrix"</span></span></code></pre>
 <pre><code><span><span class="co">##   [[ suppressing 10 column names 'K00001', 'K00002', 'K00003' ... ]]</span></span></code></pre>
 <pre><code><span><span class="co">##         ko</span></span>
@@ -327,7 +328,7 @@ data set, this means we can link between any two of <code>ec</code>,
 <span><span class="co">##   C00010 . . . . . . . . . .</span></span></code></pre>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Character notation</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span> <span class="fu"><a href="../reference/web.html">weaveWeb</a></span><span class="op">(</span>y <span class="op">=</span> <span class="st">"ko"</span>, x <span class="op">=</span> <span class="st">"cpd"</span><span class="op">)</span><span class="op">$</span><span class="va">dictionary</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">10</span><span class="op">)</span> <span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span> <span class="fu"><a href="../reference/AnansiWeb.html">weaveWeb</a></span><span class="op">(</span>y <span class="op">=</span> <span class="st">"ko"</span>, x <span class="op">=</span> <span class="st">"cpd"</span>, link <span class="op">=</span> <span class="fu"><a href="../reference/kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">dictionary</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">10</span><span class="op">)</span> <span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## 10 x 10 sparse Matrix of class "ngCMatrix"</span></span></code></pre>
 <pre><code><span><span class="co">##   [[ suppressing 10 column names 'C00001', 'C00002', 'C00003' ... ]]</span></span></code></pre>
 <pre><code><span><span class="co">##         cpd</span></span>
@@ -345,10 +346,10 @@ data set, this means we can link between any two of <code>ec</code>,
 </div>
 </div>
 <div class="section level3">
-<h3 id="use-custom-biadjacency-matrices-with-as_web">Use custom biadjacency matrices with as_web()<a class="anchor" aria-label="anchor" href="#use-custom-biadjacency-matrices-with-as_web"></a>
+<h3 id="use-custom-biadjacency-matrices-with-anansiweb">Use custom biadjacency matrices with AnansiWeb()<a class="anchor" aria-label="anchor" href="#use-custom-biadjacency-matrices-with-anansiweb"></a>
 </h3>
-<p>The most flexible way to make an <code>anansiWeb</code> object is
-through <code><a href="../reference/web.html">as_web()</a></code>:</p>
+<p>The most flexible way to make an <code>AnansiWeb</code> object is
+through <code><a href="../reference/AnansiWeb.html">AnansiWeb()</a></code>:</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Prep some dummy input tables</span></span>
 <span>  <span class="va">tX</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">6</span><span class="op">)</span></span>
@@ -362,13 +363,13 @@ through <code><a href="../reference/web.html">as_web()</a></code>:</p>
 <span>    ncol <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">NCOL</a></span><span class="op">(</span><span class="va">tX</span><span class="op">)</span></span>
 <span>    <span class="op">)</span></span>
 <span>  </span>
-<span><span class="co"># make the anansiWeb</span></span>
-<span> <span class="va">w</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/web.html">as_web</a></span><span class="op">(</span></span>
+<span><span class="co"># make the AnansiWeb</span></span>
+<span> <span class="va">w</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/AnansiWeb.html">AnansiWeb</a></span><span class="op">(</span></span>
 <span>    tableY <span class="op">=</span> <span class="va">tY</span>, </span>
 <span>    tableX <span class="op">=</span> <span class="va">tX</span>,</span>
 <span>    dictionary <span class="op">=</span> <span class="va">d</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Warning in as_web(tableY = tY, tableX = tX, dictionary = d): Dimnames of</span></span>
+<pre><code><span><span class="co">## Warning in AnansiWeb(tableY = tY, tableX = tX, dictionary = d): Dimnames of</span></span>
 <span><span class="co">## 'dictionary' were missing; Assigned 'y' and 'x'.</span></span></code></pre>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Confirm the warning:  </span></span>

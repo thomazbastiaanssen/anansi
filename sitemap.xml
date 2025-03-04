@@ -8,6 +8,9 @@
 <url><loc>https://thomazbastiaanssen.github.io/anansi/authors.html</loc></url>
 <url><loc>https://thomazbastiaanssen.github.io/anansi/index.html</loc></url>
 <url><loc>https://thomazbastiaanssen.github.io/anansi/news/index.html</loc></url>
+<url><loc>https://thomazbastiaanssen.github.io/anansi/reference/AnansiWeb-class.html</loc></url>
+<url><loc>https://thomazbastiaanssen.github.io/anansi/reference/AnansiWeb-methods.html</loc></url>
+<url><loc>https://thomazbastiaanssen.github.io/anansi/reference/AnansiWeb.html</loc></url>
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/FMT_KOs.html</loc></url>
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/FMT_metab.html</loc></url>
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/FMT_metadata.html</loc></url>
@@ -20,8 +23,6 @@
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/anansiLinkMap-class.html</loc></url>
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/anansiLinkMap-methods.html</loc></url>
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/anansiTale-class.html</loc></url>
-<url><loc>https://thomazbastiaanssen.github.io/anansi/reference/anansiWeb-class.html</loc></url>
-<url><loc>https://thomazbastiaanssen.github.io/anansi/reference/anansiWeb-methods.html</loc></url>
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/anansi_compute_clr.html</loc></url>
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/clr_imputed.html</loc></url>
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/clr_lite.html</loc></url>
@@ -36,7 +37,8 @@
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/named_group_list.html</loc></url>
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/named_term_list.html</loc></url>
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/plotAnansi.html</loc></url>
+<url><loc>https://thomazbastiaanssen.github.io/anansi/reference/randomWebDic.html</loc></url>
+<url><loc>https://thomazbastiaanssen.github.io/anansi/reference/randomWebTab.html</loc></url>
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/softmax.html</loc></url>
-<url><loc>https://thomazbastiaanssen.github.io/anansi/reference/web.html</loc></url>
 </urlset>
 
