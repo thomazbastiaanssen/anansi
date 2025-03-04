@@ -25,7 +25,6 @@ Imports:
     stats,
     methods,
     igraph,
-    graph,
     Matrix,
     future.apply,
     SummarizedExperiment,
@@ -39,6 +38,7 @@ Imports:
     tidyselect
 Suggests:
     BiocStyle,
+    graph,
     mia,
     patchwork,
     KEGGREST,

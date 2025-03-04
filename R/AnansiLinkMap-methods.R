@@ -19,11 +19,17 @@ asLinkMap <- function(x) {
   if(validLinkDF(x)) x <- list(link = x)
 
   linkMap <- new("anansiLinkMap", x)
-
-  linkMap@edgelist <- as.data.frame(do.call(rbind, names(linkMap)))
+  validObject(linkMap)
 
   return(linkMap)
 }
+
+#' S4 Methods for anansiLinkMap
+#' @name anansiLinkMap-methods
+#' @description
+#' a set of methods to work with \code{anansiLinkWeb}, a special type of list.
+#'
+NULL
 
 #' S4 Methods for anansiLinkMap
 #' @description \code{names}: Display a list of column names from anansiLinkMap
@@ -31,6 +37,31 @@ asLinkMap <- function(x) {
 #' @export
 #'
 setMethod("names", "anansiLinkMap", function(x) lapply(x, names) )
+
+#' S4 Methods for anansiLinkMap
+#' @description \code{show}: Display the object
+#' @importFrom methods show
+#' @inheritParams methods::show
+#' @rdname anansiLinkMap-methods
+#' @export
+#'
+setMethod("show",  "anansiLinkMap", function(object) {
+    cat("An object of class ", class(object), ":\n", sep = "")
+    show(lapply(object,
+                function(x) (apply(x, 2, function(y) length(unique(y)))))
+         )
+    invisible(NULL)
+})
+
+#' S4 Methods for anansiLinkMap
+#' @description
+#' \code{getEdgeList}: Return a data frame in edge list format.
+#' @rdname anansiLinkMap-methods
+#' @export
+#'
+setMethod("getEdgeList", "anansiLinkMap",
+          function(x) as.data.frame(do.call(rbind, names(x))))
+
 
 #' S4 Methods for anansiLinkMap
 #' @rdname anansiLinkMap-methods
@@ -58,7 +89,7 @@ setMethod("names", "anansiLinkMap", function(x) lapply(x, names) )
 #' str(subset(x = l, cpd %in% c("C00001", "C00002")))
 #'
 #' # Several data frames at the same time:
-#' str(subset(x = l, ec %in% c("1.2.3.4", "4.3.2.1")))
+#' subset(x = l, ec %in% c("1.2.3.4", "4.3.2.1"))
 #'
 setMethod("subset", "anansiLinkMap", function(x, subset, select, ...) {
   validObject(x); x.names <- names(x)

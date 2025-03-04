@@ -7,7 +7,7 @@
 easily be extracted.}
 \description{
 \code{anansiTale} is the main container that will hold your
-stats output data coming out of the \code{anansi} pipeline.
+    stats output data coming out of the \code{anansi} pipeline.
 }
 \section{Slots}{
 
@@ -15,8 +15,8 @@ stats output data coming out of the \code{anansi} pipeline.
 \item{\code{subject}}{A character that describes the data that was queried.}
 
 \item{\code{type}}{A character that describes type of parameter contained in the
-\code{estimates} slot.
-For example r.values for correlations or r.squared for models.}
+\code{estimates} slot. For example r.values for correlations or r.squared
+for models.}
 
 \item{\code{df}}{a vector of length 2, containing df1 and df2 corresponding to the
 F-ratio considered.}

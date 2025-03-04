@@ -5,16 +5,9 @@
 \alias{anansiLinkMap-class}
 \title{anansiLinkMap S4 container class}
 \description{
-\code{anansiLinkMap} is an S4 class containing one or several data frames 
+\code{anansiLinkMap} is an S4 class containing one or several data frames
 structured as edge lists from the \code{igraph} package.
 }
-\section{Slots}{
-
-\describe{
-\item{\code{edgelist}}{\code{data.frame}, a two column character data frame 
-describing the relation of the data frames contained.}
-}}
-
 \seealso{
 \itemize{
 \item \code{\link{LinkMap}}: for general use.
