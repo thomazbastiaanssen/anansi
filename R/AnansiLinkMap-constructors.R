@@ -25,6 +25,7 @@ asLinkMap <- function(x) {
 }
 
 #' Make a random anansiLinkMap
+#' @rdname LinkMap
 #' @export
 #'
 randomLinkMap <- function(n_ids = 6, n_feat = 100, p = 1){

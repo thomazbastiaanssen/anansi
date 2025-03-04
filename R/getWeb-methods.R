@@ -22,9 +22,9 @@
 #' 
 #' @param force_new \code{boolean} If x already has a dictionary \code{Matrix} 
 #' in metadata, ignore it and generate a new object anyway? (Default: FALSE).
-#' @param ... additional parameters that can be passed to \code{\link{web}}.
+#' @param ... additional parameters that can be passed to \code{\link{AnansiWeb}}.
 #'
-#' @returns an \code{anansiWeb} object, with sparse binary biadjacency matrix 
+#' @returns an \code{AnansiWeb} object, with sparse binary biadjacency matrix 
 #' with features from \code{y} as rows and features from \code{x} as columns in 
 #' \code{dictionary} slot. If x already contains a dictionary in metadata, use 
 #' that one, unless \code{force_new = TRUE}.
@@ -35,10 +35,10 @@
 #' 
 #' @details
 #' This wrapper of \code{\link{weaveWeb}} allows to generate an 
-#' \code{anansiWeb} S4 object directly from objects of class
+#' \code{AnansiWeb} S4 object directly from objects of class
 #' \code{\link[MultiAssayExperiment:MultiAssayExperiment]{MultiAssayExperiment}}
 #' . First, the assays specified by \code{assay.typeY} and \code{assay.typeX}
-#' are passed to \code{\link{web}} to build an anansiWeb object.
+#' are passed to \code{\link{AnansiWeb}} to build an AnansiWeb object.
 #' 
 #' @examples
 #'
@@ -107,9 +107,9 @@ setMethod("getWeb",
             # Check if x already contains a dictionary
             m <- metadata(x)
             if(!force_new && "dictionary" %in% names(m)) return(
-              as_web( tableX, tableY, m[["dictionary"]] )
+              AnansiWeb( tableX, tableY, m[["dictionary"]] )
               )             
-            # Combine web.default args into list
+            # Combine weaveWeb.default args into list
             web_args <- c(list(x = experimentX, y = experimentY, 
                                tableX = tableX, tableY = tableY), kwargs)
             # Add kegg as a default link to match anansi()
@@ -117,6 +117,6 @@ setMethod("getWeb",
             keep <- names(web_args) %in% c("x", "y", "tableX", "tableY", "link")
             web_args <- web_args[keep]
             # Generate web object
-            do.call(web.default, web_args)
+            do.call(weaveWeb.default, web_args)
           }
 )

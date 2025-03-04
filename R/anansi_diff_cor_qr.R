@@ -4,7 +4,7 @@
 #' Can either take continuous or categorical data. Typically, the main
 #' \code{anansi()} function will run this for you.
 #' @param web
-#' An \code{anansiWeb} object, containing two tables with omics data and a
+#' An \code{AnansiWeb} object, containing two tables with omics data and a
 #' dictionary that links them. See \code{weaveWebFromTables()} for how to weave
 #' a web.
 #' @param sat_model A \code{formula} object, containing the full model

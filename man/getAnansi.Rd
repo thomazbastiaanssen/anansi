@@ -20,7 +20,7 @@ getAnansi(x, ...)
 \item{x}{a \code{\link[MultiAssayExperiment:MultiAssayExperiment]{MultiAssayExperiment}}.}
 
 \item{...}{additional parameters that can be passed to
-\code{\link{web}} or \code{\link{anansi}}.}
+\code{\link{AnansiWeb}} or \code{\link{anansi}}.}
 
 \item{experimentY, experimentX}{\code{Character scalar} or \code{numeric scalar}. Selects experiment 
 corresponding to \code{tableY} and \code{tableX} from \code{experiments(x)} 
@@ -49,7 +49,7 @@ This wrapper of \code{\link{anansi}} allows to perform a complete anansi
 analysis directly on objects of class
 \code{\link[MultiAssayExperiment:MultiAssayExperiment]{MultiAssayExperiment}}
 . First, the assays specified by \code{assay.typeY} and \code{assay.typeX}
-are passed to \code{\link{web}} to build an anansiWeb object.
+are passed to \code{\link{AnansiWeb}} to build an AnansiWeb object.
 Next, this object is fed to the main \code{\link{anansi}} function to compute
 interactions between the two assays.
 }
@@ -110,6 +110,6 @@ head(out, 5)
 
 }
 \seealso{
-\code{\link{web}}
+\code{\link{AnansiWeb}}
 \code{\link{anansi}}
 }

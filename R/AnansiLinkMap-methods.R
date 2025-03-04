@@ -53,7 +53,7 @@ setMethod("getEdgeList", "anansiLinkMap",
 #' @importMethodsFrom BiocGenerics subset
 #' @export
 #' @seealso \code{\link[BiocGenerics:subset]{subset}}.
-#' \code{\link{weaveWeb}} for the anansiWeb constructor functions that
+#' \code{\link{weaveWeb}} for the AnansiWeb constructor functions that
 #' take link data frames.
 #' @examples
 #' # prep input

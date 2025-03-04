@@ -9,7 +9,7 @@ test_that("plotAnansi", {
   t1 <- t(FMT_metab)
   t2 <- t(KOs.exp)
   web <- weaveWeb(
-    x = cpd ~ ko,
+    formula = cpd ~ ko,
     tableY = t1,
     tableX = t2,
     link = kegg_link())

@@ -8,7 +8,7 @@ Typically, the main \code{anansi()} function will run this for you.}
 anansiCor(web, group.bool)
 }
 \arguments{
-\item{web}{An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.}
+\item{web}{An \code{AnansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.}
 
 \item{group.bool}{A boolean vector used to select which samples should be included in the correlations.}
 }

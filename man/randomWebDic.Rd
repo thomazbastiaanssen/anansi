@@ -4,7 +4,7 @@
 \alias{randomWebDic}
 \title{Generate a random AnansiWeb, only missing dictionary}
 \usage{
-randomWebDic(tableY, tableX, density = 0.1)
+randomWebDic(tableY, tableX, density)
 }
 \description{
 Generate a random AnansiWeb, only missing dictionary

@@ -19,7 +19,7 @@
 \arguments{
 \item{x}{a \code{\link[MultiAssayExperiment:MultiAssayExperiment]{MultiAssayExperiment}}.}
 
-\item{...}{additional parameters that can be passed to \code{\link{web}}.}
+\item{...}{additional parameters that can be passed to \code{\link{AnansiWeb}}.}
 
 \item{experimentY, experimentX}{\code{Character scalar} or \code{numeric scalar}. Selects experiment 
 corresponding to \code{tableY} and \code{tableX} from \code{experiments(x)} 
@@ -40,7 +40,7 @@ X to be used. (Default: \code{"counts"})}
 in metadata, ignore it and generate a new object anyway? (Default: FALSE).}
 }
 \value{
-an \code{anansiWeb} object, with sparse binary biadjacency matrix 
+an \code{AnansiWeb} object, with sparse binary biadjacency matrix 
 with features from \code{y} as rows and features from \code{x} as columns in 
 \code{dictionary} slot. If x already contains a dictionary in metadata, use 
 that one, unless \code{force_new = TRUE}.
@@ -50,10 +50,10 @@ weaveWeb wrapper for the MultiAssayExperiment class
 }
 \details{
 This wrapper of \code{\link{weaveWeb}} allows to generate an 
-\code{anansiWeb} S4 object directly from objects of class
+\code{AnansiWeb} S4 object directly from objects of class
 \code{\link[MultiAssayExperiment:MultiAssayExperiment]{MultiAssayExperiment}}
 . First, the assays specified by \code{assay.typeY} and \code{assay.typeX}
-are passed to \code{\link{web}} to build an anansiWeb object.
+are passed to \code{\link{AnansiWeb}} to build an AnansiWeb object.
 }
 \examples{
 
