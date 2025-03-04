@@ -1,3 +1,20 @@
+#' Manages group-wise association calls
+#' @description If the \code{groups} argument is suitable, will also run correlation analysis per group. Typically, the main \code{anansi()} function will run this for you.
+#' @param web An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.
+#' @param groups A categorical or continuous value necessary for differential correlations. Typically a state or treatment score.
+#' @param metadata A vector or data.frame of categorical or continuous value necessary for differential correlations. Typically a state or treatment score.
+#' @param verbose A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.
+#' @noRd
+#'
+call_groupwise <- function(web, groups, metadata, verbose) {
+  if(is.null(groups)) {group.vec <- NULL} else {
+    group.vec <- apply(metadata[,groups, drop = FALSE], 1, paste, collapse = "_")
+  }
+  return(
+    anansiCorTestByGroup(web, group.vec, verbose)
+  )
+}
+
 #' Run correlations for all interacting metabolites and functions.
 #' @description If the \code{groups} argument is suitable, will also run correlation analysis per group. Typically, the main \code{anansi()} function will run this for you.
 #' @param web An \code{anansiWeb} object, containing two tables with omics data and a dictionary that links them. See \code{weaveWebFromTables()} for how to weave a web.
@@ -17,23 +34,22 @@ anansiCorTestByGroup <- function(web, group.vec, verbose = TRUE) {
   # first run for all groups together
   out_list$All <- anansiCorPvalue(
     web,
-    group.bool = rep(TRUE, NROW(get_tableY(web))), verbose = verbose
+    group.bool = rep(TRUE, NROW(web@tableY)), verbose
   )
-
-  out_list$All@subject <- "All"
 
   if (!is.null(all_groups)) {
     # If verbose, verbalize.
     if (verbose) {
       message(paste(
-        "Running correlations for the following groups:",
+        "Running correlations for the following groups:\n",
         paste(all_groups, collapse = ", ")
       ))
     }
-    for (i in seq_len(length(all_groups))) {
-      out_by_group <- anansiCorPvalue(web, group.bool = group.vec == all_groups[i], verbose = verbose)
+    for (i in seq_along(all_groups)) {
+      out_by_group <- anansiCorPvalue(
+        web, group.bool = group.vec == all_groups[i], verbose
+        )
       out_by_group@subject <- all_groups[i]
-
       out_list[[i + 1]] <- out_by_group
     }
   }
@@ -52,28 +68,23 @@ anansiCorTestByGroup <- function(web, group.vec, verbose = TRUE) {
 #' @importFrom stats pt
 #' @importFrom methods new
 #'
-anansiCorPvalue <- function(web, group.bool, verbose = verbose) {
+anansiCorPvalue <- function(web, group.bool, verbose) {
   # Compute correlation coefficients
   r <- anansiCor(web = web, group.bool = group.bool)
 
-  # Compute t-statistics based on the n and the correlation coefficient
+  # Compute p-value through t-statistic, based on n and correlation coefficient.
   n <- sum(group.bool)
-  t <- (r * sqrt(n - 2)) / sqrt(1 - r^2)
-
-  # Compute p-values based on t and n.
-  p <- 2 * (1 - pt(abs(t), (n - 2)))
-
-  # Compute naive adjusted p-values
-  q <- p
-  q[web@dictionary] <- NA
+  t <- abs((r * sqrt(n - 2)) / sqrt(1 - r^2))
+  p <- 2 * (1 - pt(t, (n - 2)))
 
   # Collate correlation coefficients, p-values and q-values into an anansiTale
   out <- new("anansiTale",
-    subject    = "All",
-    type       = "r.values",
-    estimates  = r,
-    p.values   = p,
-    q.values   = q
+    subject     = "All",
+    type        = "r.values",
+    estimates   = r,
+    df          = n - 2,
+    t.values    = t,
+    p.values    = p
   )
   return(out)
 }
@@ -89,10 +100,11 @@ anansiCorPvalue <- function(web, group.bool, verbose = verbose) {
 anansiCor <- function(web, group.bool) {
   # Run correlations on subsections of your data
   cors <- cor(
-    x = get_tableY(web)[group.bool, ],
-    y = get_tableX(web)[group.bool, ],
+    x = web@tableY[group.bool, ],
+    y = web@tableX[group.bool, ],
     method = "pearson", use = "pairwise.complete.obs"
   )
+  cors[! Matrix::as.matrix(web@dictionary) ] <- 0
   # set non-canonical correlations to zero using the binary adjacency matrix.
-  return(cors * get_dict(web))
+  return(cors)
 }

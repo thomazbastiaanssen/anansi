@@ -1,0 +1,384 @@
+---
+title: "Adjacency matrices"
+output:
+    BiocStyle::html_document:
+        toc: true
+        toc_float: true
+        toc_depth: 2
+        number_sections: true
+vignette: >
+  %\VignetteIndexEntry{2. Working with (bi)adjacency matrices}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+<style>
+body {
+text-align: justify}
+</style>
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(anansi)
+library(ggplot2)
+```
+
+# Overview {-}
+A common challenge in integrative analysis of high-dimensional data sets is 
+subsequent biological interpretation. Anansi addresses this challenge by only 
+considering pairwise associations that are known to occur *a priori*. In order
+to achieve this, we need to provide this relational information to anansi in the
+form of a (bi)adjacency matrix. 
+
+This vignette is divided by two sections:
+
+* [Section 1](#sec-mat-1) introduces (bi)adjacency matrices in the context of the 
+anansi framework.  
+* [Section 2](#sec-mat-2) introduces the `anansiWeb` object and demonstrates how to 
+work with it
+
+# Understanding adjacency matrices {#sec-mat-1}
+
+## Example from Biology: The Krebs cycle
+Recall that the [citric acid cycle, or Krebs cycle](https://en.wikipedia.org/wiki/Citric_acid_cycle),
+is a central piece of metabolic machinery. In short, it enables oxidative 
+phosphorylation. See figure \@ref(fig:plot-krebs) below for a simplified 
+representation. In the figure, there are 8 unique enzymatic reactions and 9 
+unique metabolites. 
+
+```{r}
+#| plot-krebs, echo=FALSE, fig.small=TRUE,
+#| fig.cap="Two simplified representations of the Krebs cycle. Orange marks 
+#| metabolites and blue marks enzymes."
+library(patchwork)
+kd <- data.frame(
+    enzyme = c("isocitrate\ndehydrogenase", "aconitase", "aconitase",  
+               "citrate\ndehydrogenase", "malate\ndehydrogenase", "fumarase",  
+               "succinate\ndehydrogenase","succinyl-CoA\nsynthetase",
+               "ketoglutarate\ndehydrogenase"), 
+    metab = c("isocitrate","cis-aconitate","citrate","oxaloacetate","L-malate",
+              "fumarate","succinate","succinyl-CoA", "ketoglutarate"),
+    rad = seq(0, 2*pi * 8/9, length.out = 9)) 
+  
+ggplot(kd) + 
+    annotate("path",
+             x=0.75*cos(seq(0,2*pi,length.out=100)),
+             y=0.75*sin(seq(0,2*pi,length.out=100))) +
+    
+    geom_tile(aes(x = 0.8*cos(rad), y =0.8* sin(rad)), width = 0.45, 
+              height = 0.15, fill = "orange", color = "black", linewidth = 0.6, 
+              show.legend = FALSE) + 
+    geom_text(aes(x = 0.8*cos(rad), y =0.8* sin(rad), label = metab), 
+              size = 3, show.legend = FALSE) + 
+    
+    geom_segment(aes(x = 0.75*cos(rad - pi/9), y =0.75* sin(rad - pi/9), 
+                     xend = cos(rad - pi/9), yend = sin(rad - pi/9))) +
+    
+    geom_point(aes(x = 0.75*cos(rad-pi/9), y =0.75* sin(rad-pi/9)), size = 3, 
+               fill = "dodgerblue", color = "black", show.legend = FALSE, 
+               shape = 21) + 
+    geom_text(aes(x = 1.15*cos(rad-pi/9), y =1.15* sin(rad-pi/9),label=enzyme), 
+              lineheight = 7/10, size = 3, show.legend = FALSE) + 
+    
+    scale_y_continuous(limits = c(-1.4, 1.2), expand = c(0, 0)) +
+    scale_x_continuous(limits = c(-1.3, 1.3), expand = c(0, 0)) +
+    coord_equal(clip = "off") +
+    theme_void() 
+
+```
+
+## Adjacency matrices allow us to be specific in our questions
+
+Let's imagine we had (high-dimensional proxy) measurements 
+available for both types. For instance, we could have transcription data for the 
+enzymes and metabolomics data for the metabolites. We could represent our two 
+data sets like two sets of features.
+
+### All vs-all testing 
+If we were to perform an all-vs-all integrative analysis between our two data 
+sets, comprehensively testing every metabolite-enzyme pair, we'd test 
+$8\times9=72$ hypotheses. Figure \@ref(fig:all-v-all) A. 
+
+```{r}
+#| all-v-all, echo=FALSE, fig.wide=TRUE, out.width='100%', out.height='60%',
+#| fig.cap="Graph representation of possible association sctructures in the 
+#| Krebs cycle. **A)** All-vs-all, with a full graph. **B)** Constrained, only 
+#| linking metabolites an enzymes that are known to directly interact."
+
+
+colmat <- data.frame(name = c(
+  "aconitase", "citrate\nsynthase", "fumarase", "succinate\ndehydrogenase",
+  "isocitrate\ndehydrogenase", "malate\ndehydrogenase", 
+  "succinyl-CoA\nsynthetase", "ketoglutarate\ndehydrogenase", "cis-aconitate",
+  "citrate", "fumarate", "isocitrate", "L-malate", "oxaloacetate", "succinate", 
+  "succinyl-CoA", "ketoglutarate"), 
+  y = c(seq(9,1, length.out = 8), 9:1), 
+  x = rep(c(0.3, 0.7), times = c(8, 9) ), 
+  fill = rep(c("Enzyme", "Metabolite"), times = c(8, 9) ))
+
+p_0 <- ggplot() +
+  annotate("segment", x = c(0.28, 0.72), y = 0.875, 
+           xend = c(0.28, 0.72), yend = 9.125, color = "gray") + 
+  geom_text(data = colmat, aes(y = y, x = x, label = name), colour = "black", 
+            size = 3.25, hjust = c(rep(1, 8), rep(0, 9)), lineheight = 7/10, 
+            nudge_x = c(rep(-0.03, 8), rep(0.03, 9))) + 
+  
+  scale_fill_manual(values = c(Metabolite = "orange", Enzyme = "dodgerblue")) +
+  coord_cartesian(xlim = c(1/20, 19/20), clip = "off") +
+  annotate("text", label = c("Enzymes","Metabolites"), 
+           x = c(2/8, 6/8), y = 9.6, size = 4) +  
+  ylab(NULL) + xlab(NULL) +
+  theme_void()  
+
+p_a <- p_0 + 
+  geom_point(data = colmat, aes(y = y, x = x, fill = fill), 
+             color = "black", shape = 21, size = 4, show.legend = FALSE)
+
+
+
+p_b <- p_0 + geom_segment(data = expand.grid(seq(9,1, length.out = 8), 9:1), 
+               aes(y = Var1, yend = Var2), x = 3/10, xend = 7/10, 
+               color = "#393D47", inherit.aes = FALSE) + 
+  geom_point(data = colmat, aes(y = y, x = x, fill = fill), 
+             color = "black", 
+             shape = 21, size = 4,  show.legend = FALSE) 
+p_c <- p_0 + geom_segment(data = data.frame(
+  Var1 = seq(1, 9, length.out = 8)[
+    c(8, 8, 7, 6, 5, 8, 4, 6, 3, 7, 3, 5, 2, 2, 1, 4, 1)], 
+  Var2 = 
+    c(9, 8, 8, 7, 7, 6, 6, 5, 5, 4, 4, 3, 3, 2, 2, 1, 1)), 
+  aes(y = Var1, yend = Var2), x = 3/10, xend = 7/10, 
+  color = "#393D47", inherit.aes = FALSE) +
+  geom_point(data = colmat, aes(y = y, x = x, fill = fill), 
+             color = "black", shape = 21, size = 4, show.legend = FALSE) 
+
+
+(p_b | p_c) + plot_annotation(tag_levels = "A")
+
+```
+### Knowledge-informed analyis of specific interactions
+Often however, only a subset of these comparisons is scientifically relevant to
+investigate. In this case for instance, only 17 associations between 
+enzyme-metabolite pairs are likely to make sense. Figure \@ref(fig:all-v-all)
+A. Non-selectively testing all 72 associations actively harms statistical power, 
+as 55 of these tests likely cannot be interpreted, but their p-values will still
+be tallied for the purpose of FDR and FWER. Moreover, they tend to obscure any 
+biologically interpretable findings. 
+
+In order to 'know' which features-pairs in your data set should be considered, 
+anansi requires a *biadjacency matrix*. The biadjacency matrix corresponding to
+to the sparse graph in figure \@ref(fig:all-v-all) B can be seen in figure 
+\@ref(fig:krebs-biadj). 
+
+```{r}
+#| krebs-biadj, echo=FALSE, fig.small=TRUE,
+#| fig.cap="Matrix representation of the constrained analysis of the Krebs cycle, 
+#| with cells marked with 'X' signifying tested feature-pairs."
+
+kd$lab <- "X"
+ggplot(kd) +
+  geom_text(aes(label = lab), x = I(0.5), y = I(0.5)) +
+  facet_grid(enzyme ~ metab , switch = "y", space = "free_x") + 
+  theme_bw() +
+  theme(strip.text.y.left = element_text(
+    angle = 0, size = 10, lineheight = 7/10, hjust = 1),
+        strip.text.x.top = element_text(angle = 90, size = 10, hjust = 0),
+        strip.background.x = element_rect(fill = "orange", color = "black"), 
+        strip.background.y = element_rect(fill = "dodgerblue", color = "black"), 
+        panel.spacing = unit(0.1, "lines")) +
+  labs(x = NULL, y = NULL)
+
+```
+
+# General use in anansi {#sec-mat-2}
+In anansi, we work with biadjacency matrices in the `anansiWeb` S4 class, which 
+consists of a biadjacency matrix, in this case we call it a `dictionary`, as 
+well as two tables of observations that should be analysed jointly. 
+
+The anansi package offers some functions that should be sufficient for basic 
+analysis. To enable more advanced users to pursue non-standard applications, our
+methodology is compatible with several popular interfaces. 
+
+## Make a biadjacency matrix with `weaveWeb()`
+The recommended default interface to generate an `anansiWeb` object is 
+`weaveWeb()`. Besides a traditional interface, it also accepts R `formula` 
+syntax. Once we have an `anansiWeb` object, we can use the $ operator to access 
+the biadjacency matrix in the 'dictionary' slot.
+
+```{r weaveWeb-intro}
+# Two interfaces
+form.web <- weaveWeb(ec ~ ko)
+
+trad.web <- weaveWeb(y = "ec", x = "ko")
+
+# Same output
+identical(form.web, trad.web)
+
+# Get the biadjacency matrix using the $ operator
+head( form.web$dictionary,  c(10, 10) )
+```
+Note that the majority of this matrix consists of dots, it's a sparse matrix, 
+which is a format that can considerably speed up calculations involving huge, 
+mostly empty matrices. For further reading, see the 
+[Matrix package website](https://matrix.r-forge.r-project.org/). 
+
+### `weaveWeb()` input: `link`
+`weaveWeb()` takes additional arguments, let's focus on `link`, which will take 
+the information necessary to link features between input data sets. The anansi 
+package includes such data for the [KEGG database](https://www.genome.jp/kegg/), 
+let's take a look at some of it:
+
+```{r peakec2ko}
+head(ec2ko)
+```
+
+### Structure of `link` input
+The format of the `data.frame` is important: It should have two named columns. 
+Each column contains feature IDs of one type (in this case, `ec` and `ko`, which
+is how the KEGG database refers to 
+[Enzyme Commission numbers](https://enzyme.expasy.org/) and [kegg orthologes](https://www.genome.jp/kegg/ko.html), respectively. If two feature 
+IDs are on the same row of the `data.frame`, it means those features are paired
+(hence adjacency). 
+
+### linking between feature names
+The column names correspond to the types of feature IDs that should be linked. 
+These names are used throughout the `anansiWeb` workflow. They can be directly 
+called from an `anansiWeb` object:
+
+```{r names}
+# Note that the formula controls the order 
+names(dimnames( weaveWeb(ko~ec)$dictionary ))
+
+# names() is short for the above
+names(weaveWeb(ec~ko))
+```
+## The pre-packaged kegg linking map
+By default, `weaveWeb()` will assume to use the pre-packaged kegg link map, 
+which consists of two similarly structured `data.frame`s in a list, one of which
+we just inspected. We can call it directly using `kegg_link()`: 
+```{r kegg_web}
+# Only print the first few entries
+lapply( kegg_link(), head)
+
+```
+
+### linking across two `data.frame`
+Note the column names in the two `data.frames`: `ec`, `cpd` and `ko`. Two of 
+these correspond to the formula we used just used: `weaveWeb(ec ~ ko)`. We 
+didn't use the term `cpd`. Further, `ec` is present in both `data.frame`s. 
+
+We can use `weaveWeb()` to make a biadjacency matrix between any combination of 
+one or two similarly structured `data.frame`s, presented as a list. For the pre-
+packaged data set, this means we can link between any two of `ec`, `cpd` and 
+`ko`, in either order. 
+
+```{r web_formula}
+# Formula notation
+head( weaveWeb(cpd ~ ko)$dictionary, c(10, 10) )
+
+# Character notation
+head( weaveWeb(y = "ko", x = "cpd")$dictionary, c(10, 10) )
+```
+
+## Use custom biadjacency matrices with as_web()
+The most flexible way to make an `anansiWeb` object is through `as_web()`: 
+```{r as_web}
+# Prep some dummy input tables
+  tX <- matrix(rnorm(30), nrow = 6)
+  tY <- matrix(rnorm(42), nrow = 6)
+
+# Prep biadjacency matrix    
+# base::matrix is fine too, but will get coerced to Matrix::Matrix.
+  d <- matrix(
+    data = sample(x = c(TRUE, FALSE), size = 35, replace = TRUE), 
+    nrow = NCOL(tY), 
+    ncol = NCOL(tX)
+    )
+  
+# make the anansiWeb
+ w <- as_web(
+    tableY = tY, 
+    tableX = tX,
+    dictionary = d
+  )
+
+# Confirm the warning:  
+  names(w)
+```
+## Additional approaches
+There are numerous ways in which we can define an adjacency matrix. Here, we 
+demonstrate a graph-based and matrix based approach.
+
+```{r init-list, echo=FALSE}
+krebs_edge_df <- data.frame(
+ Enzyme = c("aconitase", "aconitase", "citrate synthase", 
+"fumarase", "succinate dehydrogenase", "aconitase", "isocitrate dehydrogenase", 
+"fumarase", "malate dehydrogenase", "citrate synthase", "malate dehydrogenase", 
+"succinate dehydrogenase", "succinyl-CoA synthetase", "succinyl-CoA synthetase", 
+"ketoglutarate dehydrogenase", "isocitrate dehydrogenase", 
+"ketoglutarate dehydrogenase"), 
+ Metabolite = c("cis-aconitate", 
+"citrate", "citrate", "fumarate", "fumarate", "isocitrate", "isocitrate", 
+"L-malate", "L-malate", "oxaloacetate", "oxaloacetate", "succinate", 
+"succinate", "succinyl-CoA", "succinyl-CoA", 
+"ketoglutarate", "ketoglutarate"))
+```
+
+### adjacency matrices with `igraph`
+Importantly, (bi)adjacency matrices can be understood as graphs. Two common 
+packages that deal with graphs are [`igraph`](https://r.igraph.org/) and [`graph`](https://bioconductor.org/packages/graph/). 
+```{r igraph-1, message=FALSE}
+library(igraph)
+
+# Convert data.frame to graph
+g <- graph_from_data_frame(krebs_edge_df, directed = FALSE)
+
+```
+
+Now that we have constructed a graph, we still need to identify which features, 
+vertices, belong to which data modality, in this case either enzymes and 
+metabolites. `igraph` does this using a boolean vector, where `TRUE` values 
+become columns, which corresponds to `tableX`, whereas `FALSE` values become 
+rows, corresponding to `tableY`.
+
+```{r igraph-2, message=FALSE}
+V(g)$type <- V(g)$name %in% krebs_edge_df$Enzyme
+
+# Now that we've defined type, we can convert to biadjacency matrix: 
+bi_mat1 <- as_biadjacency_matrix(g, sparse = TRUE)
+
+head(bi_mat1, n = c(4, 5))
+```
+Though biadjacency support in `graph` is currently limited, We note that igraph 
+and graph objects can be converted using the `graph_from_graphnel()` and 
+`as_graphnel()` functions in `igraph`.
+
+### adjacency matrices with `Matrix`
+We can also define a matrix directly. Conveniently, sparse matrices can be 
+defined easily from our starting data. The `Matrix` library provides fantastic 
+support for this.
+```{r Matrix, message=FALSE}
+library(Matrix)
+
+# For this approach, it's useful to prepare the input as two factors:
+enzymes     <- factor(krebs_edge_df$Enzyme)
+metabolites <- factor(krebs_edge_df$Metabolite)
+
+# We can get integers out of factors, corresponding to their level indices 
+bi_mat2 <- sparseMatrix(i = as.integer(enzymes), 
+             j = as.integer(metabolites), 
+             dimnames = list(
+               levels(enzymes),
+               levels(metabolites)
+               )
+             )
+
+head(bi_mat2, n = c(4, 5))
+
+```
+
+# Session info
+
+```{r}
+sessionInfo()
+```

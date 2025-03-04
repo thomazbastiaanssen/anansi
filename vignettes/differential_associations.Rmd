@@ -1,5 +1,5 @@
 ---
-title: "Differential association testing with anansi"
+title: "Association testing"
 output:
     BiocStyle::html_document:
         toc: true
@@ -7,19 +7,188 @@ output:
         toc_depth: 2
         number_sections: true
 vignette: >
-  %\VignetteIndexEntry{2. Differential association testing}
+  %\VignetteIndexEntry{3. Differential associations}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
-<p align="justify">    
+
+<style>
+body {
+text-align: justify}
+</style>
 
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(anansi)
 ```
 
-# Differential associations
+
+# Overview {-}
+A common challenge in integrative analysis of high-dimensional data sets is 
+subsequent biological interpretation. Anansi addresses this challenge by only 
+considering pairwise associations that are known to occur *a priori*. In order
+to achieve this, we need to provide this relational information to anansi in the
+form of a (bi)adjacency matrix. 
+
+This vignette is divided by three sections:
+
+* [Section 1](#sec-da-1) introduces the anansi framework and covers the *full 
+model*.  
+* [Section 2](#sec-da-2) Covers differential associations
+* [Section 3](#sec-da-3) Discusses incorporating repeated measures through 
+`Error()` notation. 
+
+# Getting started: The full model {#sec-da-1}
+Overview
+full model estimates the effect of x on y.
+
+## formula syntax. 
+
+```{r formula-web-full} 
+# Setup anansiWeb with some dummy data
+tableY <- matrix(rnorm(60*10), nrow = 60, 
+                 dimnames = list(ids = 1:60, y = LETTERS[1:10] ) ) 
+
+tableX <- matrix(rnorm(60*20), nrow = 60, 
+                 dimnames = list(ids = 1:60, x = letters[1:20] ) ) 
+
+metadata <- data.frame(sample_id = format(1:60),
+                       treat_cat = rep(c("A", "B", "C"), each = 20), 
+                       score_num = rnorm(60))
+
+anansiWeb <- weaveWeb( y ~ x, link = "none", 
+                       tableY = tableY, tableX = tableX ) 
+```
+
+### link to adjacency matrix vignette
+The variables mentioned in the formula, `y ~ x`, control the feature types to be
+investigated. they can be found back using `names()`. 
+```{r link-names} 
+names(anansiWeb) 
+```
+[See the vignette on adjacency matrices.](https://thomazbastiaanssen.github.io/anansi/articles/adjacency_matrices.html) 
+
+```{r formula-anansi-full} 
+out <- anansi(anansiWeb, 
+              formula = ~ treat_cat * score_num, groups = "treat_cat",
+              metadata = metadata)
+```
+Anansi supports arbitrarily complex linear models as well as longitudinal models
+using the R formula syntax. 
+
+With 'full' model, we mean the total influence of `x`, including all of its 
+interaction terms, on `y`.
+For example, if our input formula was: 
+`y ~ x * (a + b + c)`. R rewrites this as follows: 
+```{r, reformulate}
+update.formula(y ~ x * (a + b + c), .~.)
+```
+The variables that constitute the 'full' effect of x would be: 
+`x + x:a + x:b + x:c`. 
+
+### compare to `lm()`. 
+
+```{r lm-compare-full} 
+
+```
+
+# Differential association {#sec-da-2}
+
+In order to assess differences in associations based on one or more variables 
+(such as phenotype or treatment), we make use of the emergent and disjointed 
+association paradigm introduced in the context of proportionality \citep{diff_prop,quinn2017propr,part_corr} and apply it outside of the simplex. 
+Briefly, disjointed associations refer to the scenario where the \textit{slope} 
+of an association is dependent on a variable. On the other hand, emergent 
+associations refer to the scenario where the \textit{strength} of the scenario 
+is dependent on a variable. See figure \@ref(fig:fig-diffab) for an illustrated 
+example. 
+
+An example of differential associations between hypothetical features Y and X. 
+In both cases, phenotype C illustrates the differential association compared to 
+phenotypes A \& B. Disjointed associations describe the scenario where there is 
+a detectable association in all cases, but the quality of that association 
+differs. Emergent associations describe the case where an association can be 
+detected in one case but not in another. 
+
+```{r} 
+#| fig-diffab, fig.wide=TRUE, warning=FALSE, message=FALSE, echo=FALSE,
+#| fig.cap="An example of differential associations between hypothetical
+#| features Y and X. In both cases, phenotype C illustrates the differential 
+#| association compared to phenotypes A & B. Disjointed associations describe 
+#| the scenario where there is a detectable association in all cases, but the 
+#| quality of the association differs. Emergent associations describe the case 
+#| where an association can be detected in one case but not in another." 
+
+library(patchwork)
+library(ggplot2)
+
+set.seed(1)
+a = data.frame(Y  = c(1:10, (1:10)*3/2, 10:1) + runif(30, -1, 1),
+               X  = rep(1:10,  3) + runif(30, -1, 1),
+               Phenotype = rep(LETTERS[1:3], each = 10),
+               plot = "Disjointed Association")
+
+b = data.frame(Y  = c(1:10, (1:10)*3/2, (1:10)*5/4) + c(runif(20, -1, 1), runif(10, -7, 7)),
+               X  = rep(1:10,  3)  + c(runif(20, -1, 1), runif(10, -7, 7)),
+               Phenotype = rep(LETTERS[1:3], each = 10),
+               plot = "Emergent Association")
+
+  ggplot( rbind(a, b) ) +
+  aes(x = X, y = Y, fill = Phenotype, colour = Phenotype) +
+  geom_point(size = 3, shape = 21, colour = "black") +
+  geom_smooth(method = "lm", se = F, linetype = "dashed", show.legend = F) +
+  facet_wrap(~plot) +
+  theme_bw() 
+
+```
+
+The features Y and X are from different data sets and differential associations 
+can be expressed in the style of R classical linear models: 
+$lm(Y \sim X \underline{\times Phenotype})$ and 
+$lm( abs( residuals( lm(Y \sim X)) ) \sim \underline{Phenotype})$ for disjointed 
+and emergent associations, respectively. 
+
+### ref `propr` paper.
 
 ## Disjointed associations
+Overview
 
-## Emergent associations
+### Interpretation:
+disjointed is term interaction with `x`, namely, drop `x:a`, `x:b`, `x:c`. 
+
+### compare to `lm()` outcome.
+
+```{r lm-disj} 
+
+```
+
+## Emergent association
+    decide on action. 
+
+# Repeated measures with `Error()` {#sec-da-3}
+
+## Random slopes through `Error()`
+
+```{r intro-error} 
+
+# out <- anansi(anansiWeb, formula = ~ treatment * temperature + Error(participant_id), metadata = metadata)
+
+```
+
+### compare to `aov( Error() )`.
+
+```{r aov-error} 
+
+```
+
+### corresponding `lm()`
+
+```{r lm-error} 
+
+```
+
+# Session info
+
+```{r}
+sessionInfo()
+```

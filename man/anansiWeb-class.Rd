@@ -3,17 +3,29 @@
 \docType{class}
 \name{anansiWeb-class}
 \alias{anansiWeb-class}
-\title{An S4 class to contain all metabolomics and functional input data as well as a dictionary to link them.}
+\title{anansiWeb S4 container class}
 \description{
-anansiWeb is the main container that will hold your input data thoughout the \code{anansi} pipeline.
+\code{anansiWeb} is an S4 class containing two feature tables as well as a
+dictionary to link them. \code{anansiWeb} is the main container that will
+hold your input data throughout the \code{anansi} pipeline.
 }
 \section{Slots}{
 
 \describe{
-\item{\code{tableY}}{A matrix of metabolomics data. Rows are samples and columns are features.}
+\item{\code{tableY}}{\code{matrix} of metabolomics data. Rows are samples and columns
+are features.}
 
-\item{\code{tableX}}{A matrix of functional data. Rows are samples and columns are features.}
+\item{\code{tableX}}{\code{matrix} of functional data. Rows are samples and columns
+are features.}
 
-\item{\code{dictionary}}{A binary adjacency matrix. Typically generated using the \code{weaveWebFromTables()} function.}
+\item{\code{dictionary}}{\code{Matrix}, binary adjacency matrix. Optionally sparse.
+Typically generated using the\code{weaveWeb()} function.}
 }}
 
+\seealso{
+\itemize{
+\item \code{\link{weaveWeb}}: for general use.
+\item \code{\link{anansiWeb-methods}} for methods, including \code{$}
+operator.
+}
+}
