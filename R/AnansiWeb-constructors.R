@@ -182,7 +182,75 @@ kegg_web <- function(x, ...) web(x, link = kegg_link(), ...)
 weaveWeb <-
   function(x, link = kegg_link(), ...) web(x, link, ...)
 
+#' Generate a random AnansiWeb from scratch
+#' @importFrom Matrix rsparsematrix
+#' @importFrom stats rnorm
+#' @examples
+#' # Make a random AnansiWeb object
+#'
+#' # random dictionary
+#' dictionary <- weaveWeb(a ~ c, link = randomLinkMap())$dictionary
+#' # anansiWeb
+#' web <- randomWebTab(n_samp = 100, dictionary)
+#' mae <- as(web, "MultiAssayExperiment")
+#'
+randomWebFull <- function(n_samp = 10, n_x = 8, n_y = 12, density = 0.1) {
 
+  tableY <- matrix(data = rnorm(n_y * n_samp),
+                   nrow = n_samp, ncol = n_y,
+                   dimnames = list(
+                     sample_id = paste0("sample_", seq_len(n_samp)),
+                     y = paste0("y_", seq_len(n_y)))
+                   )
+  tableX <- matrix(data = rnorm(n_x * n_samp),
+                   nrow = n_samp, ncol = n_x,
+                   dimnames = list(
+                     sample_id = paste0("sample_", seq_len(n_samp)),
+                     x = paste0("x_", seq_len(n_x)))
+                   )
+  dictionary <- randomWebDic(tableY, tableX, density)
+  # return AnansiWeb
+  new("anansiWeb", tableY = tableY, tableX = tableX, dictionary = dictionary)
+}
+
+#' Generate a random AnansiWeb, only missing tables
+#'
+randomWebTab <- function(n_samp = 10, dictionary) {
+  d <- dim(dictionary)
+  tableY <- matrix(data = rnorm(d[1] * n_samp),
+                   nrow = n_samp, ncol = d[1],
+                   dimnames = list(
+                     sample_id = paste0("sample_", seq_len(n_samp)),
+                     y = rownames(dictionary))
+  )
+  names(dimnames(tableY))[2] <- names(dimnames(dictionary))[1]
+  tableX <- matrix(data = rnorm(d[2] * n_samp),
+                   nrow = n_samp, ncol = d[2],
+                   dimnames = list(
+                     sample_id = paste0("sample_", seq_len(n_samp)),
+                     x = colnames(dictionary))
+  )
+  names(dimnames(tableX))[2] <- names(dimnames(dictionary))[2]
+
+  # return AnansiWeb
+  new("anansiWeb", tableY = tableY, tableX = tableX, dictionary = dictionary)
+}
+
+#' Generate a random AnansiWeb, only missing dictionary
+#' @importFrom Matrix rsparsematrix
+#'
+randomWebDic <- function(tableY, tableX, density = 0.1) {
+
+  dictionary <- rsparsematrix(nrow = NCOL(tableY), ncol = NCOL(tableX),
+                              density = density, rand.x = NULL,
+                              dimnames = list(
+                                y = colnames(tableY),
+                                x = colnames(tableX)))
+  names(dimnames(dictionary)) <- c(names(dimnames(tableY))[2L],
+                                   names(dimnames(tableX))[2L])
+  # return AnansiWeb
+  new("anansiWeb", tableY = tableY, tableX = tableX, dictionary = dictionary)
+}
 
 ###############################################################################
 ###############################################################################

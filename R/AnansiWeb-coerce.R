@@ -7,8 +7,7 @@ setAs(from = "anansiWeb", to = "list", def = function(from) {
     out
 })
 
-#'
-#' @export
+#' Coerce to MultiAssayExperiment
 #' @importClassesFrom MultiAssayExperiment MultiAssayExperiment
 #' @importFrom MultiAssayExperiment MultiAssayExperiment ExperimentList
 #' @importFrom SummarizedExperiment SummarizedExperiment
