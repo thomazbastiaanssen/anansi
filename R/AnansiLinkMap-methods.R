@@ -1,25 +1,25 @@
-#' S4 Methods for anansiLinkMap
-#' @name anansiLinkMap-methods
+#' S4 Methods for AnansiLinkMap
+#' @name AnansiLinkMap-methods
 #' @description
 #' a set of methods to work with \code{anansiLinkWeb}, a special type of list.
 #'
 NULL
 
-#' S4 Methods for anansiLinkMap
-#' @description \code{names}: Display a list of column names from anansiLinkMap
-#' @rdname anansiLinkMap-methods
+#' S4 Methods for AnansiLinkMap
+#' @description \code{names}: Display a list of column names from AnansiLinkMap
+#' @rdname AnansiLinkMap-methods
 #' @export
 #'
-setMethod("names", "anansiLinkMap", function(x) lapply(x, names) )
+setMethod("names", "AnansiLinkMap", function(x) lapply(x, names) )
 
-#' S4 Methods for anansiLinkMap
+#' S4 Methods for AnansiLinkMap
 #' @description \code{show}: Display the object
 #' @importFrom methods show
 #' @inheritParams methods::show
-#' @rdname anansiLinkMap-methods
+#' @rdname AnansiLinkMap-methods
 #' @export
 #'
-setMethod("show",  "anansiLinkMap", function(object) {
+setMethod("show",  "AnansiLinkMap", function(object) {
     cat("An object of class ", class(object), ":\n", sep = "")
     show(lapply(object,
                 function(x) (apply(x, 2, function(y) length(unique(y)))))
@@ -27,20 +27,20 @@ setMethod("show",  "anansiLinkMap", function(object) {
     invisible(NULL)
 })
 
-#' S4 Methods for anansiLinkMap
+#' S4 Methods for AnansiLinkMap
 #' @description
 #' \code{getEdgeList}: Return a data frame in edge list format.
-#' @rdname anansiLinkMap-methods
+#' @rdname AnansiLinkMap-methods
 #' @export
 #'
-setMethod("getEdgeList", "anansiLinkMap",
+setMethod("getEdgeList", "AnansiLinkMap",
           function(x) as.data.frame(do.call(rbind, names(x))))
 
 
-#' S4 Methods for anansiLinkMap
-#' @rdname anansiLinkMap-methods
+#' S4 Methods for AnansiLinkMap
+#' @rdname AnansiLinkMap-methods
 #' @details
-#' \code{subset}: For \code{anansiLinkMap objects}, sub-setting is only applied
+#' \code{subset}: For \code{AnansiLinkMap objects}, sub-setting is only applied
 #' to data frames compatible with the expression. The rest are returned
 #' unaltered. Modeled after \code{subset()}.
 #'
@@ -65,7 +65,7 @@ setMethod("getEdgeList", "anansiLinkMap",
 #' # Several data frames at the same time:
 #' subset(x = l, ec %in% c("1.2.3.4", "4.3.2.1"))
 #'
-setMethod("subset", "anansiLinkMap", function(x, subset, select, ...) {
+setMethod("subset", "AnansiLinkMap", function(x, subset, select, ...) {
   validObject(x); x.names <- names(x)
   # PART I: SUBSETTING
   if(!missing(subset)) {

@@ -11,6 +11,7 @@
 #' @slot dictionary \code{Matrix}, binary adjacency matrix. Optionally sparse.
 #'     Typically generated using the\code{weaveWeb()} function.
 #' @importClassesFrom Matrix Matrix
+#' @importClassesFrom S4Vectors DataFrame
 #' @seealso \itemize{
 #' \item \code{\link{AnansiWeb}}: for general use.
 #' \item \code{\link{AnansiWeb-methods}} for methods, including \code{$}
@@ -21,36 +22,37 @@ setClass("AnansiWeb",
          slots = c(
            tableY     = "matrix",
            tableX     = "matrix",
-           dictionary = "Matrix"
+           dictionary = "Matrix",
+           metadata   = "DataFrame"
          )
 )
 
-#' anansiLinkMap S4 container class
-#' @name anansiLinkMap-class
+#' AnansiLinkMap S4 container class
+#' @name AnansiLinkMap-class
 #' @description
-#' \code{anansiLinkMap} is an S4 class containing one or several data frames
+#' \code{AnansiLinkMap} is an S4 class containing one or several data frames
 #' structured as edge lists from the \code{igraph} package.
 #' @export
 #' @seealso \itemize{
-#' \item \code{\link{LinkMap}}: for general use.
-#' \item \code{\link{anansiLinkMap-methods}} for methods
+#' \item \code{\link{AnansiLinkMap}}: for general use.
+#' \item \code{\link{AnansiLinkMap-methods}} for methods
 #' \item \code{\link[igraph:igraph]{igraph}}.
 #'}
 #'
-setClass("anansiLinkMap",
+setClass("AnansiLinkMap",
          contains = "list")
 
-#' is valid anansiLinkMap?
+#' is valid AnansiLinkMap?
 #' @noRd
 #' @description
-#' returns TRUE if input is in the right format to be an anansiLinkMap object
+#' returns TRUE if input is in the right format to be an AnansiLinkMap object
 #' @param object
 #' \code{any} object, but not much will happen unless the object's class has a
 #' formal definition.
 #' @importFrom methods validObject
 #' @returns \code{TRUE} if passes, character vector otherwise.
 #'
-setValidity("anansiLinkMap", method = function(object) ifelse(
+setValidity("AnansiLinkMap", method = function(object) ifelse(
     test = validLinkDF(object) || all(unlist(lapply(object, validLinkDF))),
     yes = TRUE,
     no = "object is not in a valid format.")

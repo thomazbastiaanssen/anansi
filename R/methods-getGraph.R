@@ -1,6 +1,6 @@
-#' Get a graph object out of an anansiLinkMap.
+#' Get a graph object out of an AnansiLinkMap.
 #' @rdname getGraph
-#' @param x \code{anansiLinkMap}
+#' @param x \code{AnansiLinkMap}
 #' @param format
 #' \code{Character scalar}, controls output format by package name.
 #' \code{"igraph"} and \code{"graph"} are supported.
@@ -22,7 +22,7 @@
 #' getGraph( ec2cpd, format = "igraph" )
 #'
 #'
-setMethod("getGraph", "anansiLinkMap",
+setMethod("getGraph", "AnansiLinkMap",
           function(x, format = "igraph", ...) {
             validObject(x)
 

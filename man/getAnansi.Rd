@@ -7,14 +7,7 @@
 \usage{
 getAnansi(x, ...)
 
-\S4method{getAnansi}{MultiAssayExperiment}(
-  x,
-  experimentY = 1,
-  experimentX = 2,
-  assay.typeY = "counts",
-  assay.typeX = "counts",
-  ...
-)
+\S4method{getAnansi}{MultiAssayExperiment}(x, tableY = 1, tableX = 2, link = NULL, force_new = FALSE, ...)
 }
 \arguments{
 \item{x}{a \code{\link[MultiAssayExperiment:MultiAssayExperiment]{MultiAssayExperiment}}.}
@@ -22,13 +15,20 @@ getAnansi(x, ...)
 \item{...}{additional parameters that can be passed to
 \code{\link{AnansiWeb}} or \code{\link{anansi}}.}
 
-\item{experimentY, experimentX}{\code{Character scalar} or \code{numeric scalar}. Selects experiment 
-corresponding to \code{tableY} and \code{tableX} from \code{experiments(x)} 
-of \code{MultiAssayExperiment} object by name or index, name is recommended. 
+\item{tableY, tableX}{\code{Character scalar} or \code{numeric scalar}. Selects experiment
+corresponding to \code{tableY} and \code{tableX} from \code{experiments(x)}
+of \code{MultiAssayExperiment} object by name or index, name is recommended.
 (Default slots: \code{Y = 1}, \code{X = 2}).}
 
-\item{assay.typeY, assay.typeX}{\code{Character scalar}. Specifies the name of the assay in experiments Y and
-X to be used. (Default: \code{"counts"})}
+\item{link}{One of the following:
+\itemize{
+ \item Character scalar with value "none"
+ \item data.frame with two columns
+ \item list with two such data.frames
+}}
+
+\item{force_new}{\code{boolean} If x already has a dictionary \code{Matrix}
+in metadata, ignore it and generate a new object anyway? (Default: FALSE).}
 }
 \value{
 If \code{return.format} is \code{"table"} (default), a wide format data.frame

@@ -58,10 +58,9 @@ setMethod("dimnames", "AnansiWeb",
 #'
 setMethod("names", "AnansiWeb", function(x) names( dimnames( x@dictionary) ))
 
-
-
 ###############################################################################
 ###############################################################################
+#
 # setAs
 
 #' Accessing and modifying information in AnansiWeb S4 class
@@ -71,7 +70,8 @@ setMethod("names", "AnansiWeb", function(x) names( dimnames( x@dictionary) ))
 #' @export
 #'
 setAs(from = "AnansiWeb", to = "list", def = function(from) {
-  out <- list(from@tableY, from@tableX, dictionary = from@dictionary)
+  out <- list(from@tableY, from@tableX,
+              dictionary = from@dictionary, metadata = from@metadata)
   names(out)[c(1L, 2L)] <- names(from)
   out
 })
@@ -86,16 +86,21 @@ setAs(from = "AnansiWeb", to = "list", def = function(from) {
 #'
 setAs(from = "AnansiWeb", to = "MultiAssayExperiment", def = function(from) {
   weblist <- as(from, "list")
+  coldata <- weblist[[4L]]
+
   experiments <- ExperimentList(
-    y = SummarizedExperiment(t(weblist[[1L]])),
-    x = SummarizedExperiment(t(weblist[[2L]]))
+    y = SummarizedExperiment(t(weblist[[1L]]), colData = coldata),
+    x = SummarizedExperiment(t(weblist[[2L]]), colData = coldata)
   )
   names(experiments) <- names(weblist)[c(1L, 2L)]
   metadata <- weblist[3L]
 
   MultiAssayExperiment(
     experiments = experiments,
-    metadata = metadata)
+    metadata = metadata,
+    colData = coldata
+
+    )
 })
 
 

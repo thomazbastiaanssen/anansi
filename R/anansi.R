@@ -1,7 +1,7 @@
 #' Calculate an association network
-#' @description This is the main workspider function in the anansi package. It
-#' manages the individual functionalities of anansi, including correlation
-#' analysis, correlation by group and differential correlation.
+#' @description The main workspider function in the anansi package is called
+#' \code{anansi}. It manages the individual functionalities of anansi, including
+#' correlation analysis, correlation by group and differential associations.
 #' @param web An \code{AnansiWeb} object, containing two tables with 'omics data
 #' and a dictionary that links them. See \code{weaveWebFromTables()} for how to
 #' weave a web.
@@ -131,11 +131,10 @@
 #'   p
 #'
 #'
-anansi <- function(web, formula = ~1, groups = NULL, metadata,
+anansi <- function(web, formula, groups = NULL, metadata = NULL,
                    adjust.method = "BH", verbose = TRUE,
                    return.format = "table") {
   return.format <- match.arg(return.format, choices = c("table", "list", "raw"))
-
   # generate anansiYarn input object
   input <- prepInput(
     web = web, formula = formula, groups = groups,
@@ -143,7 +142,7 @@ anansi <- function(web, formula = ~1, groups = NULL, metadata,
   )
   int.terms <- input$int.terms; groups <- input$groups; n.grps <- input$n.grps;
   group.id <- input$group.id; errorterm <- input$error.term;
-  sat_model <- input$lm.formula
+  sat_model <- input$lm.formula; metadata <- input$metadata
 
   out.list <- vector(
     "list", length = 1 + n.grps + (2 * length(int.terms))
@@ -177,9 +176,14 @@ anansi <- function(web, formula = ~1, groups = NULL, metadata,
 #' Assess formula, trim metadata and prepare output for anansi workflow
 #' @description Initialize `anansiInput` component of output. Should not be
 #' called by user.
+#' @importFrom S4Vectors as.data.frame.DataFrame
 #' @noRd
 #'
 prepInput <- function(web, formula, groups, metadata, verbose) {
+  # If no metadata argument, try web slot
+  if(is.null(metadata)) metadata <- as.data.frame.DataFrame(web@metadata)
+  stopifnot("No metadata argument provided or found in AnansiWeb" =
+              prod(dim(metadata)) > 0 )
   raw_terms <- terms.formula(formula, "Error", data = metadata)
   indErr <- attr(raw_terms, "specials")$Error
 

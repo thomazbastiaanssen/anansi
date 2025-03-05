@@ -6,26 +6,15 @@
 \alias{weaveWeb.default}
 \alias{AnansiWeb}
 \alias{weaveKEGG}
-\alias{randomWeb}
 \title{Make an AnansiWeb}
 \usage{
 \method{weaveWeb}{formula}(formula, link = NULL, tableX = NULL, tableY = NULL, ...)
 
 \method{weaveWeb}{default}(x, y, link = NULL, tableX = NULL, tableY = NULL, ...)
 
-AnansiWeb(tableX, tableY, dictionary)
+AnansiWeb(tableX, tableY, dictionary, metadata = NULL, ...)
 
 weaveKEGG(x, ...)
-
-randomWeb(
-  n_samp = 10,
-  n_x = 8,
-  n_y = 12,
-  density = 0.1,
-  tableY = NULL,
-  tableX = NULL,
-  dictionary = NULL
-)
 }
 \arguments{
 \item{x, y}{\code{Character scalar}, names of feature types that should be
@@ -50,6 +39,8 @@ the features in a formula: Y ~ X.}
 
 \item{dictionary}{A binary adjacency matrix of class \code{Matrix}, or
 coercible to \code{Matrix}}
+
+\item{metadata}{\code{DataFrame}, or coerible to \code{DataFrame}. Optional.}
 }
 \value{
 an \code{AnansiWeb} object, with sparse binary biadjacency matrix
@@ -99,13 +90,6 @@ b <- weaveWeb(cpd ~ ko, link = kegg_link())$dictionary
 
 identical(a, Matrix::t(b))
 
-# Make a random AnansiWeb object
-
-# random dictionary
-dictionary <- weaveWeb(a ~ c, link = randomLinkMap() )$dictionary
-# AnansiWeb
-web <- randomWeb(n_samp = 100, dictionary = dictionary)
-mae <- as(web, "MultiAssayExperiment")
 }
 \seealso{
 \itemize{

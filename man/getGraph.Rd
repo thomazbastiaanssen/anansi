@@ -2,16 +2,16 @@
 % Please edit documentation in R/AllGenerics.R, R/methods-getGraph.R
 \name{getGraph}
 \alias{getGraph}
-\alias{getGraph,anansiLinkMap-method}
+\alias{getGraph,AnansiLinkMap-method}
 \alias{getGraph,list-method}
 \title{extract or make a graph}
 \usage{
-\S4method{getGraph}{anansiLinkMap}(x, format = "igraph", ...)
+\S4method{getGraph}{AnansiLinkMap}(x, format = "igraph", ...)
 
 \S4method{getGraph}{list}(x, format = "igraph", ...)
 }
 \arguments{
-\item{x}{\code{anansiLinkMap}}
+\item{x}{\code{AnansiLinkMap}}
 
 \item{...}{additional arguments (currently not used).}
 
@@ -21,7 +21,7 @@
 \description{
 extract or make a graph
 
-Get a graph object out of an anansiLinkMap.
+Get a graph object out of an AnansiLinkMap.
 }
 \examples{
 # Generate a regular igraph object

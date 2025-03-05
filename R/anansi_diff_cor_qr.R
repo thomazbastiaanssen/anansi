@@ -30,7 +30,6 @@
 anansiDiffCor <- function(
         web, sat_model, errorterm, int.terms, metadata, verbose
 ) {
-
     tY  <- web@tableY
     tX  <- web@tableX
     dic <- Matrix::as.matrix(web@dictionary)

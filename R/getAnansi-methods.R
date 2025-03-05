@@ -97,12 +97,11 @@ NULL
 #' @importFrom SummarizedExperiment assay colData
 setMethod("getAnansi",
   signature = c(x = "MultiAssayExperiment"),
-  function(x, experimentY = 1, experimentX = 2, assay.typeY = "counts",
-           assay.typeX = "counts", ...) {
+  function(x, tableY = 1, tableX = 2, link = NULL, force_new = FALSE, ...) {
     # Retrieve kwargs as list
     kwargs <- list(...)
     # Check fixed arguments
-    fixed_args <- c("tableY", "tableX", "web", "metadata")
+    fixed_args <- c("web", "metadata")
     remove <- names(kwargs) %in% fixed_args
     # If fixed arguments in kwargs, remove them
     if (any(remove)) {
@@ -113,10 +112,8 @@ setMethod("getAnansi",
         call. = FALSE
       )
     }
-    # Add kegg as a default link to match anansi()
-    if(!"link" %in% names(kwargs)) link <- kegg_link()
     # Generate web object
-    web <- getWeb(x, experimentY, experimentX, assay.typeY, assay.typeX, link)
+    web <- getWeb(x, tableY, tableX, link, ...)
     # Extract colData (metadata)
     coldata <- colData(x)
     # Combine anansi args into list

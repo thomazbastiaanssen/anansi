@@ -5,29 +5,17 @@
 \alias{getWeb,MultiAssayExperiment-method}
 \title{weaveWeb wrapper for the MultiAssayExperiment class}
 \usage{
-\S4method{getWeb}{MultiAssayExperiment}(
-  x,
-  experimentY = 1,
-  experimentX = 2,
-  assay.typeY = "counts",
-  assay.typeX = "counts",
-  link = NULL,
-  force_new = FALSE,
-  ...
-)
+\S4method{getWeb}{MultiAssayExperiment}(x, tableY = 1, tableX = 2, link = NULL, force_new = FALSE, ...)
 }
 \arguments{
 \item{x}{a \code{\link[MultiAssayExperiment:MultiAssayExperiment]{MultiAssayExperiment}}.}
 
-\item{...}{additional parameters that can be passed to \code{\link{AnansiWeb}}.}
+\item{...}{additional parameters passed to \code{\link{AnansiWeb}}.}
 
-\item{experimentY, experimentX}{\code{Character scalar} or \code{numeric scalar}. Selects experiment 
-corresponding to \code{tableY} and \code{tableX} from \code{experiments(x)} 
-of \code{MultiAssayExperiment} object by name or index, name is recommended. 
+\item{tableY, tableX}{\code{Character scalar} or \code{numeric scalar}. Selects experiment
+corresponding to \code{tableY} and \code{tableX} from \code{experiments(x)}
+of \code{MultiAssayExperiment} object by name or index, name is recommended.
 (Default slots: \code{Y = 1}, \code{X = 2}).}
-
-\item{assay.typeY, assay.typeX}{\code{Character scalar}. Specifies the name of the assay in experiments Y and
-X to be used. (Default: \code{"counts"})}
 
 \item{link}{One of the following:
 \itemize{
@@ -36,68 +24,33 @@ X to be used. (Default: \code{"counts"})}
  \item list with two such data.frames
 }}
 
-\item{force_new}{\code{boolean} If x already has a dictionary \code{Matrix} 
+\item{force_new}{\code{boolean} If x already has a dictionary \code{Matrix}
 in metadata, ignore it and generate a new object anyway? (Default: FALSE).}
 }
 \value{
-an \code{AnansiWeb} object, with sparse binary biadjacency matrix 
-with features from \code{y} as rows and features from \code{x} as columns in 
-\code{dictionary} slot. If x already contains a dictionary in metadata, use 
+an \code{AnansiWeb} object, with sparse binary biadjacency matrix
+with features from \code{y} as rows and features from \code{x} as columns in
+\code{dictionary} slot. If x already contains a dictionary in metadata, use
 that one, unless \code{force_new = TRUE}.
 }
 \description{
 weaveWeb wrapper for the MultiAssayExperiment class
 }
 \details{
-This wrapper of \code{\link{weaveWeb}} allows to generate an 
+This wrapper of \code{\link{weaveWeb}} allows to generate an
 \code{AnansiWeb} S4 object directly from objects of class
 \code{\link[MultiAssayExperiment:MultiAssayExperiment]{MultiAssayExperiment}}
 . First, the assays specified by \code{assay.typeY} and \code{assay.typeX}
 are passed to \code{\link{AnansiWeb}} to build an AnansiWeb object.
 }
 \examples{
-
-# Import libraries
-library(mia)
-library(TreeSummarizedExperiment)
-library(MultiAssayExperiment)
-
-# Load data
-data("FMT_data", package = "anansi")
-
-# Convert to (Tree)SummarizedExperiment objects
-metab_se <- SummarizedExperiment(assays = SimpleList(conc = as.matrix(FMT_metab)))
-KO_tse <- TreeSummarizedExperiment(assays = SimpleList(counts = as.matrix(FMT_KOs)))
-
-
-# Remove features with less than 10\% prevalence
-KO_tse <- subsetByPrevalent(KO_tse,
-  assay.type = "counts",
-  prevalence = 0.1
-)
-
-# Perform a centered log-ratio transformation on the functional counts assay
-KO_tse <- transformAssay(KO_tse,
-  assay.type = "counts",
-  method = "clr",
-  pseudocount = TRUE
-)
-
-# Prepare colData
-coldata <- FMT_metadata
-rownames(coldata) <- coldata$Sample_ID
-coldata <- coldata[match(colnames(KO_tse), rownames(coldata)), ]
+# Make a random anansiWeb
+web <- randomWeb()
 
 # Combine experiments into MultiAssayExperiment object
-mae <- MultiAssayExperiment(
-  experiments = ExperimentList(cpd = metab_se, ko = KO_tse),
-  colData = coldata
-)
+mae <- as(web, "MultiAssayExperiment")
 
-# Perform anansi analysis
-outWeb <- getWeb(mae,
-  experimentY = "cpd", experimentX = "ko",
-  assay.typeY = "conc", assay.typeX = "clr"
-)
+# Back to AnansiWeb
+outWeb <- getWeb(mae, tableY = "y", tableX = "x")
 
 }
