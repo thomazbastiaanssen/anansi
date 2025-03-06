@@ -4,7 +4,9 @@
 \alias{AnansiWeb-methods}
 \alias{$,AnansiWeb-method}
 \alias{$<-,AnansiWeb-method}
+\alias{show,AnansiWeb-method}
 \alias{dimnames,AnansiWeb-method}
+\alias{dim,AnansiWeb-method}
 \alias{names,AnansiWeb-method}
 \title{Accessing and modifying information in AnansiWeb S4 class}
 \usage{
@@ -12,12 +14,18 @@
 
 \S4method{$}{AnansiWeb}(x, name) <- value
 
+\S4method{show}{AnansiWeb}(object)
+
 \S4method{dimnames}{AnansiWeb}(x)
+
+\S4method{dim}{AnansiWeb}(x)
 
 \S4method{names}{AnansiWeb}(x)
 }
 \arguments{
-\item{x}{an \R object, for example a matrix, array or data frame.}
+\item{x, object}{
+    object from which to extract element(s) or in which to replace element(s).
+  }
 
 \item{name}{
     a literal character string or a \link[base]{name} (possibly \link[base]{backtick}
@@ -38,6 +46,8 @@ assigning values.
 
 \code{dimnames( x )} is shorthand for \code{dimnames( x$dictionary )} and
 \code{names( x )} is in turn shorthand for \code{names( dimnames(x) )}.
+
+\code{show}: Display the object
 }
 \examples{
 # prepare an AnansiWeb

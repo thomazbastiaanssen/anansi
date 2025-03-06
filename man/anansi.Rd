@@ -64,17 +64,18 @@ are known to interact.
 \item \link{randomAnansi}, \code{\link[=kegg_link]{kegg_link()}}: Generate example input
 \item \link{AnansiWeb-methods}, \link{AnansiLinkMap-methods}: Handle and manipulate
 input
+\item \link{coerceAnansi}: Coersion methods including to \code{list} and
+\code{MultiAssayExperiment}.
 }
 }
 
 \subsection{2. Output and cross-compatibility}{
 
 \itemize{
-\item \code{\link[=getAnansi]{getAnansi()}}: Compatibility with \href{[mia::mia]}{mia} and
-\href{[MultiAssayExperiment::MultiAssayExperiment]}{MultiAssayExperiment}
-\item \code{\link[=getGraph]{getGraph()}}: Compatibility with \href{[igraph::igraph]}{igraph}
-\item \code{\link[=plotAnansi]{plotAnansi()}}: Plot output in the style of
-\href{[miaViz::miaViz]}{miaViz}
+\item \code{\link[=getAnansi]{getAnansi()}}: Compatibility with \link[mia:mia-package]{mia::mia} and
+\link[MultiAssayExperiment:MultiAssayExperiment]{MultiAssayExperiment::MultiAssayExperiment}
+\item \code{\link[=getGraph]{getGraph()}}: Compatibility with \link[igraph:aaa-igraph-package]{igraph::igraph}
+\item \code{\link[=plotAnansi]{plotAnansi()}}: Plot output in the style of \link[miaViz:miaViz-package]{miaViz::miaViz}
 }
 }
 

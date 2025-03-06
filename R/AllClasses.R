@@ -27,6 +27,22 @@ setClass("AnansiWeb",
          )
 )
 
+#' is valid AnansiWeb?
+#' @noRd
+#' @description
+#' returns TRUE if input is in the right format to be an AnansiWeb object
+#' @param object
+#' `any` object, but not much will happen unless the object's class has a
+#' formal definition.
+#' @importFrom methods validObject
+#' @returns `TRUE` if passes, character vector otherwise.
+#'
+setValidity("AnansiWeb", method = function(object) ifelse(
+  test = validWeb(object),
+  yes = TRUE,
+  no = "object is not in a valid format.")
+)
+
 #' AnansiLinkMap S4 container class
 #' @name AnansiLinkMap-class
 #' @description
