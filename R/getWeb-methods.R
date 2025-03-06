@@ -30,7 +30,7 @@
 #' \code{dictionary} slot. If x already contains a dictionary in metadata, use
 #' that one, unless \code{force_new = TRUE}.
 #'
-#' @importFrom MultiAssayExperiment MultiAssayExperiment metadata metadata<-
+#' @importFrom MultiAssayExperiment MultiAssayExperiment metadata experiments
 #' @importFrom SummarizedExperiment assay colData
 #' @importClassesFrom Matrix Matrix
 #'
@@ -58,12 +58,12 @@ setMethod("getWeb", signature = c(x = "MultiAssayExperiment"), function(
     # Check experiments
     mia:::.test_experiment_of_mae(x, tableY)
     mia:::.test_experiment_of_mae(x, tableX)
-    y_id <- names(experiments(mae)[tableY])
-    x_id <- names(experiments(mae)[tableX])
+    y_id <- names(experiments(x)[tableY])
+    x_id <- names(experiments(x)[tableX])
 
     # Extract assays
-    tableY <- t(assay(x, y_id))
-    tableX <- t(assay(x, x_id))
+    tY <- t(assay(x, y_id))
+    tX <- t(assay(x, x_id))
 
     if(!force_new){
     # Check if x already contains a dictionary
@@ -71,12 +71,36 @@ setMethod("getWeb", signature = c(x = "MultiAssayExperiment"), function(
 
     if(is.null(link))
         d <- "dictionary"
-    if(length(link) == 1L && (is.character(link) || is.numeric(link)) )
+    if(valid_selection(link, m))
         d <- link
     if(d %in% names(m))
-        return(AnansiWeb( tableX, tableY, m[[d]]))
+        return(AnansiWeb(tableX = tX, tableY = tY, dictionary = m[[d]],
+                         metadata = colData(x), ...) )
     }
     # Generate web object
-    weaveWeb.default(x, y, link, tableX, tableY, metadata = colData(x), ...)
-}
+    weaveWeb.default(x = x_id, y = y_id, link = link,
+                     tableX = tX, tableY = tY, metadata = colData(x), ...)
+    }
 )
+
+#' TRUE if i can select in x
+#' @noRd
+#' @param i \code{Character or numeric scalar}. Index to check.
+#' @param x object to check i in
+#' @returns TRUE if i selects in x, FALSE otherwise
+#'
+valid_selection <- function(i, x) {
+    # Need to be length 1.
+    if(length(i) != 1L) FALSE
+
+    # If numeric, needs to be within element length of x
+    if(is.numeric(i)) i <= length(x)
+    # If character, x needs to be named and i needs to be within those names
+    if(is.character(i)){
+        if(is.null(names(x))) FALSE
+
+        !is.na(match(i, names(x)))
+    }
+    # If that didn't work, invalid selection. return FALSE.
+    FALSE
+}

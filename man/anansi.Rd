@@ -13,7 +13,8 @@ anansi(
   metadata = NULL,
   adjust.method = "BH",
   verbose = TRUE,
-  return.format = "table"
+  return.format = "table",
+  ...
 )
 }
 \arguments{
@@ -46,6 +47,8 @@ while running. Useful for debugging errors on large datasets.}
 respectively be a wide `data.frame` of results, a list containing the results
 and input, or a list of raw output (used for testing purposes).
 convenient use. (Default: \code{"table"})}
+
+\item{...}{additional arguments (currently not used).}
 }
 \value{
 A list of lists containing correlation coefficients, p-values and

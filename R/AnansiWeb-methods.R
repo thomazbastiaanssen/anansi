@@ -70,7 +70,7 @@ setMethod("names", "AnansiWeb", function(x) names( dimnames( x@dictionary) ))
 #' @export
 #'
 setAs(from = "AnansiWeb", to = "list", def = function(from) {
-  out <- list(from@tableY, from@tableX,
+  out <- list(tableY = from@tableY, tableX = from@tableX,
               dictionary = from@dictionary, metadata = from@metadata)
   names(out)[c(1L, 2L)] <- names(from)
   out
@@ -85,21 +85,22 @@ setAs(from = "AnansiWeb", to = "list", def = function(from) {
 #' @export
 #'
 setAs(from = "AnansiWeb", to = "MultiAssayExperiment", def = function(from) {
-  weblist <- as(from, "list")
-  coldata <- weblist[[4L]]
 
-  experiments <- ExperimentList(
-    y = SummarizedExperiment(t(weblist[[1L]]), colData = coldata),
-    x = SummarizedExperiment(t(weblist[[2L]]), colData = coldata)
+  tY  <- t(from@tableY)
+  tX  <- t(from@tableX)
+  to_exp <- ExperimentList(
+    y = SummarizedExperiment(tY),
+    x = SummarizedExperiment(tX)
   )
-  names(experiments) <- names(weblist)[c(1L, 2L)]
-  metadata <- weblist[3L]
+  names(to_exp) <- names(from)
+
+  to_md  <- list(dictionary = from@dictionary)
+  to_cd  <- from@metadata
 
   MultiAssayExperiment(
-    experiments = experiments,
-    metadata = metadata,
-    colData = coldata
-
+    experiments = to_exp,
+    metadata = to_md,
+    colData = to_cd
     )
 })
 

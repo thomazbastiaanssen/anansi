@@ -63,46 +63,14 @@
 #' library(TreeSummarizedExperiment)
 #' library(MultiAssayExperiment)
 #'
-#' # Load data
-#' data("FMT_data", package = "anansi")
-#'
-#' # Convert to (Tree)SummarizedExperiment objects
-#' metab_se <- SummarizedExperiment(assays = SimpleList(conc = as.matrix(FMT_metab)))
-#' KO_tse <- TreeSummarizedExperiment(assays = SimpleList(counts = as.matrix(FMT_KOs)))
-#'
-#' # Select functions that are represented in the dictionary
-#' keep <- row.names(KO_tse) %in% sort(unique(ec2ko$ko))
-#' KO_tse <- KO_tse[keep, ]
-#'
-#' # Remove features with less than 10% prevalence
-#' KO_tse <- subsetByPrevalent(KO_tse,
-#'   assay.type = "counts",
-#'   prevalence = 0.1
-#' )
-#'
-#' # Perform a centered log-ratio transformation on the functional counts assay
-#' KO_tse <- transformAssay(KO_tse,
-#'   assay.type = "counts",
-#'   method = "clr",
-#'   pseudocount = TRUE
-#' )
-#'
-#' # Prepare colData
-#' coldata <- FMT_metadata
-#' rownames(coldata) <- coldata$Sample_ID
-#' coldata <- coldata[match(colnames(KO_tse), rownames(coldata)), ]
-#'
-#' # Combine experiments into MultiAssayExperiment object
-#' mae <- MultiAssayExperiment(
-#'   experiments = ExperimentList(cpd = metab_se, ko = KO_tse),
-#'   colData = coldata
-#' )
+#' web <- randomWeb(n_samples = 100)
+#' mae <- as(web, "MultiAssayExperiment")
 #'
 #' # Perform anansi analysis
 #' out <- getAnansi(mae,
-#'   experimentY = "cpd", experimentX = "ko",
-#'   assay.typeY = "conc", assay.typeX = "clr",
-#'   formula = ~Legend)
+#'   tableY = "y", tableX = "x",
+#'   formula = ~ cat_ab
+#' )
 #'
 #' # Select significant interactions
 #' out <- out[out$full_p.values < 0.05, ]
@@ -110,15 +78,15 @@
 #' # Visualise disjointed associations filled by group
 #' plotAnansi(out,
 #'            association.type = "disjointed",
-#'            model.var = "Legend",
+#'            model.var = "cat_ab",
 #'            signif.threshold = 0.05,
 #'            fill_by = "group")
 #'
-#' # Visualise full associations filled by Legend
+#' # Visualise full associations filled by category ('cat_ab')
 #' plotAnansi(out,
 #'            association.type = "full",
 #'            signif.threshold = 0.05,
-#'            fill_by = "Legend")
+#'            fill_by = "cat_ab")
 #'
 #' @seealso
 #' \code{\link{getAnansi}}

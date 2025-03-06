@@ -4,10 +4,8 @@
 #' \code{\link[MultiAssayExperiment:MultiAssayExperiment]{MultiAssayExperiment}}
 #' object. It applies the functions \code{\link{weaveWeb}} and
 #' \code{\link{anansi}} in the given order.
-#' @usage NULL
-#'
+#' @inheritParams anansi
 #' @inheritParams getWeb
-#'
 #' @param ... additional parameters that can be passed to
 #'   \code{\link{AnansiWeb}} or \code{\link{anansi}}.
 #'
@@ -35,50 +33,14 @@
 #' library(TreeSummarizedExperiment)
 #' library(MultiAssayExperiment)
 #'
-#' # Load data
-#' data("FMT_data", package = "anansi")
-#'
-#' # Convert to (Tree)SummarizedExperiment objects
-#' metab_se <- SummarizedExperiment(assays = SimpleList(conc = as.matrix(FMT_metab)))
-#' KO_tse <- TreeSummarizedExperiment(assays = SimpleList(counts = as.matrix(FMT_KOs)))
-#'
-#' # Select functions that are represented in the dictionary
-#' keep <- row.names(KO_tse) %in% sort(unique(ec2ko$ko))
-#' KO_tse <- KO_tse[keep, ]
-#'
-#' # Remove features with less than 10% prevalence
-#' KO_tse <- subsetByPrevalent(KO_tse,
-#'   assay.type = "counts",
-#'   prevalence = 0.1
-#' )
-#'
-#' # Perform a centered log-ratio transformation on the functional counts assay
-#' KO_tse <- transformAssay(KO_tse,
-#'   assay.type = "counts",
-#'   method = "clr",
-#'   pseudocount = TRUE
-#' )
-#'
-#' # Prepare colData
-#' coldata <- FMT_metadata
-#' rownames(coldata) <- coldata$Sample_ID
-#' coldata <- coldata[match(colnames(KO_tse), rownames(coldata)), ]
-#'
-#' # Combine experiments into MultiAssayExperiment object
-#' mae <- MultiAssayExperiment(
-#'   experiments = ExperimentList(cpd = metab_se, ko = KO_tse),
-#'   colData = coldata
-#' )
+#' web <- randomWeb(n_samples = 100)
+#' mae <- as(web, "MultiAssayExperiment")
 #'
 #' # Perform anansi analysis
 #' out <- getAnansi(mae,
-#'   experimentY = "cpd", experimentX = "ko",
-#'   assay.typeY = "conc", assay.typeX = "clr",
-#'   formula = ~Legend
+#'   tableY = "y", tableX = "x",
+#'   formula = ~ cat_ab
 #' )
-#'
-#' # Select significant interactions
-#' out <- out[out$full_p.values < 0.05, ]
 #'
 #' # View subset of results
 #' head(out, 5)
@@ -95,9 +57,10 @@ NULL
 #' @export
 #' @importFrom MultiAssayExperiment MultiAssayExperiment
 #' @importFrom SummarizedExperiment assay colData
+#'
 setMethod("getAnansi",
   signature = c(x = "MultiAssayExperiment"),
-  function(x, tableY = 1, tableX = 2, link = NULL, force_new = FALSE, ...) {
+  function(x, tableY = 1, tableX = 2, formula, link = NULL, force_new = FALSE, ...) {
     # Retrieve kwargs as list
     kwargs <- list(...)
     # Check fixed arguments
@@ -107,24 +70,16 @@ setMethod("getAnansi",
     if (any(remove)) {
       removed <- paste0(names(kwargs[remove]), sep = "'", collapse = ", '")
       kwargs <- kwargs[!remove]
-      warning("The arguments '", removed, " should not be used, as they are ",
+      stop("The arguments '", removed, " should not be used, as they are ",
         "extracted from 'x'.",
         call. = FALSE
       )
     }
     # Generate web object
-    web <- getWeb(x, tableY, tableX, link, ...)
-    # Extract colData (metadata)
-    coldata <- colData(x)
-    # Combine anansi args into list
-    anansi_args <- c(list(web = web, metadata = as.data.frame(coldata)), kwargs)
-    keep <- names(anansi_args) %in% c(
-      "web", "formula", "groups", "metadata",
-      "adjust.method", "verbose", "return.format"
-    )
-    anansi_args <- anansi_args[keep]
+    w <- getWeb(x, tableY, tableX, link, ...)
+
     # Generate anansi output
-    out <- do.call(anansi, anansi_args)
+    out <- anansi(web = w, formula = formula, ...)
 
     return(out)
   }

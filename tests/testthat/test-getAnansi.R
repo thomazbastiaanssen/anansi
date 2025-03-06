@@ -1,17 +1,6 @@
 test_that("getAnansi", {
-  ### Import libraries ###
-  library(mia)
-  library(TreeSummarizedExperiment)
-  library(MultiAssayExperiment)
-  ### Load data ###
-  ###
-
-  data("FMT_data", package = "anansi")
-
-  # Make a random anansiWeb
-  web <- randomWeb()
-
   # Combine experiments into MultiAssayExperiment object
+  web <- randomWeb(n_samples = 100)
   mae <- as(web, "MultiAssayExperiment")
 
   expect_error(getAnansi(mae, tableY = "wrong_name"),
@@ -23,7 +12,7 @@ test_that("getAnansi", {
     tableX = "x",
     return.format = "wrong_input"
   ), class = "error")
-  expect_warning(
+  expect_error(
     getAnansi(mae,
       tableY = "y",
       tableX = "x",
@@ -33,18 +22,17 @@ test_that("getAnansi", {
     fixed = TRUE
   )
   ### Check identity with original anansi output ###
-  web <- randomWeb(n_samples = 100)
 
   table1 <- anansi(
     web = web, formula = ~ cat_XYZ,
     verbose = FALSE
   )
   list1 <- anansi(
-    web = web, formula = ~cat_XYZ, metadata = FMT_metadata,
+    web = web, formula = ~cat_XYZ,
     verbose = FALSE, return.format = "list"
   )
   raw1 <- anansi(
-    web = web, formula = ~cat_XYZ, metadata = FMT_metadata,
+    web = web, formula = ~cat_XYZ,
     verbose = FALSE, return.format = "raw"
   )
 

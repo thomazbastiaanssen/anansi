@@ -25,6 +25,7 @@
 #' respectively be a wide `data.frame` of results, a list containing the results
 #' and input, or a list of raw output (used for testing purposes).
 #' convenient use. (Default: \code{"table"})
+#' @param ... additional arguments (currently not used).
 #' @return A list of lists containing correlation coefficients, p-values and
 #' q-values for all operations.
 #' @importFrom stats model.frame
@@ -133,7 +134,7 @@
 #'
 anansi <- function(web, formula, groups = NULL, metadata = NULL,
                    adjust.method = "BH", verbose = TRUE,
-                   return.format = "table") {
+                   return.format = "table", ...) {
   return.format <- match.arg(return.format, choices = c("table", "list", "raw"))
   # generate anansiYarn input object
   input <- prepInput(
