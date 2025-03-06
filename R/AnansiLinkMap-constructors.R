@@ -3,14 +3,14 @@
 #' @rdname AnansiLinkMap
 #' @aliases LinkMap asLinkMap
 #' @description
-#' Construct an \code{AnansiLinkMap} object from a validly shaped data frame or
+#' Construct an `AnansiLinkMap` object from a validly shaped data frame or
 #' list of such data.frames.
-#' @param x \code{any} object, most likely \code{list} of data frames.
+#' @param x `any` object, most likely `list` of data frames.
 #' @export
 #' @seealso \itemize{
-#' \item \code{\link{kegg_link}}: for an example of valid input.
-#' \item \code{\link{AnansiLinkMap-class}}: for class.
-#' \item \code{\link{AnansiLinkMap-methods}} for methods.
+#' \item [kegg_link()]: for an example of valid input.
+#' \item [AnansiLinkMap-class()]: for class.
+#' \item [AnansiLinkMap-methods()] for methods.
 #'}
 #' @examples
 #' AnansiLinkMap( kegg_link( ) )
@@ -30,9 +30,9 @@ AnansiLinkMap <- function(x) {
 asLinkMap <- AnansiLinkMap
 
 #' @rdname randomAnansi
-#' @param n_types \code{Numeric scalar}, number of types of features to generate
-#' @param n_features \code{Numeric scalar}, number of features per type
-#' @param sparseness \code{Numeric scalar}, proportion: How rare are connections
+#' @param n_types `Numeric scalar`, number of types of features to generate
+#' @param n_features `Numeric scalar`, number of features per type
+#' @param sparseness `Numeric scalar`, proportion: How rare are connections
 #' @export
 #'
 randomLinkMap <- function(n_types = 6, n_features = 100,
@@ -57,7 +57,7 @@ randomLinkMap <- function(n_types = 6, n_features = 100,
 
 #' Make a single df for a random AnansiLinkMap
 #' @rdname randomAnansi
-#' @description called by \code{randomLinkMap}, shouldn't be called by user.
+#' @description called by `randomLinkMap`, shouldn't be called by user.
 #' @param l,r character vector of left, right features
 #' @param l_id,r_id character scalar of left, right feature names
 #' @param p proportion of connections to keep

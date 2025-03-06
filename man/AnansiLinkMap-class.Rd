@@ -10,8 +10,8 @@ structured as edge lists from the \code{igraph} package.
 }
 \seealso{
 \itemize{
-\item \code{\link{AnansiLinkMap}}: for general use.
-\item \code{\link{AnansiLinkMap-methods}} for methods
-\item \code{\link[igraph:igraph]{igraph}}.
+\item \code{\link[=AnansiLinkMap]{AnansiLinkMap()}}: for general use.
+\item \code{\link[=AnansiLinkMap-methods]{AnansiLinkMap-methods()}} for methods
+\item \code{\link[igraph:aaa-igraph-package]{igraph::igraph()}}.
 }
 }

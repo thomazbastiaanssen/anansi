@@ -24,8 +24,8 @@ asLinkMap( kegg_link() )
 }
 \seealso{
 \itemize{
-\item \code{\link{kegg_link}}: for an example of valid input.
-\item \code{\link{AnansiLinkMap-class}}: for class.
-\item \code{\link{AnansiLinkMap-methods}} for methods.
+\item \code{\link[=kegg_link]{kegg_link()}}: for an example of valid input.
+\item \code{\link[=AnansiLinkMap-class]{AnansiLinkMap-class()}}: for class.
+\item \code{\link[=AnansiLinkMap-methods]{AnansiLinkMap-methods()}} for methods.
 }
 }

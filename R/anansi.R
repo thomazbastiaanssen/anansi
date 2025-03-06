@@ -1,9 +1,11 @@
 #' Calculate an association network
-#' @description The main workspider function in the anansi package is called
-#' \code{anansi}. It manages the individual functionalities of anansi, including
+#' @description
+#' ## General use: `anansi()`
+#' The main workspider function in the anansi package is called
+#' `anansi`. It manages the individual functionalities of anansi, including
 #' correlation analysis, correlation by group and differential associations.
-#' @param web An \code{AnansiWeb} object, containing two tables with 'omics data
-#' and a dictionary that links them. See \code{weaveWebFromTables()} for how to
+#' @param web An `AnansiWeb` object, containing two tables with 'omics data
+#' and a dictionary that links them. See `weaveWebFromTables()` for how to
 #' weave a web.
 #' @param metadata A vector or data.frame of categorical or continuous value
 #' necessary for differential correlations. Typically a state or treatment.
@@ -16,15 +18,15 @@
 #' correlations according to your dictionary.
 #' @param formula A formula object. Used to assess differential associations.
 #' @param adjust.method Method to adjust p-values for multiple comparisons.
-#' \code{adjust.method = "BH"} is the default value. See \code{p.adjust()} in
-#' the base R \code{stats} package.
+#' `adjust.method = "BH"` is the default value. See `p.adjust()` in
+#' the base R `stats` package.
 #' @param verbose A boolean. Toggles whether to print diagnostic information
 #' while running. Useful for debugging errors on large datasets.
-#' @param return.format \code{Character scalar}. Should be one of \code{"table"}
-#' , \code{"list"}, or \code{"raw"}. Should the output of \code{\link{anansi}}
+#' @param return.format `Character scalar`. Should be one of `"table"`
+#' , `"list"`, or `"raw"`. Should the output of [anansi()]
 #' respectively be a wide `data.frame` of results, a list containing the results
 #' and input, or a list of raw output (used for testing purposes).
-#' convenient use. (Default: \code{"table"})
+#' convenient use. (Default: `"table"`)
 #' @param ... additional arguments (currently not used).
 #' @return A list of lists containing correlation coefficients, p-values and
 #' q-values for all operations.
@@ -258,7 +260,7 @@ check_groups <- function(groups, raw_terms, indErr, metadata, verbose) {
   return(list(groups, n.groups))
 }
 
-#' Prepare saturated model, deal with \code{Error} terms.
+#' Prepare saturated model, deal with `Error` terms.
 #' @noRd
 #' @importFrom stats as.formula update.formula
 #'
@@ -307,7 +309,7 @@ make_saturated_model <- function(formula, raw_terms, indErr, verbose) {
 
 #' Is character, factor or ordered factor
 #' @description wrapper around
-#' \code{is.character(x) || is.factor(x) || is.ordered(x)}
+#' `is.character(x) || is.factor(x) || is.ordered(x)`
 #' @param x an object to be evaluated as being categorical
 #' @returns a boolean.
 #'

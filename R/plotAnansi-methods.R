@@ -1,58 +1,58 @@
 #' Dissociation plot
 #'
-#' \code{plotAnansi} generates a standard dissociation plot from the output of
-#' \code{\link{getAnansi}} in the table format. It provides a convenient way to
+#' `plotAnansi` generates a standard dissociation plot from the output of
+#' [getAnansi()] in the table format. It provides a convenient way to
 #' visually assess relevant results from the anansi analysis.
 #'
-#' @param x a \code{data.frame} object output of \code{\link{getAnansi}} in
+#' @param x a `data.frame` object output of [getAnansi()] in
 #'   the table format.
 #'
-#' @param association.type \code{Character scalar}. Specifies the type of
-#' association to show in the plot. One of \code{"disjointed"},
-#'   \code{"emergent"} and \code{"full"}. (Default: \code{NULL})
+#' @param association.type `Character scalar`. Specifies the type of
+#' association to show in the plot. One of `"disjointed"`,
+#'   `"emergent"` and `"full"`. (Default: `NULL`)
 #'
-#' @param model.var \code{Character scalar}. Specifies the name of a variable
-#' in the anansi model. It is relevant only when \code{association.type} is
-#'   \code{"disjointed"} or \code{"emergent"}. (Default: \code{NULL})
+#' @param model.var `Character scalar`. Specifies the name of a variable
+#' in the anansi model. It is relevant only when `association.type` is
+#'   `"disjointed"` or `"emergent"`. (Default: `NULL`)
 #'
-#' @param signif.threshold \code{Numeric scalar}. Specifies the threshold to
-#'   mark the significance of \code{association.type}. (Default: \code{NULL})
+#' @param signif.threshold `Numeric scalar`. Specifies the threshold to
+#'   mark the significance of `association.type`. (Default: `NULL`)
 #'
-#' @param colour_by \code{Character scalar}. Specifies one of the \code{groups}
-#'    terms used in the original \code{anansi} call, \code{x} by which points
-#'    should be coloured. (Default: \code{NULL})
+#' @param colour_by `Character scalar`. Specifies one of the `groups`
+#'    terms used in the original `anansi` call, `x` by which points
+#'    should be coloured. (Default: `NULL`)
 #'
-#' @param color_by \code{Character scalar}. Alias to \code{colour_by}.
+#' @param color_by `Character scalar`. Alias to `colour_by`.
 #'
-#' @param fill_by \code{Character scalar}. Specifies one of the \code{groups}
-#'    terms used in the original \code{anansi} call, \code{x} by which points
-#'    should be filled (Default: \code{NULL})
+#' @param fill_by `Character scalar`. Specifies one of the `groups`
+#'    terms used in the original `anansi` call, `x` by which points
+#'    should be filled (Default: `NULL`)
 #'
-#' @param size_by \code{Character scalar}. Specifies one of the \code{groups}
-#'    terms used in the original \code{anansi} call, \code{x} by which points
-#'    should be sized. (Default: \code{NULL})
+#' @param size_by `Character scalar`. Specifies one of the `groups`
+#'    terms used in the original `anansi` call, `x` by which points
+#'    should be sized. (Default: `NULL`)
 #'
-#' @param shape_by \code{Character scalar}. Specifies one of the \code{groups}
-#'    terms used in the original \code{anansi} call, \code{x} by which points
-#'    should be shaped. (Default: \code{NULL})
+#' @param shape_by `Character scalar`. Specifies one of the `groups`
+#'    terms used in the original `anansi` call, `x` by which points
+#'    should be shaped. (Default: `NULL`)
 #'
-#' @param x_lab \code{Character scalar}. Specifies the label of the x axis.
-#'   (Default: \code{"cor"})
+#' @param x_lab `Character scalar`. Specifies the label of the x axis.
+#'   (Default: `"cor"`)
 #'
-#' @param y_lab \code{Character scalar}. Specifies the label of the y axis.
-#'   (Default: \code{""})
+#' @param y_lab `Character scalar`. Specifies the label of the y axis.
+#'   (Default: `""`)
 #'
-#' @param y_position \code{Character scalar}. Specifies the position of the y
-#'   labels. It should be either \code{"left"} or \code{"right"}.
-#'   (Default: \code{"right"})
+#' @param y_position `Character scalar`. Specifies the position of the y
+#'   labels. It should be either `"left"` or `"right"`.
+#'   (Default: `"right"`)
 #'
 #' @param ... additional arguments
 #'
 #' @details
-#' \code{plotAnansi} provides a standardised method to visualise the results
+#' `plotAnansi` provides a standardised method to visualise the results
 #' of anansi by means of a differential association plot. The input for this
-#' function should be generated from \code{\link{getAnansi}} or
-#' \code{\link{anansi}}, with \code{return.format = "table"}
+#' function should be generated from [getAnansi()] or
+#' [anansi()], with `return.format = "table"`
 #'
 #' @return
 #' A ggplot2 object.
@@ -89,8 +89,8 @@
 #'            fill_by = "cat_ab")
 #'
 #' @seealso
-#' \code{\link{getAnansi}}
-#' \code{\link{anansi}}
+#' [getAnansi()]
+#' [anansi()]
 #'
 #' @name plotAnansi
 #'

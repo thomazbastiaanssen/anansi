@@ -21,7 +21,7 @@ clr_logunif(counts, samples_are = "cols", replicates = 1000)
 \item{samples_are}{Either "cols" or "rows". Default is "cols". Denotes whether the columns or rows depict individual samples.}
 
 \item{method}{The method for zero imputation. One of \code{"logunif"}, \code{"unif"} or \code{"const"}.
-\code{'logunif'} samples small numbers from a log-uniform distribution, whereas \code{'unif'} samples from a uniform one. On the other hand, \code{"const"} simply replaces zeroes with \code{0.65 * [the lowest value]}.}
+\code{'logunif'} samples small numbers from a log-uniform distribution, whereas \code{'unif'} samples from a uniform one. On the other hand, \code{"const"} simply replaces zeroes with \verb{0.65 * [the lowest value]}.}
 
 \item{replicates}{An integer. For the two random sampling methods, if this is larger than 1, every zero will be imputed that many times. The median of the CLR of all those replicates will be returned. If \code{method} is set to \code{"const"}, replicates will be automatically set to 1 as no random numbers are generated.}
 }
@@ -40,16 +40,16 @@ For these methods, we have implemented a resampling approach in order to stabili
 }
 \section{Functions}{
 
-\code{clr_c:}
- A wrapper for \code{clr_lite(counts, method = "const", replicates = 1)}.
+\verb{clr_c:}
+A wrapper for \code{clr_lite(counts, method = "const", replicates = 1)}.
 
 
-\code{clr_unif:}
- A wrapper for \code{clr_lite(counts, method = "unif")}.
+\verb{clr_unif:}
+A wrapper for \code{clr_lite(counts, method = "unif")}.
 
 
-\code{clr_logunif:}
- A wrapper for \code{clr_lite(counts, method = "logunif")}.
+\verb{clr_logunif:}
+A wrapper for \code{clr_lite(counts, method = "logunif")}.
 }
 
 \references{

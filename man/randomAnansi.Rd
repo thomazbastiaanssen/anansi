@@ -19,11 +19,11 @@ randomWeb(
 )
 }
 \arguments{
-\item{n_types}{\code{Numeric scalar}, number of types of features to generate}
+\item{n_types}{\verb{Numeric scalar}, number of types of features to generate}
 
-\item{n_features}{\code{Numeric scalar}, number of features per type}
+\item{n_features}{\verb{Numeric scalar}, number of features per type}
 
-\item{sparseness}{\code{Numeric scalar}, proportion: How rare are connections}
+\item{sparseness}{\verb{Numeric scalar}, proportion: How rare are connections}
 
 \item{tableY, tableX}{A table containing features of interest. Rows should be
 samples and columns should be features. Y and X refer to the position of
@@ -41,5 +41,5 @@ randomWeb()
 randomLinkMap()
 }
 \seealso{
-\code{\link{AnansiWeb}}, \code{\link{AnansiLinkMap}}
+\code{\link[=AnansiWeb]{AnansiWeb()}}, \code{\link[=AnansiLinkMap]{AnansiLinkMap()}}
 }

@@ -20,5 +20,5 @@ Compute r-statistics for each featureY-featureX pair in the dictionary.
 Typically, the main \code{anansi()} function will run this for you.
 }
 \seealso{
-\code{\link{anansi}} \cr \code{\link{anansiCorTestByGroup}}
+\code{\link[=anansi]{anansi()}} \cr \code{\link[=anansiCorTestByGroup]{anansiCorTestByGroup()}}
 }

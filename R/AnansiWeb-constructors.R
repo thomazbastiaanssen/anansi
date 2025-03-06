@@ -3,44 +3,44 @@
 #' @rdname AnansiWeb
 #' @description
 #' Generate a biadjacency matrix, linking the features between two tables.
-#' Return an \code{AnansiWeb} object which contains all three.
+#' Return an `AnansiWeb` object which contains all three.
 #'
-#' \code{weaveWeb()} is for general use and has flexible default settings.
+#' `weaveWeb()` is for general use and has flexible default settings.
 #'
-#' \code{weaveKEGG()} is a wrapper that sets \code{link} to \code{kegg_link()}.
-#' All variants are special cases of \code{weaveWeb()}.
+#' `weaveKEGG()` is a wrapper that sets `link` to `kegg_link()`.
+#' All variants are special cases of `weaveWeb()`.
 #'
-#' \code{AnansiWeb()} constructs an \code{AnansiWeb} object from three tables.
+#' `AnansiWeb()` constructs an `AnansiWeb` object from three tables.
 #'
-#' @param formula \code{formula} of the form y ~ x, denoting desired output
-#'     format; assigns y to rows and columns to x. Equivalent to using \code{x}
-#'     and \code{y} arguments.
-#' @param x,y \code{Character scalar}, names of feature types that should be
-#'     linked. Should be found in the column names of \code{link}.
+#' @param formula `formula` of the form y ~ x, denoting desired output
+#'     format; assigns y to rows and columns to x. Equivalent to using `x`
+#'     and `y` arguments.
+#' @param x,y `Character scalar`, names of feature types that should be
+#'     linked. Should be found in the column names of `link`.
 #' @param link One of the following:
 #' \itemize{
-#'  \item \code{Character scalar} with value \code{"none"}.
-#'  \item \code{data.frame} with two columns
-#'  \item \code{list} with two such \code{data.frame}s.
+#'  \item `Character scalar` with value `"none"`.
+#'  \item `data.frame` with two columns
+#'  \item `list` with two such `data.frame`s.
 #' }
 #' @param tableY,tableX A table containing features of interest. Rows should be
 #'     samples and columns should be features. Y and X refer to the position of
 #'     the features in a formula: Y ~ X.
 #' @param ... further arguments.
 #' @details
-#' If the \code{link} argument is \code{"none"}, all features will be considered
-#' linked. If one or more \code{data.frame}s, colnames should be as specified in
-#' \code{x} and \code{y}.
+#' If the `link` argument is `"none"`, all features will be considered
+#' linked. If one or more `data.frame`s, colnames should be as specified in
+#' `x` and `y`.
 #' @seealso \itemize{
-#'  \item \code{\link{AnansiWeb-methods}}: For utility functions to get and set.
-#'  \item \code{\link{kegg_link}}: For examples of input for link argument.
-#'  \item \code{\link{getWeb}}: For
-#'  \code{\link[MultiAssayExperiment]{MultiAssayExperiment}} methods.
+#'  \item [AnansiWeb-methods()]: For utility functions to get and set.
+#'  \item [kegg_link()]: For examples of input for link argument.
+#'  \item [getWeb()]: For
+#'  [MultiAssayExperiment::MultiAssayExperiment()] methods.
 #' }
 #'
-#' @returns an \code{AnansiWeb} object, with sparse binary biadjacency matrix
-#' with features from \code{y} as rows and features from \code{x} as columns in
-#' \code{dictionary} slot.
+#' @returns an `AnansiWeb` object, with sparse binary biadjacency matrix
+#' with features from `y` as rows and features from `x` as columns in
+#' `dictionary` slot.
 #' @examples
 #' # Basic usage
 #' weaveWeb(cpd ~ ko, link = kegg_link())
@@ -148,9 +148,9 @@ weaveWeb.formula <- function(
 }
 
 #' @rdname AnansiWeb
-#' @param dictionary A binary adjacency matrix of class \code{Matrix}, or
-#' coercible to \code{Matrix}
-#' @param metadata \code{DataFrame}, or coerible to \code{DataFrame}. Optional.
+#' @param dictionary A binary adjacency matrix of class `Matrix`, or
+#' coercible to `Matrix`
+#' @param metadata `DataFrame`, or coerible to `DataFrame`. Optional.
 #' @importFrom Matrix Matrix drop0
 #' @importFrom S4Vectors DataFrame
 #' @export
@@ -193,10 +193,10 @@ weaveKEGG <- function(x, ...) weaveWeb(x, link = kegg_link(), ...)
 #' @param tableY,tableX A table containing features of interest. Rows should be
 #'     samples and columns should be features. Y and X refer to the position of
 #'     the features in a formula: Y ~ X.
-#' @param dictionary A binary adjacency matrix of class \code{Matrix}, or
-#' coercible to \code{Matrix}
+#' @param dictionary A binary adjacency matrix of class `Matrix`, or
+#' coercible to `Matrix`
 #' @export
-#' @seealso \code{\link{AnansiWeb}}, \code{\link{AnansiLinkMap}}
+#' @seealso [AnansiWeb()], [AnansiLinkMap()]
 #' @examples
 #' # Make a random AnansiWeb object
 #' randomWeb()
@@ -323,8 +323,8 @@ randomWebMetadata <- function(table){
 
 #' Produce a biadjacency matrix given tables and a dictionary
 #' @description calculates a biadjacency matrix for the cases where
-#' \code{link} is a single - or a \code{list} of two - \code{data.frame}(s).
-#' @param link a \code{data.frame} or \code{list} of two compatible ones.
+#' `link` is a single - or a `list` of two - `data.frame`(s).
+#' @param link a `data.frame` or `list` of two compatible ones.
 #' @param terms a length 2 character vector, naming the x and y terms in order
 #' @param tableY A table containing features of interest. Rows should be samples
 #' and columns should be features. The Y and X refer to the position of the
@@ -332,8 +332,8 @@ randomWebMetadata <- function(table){
 #' @param tableX A table containing features of interest. Rows should be samples
 #' and columns should be features. The Y and X refer to the position of the
 #' features in a formula: Y ~ X.
-#' @param link_is_list a boolean, is a \code{list} (or \code{FALSE}: a
-#' \code{data.frame})
+#' @param link_is_list a boolean, is a `list` (or `FALSE`: a
+#' `data.frame`)
 #' @returns a sparse boolean biadjacency matrix, for use in main anansi workflow
 #' @noRd
 #'
@@ -404,11 +404,11 @@ df_to_sparse_biadjacency_matrix <- function(x){
 #' Make a full web; for all vs all association testing
 #' @description
 #' Make a fully TRUE biadjacency matrix with dimensions of the two input tables.
-#' @param tableX,tableY \code{matrix} of features of table \code{X}.
-#' @param x,y \code{character scalar} names of x & y terms
+#' @param tableX,tableY `matrix` of features of table `X`.
+#' @param x,y `character scalar` names of x & y terms
 #' @returns
-#' An \code{AnansiWeb} object with both tables and a fully \code{TRUE}
-#' (non-sparse) matrix from the \code{Matrix} package.
+#' An `AnansiWeb` object with both tables and a fully `TRUE`
+#' (non-sparse) matrix from the `Matrix` package.
 #' @importFrom Matrix Matrix
 #' @noRd
 #'

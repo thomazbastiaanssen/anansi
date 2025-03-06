@@ -8,20 +8,20 @@
 \S4method{getWeb}{MultiAssayExperiment}(x, tableY = 1, tableX = 2, link = NULL, force_new = FALSE, ...)
 }
 \arguments{
-\item{x}{a \code{\link[MultiAssayExperiment:MultiAssayExperiment]{MultiAssayExperiment}}.}
+\item{x}{a \code{\link[MultiAssayExperiment:MultiAssayExperiment]{MultiAssayExperiment::MultiAssayExperiment()}}.}
 
-\item{...}{additional parameters passed to \code{\link{AnansiWeb}}.}
+\item{...}{additional parameters passed to \code{\link[=AnansiWeb]{AnansiWeb()}}.}
 
-\item{tableY, tableX}{\code{Character scalar} or \code{numeric scalar}. Selects experiment
+\item{tableY, tableX}{\verb{Character scalar} or \verb{numeric scalar}. Selects experiment
 corresponding to \code{tableY} and \code{tableX} from \code{experiments(x)}
 of \code{MultiAssayExperiment} object by name or index, name is recommended.
 (Default slots: \code{Y = 1}, \code{X = 2}).}
 
 \item{link}{One of the following:
 \itemize{
- \item Character scalar with value "none"
- \item data.frame with two columns
- \item list with two such data.frames
+\item Character scalar with value "none"
+\item data.frame with two columns
+\item list with two such data.frames
 }}
 
 \item{force_new}{\code{boolean} If x already has a dictionary \code{Matrix}
@@ -37,11 +37,11 @@ that one, unless \code{force_new = TRUE}.
 weaveWeb wrapper for the MultiAssayExperiment class
 }
 \details{
-This wrapper of \code{\link{weaveWeb}} allows to generate an
+This wrapper of \code{\link[=weaveWeb]{weaveWeb()}} allows to generate an
 \code{AnansiWeb} S4 object directly from objects of class
-\code{\link[MultiAssayExperiment:MultiAssayExperiment]{MultiAssayExperiment}}
+\code{\link[MultiAssayExperiment:MultiAssayExperiment]{MultiAssayExperiment::MultiAssayExperiment()}}
 . First, the assays specified by \code{assay.typeY} and \code{assay.typeX}
-are passed to \code{\link{AnansiWeb}} to build an AnansiWeb object.
+are passed to \code{\link[=AnansiWeb]{AnansiWeb()}} to build an AnansiWeb object.
 }
 \examples{
 # Make a random anansiWeb

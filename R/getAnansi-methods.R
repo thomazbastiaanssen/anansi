@@ -1,29 +1,29 @@
 #' anansi wrapper for the MultiAssayExperiment class
 #'
-#' \code{getAnansi} provides a wrapper to execute the anansi pipeline on a
-#' \code{\link[MultiAssayExperiment:MultiAssayExperiment]{MultiAssayExperiment}}
-#' object. It applies the functions \code{\link{weaveWeb}} and
-#' \code{\link{anansi}} in the given order.
+#' `getAnansi` provides a wrapper to execute the anansi pipeline on a
+#' [MultiAssayExperiment::MultiAssayExperiment()]
+#' object. It applies the functions [weaveWeb()] and
+#' [anansi()] in the given order.
 #' @inheritParams anansi
 #' @inheritParams getWeb
 #' @param ... additional parameters that can be passed to
-#'   \code{\link{AnansiWeb}} or \code{\link{anansi}}.
+#'   [AnansiWeb()] or [anansi()].
 #'
 #' @details
-#' This wrapper of \code{\link{anansi}} allows to perform a complete anansi
+#' This wrapper of [anansi()] allows to perform a complete anansi
 #' analysis directly on objects of class
-#' \code{\link[MultiAssayExperiment:MultiAssayExperiment]{MultiAssayExperiment}}
-#' . First, the assays specified by \code{assay.typeY} and \code{assay.typeX}
-#' are passed to \code{\link{AnansiWeb}} to build an AnansiWeb object.
-#' Next, this object is fed to the main \code{\link{anansi}} function to compute
+#' [MultiAssayExperiment::MultiAssayExperiment()]
+#' . First, the assays specified by `assay.typeY` and `assay.typeX`
+#' are passed to [AnansiWeb()] to build an AnansiWeb object.
+#' Next, this object is fed to the main [anansi()] function to compute
 #' interactions between the two assays.
 #'
 #' @return
-#' If \code{return.format} is \code{"table"} (default), a wide format data.frame
+#' If `return.format` is `"table"` (default), a wide format data.frame
 #' intended to be compatible with `ggplot2`, or specialized plotting functions
-#' (See \code{\link{plotAnansi}}). If \code{return.format} is
-#' \code{"list"}, a list with aforementioned table, as well as input and
-#' additional information. If \code{return.format} is \code{"raw"}, a list of
+#' (See [plotAnansi()]). If `return.format` is
+#' `"list"`, a list with aforementioned table, as well as input and
+#' additional information. If `return.format` is `"raw"`, a list of
 #' raw output (used for testing purposes).
 #'
 #' @examples
@@ -46,8 +46,8 @@
 #' head(out, 5)
 #'
 #' @seealso
-#' \code{\link{AnansiWeb}}
-#' \code{\link{anansi}}
+#' [AnansiWeb()]
+#' [anansi()]
 #'
 #' @name getAnansi
 #'

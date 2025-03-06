@@ -17,7 +17,7 @@ AnansiWeb(tableX, tableY, dictionary, metadata = NULL, ...)
 weaveKEGG(x, ...)
 }
 \arguments{
-\item{x, y}{\code{Character scalar}, names of feature types that should be
+\item{x, y}{\verb{Character scalar}, names of feature types that should be
 linked. Should be found in the column names of \code{link}.}
 
 \item{...}{further arguments.}
@@ -28,9 +28,9 @@ and \code{y} arguments.}
 
 \item{link}{One of the following:
 \itemize{
- \item \code{Character scalar} with value \code{"none"}.
- \item \code{data.frame} with two columns
- \item \code{list} with two such \code{data.frame}s.
+\item \verb{Character scalar} with value \code{"none"}.
+\item \code{data.frame} with two columns
+\item \code{list} with two such \code{data.frame}s.
 }}
 
 \item{tableY, tableX}{A table containing features of interest. Rows should be
@@ -93,9 +93,9 @@ identical(a, Matrix::t(b))
 }
 \seealso{
 \itemize{
- \item \code{\link{AnansiWeb-methods}}: For utility functions to get and set.
- \item \code{\link{kegg_link}}: For examples of input for link argument.
- \item \code{\link{getWeb}}: For
- \code{\link[MultiAssayExperiment]{MultiAssayExperiment}} methods.
+\item \code{\link[=AnansiWeb-methods]{AnansiWeb-methods()}}: For utility functions to get and set.
+\item \code{\link[=kegg_link]{kegg_link()}}: For examples of input for link argument.
+\item \code{\link[=getWeb]{getWeb()}}: For
+\code{\link[MultiAssayExperiment:MultiAssayExperiment]{MultiAssayExperiment::MultiAssayExperiment()}} methods.
 }
 }

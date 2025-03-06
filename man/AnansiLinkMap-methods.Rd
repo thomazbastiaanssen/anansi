@@ -23,7 +23,7 @@
 
 \item{object}{Any R object}
 
-\item{subset}{\code{logical expression} indicating rows to keep. Must contain variables
+\item{subset}{\verb{logical expression} indicating rows to keep. Must contain variables
 found as column names.}
 
 \item{select}{\code{expression}. Which column names to consider. If missing
@@ -45,7 +45,7 @@ a set of methods to work with \code{anansiLinkWeb}, a special type of list.
 \code{getEdgeList}: Return a data frame in edge list format.
 }
 \details{
-\code{subset}: For \code{AnansiLinkMap objects}, sub-setting is only applied
+\code{subset}: For \verb{AnansiLinkMap objects}, sub-setting is only applied
 to data frames compatible with the expression. The rest are returned
 unaltered. Modeled after \code{subset()}.
 }
@@ -61,7 +61,7 @@ subset(x = l, ec \%in\% c("1.2.3.4", "4.3.2.1"))
 
 }
 \seealso{
-\code{\link[BiocGenerics:subset]{subset}}.
-\code{\link{weaveWeb}} for the AnansiWeb constructor functions that
+\code{\link[BiocGenerics:subset]{BiocGenerics::subset()}}.
+\code{\link[=weaveWeb]{weaveWeb()}} for the AnansiWeb constructor functions that
 take link data frames.
 }

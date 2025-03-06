@@ -15,7 +15,7 @@
 
 \item{...}{additional arguments (currently not used).}
 
-\item{format}{\code{Character scalar}, controls output format by package name.
+\item{format}{\verb{Character scalar}, controls output format by package name.
 \code{"igraph"} and \code{"graph"} are supported.}
 }
 \description{
@@ -35,7 +35,7 @@ getGraph( ec2cpd, format = "igraph" )
 
 }
 \seealso{
-\code{\link[igraph:graph_from_data_frame]{graph_from_data_frame}} and
-\code{\link[igraph:as_graphnel]{as_graphnel}}, which are used under the hood,
-from \code{\link[igraph:igraph]{igraph}} package.
+\code{\link[igraph:graph_from_data_frame]{igraph::graph_from_data_frame()}} and
+\code{\link[igraph:as_graphnel]{igraph::as_graphnel()}}, which are used under the hood,
+from \code{\link[igraph:aaa-igraph-package]{igraph::igraph()}} package.
 }

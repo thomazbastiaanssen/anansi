@@ -25,48 +25,48 @@ plotAnansi(x, ...)
 )
 }
 \arguments{
-\item{x}{a \code{data.frame} object output of \code{\link{getAnansi}} in
+\item{x}{a \code{data.frame} object output of \code{\link[=getAnansi]{getAnansi()}} in
 the table format.}
 
 \item{...}{additional arguments}
 
-\item{association.type}{\code{Character scalar}. Specifies the type of
+\item{association.type}{\verb{Character scalar}. Specifies the type of
 association to show in the plot. One of \code{"disjointed"},
-  \code{"emergent"} and \code{"full"}. (Default: \code{NULL})}
+\code{"emergent"} and \code{"full"}. (Default: \code{NULL})}
 
-\item{model.var}{\code{Character scalar}. Specifies the name of a variable
+\item{model.var}{\verb{Character scalar}. Specifies the name of a variable
 in the anansi model. It is relevant only when \code{association.type} is
-  \code{"disjointed"} or \code{"emergent"}. (Default: \code{NULL})}
+\code{"disjointed"} or \code{"emergent"}. (Default: \code{NULL})}
 
-\item{signif.threshold}{\code{Numeric scalar}. Specifies the threshold to
+\item{signif.threshold}{\verb{Numeric scalar}. Specifies the threshold to
 mark the significance of \code{association.type}. (Default: \code{NULL})}
 
-\item{colour_by}{\code{Character scalar}. Specifies one of the \code{groups}
+\item{colour_by}{\verb{Character scalar}. Specifies one of the \code{groups}
 terms used in the original \code{anansi} call, \code{x} by which points
 should be coloured. (Default: \code{NULL})}
 
-\item{color_by}{\code{Character scalar}. Alias to \code{colour_by}.}
+\item{color_by}{\verb{Character scalar}. Alias to \code{colour_by}.}
 
-\item{fill_by}{\code{Character scalar}. Specifies one of the \code{groups}
+\item{fill_by}{\verb{Character scalar}. Specifies one of the \code{groups}
 terms used in the original \code{anansi} call, \code{x} by which points
 should be filled (Default: \code{NULL})}
 
-\item{size_by}{\code{Character scalar}. Specifies one of the \code{groups}
+\item{size_by}{\verb{Character scalar}. Specifies one of the \code{groups}
 terms used in the original \code{anansi} call, \code{x} by which points
 should be sized. (Default: \code{NULL})}
 
-\item{shape_by}{\code{Character scalar}. Specifies one of the \code{groups}
+\item{shape_by}{\verb{Character scalar}. Specifies one of the \code{groups}
 terms used in the original \code{anansi} call, \code{x} by which points
 should be shaped. (Default: \code{NULL})}
 
-\item{y_position}{\code{Character scalar}. Specifies the position of the y
+\item{y_position}{\verb{Character scalar}. Specifies the position of the y
 labels. It should be either \code{"left"} or \code{"right"}.
 (Default: \code{"right"})}
 
-\item{x_lab}{\code{Character scalar}. Specifies the label of the x axis.
+\item{x_lab}{\verb{Character scalar}. Specifies the label of the x axis.
 (Default: \code{"cor"})}
 
-\item{y_lab}{\code{Character scalar}. Specifies the label of the y axis.
+\item{y_lab}{\verb{Character scalar}. Specifies the label of the y axis.
 (Default: \code{""})}
 }
 \value{
@@ -74,14 +74,14 @@ A ggplot2 object.
 }
 \description{
 \code{plotAnansi} generates a standard dissociation plot from the output of
-\code{\link{getAnansi}} in the table format. It provides a convenient way to
+\code{\link[=getAnansi]{getAnansi()}} in the table format. It provides a convenient way to
 visually assess relevant results from the anansi analysis.
 }
 \details{
 \code{plotAnansi} provides a standardised method to visualise the results
 of anansi by means of a differential association plot. The input for this
-function should be generated from \code{\link{getAnansi}} or
-\code{\link{anansi}}, with \code{return.format = "table"}
+function should be generated from \code{\link[=getAnansi]{getAnansi()}} or
+\code{\link[=anansi]{anansi()}}, with \code{return.format = "table"}
 }
 \examples{
 # Import libraries
@@ -116,6 +116,6 @@ plotAnansi(out,
 
 }
 \seealso{
-\code{\link{getAnansi}}
-\code{\link{anansi}}
+\code{\link[=getAnansi]{getAnansi()}}
+\code{\link[=anansi]{anansi()}}
 }

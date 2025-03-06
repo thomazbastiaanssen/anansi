@@ -1,16 +1,16 @@
 #' Accessing and modifying information in AnansiWeb S4 class
 #' @name AnansiWeb-methods
-#' @description \code{AnansiWeb} supports \code{$} operator for getting and
+#' @description `AnansiWeb` supports `$` operator for getting and
 #' assigning values.
 #'
-#' \code{ dimnames( x ) } is shorthand for \code{dimnames( x$dictionary )} and
-#' \code{names( x )} is in turn shorthand for \code{names( dimnames(x) )}.
+#' ` dimnames( x ) ` is shorthand for `dimnames( x$dictionary )` and
+#' `names( x )` is in turn shorthand for `names( dimnames(x) )`.
 #'
-#' @returns a specified \code{AnansiWeb} object.
+#' @returns a specified `AnansiWeb` object.
 #'
 #' @seealso \itemize{
-#' \item \code{\link{AnansiWeb-class}}.
-#' \item \code{\link{weaveWeb}}: for general use.
+#' \item [AnansiWeb-class()].
+#' \item [weaveWeb()]: for general use.
 #'}
 #' @importFrom methods slotNames slot slot<-
 #' @examples

@@ -42,9 +42,9 @@ the base R \code{stats} package.}
 \item{verbose}{A boolean. Toggles whether to print diagnostic information
 while running. Useful for debugging errors on large datasets.}
 
-\item{return.format}{\code{Character scalar}. Should be one of \code{"table"}
-, \code{"list"}, or \code{"raw"}. Should the output of \code{\link{anansi}}
-respectively be a wide `data.frame` of results, a list containing the results
+\item{return.format}{\verb{Character scalar}. Should be one of \code{"table"}
+, \code{"list"}, or \code{"raw"}. Should the output of \code{\link[=anansi]{anansi()}}
+respectively be a wide \code{data.frame} of results, a list containing the results
 and input, or a list of raw output (used for testing purposes).
 convenient use. (Default: \code{"table"})}
 
@@ -58,22 +58,41 @@ q-values for all operations.
 The anansi package package provides tools to prepare and facilitate
 integrative association analysis between the features of two data sets that
 are known to interact.
+\subsection{1. Input for \code{anansi()} with \code{\link[=AnansiWeb]{AnansiWeb()}} and \code{\link[=AnansiLinkMap]{AnansiLinkMap()}}}{
 
-The documentation for the \emph{function} \code{anansi()} is below.
+\itemize{
+\item \link{randomAnansi}, \code{\link[=kegg_link]{kegg_link()}}: Generate example input
+\item \link{AnansiWeb-methods}, \link{AnansiLinkMap-methods}: Handle and manipulate
+input
+}
+}
 
-### Key topics
- \itemize{
-  \item \code{\link{AnansiWeb}}, \code{\link{AnansiLinkMap}} classes for
-  input
-  \item \code{\link{getAnansi}} for integration with
-  \code{MultiAssayExperiment} and \code{mia}
-  }
+\subsection{2. Output and cross-compatibility}{
 
-## General use: \code{anansi()}
+\itemize{
+\item \code{\link[=getAnansi]{getAnansi()}}: Compatibility with \href{[mia::mia]}{mia} and
+\href{[MultiAssayExperiment::MultiAssayExperiment]}{MultiAssayExperiment}
+\item \code{\link[=getGraph]{getGraph()}}: Compatibility with \href{[igraph::igraph]}{igraph}
+\item \code{\link[=plotAnansi]{plotAnansi()}}: Plot output in the style of
+\href{[miaViz::miaViz]}{miaViz}
+}
+}
+
+\subsection{3. Vignettes}{
+
+\itemize{
+\item \href{https://thomazbastiaanssen.github.io/anansi/articles/anansi.html}{Getting started with anansi}
+\item \href{https://thomazbastiaanssen.github.io/anansi/articles/adjacency_matrices.html}{adjacency matrices}
+\item \href{https://thomazbastiaanssen.github.io/anansi/articles/differential_associations.html}{differential associations}
+}
+}
+
+\subsection{General use: \code{anansi()}}{
 
 The main workspider function in the anansi package is called
 \code{anansi}. It manages the individual functionalities of anansi, including
 correlation analysis, correlation by group and differential associations.
+}
 }
 \examples{
 # Load example data:

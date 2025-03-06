@@ -18,12 +18,12 @@ getAnansi(x, ...)
 )
 }
 \arguments{
-\item{x}{a \code{\link[MultiAssayExperiment:MultiAssayExperiment]{MultiAssayExperiment}}.}
+\item{x}{a \code{\link[MultiAssayExperiment:MultiAssayExperiment]{MultiAssayExperiment::MultiAssayExperiment()}}.}
 
 \item{...}{additional parameters that can be passed to
-\code{\link{AnansiWeb}} or \code{\link{anansi}}.}
+\code{\link[=AnansiWeb]{AnansiWeb()}} or \code{\link[=anansi]{anansi()}}.}
 
-\item{tableY, tableX}{\code{Character scalar} or \code{numeric scalar}. Selects experiment
+\item{tableY, tableX}{\verb{Character scalar} or \verb{numeric scalar}. Selects experiment
 corresponding to \code{tableY} and \code{tableX} from \code{experiments(x)}
 of \code{MultiAssayExperiment} object by name or index, name is recommended.
 (Default slots: \code{Y = 1}, \code{X = 2}).}
@@ -32,9 +32,9 @@ of \code{MultiAssayExperiment} object by name or index, name is recommended.
 
 \item{link}{One of the following:
 \itemize{
- \item Character scalar with value "none"
- \item data.frame with two columns
- \item list with two such data.frames
+\item Character scalar with value "none"
+\item data.frame with two columns
+\item list with two such data.frames
 }}
 
 \item{force_new}{\code{boolean} If x already has a dictionary \code{Matrix}
@@ -42,25 +42,25 @@ in metadata, ignore it and generate a new object anyway? (Default: FALSE).}
 }
 \value{
 If \code{return.format} is \code{"table"} (default), a wide format data.frame
-intended to be compatible with `ggplot2`, or specialized plotting functions
-(See \code{\link{plotAnansi}}). If \code{return.format} is
+intended to be compatible with \code{ggplot2}, or specialized plotting functions
+(See \code{\link[=plotAnansi]{plotAnansi()}}). If \code{return.format} is
 \code{"list"}, a list with aforementioned table, as well as input and
 additional information. If \code{return.format} is \code{"raw"}, a list of
 raw output (used for testing purposes).
 }
 \description{
 \code{getAnansi} provides a wrapper to execute the anansi pipeline on a
-\code{\link[MultiAssayExperiment:MultiAssayExperiment]{MultiAssayExperiment}}
-object. It applies the functions \code{\link{weaveWeb}} and
-\code{\link{anansi}} in the given order.
+\code{\link[MultiAssayExperiment:MultiAssayExperiment]{MultiAssayExperiment::MultiAssayExperiment()}}
+object. It applies the functions \code{\link[=weaveWeb]{weaveWeb()}} and
+\code{\link[=anansi]{anansi()}} in the given order.
 }
 \details{
-This wrapper of \code{\link{anansi}} allows to perform a complete anansi
+This wrapper of \code{\link[=anansi]{anansi()}} allows to perform a complete anansi
 analysis directly on objects of class
-\code{\link[MultiAssayExperiment:MultiAssayExperiment]{MultiAssayExperiment}}
+\code{\link[MultiAssayExperiment:MultiAssayExperiment]{MultiAssayExperiment::MultiAssayExperiment()}}
 . First, the assays specified by \code{assay.typeY} and \code{assay.typeX}
-are passed to \code{\link{AnansiWeb}} to build an AnansiWeb object.
-Next, this object is fed to the main \code{\link{anansi}} function to compute
+are passed to \code{\link[=AnansiWeb]{AnansiWeb()}} to build an AnansiWeb object.
+Next, this object is fed to the main \code{\link[=anansi]{anansi()}} function to compute
 interactions between the two assays.
 }
 \examples{
@@ -84,6 +84,6 @@ head(out, 5)
 
 }
 \seealso{
-\code{\link{AnansiWeb}}
-\code{\link{anansi}}
+\code{\link[=AnansiWeb]{AnansiWeb()}}
+\code{\link[=anansi]{anansi()}}
 }

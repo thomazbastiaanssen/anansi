@@ -2,17 +2,17 @@
 #' functions.
 #' @description
 #' Can either take continuous or categorical data. Typically, the main
-#' \code{anansi()} function will run this for you.
+#' `anansi()` function will run this for you.
 #' @param web
-#' An \code{AnansiWeb} object, containing two tables with omics data and a
-#' dictionary that links them. See \code{weaveWebFromTables()} for how to weave
+#' An `AnansiWeb` object, containing two tables with omics data and a
+#' dictionary that links them. See `weaveWebFromTables()` for how to weave
 #' a web.
-#' @param sat_model A \code{formula} object, containing the full model
+#' @param sat_model A `formula` object, containing the full model
 #' @param errorterm
-#' A \code{character vector}, containing the metadata col.name denoting repeated
+#' A `character vector`, containing the metadata col.name denoting repeated
 #' measures.
 #' @param int.terms
-#' A \code{character vector}, containing the metadata col.names denoting
+#' A `character vector`, containing the metadata col.names denoting
 #' covariates interacting with X to be tested for differential associations.
 #' @param metadata
 #' A vector or data.frame of categorical or continuous value necessary for
@@ -21,7 +21,7 @@
 #' according to your dictionary.
 #' @param verbose A boolean. Toggles whether to print diagnostic information
 #' while running. Useful for debugging errors on large datasets.
-#' @return a list of \code{anansiTale} result objects, one for the total model,
+#' @return a list of `anansiTale` result objects, one for the total model,
 #' one for emergent correlations and one for disjointed correlations.
 #' @importFrom stats anova lm pf residuals model.matrix.default terms.formula
 #' @importFrom future.apply future_apply
@@ -208,9 +208,9 @@ SS <- function(x) {
 #'
 oddify <- function(x) x / (1 - x)
 
-#' Compute F and P statistic for \code{anansiTale} object.
-#' @description Populate \code{anansiTale} object with F statistics.
-#' @param object An \code{anansiTale} object.
+#' Compute F and P statistic for `anansiTale` object.
+#' @description Populate `anansiTale` object with F statistics.
+#' @param object An `anansiTale` object.
 #' @param d A binary adjacency matrix, corresponding to the relevant dictionary
 #' @noRd
 #'
@@ -311,7 +311,7 @@ index.disj <- function(x, all.assign, x.fct) {
     cbind(i0, i1 = i0 | ix, ix)
 }
 
-#' Generate x.fct table, deal with \code{Error} terms.
+#' Generate x.fct table, deal with `Error` terms.
 #' @noRd
 #'
 get_x.fct <- function(sat_model, errorterm) {
