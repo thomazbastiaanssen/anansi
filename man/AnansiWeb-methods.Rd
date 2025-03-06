@@ -6,7 +6,6 @@
 \alias{$<-,AnansiWeb-method}
 \alias{dimnames,AnansiWeb-method}
 \alias{names,AnansiWeb-method}
-\alias{as}
 \title{Accessing and modifying information in AnansiWeb S4 class}
 \usage{
 \S4method{$}{AnansiWeb}(x, name)

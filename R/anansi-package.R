@@ -23,9 +23,9 @@
 #'
 #' ## 3. Vignettes
 #' \itemize{
-#'     \item [Getting started with anansi](https://thomazbastiaanssen.github.io/anansi/articles/anansi.html)
-#'     \item [adjacency matrices](https://thomazbastiaanssen.github.io/anansi/articles/adjacency_matrices.html)
-#'     \item [differential associations](https://thomazbastiaanssen.github.io/anansi/articles/differential_associations.html)
+#'     \item \href{https://thomazbastiaanssen.github.io/anansi/articles/anansi.html}{1. Getting started with anansi}
+#'     \item \href{https://thomazbastiaanssen.github.io/anansi/articles/adjacency_matrices.html}{2. Adjacency matrices}
+#'     \item \href{https://thomazbastiaanssen.github.io/anansi/articles/association_testing.html}{3. Association testing}
 #'     }
 #'
 #' @aliases anansi-package

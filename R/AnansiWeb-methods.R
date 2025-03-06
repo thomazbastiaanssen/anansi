@@ -58,53 +58,6 @@ setMethod("dimnames", "AnansiWeb",
 #'
 setMethod("names", "AnansiWeb", function(x) names( dimnames( x@dictionary) ))
 
-###############################################################################
-###############################################################################
-#
-# setAs
-
-#' Accessing and modifying information in AnansiWeb S4 class
-#' @name as
-#' @rdname AnansiWeb-methods
-#' @importFrom methods as
-#' @export
-#'
-setAs(from = "AnansiWeb", to = "list", def = function(from) {
-  out <- list(tableY = from@tableY, tableX = from@tableX,
-              dictionary = from@dictionary, metadata = from@metadata)
-  names(out)[c(1L, 2L)] <- names(from)
-  out
-})
-
-#' Accessing and modifying information in AnansiWeb S4 class
-#' @name as
-#' @rdname AnansiWeb-methods
-#' @importClassesFrom MultiAssayExperiment MultiAssayExperiment
-#' @importFrom MultiAssayExperiment MultiAssayExperiment ExperimentList
-#' @importFrom SummarizedExperiment SummarizedExperiment
-#' @export
-#'
-setAs(from = "AnansiWeb", to = "MultiAssayExperiment", def = function(from) {
-
-  tY  <- t(from@tableY)
-  tX  <- t(from@tableX)
-  to_exp <- ExperimentList(
-    y = SummarizedExperiment(tY),
-    x = SummarizedExperiment(tX)
-  )
-  names(to_exp) <- names(from)
-
-  to_md  <- list(dictionary = from@dictionary)
-  to_cd  <- from@metadata
-
-  MultiAssayExperiment(
-    experiments = to_exp,
-    metadata = to_md,
-    colData = to_cd
-    )
-})
-
-
 #' @noRd
 #'
 tell_F <- function(tale) {

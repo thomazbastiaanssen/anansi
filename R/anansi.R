@@ -1,6 +1,6 @@
 #' Calculate an association network
 #' @description
-#' ## General use: `anansi()`
+#' ## Description: The `anansi()` function
 #' The main workspider function in the anansi package is called
 #' `anansi`. It manages the individual functionalities of anansi, including
 #' correlation analysis, correlation by group and differential associations.
