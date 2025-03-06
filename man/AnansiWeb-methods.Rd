@@ -6,7 +6,6 @@
 \alias{$<-,AnansiWeb-method}
 \alias{dimnames,AnansiWeb-method}
 \alias{names,AnansiWeb-method}
-\alias{as}
 \title{Accessing and modifying information in AnansiWeb S4 class}
 \usage{
 \S4method{$}{AnansiWeb}(x, name)
@@ -37,7 +36,7 @@ a specified \code{AnansiWeb} object.
 \code{AnansiWeb} supports \code{$} operator for getting and
 assigning values.
 
-\code{ dimnames( x ) } is shorthand for \code{dimnames( x$dictionary )} and
+\code{dimnames( x )} is shorthand for \code{dimnames( x$dictionary )} and
 \code{names( x )} is in turn shorthand for \code{names( dimnames(x) )}.
 }
 \examples{
@@ -51,7 +50,7 @@ names(w)
 }
 \seealso{
 \itemize{
-\item \code{\link{AnansiWeb-class}}.
-\item \code{\link{weaveWeb}}: for general use.
+\item \code{\link[=AnansiWeb-class]{AnansiWeb-class()}}.
+\item \code{\link[=weaveWeb]{weaveWeb()}}: for general use.
 }
 }

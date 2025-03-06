@@ -1,16 +1,16 @@
 #' Accessing and modifying information in AnansiWeb S4 class
 #' @name AnansiWeb-methods
-#' @description \code{AnansiWeb} supports \code{$} operator for getting and
+#' @description `AnansiWeb` supports `$` operator for getting and
 #' assigning values.
 #'
-#' \code{ dimnames( x ) } is shorthand for \code{dimnames( x$dictionary )} and
-#' \code{names( x )} is in turn shorthand for \code{names( dimnames(x) )}.
+#' ` dimnames( x ) ` is shorthand for `dimnames( x$dictionary )` and
+#' `names( x )` is in turn shorthand for `names( dimnames(x) )`.
 #'
-#' @returns a specified \code{AnansiWeb} object.
+#' @returns a specified `AnansiWeb` object.
 #'
 #' @seealso \itemize{
-#' \item \code{\link{AnansiWeb-class}}.
-#' \item \code{\link{weaveWeb}}: for general use.
+#' \item [AnansiWeb-class()].
+#' \item [weaveWeb()]: for general use.
 #'}
 #' @importFrom methods slotNames slot slot<-
 #' @examples
@@ -57,47 +57,6 @@ setMethod("dimnames", "AnansiWeb",
 #' @export
 #'
 setMethod("names", "AnansiWeb", function(x) names( dimnames( x@dictionary) ))
-
-
-
-###############################################################################
-###############################################################################
-# setAs
-
-#' Accessing and modifying information in AnansiWeb S4 class
-#' @name as
-#' @rdname AnansiWeb-methods
-#' @importFrom methods as
-#' @export
-#'
-setAs(from = "AnansiWeb", to = "list", def = function(from) {
-  out <- list(from@tableY, from@tableX, dictionary = from@dictionary)
-  names(out)[c(1L, 2L)] <- names(from)
-  out
-})
-
-#' Accessing and modifying information in AnansiWeb S4 class
-#' @name as
-#' @rdname AnansiWeb-methods
-#' @importClassesFrom MultiAssayExperiment MultiAssayExperiment
-#' @importFrom MultiAssayExperiment MultiAssayExperiment ExperimentList
-#' @importFrom SummarizedExperiment SummarizedExperiment
-#' @export
-#'
-setAs(from = "AnansiWeb", to = "MultiAssayExperiment", def = function(from) {
-  weblist <- as(from, "list")
-  experiments <- ExperimentList(
-    y = SummarizedExperiment(t(weblist[[1L]])),
-    x = SummarizedExperiment(t(weblist[[2L]]))
-  )
-  names(experiments) <- names(weblist)[c(1L, 2L)]
-  metadata <- weblist[3L]
-
-  MultiAssayExperiment(
-    experiments = experiments,
-    metadata = metadata)
-})
-
 
 #' @noRd
 #'

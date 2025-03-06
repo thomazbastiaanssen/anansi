@@ -24,8 +24,8 @@ Typically generated using the\code{weaveWeb()} function.}
 
 \seealso{
 \itemize{
-\item \code{\link{AnansiWeb}}: for general use.
-\item \code{\link{AnansiWeb-methods}} for methods, including \code{$}
+\item \code{\link[=AnansiWeb]{AnansiWeb()}}: for general use.
+\item \code{\link[=AnansiWeb-methods]{AnansiWeb-methods()}} for methods, including \code{$}
 operator.
 }
 }

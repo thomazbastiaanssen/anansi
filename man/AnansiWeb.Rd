@@ -6,29 +6,18 @@
 \alias{weaveWeb.default}
 \alias{AnansiWeb}
 \alias{weaveKEGG}
-\alias{randomWeb}
 \title{Make an AnansiWeb}
 \usage{
 \method{weaveWeb}{formula}(formula, link = NULL, tableX = NULL, tableY = NULL, ...)
 
 \method{weaveWeb}{default}(x, y, link = NULL, tableX = NULL, tableY = NULL, ...)
 
-AnansiWeb(tableX, tableY, dictionary)
+AnansiWeb(tableX, tableY, dictionary, metadata = NULL, ...)
 
 weaveKEGG(x, ...)
-
-randomWeb(
-  n_samp = 10,
-  n_x = 8,
-  n_y = 12,
-  density = 0.1,
-  tableY = NULL,
-  tableX = NULL,
-  dictionary = NULL
-)
 }
 \arguments{
-\item{x, y}{\code{Character scalar}, names of feature types that should be
+\item{x, y}{\verb{Character scalar}, names of feature types that should be
 linked. Should be found in the column names of \code{link}.}
 
 \item{...}{further arguments.}
@@ -39,9 +28,9 @@ and \code{y} arguments.}
 
 \item{link}{One of the following:
 \itemize{
- \item \code{Character scalar} with value \code{"none"}.
- \item \code{data.frame} with two columns
- \item \code{list} with two such \code{data.frame}s.
+\item \verb{Character scalar} with value \code{"none"}.
+\item \code{data.frame} with two columns
+\item \code{list} with two such \code{data.frame}s.
 }}
 
 \item{tableY, tableX}{A table containing features of interest. Rows should be
@@ -50,6 +39,8 @@ the features in a formula: Y ~ X.}
 
 \item{dictionary}{A binary adjacency matrix of class \code{Matrix}, or
 coercible to \code{Matrix}}
+
+\item{metadata}{\code{DataFrame}, or coerible to \code{DataFrame}. Optional.}
 }
 \value{
 an \code{AnansiWeb} object, with sparse binary biadjacency matrix
@@ -99,19 +90,12 @@ b <- weaveWeb(cpd ~ ko, link = kegg_link())$dictionary
 
 identical(a, Matrix::t(b))
 
-# Make a random AnansiWeb object
-
-# random dictionary
-dictionary <- weaveWeb(a ~ c, link = randomLinkMap() )$dictionary
-# AnansiWeb
-web <- randomWeb(n_samp = 100, dictionary = dictionary)
-mae <- as(web, "MultiAssayExperiment")
 }
 \seealso{
 \itemize{
- \item \code{\link{AnansiWeb-methods}}: For utility functions to get and set.
- \item \code{\link{kegg_link}}: For examples of input for link argument.
- \item \code{\link{getWeb}}: For
- \code{\link[MultiAssayExperiment]{MultiAssayExperiment}} methods.
+\item \code{\link[=AnansiWeb-methods]{AnansiWeb-methods()}}: For utility functions to get and set.
+\item \code{\link[=kegg_link]{kegg_link()}}: For examples of input for link argument.
+\item \code{\link[=getWeb]{getWeb()}}: For
+\code{\link[MultiAssayExperiment:MultiAssayExperiment]{MultiAssayExperiment::MultiAssayExperiment()}} methods.
 }
 }

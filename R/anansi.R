@@ -1,9 +1,11 @@
 #' Calculate an association network
-#' @description This is the main workspider function in the anansi package. It
-#' manages the individual functionalities of anansi, including correlation
-#' analysis, correlation by group and differential correlation.
-#' @param web An \code{AnansiWeb} object, containing two tables with 'omics data
-#' and a dictionary that links them. See \code{weaveWebFromTables()} for how to
+#' @description
+#' ## Description: The `anansi()` function
+#' The main workspider function in the anansi package is called
+#' `anansi`. It manages the individual functionalities of anansi, including
+#' correlation analysis, correlation by group and differential associations.
+#' @param web An `AnansiWeb` object, containing two tables with 'omics data
+#' and a dictionary that links them. See `weaveWebFromTables()` for how to
 #' weave a web.
 #' @param metadata A vector or data.frame of categorical or continuous value
 #' necessary for differential correlations. Typically a state or treatment.
@@ -16,15 +18,16 @@
 #' correlations according to your dictionary.
 #' @param formula A formula object. Used to assess differential associations.
 #' @param adjust.method Method to adjust p-values for multiple comparisons.
-#' \code{adjust.method = "BH"} is the default value. See \code{p.adjust()} in
-#' the base R \code{stats} package.
+#' `adjust.method = "BH"` is the default value. See `p.adjust()` in
+#' the base R `stats` package.
 #' @param verbose A boolean. Toggles whether to print diagnostic information
 #' while running. Useful for debugging errors on large datasets.
-#' @param return.format \code{Character scalar}. Should be one of \code{"table"}
-#' , \code{"list"}, or \code{"raw"}. Should the output of \code{\link{anansi}}
+#' @param return.format `Character scalar`. Should be one of `"table"`
+#' , `"list"`, or `"raw"`. Should the output of [anansi()]
 #' respectively be a wide `data.frame` of results, a list containing the results
 #' and input, or a list of raw output (used for testing purposes).
-#' convenient use. (Default: \code{"table"})
+#' convenient use. (Default: `"table"`)
+#' @param ... additional arguments (currently not used).
 #' @return A list of lists containing correlation coefficients, p-values and
 #' q-values for all operations.
 #' @importFrom stats model.frame
@@ -131,11 +134,10 @@
 #'   p
 #'
 #'
-anansi <- function(web, formula = ~1, groups = NULL, metadata,
+anansi <- function(web, formula, groups = NULL, metadata = NULL,
                    adjust.method = "BH", verbose = TRUE,
-                   return.format = "table") {
+                   return.format = "table", ...) {
   return.format <- match.arg(return.format, choices = c("table", "list", "raw"))
-
   # generate anansiYarn input object
   input <- prepInput(
     web = web, formula = formula, groups = groups,
@@ -143,7 +145,7 @@ anansi <- function(web, formula = ~1, groups = NULL, metadata,
   )
   int.terms <- input$int.terms; groups <- input$groups; n.grps <- input$n.grps;
   group.id <- input$group.id; errorterm <- input$error.term;
-  sat_model <- input$lm.formula
+  sat_model <- input$lm.formula; metadata <- input$metadata
 
   out.list <- vector(
     "list", length = 1 + n.grps + (2 * length(int.terms))
@@ -177,9 +179,14 @@ anansi <- function(web, formula = ~1, groups = NULL, metadata,
 #' Assess formula, trim metadata and prepare output for anansi workflow
 #' @description Initialize `anansiInput` component of output. Should not be
 #' called by user.
+#' @importFrom S4Vectors as.data.frame.DataFrame
 #' @noRd
 #'
 prepInput <- function(web, formula, groups, metadata, verbose) {
+  # If no metadata argument, try web slot
+  if(is.null(metadata)) metadata <- as.data.frame.DataFrame(web@metadata)
+  stopifnot("No metadata argument provided or found in AnansiWeb" =
+              prod(dim(metadata)) > 0 )
   raw_terms <- terms.formula(formula, "Error", data = metadata)
   indErr <- attr(raw_terms, "specials")$Error
 
@@ -253,7 +260,7 @@ check_groups <- function(groups, raw_terms, indErr, metadata, verbose) {
   return(list(groups, n.groups))
 }
 
-#' Prepare saturated model, deal with \code{Error} terms.
+#' Prepare saturated model, deal with `Error` terms.
 #' @noRd
 #' @importFrom stats as.formula update.formula
 #'
@@ -302,7 +309,7 @@ make_saturated_model <- function(formula, raw_terms, indErr, verbose) {
 
 #' Is character, factor or ordered factor
 #' @description wrapper around
-#' \code{is.character(x) || is.factor(x) || is.ordered(x)}
+#' `is.character(x) || is.factor(x) || is.ordered(x)`
 #' @param x an object to be evaluated as being categorical
 #' @returns a boolean.
 #'

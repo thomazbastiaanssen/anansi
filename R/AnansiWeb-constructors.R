@@ -3,44 +3,44 @@
 #' @rdname AnansiWeb
 #' @description
 #' Generate a biadjacency matrix, linking the features between two tables.
-#' Return an \code{AnansiWeb} object which contains all three.
+#' Return an `AnansiWeb` object which contains all three.
 #'
-#' \code{weaveWeb()} is for general use and has flexible default settings.
+#' `weaveWeb()` is for general use and has flexible default settings.
 #'
-#' \code{weaveKEGG()} is a wrapper that sets \code{link} to \code{kegg_link()}.
-#' All variants are special cases of \code{weaveWeb()}.
+#' `weaveKEGG()` is a wrapper that sets `link` to `kegg_link()`.
+#' All variants are special cases of `weaveWeb()`.
 #'
-#' \code{AnansiWeb()} constructs an \code{AnansiWeb} object from three tables.
+#' `AnansiWeb()` constructs an `AnansiWeb` object from three tables.
 #'
-#' @param x,y \code{Character scalar}, names of feature types that should be
-#'     linked. Should be found in the column names of \code{link}.
-#' @param formula \code{formula} of the form y ~ x, denoting desired output
-#'     format; assigns y to rows and columns to x. Equivalent to using \code{x}
-#'     and \code{y} arguments.
+#' @param formula `formula` of the form y ~ x, denoting desired output
+#'     format; assigns y to rows and columns to x. Equivalent to using `x`
+#'     and `y` arguments.
+#' @param x,y `Character scalar`, names of feature types that should be
+#'     linked. Should be found in the column names of `link`.
 #' @param link One of the following:
 #' \itemize{
-#'  \item \code{Character scalar} with value \code{"none"}.
-#'  \item \code{data.frame} with two columns
-#'  \item \code{list} with two such \code{data.frame}s.
+#'  \item `Character scalar` with value `"none"`.
+#'  \item `data.frame` with two columns
+#'  \item `list` with two such `data.frame`s.
 #' }
 #' @param tableY,tableX A table containing features of interest. Rows should be
 #'     samples and columns should be features. Y and X refer to the position of
 #'     the features in a formula: Y ~ X.
 #' @param ... further arguments.
 #' @details
-#' If the \code{link} argument is \code{"none"}, all features will be considered
-#' linked. If one or more \code{data.frame}s, colnames should be as specified in
-#' \code{x} and \code{y}.
+#' If the `link` argument is `"none"`, all features will be considered
+#' linked. If one or more `data.frame`s, colnames should be as specified in
+#' `x` and `y`.
 #' @seealso \itemize{
-#'  \item \code{\link{AnansiWeb-methods}}: For utility functions to get and set.
-#'  \item \code{\link{kegg_link}}: For examples of input for link argument.
-#'  \item \code{\link{getWeb}}: For
-#'  \code{\link[MultiAssayExperiment]{MultiAssayExperiment}} methods.
+#'  \item [AnansiWeb-methods()]: For utility functions to get and set.
+#'  \item [kegg_link()]: For examples of input for link argument.
+#'  \item [getWeb()]: For
+#'  [MultiAssayExperiment::MultiAssayExperiment()] methods.
 #' }
 #'
-#' @returns an \code{AnansiWeb} object, with sparse binary biadjacency matrix
-#' with features from \code{y} as rows and features from \code{x} as columns in
-#' \code{dictionary} slot.
+#' @returns an `AnansiWeb` object, with sparse binary biadjacency matrix
+#' with features from `y` as rows and features from `x` as columns in
+#' `dictionary` slot.
 #' @examples
 #' # Basic usage
 #' weaveWeb(cpd ~ ko, link = kegg_link())
@@ -88,6 +88,7 @@ weaveWeb.default <- function(x, y, link = NULL, tableX = NULL, tableY = NULL, ..
               is(terms, "character") && length(terms) == 2L)
 
   if(identical(link,"none")) return(web_missing_link(tableX, tableY, x, y))
+
   link_is_list <- is.list(link) && !is.data.frame(link)
 
   if(link_is_list) {
@@ -103,15 +104,23 @@ weaveWeb.default <- function(x, y, link = NULL, tableX = NULL, tableY = NULL, ..
   }
   d <- deliver_web_cases(link, terms, tableX, tableY, link_is_list)
   names(dimnames(d)) <- c(y, x)
-  if(is.null(tableX) && is.null(tableY)) return(
-    new("AnansiWeb",
-      tableY     = matrix(ncol = NROW(d), dimnames = list(NULL, rownames(d))),
-      tableX     = matrix(ncol = NCOL(d), dimnames = list(NULL, colnames(d))),
-      dictionary = d)) else return(
-        new("AnansiWeb",
-        tableY     = as.matrix(tableY)[,rownames(d)],
-        tableX     = as.matrix(tableX)[,colnames(d)],
-        dictionary = d))
+  if(is.null(tableX) && is.null(tableY))
+    return(
+      AnansiWeb(
+          tableY     = matrix(ncol = NROW(d),
+                              dimnames = list(NULL, rownames(d))),
+          tableX     = matrix(ncol = NCOL(d),
+                              dimnames = list(NULL, colnames(d))),
+          dictionary = d,
+          metadata   = DataFrame(metadata))
+    ) else
+      return(
+        AnansiWeb(
+            tableY     = as.matrix(tableY)[,rownames(d)],
+            tableX     = as.matrix(tableX)[,colnames(d)],
+            dictionary = d,
+            metadata   = DataFrame(metadata))
+        )
 }
 
 #' @rdname AnansiWeb
@@ -139,12 +148,14 @@ weaveWeb.formula <- function(
 }
 
 #' @rdname AnansiWeb
-#' @param dictionary A binary adjacency matrix of class \code{Matrix}, or
-#' coercible to \code{Matrix}
+#' @param dictionary A binary adjacency matrix of class `Matrix`, or
+#' coercible to `Matrix`
+#' @param metadata `DataFrame`, or coerible to `DataFrame`. Optional.
 #' @importFrom Matrix Matrix drop0
+#' @importFrom S4Vectors DataFrame
 #' @export
 #'
-AnansiWeb <- function(tableX, tableY, dictionary) {
+AnansiWeb <- function(tableX, tableY, dictionary, metadata = NULL, ...) {
   # coerce
   if(!is(dictionary, "Matrix")) dictionary <-
       drop0(Matrix(dictionary, sparse = TRUE))
@@ -165,10 +176,11 @@ AnansiWeb <- function(tableX, tableY, dictionary) {
     }
 
   # return AnansiWeb
-    new("AnansiWeb",
+  new("AnansiWeb",
         tableY     = tableY,
         tableX     = tableX,
-        dictionary = dictionary)
+        dictionary = dictionary,
+        metadata   = DataFrame(metadata))
     }
 
 #' @rdname AnansiWeb
@@ -176,39 +188,49 @@ AnansiWeb <- function(tableX, tableY, dictionary) {
 #'
 weaveKEGG <- function(x, ...) weaveWeb(x, link = kegg_link(), ...)
 
-#' Generate a random AnansiWeb from scratch
-#' @rdname AnansiWeb
+#' Generate a random AnansiWeb or AnansiLinkMap
+#' @rdname randomAnansi
+#' @param tableY,tableX A table containing features of interest. Rows should be
+#'     samples and columns should be features. Y and X refer to the position of
+#'     the features in a formula: Y ~ X.
+#' @param dictionary A binary adjacency matrix of class `Matrix`, or
+#' coercible to `Matrix`
 #' @export
+#' @seealso [AnansiWeb()], [AnansiLinkMap()]
 #' @examples
 #' # Make a random AnansiWeb object
-#'
-#' # random dictionary
-#' dictionary <- weaveWeb(a ~ c, link = randomLinkMap() )$dictionary
-#' # AnansiWeb
-#' web <- randomWeb(n_samp = 100, dictionary = dictionary)
-#' mae <- as(web, "MultiAssayExperiment")
+#' randomWeb()
+#' randomLinkMap()
 #' @export
 #'
-randomWeb <- function(n_samp = 10, n_x = 8, n_y = 12, density = 0.1,
-                      tableY = NULL, tableX = NULL, dictionary = NULL){
-
+randomWeb <- function(n_samples = 10, n_features_x = 8, n_features_y = 12,
+                      sparseness = 0.5, tableY = NULL, tableX = NULL,
+                      dictionary = NULL){
+  stopifnot("'sparseness' must be a proportion [0-1]. " =
+              sparseness <= 1 && sparseness > 0)
   stopifnot("At least one of 'tableY,tableX', 'dictionary' should be NULL." =
               any(c(is.null(tableY), is.null(tableX), is.null(dictionary))))
   stopifnot("'tableY,tableX' should either both be provided or both NULL. " =
               is.null(tableY) == is.null(tableX) )
 
+  density <- 1 - sparseness
   # All missing: return full random Web
   if(all(c(is.null(tableY), is.null(tableX), is.null(dictionary)))) return(
-    randomWebFull(n_samp, n_x, n_y, density) )
+    randomWebFull(n_samples, n_features_x, n_features_y, density) )
   # Dictionary missing: make random fitting dictionary, return filled Web
   if(is.null(dictionary)) return(
     randomWebDic(tableY, tableX, density) )
   # Tables missing: make random fitting tables, return filled Web
-  return(randomWebTab(n_samp, dictionary))
+  return(randomWebTab(n_samples, dictionary))
 }
 
+#' Generate a random AnansiWeb, without any prior components
+#' @description
+#' called by randomWeb, not for user.
 #' @importFrom Matrix rsparsematrix
 #' @importFrom stats rnorm
+#' @rdname randomAnansi
+#' @noRd
 #'
 randomWebFull <- function(n_samp, n_x, n_y, density) {
 
@@ -224,14 +246,16 @@ randomWebFull <- function(n_samp, n_x, n_y, density) {
                      sample_id = paste0("sample_", seq_len(n_samp)),
                      x = paste0("x_", seq_len(n_x)))
                    )
-  dictionary <- randomWebDic(tableY, tableX, density)
-  # return AnansiWeb
-  new("AnansiWeb", tableY = tableY, tableX = tableX, dictionary = dictionary)
+  randomWebDic(tableY, tableX, density)
 }
 
 #' Generate a random AnansiWeb, only missing tables
+#' @description
+#' called by randomWeb, not for user.
+#' @rdname randomAnansi
+#' @noRd
 #'
-randomWebTab <- function(n_samp = 10, dictionary) {
+randomWebTab <- function(n_samp = 10, dictionary, metadata) {
   d <- dim(dictionary)
   tableY <- matrix(data = rnorm(d[1] * n_samp),
                    nrow = n_samp, ncol = d[1],
@@ -247,15 +271,20 @@ randomWebTab <- function(n_samp = 10, dictionary) {
                      x = colnames(dictionary))
   )
   names(dimnames(tableX))[2] <- names(dimnames(dictionary))[2]
-
+  metadata <- randomWebMetadata(tableY)
   # return AnansiWeb
-  new("AnansiWeb", tableY = tableY, tableX = tableX, dictionary = dictionary)
+  AnansiWeb( tableY = tableY, tableX = tableX,
+      dictionary = dictionary, metadata = metadata)
 }
 
-#' Generate a random AnansiWeb, only missing dictionary
+#' Generate a random AnansiWeb, only missing dictionary.
+#' @description
+#' called by randomWeb, not for user.
 #' @importFrom Matrix rsparsematrix
+#' @rdname randomAnansi
+#' @noRd
 #'
-randomWebDic <- function(tableY, tableX, density) {
+randomWebDic <- function(tableY, tableX, density, metadata) {
 
   dictionary <- rsparsematrix(nrow = NCOL(tableY), ncol = NCOL(tableX),
                               density = density, rand.x = NULL,
@@ -264,8 +293,29 @@ randomWebDic <- function(tableY, tableX, density) {
                                 x = colnames(tableX)))
   names(dimnames(dictionary)) <- c(names(dimnames(tableY))[2L],
                                    names(dimnames(tableX))[2L])
+  metadata <- randomWebMetadata(tableY)
   # return AnansiWeb
-  new("AnansiWeb", tableY = tableY, tableX = tableX, dictionary = dictionary)
+  AnansiWeb( tableY = tableY, tableX = tableX,
+      dictionary = dictionary, metadata = metadata)
+}
+
+#' Generate random metadata for AnansiWeb
+#' @description
+#' called by randomWeb, not for user.
+#' @param table a web table
+#' @rdname randomAnansi
+#' @noRd
+#'
+randomWebMetadata <- function(table){
+  n_samples <- NROW(table)
+  m <- DataFrame(
+    cat_ab  = sample(c("a", "b"), n_samples, replace = TRUE),
+    cat_XYZ = sample(c("X", "Y", "Z"), n_samples, replace = TRUE),
+    num_norm  = rnorm(n_samples),
+    num_unif  = runif(n_samples),
+    row.names = paste0("sample_", seq_len(n_samples))
+    )
+  return(m)
 }
 
 ###############################################################################
@@ -273,8 +323,8 @@ randomWebDic <- function(tableY, tableX, density) {
 
 #' Produce a biadjacency matrix given tables and a dictionary
 #' @description calculates a biadjacency matrix for the cases where
-#' \code{link} is a single - or a \code{list} of two - \code{data.frame}(s).
-#' @param link a \code{data.frame} or \code{list} of two compatible ones.
+#' `link` is a single - or a `list` of two - `data.frame`(s).
+#' @param link a `data.frame` or `list` of two compatible ones.
 #' @param terms a length 2 character vector, naming the x and y terms in order
 #' @param tableY A table containing features of interest. Rows should be samples
 #' and columns should be features. The Y and X refer to the position of the
@@ -282,8 +332,8 @@ randomWebDic <- function(tableY, tableX, density) {
 #' @param tableX A table containing features of interest. Rows should be samples
 #' and columns should be features. The Y and X refer to the position of the
 #' features in a formula: Y ~ X.
-#' @param link_is_list a boolean, is a \code{list} (or \code{FALSE}: a
-#' \code{data.frame})
+#' @param link_is_list a boolean, is a `list` (or `FALSE`: a
+#' `data.frame`)
 #' @returns a sparse boolean biadjacency matrix, for use in main anansi workflow
 #' @noRd
 #'
@@ -354,14 +404,15 @@ df_to_sparse_biadjacency_matrix <- function(x){
 #' Make a full web; for all vs all association testing
 #' @description
 #' Make a fully TRUE biadjacency matrix with dimensions of the two input tables.
-#' @param tableX,tableY \code{matrix} of features of table \code{X}.
-#' @param x,y \code{character scalar} names of x & y terms
-#' @returns An \code{AnansiWeb} object with both tables and a fully \code{TRUE}
-#' (non-sparse) matrix from the \code{Matrix} package.
+#' @param tableX,tableY `matrix` of features of table `X`.
+#' @param x,y `character scalar` names of x & y terms
+#' @returns
+#' An `AnansiWeb` object with both tables and a fully `TRUE`
+#' (non-sparse) matrix from the `Matrix` package.
 #' @importFrom Matrix Matrix
 #' @noRd
 #'
-web_missing_link <- function(tableX, tableY, x, y) {
+web_missing_link <- function(tableX, tableY, x, y, metadata = NULL) {
 
   d <- Matrix(
     data = TRUE,
@@ -371,9 +422,10 @@ web_missing_link <- function(tableX, tableY, x, y) {
     )
   names(dimnames(d)) <- c(y, x)
 
-  new("AnansiWeb",
+  AnansiWeb(
       tableY     = as.matrix(tableY)[,rownames(d)],
       tableX     = as.matrix(tableX)[,colnames(d)],
-      dictionary = d)
+      dictionary = d,
+      metadata = DataFrame(metadata))
 
 }

@@ -55,3 +55,4 @@ biocViews: Microbiome, Metabolomics, Regression, Pathways
 URL: https://github.com/thomazbastiaanssen/anansi, https://thomazbastiaanssen.github.io/anansi
 BugReports: https://github.com/thomazbastiaanssen/anansi/issues
 VignetteBuilder: knitr
+Roxygen: list(markdown = TRUE)

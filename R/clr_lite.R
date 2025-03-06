@@ -3,18 +3,18 @@
 #' Performing a centered log-ratio transformation is a reasonable way to address these problems reasonably well.
 #' \cr \cr
 #' A major problem with this approach is that microbiome data typically contains lots of zeroes and the logarithm of zero is undefined.
-#' Here, we implemented a few methods discussed by Lubbe \emph{et al.} 2021 to replace zeroes with non-zero values in such a way that the structure of the data remains reasonably well preserved.
+#' Here, we implemented a few methods discussed by Lubbe *et al.* 2021 to replace zeroes with non-zero values in such a way that the structure of the data remains reasonably well preserved.
 #' \cr \cr
 #' Some of these methods (namely 'logunif' and 'runif') involve imputing small values between 0 and the lowest non-zero value in the dataset.
-#' For these methods, we have implemented a resampling approach in order to stabilize the inter-run variability. See \code{method} for more information.
+#' For these methods, we have implemented a resampling approach in order to stabilize the inter-run variability. See `method` for more information.
 #' @param counts A compositional count table.
 #' @param samples_are Either "cols" or "rows". Default is "cols". Denotes whether the columns or rows depict individual samples.
-#' @param method The method for zero imputation. One of \code{"logunif"}, \code{"unif"} or \code{"const"}.
-#' \code{'logunif'} samples small numbers from a log-uniform distribution, whereas \code{'unif'} samples from a uniform one. On the other hand, \code{"const"} simply replaces zeroes with \code{0.65 * [the lowest value]}.
-#' @param replicates An integer. For the two random sampling methods, if this is larger than 1, every zero will be imputed that many times. The median of the CLR of all those replicates will be returned. If \code{method} is set to \code{"const"}, replicates will be automatically set to 1 as no random numbers are generated.
+#' @param method The method for zero imputation. One of `"logunif"`, `"unif"` or `"const"`.
+#' `'logunif'` samples small numbers from a log-uniform distribution, whereas `'unif'` samples from a uniform one. On the other hand, `"const"` simply replaces zeroes with `0.65 * [the lowest value]`.
+#' @param replicates An integer. For the two random sampling methods, if this is larger than 1, every zero will be imputed that many times. The median of the CLR of all those replicates will be returned. If `method` is set to `"const"`, replicates will be automatically set to 1 as no random numbers are generated.
 #' @return A CLR-transformed count table.
 #' @references Sugnet Lubbe, Peter Filzmoser, Matthias Templ (2021)
-#' \emph{Comparison of zero replacement strategies for compositional data with large numbers of zeros.}
+#' *Comparison of zero replacement strategies for compositional data with large numbers of zeros.*
 #' doi:https://doi.org/10.1016/j.chemolab.2021.104248
 #' @export
 #'
@@ -52,8 +52,8 @@ clr_lite <- function(counts, samples_are = "cols", method = "logunif", replicate
 }
 
 #' compute CLR using Aitchison's method
-#' @description See \code{clr_lite}.
-#' @seealso \code{\link{clr_lite}}
+#' @description See `clr_lite`.
+#' @seealso [clr_lite()]
 #' @param x A vector of compositional data without zeroes.
 #' @return A vector of CLR-transformed data
 #'
@@ -63,8 +63,8 @@ anansi_compute_clr <- function(x) {
 }
 
 #' Replace zeroes with non-zero values in order to perform a CLR-transformation
-#' @description See \code{\link{clr_lite}}.
-#' @seealso \code{\link{clr_lite}}
+#' @description See [clr_lite()].
+#' @seealso [clr_lite()]
 #' @param vec A vector of compositional data that may contain zeroes.
 #' @param method The method for zero imputation. One of "logunif", "unif" or "const".
 #' @return A vector with all the zeroes replaced with non-zero values.
@@ -88,8 +88,8 @@ impute_zeroes <- function(vec, method = "logunif") {
 }
 
 #' Resample random values, perform CLR over each iteration and return the median result.
-#' @description See \code{clr_lite}.
-#' @seealso \code{\link{clr_lite}}
+#' @description See `clr_lite`.
+#' @seealso [clr_lite()]
 #' @param vec A vector of compositional data that may contain zeroes.
 #' @param method The method for zero imputation. One of "logunif", "unif" or "const".
 #' @param replicates A positive integer. Default is 1000. Controls how many replicates the median should be taken over.
@@ -112,8 +112,8 @@ softmax <- function(x) exp(x) / sum(exp(x))
 
 #' @rdname clr_lite
 #' @section Functions:
-#' \code{clr_c:}
-#'  A wrapper for \code{clr_lite(counts, method = "const", replicates = 1)}.
+#' `clr_c:`
+#'  A wrapper for `clr_lite(counts, method = "const", replicates = 1)`.
 #' @export
 #'
 clr_c <- function(counts, samples_are = "cols") {
@@ -122,8 +122,8 @@ clr_c <- function(counts, samples_are = "cols") {
 
 #' @rdname clr_lite
 #' @section Functions:
-#' \code{clr_unif:}
-#'  A wrapper for \code{clr_lite(counts, method = "unif")}.
+#' `clr_unif:`
+#'  A wrapper for `clr_lite(counts, method = "unif")`.
 #' @export
 #'
 clr_unif <- function(counts, samples_are = "cols", replicates = 1000) {
@@ -132,8 +132,8 @@ clr_unif <- function(counts, samples_are = "cols", replicates = 1000) {
 
 #' @rdname clr_lite
 #' @section Functions:
-#' \code{clr_logunif:}
-#'  A wrapper for \code{clr_lite(counts, method = "logunif")}.
+#' `clr_logunif:`
+#'  A wrapper for `clr_lite(counts, method = "logunif")`.
 #' @export
 #'
 clr_logunif <- function(counts, samples_are = "cols", replicates = 1000) {

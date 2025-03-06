@@ -14,10 +14,10 @@ a web.}
 
 \item{sat_model}{A \code{formula} object, containing the full model}
 
-\item{errorterm}{A \code{character vector}, containing the metadata col.name denoting repeated
+\item{errorterm}{A \verb{character vector}, containing the metadata col.name denoting repeated
 measures.}
 
-\item{int.terms}{A \code{character vector}, containing the metadata col.names denoting
+\item{int.terms}{A \verb{character vector}, containing the metadata col.names denoting
 covariates interacting with X to be tested for differential associations.}
 
 \item{metadata}{A vector or data.frame of categorical or continuous value necessary for

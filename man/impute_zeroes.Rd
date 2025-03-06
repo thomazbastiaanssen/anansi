@@ -15,8 +15,8 @@ impute_zeroes(vec, method = "logunif")
 A vector with all the zeroes replaced with non-zero values.
 }
 \description{
-See \code{\link{clr_lite}}.
+See \code{\link[=clr_lite]{clr_lite()}}.
 }
 \seealso{
-\code{\link{clr_lite}}
+\code{\link[=clr_lite]{clr_lite()}}
 }

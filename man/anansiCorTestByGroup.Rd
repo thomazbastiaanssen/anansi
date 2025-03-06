@@ -20,5 +20,5 @@ a list of \code{anansiTale} result objects, one for the total dataset and per gr
 If the \code{groups} argument is suitable, will also run correlation analysis per group. Typically, the main \code{anansi()} function will run this for you.
 }
 \seealso{
-\code{\link{anansi}}
+\code{\link[=anansi]{anansi()}}
 }

@@ -1,37 +1,37 @@
 #' @rdname kegg_link
-#' @format \code{ec2ko}: a \code{data.frame} of two columns, named \code{"ec"}
-#' and \code{"ko"}.
+#' @format `ec2ko`: a `data.frame` of two columns, named `"ec"`
+#' and `"ko"`.
 #' The IDs refer to KEGG orthologues. Enzyme commission numbers, ecs, typically
 #' describe reactions captured by them.
 #'
-#' @source \code{ec2ko}: Adapted from \url{https://www.genome.jp/kegg/}, using
-#' \code{KEGGREST}. Script to generate available in example.
+#' @source `ec2ko`: Adapted from <https://www.genome.jp/kegg/>, using
+#' `KEGGREST`. Script to generate available in example.
 #'
 "ec2ko"
 
 #' @rdname kegg_link
-#' @format \code{ec2cpd}: a \code{data.frame} of two columns, named \code{"ec"}
-#' and \code{"cpd"}.
+#' @format `ec2cpd`: a `data.frame` of two columns, named `"ec"`
+#' and `"cpd"`.
 #' The IDs refer to compounds in the KEGG database. Enzyme commission numbers,
 #' ecs, typically describe reactions either producing or requiring them.
 #'
-#' @source \code{ec2cpd}: Adapted from \url{https://www.genome.jp/kegg/} using
-#' \code{KEGGREST}. Script to generate available in example.
+#' @source `ec2cpd`: Adapted from <https://www.genome.jp/kegg/> using
+#' `KEGGREST`. Script to generate available in example.
 #'
 "ec2cpd"
 
 #' Use linking data from the KEGG database.
 #' @description
-#' \code{kegg_links} is a convenience function to return a list
-#' containing two \code{data.frame}s; \code{ec2cpd} and \code{ec2ko}. This will
+#' `kegg_links` is a convenience function to return a list
+#' containing two `data.frame`s; `ec2cpd` and `ec2ko`. This will
 #' be their most likely use.
 #'
-#' \code{ec2cpd} and \code{ec2ko} are two \code{data.frame}s, used
+#' `ec2cpd` and `ec2ko` are two `data.frame`s, used
 #' to link ko, ecs and cpd identifiers in the KEGG database.
 #'
 
-#' @returns \code{kegg_link} returns a list containing the two aforementioned
-#' data.frames, \code{ec2cpd} and \code{ec2ko}.
+#' @returns `kegg_link` returns a list containing the two aforementioned
+#' data.frames, `ec2cpd` and `ec2ko`.
 #' @examples
 #' kegg_link()
 #'

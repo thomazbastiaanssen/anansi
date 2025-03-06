@@ -1,5 +1,5 @@
 #' Extract information from an anansiTale object and parse it into a neat table
-#' @param tale An \code{anansiTale} object
+#' @param tale An `anansiTale` object
 #' @param dic A dictionary.
 #' @noRd
 #' @return A wide format data.frame with summary statistics by feature pair.

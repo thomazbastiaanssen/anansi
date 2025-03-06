@@ -1,122 +1,106 @@
 #' @rdname getWeb
 #' @export
-#' 
-#' @param x a \code{\link[MultiAssayExperiment:MultiAssayExperiment]{MultiAssayExperiment}}.
-#' 
-#' @param experimentY,experimentX 
-#' \code{Character scalar} or \code{numeric scalar}. Selects experiment 
-#' corresponding to \code{tableY} and \code{tableX} from \code{experiments(x)} 
-#' of \code{MultiAssayExperiment} object by name or index, name is recommended. 
-#' (Default slots: \code{Y = 1}, \code{X = 2}).
-#' 
-#' @param assay.typeY,assay.typeX 
-#' \code{Character scalar}. Specifies the name of the assay in experiments Y and
-#' X to be used. (Default: \code{"counts"})
-#' 
+#'
+#' @param x a [MultiAssayExperiment::MultiAssayExperiment()].
+#'
+#' @param tableY,tableX
+#' `Character scalar` or `numeric scalar`. Selects experiment
+#' corresponding to `tableY` and `tableX` from `experiments(x)`
+#' of `MultiAssayExperiment` object by name or index, name is recommended.
+#' (Default slots: `Y = 1`, `X = 2`).
+#'
 #' @param link One of the following:
 #' \itemize{
 #'  \item Character scalar with value "none"
 #'  \item data.frame with two columns
 #'  \item list with two such data.frames
 #' }
-#' 
-#' @param force_new \code{boolean} If x already has a dictionary \code{Matrix} 
-#' in metadata, ignore it and generate a new object anyway? (Default: FALSE).
-#' @param ... additional parameters that can be passed to \code{\link{AnansiWeb}}.
 #'
-#' @returns an \code{AnansiWeb} object, with sparse binary biadjacency matrix 
-#' with features from \code{y} as rows and features from \code{x} as columns in 
-#' \code{dictionary} slot. If x already contains a dictionary in metadata, use 
-#' that one, unless \code{force_new = TRUE}.
-#' 
-#' @importFrom MultiAssayExperiment MultiAssayExperiment metadata metadata<-
+#' @param force_new `boolean` If x already has a dictionary `Matrix`
+#' in metadata, ignore it and generate a new object anyway? (Default: FALSE).
+#' @param ... additional parameters passed to [AnansiWeb()].
+#' @param tableY,tableX
+#' `Character scalar` or `numeric scalar`. Selects experiment
+#' corresponding to `tableY` and `tableX` from `experiments(x)`
+#' of `MultiAssayExperiment` object by name or index, name is recommended.
+#' (Default slots: `Y = 1`, `X = 2`).
+#'
+#' @returns an `AnansiWeb` object, with sparse binary biadjacency matrix
+#' with features from `y` as rows and features from `x` as columns in
+#' `dictionary` slot. If x already contains a dictionary in metadata, use
+#' that one, unless `force_new = TRUE`.
+#'
+#' @importFrom MultiAssayExperiment MultiAssayExperiment metadata experiments
 #' @importFrom SummarizedExperiment assay colData
 #' @importClassesFrom Matrix Matrix
-#' 
+#'
 #' @details
-#' This wrapper of \code{\link{weaveWeb}} allows to generate an 
-#' \code{AnansiWeb} S4 object directly from objects of class
-#' \code{\link[MultiAssayExperiment:MultiAssayExperiment]{MultiAssayExperiment}}
-#' . First, the assays specified by \code{assay.typeY} and \code{assay.typeX}
-#' are passed to \code{\link{AnansiWeb}} to build an AnansiWeb object.
-#' 
+#' This wrapper of [weaveWeb()] allows to generate an
+#' `AnansiWeb` S4 object directly from objects of class
+#' [MultiAssayExperiment::MultiAssayExperiment()]
+#' . First, the assays specified by `assay.typeY` and `assay.typeX`
+#' are passed to [AnansiWeb()] to build an AnansiWeb object.
+#'
 #' @examples
-#'
-#' # Import libraries
-#' library(mia)
-#' library(TreeSummarizedExperiment)
-#' library(MultiAssayExperiment)
-#'
-#' # Load data
-#' data("FMT_data", package = "anansi")
-#'
-#' # Convert to (Tree)SummarizedExperiment objects
-#' metab_se <- SummarizedExperiment(assays = SimpleList(conc = as.matrix(FMT_metab)))
-#' KO_tse <- TreeSummarizedExperiment(assays = SimpleList(counts = as.matrix(FMT_KOs)))
-#'
-#'
-#' # Remove features with less than 10% prevalence
-#' KO_tse <- subsetByPrevalent(KO_tse,
-#'   assay.type = "counts",
-#'   prevalence = 0.1
-#' )
-#'
-#' # Perform a centered log-ratio transformation on the functional counts assay
-#' KO_tse <- transformAssay(KO_tse,
-#'   assay.type = "counts",
-#'   method = "clr",
-#'   pseudocount = TRUE
-#' )
-#'
-#' # Prepare colData
-#' coldata <- FMT_metadata
-#' rownames(coldata) <- coldata$Sample_ID
-#' coldata <- coldata[match(colnames(KO_tse), rownames(coldata)), ]
+#' # Make a random anansiWeb
+#' web <- randomWeb()
 #'
 #' # Combine experiments into MultiAssayExperiment object
-#' mae <- MultiAssayExperiment(
-#'   experiments = ExperimentList(cpd = metab_se, ko = KO_tse),
-#'   colData = coldata
-#' )
+#' mae <- as(web, "MultiAssayExperiment")
 #'
-#' # Perform anansi analysis
-#' outWeb <- getWeb(mae,
-#'   experimentY = "cpd", experimentX = "ko",
-#'   assay.typeY = "conc", assay.typeX = "clr"
-#' )
-#' 
-setMethod("getWeb",
-          signature = c(x = "MultiAssayExperiment"),
-          function(x, experimentY = 1, experimentX = 2, 
-                   assay.typeY = "counts", assay.typeX = "counts", 
-                   link = NULL, force_new = FALSE, ...) {
-            # Retrieve kwargs as list
-            kwargs <- list(...)
-            # Check experiments
-            mia:::.test_experiment_of_mae(x, experimentY)
-            mia:::.test_experiment_of_mae(x, experimentX)
-            # Extract experiments
-            tableY <- x[[experimentY]]
-            tableX <- x[[experimentX]]
-            # Check assays
-            mia:::.check_assay_present(assay.typeY, tableY)
-            mia:::.check_assay_present(assay.typeX, tableX)
-            # Extract assays
-            tableY <- t(assay(tableY, assay.typeY))
-            tableX <- t(assay(tableX, assay.typeX))
-            # Check if x already contains a dictionary
-            m <- metadata(x)
-            if(!force_new && "dictionary" %in% names(m)) return(
-              AnansiWeb( tableX, tableY, m[["dictionary"]] )
-              )             
-            # Combine weaveWeb.default args into list
-            web_args <- c(list(x = experimentX, y = experimentY, 
-                               tableX = tableX, tableY = tableY), kwargs)
-            # Add kegg as a default link to match anansi()
-            if(!"link" %in% names(web_args)) web_args[["link"]] <- kegg_link()
-            keep <- names(web_args) %in% c("x", "y", "tableX", "tableY", "link")
-            web_args <- web_args[keep]
-            # Generate web object
-            do.call(weaveWeb.default, web_args)
-          }
+#' # Back to AnansiWeb
+#' outWeb <- getWeb(mae, tableY = "y", tableX = "x")
+#'
+setMethod("getWeb", signature = c(x = "MultiAssayExperiment"), function(
+        x, tableY = 1, tableX = 2, link = NULL, force_new = FALSE, ...
+        ) {
+
+    # Check experiments
+    mia:::.test_experiment_of_mae(x, tableY)
+    mia:::.test_experiment_of_mae(x, tableX)
+    y_id <- names(experiments(x)[tableY])
+    x_id <- names(experiments(x)[tableX])
+
+    # Extract assays
+    tY <- t(assay(x, y_id))
+    tX <- t(assay(x, x_id))
+
+    # Check if x already contains a dictionary
+    if(!force_new){
+    m <- metadata(x)
+
+    if(is.null(link))
+        d <- "dictionary"
+    if(valid_selection(link, m))
+        d <- link
+    if(d %in% names(m))
+        return(AnansiWeb(tableX = tX, tableY = tY, dictionary = m[[d]],
+                         metadata = colData(x), ...) )
+    }
+    # Generate web object
+    weaveWeb.default(x = x_id, y = y_id, link = link,
+                     tableX = tX, tableY = tY, metadata = colData(x), ...)
+    }
 )
+
+#' TRUE if i can select in x
+#' @noRd
+#' @param i `Character or numeric scalar`. Index to check.
+#' @param x object to check i in
+#' @returns TRUE if i selects in x, FALSE otherwise
+#'
+valid_selection <- function(i, x) {
+    # Need to be length 1.
+    if(length(i) != 1L) FALSE
+
+    # If numeric, needs to be within element length of x
+    if(is.numeric(i)) i <= length(x)
+    # If character, x needs to be named and i needs to be within those names
+    if(is.character(i)){
+        if(is.null(names(x))) FALSE
+
+        !is.na(match(i, names(x)))
+    }
+    # If that didn't work, invalid selection. return FALSE.
+    FALSE
+}

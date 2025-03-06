@@ -20,5 +20,5 @@ a vector of CLR-transformed data
 See \code{clr_lite}.
 }
 \seealso{
-\code{\link{clr_lite}}
+\code{\link[=clr_lite]{clr_lite()}}
 }

@@ -1,58 +1,58 @@
 #' Dissociation plot
 #'
-#' \code{plotAnansi} generates a standard dissociation plot from the output of
-#' \code{\link{getAnansi}} in the table format. It provides a convenient way to
+#' `plotAnansi` generates a standard dissociation plot from the output of
+#' [getAnansi()] in the table format. It provides a convenient way to
 #' visually assess relevant results from the anansi analysis.
 #'
-#' @param x a \code{data.frame} object output of \code{\link{getAnansi}} in
+#' @param x a `data.frame` object output of [getAnansi()] in
 #'   the table format.
 #'
-#' @param association.type \code{Character scalar}. Specifies the type of
-#' association to show in the plot. One of \code{"disjointed"},
-#'   \code{"emergent"} and \code{"full"}. (Default: \code{NULL})
+#' @param association.type `Character scalar`. Specifies the type of
+#' association to show in the plot. One of `"disjointed"`,
+#'   `"emergent"` and `"full"`. (Default: `NULL`)
 #'
-#' @param model.var \code{Character scalar}. Specifies the name of a variable
-#' in the anansi model. It is relevant only when \code{association.type} is
-#'   \code{"disjointed"} or \code{"emergent"}. (Default: \code{NULL})
+#' @param model.var `Character scalar`. Specifies the name of a variable
+#' in the anansi model. It is relevant only when `association.type` is
+#'   `"disjointed"` or `"emergent"`. (Default: `NULL`)
 #'
-#' @param signif.threshold \code{Numeric scalar}. Specifies the threshold to
-#'   mark the significance of \code{association.type}. (Default: \code{NULL})
+#' @param signif.threshold `Numeric scalar`. Specifies the threshold to
+#'   mark the significance of `association.type`. (Default: `NULL`)
 #'
-#' @param colour_by \code{Character scalar}. Specifies one of the \code{groups}
-#'    terms used in the original \code{anansi} call, \code{x} by which points
-#'    should be coloured. (Default: \code{NULL})
+#' @param colour_by `Character scalar`. Specifies one of the `groups`
+#'    terms used in the original `anansi` call, `x` by which points
+#'    should be coloured. (Default: `NULL`)
 #'
-#' @param color_by \code{Character scalar}. Alias to \code{colour_by}.
+#' @param color_by `Character scalar`. Alias to `colour_by`.
 #'
-#' @param fill_by \code{Character scalar}. Specifies one of the \code{groups}
-#'    terms used in the original \code{anansi} call, \code{x} by which points
-#'    should be filled (Default: \code{NULL})
+#' @param fill_by `Character scalar`. Specifies one of the `groups`
+#'    terms used in the original `anansi` call, `x` by which points
+#'    should be filled (Default: `NULL`)
 #'
-#' @param size_by \code{Character scalar}. Specifies one of the \code{groups}
-#'    terms used in the original \code{anansi} call, \code{x} by which points
-#'    should be sized. (Default: \code{NULL})
+#' @param size_by `Character scalar`. Specifies one of the `groups`
+#'    terms used in the original `anansi` call, `x` by which points
+#'    should be sized. (Default: `NULL`)
 #'
-#' @param shape_by \code{Character scalar}. Specifies one of the \code{groups}
-#'    terms used in the original \code{anansi} call, \code{x} by which points
-#'    should be shaped. (Default: \code{NULL})
+#' @param shape_by `Character scalar`. Specifies one of the `groups`
+#'    terms used in the original `anansi` call, `x` by which points
+#'    should be shaped. (Default: `NULL`)
 #'
-#' @param x_lab \code{Character scalar}. Specifies the label of the x axis.
-#'   (Default: \code{"cor"})
+#' @param x_lab `Character scalar`. Specifies the label of the x axis.
+#'   (Default: `"cor"`)
 #'
-#' @param y_lab \code{Character scalar}. Specifies the label of the y axis.
-#'   (Default: \code{""})
+#' @param y_lab `Character scalar`. Specifies the label of the y axis.
+#'   (Default: `""`)
 #'
-#' @param y_position \code{Character scalar}. Specifies the position of the y
-#'   labels. It should be either \code{"left"} or \code{"right"}.
-#'   (Default: \code{"right"})
+#' @param y_position `Character scalar`. Specifies the position of the y
+#'   labels. It should be either `"left"` or `"right"`.
+#'   (Default: `"right"`)
 #'
 #' @param ... additional arguments
 #'
 #' @details
-#' \code{plotAnansi} provides a standardised method to visualise the results
+#' `plotAnansi` provides a standardised method to visualise the results
 #' of anansi by means of a differential association plot. The input for this
-#' function should be generated from \code{\link{getAnansi}} or
-#' \code{\link{anansi}}, with \code{return.format = "table"}
+#' function should be generated from [getAnansi()] or
+#' [anansi()], with `return.format = "table"`
 #'
 #' @return
 #' A ggplot2 object.
@@ -63,46 +63,14 @@
 #' library(TreeSummarizedExperiment)
 #' library(MultiAssayExperiment)
 #'
-#' # Load data
-#' data("FMT_data", package = "anansi")
-#'
-#' # Convert to (Tree)SummarizedExperiment objects
-#' metab_se <- SummarizedExperiment(assays = SimpleList(conc = as.matrix(FMT_metab)))
-#' KO_tse <- TreeSummarizedExperiment(assays = SimpleList(counts = as.matrix(FMT_KOs)))
-#'
-#' # Select functions that are represented in the dictionary
-#' keep <- row.names(KO_tse) %in% sort(unique(ec2ko$ko))
-#' KO_tse <- KO_tse[keep, ]
-#'
-#' # Remove features with less than 10% prevalence
-#' KO_tse <- subsetByPrevalent(KO_tse,
-#'   assay.type = "counts",
-#'   prevalence = 0.1
-#' )
-#'
-#' # Perform a centered log-ratio transformation on the functional counts assay
-#' KO_tse <- transformAssay(KO_tse,
-#'   assay.type = "counts",
-#'   method = "clr",
-#'   pseudocount = TRUE
-#' )
-#'
-#' # Prepare colData
-#' coldata <- FMT_metadata
-#' rownames(coldata) <- coldata$Sample_ID
-#' coldata <- coldata[match(colnames(KO_tse), rownames(coldata)), ]
-#'
-#' # Combine experiments into MultiAssayExperiment object
-#' mae <- MultiAssayExperiment(
-#'   experiments = ExperimentList(cpd = metab_se, ko = KO_tse),
-#'   colData = coldata
-#' )
+#' web <- randomWeb(n_samples = 100)
+#' mae <- as(web, "MultiAssayExperiment")
 #'
 #' # Perform anansi analysis
 #' out <- getAnansi(mae,
-#'   experimentY = "cpd", experimentX = "ko",
-#'   assay.typeY = "conc", assay.typeX = "clr",
-#'   formula = ~Legend)
+#'   tableY = "y", tableX = "x",
+#'   formula = ~ cat_ab
+#' )
 #'
 #' # Select significant interactions
 #' out <- out[out$full_p.values < 0.05, ]
@@ -110,19 +78,19 @@
 #' # Visualise disjointed associations filled by group
 #' plotAnansi(out,
 #'            association.type = "disjointed",
-#'            model.var = "Legend",
+#'            model.var = "cat_ab",
 #'            signif.threshold = 0.05,
 #'            fill_by = "group")
 #'
-#' # Visualise full associations filled by Legend
+#' # Visualise full associations filled by category ('cat_ab')
 #' plotAnansi(out,
 #'            association.type = "full",
 #'            signif.threshold = 0.05,
-#'            fill_by = "Legend")
+#'            fill_by = "cat_ab")
 #'
 #' @seealso
-#' \code{\link{getAnansi}}
-#' \code{\link{anansi}}
+#' [getAnansi()]
+#' [anansi()]
 #'
 #' @name plotAnansi
 #'

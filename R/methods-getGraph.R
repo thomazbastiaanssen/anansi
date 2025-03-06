@@ -1,16 +1,16 @@
-#' Get a graph object out of an anansiLinkMap.
+#' Get a graph object out of an AnansiLinkMap.
 #' @rdname getGraph
-#' @param x \code{anansiLinkMap}
+#' @param x `AnansiLinkMap`
 #' @param format
-#' \code{Character scalar}, controls output format by package name.
-#' \code{"igraph"} and \code{"graph"} are supported.
+#' `Character scalar`, controls output format by package name.
+#' `"igraph"` and `"graph"` are supported.
 #'
 #' @param ... additional arguments (currently not used).
 #' @importFrom igraph graph_from_data_frame as_graphnel
 #' @seealso
-#' \code{\link[igraph:graph_from_data_frame]{graph_from_data_frame}} and
-#' \code{\link[igraph:as_graphnel]{as_graphnel}}, which are used under the hood,
-#' from \code{\link[igraph:igraph]{igraph}} package.
+#' [igraph::graph_from_data_frame()] and
+#' [igraph::as_graphnel()], which are used under the hood,
+#' from [igraph::igraph()] package.
 #' @export
 #' @examples
 #' # Generate a regular igraph object
@@ -22,7 +22,7 @@
 #' getGraph( ec2cpd, format = "igraph" )
 #'
 #'
-setMethod("getGraph", "anansiLinkMap",
+setMethod("getGraph", "AnansiLinkMap",
           function(x, format = "igraph", ...) {
             validObject(x)
 

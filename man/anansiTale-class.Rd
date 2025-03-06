@@ -7,7 +7,7 @@
 easily be extracted.}
 \description{
 \code{anansiTale} is the main container that will hold your
-    stats output data coming out of the \code{anansi} pipeline.
+stats output data coming out of the \code{anansi} pipeline.
 }
 \section{Slots}{
 
