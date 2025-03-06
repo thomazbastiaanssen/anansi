@@ -72,19 +72,9 @@ All variants are special cases of <code>weaveWeb()</code>.</p>
 <span><span class="co"># Default S3 method</span></span>
 <span><span class="fu">weaveWeb</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, link <span class="op">=</span> <span class="cn">NULL</span>, tableX <span class="op">=</span> <span class="cn">NULL</span>, tableY <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">AnansiWeb</span><span class="op">(</span><span class="va">tableX</span>, <span class="va">tableY</span>, <span class="va">dictionary</span><span class="op">)</span></span>
+<span><span class="fu">AnansiWeb</span><span class="op">(</span><span class="va">tableX</span>, <span class="va">tableY</span>, <span class="va">dictionary</span>, metadata <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">weaveKEGG</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">randomWeb</span><span class="op">(</span></span>
-<span>  n_samp <span class="op">=</span> <span class="fl">10</span>,</span>
-<span>  n_x <span class="op">=</span> <span class="fl">8</span>,</span>
-<span>  n_y <span class="op">=</span> <span class="fl">12</span>,</span>
-<span>  density <span class="op">=</span> <span class="fl">0.1</span>,</span>
-<span>  tableY <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  tableX <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  dictionary <span class="op">=</span> <span class="cn">NULL</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">weaveKEGG</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -123,6 +113,10 @@ the features in a formula: Y ~ X.</p></dd>
 <dd><p>A binary adjacency matrix of class <code>Matrix</code>, or
 coercible to <code>Matrix</code></p></dd>
 
+
+<dt id="arg-metadata">metadata<a class="anchor" aria-label="anchor" href="#arg-metadata"></a></dt>
+<dd><p><code>DataFrame</code>, or coerible to <code>DataFrame</code>. Optional.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -139,10 +133,10 @@ linked. If one or more <code>data.frame</code>s, colnames should be as specified
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index">
-<ul><li><p><code><a href="AnansiWeb-methods.html">AnansiWeb-methods</a></code>: For utility functions to get and set.</p></li>
-<li><p><code><a href="kegg_link.html">kegg_link</a></code>: For examples of input for link argument.</p></li>
-<li><p><code><a href="getWeb.html">getWeb</a></code>: For
- <code><a href="https://github.com/waldronlab/MultiAssayExperiment/reference/MultiAssayExperiment.html" class="external-link">MultiAssayExperiment</a></code> methods.</p></li>
+<ul><li><p><code><a href="AnansiWeb-methods.html">AnansiWeb-methods()</a></code>: For utility functions to get and set.</p></li>
+<li><p><code><a href="kegg_link.html">kegg_link()</a></code>: For examples of input for link argument.</p></li>
+<li><p><code><a href="getWeb.html">getWeb()</a></code>: For
+<code><a href="https://github.com/waldronlab/MultiAssayExperiment/reference/MultiAssayExperiment.html" class="external-link">MultiAssayExperiment::MultiAssayExperiment()</a></code> methods.</p></li>
 </ul></div>
     </div>
 
@@ -6096,6 +6090,12 @@ linked. If one or more <code>data.frame</code>s, colnames should be as specified
 <span class="r-out co"><span class="r-pr">#&gt;</span> C22996 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ......</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> C22997 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ......</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> C22998 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ......</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Slot "metadata":</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> DataFrame with 1 row and 1 column</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            metadata</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;standardGeneric&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 &lt;standardGeneric&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu">weaveWeb</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"ko"</span>, y <span class="op">=</span> <span class="st">"ec"</span>, link <span class="op">=</span> <span class="va">ec2ko</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> An object of class "AnansiWeb"</span>
@@ -15637,6 +15637,12 @@ linked. If one or more <code>data.frame</code>s, colnames should be as specified
 <span class="r-out co"><span class="r-pr">#&gt;</span> 7.6.2.8   ......</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 7.6.2.9   ......</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Slot "metadata":</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> DataFrame with 1 row and 1 column</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            metadata</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;standardGeneric&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 &lt;standardGeneric&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu">weaveWeb</span><span class="op">(</span><span class="va">ec</span> <span class="op">~</span> <span class="va">cpd</span>, link <span class="op">=</span> <span class="va">ec2cpd</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> An object of class "AnansiWeb"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Slot "tableY":</span>
@@ -25059,6 +25065,12 @@ linked. If one or more <code>data.frame</code>s, colnames should be as specified
 <span class="r-out co"><span class="r-pr">#&gt;</span> 7.2.4.5   ......</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 7.3.2.6   ......</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Slot "metadata":</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> DataFrame with 1 row and 1 column</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            metadata</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;standardGeneric&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 &lt;standardGeneric&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># use AnansiWeb() to constuct an AnansiWeb object from components:</span></span></span>
 <span class="r-in"><span></span></span>
@@ -25155,6 +25167,9 @@ linked. If one or more <code>data.frame</code>s, colnames should be as specified
 <span class="r-out co"><span class="r-pr">#&gt;</span>   B | | | | |</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   C | | | | |</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Slot "metadata":</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> DataFrame with 0 rows and 0 columns</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># A wrapper is available for kegg ko, ec and cpd data</span></span></span>
 <span class="r-in"><span><span class="va">generic</span>      <span class="op">&lt;-</span> <span class="fu">weaveWeb</span><span class="op">(</span><span class="va">cpd</span> <span class="op">~</span> <span class="va">ko</span>, link <span class="op">=</span> <span class="fu"><a href="kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
@@ -25170,13 +25185,6 @@ linked. If one or more <code>data.frame</code>s, colnames should be as specified
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/identical.html" class="external-link">identical</a></span><span class="op">(</span><span class="va">a</span>, <span class="fu">Matrix</span><span class="fu">::</span><span class="fu">t</span><span class="op">(</span><span class="va">b</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Make a random AnansiWeb object</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># random dictionary</span></span></span>
-<span class="r-in"><span><span class="va">dictionary</span> <span class="op">&lt;-</span> <span class="fu">weaveWeb</span><span class="op">(</span><span class="va">a</span> <span class="op">~</span> <span class="va">c</span>, link <span class="op">=</span> <span class="fu"><a href="LinkMap.html">randomLinkMap</a></span><span class="op">(</span><span class="op">)</span> <span class="op">)</span><span class="op">$</span><span class="va">dictionary</span></span></span>
-<span class="r-in"><span><span class="co"># AnansiWeb</span></span></span>
-<span class="r-in"><span><span class="va">web</span> <span class="op">&lt;-</span> <span class="fu">randomWeb</span><span class="op">(</span>n_samp <span class="op">=</span> <span class="fl">100</span>, dictionary <span class="op">=</span> <span class="va">dictionary</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">mae</span> <span class="op">&lt;-</span> <span class="fu"><a href="AnansiWeb-methods.html">as</a></span><span class="op">(</span><span class="va">web</span>, <span class="st">"MultiAssayExperiment"</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

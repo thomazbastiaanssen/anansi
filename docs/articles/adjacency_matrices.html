@@ -270,10 +270,11 @@ object:</p>
 <div class="section level3">
 <h3 id="the-pre-packaged-kegg-linking-map">The pre-packaged kegg linking map<a class="anchor" aria-label="anchor" href="#the-pre-packaged-kegg-linking-map"></a>
 </h3>
-<p>By default, <code><a href="../reference/AnansiWeb.html">weaveWeb()</a></code> will assume to use the
-pre-packaged kegg link map, which consists of two similarly structured
-<code>data.frame</code>s in a list, one of which we just inspected. We
-can call it directly using <code><a href="../reference/kegg_link.html">kegg_link()</a></code>:</p>
+<p>We need to provide <code><a href="../reference/AnansiWeb.html">weaveWeb()</a></code> with a map of which
+features are linked. We can use the pre-packaged kegg link map, which
+consists of two similarly structured <code>data.frame</code>s in a list,
+one of which we just inspected. We can call it directly using
+<code><a href="../reference/kegg_link.html">kegg_link()</a></code>:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Only print the first few entries</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span> <span class="fu"><a href="../reference/kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">head</span><span class="op">)</span></span></code></pre></div>
