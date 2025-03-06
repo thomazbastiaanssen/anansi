@@ -3,12 +3,24 @@
 \name{AnansiLinkMap-methods}
 \alias{AnansiLinkMap-methods}
 \alias{names,AnansiLinkMap-method}
+\alias{dim,AnansiLinkMap-method}
+\alias{dimnames,AnansiLinkMap-method}
+\alias{colnames,AnansiLinkMap-method}
+\alias{rownames,AnansiLinkMap-method}
 \alias{show,AnansiLinkMap-method}
 \alias{getEdgeList,AnansiLinkMap-method}
 \alias{subset,AnansiLinkMap-method}
 \title{S4 Methods for AnansiLinkMap}
 \usage{
 \S4method{names}{AnansiLinkMap}(x)
+
+\S4method{dim}{AnansiLinkMap}(x)
+
+\S4method{dimnames}{AnansiLinkMap}(x)
+
+\S4method{colnames}{AnansiLinkMap}(x)
+
+\S4method{rownames}{AnansiLinkMap}(x)
 
 \S4method{show}{AnansiLinkMap}(object)
 
@@ -39,6 +51,14 @@ found as column names.}
 a set of methods to work with \code{anansiLinkWeb}, a special type of list.
 
 \code{names}: Display a list of column names from AnansiLinkMap
+
+\code{dim}: Display a vector of dims (n objects, n ids).
+
+\code{dimnames}: Display a vector of id names.
+
+\code{colnames}: Display a vector of id names.
+
+\code{rownames}: Display a vector of link df names.
 
 \code{show}: Display the object
 

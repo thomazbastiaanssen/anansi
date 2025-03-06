@@ -13,6 +13,39 @@ NULL
 setMethod("names", "AnansiLinkMap", function(x) lapply(x, names) )
 
 #' S4 Methods for AnansiLinkMap
+#' @description `dim`: Display a vector of dims (n objects, n ids).
+#' @rdname AnansiLinkMap-methods
+#' @export
+#'
+setMethod("dim", "AnansiLinkMap", function(x)
+  c(length(object),
+    length(unique(unlist(names(object), use.names = FALSE)))
+    ))
+
+#' S4 Methods for AnansiLinkMap
+#' @description `dimnames`: Display a vector of id names.
+#' @rdname AnansiLinkMap-methods
+#' @export
+#'
+setMethod("dimnames", "AnansiLinkMap", function(x)
+  list(rownames(x), colnames(x)))
+
+#' S4 Methods for AnansiLinkMap
+#' @description `colnames`: Display a vector of id names.
+#' @rdname AnansiLinkMap-methods
+#' @export
+#'
+setMethod("colnames", "AnansiLinkMap", function(x)
+  unique(unlist(names(object), use.names = FALSE)))
+
+#' S4 Methods for AnansiLinkMap
+#' @description `rownames`: Display a vector of link df names.
+#' @rdname AnansiLinkMap-methods
+#' @export
+#'
+setMethod("rownames", "AnansiLinkMap", function(x) names(names(object)))
+
+#' S4 Methods for AnansiLinkMap
 #' @description `show`: Display the object
 #' @importFrom methods show
 #' @inheritParams methods::show
