@@ -25,6 +25,22 @@ AnansiLinkMap <- function(x) {
 }
 
 #' @rdname AnansiLinkMap
-#' @examples asLinkMap( kegg_link() )
 #' @export
+#'
 asLinkMap <- AnansiLinkMap
+
+#' @rdname AnansiLinkMap
+#' @description
+#' Helper function that takes an AnansiLinkMap and returns a sparse biadjacency
+#' Matrix with link df names as rownames and id names as colnames. Called
+#' internally.
+#' @returns a sparse biadjacency Matrix with link df names as rownames and id
+#'     names as colnames
+#' @importFrom Matrix sparseMatrix
+#'
+linkMatrix <- function(x){
+    i <- factor(rep(rownames(x), each = 2))
+    j <- factor(unlist(names(x), use.names = FALSE))
+    sparseMatrix(i, j, dimnames = dimnames(x))
+}
+

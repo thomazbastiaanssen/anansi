@@ -2,29 +2,23 @@
 % Please edit documentation in R/AnansiLinkMap-methods.R
 \name{AnansiLinkMap-methods}
 \alias{AnansiLinkMap-methods}
-\alias{names,AnansiLinkMap-method}
-\alias{dim,AnansiLinkMap-method}
-\alias{dimnames,AnansiLinkMap-method}
-\alias{colnames,AnansiLinkMap-method}
-\alias{rownames,AnansiLinkMap-method}
-\alias{show,AnansiLinkMap-method}
 \alias{getEdgeList,AnansiLinkMap-method}
+\alias{names,AnansiLinkMap-method}
+\alias{dimnames,AnansiLinkMap-method}
+\alias{dim,AnansiLinkMap-method}
+\alias{show,AnansiLinkMap-method}
 \alias{subset,AnansiLinkMap-method}
 \title{S4 Methods for AnansiLinkMap}
 \usage{
-\S4method{names}{AnansiLinkMap}(x)
+\S4method{getEdgeList}{AnansiLinkMap}(x)
 
-\S4method{dim}{AnansiLinkMap}(x)
+\S4method{names}{AnansiLinkMap}(x)
 
 \S4method{dimnames}{AnansiLinkMap}(x)
 
-\S4method{colnames}{AnansiLinkMap}(x)
-
-\S4method{rownames}{AnansiLinkMap}(x)
+\S4method{dim}{AnansiLinkMap}(x)
 
 \S4method{show}{AnansiLinkMap}(object)
-
-\S4method{getEdgeList}{AnansiLinkMap}(x)
 
 \S4method{subset}{AnansiLinkMap}(x, subset, select, ...)
 }
@@ -50,19 +44,15 @@ found as column names.}
 \description{
 a set of methods to work with \code{anansiLinkWeb}, a special type of list.
 
-\code{names}: Display a list of column names from AnansiLinkMap
+\code{getEdgeList}: Return a data frame in edge list format.
 
-\code{dim}: Display a vector of dims (n objects, n ids).
+\code{names}: Display a list of column names from AnansiLinkMap
 
 \code{dimnames}: Display a vector of id names.
 
-\code{colnames}: Display a vector of id names.
-
-\code{rownames}: Display a vector of link df names.
+\code{dim}: Display a vector of dims (n objects, n ids).
 
 \code{show}: Display the object
-
-\code{getEdgeList}: Return a data frame in edge list format.
 }
 \details{
 \code{subset}: For \verb{AnansiLinkMap objects}, sub-setting is only applied
