@@ -148,29 +148,8 @@ setMethod("subset", "AnansiLinkMap", function(x, subset, select, ...) {
   return(x)
 })
 
-################################################################################
-################################################################################
 
-#' @noRd
-#' @description not intended for direct use.
-#' @param id feature name, one of `colnames(x)`.
-#' @param x `AnansiLinkWeb`
-#'
-lv_list_char <- function(id, x)
-  sort(unique(unlist(lapply(x, function(y)
-    unique(as.character(y[[id]]))), recursive = FALSE, use.names = FALSE)))
-
-#' @noRd
-#' @description not intended for direct use.
-#' @param id feature name, one of `colnames(x)`.
-#' @param x `AnansiLinkWeb`
-#'
-lv_list_factor <- function(id, x)
-  unique(unlist(lapply(x, function(y)
-    unique(levels(y[[id]]))), recursive = FALSE, use.names = FALSE))
-
-#' Is this a data.frame with exactly two columns that are named?
+#' Is this a data.frame with at least two columns, that all are named?
 #' @noRd
 validLinkDF <- function(x) is.data.frame(x) &&
-  NCOL(x) == 2L &&
-  length(colnames(x)) == 2L
+  NCOL(x) >= 2L && length(colnames(x)) == NCOL(x)
