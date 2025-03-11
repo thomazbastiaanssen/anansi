@@ -10,15 +10,16 @@
 #'     \item [randomAnansi], [kegg_link()]: Generate example input
 #'     \item [AnansiWeb-methods], [AnansiLinkMap-methods]: Handle and manipulate
 #'     input
+#'     \item [coerceAnansi]: Coersion methods including to `list` and
+#'     `MultiAssayExperiment`.
 #'     }
 #'
 #' ## 2. Output and cross-compatibility
 #' \itemize{
-#'     \item [`getAnansi()`]: Compatibility with [mia]([mia::mia]) and
-#'     [MultiAssayExperiment]([MultiAssayExperiment::MultiAssayExperiment])
-#'     \item [`getGraph()`]: Compatibility with [igraph]([igraph::igraph])
-#'     \item [`plotAnansi()`]: Plot output in the style of
-#'     [miaViz]([miaViz::miaViz])
+#'     \item [`getAnansi()`]: Compatibility with [mia::mia] and
+#'     [MultiAssayExperiment::MultiAssayExperiment]
+#'     \item [`getGraph()`]: Compatibility with [igraph::igraph]
+#'     \item [`plotAnansi()`]: Plot output in the style of [miaViz::miaViz]
 #'     }
 #'
 #' ## 3. Vignettes

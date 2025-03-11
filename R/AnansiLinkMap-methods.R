@@ -5,27 +5,6 @@
 #'
 NULL
 
-#' S4 Methods for AnansiLinkMap
-#' @description `names`: Display a list of column names from AnansiLinkMap
-#' @rdname AnansiLinkMap-methods
-#' @export
-#'
-setMethod("names", "AnansiLinkMap", function(x) lapply(x, names) )
-
-#' S4 Methods for AnansiLinkMap
-#' @description `show`: Display the object
-#' @importFrom methods show
-#' @inheritParams methods::show
-#' @rdname AnansiLinkMap-methods
-#' @export
-#'
-setMethod("show",  "AnansiLinkMap", function(object) {
-    cat("An object of class ", class(object), ":\n", sep = "")
-    show(lapply(object,
-                function(x) (apply(x, 2, function(y) length(unique(y)))))
-         )
-    invisible(NULL)
-})
 
 #' S4 Methods for AnansiLinkMap
 #' @description
@@ -35,6 +14,80 @@ setMethod("show",  "AnansiLinkMap", function(object) {
 #'
 setMethod("getEdgeList", "AnansiLinkMap",
           function(x) as.data.frame(do.call(rbind, names(x))))
+
+#' S3/S4 combo for levels.AnansiLinkMap
+#' @description
+#' following [S4Vectors:levels.Rle()]
+#' @rdname AnansiLinkMap
+#'
+levels.AnansiLinkMap <- function(x) lapply(colnames(x), lv_list_char, x)
+setMethod("levels", "AnansiLinkMap", levels.AnansiLinkMap)
+
+setReplaceMethod("levels", "AnansiLinkMap",
+                 function(x, value) {
+                   levels(x@values) <- value
+                   validObject(x)
+                   x   } )
+#' S4 Methods for AnansiLink
+#' Map
+#' @description `names`: Display a list of column names from AnansiLinkMap
+#' @rdname AnansiLinkMap-methods
+#' @export
+#'
+setMethod("names", "AnansiLinkMap", function(x) lapply(x, names) )
+
+#' S4 Methods for AnansiLinkMap
+#' @description `dimnames`: Display a vector of id names.
+#' @rdname AnansiLinkMap-methods
+#' @export
+#'
+setMethod("dimnames", "AnansiLinkMap", function(x)
+  list(
+    names(names(x)),
+    unique(unlist(names(x), use.names = FALSE))
+  )
+)
+
+#' S4 Methods for AnansiLinkMap
+#' @description `dim`: Display a vector of dims (n objects, n ids).
+#' @rdname AnansiLinkMap-methods
+#' @export
+#'
+setMethod("dim", "AnansiLinkMap", function(x)
+  c(length(x),length(unique(unlist(names(x), use.names = FALSE))))
+  )
+
+#' S4 Methods for AnansiLinkMap
+#' @description `show`: Display the object
+#' @importFrom methods show
+#' @importFrom Matrix sparseMatrix printSpMatrix
+#' @inheritParams methods::show
+#' @rdname AnansiLinkMap-methods
+#' @export
+#'
+setMethod("show",  "AnansiLinkMap", function(object) {
+    cat("A list of class ", class(object), ",\n    ",
+        NCOL(object), " feature types across ", NROW(object), " edge lists.\n\n", sep = "")
+    c.n <- colnames(object)
+    lv_lst <- lapply(c.n, lv_list_char, x = object)
+
+  i <- factor(rep(rownames(object), each = 2))
+  j <- factor(unlist(names(object), use.names = FALSE))
+  x <- unlist(
+    lapply(object, function(x)
+      lapply(x, function(y)
+        length(unique(y))
+        )), use.names = FALSE)
+ sm <- sparseMatrix(
+   i = i,
+   j = j,
+   x = x,
+   dimnames = dimnames(object))
+ printSpMatrix(sm)
+
+ cat("\nValues represent unique feature names in that edge list.")
+ invisible(NULL)
+})
 
 
 #' S4 Methods for AnansiLinkMap
@@ -95,11 +148,8 @@ setMethod("subset", "AnansiLinkMap", function(x, subset, select, ...) {
   return(x)
 })
 
-################################################################################
-################################################################################
 
-#' Is this a data.frame with exactly two columns that are named?
+#' Is this a data.frame with at least two columns, that all are named?
 #' @noRd
 validLinkDF <- function(x) is.data.frame(x) &&
-  NCOL(x) == 2L &&
-  length(colnames(x)) == 2L
+  NCOL(x) >= 2L && length(colnames(x)) == NCOL(x)

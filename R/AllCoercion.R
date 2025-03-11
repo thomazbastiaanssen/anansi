@@ -1,7 +1,7 @@
 #' Coercion methods for AnansiWeb
 #' @description
 #' Coerce AnansiWeb to and from other object types.
-#' @name coerce
+#' @name coerceAnansi
 #' @examples
 #' #Create a random web
 #' web <- randomWeb()
@@ -14,13 +14,14 @@
 #'
 NULL
 
-#' @rdname coerce
+#' @rdname coerceAnansi
+#' @aliases as.list.AnansiWeb
 #' @inheritParams base::as.list
 #' @export
 #'
 setMethod("as.list", c(x = "AnansiWeb"), function(x, ...) as(x, "list"))
 
-#' @rdname coerce
+#' @rdname coerceAnansi
 #' @aliases as.MAE as.MultiAssayExperiment asMultiAssayExperiment
 #' @export
 #'

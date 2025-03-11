@@ -21,6 +21,9 @@
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/FMT_metadata.html</loc></url>
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/KO_member_dic.html</loc></url>
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/KO_translation.html</loc></url>
+<url><loc>https://thomazbastiaanssen.github.io/anansi/reference/MultiFactor-class.html</loc></url>
+<url><loc>https://thomazbastiaanssen.github.io/anansi/reference/MultiFactor-methods.html</loc></url>
+<url><loc>https://thomazbastiaanssen.github.io/anansi/reference/MultiFactor.html</loc></url>
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/anansi.html</loc></url>
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/anansi.p.adjust.html</loc></url>
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/anansiCor.html</loc></url>
@@ -42,6 +45,7 @@
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/clr_imputed.html</loc></url>
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/clr_lite.html</loc></url>
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/coerce.html</loc></url>
+<url><loc>https://thomazbastiaanssen.github.io/anansi/reference/coerceAnansi.html</loc></url>
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/cpd_translation.html</loc></url>
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/deliver_web_cases.html</loc></url>
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/dimnames,anansiWeb-method.html</loc></url>
@@ -58,6 +62,7 @@
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/is.categorical.html</loc></url>
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/kegg_link.html</loc></url>
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/kegg_web.html</loc></url>
+<url><loc>https://thomazbastiaanssen.github.io/anansi/reference/levels-MultiFactor-method.html</loc></url>
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/makeAdjacencyMatrix.html</loc></url>
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/makeAdjacencyMatrixFromGroupMemberList.html</loc></url>
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/makeAdjacencyMatrixFromList.html</loc></url>
@@ -67,10 +72,10 @@
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/named_term_list.html</loc></url>
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/names,anansiLinkMap-method.html</loc></url>
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/names,anansiWeb-method.html</loc></url>
+<url><loc>https://thomazbastiaanssen.github.io/anansi/reference/nlevels-MultiFactor-method.html</loc></url>
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/plotAnansi.html</loc></url>
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/prune_dictionary_for_exclusivity.html</loc></url>
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/randomAnansi.html</loc></url>
-<url><loc>https://thomazbastiaanssen.github.io/anansi/reference/randomLinkMap.html</loc></url>
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/randomWebDic.html</loc></url>
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/randomWebTab.html</loc></url>
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/show,anansiLinkMap-method.html</loc></url>
