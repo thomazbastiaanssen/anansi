@@ -134,24 +134,49 @@ setMethod("dimnames", "MultiFactor", function(x)
 #'
 setMethod("show",  "MultiFactor", function(object) {
     cat("A list of class ", class(object), ",\n    ",
-        NCOL(object), " feature types across ", NROW(object), " edge lists.\n\n", sep = "")
-     printSpMatrix(object@map)
+        NCOL(object), " feature types across ", NROW(object),
+        " edge lists.\n\n", sep = "")
+     printSpMatrix( object@map )
 
-    cat("\nValues represent unique feature names in that edge list.")
+     cat("\nValues represent unique feature names in that edge list.\n\n",
+         "Levels:\n\n", sep = ''
+     )
+     id_w <- max(nchar(colnames(object)))
+     nm_w <- max(nchar(nlevels(object)))
+     for(id in colnames(object)) {
+         num_lvs <- length(levels(object)[[id]])
+         cat(format(id, width = id_w), " : ",
+             format(num_lvs, width = nm_w), " Levels: ", sep = "" )
+
+         if(num_lvs > 4L)
+             cat(
+                 levels(object)[[id]][1], levels(object)[[id]][2], "...",
+                 levels(object)[[id]][num_lvs], "\n",sep = " "
+                 ) else
+                     cat(levels(object)[[id]], "\n", sep = " ")
+
+     }
     invisible(NULL)
 })
 
 
 
 #' Levels Attributes
+#' @export
 #' @description `levels` provides access to the levels attribute of a variable.
 #' @returns a named list of character vectors.
 #' @seealso [base:levels()]
 #'
 setMethod("levels",  "MultiFactor", definition = function(x) {x@levels} )
-#nlevels
-#relevel
 
+#' Levels Attributes
+#' @export
+#' @description `nlevels` provides access to the levels attribute of a variable.
+#' @returns a named vector with the lenghts of the levels.
+#' @seealso [base:nlevels()]
+#'
+setMethod("nlevels",  "MultiFactor", definition = function(x) {
+    vapply(x@levels, length, 1)} )
 
 #' Make an MultiFactor
 #' @name MultiFactor

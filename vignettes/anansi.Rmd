@@ -224,6 +224,7 @@ function `asMAE`.
 
 ```{r}
 #| bioc1, eval=TRUE
+library(MultiAssayExperiment)
 
 # Store sample metadata into metadata slot of web object
 web@metadata <- DataFrame(FMT_metadata, row.names = FMT_metadata$Sample_ID)
@@ -240,7 +241,6 @@ output as `anansi`.
 ```{r}
 #| bioc2, eval=TRUE
 
-# 
 out <- getAnansi(mae,
     tableY = "cpd", tableX = "ko",
     formula = ~ Legend,
@@ -253,12 +253,12 @@ Finally, the output of anansi can be visualised with `plotAnansi` by specifying
 the type of association to use.
 
 ```{r}
-#| bioc2, eval=TRUE, fig.width = 10, fig.height = 8
+#| bioc3, eval=TRUE, fig.width = 10, fig.height = 8
 
 # Filter associations by q value
 out <- out[out$full_q.values < 0.2, ]
 
-# Visualise disjointed associations
+# Visualize disjointed associations
 plotAnansi(out,
            association.type = "disjointed",
            model.var = "Legend",
