@@ -82,7 +82,8 @@ weaveWeb <- function(x, ...) UseMethod("weaveWeb")
 #' @order 2
 #' @export
 #'
-weaveWeb.default <- function(x, y, link = NULL, tableX = NULL, tableY = NULL, ...){
+weaveWeb.default <- function(x, y, link = NULL, tableX = NULL, tableY = NULL,
+                             metadata = NULL, ...){
   terms <- c(x, y)
   stopifnot("both 'x' and 'y' terms must be provided as character" =
               is(terms, "character") && length(terms) == 2L)
