@@ -113,14 +113,14 @@ weaveWeb.default <- function(x, y, link = NULL, tableX = NULL, tableY = NULL,
           tableX     = matrix(ncol = NCOL(d),
                               dimnames = list(NULL, colnames(d))),
           dictionary = d,
-          metadata   = DataFrame(metadata))
+          metadata   = metadata)
     ) else
       return(
         AnansiWeb(
             tableY     = as.matrix(tableY)[,rownames(d)],
             tableX     = as.matrix(tableX)[,colnames(d)],
             dictionary = d,
-            metadata   = DataFrame(metadata))
+            metadata   = metadata)
         )
 }
 
@@ -151,12 +151,12 @@ weaveWeb.formula <- function(
 #' @rdname AnansiWeb
 #' @param dictionary A binary adjacency matrix of class `Matrix`, or
 #' coercible to `Matrix`
-#' @param metadata `DataFrame`, or coerible to `DataFrame`. Optional.
+#' @param metadata `list` of metadata. Optional.
 #' @importFrom Matrix Matrix drop0
 #' @importFrom S4Vectors DataFrame
 #' @export
 #'
-AnansiWeb <- function(tableX, tableY, dictionary, metadata = NULL, ...) {
+AnansiWeb <- function(tableX, tableY, dictionary, metadata = list(), ...) {
   # coerce
   if(!is(dictionary, "Matrix")) dictionary <-
       drop0(Matrix(dictionary, sparse = TRUE))
@@ -176,12 +176,14 @@ AnansiWeb <- function(tableX, tableY, dictionary, metadata = NULL, ...) {
        names(dimnames(dictionary)) <- c("y", "x")
     }
 
+  if(!inherits(metadata, "list")) metadata <-
+    list(metadata = as.data.frame(metadata))
   # return AnansiWeb
   new("AnansiWeb",
         tableY     = tableY,
         tableX     = tableX,
         dictionary = dictionary,
-        metadata   = DataFrame(metadata))
+        metadata   = metadata)
     }
 
 #' @rdname AnansiWeb
@@ -297,6 +299,6 @@ web_missing_link <- function(tableX, tableY, x, y, metadata = NULL) {
       tableY     = as.matrix(tableY)[,rownames(d)],
       tableX     = as.matrix(tableX)[,colnames(d)],
       dictionary = d,
-      metadata = DataFrame(metadata))
+      metadata = metadata)
 
 }

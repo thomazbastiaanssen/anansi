@@ -4,7 +4,7 @@
 \alias{randomAnansi}
 \alias{randomWeb}
 \alias{randomLinkMap}
-\title{Generate a random AnansiWeb or AnansiLinkMap}
+\title{Generate a random AnansiWeb or MultiFactor}
 \usage{
 randomWeb(
   n_samples = 10,
@@ -41,7 +41,7 @@ coercible to \code{Matrix}.}
 a randomly generated object of the specified class.
 }
 \description{
-Randomly generate a valid \code{AnansiWeb} or \code{AnansiLinkMap} object.
+Randomly generate a valid \code{AnansiWeb} or \code{MultiFactor} object.
 }
 \examples{
 # Make a random AnansiWeb object
@@ -49,5 +49,5 @@ randomWeb()
 randomLinkMap()
 }
 \seealso{
-\code{\link[=AnansiWeb]{AnansiWeb()}}, \code{\link[=AnansiLinkMap]{AnansiLinkMap()}}
+\code{\link[=AnansiWeb]{AnansiWeb()}}, \code{\link[=MultiFactor]{MultiFactor()}}
 }

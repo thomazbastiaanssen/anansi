@@ -4,6 +4,7 @@
 \alias{AnansiWeb-methods}
 \alias{$,AnansiWeb-method}
 \alias{$<-,AnansiWeb-method}
+\alias{metadata<-,AnansiWeb-method}
 \alias{show,AnansiWeb-method}
 \alias{dimnames,AnansiWeb-method}
 \alias{dim,AnansiWeb-method}
@@ -13,6 +14,8 @@
 \S4method{$}{AnansiWeb}(x, name)
 
 \S4method{$}{AnansiWeb}(x, name) <- value
+
+\S4method{metadata}{AnansiWeb}(x, ..., simplify = TRUE) <- value
 
 \S4method{show}{AnansiWeb}(object)
 

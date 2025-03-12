@@ -75,11 +75,14 @@ setMethod("getWeb", signature = c(x = "MultiAssayExperiment"), function(
         d <- link
     if(d %in% names(m))
         return(AnansiWeb(tableX = tX, tableY = tY, dictionary = m[[d]],
-                         metadata = colData(x), ...) )
+                         metadata = list(metadata = as.data.frame(colData(x))),
+                         ...) )
     }
     # Generate web object
     weaveWeb.default(x = x_id, y = y_id, link = link,
-                     tableX = tX, tableY = tY, metadata = colData(x), ...)
+                     tableX = tX, tableY = tY,
+                     metadata = list(metadata = as.data.frame(colData(x))),
+                     ...)
     }
 )
 

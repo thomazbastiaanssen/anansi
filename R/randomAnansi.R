@@ -1,7 +1,7 @@
-#' Generate a random AnansiWeb or AnansiLinkMap
+#' Generate a random AnansiWeb or MultiFactor
 #' @name randomAnansi
 #' @description
-#' Randomly generate a valid `AnansiWeb` or `AnansiLinkMap` object.
+#' Randomly generate a valid `AnansiWeb` or `MultiFactor` object.
 #' @param n_samples `Numeric scalar` Number of samples to be generated.
 #' @param n_features_y,n_features_x `Numeric scalar` Number of features to be
 #'     generated.
@@ -15,7 +15,7 @@
 #' # Make a random AnansiWeb object
 #' randomWeb()
 #' randomLinkMap()
-#' @seealso [AnansiWeb()], [AnansiLinkMap()]
+#' @seealso [AnansiWeb()], [MultiFactor()]
 #'
 NULL
 
@@ -122,7 +122,7 @@ randomWebTab <- function(n_samp = 10, dictionary, metadata) {
     metadata <- randomWebMetadata(tableY)
     # return AnansiWeb
     AnansiWeb( tableY = tableY, tableX = tableX,
-               dictionary = dictionary, metadata = metadata)
+               dictionary = dictionary, metadata = list(metadata = metadata))
 }
 
 #' Generate a random AnansiWeb, only missing dictionary.
@@ -144,7 +144,7 @@ randomWebDic <- function(tableY, tableX, density, metadata) {
     metadata <- randomWebMetadata(tableY)
     # return AnansiWeb
     AnansiWeb( tableY = tableY, tableX = tableX,
-               dictionary = dictionary, metadata = metadata)
+               dictionary = dictionary, metadata = list(metadata = metadata))
 }
 
 #' Generate random metadata for AnansiWeb
@@ -156,7 +156,7 @@ randomWebDic <- function(tableY, tableX, density, metadata) {
 #'
 randomWebMetadata <- function(table){
     n_samples <- NROW(table)
-    m <- DataFrame(
+    m <- data.frame(
         cat_ab  = sample(c("a", "b"), n_samples, replace = TRUE),
         cat_XYZ = sample(c("X", "Y", "Z"), n_samples, replace = TRUE),
         num_norm  = rnorm(n_samples),
@@ -166,7 +166,7 @@ randomWebMetadata <- function(table){
     return(m)
 }
 
-#' Make a single df for a random AnansiLinkMap
+#' Make a single df for a random MultiFactor
 #' @rdname randomAnansi
 #' @description called by `randomLinkMap`, shouldn't be called by user.
 #' @param l,r character vector of left, right features

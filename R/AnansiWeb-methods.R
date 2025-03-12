@@ -44,6 +44,41 @@ setReplaceMethod("$", "AnansiWeb", def = function(x, name, value) {
   return(x)}
  )
 
+
+#' @export
+#' @importClassesFrom S4Vectors Annotated
+#' @inheritParams S4Vectors::metadata
+#' @importFrom methods slot
+#'
+setMethod("metadata", signature = c(x = "AnansiWeb"),
+          definition = function(x, simplify = TRUE, ...) {
+            m <- x@metadata
+            if(simplify && "metadata" %in% names(m) ) return(m[["metadata"]])
+            return(m)
+          })
+
+#' @export
+#' @importFrom S4Vectors metadata<-
+#' @importFrom methods slot<-
+#' @rdname AnansiWeb-methods
+#'
+setReplaceMethod("metadata", "AnansiWeb", def = function(
+    x,  ..., simplify = TRUE, value
+) {
+  if(simplify && inherits(value, "data.frame")) {
+    x@metadata[["metadata"]] <- as.data.frame(value)
+    return(x)
+  }
+  if (!is.list(value))
+    stop("replacement 'metadata' value must be a list")
+  if (!length(value))
+    names(value) <- NULL # instead of character()
+  x@metadata <- value
+  x
+})
+
+
+
 #' @description `show`: Display the object
 #' @importFrom methods show
 #' @inheritParams methods::show

@@ -227,7 +227,7 @@ function `asMAE`.
 library(MultiAssayExperiment)
 
 # Store sample metadata into metadata slot of web object
-web@metadata <- DataFrame(FMT_metadata, row.names = FMT_metadata$Sample_ID)
+web@metadata <- data.frame(FMT_metadata, row.names = FMT_metadata$Sample_ID)
 # Ensure that metadata rows match tableX rows
 web@metadata <- web@metadata[match(rownames(web@tableX), rownames(web@metadata)), ]
 

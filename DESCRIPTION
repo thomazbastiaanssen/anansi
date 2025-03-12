@@ -27,6 +27,7 @@ Imports:
     igraph,
     Matrix,
     future.apply,
+    forcats,
     SummarizedExperiment,
     MultiAssayExperiment, 
     BiocGenerics,

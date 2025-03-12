@@ -1,6 +1,6 @@
-#' Get a graph object out of an AnansiLinkMap.
+#' Get a graph object out of an MultiFactor.
 #' @rdname getGraph
-#' @param x `AnansiLinkMap`
+#' @param x `MultiFactor`
 #' @param format
 #' `Character scalar`, controls output format by package name.
 #' `"igraph"` and `"graph"` are supported.
@@ -22,7 +22,7 @@
 #' getGraph( ec2cpd, format = "igraph" )
 #'
 #'
-setMethod("getGraph", "AnansiLinkMap",
+setMethod("getGraph", "MultiFactor",
           function(x, format = "igraph", ...) {
             validObject(x)
 
