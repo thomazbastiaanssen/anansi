@@ -124,7 +124,7 @@ setReplaceMethod("levels", "MultiFactor",
 #' take link data frames.
 #' @examples
 #' # prep input
-#' l <- asLinkMap(kegg_link())
+#' l <- asMultiFactor(kegg_link())
 #'
 #' # Sub-setting is only performed on data frames that contain the arguments
 #' str(subset(x = l, cpd %in% c("C00001", "C00002")))

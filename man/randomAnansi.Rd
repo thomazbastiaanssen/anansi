@@ -3,7 +3,7 @@
 \name{randomAnansi}
 \alias{randomAnansi}
 \alias{randomWeb}
-\alias{randomLinkMap}
+\alias{randomMultiFactor}
 \title{Generate a random AnansiWeb or MultiFactor}
 \usage{
 randomWeb(
@@ -16,7 +16,7 @@ randomWeb(
   dictionary = NULL
 )
 
-randomLinkMap(n_types = 6, n_features = 100, sparseness = 0.5)
+randomMultiFactor(n_types = 6, n_features = 100, sparseness = 0.5)
 }
 \arguments{
 \item{n_samples}{\verb{Numeric scalar} Number of samples to be generated.}
@@ -46,7 +46,7 @@ Randomly generate a valid \code{AnansiWeb} or \code{MultiFactor} object.
 \examples{
 # Make a random AnansiWeb object
 randomWeb()
-randomLinkMap()
+randomMultiFactor()
 }
 \seealso{
 \code{\link[=AnansiWeb]{AnansiWeb()}}, \code{\link[=MultiFactor]{MultiFactor()}}
