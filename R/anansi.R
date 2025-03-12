@@ -183,8 +183,10 @@ anansi <- function(web, formula, groups = NULL, metadata = NULL,
 #' @noRd
 #'
 prepInput <- function(web, formula, groups, metadata, verbose) {
-  # If no metadata argument, try web slot
-  if(is.null(metadata)) metadata <- as.data.frame.DataFrame(web@metadata)
+  # If no metadata argument try web slot. If list select one named "metadata".
+  if(is.null(metadata)) metadata <- metadata(web, simplify = FALSE)
+  if(!is.data.frame(metadata)) metadata <- metadata[["metadata"]]
+
   stopifnot("No metadata argument provided or found in AnansiWeb" =
               prod(dim(metadata)) > 0 )
   raw_terms <- terms.formula(formula, "Error", data = metadata)
@@ -204,17 +206,17 @@ prepInput <- function(web, formula, groups, metadata, verbose) {
   } else {
     deparse1(attr(raw_terms, "variables")[[1L + indErr]][[2L]], backtick = TRUE)
   }
-    input <- list(
-      web = web,
-      lm.formula = sat_model,
-      error.term = error.term,
-      int.terms = all_terms,
-      groups = groups[[1]],
-      n.grps = groups[[2]],
-      group.id = c("All",unique(apply(metadata[,groups[[1]], drop = FALSE],
-                                       1, paste, collapse = "_"))),
-      metadata = `row.names<-.data.frame`(metadata, NULL)
-    )
+  input <- list(
+    web = web,
+    lm.formula = sat_model,
+    error.term = error.term,
+    int.terms = all_terms,
+    groups = groups[[1]],
+    n.grps = groups[[2]],
+    group.id = c("All",unique(apply(metadata[,groups[[1]], drop = FALSE],
+                                    1, paste, collapse = "_"))),
+    metadata = `row.names<-.data.frame`(metadata, NULL)
+  )
 
   return(input)
 }

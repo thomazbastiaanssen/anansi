@@ -58,11 +58,11 @@ q-values for all operations.
 The anansi package package provides tools to prepare and facilitate
 integrative association analysis between the features of two data sets that
 are known to interact.
-\subsection{1. Input for \code{anansi()} with \code{\link[=AnansiWeb]{AnansiWeb()}} and \code{\link[=AnansiLinkMap]{AnansiLinkMap()}}}{
+\subsection{1. Input for \code{anansi()} with \code{\link[=AnansiWeb]{AnansiWeb()}} and \code{\link[=MultiFactor]{MultiFactor()}}}{
 
 \itemize{
 \item \link{randomAnansi}, \code{\link[=kegg_link]{kegg_link()}}: Generate example input
-\item \link{AnansiWeb-methods}, \link{AnansiLinkMap-methods}: Handle and manipulate
+\item \link{AnansiWeb-methods}, \link{MultiFactor-methods}: Handle and manipulate
 input
 \item \link{coerceAnansi}: Coersion methods including to \code{list} and
 \code{MultiAssayExperiment}.

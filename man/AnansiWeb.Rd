@@ -10,9 +10,9 @@
 \usage{
 \method{weaveWeb}{formula}(formula, link = NULL, tableX = NULL, tableY = NULL, ...)
 
-\method{weaveWeb}{default}(x, y, link = NULL, tableX = NULL, tableY = NULL, ...)
+\method{weaveWeb}{default}(x, y, link = NULL, tableX = NULL, tableY = NULL, metadata = NULL, ...)
 
-AnansiWeb(tableX, tableY, dictionary, metadata = NULL, ...)
+AnansiWeb(tableX, tableY, dictionary, metadata = list(), ...)
 
 weaveKEGG(x, ...)
 }
@@ -37,10 +37,10 @@ and \code{y} arguments.}
 samples and columns should be features. Y and X refer to the position of
 the features in a formula: Y ~ X.}
 
+\item{metadata}{\code{list} of metadata. Optional.}
+
 \item{dictionary}{A binary adjacency matrix of class \code{Matrix}, or
 coercible to \code{Matrix}}
-
-\item{metadata}{\code{DataFrame}, or coerible to \code{DataFrame}. Optional.}
 }
 \value{
 an \code{AnansiWeb} object, with sparse binary biadjacency matrix

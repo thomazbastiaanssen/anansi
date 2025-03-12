@@ -31,8 +31,8 @@ asMAE <- function(x) as(x, "MultiAssayExperiment")
 #' @export
 #'
 setAs(from = "AnansiWeb", to = "list", def = function(from) {
-    out <- list(tableY = from@tableY, tableX = from@tableX,
-                dictionary = from@dictionary, metadata = from@metadata)
+    out <- c(list(tableY = from@tableY, tableX = from@tableX,
+                dictionary = from@dictionary), from@metadata)
     names(out)[c(1L, 2L)] <- names(from)
     out
 })
@@ -53,7 +53,7 @@ setAs(from = "AnansiWeb", to = "MultiAssayExperiment", def = function(from) {
     names(to_exp) <- names(from)
 
     to_md  <- list(dictionary = from@dictionary)
-    to_cd  <- from@metadata
+    to_cd  <- metadata(from, simplify = TRUE)
 
     MultiAssayExperiment(
         experiments = to_exp,

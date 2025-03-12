@@ -1,7 +1,7 @@
 test_that("getAnansi", {
   # Combine experiments into MultiAssayExperiment object
   web <- randomWeb(n_samples = 15)
-  web$metadata$cat_XYZ <- rep(c("X", "Y", "Z"), 5)
+  metadata(web)$cat_XYZ <- rep(c("X", "Y", "Z"), 5)
   mae <- as(web, "MultiAssayExperiment")
 
   expect_error(getAnansi(mae, tableY = "wrong_name"),

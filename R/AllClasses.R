@@ -11,7 +11,7 @@
 #' @slot dictionary `Matrix`, binary adjacency matrix. Optionally sparse.
 #'     Typically generated using the`weaveWeb()` function.
 #' @importClassesFrom Matrix Matrix
-#' @importClassesFrom S4Vectors DataFrame
+#' @importClassesFrom S4Vectors Annotated
 #' @seealso \itemize{
 #' \item [AnansiWeb()]: for general use.
 #' \item [AnansiWeb-methods()] for methods, including `$`
@@ -19,11 +19,12 @@
 #'}
 #'
 setClass("AnansiWeb",
+         contains = "Annotated",
          slots = c(
            tableY     = "matrix",
            tableX     = "matrix",
            dictionary = "Matrix",
-           metadata   = "DataFrame"
+           metadata   = "list"
          )
 )
 
@@ -43,36 +44,76 @@ setValidity("AnansiWeb", method = function(object) ifelse(
   no = "object is not in a valid format.")
 )
 
-#' AnansiLinkMap S4 container class
-#' @name AnansiLinkMap-class
+#' MultiFactor S4 container class
+#' @name MultiFactor-class
 #' @description
-#' `AnansiLinkMap` is an S4 class containing one or several data frames
+#' `MultiFactor` is an S4 class containing one or several data frames
 #' structured as edge lists from the `igraph` package.
 #' @export
 #' @seealso \itemize{
-#' \item [AnansiLinkMap()]: for general use.
-#' \item [AnansiLinkMap-methods()] for methods
+#' \item [MultiFactor()]: for general use.
+#' \item [MultiFactor-methods()] for methods
 #' \item [igraph::igraph()].
 #'}
 #'
-setClass("AnansiLinkMap",
-         contains = "list")
 
-#' is valid AnansiLinkMap?
+#' MultiFactor S4 container class
+#' @description
+#' `MultiFactor` is an S4 class to manage multiple sets of factors. Methods for
+#' `MultiFactor` aim to follow `factor` behaviour.
+#' @slot levels `Named list of character vectors`
+#' @slot map `(sparse)Matrix` specifying which elements contain which levels.
+#' @importClassesFrom Matrix Matrix
+#'
+#' @export
+setClass("MultiFactor",
+         contains = "list",
+         slots = c(levels  = "list",
+                   map     = "Matrix")
+)
+
+#' is valid MultiFactor?
 #' @noRd
 #' @description
-#' returns TRUE if input is in the right format to be an AnansiLinkMap object
+#' returns TRUE if input is in the right format to be an MultiFactor object
 #' @param object
 #' `any` object, but not much will happen unless the object's class has a
 #' formal definition.
 #' @importFrom methods validObject
 #' @returns `TRUE` if passes, character vector otherwise.
 #'
-setValidity("AnansiLinkMap", method = function(object) ifelse(
-    test = validLinkDF(object) || all(unlist(lapply(object, validLinkDF))),
-    yes = TRUE,
-    no = "object is not in a valid format.")
+setValidity("MultiFactor", method = function(object) ifelse(
+  test = validMultiFactor(object),
+  yes = TRUE,
+  no = "object is not in a valid format.")
 )
+
+
+#' Is this a data.frame with exactly two columns that are named?
+#' @noRd
+validMultiFactor <- function(x) {
+
+  levels_valid <- validLevels(x)
+  values_valid <- vapply(x, validIntLinkDF, NA, USE.NAMES = FALSE)
+  no_missing   <- ! any(vapply(x, anyNA, NA, USE.NAMES = FALSE))
+
+  if(!isTRUE(levels_valid))
+    message("Levels are not structured correctly. ")
+  if(!isTRUE(all(values_valid)))
+    message("List content in positions ",
+            paste(which(!isTRUE(values_valid)), collapse = ", "),
+            " not structured correctly. ")
+  if(!no_missing)
+    message("Missing values are not allowed.")
+
+  if(
+    all(levels_valid,
+        isTRUE(values_valid),
+        isTRUE(all(no_missing))
+    )
+  ) return( TRUE )
+
+}
 
 #' An S4 class to contain all `anansi` stats results so that they can
 #' easily be extracted.

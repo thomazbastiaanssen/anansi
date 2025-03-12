@@ -70,9 +70,9 @@ All variants are special cases of <code>weaveWeb()</code>.</p>
 <span><span class="fu">weaveWeb</span><span class="op">(</span><span class="va">formula</span>, link <span class="op">=</span> <span class="cn">NULL</span>, tableX <span class="op">=</span> <span class="cn">NULL</span>, tableY <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Default S3 method</span></span>
-<span><span class="fu">weaveWeb</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, link <span class="op">=</span> <span class="cn">NULL</span>, tableX <span class="op">=</span> <span class="cn">NULL</span>, tableY <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">weaveWeb</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, link <span class="op">=</span> <span class="cn">NULL</span>, tableX <span class="op">=</span> <span class="cn">NULL</span>, tableY <span class="op">=</span> <span class="cn">NULL</span>, metadata <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">AnansiWeb</span><span class="op">(</span><span class="va">tableX</span>, <span class="va">tableY</span>, <span class="va">dictionary</span>, metadata <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">AnansiWeb</span><span class="op">(</span><span class="va">tableX</span>, <span class="va">tableY</span>, <span class="va">dictionary</span>, metadata <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">weaveKEGG</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -109,13 +109,13 @@ samples and columns should be features. Y and X refer to the position of
 the features in a formula: Y ~ X.</p></dd>
 
 
+<dt id="arg-metadata">metadata<a class="anchor" aria-label="anchor" href="#arg-metadata"></a></dt>
+<dd><p><code>list</code> of metadata. Optional.</p></dd>
+
+
 <dt id="arg-dictionary">dictionary<a class="anchor" aria-label="anchor" href="#arg-dictionary"></a></dt>
 <dd><p>A binary adjacency matrix of class <code>Matrix</code>, or
 coercible to <code>Matrix</code></p></dd>
-
-
-<dt id="arg-metadata">metadata<a class="anchor" aria-label="anchor" href="#arg-metadata"></a></dt>
-<dd><p><code>DataFrame</code>, or coerible to <code>DataFrame</code>. Optional.</p></dd>
 
 </dl></div>
     <div class="section level2">
