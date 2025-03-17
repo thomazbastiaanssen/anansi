@@ -215,7 +215,7 @@ trad.web <- weaveWeb(y = "ec", x = "ko", link = kegg_link())
 identical(form.web, trad.web)
 
 # Get the biadjacency matrix using the $ operator
-head( form.web$dictionary,  c(10, 10) )
+head( dictionary(form.web),  c(10, 10) )
 ```
 Note that the majority of this matrix consists of dots, it's a sparse matrix, 
 which is a format that can considerably speed up calculations involving huge, 
@@ -247,10 +247,10 @@ called from an `AnansiWeb` object:
 
 ```{r names}
 # Note that the formula controls the order 
-names(dimnames( weaveWeb(ko~ec, link = kegg_link())$dictionary ))
+names( weaveWeb(ko~ec, link = kegg_link()) )
 
 # names() is short for the above
-names(weaveWeb(ec~ko, link = kegg_link()))
+names( weaveWeb(ec~ko, link = kegg_link()) )
 ```
 ## The pre-packaged kegg linking map
 We need to provide `weaveWeb()` with a map of which features are linked. We can 
@@ -275,25 +275,30 @@ packaged data set, this means we can link between any two of `ec`, `cpd` and
 
 ```{r web_formula}
 # Formula notation
-head( weaveWeb(cpd ~ ko, link = kegg_link())$dictionary, c(10, 10) )
+head( dictionary( weaveWeb(cpd ~ ko, link = kegg_link()) ) , c(10, 10) )
 
 # Character notation
-head( weaveWeb(y = "ko", x = "cpd", link = kegg_link())$dictionary, c(10, 10) )
+head( dictionary( weaveWeb(y = "ko", x = "cpd", link = kegg_link()) ), c(10, 10) )
 ```
 
 ## Use custom biadjacency matrices with AnansiWeb()
 The most flexible way to make an `AnansiWeb` object is through `AnansiWeb()`: 
 ```{r AnansiWeb}
 # Prep some dummy input tables
-  tX <- matrix(rnorm(30), nrow = 6)
-  tY <- matrix(rnorm(42), nrow = 6)
+  tX <- matrix(rnorm(30), 
+               nrow = 6, 
+               dimnames = list(NULL, x = paste("x", seq_len(5), sep = "_")))
+  tY <- matrix(rnorm(42), 
+               nrow = 6, 
+               dimnames = list(NULL, y = paste("y", seq_len(7), sep = "_")))
 
 # Prep biadjacency matrix    
 # base::matrix is fine too, but will get coerced to Matrix::Matrix.
   d <- matrix(
     data = sample(x = c(TRUE, FALSE), size = 35, replace = TRUE), 
     nrow = NCOL(tY), 
-    ncol = NCOL(tX)
+    ncol = NCOL(tX), 
+    dimnames = list(colnames(tY), colnames(tX))
     )
   
 # make the AnansiWeb

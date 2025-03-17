@@ -79,14 +79,6 @@ setMethod("show",  "MultiFactor", function(object) {
 })
 
 
-
-#' Levels Attributes
-#' @export
-#' @description `levels` provides access to the levels attribute of a variable.
-#' @seealso [base:levels()]
-#'
-setMethod("levels",  "MultiFactor", definition = function(x) x@levels )
-
 #' S3/S4 combo for levels.
 #' @export
 #' @description
@@ -99,7 +91,23 @@ setMethod("levels",  "MultiFactor", levels.MultiFactor)
 
 setReplaceMethod("levels", "MultiFactor",
                  function(x, value) {
-                   levels(x@values) <- value
+                   x@levels <- value
+                   validObject(x)
+                   x   } )
+
+
+#' @export
+#' @description
+#' get object map
+#' @param x `MultiFactor` object
+#' @returns a named sparse biadjacency matrix of dimensions (`dimnames(x)`)
+#' @rdname MultiFactormethods
+#'
+setMethod("dictionary",  "MultiFactor", function(x, ...) x@map)
+
+setReplaceMethod("dictionary", "MultiFactor",
+                 function(x, ..., value) {
+                   x@map <- value
                    validObject(x)
                    x   } )
 
@@ -161,3 +169,4 @@ setMethod("subset", "MultiFactor", function(x, subset, select, ...) {
     }
     return(x)
 })
+

@@ -58,7 +58,7 @@ setAs(from = "AnansiWeb", to = "MultiAssayExperiment", def = function(from) {
     MultiAssayExperiment(
         experiments = to_exp,
         metadata = to_md,
-        colData = to_cd
+        colData = DataFrame(to_cd)
     )
 })
 

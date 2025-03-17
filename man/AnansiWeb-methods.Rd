@@ -4,7 +4,16 @@
 \alias{AnansiWeb-methods}
 \alias{$,AnansiWeb-method}
 \alias{$<-,AnansiWeb-method}
+\alias{metadata,AnansiWeb-method}
 \alias{metadata<-,AnansiWeb-method}
+\alias{tableY,AnansiWeb-method}
+\alias{tableY}
+\alias{tableX,AnansiWeb-method}
+\alias{dictionary,AnansiWeb-method}
+\alias{tableY<-,AnansiWeb-method}
+\alias{`tableY<-`}
+\alias{tableX<-,AnansiWeb-method}
+\alias{dictionary<-,AnansiWeb-method}
 \alias{show,AnansiWeb-method}
 \alias{dimnames,AnansiWeb-method}
 \alias{dim,AnansiWeb-method}
@@ -15,7 +24,21 @@
 
 \S4method{$}{AnansiWeb}(x, name) <- value
 
+\S4method{metadata}{AnansiWeb}(x, simplify = TRUE, ...)
+
 \S4method{metadata}{AnansiWeb}(x, ..., simplify = TRUE) <- value
+
+\S4method{tableY}{AnansiWeb}(x, ...)
+
+\S4method{tableX}{AnansiWeb}(x, ...)
+
+\S4method{dictionary}{AnansiWeb}(x, ...)
+
+\S4method{tableY}{AnansiWeb}(x, ...) <- value
+
+\S4method{tableX}{AnansiWeb}(x, ...) <- value
+
+\S4method{dictionary}{AnansiWeb}(x, ...) <- value
 
 \S4method{show}{AnansiWeb}(object)
 
@@ -39,6 +62,9 @@
 
 \item{value}{typically an array-like \R object of a similar class as
     \code{x}.}
+
+\item{simplify}{\code{boolean}. If \code{TRUE} (Default), handles single data.frame
+arguments while ensuring compatibility with \code{S4Vectors} method.}
 }
 \value{
 a specified \code{AnansiWeb} object.

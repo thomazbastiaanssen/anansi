@@ -2,13 +2,23 @@
 % Please edit documentation in R/MultiFactor-methods.R
 \name{levels.MultiFactor}
 \alias{levels.MultiFactor}
+\alias{dictionary,MultiFactor-method}
 \title{S3/S4 combo for levels.}
 \usage{
-levels.MultiFactor(x)
+\method{levels}{MultiFactor}(x)
+
+\S4method{dictionary}{MultiFactor}(x, ...)
+}
+\arguments{
+\item{x}{\code{MultiFactor} object}
 }
 \value{
 a named list of character vectors.
+
+a named sparse biadjacency matrix of dimensions (\code{dimnames(x)})
 }
 \description{
 get object levels
+
+get object map
 }
