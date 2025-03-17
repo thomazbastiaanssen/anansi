@@ -7,6 +7,8 @@
 \alias{names,MultiFactor-method}
 \alias{dimnames,MultiFactor-method}
 \alias{show,MultiFactor-method}
+\alias{levels.MultiFactor}
+\alias{dictionary,MultiFactor-method}
 \alias{subset,MultiFactor-method}
 \title{S4 Methods for MultiFactor}
 \usage{
@@ -20,26 +22,33 @@
 
 \S4method{show}{MultiFactor}(object)
 
+\method{levels}{MultiFactor}(x)
+
+\S4method{dictionary}{MultiFactor}(x, ...)
+
 \S4method{subset}{MultiFactor}(x, subset, select, ...)
 }
 \arguments{
-\item{x}{
-    A vector-like, matrix-like or data-frame-like object to be subsetted.
-  }
+\item{x}{\code{MultiFactor} object}
 
 \item{object}{Any R object}
-
-\item{subset}{\verb{logical expression} indicating rows to keep. Must contain variables
-found as column names.}
-
-\item{select}{\code{expression}. Which column names to consider. If missing
-(Default), consider all column names.}
 
 \item{...}{
     Additional arguments (e.g. \code{subset}, \code{select}, \code{drop}),
     for use in specific methods. See \code{?base::\link[base]{subset}} for
     more information.
   }
+
+\item{subset}{\verb{logical expression} indicating rows to keep. Must contain variables
+found as column names.}
+
+\item{select}{\code{expression}. Which column names to consider. If missing
+(Default), consider all column names.}
+}
+\value{
+a named list of character vectors.
+
+a named sparse biadjacency matrix of dimensions (\code{dimnames(x)})
 }
 \description{
 a set of methods to work with \code{MultiFactor}, a special type of list.
@@ -53,6 +62,10 @@ a set of methods to work with \code{MultiFactor}, a special type of list.
 \code{dimnames}: Display a vector of dims (n objects, n ids).
 
 \code{show}: Display the object
+
+get object levels
+
+get object map
 }
 \details{
 \code{subset}: For \verb{MultiFactor objects}, sub-setting is only applied

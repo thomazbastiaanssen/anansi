@@ -10,6 +10,9 @@
 #'     character strings) that x might have taken. The default is the unique set
 #'     of values taken by lapply(x, as.character), sorted into increasing order
 #'     of x.
+#' @param drop.unmatched `Logical scalar` If `TRUE` (Default), for feature types
+#'     that are seen at least twice, exclude features that only present in one
+#'     of their respective link data frames.
 #' @export
 #' @seealso \itemize{
 #' \item [kegg_link()]: for an example of valid input.
@@ -19,8 +22,11 @@
 #' @examples
 #' MultiFactor( kegg_link( ) )
 #'
-MultiFactor <- function(x, levels) {
+MultiFactor <- function(x, levels = NULL, drop.unmatched = TRUE) {
   if(validLinkDF(x)) x <- list(x = x)
+
+  if(is(x, "MultiFactor") && is.null(levels)) levels <- levels(x)
+
   stopifnot( "Input not correctly formatted." =
                all( vapply(x, validLinkDF, NA, USE.NAMES = FALSE)))
 
@@ -28,18 +34,23 @@ MultiFactor <- function(x, levels) {
 
   if(all( vapply(x, validIntLinkDF, NA, USE.NAMES = FALSE))) {
     stopifnot(
-      "Input is integers, levels must be provided. " = !missing(levels)
+      "Input is integers, levels must be provided. " = !is.null(levels)
     )
   } else
     if(all( vapply(x, validFactLinkDF, NA, USE.NAMES = FALSE))) {
-      if(missing(levels)) levels <- factorInputMultiFactorLevels(x, m)
+      if(is.null(levels)) levels <- factorInputMultiFactorLevels(x, m)
       x <- listFactRefactor(x, m, levels)
       x <- lapply(x, factToIntDF)
     } else
       if(all( vapply(x, validCharLinkDF, NA, USE.NAMES = FALSE))) {
-        if(missing(levels)) levels <- generateMultiFactorLevels(x, m)
+        if(is.null(levels)) levels <- generateMultiFactorLevels(x, m)
         x <- listCharToIntegers(x, m, levels)
       }
+
+  if(drop.unmatched) {
+      x <- trimMultiFactor(x)
+      m <- mapMultiFactor(x)
+  }
 
   out <- new("MultiFactor", x, levels = levels, map = m)
 
@@ -51,10 +62,12 @@ MultiFactor <- function(x, levels) {
 #' @noRd
 #' @importFrom Matrix sparseMatrix
 #' @description
-#' helper function to make mapping matrix, internal use.
+#' Helper function that takes an MultiFactor and returns a sparse biadjacency
+#' Matrix with link df names as rownames and id names as colnames. Called
+#' internally to generate
 #' @param x a named list of data frames with named character columns.
-#' @returns a sparse matrix indicating which ids can be found in which data
-#'     frames.
+#' @returns a sparse biadjacency Matrix with link df names as rownames and id
+#'     names as colnames. Values count unique features in that position.
 #'
 mapMultiFactor <- function(x) {
   all_names <- lapply(x, names)
@@ -88,7 +101,7 @@ generateMultiFactorLevels <- function(x, m) {
     seq_along(lv_names),
     function(y) unique(
       unlist(
-        lapply(x[names(which(m[, y] != 0 ))],
+        lapply(x[which(m[, y] != 0L)],
                function(z) unique(z[[ lv_names[y] ]])),
         FALSE, FALSE)
     )
@@ -113,7 +126,7 @@ factorInputMultiFactorLevels <- function(x, m) {
     seq_along(lv_names),
     function(y) unique(
       unlist(
-        lapply(x[names(which(m[, y] != 0 ))],
+        lapply(x[which(m[, y] != 0 )],
                function(z) levels(z[[ lv_names[y] ]])),
         FALSE, FALSE)
     )
@@ -179,7 +192,7 @@ charToIntDF <- function(x, id, r) {
 #' @noRd
 #'
 factorToMF <- function(x, id, r) {
-  x[[id]] <- lvls_expand(x[[id]], r)
+  x[[id]] <- forcats::lvls_expand(x[[id]], r)
   return(x)
 }
 
@@ -244,26 +257,32 @@ validCharLinkDF <- function(x) validLinkDF(x) &&
 validFactLinkDF <- function(x) validLinkDF(x) &&
   all(vapply(x, is.factor, NA, USE.NAMES = FALSE))
 
-
-
 #' @rdname MultiFactor
 #' @export
 #'
 asMultiFactor <- MultiFactor
 
-#' @rdname MultiFactor
-#' @description
-#' Helper function that takes an MultiFactor and returns a sparse biadjacency
-#' Matrix with link df names as rownames and id names as colnames. Called
-#' internally.
-#' @returns a sparse biadjacency Matrix with link df names as rownames and id
-#'     names as colnames
-#' @importFrom Matrix sparseMatrix
+#' @noRd
+#' @param x a list in `MultiFactor` formatting.
+#' @description Called by `MultiFactor()` if `drop.unmatched` argument is `TRUE`.
+#'     Runs part of `subset` method.
+#' @returns a subsetted list with `MultiFactor`.formatting.
 #'
-linkMatrix <- function(x){
-  i <- factor(rep(rownames(x), each = 2))
-  j <- factor(unlist(names(x), use.names = FALSE))
-  sparseMatrix(i, j, dimnames = dimnames(x))
+trimMultiFactor <- function(x) {
+    # Determine positions of feature names that occur in several edge link dfs
+    x.names <- lapply(x, names)
+    id.vec   <- unlist(x.names, use.names = FALSE)
+    sel.vars <- id.vec[duplicated(id.vec)]
+    # Sequentially subset over feature names
+      for(v in sel.vars) {
+          # Select all those data frames where that term is mentioned
+          s.ind <- unlist(lapply(x.names, function(y) v %in% y ))
+          sel.obj <- x[s.ind]
+          keep    <- Reduce(intersect, lapply(sel.obj, function(df) df[,v]))
+          # Filter feature ids in each df to only universally shared ones.
+          x[s.ind] <-
+              lapply(sel.obj, function(df) return( df[df[[v]] %in% keep,] ))
+          levels(x)[[v]] <- levels(x)[[v]][keep]
+    }
+    return(x)
 }
-
-

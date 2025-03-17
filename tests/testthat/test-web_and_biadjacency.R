@@ -1,15 +1,15 @@
 test_that("kegg wrapper is equivalent", {
 
-  generic      <- weaveWeb(cpd ~ ko, link = list(ec2ko, ec2cpd))
-  kegg_wrapper <- weaveKEGG(cpd ~ ko)
+  web_g <- weaveWeb(cpd ~ ko, link = list(ec2ko = ec2ko, ec2cpd = ec2cpd))
+  web_k <- weaveKEGG(cpd ~ ko)
 
-  expect_identical(generic, kegg_wrapper)
+  expect_identical(web_g, web_k)
 })
 
 test_that("Swapping terms in formula is equivalent to transposition", {
 
-  a <- weaveWeb(ko ~ cpd, link = list(ec2ko, ec2cpd))$dictionary
-  b <- weaveWeb(cpd ~ ko, link = list(ec2ko, ec2cpd))$dictionary
+  a <- dictionary(weaveWeb(ko ~ cpd, link = kegg_link()))
+  b <- dictionary(weaveWeb(cpd ~ ko, link = kegg_link()))
 
   expect_identical(a, Matrix::t(b))
 })

@@ -3,14 +3,11 @@
 \name{MultiFactor}
 \alias{MultiFactor}
 \alias{asMultiFactor}
-\alias{linkMatrix}
 \title{Make aa MultiFactor}
 \usage{
-MultiFactor(x, levels)
+MultiFactor(x, levels = NULL, drop.unmatched = TRUE)
 
-asMultiFactor(x, levels)
-
-linkMatrix(x)
+asMultiFactor(x, levels = NULL, drop.unmatched = TRUE)
 }
 \arguments{
 \item{x}{\code{any} object, most likely \code{list} of data frames.}
@@ -19,18 +16,14 @@ linkMatrix(x)
 character strings) that x might have taken. The default is the unique set
 of values taken by lapply(x, as.character), sorted into increasing order
 of x.}
-}
-\value{
-a sparse biadjacency Matrix with link df names as rownames and id
-names as colnames
+
+\item{drop.unmatched}{\verb{Logical scalar} If \code{TRUE} (Default), for feature types
+that are seen at least twice, exclude features that only present in one
+of their respective link data frames.}
 }
 \description{
 Construct an \code{MultiFactor} object from a from a validly shaped data frame or
 list of such data frames.
-
-Helper function that takes an MultiFactor and returns a sparse biadjacency
-Matrix with link df names as rownames and id names as colnames. Called
-internally.
 }
 \examples{
 MultiFactor( kegg_link( ) )
