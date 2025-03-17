@@ -12,14 +12,15 @@ hold your input data throughout the \code{anansi} pipeline.
 \section{Slots}{
 
 \describe{
-\item{\code{tableY}}{\code{matrix} of metabolomics data. Rows are samples and columns
-are features.}
-
-\item{\code{tableX}}{\code{matrix} of functional data. Rows are samples and columns
-are features.}
+\item{\code{tableY,tableX}}{\code{matrix} of measurements, data. Rows are samples and
+columns are features. Access with \code{tableY()} and \code{tableX()}.}
 
 \item{\code{dictionary}}{\code{Matrix}, binary adjacency matrix. Optionally sparse.
-Typically generated using the\code{weaveWeb()} function.}
+Typically generated using the\code{weaveWeb()} function. Access with
+\code{dictionary()}.}
+
+\item{\code{metadata}}{Optional \code{data.frame} of sample metadata. Access with
+\code{metadata()}.}
 }}
 
 \seealso{

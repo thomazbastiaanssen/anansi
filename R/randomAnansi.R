@@ -14,7 +14,7 @@
 #' @examples
 #' # Make a random AnansiWeb object
 #' randomWeb()
-#' randomLinkMap()
+#' randomMultiFactor()
 #' @seealso [AnansiWeb()], [MultiFactor()]
 #'
 NULL
@@ -50,7 +50,7 @@ randomWeb <- function(n_samples = 10, n_features_x = 8, n_features_y = 12,
 #' @param sparseness `Numeric scalar`, proportion: How rare are connections
 #' @export
 #'
-randomLinkMap <- function(n_types = 6, n_features = 100,
+randomMultiFactor <- function(n_types = 6, n_features = 100,
                           sparseness = 0.5){
     stopifnot("'sparseness' must be a proportion [0-1]. " =
                   sparseness <= 1 && sparseness > 0)
@@ -68,7 +68,7 @@ randomLinkMap <- function(n_types = 6, n_features = 100,
                      r_id = ids[-1L][x],
                      p = (1-sparseness))})
     names(out) <- out_names
-    asLinkMap(out)
+    asMultiFactor(out)
 }
 
 
@@ -168,7 +168,7 @@ randomWebMetadata <- function(table){
 
 #' Make a single df for a random MultiFactor
 #' @rdname randomAnansi
-#' @description called by `randomLinkMap`, shouldn't be called by user.
+#' @description called by `randomMultiFactor`, shouldn't be called by user.
 #' @param l,r character vector of left, right features
 #' @param l_id,r_id character scalar of left, right feature names
 #' @param p proportion of connections to keep

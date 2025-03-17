@@ -7,6 +7,12 @@
 \alias{names,MultiFactor-method}
 \alias{dimnames,MultiFactor-method}
 \alias{show,MultiFactor-method}
+\alias{unfactor,MultiFactor-method}
+\alias{levels.MultiFactor}
+\alias{levels,MultiFactor-method}
+\alias{levels<-,MultiFactor-method}
+\alias{dictionary,MultiFactor-method}
+\alias{dictionary<-,MultiFactor-method}
 \alias{subset,MultiFactor-method}
 \title{S4 Methods for MultiFactor}
 \usage{
@@ -20,26 +26,43 @@
 
 \S4method{show}{MultiFactor}(object)
 
+\S4method{unfactor}{MultiFactor}(x)
+
+\method{levels}{MultiFactor}(x)
+
+\S4method{levels}{MultiFactor}(x)
+
+\S4method{levels}{MultiFactor}(x) <- value
+
+\S4method{dictionary}{MultiFactor}(x, ...)
+
+\S4method{dictionary}{MultiFactor}(x, ...) <- value
+
 \S4method{subset}{MultiFactor}(x, subset, select, ...)
 }
 \arguments{
-\item{x}{
-    A vector-like, matrix-like or data-frame-like object to be subsetted.
-  }
+\item{x}{\code{MultiFactor} object}
 
 \item{object}{Any R object}
+
+\item{value}{a replacement character vector of suitable dimensions.}
+
+\item{...}{
+    Optional metadata columns.
+  }
 
 \item{subset}{\verb{logical expression} indicating rows to keep. Must contain variables
 found as column names.}
 
 \item{select}{\code{expression}. Which column names to consider. If missing
 (Default), consider all column names.}
+}
+\value{
+A named character list
 
-\item{...}{
-    Additional arguments (e.g. \code{subset}, \code{select}, \code{drop}),
-    for use in specific methods. See \code{?base::\link[base]{subset}} for
-    more information.
-  }
+a named list of character vectors.
+
+a named sparse biadjacency matrix of dimensions (\code{dimnames(x)})
 }
 \description{
 a set of methods to work with \code{MultiFactor}, a special type of list.
@@ -53,6 +76,13 @@ a set of methods to work with \code{MultiFactor}, a special type of list.
 \code{dimnames}: Display a vector of dims (n objects, n ids).
 
 \code{show}: Display the object
+
+Analogous to \code{factors}. \code{unfactor(MultiFactor)} returns a named
+list with character data frames with same dimensions as input.
+
+get object levels
+
+get object map
 }
 \details{
 \code{subset}: For \verb{MultiFactor objects}, sub-setting is only applied
@@ -61,7 +91,7 @@ unaltered. Modeled after \code{subset()}.
 }
 \examples{
 # prep input
-l <- asLinkMap(kegg_link())
+l <- asMultiFactor(kegg_link())
 
 # Sub-setting is only performed on data frames that contain the arguments
 str(subset(x = l, cpd \%in\% c("C00001", "C00002")))

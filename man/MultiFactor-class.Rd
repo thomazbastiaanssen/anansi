@@ -5,18 +5,21 @@
 \alias{MultiFactor-class}
 \title{MultiFactor S4 container class}
 \description{
-\code{MultiFactor} is an S4 class containing one or several data frames
-structured as edge lists from the \code{igraph} package.
-
 \code{MultiFactor} is an S4 class to manage multiple sets of factors. Methods for
 \code{MultiFactor} aim to follow \code{factor} behaviour.
 }
 \section{Slots}{
 
 \describe{
-\item{\code{levels}}{\verb{Named list of character vectors}}
+\item{\code{.Data}}{Named \code{list} of named integer data frames of at least two columns
+each. The column names correspond to names in the \code{levels} slot. Similar
+to \code{factor}s, the integers in those columns correspond to the characters
+in that level. Accessed through regular list methods (e.g., \code{[}, \code{[[}).}
 
-\item{\code{map}}{\verb{(sparse)Matrix} specifying which elements contain which levels.}
+\item{\code{levels}}{\verb{Named list of character vectors}. Accessed through \code{levels(x)}}
+
+\item{\code{map}}{\verb{(sparse)Matrix} specifying which elements contain which levels.
+Accesses through \code{dictionary(x)}.}
 }}
 
 \seealso{
@@ -25,6 +28,4 @@ structured as edge lists from the \code{igraph} package.
 \item \code{\link[=MultiFactor-methods]{MultiFactor-methods()}} for methods
 \item \code{\link[igraph:aaa-igraph-package]{igraph::igraph()}}.
 }
-
-MultiFactor S4 container class
 }

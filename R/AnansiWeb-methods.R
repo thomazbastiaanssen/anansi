@@ -7,6 +7,7 @@
 #' `names( x )` is in turn shorthand for `names( dimnames(x) )`.
 #'
 #' @returns a specified `AnansiWeb` object.
+#' @param ... further arguments.
 #'
 #' @seealso \itemize{
 #' \item [AnansiWeb-class()].
@@ -48,6 +49,9 @@ setReplaceMethod("$", "AnansiWeb", def = function(x, name, value) {
 #' @export
 #' @importClassesFrom S4Vectors Annotated
 #' @inheritParams S4Vectors::metadata
+#' @param simplify `boolean`. If `TRUE` (Default), handles single data.frame
+#'     arguments while ensuring compatibility with `S4Vectors` method.
+#' @rdname AnansiWeb-methods
 #' @importFrom methods slot
 #'
 setMethod("metadata", signature = c(x = "AnansiWeb"),
@@ -63,8 +67,8 @@ setMethod("metadata", signature = c(x = "AnansiWeb"),
 #' @rdname AnansiWeb-methods
 #'
 setReplaceMethod("metadata", "AnansiWeb", def = function(
-    x,  ..., simplify = TRUE, value
-) {
+    x, ... , simplify = TRUE, value
+    ) {
   if(simplify && inherits(value, "data.frame")) {
     x@metadata[["metadata"]] <- as.data.frame(value)
     return(x)
@@ -74,10 +78,51 @@ setReplaceMethod("metadata", "AnansiWeb", def = function(
   if (!length(value))
     names(value) <- NULL # instead of character()
   x@metadata <- value
+  validObject(x)
   x
+
 })
 
+#' @rdname AnansiWeb-methods
+#' @aliases tableY
+#' @export
+#'
+setMethod("tableY", "AnansiWeb", def = function(x, ...) {x@tableY})
 
+#' @rdname AnansiWeb-methods
+#' @export
+#'
+setMethod("tableX", "AnansiWeb", function(x, ...) x@tableX)
+
+#' @rdname AnansiWeb-methods
+#' @export
+#'
+setMethod("dictionary", "AnansiWeb", function(x, ...) x@dictionary)
+
+#' @rdname AnansiWeb-methods
+#' @aliases `tableY<-`
+#' @importFrom methods slot<-
+#'
+setReplaceMethod("tableY", "AnansiWeb", def = function(x, ..., value) {
+    x@tableY  <- value
+    validObject(x)
+    x})
+
+#' @rdname AnansiWeb-methods
+#' @export
+#'
+setReplaceMethod("tableX", "AnansiWeb", def = function(x, ..., value) {
+    x@tableX <- value
+    validObject(x)
+    x})
+
+#' @rdname AnansiWeb-methods
+#' @export
+#'
+setReplaceMethod("dictionary", "AnansiWeb", def = function(x, ..., value) {
+    x@dictionary <- value
+    validObject(x)
+    x })
 
 #' @description `show`: Display the object
 #' @importFrom methods show

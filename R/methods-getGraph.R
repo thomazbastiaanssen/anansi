@@ -40,5 +40,7 @@ setMethod("getGraph", "MultiFactor",
 #' @rdname getGraph
 #'
 setMethod("getGraph", "list",
-          function(x, format = "igraph", ...) getGraph( asLinkMap(x), format)
+          function(
+        x, format = "igraph", ...) getGraph( asMultiFactor(x), format
+        )
 )

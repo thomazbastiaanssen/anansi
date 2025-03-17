@@ -43,7 +43,7 @@ MultiFactor aim to follow factor behaviour."></head><body>
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>MultiFactor S4 container class</h1>
-      <small class="dont-index">Source: <a href="https://github.com/thomazbastiaanssen/anansi/blob/HEAD/R/AllMultiFactor.R" class="external-link"><code>R/AllMultiFactor.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/thomazbastiaanssen/anansi/blob/HEAD/R/AllClasses.R" class="external-link"><code>R/AllClasses.R</code></a></small>
       <div class="d-none name"><code>MultiFactor-class.Rd</code></div>
     </div>
 
@@ -57,17 +57,34 @@ MultiFactor aim to follow factor behaviour."></head><body>
     <h2 id="slots">Slots<a class="anchor" aria-label="anchor" href="#slots"></a></h2>
 
 
-<dl><dt><code>levels</code></dt>
-<dd><p><code>Named list of character vectors</code></p></dd>
+<dl><dt><code>.Data</code></dt>
+<dd><p>Named <code>list</code> of named integer data frames of at least two columns
+each. The column names correspond to names in the <code>levels</code> slot. Similar
+to <code>factor</code>s, the integers in those columns correspond to the characters
+in that level. Accessed through regular list methods (e.g., <code>[</code>, <code>[[</code>).</p></dd>
+
+
+<dt><code>levels</code></dt>
+<dd><p><code>Named list of character vectors</code>. Accessed through <code>levels(x)</code></p></dd>
 
 
 <dt><code>map</code></dt>
-<dd><p><code>(sparse)Matrix</code> specifying which elements contain which levels.</p></dd>
+<dd><p><code>(sparse)Matrix</code> specifying which elements contain which levels.
+Accesses through <code>dictionary(x)</code>.</p></dd>
 
 
 </dl></div>
+    <div class="section level2">
+    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
+    <div class="dont-index">
+<ul><li><p><code><a href="MultiFactor.html">MultiFactor()</a></code>: for general use.</p></li>
+<li><p><code><a href="MultiFactor-methods.html">MultiFactor-methods()</a></code> for methods</p></li>
+<li><p><code><a href="https://r.igraph.org/reference/aaa-igraph-package.html" class="external-link">igraph::igraph()</a></code>.</p></li>
+</ul></div>
+    </div>
 
-  </main></div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">

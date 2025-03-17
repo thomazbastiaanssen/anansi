@@ -78,28 +78,61 @@ setMethod("show",  "MultiFactor", function(object) {
   invisible(NULL)
 })
 
-
-
-#' Levels Attributes
+#' @rdname MultiFactor-methods
+#' @description Analogous to `factors`. `unfactor(MultiFactor)` returns a named
+#'     list with character data frames with same dimensions as input.
+#' @importMethodsFrom S4Vectors unfactor
+#' @inheritParams S4Vectors::unfactor
+#' @returns A named character list
 #' @export
-#' @description `levels` provides access to the levels attribute of a variable.
-#' @seealso [base:levels()]
 #'
-setMethod("levels",  "MultiFactor", definition = function(x) x@levels )
+setMethod("unfactor", "MultiFactor", function(x) {
+  ns <- lapply(x, names)
+  lv <- levels(x)
+  x  <- lapply(x, function(id) as.data.frame.list(
+      lapply(names(id), function(y) lv[[y]] [ id[[y]] ] ),
+      col.names = names(id))
+      )
+  x
+})
 
 #' S3/S4 combo for levels.
 #' @export
 #' @description
 #' get object levels
 #' @returns a named list of character vectors.
-#' @rdname MultiFactormethods
+#' @rdname MultiFactor-methods
 #'
 levels.MultiFactor <- function(x) x@levels
+
+#' @export
+#' @rdname MultiFactor-methods
 setMethod("levels",  "MultiFactor", levels.MultiFactor)
 
+#' @export
+#' @rdname MultiFactor-methods
+#' @param value a replacement character vector of suitable dimensions.
+#'
 setReplaceMethod("levels", "MultiFactor",
                  function(x, value) {
-                   levels(x@values) <- value
+                   x@levels <- value
+                   validObject(x)
+                   x   } )
+
+#' @export
+#' @description
+#' get object map
+#' @param x `MultiFactor` object
+#' @returns a named sparse biadjacency matrix of dimensions (`dimnames(x)`)
+#' @rdname MultiFactor-methods
+#'
+setMethod("dictionary",  "MultiFactor", function(x, ...) x@map)
+
+#' @export
+#' @rdname MultiFactor-methods
+setReplaceMethod("dictionary", "MultiFactor",
+                 function(x, ..., value) {
+                   x@map <- value
                    validObject(x)
                    x   } )
 
@@ -124,7 +157,7 @@ setReplaceMethod("levels", "MultiFactor",
 #' take link data frames.
 #' @examples
 #' # prep input
-#' l <- asLinkMap(kegg_link())
+#' l <- asMultiFactor(kegg_link())
 #'
 #' # Sub-setting is only performed on data frames that contain the arguments
 #' str(subset(x = l, cpd %in% c("C00001", "C00002")))
@@ -161,3 +194,4 @@ setMethod("subset", "MultiFactor", function(x, subset, select, ...) {
     }
     return(x)
 })
+

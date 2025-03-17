@@ -76,6 +76,24 @@ assigning values.</p>
 <span><span class="fu">metadata</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span>, simplify <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
 <span></span>
 <span><span class="co"># S4 method for class 'AnansiWeb'</span></span>
+<span><span class="fu">tableY</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for class 'AnansiWeb'</span></span>
+<span><span class="fu">tableX</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for class 'AnansiWeb'</span></span>
+<span><span class="fu">dictionary</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for class 'AnansiWeb'</span></span>
+<span><span class="fu">tableY</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
+<span></span>
+<span><span class="co"># S4 method for class 'AnansiWeb'</span></span>
+<span><span class="fu">tableX</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
+<span></span>
+<span><span class="co"># S4 method for class 'AnansiWeb'</span></span>
+<span><span class="fu">dictionary</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
+<span></span>
+<span><span class="co"># S4 method for class 'AnansiWeb'</span></span>
 <span><span class="fu">show</span><span class="op">(</span><span class="va">object</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S4 method for class 'AnansiWeb'</span></span>
@@ -107,6 +125,15 @@ assigning values.</p>
 <dd><p>typically an array-like <span style="R">R</span> object of a similar class as
     <code>x</code>.</p></dd>
 
+
+<dt id="arg-simplify">simplify<a class="anchor" aria-label="anchor" href="#arg-simplify"></a></dt>
+<dd><p><code>boolean</code>. If <code>TRUE</code> (Default), handles single data.frame
+arguments while ensuring compatibility with <code>S4Vectors</code> method.</p></dd>
+
+
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
+<dd><p>further arguments.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -116,14 +143,14 @@ assigning values.</p>
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index">
 <ul><li><p><code><a href="AnansiWeb-class.html">AnansiWeb-class()</a></code>.</p></li>
-<li><p><code><a href="AnansiWeb.html">weaveWeb()</a></code>: for general use.</p></li>
+<li><p><code><a href="weaveWeb.html">weaveWeb()</a></code>: for general use.</p></li>
 </ul></div>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># prepare an AnansiWeb</span></span></span>
-<span class="r-in"><span><span class="va">w</span> <span class="op">&lt;-</span> <span class="fu"><a href="AnansiWeb.html">weaveWeb</a></span><span class="op">(</span><span class="va">cpd</span> <span class="op">~</span> <span class="va">ko</span>, link <span class="op">=</span> <span class="fu"><a href="kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">w</span> <span class="op">&lt;-</span> <span class="fu"><a href="weaveWeb.html">weaveWeb</a></span><span class="op">(</span><span class="va">cpd</span> <span class="op">~</span> <span class="va">ko</span>, link <span class="op">=</span> <span class="fu"><a href="kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">w</span><span class="op">$</span><span class="va">dictionary</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6754 x 7270 sparse Matrix of class "ngCMatrix"</span>
