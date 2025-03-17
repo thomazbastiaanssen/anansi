@@ -61,7 +61,7 @@
 <span>  dictionary <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">randomLinkMap</span><span class="op">(</span>n_types <span class="op">=</span> <span class="fl">6</span>, n_features <span class="op">=</span> <span class="fl">100</span>, sparseness <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">randomMultiFactor</span><span class="op">(</span>n_types <span class="op">=</span> <span class="fl">6</span>, n_features <span class="op">=</span> <span class="fl">100</span>, sparseness <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -116,8 +116,27 @@ coercible to <code>Matrix</code>.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> AnansiWeb object with 10 observations:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Tables: y (12 features) and x (8 features)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Access content with $ operator. Collapse with as.list().</span>
-<span class="r-in"><span><span class="fu">randomLinkMap</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in asLinkMap(out):</span> could not find function "asLinkMap"</span>
+<span class="r-in"><span><span class="fu">randomMultiFactor</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> A list of class MultiFactor,</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     6 feature types across 5 edge lists.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       a   b   c   d   e   f</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> a2b 100 100   .   .   .   .</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> b2c   . 100 100   .   .   .</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> c2d   .   . 100 100   .   .</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> d2e   .   .   . 100 100   .</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> e2f   .   .   .   . 100 100</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Values represent unique feature names in that edge list.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Levels:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> a : 100 Levels: a_001 a_002 ... a_100 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> b : 100 Levels: b_001 b_002 ... b_100 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> c : 100 Levels: c_001 c_002 ... c_100 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> d : 100 Levels: d_001 d_002 ... d_100 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> e : 100 Levels: e_001 e_002 ... e_100 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> f : 100 Levels: f_001 f_002 ... f_100 </span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

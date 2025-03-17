@@ -182,7 +182,7 @@ KEGG Orthologues (KOs). These tables can be directly plugged in to
 <div class="section level2">
 <h2 id="weave-a-web">Weave a web🕸️<a class="anchor" aria-label="anchor" href="#weave-a-web"></a>
 </h2>
-<p>The <code><a href="../reference/AnansiWeb.html">weaveWeb()</a></code> function can be used to parse the tables
+<p>The <code><a href="../reference/weaveWeb.html">weaveWeb()</a></code> function can be used to parse the tables
 that we prepared above into an <code>AnansiWeb</code> object. The
 <code>AnansiWeb</code> format is a necessary input file for the main
 <code>anansi</code> workflow. It allows <code>anansi</code> to keep
@@ -193,7 +193,7 @@ and ec features of the KEGG database, but users can provide their own
 maps. <a href="https://thomazbastiaanssen.github.io/anansi/articles/adjacency_matrices.html">See
 vignette on adjacency matrices.</a></p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">web</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/AnansiWeb.html">weaveWeb</a></span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="va">web</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/weaveWeb.html">weaveWeb</a></span><span class="op">(</span></span>
 <span>  <span class="va">cpd</span> <span class="op">~</span> <span class="va">ko</span>,</span>
 <span>  tableY <span class="op">=</span> <span class="va">t1</span>,</span>
 <span>  tableX <span class="op">=</span> <span class="va">t2</span>,</span>
@@ -439,10 +439,10 @@ use.</p>
 <span><span class="co">##   [1] splines_4.4.3                   cellranger_1.1.0               </span></span>
 <span><span class="co">##   [3] tibble_3.2.1                    polyclip_1.10-7                </span></span>
 <span><span class="co">##   [5] rpart_4.1.24                    DirichletMultinomial_1.48.0    </span></span>
-<span><span class="co">##   [7] lifecycle_1.0.4                 Rdpack_2.6.2                   </span></span>
+<span><span class="co">##   [7] lifecycle_1.0.4                 Rdpack_2.6.3                   </span></span>
 <span><span class="co">##   [9] globals_0.16.3                  lattice_0.22-6                 </span></span>
 <span><span class="co">##  [11] MASS_7.3-64                     backports_1.5.0                </span></span>
-<span><span class="co">##  [13] magrittr_2.0.3                  Hmisc_5.2-2                    </span></span>
+<span><span class="co">##  [13] magrittr_2.0.3                  Hmisc_5.2-3                    </span></span>
 <span><span class="co">##  [15] sass_0.4.9                      rmarkdown_2.29                 </span></span>
 <span><span class="co">##  [17] jquerylib_0.1.4                 yaml_2.3.10                    </span></span>
 <span><span class="co">##  [19] DBI_1.2.3                       minqa_1.2.8                    </span></span>
@@ -457,7 +457,7 @@ use.</p>
 <span><span class="co">##  [37] permute_0.9-7                   pkgdown_2.1.1                  </span></span>
 <span><span class="co">##  [39] DelayedMatrixStats_1.28.1       codetools_0.2-20               </span></span>
 <span><span class="co">##  [41] DelayedArray_0.32.0             scuttle_1.16.0                 </span></span>
-<span><span class="co">##  [43] ggtext_0.1.2                    xml2_1.3.7                     </span></span>
+<span><span class="co">##  [43] ggtext_0.1.2                    xml2_1.3.8                     </span></span>
 <span><span class="co">##  [45] tidyselect_1.2.1                UCSC.utils_1.2.0               </span></span>
 <span><span class="co">##  [47] farver_2.1.2                    lme4_1.1-36                    </span></span>
 <span><span class="co">##  [49] ScaledMatrix_1.14.0             viridis_0.6.5                  </span></span>
@@ -484,10 +484,10 @@ use.</p>
 <span><span class="co">##  [91] gtable_0.3.6                    SingleCellExperiment_1.28.1    </span></span>
 <span><span class="co">##  [93] XVector_0.46.0                  htmltools_0.5.8.1              </span></span>
 <span><span class="co">##  [95] bookdown_0.42                   scales_1.3.0                   </span></span>
-<span><span class="co">##  [97] reformulas_0.4.0                knitr_1.49                     </span></span>
-<span><span class="co">##  [99] rstudioapi_0.17.1               tzdb_0.4.0                     </span></span>
+<span><span class="co">##  [97] reformulas_0.4.0                knitr_1.50                     </span></span>
+<span><span class="co">##  [99] rstudioapi_0.17.1               tzdb_0.5.0                     </span></span>
 <span><span class="co">## [101] reshape2_1.4.4                  checkmate_2.3.2                </span></span>
-<span><span class="co">## [103] nlme_3.1-167                    nloptr_2.1.1                   </span></span>
+<span><span class="co">## [103] nlme_3.1-167                    nloptr_2.2.1                   </span></span>
 <span><span class="co">## [105] cachem_1.1.0                    zoo_1.8-13                     </span></span>
 <span><span class="co">## [107] stringr_1.5.1                   parallel_4.4.3                 </span></span>
 <span><span class="co">## [109] vipor_0.4.7                     foreign_0.8-88                 </span></span>
