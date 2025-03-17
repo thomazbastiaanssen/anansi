@@ -17,13 +17,6 @@ coercible to \code{Matrix}}
 \item{metadata}{\code{list} of metadata. Optional.}
 
 \item{...}{further arguments.}
-
-\item{link}{One of the following:
-\itemize{
-\item \verb{Character scalar} with value \code{"none"}.
-\item \code{data.frame} with two columns
-\item \code{list} with two such \code{data.frame}s.
-}}
 }
 \value{
 an \code{AnansiWeb} object, with sparse binary biadjacency matrix
@@ -32,11 +25,6 @@ with features from \code{y} as rows and features from \code{x} as columns in
 }
 \description{
 \code{AnansiWeb()} constructs an \code{AnansiWeb} object from three tables.
-}
-\details{
-If the \code{link} argument is \code{"none"}, all features will be considered
-linked. If one or more \code{data.frame}s, colnames should be as specified in
-\code{x} and \code{y}.
 }
 \examples{
 

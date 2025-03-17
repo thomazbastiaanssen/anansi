@@ -4,12 +4,20 @@ getEdgeList: Return a data frame in edge list format.
 dim: Display a vector of dims (n objects, n ids).
 names: Display a vector of dims (n objects, n ids).
 dimnames: Display a vector of dims (n objects, n ids).
-show: Display the object"><meta property="og:description" content="a set of methods to work with MultiFactor, a special type of list.
+show: Display the object
+Analogous to factors. unfactor(MultiFactor) returns a named
+list with character data frames with same dimensions as input.
+get object levels
+get object map"><meta property="og:description" content="a set of methods to work with MultiFactor, a special type of list.
 getEdgeList: Return a data frame in edge list format.
 dim: Display a vector of dims (n objects, n ids).
 names: Display a vector of dims (n objects, n ids).
 dimnames: Display a vector of dims (n objects, n ids).
-show: Display the object"></head><body>
+show: Display the object
+Analogous to factors. unfactor(MultiFactor) returns a named
+list with character data frames with same dimensions as input.
+get object levels
+get object map"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -62,6 +70,10 @@ show: Display the object"></head><body>
 <p><code>names</code>: Display a vector of dims (n objects, n ids).</p>
 <p><code>dimnames</code>: Display a vector of dims (n objects, n ids).</p>
 <p><code>show</code>: Display the object</p>
+<p>Analogous to <code>factors</code>. <code>unfactor(MultiFactor)</code> returns a named
+list with character data frames with same dimensions as input.</p>
+<p>get object levels</p>
+<p>get object map</p>
     </div>
 
     <div class="section level2">
@@ -82,6 +94,24 @@ show: Display the object"></head><body>
 <span><span class="fu">show</span><span class="op">(</span><span class="va">object</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S4 method for class 'MultiFactor'</span></span>
+<span><span class="fu">unfactor</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for class 'MultiFactor'</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for class 'MultiFactor'</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for class 'MultiFactor'</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
+<span></span>
+<span><span class="co"># S4 method for class 'MultiFactor'</span></span>
+<span><span class="fu">dictionary</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for class 'MultiFactor'</span></span>
+<span><span class="fu">dictionary</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
+<span></span>
+<span><span class="co"># S4 method for class 'MultiFactor'</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">subset</span>, <span class="va">select</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -90,11 +120,19 @@ show: Display the object"></head><body>
 
 
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
-<dd><p>A vector-like, matrix-like or data-frame-like object to be subsetted.</p></dd>
+<dd><p><code>MultiFactor</code> object</p></dd>
 
 
 <dt id="arg-object">object<a class="anchor" aria-label="anchor" href="#arg-object"></a></dt>
 <dd><p>Any R object</p></dd>
+
+
+<dt id="arg-value">value<a class="anchor" aria-label="anchor" href="#arg-value"></a></dt>
+<dd><p>a replacement character vector of suitable dimensions.</p></dd>
+
+
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
+<dd><p>Optional metadata columns.</p></dd>
 
 
 <dt id="arg-subset">subset<a class="anchor" aria-label="anchor" href="#arg-subset"></a></dt>
@@ -106,13 +144,13 @@ found as column names.</p></dd>
 <dd><p><code>expression</code>. Which column names to consider. If missing
 (Default), consider all column names.</p></dd>
 
-
-<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>Additional arguments (e.g. <code>subset</code>, <code>select</code>, <code>drop</code>),
-    for use in specific methods. See <code>?base::<a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></code> for
-    more information.</p></dd>
-
 </dl></div>
+    <div class="section level2">
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    <p>A named character list</p>
+<p>a named list of character vectors.</p>
+<p>a named sparse biadjacency matrix of dimensions (<code>dimnames(x)</code>)</p>
+    </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p><code>subset</code>: For <code>MultiFactor objects</code>, sub-setting is only applied
@@ -142,9 +180,9 @@ take link data frames.</p></div>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ ec : int(0) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ cpd: int(0) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..@ levels:List of 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ ec : chr [1:6690] "1.1.1.1" "1.1.1.2" "1.1.1.3" "1.1.1.4" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ ko : chr [1:8817] "K00001" "K00002" "K00003" "K00004" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ cpd: chr [1:7802] "C00001" "C00002" "C00003" "C00004" ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ ec : chr [1:4825] "1.1.1.1" "1.1.1.2" "1.1.1.3" "1.1.1.4" ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ ko : chr [1:7270] "K00001" "K00002" "K00003" "K00004" ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ cpd: chr [1:6754] "C00001" "C00002" "C00003" "C00004" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..@ map   :Formal class 'dgCMatrix' [package "Matrix"] with 6 slots</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..@ i       : int [1:4] 0 1 0 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..@ p       : int [1:4] 0 2 3 4</span>
@@ -169,9 +207,9 @@ take link data frames.</p></div>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Levels:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ec  : 6690 Levels: 1.1.1.1 1.1.1.2 ... 5.3.1.37 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ko  : 8817 Levels: K00001 K00002 ... K28089 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cpd : 7802 Levels: C00001 C00002 ... C23000 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ec  : 4825 Levels: 1.1.1.1 1.1.1.2 ... 1.14.13.253 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ko  : 7270 Levels: K00001 K00002 ... K28089 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cpd : 6754 Levels: C00001 C00002 ... C22998 </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

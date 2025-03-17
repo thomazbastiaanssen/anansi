@@ -65,6 +65,8 @@
 
 \item{simplify}{\code{boolean}. If \code{TRUE} (Default), handles single data.frame
 arguments while ensuring compatibility with \code{S4Vectors} method.}
+
+\item{...}{further arguments.}
 }
 \value{
 a specified \code{AnansiWeb} object.

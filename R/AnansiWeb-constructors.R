@@ -3,21 +3,10 @@
 #' @rdname AnansiWeb
 #' @description
 #' `AnansiWeb()` constructs an `AnansiWeb` object from three tables.
-#'
-#' @param link One of the following:
-#' \itemize{
-#'  \item `Character scalar` with value `"none"`.
-#'  \item `data.frame` with two columns
-#'  \item `list` with two such `data.frame`s.
-#' }
 #' @param tableY,tableX A table containing features of interest. Rows should be
 #'     samples and columns should be features. Y and X refer to the position of
 #'     the features in a formula: Y ~ X.
 #' @param ... further arguments.
-#' @details
-#' If the `link` argument is `"none"`, all features will be considered
-#' linked. If one or more `data.frame`s, colnames should be as specified in
-#' `x` and `y`.
 #' @seealso \itemize{
 #'  \item [AnansiWeb-methods()]: For utility functions to get and set.
 #'  \item [kegg_link()]: For examples of input for link argument.

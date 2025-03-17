@@ -78,6 +78,23 @@ setMethod("show",  "MultiFactor", function(object) {
   invisible(NULL)
 })
 
+#' @rdname MultiFactor-methods
+#' @description Analogous to `factors`. `unfactor(MultiFactor)` returns a named
+#'     list with character data frames with same dimensions as input.
+#' @importMethodsFrom S4Vectors unfactor
+#' @inheritParams S4Vectors::unfactor
+#' @returns A named character list
+#' @export
+#'
+setMethod("unfactor", "MultiFactor", function(x) {
+  ns <- lapply(x, names)
+  lv <- levels(x)
+  x  <- lapply(x, function(id) as.data.frame.list(
+      lapply(names(id), function(y) lv[[y]] [ id[[y]] ] ),
+      col.names = names(id))
+      )
+  x
+})
 
 #' S3/S4 combo for levels.
 #' @export
@@ -87,14 +104,20 @@ setMethod("show",  "MultiFactor", function(object) {
 #' @rdname MultiFactor-methods
 #'
 levels.MultiFactor <- function(x) x@levels
+
+#' @export
+#' @rdname MultiFactor-methods
 setMethod("levels",  "MultiFactor", levels.MultiFactor)
 
+#' @export
+#' @rdname MultiFactor-methods
+#' @param value a replacement character vector of suitable dimensions.
+#'
 setReplaceMethod("levels", "MultiFactor",
                  function(x, value) {
                    x@levels <- value
                    validObject(x)
                    x   } )
-
 
 #' @export
 #' @description
@@ -105,6 +128,8 @@ setReplaceMethod("levels", "MultiFactor",
 #'
 setMethod("dictionary",  "MultiFactor", function(x, ...) x@map)
 
+#' @export
+#' @rdname MultiFactor-methods
 setReplaceMethod("dictionary", "MultiFactor",
                  function(x, ..., value) {
                    x@map <- value

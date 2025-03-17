@@ -4,12 +4,13 @@
 #' `AnansiWeb` is an S4 class containing two feature tables as well as a
 #' dictionary to link them. `AnansiWeb` is the main container that will
 #' hold your input data throughout the `anansi` pipeline.
-#' @slot tableY `matrix` of metabolomics data. Rows are samples and columns
-#'     are features.
-#' @slot tableX `matrix` of functional data. Rows are samples and columns
-#'     are features.
+#' @slot tableY,tableX `matrix` of measurements, data. Rows are samples and
+#'     columns are features. Access with `tableY()` and `tableX()`.
 #' @slot dictionary `Matrix`, binary adjacency matrix. Optionally sparse.
-#'     Typically generated using the`weaveWeb()` function.
+#'     Typically generated using the`weaveWeb()` function. Access with
+#'     `dictionary()`.
+#' @slot metadata Optional `data.frame` of sample metadata. Access with
+#'     `metadata()`.
 #' @importClassesFrom Matrix Matrix
 #' @importClassesFrom S4Vectors Annotated
 #' @seealso \itemize{
@@ -47,8 +48,16 @@ setValidity("AnansiWeb", method = function(object) ifelse(
 #' MultiFactor S4 container class
 #' @name MultiFactor-class
 #' @description
-#' `MultiFactor` is an S4 class containing one or several data frames
-#' structured as edge lists from the `igraph` package.
+#' `MultiFactor` is an S4 class to manage multiple sets of factors. Methods for
+#' `MultiFactor` aim to follow `factor` behaviour.
+#' @slot .Data Named `list` of named integer data frames of at least two columns
+#'     each. The column names correspond to names in the `levels` slot. Similar
+#'     to `factor`s, the integers in those columns correspond to the characters
+#'     in that level. Accessed through regular list methods (e.g., `[`, `[[`).
+#' @slot levels `Named list of character vectors`. Accessed through `levels(x)`
+#' @slot map `(sparse)Matrix` specifying which elements contain which levels.
+#'     Accesses through `dictionary(x)`.
+#' @importClassesFrom Matrix Matrix
 #' @export
 #' @seealso \itemize{
 #' \item [MultiFactor()]: for general use.
@@ -56,16 +65,6 @@ setValidity("AnansiWeb", method = function(object) ifelse(
 #' \item [igraph::igraph()].
 #'}
 #'
-
-#' MultiFactor S4 container class
-#' @description
-#' `MultiFactor` is an S4 class to manage multiple sets of factors. Methods for
-#' `MultiFactor` aim to follow `factor` behaviour.
-#' @slot levels `Named list of character vectors`
-#' @slot map `(sparse)Matrix` specifying which elements contain which levels.
-#' @importClassesFrom Matrix Matrix
-#'
-#' @export
 setClass("MultiFactor",
          contains = "list",
          slots = c(levels  = "list",

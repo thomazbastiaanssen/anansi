@@ -25,37 +25,37 @@
 MultiFactor <- function(x, levels = NULL, drop.unmatched = TRUE) {
   if(validLinkDF(x)) x <- list(x = x)
 
-  if(is(x, "MultiFactor") && is.null(levels)) levels <- levels(x)
-
   stopifnot( "Input not correctly formatted." =
                all( vapply(x, validLinkDF, NA, USE.NAMES = FALSE)))
 
+  if(drop.unmatched) x <- trimMultiFactor(x)
+
   m <- mapMultiFactor(x)
 
+  if(is(x, "MultiFactor") && is.null(levels)) levels <- levels(x)
+
+  # Integer DF Input
   if(all( vapply(x, validIntLinkDF, NA, USE.NAMES = FALSE))) {
-    stopifnot(
-      "Input is integers, levels must be provided. " = !is.null(levels)
-    )
+    stopifnot("Input is integers, levels must be provided. " =
+                !is.null(levels))
+  # Factor DF input
   } else
     if(all( vapply(x, validFactLinkDF, NA, USE.NAMES = FALSE))) {
       if(is.null(levels)) levels <- factorInputMultiFactorLevels(x, m)
       x <- listFactRefactor(x, m, levels)
       x <- lapply(x, factToIntDF)
+  # Character DF input
     } else
       if(all( vapply(x, validCharLinkDF, NA, USE.NAMES = FALSE))) {
         if(is.null(levels)) levels <- generateMultiFactorLevels(x, m)
-        x <- listCharToIntegers(x, m, levels)
-      }
+        x <- listCharToIntegers(x, m, levels) }
 
-  if(drop.unmatched) {
-      x <- trimMultiFactor(x)
-      m <- mapMultiFactor(x)
-  }
+  # Get rid of row.names.
+  x <- lapply(x, `row.names<-.data.frame`, value = NULL)
 
+  # Out
   out <- new("MultiFactor", x, levels = levels, map = m)
-
   validObject(out)
-
   return(out)
 }
 
@@ -84,6 +84,32 @@ mapMultiFactor <- function(x) {
     i = i, j = j, x = mx, dimnames = list(levels(i), levels(j))
   )
 }
+
+
+#' @noRd
+#' @param x a list in `MultiFactor` formatting.
+#' @description Called by `MultiFactor()` if `drop.unmatched` argument is `TRUE`.
+#'     Runs part of `subset` method.
+#' @returns a subsetted list with `MultiFactor`.formatting.
+#'
+trimMultiFactor <- function(x) {
+  # Determine positions of feature names that occur in several edge link dfs
+  x.names <- lapply(x, names)
+  id.vec   <- unlist(x.names, use.names = FALSE)
+  sel.vars <- id.vec[duplicated(id.vec)]
+  # Sequentially subset over feature names
+  for(v in sel.vars) {
+    # Select all those data frames where that term is mentioned
+    s.ind <- unlist(lapply(x.names, function(y) v %in% y ))
+    sel.obj <- x[s.ind]
+    keep    <- Reduce(intersect, lapply(sel.obj, function(df) df[,v]))
+    # Filter feature ids in each df to only universally shared ones.
+    x[s.ind] <-
+      lapply(sel.obj, function(df) return( df[df[[v]] %in% keep,] ))
+  }
+  return(x)
+}
+
 
 #' @noRd
 #' @description
@@ -261,28 +287,3 @@ validFactLinkDF <- function(x) validLinkDF(x) &&
 #' @export
 #'
 asMultiFactor <- MultiFactor
-
-#' @noRd
-#' @param x a list in `MultiFactor` formatting.
-#' @description Called by `MultiFactor()` if `drop.unmatched` argument is `TRUE`.
-#'     Runs part of `subset` method.
-#' @returns a subsetted list with `MultiFactor`.formatting.
-#'
-trimMultiFactor <- function(x) {
-    # Determine positions of feature names that occur in several edge link dfs
-    x.names <- lapply(x, names)
-    id.vec   <- unlist(x.names, use.names = FALSE)
-    sel.vars <- id.vec[duplicated(id.vec)]
-    # Sequentially subset over feature names
-      for(v in sel.vars) {
-          # Select all those data frames where that term is mentioned
-          s.ind <- unlist(lapply(x.names, function(y) v %in% y ))
-          sel.obj <- x[s.ind]
-          keep    <- Reduce(intersect, lapply(sel.obj, function(df) df[,v]))
-          # Filter feature ids in each df to only universally shared ones.
-          x[s.ind] <-
-              lapply(sel.obj, function(df) return( df[df[[v]] %in% keep,] ))
-          levels(x)[[v]] <- levels(x)[[v]][keep]
-    }
-    return(x)
-}

@@ -7,6 +7,7 @@
 #' `names( x )` is in turn shorthand for `names( dimnames(x) )`.
 #'
 #' @returns a specified `AnansiWeb` object.
+#' @param ... further arguments.
 #'
 #' @seealso \itemize{
 #' \item [AnansiWeb-class()].
