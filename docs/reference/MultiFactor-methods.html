@@ -96,8 +96,7 @@ list with character data frames with same dimensions as input.</p>
 <span><span class="co"># S4 method for class 'MultiFactor'</span></span>
 <span><span class="fu">unfactor</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># S3 method for class 'MultiFactor'</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span><span class="fu">levels.MultiFactor</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S4 method for class 'MultiFactor'</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
@@ -174,11 +173,11 @@ take link data frames.</p></div>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Formal class 'MultiFactor' [package "anansi"] with 3 slots</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..@ .Data :List of 2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ :'data.frame':	0 obs. of  2 variables:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ ec: int(0) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ ko: int(0) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ ec: chr(0) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ ko: chr(0) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ :'data.frame':	0 obs. of  2 variables:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ ec : int(0) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ cpd: int(0) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ ec : chr(0) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. .. ..$ cpd: chr(0) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..@ levels:List of 3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ ec : chr [1:4825] "1.1.1.1" "1.1.1.2" "1.1.1.3" "1.1.1.4" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ ko : chr [1:7270] "K00001" "K00002" "K00003" "K00004" ...</span>

@@ -8,19 +8,35 @@
 \alias{as.MAE}
 \alias{as.MultiAssayExperiment}
 \alias{asMultiAssayExperiment}
+\alias{as.list,MultiFactor-method}
+\alias{as.list.MultiFactor}
 \title{Coercion methods for AnansiWeb}
 \usage{
 \S4method{as.list}{AnansiWeb}(x, ...)
 
 asMAE(x)
+
+\S4method{as.list}{MultiFactor}(x, ..., use.names = TRUE)
+
+as.list.MultiFactor(x, use.names = TRUE)
 }
 \arguments{
 \item{x}{object to be coerced or tested.}
 
 \item{...}{objects, possibly named.}
+
+\item{use.names}{\verb{Logical scalar}, whether output list should contain
+character (Default) or integer data frame. If \code{FALSE}, returns
+\code{unfactor(x)}.}
+}
+\value{
+a named list of character vectors (Default) or integers
+(\code{use.names = FALSE}).
 }
 \description{
 Coerce AnansiWeb to and from other object types.
+
+Convert MultiFactor to list
 }
 \examples{
 #Create a random web
@@ -32,4 +48,11 @@ as.list(web)
 #To MultiAssayExperiment
 asMAE(web)
 
+# example code
+x <- as.list(randomMultiFactor())
+identical(x, as.list(MultiFactor(x)) )
+
+}
+\seealso{
+\code{\link[=unfactor]{unfactor()}}
 }

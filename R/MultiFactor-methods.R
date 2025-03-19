@@ -31,7 +31,7 @@ setMethod("dim", "MultiFactor", function(x)
 #' @export
 #'
 setMethod("names", "MultiFactor", function(x)
-  lapply(x, names)
+  `names<-`(lapply(x@.Data, names), rownames(x))
 )
 
 #' S4 Methods for MultiFactor
@@ -42,6 +42,91 @@ setMethod("names", "MultiFactor", function(x)
 setMethod("dimnames", "MultiFactor", function(x)
   dimnames(x@map)
 )
+
+#' S4 Methods for MultiFactor
+#' @description `[`: Subset based on [rownames(),colnames(x)]
+#' @importFrom Matrix which
+#' @export
+#'
+setMethod("[", c("MultiFactor", "ANY", "ANY"), definition = function(
+    x, i, j, ..., return.list = TRUE, drop = TRUE)
+  {
+  if ( missing(i) && missing(j) )  return(x)
+  d <- dictionary(x)
+  x <- unfactor(x)
+  if (!missing(i)) ii <- rownames(d[i, , drop = FALSE])
+  if (!missing(j)) jj <- colnames(d[, j, drop = FALSE])
+
+  if ( missing(i) ) {
+      ii <- Matrix::which(d[, jj, drop = FALSE] != 0L, arr.ind = TRUE, useNames = TRUE)
+      x  <- lapply(x[ii[,1L]], `[`, i = jj)
+
+  } else if ( missing(j) ) {
+      x <- x[ii]
+
+  } else {
+      x  <- lapply(x[ii], `[`, i = jj)
+  }
+
+  if(return.list) return(x)
+
+  MultiFactor(x)
+})
+
+
+# setReplaceMethod("[", c("MultiFactor", "ANY", "ANY", "list"), def = function(
+#     x, i, j, ..., value) {
+#   if (missing(i) && missing(j)) return(value)
+#   d <- dictionary(x)
+#   x <- unfactor(x)
+#   if (!missing(i)) ii <- rownames(d[i, , drop = FALSE])
+#   if (!missing(j)) jj <- colnames(d[, j, drop = FALSE])
+#
+#
+#   if ( missing(i) ) {
+#     ii <- Matrix::which(d[, jj, drop = FALSE] != 0L, arr.ind = TRUE)[, 1L]
+#     x  <- lapply(x[ii], `[`, i = jj)
+#
+#
+#     # lv_names <- colnames(m)
+#     # for(id in seq_along(lv_names)) {
+#     #   idx <- rownames(m)[m[, id] != 0]
+#     #
+#     #   x[idx] <- lapply(x[idx], charToIntDF, id = lv_names[id], r = l[[id]])
+#     # }
+#     # x
+#
+#
+#   } else if ( missing(j) ) {
+#     x[ii] <- value
+#
+#   } else {
+#     x  <- lapply(x[ii], `[`, i = jj)
+#   }
+#
+#     MultiFactor(x)
+# })
+
+
+
+
+#' @export
+#'
+setMethod("[[", c("MultiFactor", "ANY"), function(x, i, ...) {
+  x@.Data[[i, ...]]
+})
+
+#' @export
+#'
+setReplaceMethod("[[", c("MultiFactor", "ANY", "ANY"),
+                 function(x, i, ..., value) {
+
+                   x@.Data[[i, ...]] <- value
+                   MultiFactor(x)
+                   }
+                 )
+
+
 
 #' S4 Methods for MultiFactor
 #' @description `show`: Display the object
@@ -87,8 +172,9 @@ setMethod("show",  "MultiFactor", function(object) {
 #' @export
 #'
 setMethod("unfactor", "MultiFactor", function(x) {
-  ns <- lapply(x, names)
   lv <- levels(x)
+  x  <- `names<-`(x@.Data, rownames(x))
+  ns <- lapply(x, names)
   x  <- lapply(x, function(id) as.data.frame.list(
       lapply(names(id), function(y) lv[[y]] [ id[[y]] ] ),
       col.names = names(id))

@@ -28,7 +28,7 @@
 
 \S4method{unfactor}{MultiFactor}(x)
 
-\method{levels}{MultiFactor}(x)
+levels.MultiFactor(x)
 
 \S4method{levels}{MultiFactor}(x)
 

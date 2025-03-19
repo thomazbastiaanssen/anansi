@@ -91,8 +91,8 @@ setValidity("MultiFactor", method = function(object) ifelse(
 #' Is this a data.frame with exactly two columns that are named?
 #' @noRd
 validMultiFactor <- function(x) {
-
-  levels_valid <- validLevels(x)
+  levels_valid <- validLevels(levels(x))
+  x <- x@.Data
   values_valid <- vapply(x, validIntLinkDF, NA, USE.NAMES = FALSE)
   no_missing   <- ! any(vapply(x, anyNA, NA, USE.NAMES = FALSE))
 

@@ -193,13 +193,13 @@ dictionaryMatrix <- function(link, all_terms){
     # Handle simple case of one link df first, return sparse matrix.
     if(length(steps) == 1L)
         return(
-            mapFromLink(all_terms, df = link[[steps]], dims = lv_len[all_terms])
+            mapFromLink(all_terms, df = link@.Data[[steps]], dims = lv_len[all_terms])
             )
 
     # Otherwise, make a list of matrices to Reduce to final dictionary
     mat_list <- mapply(mapFromLink,
                        terms = term_list,
-                       df = link[steps],
+                       df = link@.Data[steps],
                        dims = lv_list)
     Reduce(Matrix::`%&%`,  mat_list)
 
@@ -227,7 +227,7 @@ trimByInput <- function(link, tableID, id) {
     x.names <- names(link)
 
     x.ind <- vapply(x.names, `%in%`, x = id, NA, USE.NAMES = FALSE)
-    sel.obj <- link[x.ind]
+    sel.obj <- link@.Data[x.ind]
     term_list <- lapply(sel.obj, function(df) df[, id])
     term_list[["table_IDs"]] <- match( colnames(tableID), levels(link)[[id]] )
     keep    <- Reduce(intersect, term_list)

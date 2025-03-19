@@ -24,15 +24,24 @@
 #'
 MultiFactor <- function(x, levels = NULL, drop.unmatched = TRUE) {
   if(validLinkDF(x)) x <- list(x = x)
+  stopifnot( "Input not correctly formatted." = all (
+    vapply(as.list(x, use.names = FALSE), validLinkDF, NA, USE.NAMES = FALSE)
+    ))
 
-  stopifnot( "Input not correctly formatted." =
-               all( vapply(x, validLinkDF, NA, USE.NAMES = FALSE)))
-
-  if(drop.unmatched) x <- trimMultiFactor(x)
+  if(drop.unmatched) {
+      if(is(x, "MultiFactor")) {
+          if(is.null(levels)) {levels <- levels(x)}
+          x <- as.list.MultiFactor(x, use.names = FALSE) # TODO as.list.MultiFactor use.names = TRUE gives C error
+          }
+    x <- trimMultiFactor(x)
+    }
 
   m <- mapMultiFactor(x)
 
-  if(is(x, "MultiFactor") && is.null(levels)) levels <- levels(x)
+  if(is(x, "MultiFactor") && is.null(levels)) {
+    levels <- levels(x)
+    x <- as.list.MultiFactor(x, use.names = FALSE)
+    }
 
   # Integer DF Input
   if(all( vapply(x, validIntLinkDF, NA, USE.NAMES = FALSE))) {
@@ -41,20 +50,20 @@ MultiFactor <- function(x, levels = NULL, drop.unmatched = TRUE) {
   # Factor DF input
   } else
     if(all( vapply(x, validFactLinkDF, NA, USE.NAMES = FALSE))) {
-      if(is.null(levels)) levels <- factorInputMultiFactorLevels(x, m)
+      if(is.null(levels)) {levels <- factorInputMultiFactorLevels(x, m)}
       x <- listFactRefactor(x, m, levels)
       x <- lapply(x, factToIntDF)
   # Character DF input
     } else
       if(all( vapply(x, validCharLinkDF, NA, USE.NAMES = FALSE))) {
-        if(is.null(levels)) levels <- generateMultiFactorLevels(x, m)
+        if(is.null(levels)) {levels <- generateMultiFactorLevels(x, m) }
         x <- listCharToIntegers(x, m, levels) }
 
   # Get rid of row.names.
   x <- lapply(x, `row.names<-.data.frame`, value = NULL)
 
   # Out
-  out <- new("MultiFactor", x, levels = levels, map = m)
+  out <- new("MultiFactor", .Data = x, levels = levels, map = m)
   validObject(out)
   return(out)
 }
@@ -120,6 +129,7 @@ trimMultiFactor <- function(x) {
 #' @param x a named list of data frames with named character columns.
 #' @param m Matrix resulting from `mapMultiFactor(x)`
 #' @returns a named list of levels.
+#' @importFrom Matrix which
 #'
 generateMultiFactorLevels <- function(x, m) {
   lv_names <- colnames(m)
@@ -127,7 +137,7 @@ generateMultiFactorLevels <- function(x, m) {
     seq_along(lv_names),
     function(y) unique(
       unlist(
-        lapply(x[which(m[, y] != 0L)],
+        lapply(x[Matrix::which(m[, y, drop = FALSE] != 0L)],
                function(z) unique(z[[ lv_names[y] ]])),
         FALSE, FALSE)
     )
@@ -145,6 +155,7 @@ generateMultiFactorLevels <- function(x, m) {
 #' @param x a named list of data frames with named character columns.
 #' @param m Matrix resulting from `mapMultiFactor(x)`
 #' @returns a named list of levels.
+#' @importFrom Matrix which
 #'
 factorInputMultiFactorLevels <- function(x, m) {
   lv_names <- colnames(m)
@@ -152,7 +163,7 @@ factorInputMultiFactorLevels <- function(x, m) {
     seq_along(lv_names),
     function(y) unique(
       unlist(
-        lapply(x[which(m[, y] != 0 )],
+        lapply(x[Matrix::which(m[, y] != 0 )],
                function(z) levels(z[[ lv_names[y] ]])),
         FALSE, FALSE)
     )
@@ -226,7 +237,7 @@ factorToMF <- function(x, id, r) {
 #' @noRd
 #'
 factToIntDF <- function(x) {
-  x <- as.data.frame.list(lapply(x, as.integer))
+  x[] <- lapply(x, as.integer)
   return(x)
 }
 
@@ -246,8 +257,7 @@ lv_list_char <- function(id, x) sort(
 #' @description
 #' Based on base::factor object validation.
 #'
-validLevels <-  function(x) {
-  levs <- levels(x)
+validLevels <-  function(levs) {
   if (any(vapply(
     levs, function(x) any(!is.character(x)), NA, USE.NAMES = FALSE
   ))) return("factor levels must be \"character\"")
