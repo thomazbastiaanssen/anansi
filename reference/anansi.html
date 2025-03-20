@@ -237,7 +237,8 @@ the base R <code>stats</code> package.</p></dd>
 
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
-<dd><p>A boolean. Toggles whether to print diagnostic information
+<dd><p><code>Logical scalar</code>. Whether to print diagnostic information
+(Default: <code>TRUE</code>).
 while running. Useful for debugging errors on large datasets.</p></dd>
 
 
@@ -305,6 +306,7 @@ q-values for all operations.</p>
 <span class="r-in"><span>  tableX <span class="op">=</span> <span class="va">t2</span>,</span></span>
 <span class="r-in"><span>  link <span class="op">=</span> <span class="fu"><a href="kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Dropped features in tableX: 1249 remain. </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">anansi_out</span> <span class="op">&lt;-</span> <span class="fu">anansi</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  web <span class="op">=</span> <span class="va">web</span>,</span></span>
