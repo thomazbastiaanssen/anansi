@@ -22,6 +22,8 @@
 #' If the `link` argument is `"none"`, all features will be considered
 #' linked. If one or more `data.frame`s, colnames should be as specified in
 #' `x` and `y`.
+#' @param verbose `Logical scalar`. Whether to print diagnostic information
+#'     (Default: `TRUE`).
 #' @seealso \itemize{
 #'     \item [AnansiWeb-methods]: For utility functions to get and set.
 #'     \item [AnansiWeb()]: For more general constructor.
@@ -73,7 +75,7 @@ weaveWeb <- function(x, ...) UseMethod("weaveWeb")
 #' @export
 #'
 weaveWeb.default <- function(x, y, link = NULL, tableX = NULL, tableY = NULL,
-                             metadata = NULL, ...){
+                             metadata = NULL, verbose = TRUE, ...){
     terms <- c(y, x)
     stopifnot("both 'x' and 'y' terms must be provided as character" =
                   is(terms, "character") && length(terms) == 2L)
@@ -89,12 +91,18 @@ weaveWeb.default <- function(x, y, link = NULL, tableX = NULL, tableY = NULL,
 
     # Trim link levels and tables based on feature overlap
     if(!is.null(tableX)) {
+        keep   <- sort(intersect(colnames(tableX), levels(link)[[x]]))
+        if(verbose && length(keep) < NCOL(tableX)) {
+            message("Dropped features in tableX: ", length(keep), " remain. ")}
+        tableX <- tableX[, keep]
         link   <- trimByInput(link, tableX, x)
-        tableX <- tableX[, sort(intersect(colnames(tableX), levels(link)[[x]]))]
     }
     if(!is.null(tableY)) {
+        keep   <- sort(intersect(colnames(tableY), levels(link)[[y]]))
+        if(verbose && length(keep) < NCOL(tableY)) {
+            message("Dropped features in tableY: ", length(keep), " remain. ")}
+        tableY <- tableY[, keep]
         link   <- trimByInput(link, tableY, y)
-        tableY <- tableY[, sort(intersect(colnames(tableY), levels(link)[[y]]))]
     }
     # Construct dictionary
     d <- dictionaryMatrix(link, all_terms)
@@ -156,7 +164,7 @@ weaveKEGG <- function(x, ...) weaveWeb(x, link = kegg_link(), ...)
 #'
 termSeq <- function(x, y, link){
     g <- getGraph(link)
-    sp <- shortest_paths(g, from = y, to = x, output = "vpath")
+    sp <- igraph::shortest_paths(g, from = y, to = x, output = "vpath")
     names(unlist(sp, FALSE, FALSE)[[1]])
 }
 
@@ -193,13 +201,13 @@ dictionaryMatrix <- function(link, all_terms){
     # Handle simple case of one link df first, return sparse matrix.
     if(length(steps) == 1L)
         return(
-            mapFromLink(all_terms, df = link[[steps]], dims = lv_len[all_terms])
+            mapFromLink(all_terms, df = link@index[[steps]], dims = lv_len[all_terms])
             )
 
     # Otherwise, make a list of matrices to Reduce to final dictionary
     mat_list <- mapply(mapFromLink,
                        terms = term_list,
-                       df = link[steps],
+                       df = link@index[steps],
                        dims = lv_list)
     Reduce(Matrix::`%&%`,  mat_list)
 
@@ -224,22 +232,27 @@ mapFromLink <- function(terms, df, dims)
 #' @noRd
 #'
 trimByInput <- function(link, tableID, id) {
-    x.names <- names(link)
+    lv <- levels(link)[[id]]
+    d  <- dictionary(link)
+    r  <- rowsWithCol(d, id)
+    stopifnot(
+        "Feature names appeared in several index elements. " = length(r) == 1L
+    )
+    # Subset index by table columns
+    xr <- link@index[[r]]
+    x.names <- match(colnames(tableID), lv)
+    xr <- xr[xr[,id] %in% x.names,]
+    xr.id <- xr[,id]
 
-    x.ind <- vapply(x.names, `%in%`, x = id, NA, USE.NAMES = FALSE)
-    sel.obj <- link[x.ind]
-    term_list <- lapply(sel.obj, function(df) df[, id])
-    term_list[["table_IDs"]] <- match( colnames(tableID), levels(link)[[id]] )
-    keep    <- Reduce(intersect, term_list)
+    # Subset levels
+    link@levels[[id]] <- lv[sort(unique(xr.id))]
+    # Reorder and replace indices
+    xr[,id] <- match(xr.id, sort(unique(xr.id)))
+    link@index[[r]]  <- xr
 
-    # Filter feature ids in each df to only include universally shared ones.
-    link[x.ind] <- lapply(sel.obj, function(df) {
-        df <-  df[df[[id]] %in% keep,]
-        df[,id] <- as.integer(factor(df[,id]))
-        return(df)})
-    levels(link)[[id]] <- levels(link)[[id]][keep]
+    link@map <- mapMultiFactor(link@index)
 
-    link
+    return(link)
 }
 
 

@@ -39,7 +39,8 @@ correlations according to your dictionary.}
 \code{adjust.method = "BH"} is the default value. See \code{p.adjust()} in
 the base R \code{stats} package.}
 
-\item{verbose}{A boolean. Toggles whether to print diagnostic information
+\item{verbose}{\verb{Logical scalar}. Whether to print diagnostic information
+(Default: \code{TRUE}).
 while running. Useful for debugging errors on large datasets.}
 
 \item{return.format}{\verb{Character scalar}. Should be one of \code{"table"}

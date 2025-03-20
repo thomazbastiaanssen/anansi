@@ -1,4 +1,4 @@
-#' Make aa MultiFactor
+#' Make a MultiFactor
 #' @name MultiFactor
 #' @rdname MultiFactor
 #' @aliases asMultiFactor
@@ -24,15 +24,22 @@
 #'
 MultiFactor <- function(x, levels = NULL, drop.unmatched = TRUE) {
   if(validLinkDF(x)) x <- list(x = x)
+  stopifnot( "Input not correctly formatted." = all (
+    vapply(as.list(x, use.names = FALSE), validLinkDF, NA, USE.NAMES = FALSE)
+    ))
 
-  stopifnot( "Input not correctly formatted." =
-               all( vapply(x, validLinkDF, NA, USE.NAMES = FALSE)))
+  if(is(x, "MultiFactor")) {
+    if(is.null(levels)) {levels <- levels(x)};  x <- x@index
+  }
 
-  if(drop.unmatched) x <- trimMultiFactor(x)
+  if(drop.unmatched) { x <- trimMultiFactor(x) }
 
   m <- mapMultiFactor(x)
 
-  if(is(x, "MultiFactor") && is.null(levels)) levels <- levels(x)
+  if(is(x, "MultiFactor") && is.null(levels)) {
+    levels <- levels(x)
+    x <- x@index
+    }
 
   # Integer DF Input
   if(all( vapply(x, validIntLinkDF, NA, USE.NAMES = FALSE))) {
@@ -41,20 +48,20 @@ MultiFactor <- function(x, levels = NULL, drop.unmatched = TRUE) {
   # Factor DF input
   } else
     if(all( vapply(x, validFactLinkDF, NA, USE.NAMES = FALSE))) {
-      if(is.null(levels)) levels <- factorInputMultiFactorLevels(x, m)
+      if(is.null(levels)) {levels <- factorInputMultiFactorLevels(x, m)}
       x <- listFactRefactor(x, m, levels)
       x <- lapply(x, factToIntDF)
   # Character DF input
     } else
       if(all( vapply(x, validCharLinkDF, NA, USE.NAMES = FALSE))) {
-        if(is.null(levels)) levels <- generateMultiFactorLevels(x, m)
-        x <- listCharToIntegers(x, m, levels) }
-
+        if(is.null(levels)) {levels <- generateMultiFactorLevels(x, m) }
+        x <- listCharToIntegers(x, m, levels)
+        }
   # Get rid of row.names.
   x <- lapply(x, `row.names<-.data.frame`, value = NULL)
 
   # Out
-  out <- new("MultiFactor", x, levels = levels, map = m)
+  out <- new("MultiFactor", index = x, levels = levels, map = m)
   validObject(out)
   return(out)
 }
@@ -64,50 +71,60 @@ MultiFactor <- function(x, levels = NULL, drop.unmatched = TRUE) {
 #' @description
 #' Helper function that takes an MultiFactor and returns a sparse biadjacency
 #' Matrix with link df names as rownames and id names as colnames. Called
-#' internally to generate
+#' internally.
 #' @param x a named list of data frames with named character columns.
+#' @param int `Logical scalar` Whether to return integer counts (Default) or
+#'     otherwise a sparse pattern Matrix.
 #' @returns a sparse biadjacency Matrix with link df names as rownames and id
 #'     names as colnames. Values count unique features in that position.
 #'
-mapMultiFactor <- function(x) {
+mapMultiFactor <- function(x, int = TRUE) {
+  # Some flexibility in input
+   if( is(x, "MultiFactor") ) {
+    x <- x@index }
+
   all_names <- lapply(x, names)
   i <- factor(rep(names(all_names),
                   vapply(all_names, length, 1, USE.NAMES = FALSE)),
               levels = names(all_names))
   j <- factor(unlist(all_names, use.names = FALSE),
               levels = unique(unlist(all_names, use.names = FALSE)))
+  if(!int){
+    return( sparseMatrix(i = i, j = j, dimnames = list(levels(i), levels(j))) )
+  }
+  # Otherwise, add counts.
   mx <- unlist(
     lapply(x, function(y)
       lapply(y, function(z) length(unique(z)))),
     use.names = TRUE)
-  sparseMatrix(
-    i = i, j = j, x = mx, dimnames = list(levels(i), levels(j))
-  )
+  return(
+    sparseMatrix(i = i, j = j, x = mx, dimnames = list(levels(i), levels(j)))
+    )
 }
 
 
 #' @noRd
 #' @param x a list in `MultiFactor` formatting.
-#' @description Called by `MultiFactor()` if `drop.unmatched` argument is `TRUE`.
-#'     Runs part of `subset` method.
+#' @description Called by `MultiFactor()` if `drop.unmatched` is `TRUE`. Runs
+#'     part of `subset` method.
 #' @returns a subsetted list with `MultiFactor`.formatting.
+#' @importFrom Matrix colSums
 #'
 trimMultiFactor <- function(x) {
-  # Determine positions of feature names that occur in several edge link dfs
-  x.names <- lapply(x, names)
-  id.vec   <- unlist(x.names, use.names = FALSE)
-  sel.vars <- id.vec[duplicated(id.vec)]
-  # Sequentially subset over feature names
-  for(v in sel.vars) {
-    # Select all those data frames where that term is mentioned
-    s.ind <- unlist(lapply(x.names, function(y) v %in% y ))
-    sel.obj <- x[s.ind]
-    keep    <- Reduce(intersect, lapply(sel.obj, function(df) df[,v]))
-    # Filter feature ids in each df to only universally shared ones.
-    x[s.ind] <-
-      lapply(sel.obj, function(df) return( df[df[[v]] %in% keep,] ))
-  }
-  return(x)
+    # Determine positions of feature names that occur in several edge link dfs
+    m        <- mapMultiFactor(x, int = FALSE)
+    jj       <- colnames(m)[Matrix::colSums(m) > 1]
+
+    # Sequentially subset over feature names
+    for(j in jj) {
+        # Select all those data frames where that term is mentioned
+        ii <- rowsWithCol(m, j, FALSE)
+        keep    <- Reduce(intersect, lapply(x[ii], `[[`, j))
+
+        # Filter feature ids in each df to only universally shared ones.
+        x[ii] <- lapply(x[ii], function(df) return( df[ df[[j]] %in% keep, ] ))
+        }
+    return(x)
 }
 
 
@@ -127,7 +144,7 @@ generateMultiFactorLevels <- function(x, m) {
     seq_along(lv_names),
     function(y) unique(
       unlist(
-        lapply(x[which(m[, y] != 0L)],
+        lapply(x[rowsWithCol(m, y, FALSE)],
                function(z) unique(z[[ lv_names[y] ]])),
         FALSE, FALSE)
     )
@@ -152,7 +169,7 @@ factorInputMultiFactorLevels <- function(x, m) {
     seq_along(lv_names),
     function(y) unique(
       unlist(
-        lapply(x[which(m[, y] != 0 )],
+        lapply(x[rowsWithCol(m, y, FALSE)],
                function(z) levels(z[[ lv_names[y] ]])),
         FALSE, FALSE)
     )
@@ -226,7 +243,7 @@ factorToMF <- function(x, id, r) {
 #' @noRd
 #'
 factToIntDF <- function(x) {
-  x <- as.data.frame.list(lapply(x, as.integer))
+  x[] <- lapply(x, as.integer)
   return(x)
 }
 
@@ -246,8 +263,7 @@ lv_list_char <- function(id, x) sort(
 #' @description
 #' Based on base::factor object validation.
 #'
-validLevels <-  function(x) {
-  levs <- levels(x)
+validLevels <-  function(levs) {
   if (any(vapply(
     levs, function(x) any(!is.character(x)), NA, USE.NAMES = FALSE
   ))) return("factor levels must be \"character\"")

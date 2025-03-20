@@ -37,6 +37,7 @@ NULL
 setMethod("$", "AnansiWeb", definition = function(x, name) slot(x, name) )
 
 #' @exportMethod $<-
+#' @importFrom S4Vectors metadata
 #' @inheritParams base::`$<-`
 #' @rdname AnansiWeb-methods
 #'
@@ -48,6 +49,7 @@ setReplaceMethod("$", "AnansiWeb", def = function(x, name, value) {
 
 #' @export
 #' @importClassesFrom S4Vectors Annotated
+#' @importFrom S4Vectors metadata
 #' @inheritParams S4Vectors::metadata
 #' @param simplify `boolean`. If `TRUE` (Default), handles single data.frame
 #'     arguments while ensuring compatibility with `S4Vectors` method.
@@ -62,7 +64,7 @@ setMethod("metadata", signature = c(x = "AnansiWeb"),
           })
 
 #' @export
-#' @importFrom S4Vectors metadata<-
+#' @importMethodsFrom S4Vectors "metadata<-"
 #' @importFrom methods slot<-
 #' @rdname AnansiWeb-methods
 #'
