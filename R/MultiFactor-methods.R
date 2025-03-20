@@ -31,7 +31,7 @@ setMethod("dim", "MultiFactor", function(x)
 #' @export
 #'
 setMethod("names", "MultiFactor", function(x)
-  `names<-`(lapply(x@.Data, names), rownames(x))
+  `names<-`(lapply(x@index, names), rownames(x))
 )
 
 #' S4 Methods for MultiFactor
@@ -45,7 +45,6 @@ setMethod("dimnames", "MultiFactor", function(x)
 
 #' S4 Methods for MultiFactor
 #' @description `[`: Subset based on [rownames(),colnames(x)]
-#' @importFrom Matrix which
 #' @export
 #'
 setMethod("[", c("MultiFactor", "ANY", "ANY"), definition = function(
@@ -58,8 +57,8 @@ setMethod("[", c("MultiFactor", "ANY", "ANY"), definition = function(
   if (!missing(j)) jj <- colnames(d[, j, drop = FALSE])
 
   if ( missing(i) ) {
-      ii <- Matrix::which(d[, jj, drop = FALSE] != 0L, arr.ind = TRUE, useNames = TRUE)
-      x  <- lapply(x[ii[,1L]], `[`, i = jj)
+      ii <- rowsWithCol(d, jj, FALSE)
+      x  <- lapply(x[ii], `[`, i = jj)
 
   } else if ( missing(j) ) {
       x <- x[ii]
@@ -74,38 +73,29 @@ setMethod("[", c("MultiFactor", "ANY", "ANY"), definition = function(
 })
 
 
-# setReplaceMethod("[", c("MultiFactor", "ANY", "ANY", "list"), def = function(
-#     x, i, j, ..., value) {
-#   if (missing(i) && missing(j)) return(value)
-#   d <- dictionary(x)
-#   x <- unfactor(x)
-#   if (!missing(i)) ii <- rownames(d[i, , drop = FALSE])
-#   if (!missing(j)) jj <- colnames(d[, j, drop = FALSE])
-#
-#
-#   if ( missing(i) ) {
-#     ii <- Matrix::which(d[, jj, drop = FALSE] != 0L, arr.ind = TRUE)[, 1L]
-#     x  <- lapply(x[ii], `[`, i = jj)
-#
-#
-#     # lv_names <- colnames(m)
-#     # for(id in seq_along(lv_names)) {
-#     #   idx <- rownames(m)[m[, id] != 0]
-#     #
-#     #   x[idx] <- lapply(x[idx], charToIntDF, id = lv_names[id], r = l[[id]])
-#     # }
-#     # x
-#
-#
-#   } else if ( missing(j) ) {
-#     x[ii] <- value
-#
-#   } else {
-#     x  <- lapply(x[ii], `[`, i = jj)
-#   }
-#
-#     MultiFactor(x)
-# })
+setReplaceMethod("[", c("MultiFactor", "ANY", "ANY", "list"), def = function(
+    x, i, j, ..., value) {
+  if (missing(i) && missing(j)) return(value)
+  d <- dictionary(x)
+  if (!missing(i)) ii <- rownames(d[i ,   , drop = FALSE])
+  if (!missing(j)) jj <- colnames(d[  ,  j, drop = FALSE])
+
+  if ( missing(j) ) {
+    x@index[ii] <- value
+    validObject(x)
+    return(x)
+  }
+
+  if ( missing(i) ) { ii <- rowsWithCol(d, jj, names = TRUE) }
+
+  for(i in ii) {
+      for(j in jj) {
+        x@index[[i]][,j] <- value[[i]][,j]
+      }
+  }
+  validObject(x)
+  (x)
+})
 
 
 
@@ -113,7 +103,7 @@ setMethod("[", c("MultiFactor", "ANY", "ANY"), definition = function(
 #' @export
 #'
 setMethod("[[", c("MultiFactor", "ANY"), function(x, i, ...) {
-  x@.Data[[i, ...]]
+  x@index[[i, ...]]
 })
 
 #' @export
@@ -121,8 +111,9 @@ setMethod("[[", c("MultiFactor", "ANY"), function(x, i, ...) {
 setReplaceMethod("[[", c("MultiFactor", "ANY", "ANY"),
                  function(x, i, ..., value) {
 
-                   x@.Data[[i, ...]] <- value
-                   MultiFactor(x)
+                   x@index[[i, ...]] <- value
+                   validObject(x)
+                   x
                    }
                  )
 
@@ -173,14 +164,55 @@ setMethod("show",  "MultiFactor", function(object) {
 #'
 setMethod("unfactor", "MultiFactor", function(x) {
   lv <- levels(x)
-  x  <- `names<-`(x@.Data, rownames(x))
-  ns <- lapply(x, names)
-  x  <- lapply(x, function(id) as.data.frame.list(
-      lapply(names(id), function(y) lv[[y]] [ id[[y]] ] ),
-      col.names = names(id))
-      )
-  x
+  ns <- rownames(x)
+  x  <- x@index
+
+  x[] <- lapply(x, function(df) {
+    for(id in names(df)) {
+    df[,id] <- lv[[id]][df[,id]]
+    }
+    return(df)} )
+
+  return(x)
 })
+
+#' @rdname MultiFactor-methods
+#' @description Analogous to `factors`. `droplevels(MultiFactor)` returns a
+#'     `MultiFactor` with unused levels removed.
+#' @importMethodsFrom S4Vectors droplevels
+#' @inheritParams base::droplevels
+#' @returns A MultiFactor
+#' @export
+#'
+droplevels.MultiFactor <- function(x, ...) {
+  lvs   <- levels(x)
+  d     <- dictionary(x)
+  x.int <- x@index
+  for(lv in names(lvs)) {
+    rs        <- rowsWithCol(d, lv, names = TRUE)
+    x_index   <- lapply(x.int[rs], `[[`, lv )
+
+    x_tot     <- unique(unlist(x_index, use.names = FALSE))
+
+    x_nlevels <- length(lvs[[lv]])
+    lvl_ranks <- seq_len(x_nlevels)
+
+    keep_ix   <- which(lvl_ranks %in% x_tot)
+
+    lvs[[lv]] <- lvs[[lv]][keep_ix]
+    for(r in rs) { x.int[[r]][,lv]  <- match(x_index[[r]],  table = keep_ix) }
+  }
+  MultiFactor(x.int, levels = lvs)
+}
+
+#' @rdname MultiFactor-methods
+#' @export
+#'
+setMethod("droplevels", "MultiFactor", function(x, ...)
+  droplevels.MultiFactor(x, ...))
+
+
+#mergeROWS()
 
 #' S3/S4 combo for levels.
 #' @export
@@ -202,7 +234,6 @@ setMethod("levels",  "MultiFactor", levels.MultiFactor)
 setReplaceMethod("levels", "MultiFactor",
                  function(x, value) {
                    x@levels <- value
-                   validObject(x)
                    x   } )
 
 #' @export
@@ -281,3 +312,37 @@ setMethod("subset", "MultiFactor", function(x, subset, select, ...) {
     return(x)
 })
 
+
+#' @param d `MultiFactor@map`
+#' @param id `Character or Integer scalar`. Selects column of `d`.
+#' @param names Whether to return characters (Default) or integer indices.
+#' @returns A vector indicating which elements of `MultiFactor` contain `id`.
+#' @importFrom Matrix which
+#' @noRd
+#' @description Helper function for `MultiFactor` to get names or indices of
+#' data frames that contain an id column
+#'
+rowsWithCol <- function(d, id, names = TRUE) {
+  rowInds <- Matrix::which((d[,id, drop = FALSE] != 0L))
+  if(names){
+    rowInds <- rownames(d)[rowInds]
+  }
+  return(rowInds)
+}
+
+#' @param d `MultiFactor@map`
+#' @param id `Character or Integer scalar`. Selects row of `d`.
+#' @param names Whether to return characters (Default) or integer indices.
+#' @returns A vector indicating which feature types are in element `id`.
+#' @importFrom Matrix which
+#' @noRd
+#' @description Helper function for `MultiFactor` to get names or indices of
+#'     features contained in a given data frame element of `MultiFactor`.
+#'
+colsWithRow <- function(d, id, names = TRUE) {
+  colInds <- Matrix::which((d[id, , drop = FALSE] != 0L))
+  if(names){
+    colInds <- colnames(d)[colInds]
+  }
+  return(colInds)
+}

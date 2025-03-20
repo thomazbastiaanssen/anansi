@@ -11,7 +11,7 @@
 \section{Slots}{
 
 \describe{
-\item{\code{.Data}}{Named \code{list} of named integer data frames of at least two columns
+\item{\code{index}}{Named \code{list} of named integer data frames of at least two columns
 each. The column names correspond to names in the \code{levels} slot. Similar
 to \code{factor}s, the integers in those columns correspond to the characters
 in that level. Accessed through regular list methods (e.g., \code{[}, \code{[[}).}

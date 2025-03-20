@@ -50,7 +50,7 @@ setValidity("AnansiWeb", method = function(object) ifelse(
 #' @description
 #' `MultiFactor` is an S4 class to manage multiple sets of factors. Methods for
 #' `MultiFactor` aim to follow `factor` behaviour.
-#' @slot .Data Named `list` of named integer data frames of at least two columns
+#' @slot index Named `list` of named integer data frames of at least two columns
 #'     each. The column names correspond to names in the `levels` slot. Similar
 #'     to `factor`s, the integers in those columns correspond to the characters
 #'     in that level. Accessed through regular list methods (e.g., `[`, `[[`).
@@ -66,8 +66,9 @@ setValidity("AnansiWeb", method = function(object) ifelse(
 #'}
 #'
 setClass("MultiFactor",
-         contains = "list",
-         slots = c(levels  = "list",
+
+         slots = c(index   = "list",
+                   levels  = "list",
                    map     = "Matrix")
 )
 
@@ -92,7 +93,7 @@ setValidity("MultiFactor", method = function(object) ifelse(
 #' @noRd
 validMultiFactor <- function(x) {
   levels_valid <- validLevels(levels(x))
-  x <- x@.Data
+  x <- x@index
   values_valid <- vapply(x, validIntLinkDF, NA, USE.NAMES = FALSE)
   no_missing   <- ! any(vapply(x, anyNA, NA, USE.NAMES = FALSE))
 

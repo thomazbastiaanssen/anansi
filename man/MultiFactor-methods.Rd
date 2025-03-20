@@ -8,6 +8,8 @@
 \alias{dimnames,MultiFactor-method}
 \alias{show,MultiFactor-method}
 \alias{unfactor,MultiFactor-method}
+\alias{droplevels.MultiFactor}
+\alias{droplevels,MultiFactor-method}
 \alias{levels.MultiFactor}
 \alias{levels,MultiFactor-method}
 \alias{levels<-,MultiFactor-method}
@@ -28,7 +30,11 @@
 
 \S4method{unfactor}{MultiFactor}(x)
 
-levels.MultiFactor(x)
+droplevels.MultiFactor(x, ...)
+
+\S4method{droplevels}{MultiFactor}(x, ...)
+
+\method{levels}{MultiFactor}(x)
 
 \S4method{levels}{MultiFactor}(x)
 
@@ -45,11 +51,11 @@ levels.MultiFactor(x)
 
 \item{object}{Any R object}
 
-\item{value}{a replacement character vector of suitable dimensions.}
-
 \item{...}{
     Optional metadata columns.
   }
+
+\item{value}{a replacement character vector of suitable dimensions.}
 
 \item{subset}{\verb{logical expression} indicating rows to keep. Must contain variables
 found as column names.}
@@ -59,6 +65,8 @@ found as column names.}
 }
 \value{
 A named character list
+
+A MultiFactor
 
 a named list of character vectors.
 
@@ -79,6 +87,9 @@ a set of methods to work with \code{MultiFactor}, a special type of list.
 
 Analogous to \code{factors}. \code{unfactor(MultiFactor)} returns a named
 list with character data frames with same dimensions as input.
+
+Analogous to \code{factors}. \code{droplevels(MultiFactor)} returns a
+\code{MultiFactor} with unused levels removed.
 
 get object levels
 

@@ -62,7 +62,6 @@ setAs(from = "AnansiWeb", to = "MultiAssayExperiment", def = function(from) {
     )
 })
 
-
 #' @description Convert MultiFactor to list
 #' @rdname coerceAnansi
 #' @aliases as.list.MultiFactor
@@ -87,6 +86,6 @@ setMethod("as.list", c(x = "MultiFactor"), function(x, ..., use.names = TRUE)
 as.list.MultiFactor <- function(x, use.names = TRUE) ifelse(
     use.names,
     yes = return( unfactor(x) ),
-    no  = return( `names<-`(x@.Data, rownames(x)) )
+    no  = return( `names<-`(x@index, rownames(x)) )
 )
 

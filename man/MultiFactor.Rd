@@ -3,7 +3,7 @@
 \name{MultiFactor}
 \alias{MultiFactor}
 \alias{asMultiFactor}
-\title{Make aa MultiFactor}
+\title{Make a MultiFactor}
 \usage{
 MultiFactor(x, levels = NULL, drop.unmatched = TRUE)
 

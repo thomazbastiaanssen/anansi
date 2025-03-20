@@ -20,7 +20,8 @@
 #' @param adjust.method Method to adjust p-values for multiple comparisons.
 #' `adjust.method = "BH"` is the default value. See `p.adjust()` in
 #' the base R `stats` package.
-#' @param verbose A boolean. Toggles whether to print diagnostic information
+#' @param verbose `Logical scalar`. Whether to print diagnostic information
+#'     (Default: `TRUE`).
 #' while running. Useful for debugging errors on large datasets.
 #' @param return.format `Character scalar`. Should be one of `"table"`
 #' , `"list"`, or `"raw"`. Should the output of [anansi()]
