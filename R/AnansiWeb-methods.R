@@ -96,9 +96,7 @@ setReplaceMethod("metadata", "AnansiWeb", def = function(
 #' @aliases tableY
 #' @export
 #'
-setMethod("tableY", "AnansiWeb", def = function(x, ...) {
-    x@tableY
-})
+setMethod("tableY", "AnansiWeb", def = function(x, ...) x@tableY )
 
 #' @rdname AnansiWeb-methods
 #' @inheritParams tableY
