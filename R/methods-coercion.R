@@ -53,10 +53,10 @@ setAs(from = "AnansiWeb", to = "MultiAssayExperiment", def = function(from) {
     )
     names(to_exp) <- names(from)
 
-    to_md <- list(dictionary = from@dictionary)
+    to_md <- list(dictionary = dictionary(from))
     to_cd <- metadata(from, simplify = TRUE)
 
-    MultiAssayExperiment(
+    MultiAssayExperiment::MultiAssayExperiment(
         experiments = to_exp,
         metadata = to_md,
         colData = DataFrame(to_cd)
