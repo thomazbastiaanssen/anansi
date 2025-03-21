@@ -47,7 +47,6 @@ setReplaceMethod("$", "AnansiWeb", def = function(x, name, value) {
     return(x)
 })
 
-
 #' @export
 #' @importClassesFrom S4Vectors Annotated
 #' @importFrom S4Vectors metadata
@@ -91,6 +90,9 @@ setReplaceMethod("metadata", "AnansiWeb", def = function(
 })
 
 #' @rdname AnansiWeb-methods
+#' @name tableY
+#' @param x `AnansiWeb`
+#' @param ... additional arguments (currently not used).
 #' @aliases tableY
 #' @export
 #'
@@ -99,17 +101,22 @@ setMethod("tableY", "AnansiWeb", def = function(x, ...) {
 })
 
 #' @rdname AnansiWeb-methods
+#' @inheritParams tableY
 #' @export
+#' @aliases tableX
 #'
 setMethod("tableX", "AnansiWeb", function(x, ...) x@tableX)
 
 #' @rdname AnansiWeb-methods
+#' @inheritParams tableY
 #' @export
 #'
 setMethod("dictionary", "AnansiWeb", function(x, ...) x@dictionary)
 
 #' @rdname AnansiWeb-methods
-#' @aliases `tableY<-`
+#' @name `tableY<-`
+#' @inheritParams tableY
+#' @param value replacement `matrix` with same number of rows target.
 #' @importFrom methods slot<-
 #'
 setReplaceMethod("tableY", "AnansiWeb", def = function(x, ..., value) {
@@ -120,6 +127,8 @@ setReplaceMethod("tableY", "AnansiWeb", def = function(x, ..., value) {
 
 #' @rdname AnansiWeb-methods
 #' @export
+#' @inheritParams `tableY<-`
+#' @aliases `tableX<-`
 #'
 setReplaceMethod("tableX", "AnansiWeb", def = function(x, ..., value) {
     x@tableX <- value
@@ -128,6 +137,7 @@ setReplaceMethod("tableX", "AnansiWeb", def = function(x, ..., value) {
 })
 
 #' @rdname AnansiWeb-methods
+#' @inheritParams `tableY<-`
 #' @export
 #'
 setReplaceMethod("dictionary", "AnansiWeb", def = function(x, ..., value) {

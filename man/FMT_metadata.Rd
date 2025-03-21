@@ -6,7 +6,7 @@
 \title{Snippet of the metadata from the FMT Aging study.}
 \format{
 A data.frame object with 36 rows, samples, and two columns, denoting
-sample ID and treatemtn group, respectively.
+sample ID and treatment group, respectively.
 }
 \source{
 \doi{10.1038/s43587-021-00093-9}

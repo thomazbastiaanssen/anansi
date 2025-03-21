@@ -7,5 +7,5 @@
 \S4method{[}{MultiFactor,ANY,ANY,list}(x, i, j, ...) <- value
 }
 \description{
-\verb{[<-}: Replace based on \link{rownames(),colnames(x)} indices
+\verb{[<-}: Replace based on \verb{[rownames(),colnames(x)]} indices
 }

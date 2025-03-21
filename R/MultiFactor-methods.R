@@ -46,7 +46,7 @@ setMethod("dimnames", "MultiFactor", function(x) {
 })
 
 #' S4 Methods for MultiFactor
-#' @description `[`: Subset based on [rownames(),colnames(x)] indices.
+#' @description `[`: Subset based on `[rownames(),colnames(x)]` indices.
 #' @param drop Whether to return a `list` (Default) or `MultiFactor`.
 #' @export
 #'
@@ -78,7 +78,7 @@ setMethod("[", c("MultiFactor", "ANY", "ANY"), definition = function(
 })
 
 #' S4 Methods for MultiFactor
-#' @description `[<-`: Replace based on [rownames(),colnames(x)] indices
+#' @description `[<-`: Replace based on `[rownames(),colnames(x)]` indices
 #' @export
 #'
 setReplaceMethod("[", c("MultiFactor", "ANY", "ANY", "list"), def = function(

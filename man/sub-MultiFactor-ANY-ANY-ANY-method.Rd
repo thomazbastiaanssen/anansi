@@ -10,5 +10,5 @@
 \item{drop}{Whether to return a \code{list} (Default) or \code{MultiFactor}.}
 }
 \description{
-\code{[}: Subset based on \link{rownames(),colnames(x)} indices.
+\code{[}: Subset based on \verb{[rownames(),colnames(x)]} indices.
 }

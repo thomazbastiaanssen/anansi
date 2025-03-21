@@ -81,7 +81,7 @@ kegg_link <- function() list(ec2ko = anansi::ec2ko, ec2cpd = anansi::ec2cpd)
 #'     from young mice (Young yFMT), aged mice that received FMT from aged mice
 #'     (Aged oFMT) and aged mice that received FMT from young mice (Aged yFMT).
 #' @format A data.frame object with 36 rows, samples, and two columns, denoting
-#'     sample ID and treatemtn group, respectively.
+#'     sample ID and treatment group, respectively.
 #' @source \doi{10.1038/s43587-021-00093-9}
 #'
 "FMT_metadata"
