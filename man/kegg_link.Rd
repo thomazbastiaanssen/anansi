@@ -50,17 +50,20 @@ kegg_link()
 # Don't download during tests. set to `TRUE` to download.
 dry_run <- TRUE
 
-if(!dry_run) {
+if (!dry_run) {
+    ec2ko <- KEGGREST::keggLink("ec", "ko")
+    ec2ko <- data.frame(
+        ec = gsub("ec:", "", x = ec2ko, fixed = TRUE),
+        ko = gsub("ko:", "", x = names(ec2ko), fixed = TRUE),
+        row.names = NULL
+    )
 
-ec2ko <- KEGGREST::keggLink("ec", "ko")
-ec2ko <- data.frame(ec = gsub("ec:","",  x = ec2ko, fixed = TRUE),
-                    ko = gsub("ko:", "", x = names(ec2ko), fixed = TRUE),
-                    row.names = NULL)
-
-ec2cpd <- KEGGREST::keggLink("ec", "cpd")
-ec2cpd <- data.frame(ec  = gsub("ec:","",   x = ec2cpd, fixed = TRUE),
-                     cpd = gsub("cpd:", "", x = names(ec2cpd), fixed = TRUE),
-                     row.names = NULL)
+    ec2cpd <- KEGGREST::keggLink("ec", "cpd")
+    ec2cpd <- data.frame(
+        ec = gsub("ec:", "", x = ec2cpd, fixed = TRUE),
+        cpd = gsub("cpd:", "", x = names(ec2cpd), fixed = TRUE),
+        row.names = NULL
+    )
 }
 
 }

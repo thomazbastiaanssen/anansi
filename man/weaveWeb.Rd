@@ -78,8 +78,8 @@ weaveWeb(x = "ko", y = "ec", link = ec2ko)
 weaveWeb(ec ~ cpd, link = ec2cpd)
 
 # A wrapper is available for kegg ko, ec and cpd data
-generic      <- weaveWeb(cpd ~ ko, link = kegg_link())
-kegg_wrapper <- weaveKEGG( cpd ~ ko )
+generic <- weaveWeb(cpd ~ ko, link = kegg_link())
+kegg_wrapper <- weaveKEGG(cpd ~ ko)
 
 identical(generic, kegg_wrapper)
 

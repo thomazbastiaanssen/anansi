@@ -94,8 +94,8 @@ mae <- as(web, "MultiAssayExperiment")
 
 # Perform anansi analysis
 out <- getAnansi(mae,
-  tableY = "y", tableX = "x",
-  formula = ~ cat_ab
+    tableY = "y", tableX = "x",
+    formula = ~cat_ab
 )
 
 # Select significant interactions
@@ -103,16 +103,18 @@ out <- out[out$full_p.values < 0.05, ]
 
 # Visualise disjointed associations filled by group
 plotAnansi(out,
-           association.type = "disjointed",
-           model.var = "cat_ab",
-           signif.threshold = 0.05,
-           fill_by = "group")
+    association.type = "disjointed",
+    model.var = "cat_ab",
+    signif.threshold = 0.05,
+    fill_by = "group"
+)
 
 # Visualise full associations filled by category ('cat_ab')
 plotAnansi(out,
-           association.type = "full",
-           signif.threshold = 0.05,
-           fill_by = "cat_ab")
+    association.type = "full",
+    signif.threshold = 0.05,
+    fill_by = "cat_ab"
+)
 
 }
 \seealso{

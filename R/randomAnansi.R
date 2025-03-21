@@ -25,21 +25,33 @@ NULL
 #'
 randomWeb <- function(n_samples = 10, n_features_x = 8, n_features_y = 12,
                       sparseness = 0.5, tableY = NULL, tableX = NULL,
-                      dictionary = NULL){
-    stopifnot("'sparseness' must be a proportion [0-1]. " =
-                  sparseness <= 1 && sparseness > 0)
-    stopifnot("At least one of 'tableY,tableX', 'dictionary' should be NULL." =
-                  any(c(is.null(tableY), is.null(tableX), is.null(dictionary))))
-    stopifnot("'tableY,tableX' should either both be provided or both NULL. " =
-                  is.null(tableY) == is.null(tableX) )
+                      dictionary = NULL) {
+    stopifnot(
+        "'sparseness' must be a proportion [0-1]. " =
+            sparseness <= 1 && sparseness > 0
+    )
+    stopifnot(
+        "At least one of 'tableY,tableX', 'dictionary' should be NULL." =
+            any(c(is.null(tableY), is.null(tableX), is.null(dictionary)))
+    )
+    stopifnot(
+        "'tableY,tableX' should either both be provided or both NULL. " =
+            is.null(tableY) == is.null(tableX)
+    )
 
     density <- 1 - sparseness
     # All missing: return full random Web
-    if(all(c(is.null(tableY), is.null(tableX), is.null(dictionary)))) return(
-        randomWebFull(n_samples, n_features_x, n_features_y, density) )
+    if (all(c(is.null(tableY), is.null(tableX), is.null(dictionary)))) {
+        return(
+            randomWebFull(n_samples, n_features_x, n_features_y, density)
+        )
+    }
     # Dictionary missing: make random fitting dictionary, return filled Web
-    if(is.null(dictionary)) return(
-        randomWebDic(tableY, tableX, density) )
+    if (is.null(dictionary)) {
+        return(
+            randomWebDic(tableY, tableX, density)
+        )
+    }
     # Tables missing: make random fitting tables, return filled Web
     return(randomWebTab(n_samples, dictionary))
 }
@@ -51,22 +63,29 @@ randomWeb <- function(n_samples = 10, n_features_x = 8, n_features_y = 12,
 #' @export
 #'
 randomMultiFactor <- function(n_types = 6, n_features = 100,
-                          sparseness = 0.5){
-    stopifnot("'sparseness' must be a proportion [0-1]. " =
-                  sparseness <= 1 && sparseness > 0)
+                              sparseness = 0.5) {
+    stopifnot(
+        "'sparseness' must be a proportion [0-1]. " =
+            sparseness <= 1 && sparseness > 0
+    )
     n_types <- max(min(n_types, 26), 2)
     ids <- letters[seq_len(n_types)]
-    out_names <- paste0(ids[-n_types], "2",ids[-1L])
-    id_list <- lapply(ids, function(x)
+    out_names <- paste0(ids[-n_types], "2", ids[-1L])
+    id_list <- lapply(ids, function(x) {
         paste(x, formatC(seq_len(n_features),
-                         digits = 2, flag = "0"), sep = "_"))
+            digits = 2, flag = "0"
+        ), sep = "_")
+    })
 
-    out <- lapply(seq_len(n_types-1), FUN = function(x){
-        randomLinkDF(l = id_list[-n_types][[x]],
-                     r = id_list[-1L][[x]],
-                     l_id = ids[-n_types][x],
-                     r_id = ids[-1L][x],
-                     p = (1-sparseness))})
+    out <- lapply(seq_len(n_types - 1), FUN = function(x) {
+        randomLinkDF(
+            l = id_list[-n_types][[x]],
+            r = id_list[-1L][[x]],
+            l_id = ids[-n_types][x],
+            r_id = ids[-1L][x],
+            p = (1 - sparseness)
+        )
+    })
     names(out) <- out_names
     asMultiFactor(out)
 }
@@ -81,18 +100,21 @@ randomMultiFactor <- function(n_types = 6, n_features = 100,
 #' @noRd
 #'
 randomWebFull <- function(n_samp, n_x, n_y, density) {
-
-    tableY <- matrix(data = rnorm(n_y * n_samp),
-                     nrow = n_samp, ncol = n_y,
-                     dimnames = list(
-                         sample_id = paste0("sample_", seq_len(n_samp)),
-                         y = paste0("y_", seq_len(n_y)))
+    tableY <- matrix(
+        data = rnorm(n_y * n_samp),
+        nrow = n_samp, ncol = n_y,
+        dimnames = list(
+            sample_id = paste0("sample_", seq_len(n_samp)),
+            y = paste0("y_", seq_len(n_y))
+        )
     )
-    tableX <- matrix(data = rnorm(n_x * n_samp),
-                     nrow = n_samp, ncol = n_x,
-                     dimnames = list(
-                         sample_id = paste0("sample_", seq_len(n_samp)),
-                         x = paste0("x_", seq_len(n_x)))
+    tableX <- matrix(
+        data = rnorm(n_x * n_samp),
+        nrow = n_samp, ncol = n_x,
+        dimnames = list(
+            sample_id = paste0("sample_", seq_len(n_samp)),
+            x = paste0("x_", seq_len(n_x))
+        )
     )
     randomWebDic(tableY, tableX, density)
 }
@@ -105,24 +127,30 @@ randomWebFull <- function(n_samp, n_x, n_y, density) {
 #'
 randomWebTab <- function(n_samp = 10, dictionary, metadata) {
     d <- dim(dictionary)
-    tableY <- matrix(data = rnorm(d[1] * n_samp),
-                     nrow = n_samp, ncol = d[1],
-                     dimnames = list(
-                         sample_id = paste0("sample_", seq_len(n_samp)),
-                         y = rownames(dictionary))
+    tableY <- matrix(
+        data = rnorm(d[1] * n_samp),
+        nrow = n_samp, ncol = d[1],
+        dimnames = list(
+            sample_id = paste0("sample_", seq_len(n_samp)),
+            y = rownames(dictionary)
+        )
     )
     names(dimnames(tableY))[2] <- names(dimnames(dictionary))[1]
-    tableX <- matrix(data = rnorm(d[2] * n_samp),
-                     nrow = n_samp, ncol = d[2],
-                     dimnames = list(
-                         sample_id = paste0("sample_", seq_len(n_samp)),
-                         x = colnames(dictionary))
+    tableX <- matrix(
+        data = rnorm(d[2] * n_samp),
+        nrow = n_samp, ncol = d[2],
+        dimnames = list(
+            sample_id = paste0("sample_", seq_len(n_samp)),
+            x = colnames(dictionary)
+        )
     )
     names(dimnames(tableX))[2] <- names(dimnames(dictionary))[2]
     metadata <- randomWebMetadata(tableY)
     # return AnansiWeb
-    AnansiWeb( tableY = tableY, tableX = tableX,
-               dictionary = dictionary, metadata = list(metadata = metadata))
+    AnansiWeb(
+        tableY = tableY, tableX = tableX,
+        dictionary = dictionary, metadata = list(metadata = metadata)
+    )
 }
 
 #' Generate a random AnansiWeb, only missing dictionary.
@@ -133,18 +161,24 @@ randomWebTab <- function(n_samp = 10, dictionary, metadata) {
 #' @noRd
 #'
 randomWebDic <- function(tableY, tableX, density, metadata) {
-
-    dictionary <- rsparsematrix(nrow = NCOL(tableY), ncol = NCOL(tableX),
-                                density = density, rand.x = NULL,
-                                dimnames = list(
-                                    y = colnames(tableY),
-                                    x = colnames(tableX)))
-    names(dimnames(dictionary)) <- c(names(dimnames(tableY))[2L],
-                                     names(dimnames(tableX))[2L])
+    dictionary <- rsparsematrix(
+        nrow = NCOL(tableY), ncol = NCOL(tableX),
+        density = density, rand.x = NULL,
+        dimnames = list(
+            y = colnames(tableY),
+            x = colnames(tableX)
+        )
+    )
+    names(dimnames(dictionary)) <- c(
+        names(dimnames(tableY))[2L],
+        names(dimnames(tableX))[2L]
+    )
     metadata <- randomWebMetadata(tableY)
     # return AnansiWeb
-    AnansiWeb( tableY = tableY, tableX = tableX,
-               dictionary = dictionary, metadata = list(metadata = metadata))
+    AnansiWeb(
+        tableY = tableY, tableX = tableX,
+        dictionary = dictionary, metadata = list(metadata = metadata)
+    )
 }
 
 #' Generate random metadata for AnansiWeb
@@ -154,13 +188,13 @@ randomWebDic <- function(tableY, tableX, density, metadata) {
 #' @rdname randomAnansi
 #' @noRd
 #'
-randomWebMetadata <- function(table){
+randomWebMetadata <- function(table) {
     n_samples <- NROW(table)
     m <- data.frame(
-        cat_ab  = sample(c("a", "b"), n_samples, replace = TRUE),
+        cat_ab = sample(c("a", "b"), n_samples, replace = TRUE),
         cat_XYZ = sample(c("X", "Y", "Z"), n_samples, replace = TRUE),
-        num_norm  = rnorm(n_samples),
-        num_unif  = runif(n_samples),
+        num_norm = rnorm(n_samples),
+        num_unif = runif(n_samples),
         row.names = paste0("sample_", seq_len(n_samples))
     )
     return(m)
@@ -174,10 +208,10 @@ randomWebMetadata <- function(table){
 #' @param p proportion of connections to keep
 #' @noRd
 #'
-randomLinkDF <- function(l, r, l_id, r_id, p){
+randomLinkDF <- function(l, r, l_id, r_id, p) {
     len <- length(l) * length(r)
-    ind <- sort(sample(seq_len(len), size = ceiling(p*len)))
-    out <- expand.grid(l, r, KEEP.OUT.ATTRS = FALSE)[ind,]
+    ind <- sort(sample(seq_len(len), size = ceiling(p * len)))
+    out <- expand.grid(l, r, KEEP.OUT.ATTRS = FALSE)[ind, ]
     names(out) <- c(l_id, r_id)
     out
 }

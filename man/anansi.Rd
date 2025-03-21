@@ -122,19 +122,19 @@ t2 <- t(KOs.exp)
 # Run anansi pipeline.
 
 web <- weaveWeb(
-  formula = cpd ~ ko,
-  tableY = t1,
-  tableX = t2,
-  link = kegg_link()
+    formula = cpd ~ ko,
+    tableY = t1,
+    tableX = t2,
+    link = kegg_link()
 )
 
 anansi_out <- anansi(
-  web = web,
-  formula = ~Legend,
-  groups = "Legend",
-  metadata = FMT_metadata,
-  adjust.method = "BH",
-  verbose = TRUE
+    web = web,
+    formula = ~Legend,
+    groups = "Legend",
+    metadata = FMT_metadata,
+    adjust.method = "BH",
+    verbose = TRUE
 )
 
 
@@ -142,9 +142,9 @@ library(tidyr)
 
 # Use tidyr to wrangle the correlation r-values to a single column
 anansiLong <- anansi_out |>
-  pivot_longer(starts_with("All") | contains("FMT")) |>
-  separate_wider_delim(name, delim = "_", names = c("cor_group", "param")) |>
-  pivot_wider(names_from = param, values_from = value)
+    pivot_longer(starts_with("All") | contains("FMT")) |>
+    separate_wider_delim(name, delim = "_", names = c("cor_group", "param")) |>
+    pivot_wider(names_from = param, values_from = value)
 
 # Only consider interactions where the entire model fits well enough.
 library(ggplot2)
@@ -153,50 +153,50 @@ anansiLong <- anansiLong[anansiLong$full_p.values < 0.05, ]
 
 
 ggplot(
-  data = anansiLong,
-  aes(
-    x = r.values,
-    y = feature_X,
-    fill = cor_group,
-    alpha = disjointed_Legend_p.values < 0.05
-  )
+    data = anansiLong,
+    aes(
+        x = r.values,
+        y = feature_X,
+        fill = cor_group,
+        alpha = disjointed_Legend_p.values < 0.05
+    )
 ) +
 
-  # Make a vertical dashed red line at x = 0
-  geom_vline(xintercept = 0, linetype = "dashed", colour = "red") +
+    # Make a vertical dashed red line at x = 0
+    geom_vline(xintercept = 0, linetype = "dashed", colour = "red") +
 
-  # Points show  raw correlation coefficients
-  geom_point(shape = 21, size = 3) +
+    # Points show  raw correlation coefficients
+    geom_point(shape = 21, size = 3) +
 
-  # facet per compound
-  ggforce::facet_col(~feature_Y, space = "free", scales = "free_y") +
-  scale_fill_manual(values = c(
-    "Young yFMT" = "#2166ac",
-    "Aged oFMT" = "#b2182b",
-    "Aged yFMT" = "#ef8a62",
-    "All" = "gray"
-  )) +
-  theme_bw()
+    # facet per compound
+    ggforce::facet_col(~feature_Y, space = "free", scales = "free_y") +
+    scale_fill_manual(values = c(
+        "Young yFMT" = "#2166ac",
+        "Aged oFMT" = "#b2182b",
+        "Aged yFMT" = "#ef8a62",
+        "All" = "gray"
+    )) +
+    theme_bw()
 
 # Using miaViz style function:
 
 p <- plotAnansi(anansi_out,
-                association.type = "disjointed",
-                model.var = "Legend",
-                fill_by = "group",
-                signif.threshold = 0.05,
-                x_lab = "Pearson's rho")
+    association.type = "disjointed",
+    model.var = "Legend",
+    fill_by = "group",
+    signif.threshold = 0.05,
+    x_lab = "Pearson's rho"
+)
 p <- p +
-  scale_fill_manual(values = c(
-    "Young yFMT" = "#2166ac",
-    "Aged oFMT" = "#b2182b",
-    "Aged yFMT" = "#ef8a62",
-    "All" = "gray"
-  )) +
-  theme_bw()
+    scale_fill_manual(values = c(
+        "Young yFMT" = "#2166ac",
+        "Aged oFMT" = "#b2182b",
+        "Aged yFMT" = "#ef8a62",
+        "All" = "gray"
+    )) +
+    theme_bw()
 
-  p
-
+p
 
 }
 \seealso{

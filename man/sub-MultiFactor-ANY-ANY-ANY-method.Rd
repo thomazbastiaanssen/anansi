@@ -4,8 +4,11 @@
 \alias{[,MultiFactor,ANY,ANY,ANY-method}
 \title{S4 Methods for MultiFactor}
 \usage{
-\S4method{[}{MultiFactor,ANY,ANY,ANY}(x, i, j, ..., return.list = TRUE, drop = TRUE)
+\S4method{[}{MultiFactor,ANY,ANY,ANY}(x, i, j, ..., drop = TRUE)
+}
+\arguments{
+\item{drop}{Whether to return a \code{list} (Default) or \code{MultiFactor}.}
 }
 \description{
-\code{[}: Subset based on \link{rownames(),colnames(x)}
+\code{[}: Subset based on \link{rownames(),colnames(x)} indices.
 }

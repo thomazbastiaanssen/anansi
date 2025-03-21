@@ -63,7 +63,7 @@ available.
 Below is the citation output from using `citation('anansi')` in R.
 
 ``` r
-print(citation('anansi'), bibtex = TRUE)
+print(citation("anansi"), bibtex = TRUE)
 #> To cite anansi in publications use:
 #> 
 #>   Bastiaanssen TFS, Quinn TP, Cryan JF (2023) Knowledge-based

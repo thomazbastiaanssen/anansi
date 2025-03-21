@@ -12,8 +12,10 @@ NULL
 #' @rdname MultiFactor-methods
 #' @export
 #'
-setMethod("getEdgeList", "MultiFactor",
-          function(x) as.data.frame(do.call(rbind, names(x))))
+setMethod(
+    "getEdgeList", "MultiFactor",
+    function(x) as.data.frame(do.call(rbind, names(x)))
+)
 
 
 #' S4 Methods for MultiFactor
@@ -21,102 +23,134 @@ setMethod("getEdgeList", "MultiFactor",
 #' @rdname MultiFactor-methods
 #' @export
 #'
-setMethod("dim", "MultiFactor", function(x)
-  dim(x@map)
-)
+setMethod("dim", "MultiFactor", function(x) {
+    dim(x@map)
+})
 
 #' S4 Methods for MultiFactor
 #' @description `names`: Display a vector of dims (n objects, n ids).
 #' @rdname MultiFactor-methods
 #' @export
 #'
-setMethod("names", "MultiFactor", function(x)
-  `names<-`(lapply(x@index, names), rownames(x))
-)
+setMethod("names", "MultiFactor", function(x) {
+    `names<-`(lapply(x@index, names), rownames(x))
+})
 
 #' S4 Methods for MultiFactor
 #' @description `dimnames`: Display a vector of dims (n objects, n ids).
 #' @rdname MultiFactor-methods
 #' @export
 #'
-setMethod("dimnames", "MultiFactor", function(x)
-  dimnames(x@map)
-)
+setMethod("dimnames", "MultiFactor", function(x) {
+    dimnames(x@map)
+})
 
 #' S4 Methods for MultiFactor
-#' @description `[`: Subset based on [rownames(),colnames(x)]
+#' @description `[`: Subset based on [rownames(),colnames(x)] indices.
+#' @param drop Whether to return a `list` (Default) or `MultiFactor`.
 #' @export
 #'
 setMethod("[", c("MultiFactor", "ANY", "ANY"), definition = function(
-    x, i, j, ..., return.list = TRUE, drop = TRUE)
-  {
-  if ( missing(i) && missing(j) )  return(x)
-  d <- dictionary(x)
-  x <- unfactor(x)
-  if (!missing(i)) ii <- rownames(d[i, , drop = FALSE])
-  if (!missing(j)) jj <- colnames(d[, j, drop = FALSE])
+    x, i, j, ..., drop = TRUE) {
+    if (missing(i) && missing(j)) {
+        return(x)
+    }
+    d <- dictionary(x)
+    l <- levels(x)
+    x <- x@index
+    if (!missing(i)) ii <- rownames(d[i, , drop = FALSE])
+    if (!missing(j)) jj <- colnames(d[, j, drop = FALSE])
 
-  if ( missing(i) ) {
-      ii <- rowsWithCol(d, jj, FALSE)
-      x  <- lapply(x[ii], `[`, i = jj)
+    if (missing(i)) {
+        ii <- rowsWithCol(d, jj, FALSE)
+        x <- lapply(x[ii], `[`, i = jj)
+    } else if (missing(j)) {
+        x <- x[ii]
+    } else {
+        x <- lapply(x[ii], `[`, i = jj)
+    }
 
-  } else if ( missing(j) ) {
-      x <- x[ii]
+    if (drop) {
+        return(x)
+    }
 
-  } else {
-      x  <- lapply(x[ii], `[`, i = jj)
-  }
-
-  if(return.list) return(x)
-
-  MultiFactor(x)
+    MultiFactor(x, levels = l)
 })
 
-
+#' S4 Methods for MultiFactor
+#' @description `[<-`: Replace based on [rownames(),colnames(x)] indices
+#' @export
+#'
 setReplaceMethod("[", c("MultiFactor", "ANY", "ANY", "list"), def = function(
     x, i, j, ..., value) {
-  if (missing(i) && missing(j)) return(value)
-  d <- dictionary(x)
-  if (!missing(i)) ii <- rownames(d[i ,   , drop = FALSE])
-  if (!missing(j)) jj <- colnames(d[  ,  j, drop = FALSE])
+    if (missing(i) && missing(j)) {
+        return(value)
+    }
+    d <- dictionary(x)
+    if (!missing(i)) ii <- rownames(d[i, , drop = FALSE])
+    if (!missing(j)) jj <- colnames(d[, j, drop = FALSE])
 
-  if ( missing(j) ) {
-    x@index[ii] <- value
+    if (missing(j)) {
+        x@index[ii] <- value
+        validObject(x)
+        return(x)
+    }
+
+    if (missing(i)) {
+        ii <- rowsWithCol(d, jj, names = TRUE)
+    }
+
+    for (i in ii) {
+        for (j in jj) {
+            x@index[[i]][, j] <- value[[i]][, j]
+        }
+    }
     validObject(x)
-    return(x)
-  }
-
-  if ( missing(i) ) { ii <- rowsWithCol(d, jj, names = TRUE) }
-
-  for(i in ii) {
-      for(j in jj) {
-        x@index[[i]][,j] <- value[[i]][,j]
-      }
-  }
-  validObject(x)
-  (x)
+    (x)
 })
 
 
 
-
 #' @export
+#' @description
+#' Extract all elements that contain a given feature type.
+#' @details
+#' if argument `i` is a vector, return all elements that contain at least that
+#' exact combination.
+#' @rdname MultiFactor-methods
+#' @inheritParams base::Extract
 #'
 setMethod("[[", c("MultiFactor", "ANY"), function(x, i, ...) {
-  x@index[[i, ...]]
+    d <- x@map
+    # If i can't index d, return NULL
+    if (!all(i %in% colnames(d))) {
+        if (anyNA(colnames(d)[i]) || length(colnames(d)[i]) != length(i)) {
+            return(NULL)
+        }
+    }
+    # Otherwise, return selected elements.
+    ii <- rowsWithCol(d, i, FALSE)
+    x[ii]
 })
 
 #' @export
+#' @rdname MultiFactor-methods
+#' @description `[[<-` should be used to replace, not add data.
 #'
-setReplaceMethod("[[", c("MultiFactor", "ANY", "ANY"),
-                 function(x, i, ..., value) {
-
-                   x@index[[i, ...]] <- value
-                   validObject(x)
-                   x
-                   }
-                 )
-
+setReplaceMethod("[[", c("MultiFactor", "ANY", "ANY"), function(
+    x, i, ..., value) {
+    d <- x@map
+    # If i can't index d, stop. Appending not supported through `[[<-`.
+    if (!all(i %in% colnames(d))) {
+        if (anyNA(colnames(d)[i]) || length(colnames(d)[i]) != length(i)) {
+            stop("No levels corresponding to `i` found in MultiFactor. ")
+        }
+    }
+    ii <- rowsWithCol(d, i, FALSE)
+    x@index[ii] <- value
+    validObject(x)
+    x
+})
 
 
 #' S4 Methods for MultiFactor
@@ -127,31 +161,38 @@ setReplaceMethod("[[", c("MultiFactor", "ANY", "ANY"),
 #' @rdname MultiFactor-methods
 #' @export
 #'
-setMethod("show",  "MultiFactor", function(object) {
-  cat("A list of class ", class(object), ",\n    ",
-      NCOL(object), " feature types across ", NROW(object),
-      " edge lists.\n\n", sep = "")
-  printSpMatrix( object@map )
+setMethod("show", "MultiFactor", function(object) {
+    cat("A list of class ", class(object), ",\n    ",
+        NCOL(object), " feature types across ", NROW(object),
+        " edge lists.\n\n",
+        sep = ""
+    )
+    printSpMatrix(object@map)
 
-  cat("\nValues represent unique feature names in that edge list.\n\n",
-      "Levels:\n\n", sep = ''
-  )
-  id_w <- max(nchar(colnames(object)))
-  nm_w <- max(nchar(nlevels(object)))
-  for(id in colnames(object)) {
-    num_lvs <- length(levels(object)[[id]])
-    cat(format(id, width = id_w), " : ",
-        format(num_lvs, width = nm_w), " Levels: ", sep = "" )
+    cat("\nValues represent unique feature names in that edge list.\n\n",
+        "Levels:\n\n",
+        sep = ""
+    )
+    id_w <- max(nchar(colnames(object)))
+    nm_w <- max(nchar(nlevels(object)))
+    for (id in colnames(object)) {
+        num_lvs <- length(levels(object)[[id]])
+        cat(format(id, width = id_w), " : ",
+            format(num_lvs, width = nm_w), " Levels: ",
+            sep = ""
+        )
 
-    if(num_lvs > 4L)
-      cat(
-        levels(object)[[id]][1], levels(object)[[id]][2], "...",
-        levels(object)[[id]][num_lvs], "\n",sep = " "
-      ) else
-        cat(levels(object)[[id]], "\n", sep = " ")
-
-  }
-  invisible(NULL)
+        if (num_lvs > 4L) {
+            cat(
+                levels(object)[[id]][1], levels(object)[[id]][2], "...",
+                levels(object)[[id]][num_lvs], "\n",
+                sep = " "
+            )
+        } else {
+            cat(levels(object)[[id]], "\n", sep = " ")
+        }
+    }
+    invisible(NULL)
 })
 
 #' @rdname MultiFactor-methods
@@ -163,17 +204,18 @@ setMethod("show",  "MultiFactor", function(object) {
 #' @export
 #'
 setMethod("unfactor", "MultiFactor", function(x) {
-  lv <- levels(x)
-  ns <- rownames(x)
-  x  <- x@index
+    lv <- levels(x)
+    ns <- rownames(x)
+    x <- x@index
 
-  x[] <- lapply(x, function(df) {
-    for(id in names(df)) {
-    df[,id] <- lv[[id]][df[,id]]
-    }
-    return(df)} )
+    x[] <- lapply(x, function(df) {
+        for (id in names(df)) {
+            df[, id] <- lv[[id]][df[, id]]
+        }
+        return(df)
+    })
 
-  return(x)
+    return(x)
 })
 
 #' @rdname MultiFactor-methods
@@ -181,38 +223,81 @@ setMethod("unfactor", "MultiFactor", function(x) {
 #'     `MultiFactor` with unused levels removed.
 #' @importMethodsFrom S4Vectors droplevels
 #' @inheritParams base::droplevels
+#' @param exclude `NULL` or `Named character list` of similar structure as
+#'     `levels(MultiFactor)`. Which levels to drop from output.
+#' @param select `NULL` or `Named character list` of similar structure as
+#'     `levels(MultiFactor)`. Which levels to keep in output.
+#' @details Only one of `select` and `exclude` should be provided, as they are
+#'     each others complement.
 #' @returns A MultiFactor
 #' @export
 #'
-droplevels.MultiFactor <- function(x, ...) {
-  lvs   <- levels(x)
-  d     <- dictionary(x)
-  x.int <- x@index
-  for(lv in names(lvs)) {
-    rs        <- rowsWithCol(d, lv, names = TRUE)
-    x_index   <- lapply(x.int[rs], `[[`, lv )
-
-    x_tot     <- unique(unlist(x_index, use.names = FALSE))
-
-    x_nlevels <- length(lvs[[lv]])
-    lvl_ranks <- seq_len(x_nlevels)
-
-    keep_ix   <- which(lvl_ranks %in% x_tot)
-
-    lvs[[lv]] <- lvs[[lv]][keep_ix]
-    for(r in rs) { x.int[[r]][,lv]  <- match(x_index[[r]],  table = keep_ix) }
-  }
-  MultiFactor(x.int, levels = lvs)
+droplevels.MultiFactor <- function(x, exclude = NULL, select = NULL, ...) {
+    stopifnot(
+        "Only one of 'exclude' and 'select' may be provided" =
+            sum(is.null(exclude), is.null(select)) > 0L
+    )
+    stopifnot("'x' is not a MultiFactor." = is(x, "MultiFactor"))
+    # Section 1. Trimming the indices by user input
+    lvs <- levels(x)
+    d <- dictionary(x)
+    if (!is.null(exclude)) {
+        stopifnot(
+            "`'exclude' must be a named list of character vectors ." =
+                is.list(exclude) && any(names(exclude) %in% names(lvs))
+        )
+        # Names not mentioned will be left alone.
+        jj <- intersect(names(exclude), names(lvs))
+        for (j in jj) {
+            ex.ind <- match(exclude[[j]], lvs[[j]], nomatch = 0L)
+            ii <- rowsWithCol(d, j)
+            for (i in ii) {
+                x@index[[i]] <- x@index[[i]][!x@index[[i]][, j] %in% ex.ind, ]
+            }
+        }
+    } else if (!is.null(select)) {
+        stopifnot(
+            "'select' argument must be a named list of character vectors." =
+                is.list(select) && any(names(select) %in% names(lvs))
+        )
+        jj <- intersect(names(select), names(lvs))
+        for (j in jj) {
+            ex.ind <- match(select[[j]], lvs[[j]], nomatch = 0L)
+            ii <- rowsWithCol(d, j)
+            for (i in ii) {
+                x@index[[i]] <- x@index[[i]][x@index[[i]][, j] %in% ex.ind, ]
+            }
+        }
+    }
+    # Section 2. Trimming the levels by indices. .
+    for (lv in names(lvs)) {
+        # Loop over all cols. First determine which rows are relevant per col/type
+        rs <- rowsWithCol(d, lv, names = TRUE)
+        x_index <- lapply(x@index[rs], `[[`, lv)
+        # Get unique feature names in that type and are within levels.
+        x_tot <- unique(unlist(x_index, use.names = FALSE))
+        keep_ix <- which(seq_along(lvs[[lv]]) %in% x_tot)
+        # Keep levels that show up in data
+        x@levels[[lv]] <- lvs[[lv]][keep_ix]
+        # Update indices to reflect fewer level names.
+        for (r in rs) {
+            x@index[[r]][, lv] <- match(x_index[[r]], table = keep_ix)
+        }
+    }
+    x@map <- mapMultiFactor(x@index)
+    validObject(x)
+    return(x)
 }
 
 #' @rdname MultiFactor-methods
 #' @export
 #'
-setMethod("droplevels", "MultiFactor", function(x, ...)
-  droplevels.MultiFactor(x, ...))
+setMethod("droplevels", "MultiFactor", function(x, ...) {
+    droplevels.MultiFactor(x, ...)
+})
 
 
-#mergeROWS()
+# mergeROWS()
 
 #' S3/S4 combo for levels.
 #' @export
@@ -225,16 +310,19 @@ levels.MultiFactor <- function(x) x@levels
 
 #' @export
 #' @rdname MultiFactor-methods
-setMethod("levels",  "MultiFactor", levels.MultiFactor)
+setMethod("levels", "MultiFactor", levels.MultiFactor)
 
 #' @export
 #' @rdname MultiFactor-methods
 #' @param value a replacement character vector of suitable dimensions.
 #'
-setReplaceMethod("levels", "MultiFactor",
-                 function(x, value) {
-                   x@levels <- value
-                   x   } )
+setReplaceMethod(
+    "levels", "MultiFactor",
+    function(x, value) {
+        x@levels <- value
+        x
+    }
+)
 
 #' @export
 #' @description
@@ -243,15 +331,18 @@ setReplaceMethod("levels", "MultiFactor",
 #' @returns a named sparse biadjacency matrix of dimensions (`dimnames(x)`)
 #' @rdname MultiFactor-methods
 #'
-setMethod("dictionary",  "MultiFactor", function(x, ...) x@map)
+setMethod("dictionary", "MultiFactor", function(x, ...) x@map)
 
 #' @export
 #' @rdname MultiFactor-methods
-setReplaceMethod("dictionary", "MultiFactor",
-                 function(x, ..., value) {
-                   x@map <- value
-                   validObject(x)
-                   x   } )
+setReplaceMethod(
+    "dictionary", "MultiFactor",
+    function(x, ..., value) {
+        x@map <- value
+        validObject(x)
+        x
+    }
+)
 
 
 #' S4 Methods for MultiFactor
@@ -283,66 +374,109 @@ setReplaceMethod("dictionary", "MultiFactor",
 #' subset(x = l, ec %in% c("1.2.3.4", "4.3.2.1"))
 #'
 setMethod("subset", "MultiFactor", function(x, subset, select, ...) {
-  validObject(x); x.names <- names(x)
-  # PART I: SUBSETTING
-  if(!missing(subset)) {
-    subset <- substitute(subset); sub.vars <- all.vars(subset)
-    # Select those data frames where all terms are mentioned
-    sub.ind <- unlist(lapply(x.names, function(y) all( sub.vars %in% y )))
-    # Subset them
-    x[sub.ind] <- lapply(x[sub.ind], function(y) {
-      r <- eval(subset, y, parent.frame() )
-      return(y[r,]) })  }
-  # Return now if only one df.
-  if(length(x) == 1L) return(x)
+    validObject(x)
+    x.names <- names(x)
+    # PART I: SUBSETTING
+    if (!missing(subset)) {
+        subset <- substitute(subset)
+        sub.vars <- all.vars(subset)
+        # Select those data frames where all terms are mentioned
+        sub.ind <- unlist(lapply(x.names, function(y) all(sub.vars %in% y)))
+        # Subset them
+        x[sub.ind] <- lapply(x[sub.ind], function(y) {
+            r <- eval(subset, y, parent.frame())
+            return(y[r, ])
+        })
+    }
+    # Return now if only one df.
+    if (length(x) == 1L) {
+        return(x)
+    }
 
-  # PART II: SELECTING
-  if(missing(select)) {
-    id.vec   <- unlist(x.names, use.names = FALSE)
-    id.share <- id.vec[duplicated(id.vec)]
-    sel.vars <- id.share} else sel.vars <- all.vars(substitute(select))
-    for(v in sel.vars) {
-      # Select those data frames where all terms are mentioned
-      s.ind <- unlist(lapply(x.names, function(y) v %in% y ))
-      sel.obj <- x[s.ind]
-      keep    <- Reduce(intersect, lapply(sel.obj, function(df) df[,v]))
-      # Filter feature ids in each df to only include universally shared ones.
-      x[s.ind] <- lapply(sel.obj, function(df) return( df[df[[v]] %in% keep,] ))
+    # PART II: SELECTING
+    if (missing(select)) {
+        id.vec <- unlist(x.names, use.names = FALSE)
+        id.share <- id.vec[duplicated(id.vec)]
+        sel.vars <- id.share
+    } else {
+        sel.vars <- all.vars(substitute(select))
+    }
+    for (v in sel.vars) {
+        # Select those data frames where all terms are mentioned
+        s.ind <- unlist(lapply(x.names, function(y) v %in% y))
+        sel.obj <- x[s.ind]
+        keep <- Reduce(intersect, lapply(sel.obj, function(df) df[, v]))
+        # Filter feature ids in each df to only include universally shared ones.
+        x[s.ind] <- lapply(sel.obj, function(df) {
+            return(df[df[[v]] %in% keep, ])
+        })
     }
     return(x)
 })
 
 
 #' @param d `MultiFactor@map`
-#' @param id `Character or Integer scalar`. Selects column of `d`.
+#' @param id `Character or Integer scalar`. Selects column(s) of `d`.
 #' @param names Whether to return characters (Default) or integer indices.
 #' @returns A vector indicating which elements of `MultiFactor` contain `id`.
-#' @importFrom Matrix which
+#' @importFrom Matrix rowSums
 #' @noRd
 #' @description Helper function for `MultiFactor` to get names or indices of
 #' data frames that contain an id column
 #'
 rowsWithCol <- function(d, id, names = TRUE) {
-  rowInds <- Matrix::which((d[,id, drop = FALSE] != 0L))
-  if(names){
-    rowInds <- rownames(d)[rowInds]
-  }
-  return(rowInds)
+    rowInds <- which(Matrix::rowSums(d[, id, drop = FALSE] > 0L) == length(id))
+    if (length(rowInds) == 0L) {
+        return(NULL)
+    }
+    if (names) {
+        rowInds <- rownames(d)[rowInds]
+    }
+    return(rowInds)
+}
+
+#' @noRd
+#' @description `rowsWithCol` but returns union rather than intersect.
+rowsInCol <- function(d, id, names = TRUE) {
+    rowInds <- which(Matrix::rowSums(d[, id, drop = FALSE] > 0L) > 0L)
+    if (length(rowInds) == 0L) {
+        return(NULL)
+    }
+    if (names) {
+        rowInds <- rownames(d)[rowInds]
+    }
+    return(rowInds)
 }
 
 #' @param d `MultiFactor@map`
-#' @param id `Character or Integer scalar`. Selects row of `d`.
+#' @param id `Character or Integer vector`. Selects row(s) of `d`.
 #' @param names Whether to return characters (Default) or integer indices.
 #' @returns A vector indicating which feature types are in element `id`.
-#' @importFrom Matrix which
+#' @importFrom Matrix colSums
 #' @noRd
 #' @description Helper function for `MultiFactor` to get names or indices of
 #'     features contained in a given data frame element of `MultiFactor`.
 #'
 colsWithRow <- function(d, id, names = TRUE) {
-  colInds <- Matrix::which((d[id, , drop = FALSE] != 0L))
-  if(names){
-    colInds <- colnames(d)[colInds]
-  }
-  return(colInds)
+    colInds <- which(Matrix::colSums(d[id, , drop = FALSE] > 0L) == length(id))
+    if (length(colInds) == 0L) {
+        return(NULL)
+    }
+    if (names) {
+        colInds <- colnames(d)[colInds]
+    }
+    return(colInds)
+}
+
+#' @noRd
+#' @description `colsWithRow` but returns union rather than intersect.
+colsInRow <- function(d, id, names = TRUE) {
+    colInds <- which(Matrix::colSums(d[id, , drop = FALSE] > 0L) > 0L)
+    if (length(colInds) == 0L) {
+        return(NULL)
+    }
+    if (names) {
+        colInds <- colnames(d)[colInds]
+    }
+    return(colInds)
 }

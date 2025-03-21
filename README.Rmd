@@ -67,7 +67,7 @@ Additionally, a [preprint](https://arxiv.org/abs/2305.10832) is available.
 Below is the citation output from using `citation('anansi')` in R. 
 
 ```{r 'citation', eval = requireNamespace('anansi')}
-print(citation('anansi'), bibtex = TRUE)
+print(citation("anansi"), bibtex = TRUE)
 ```
 
 ## Code of Conduct

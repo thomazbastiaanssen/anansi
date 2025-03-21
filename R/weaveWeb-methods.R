@@ -50,8 +50,8 @@
 #' weaveWeb(ec ~ cpd, link = ec2cpd)
 #'
 #' # A wrapper is available for kegg ko, ec and cpd data
-#' generic      <- weaveWeb(cpd ~ ko, link = kegg_link())
-#' kegg_wrapper <- weaveKEGG( cpd ~ ko )
+#' generic <- weaveWeb(cpd ~ ko, link = kegg_link())
+#' kegg_wrapper <- weaveKEGG(cpd ~ ko)
 #'
 #' identical(generic, kegg_wrapper)
 #'
@@ -75,34 +75,38 @@ weaveWeb <- function(x, ...) UseMethod("weaveWeb")
 #' @export
 #'
 weaveWeb.default <- function(x, y, link = NULL, tableX = NULL, tableY = NULL,
-                             metadata = NULL, verbose = TRUE, ...){
+                             metadata = NULL, verbose = TRUE, ...) {
     terms <- c(y, x)
-    stopifnot("both 'x' and 'y' terms must be provided as character" =
-                  is(terms, "character") && length(terms) == 2L)
-    if(identical(link, "none")) return(web_missing_link(tableX, tableY, terms))
+    stopifnot(
+        "both 'x' and 'y' terms must be provided as character" =
+            is(terms, "character") && length(terms) == 2L
+    )
+    if (identical(link, "none")) {
+        return(web_missing_link(tableX, tableY, terms))
+    }
 
     # Ensure link is a MultiFactor
-    link  <- MultiFactor(link)
-
-    stopifnot("both 'x' and 'y' terms must be found as colnames in 'link'" =
-                  all(terms %in% colnames(link)) )
-    # Determine required ids in order
+    link <- MultiFactor(link)
+    # Determine required ids in order, only keep relevant elements of link.
     all_terms <- termSeq(x, y, link)
+    link <- subsetByPath(link, all_terms)
 
     # Trim link levels and tables based on feature overlap
-    if(!is.null(tableX)) {
-        keep   <- sort(intersect(colnames(tableX), levels(link)[[x]]))
-        if(verbose && length(keep) < NCOL(tableX)) {
-            message("Dropped features in tableX: ", length(keep), " remain. ")}
+    if (!is.null(tableX)) {
+        keep <- sort(intersect(colnames(tableX), levels(link)[[x]]))
+        if (verbose && length(keep) < NCOL(tableX)) {
+            message("Dropped features in tableX: ", length(keep), " remain. ")
+        }
         tableX <- tableX[, keep]
-        link   <- trimByInput(link, tableX, x)
+        link <- trimByInput(link, tableX, x)
     }
-    if(!is.null(tableY)) {
-        keep   <- sort(intersect(colnames(tableY), levels(link)[[y]]))
-        if(verbose && length(keep) < NCOL(tableY)) {
-            message("Dropped features in tableY: ", length(keep), " remain. ")}
+    if (!is.null(tableY)) {
+        keep <- sort(intersect(colnames(tableY), levels(link)[[y]]))
+        if (verbose && length(keep) < NCOL(tableY)) {
+            message("Dropped features in tableY: ", length(keep), " remain. ")
+        }
         tableY <- tableY[, keep]
-        link   <- trimByInput(link, tableY, y)
+        link <- trimByInput(link, tableY, y)
     }
     # Construct dictionary
     d <- dictionaryMatrix(link, all_terms)
@@ -110,40 +114,43 @@ weaveWeb.default <- function(x, y, link = NULL, tableX = NULL, tableY = NULL,
     names(dimnames(d)) <- c(y, x)
 
     # Dummy tables if missing
-    if(is.null(tableX) && is.null(tableY)) {
+    if (is.null(tableX) && is.null(tableY)) {
         dimnames(d) <- levels(link)[terms]
-        tableY = matrix(ncol = NROW(d), dimnames = list(NULL, rownames(d)))
-        tableX = matrix(ncol = NCOL(d), dimnames = list(NULL, colnames(d)))
+        tableY <- matrix(ncol = NROW(d), dimnames = list(NULL, rownames(d)))
+        tableX <- matrix(ncol = NCOL(d), dimnames = list(NULL, colnames(d)))
     }
     #
     AnansiWeb(
-        tableY     = as.matrix(tableY)[,rownames(d), drop = FALSE],
-        tableX     = as.matrix(tableX)[,colnames(d), drop = FALSE],
+        tableY     = as.matrix(tableY)[, rownames(d), drop = FALSE],
+        tableX     = as.matrix(tableX)[, colnames(d), drop = FALSE],
         dictionary = d,
-        metadata   = metadata)
+        metadata   = metadata
+    )
 }
 
 #' @rdname weaveWeb
 #' @export
 #' @order 2
 #'
-weaveWeb.formula <- function(
-        formula, link = NULL, tableX = NULL, tableY = NULL, ...
-) {
-    if (missing(formula) || (length(formula) != 3L))
+weaveWeb.formula <- function(formula, link = NULL, tableX = NULL, tableY = NULL, ...) {
+    if (missing(formula) || (length(formula) != 3L)) {
         stop("'formula' missing or incorrect")
+    }
 
     terms <- all.vars(formula)
-    if(is.null(link) || identical(link, "none")) return(
-        weaveWeb.default(x = terms[2], y = terms[1], link, tableX, tableY)
-    )
+    if (is.null(link) || identical(link, "none")) {
+        return(
+            weaveWeb.default(x = terms[2], y = terms[1], link, tableX, tableY)
+        )
+    }
 
     link <- MultiFactor(link)
 
-    if (sum(terms %in% colnames(link)) != 2L)
+    if (sum(terms %in% colnames(link)) != 2L) {
         stop("Variables from 'formula' not found in 'link'.")
+    }
 
-    weaveWeb.default(x = terms[2], y = terms[1], link, tableX, tableY)
+    weaveWeb.default(x = terms[2], y = terms[1], link, tableX, tableY, ...)
 }
 
 #' @rdname weaveWeb
@@ -162,7 +169,11 @@ weaveKEGG <- function(x, ...) weaveWeb(x, link = kegg_link(), ...)
 #' @returns a Character vector of the ids to walk in order.
 #' @noRd
 #'
-termSeq <- function(x, y, link){
+termSeq <- function(x, y, link) {
+    stopifnot(
+        "both 'x' and 'y' terms must be found as colnames in 'link'" =
+            all(c(x, y) %in% colnames(link))
+    )
     g <- getGraph(link)
     sp <- igraph::shortest_paths(g, from = y, to = x, output = "vpath")
     names(unlist(sp, FALSE, FALSE)[[1]])
@@ -170,18 +181,31 @@ termSeq <- function(x, y, link){
 
 #' Find the order in which link data frames should be listed
 #' @param term_list list of `Character vectors`, each with length of two.
-#' @param link_names names(link)
+#' @param d dictionary(link).
 #' @returns a numeric vector with order in which row data frames should be
 #'     traversed.
 #' @noRd
 #'
-stepSeq <- function(term_list, link_names) {
-    vapply(term_list,
-           function(st) which(
-               vapply(link_names,
-                      function(x) all(st %in% x),
-                      FUN.VALUE = TRUE, USE.NAMES = FALSE)),
-           FUN.VALUE = 0L, USE.NAMES = FALSE)
+stepSeq <- function(term_list, d) {
+    vapply(term_list, rowsWithCol,
+        d = d, name = FALSE,
+        FUN.VALUE = 0L, USE.NAMES = FALSE
+    )
+}
+
+
+#' @noRd
+#'
+subsetByPath <- function(link, all_terms) {
+    term_list <- lapply(seq_len(length(all_terms) - 1L),
+        FUN = function(x) all_terms[c(x, x + 1L)]
+    )
+    steps <- stepSeq(term_list, dictionary(link))
+    link@index <- link[steps]
+    link@levels <- link@levels[all_terms]
+    link@map <- mapMultiFactor(link[steps])
+
+    return(link)
 }
 
 #' Generate dictionary Matrix from link input
@@ -191,26 +215,29 @@ stepSeq <- function(term_list, link_names) {
 #' @importMethodsFrom Matrix %&%
 #' @noRd
 #'
-dictionaryMatrix <- function(link, all_terms){
-    term_list <- lapply(seq_len(length(all_terms)-1L),
-                        FUN = function(x) all_terms[c(x, x + 1L)])
-    lv_len    <- vapply(levels(link), length, 0L, USE.NAMES = TRUE)
-    lv_list   <- lapply(term_list, function(x) lv_len[x])
-    steps     <- stepSeq(term_list, names(link))
+dictionaryMatrix <- function(link, all_terms) {
+    term_list <- lapply(seq_len(length(all_terms) - 1L),
+        FUN = function(x) all_terms[c(x, x + 1L)]
+    )
+    steps <- stepSeq(term_list, dictionary(link))
+
+    lv_len <- vapply(levels(link), length, 0L, USE.NAMES = TRUE)
 
     # Handle simple case of one link df first, return sparse matrix.
-    if(length(steps) == 1L)
-        return(
-            mapFromLink(all_terms, df = link@index[[steps]], dims = lv_len[all_terms])
-            )
-
+    if (length(steps) == 1L) {
+        return(mapFromLink(all_terms,
+            df = link@index[[steps]],
+            dims = lv_len[all_terms]
+        ))
+    }
+    lv_list <- lapply(term_list, function(x) lv_len[x])
     # Otherwise, make a list of matrices to Reduce to final dictionary
     mat_list <- mapply(mapFromLink,
-                       terms = term_list,
-                       df = link@index[steps],
-                       dims = lv_list)
-    Reduce(Matrix::`%&%`,  mat_list)
-
+        terms = term_list,
+        df = link@index[steps],
+        dims = lv_list
+    )
+    Reduce(Matrix::`%&%`, mat_list)
 }
 
 #' @param terms id of cols. `c(y, x)`.
@@ -220,8 +247,9 @@ dictionaryMatrix <- function(link, all_terms){
 #' @returns a sparse biadjacency Matrix
 #' @noRd
 #'
-mapFromLink <- function(terms, df, dims)
+mapFromLink <- function(terms, df, dims) {
     sparseMatrix(i = df[[terms[1]]], j = df[[terms[2]]], dims = dims)
+}
 
 #' @description Called by weaveWeb to subset link to inly include the features
 #'     found in the input table.
@@ -233,22 +261,22 @@ mapFromLink <- function(terms, df, dims)
 #'
 trimByInput <- function(link, tableID, id) {
     lv <- levels(link)[[id]]
-    d  <- dictionary(link)
-    r  <- rowsWithCol(d, id)
+    d <- dictionary(link)
+    r <- rowsWithCol(d, id)
     stopifnot(
         "Feature names appeared in several index elements. " = length(r) == 1L
     )
     # Subset index by table columns
     xr <- link@index[[r]]
     x.names <- match(colnames(tableID), lv)
-    xr <- xr[xr[,id] %in% x.names,]
-    xr.id <- xr[,id]
+    xr <- xr[xr[, id] %in% x.names, ]
+    xr.id <- xr[, id]
 
     # Subset levels
     link@levels[[id]] <- lv[sort(unique(xr.id))]
     # Reorder and replace indices
-    xr[,id] <- match(xr.id, sort(unique(xr.id)))
-    link@index[[r]]  <- xr
+    xr[, id] <- match(xr.id, sort(unique(xr.id)))
+    link@index[[r]] <- xr
 
     link@map <- mapMultiFactor(link@index)
 
@@ -268,7 +296,6 @@ trimByInput <- function(link, tableID, id) {
 #' @noRd
 #'
 web_missing_link <- function(tableX, tableY, terms, metadata = NULL) {
-
     d <- Matrix(
         data = TRUE,
         nrow = NCOL(tableY),
@@ -278,9 +305,9 @@ web_missing_link <- function(tableX, tableY, terms, metadata = NULL) {
     names(dimnames(d)) <- rev(terms)
 
     AnansiWeb(
-        tableY     = as.matrix(tableY)[,rownames(d)],
-        tableX     = as.matrix(tableX)[,colnames(d)],
+        tableY = as.matrix(tableY)[, rownames(d)],
+        tableX = as.matrix(tableX)[, colnames(d)],
         dictionary = d,
-        metadata = metadata)
-
+        metadata = metadata
+    )
 }

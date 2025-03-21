@@ -112,18 +112,26 @@ measures through <code>Error()</code> notation.</li>
 </h3>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Setup AnansiWeb with some dummy data</span></span>
-<span><span class="va">tableY</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">60</span><span class="op">*</span><span class="fl">10</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">60</span>, </span>
-<span>                 dimnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ids <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">60</span>, y <span class="op">=</span> <span class="va">LETTERS</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span> <span class="op">)</span> <span class="op">)</span> </span>
+<span><span class="va">tableY</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">60</span> <span class="op">*</span> <span class="fl">10</span><span class="op">)</span>,</span>
+<span>    nrow <span class="op">=</span> <span class="fl">60</span>,</span>
+<span>    dimnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ids <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">60</span>, y <span class="op">=</span> <span class="va">LETTERS</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">tableX</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">60</span><span class="op">*</span><span class="fl">20</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">60</span>, </span>
-<span>                 dimnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ids <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">60</span>, x <span class="op">=</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">20</span><span class="op">]</span> <span class="op">)</span> <span class="op">)</span> </span>
+<span><span class="va">tableX</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">60</span> <span class="op">*</span> <span class="fl">20</span><span class="op">)</span>,</span>
+<span>    nrow <span class="op">=</span> <span class="fl">60</span>,</span>
+<span>    dimnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ids <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">60</span>, x <span class="op">=</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">20</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">metadata</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>sample_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">60</span><span class="op">)</span>,</span>
-<span>                       treat_cat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span><span class="op">)</span>, each <span class="op">=</span> <span class="fl">20</span><span class="op">)</span>, </span>
-<span>                       score_num <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">60</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">metadata</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>    sample_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">60</span><span class="op">)</span>,</span>
+<span>    treat_cat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span><span class="op">)</span>, each <span class="op">=</span> <span class="fl">20</span><span class="op">)</span>,</span>
+<span>    score_num <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">60</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">AnansiWeb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/weaveWeb.html">weaveWeb</a></span><span class="op">(</span> <span class="va">y</span> <span class="op">~</span> <span class="va">x</span>, link <span class="op">=</span> <span class="st">"none"</span>, </span>
-<span>                       tableY <span class="op">=</span> <span class="va">tableY</span>, tableX <span class="op">=</span> <span class="va">tableX</span> <span class="op">)</span> </span></code></pre></div>
+<span><span class="va">AnansiWeb</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/weaveWeb.html">weaveWeb</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">x</span>,</span>
+<span>    link <span class="op">=</span> <span class="st">"none"</span>,</span>
+<span>    tableY <span class="op">=</span> <span class="va">tableY</span>, tableX <span class="op">=</span> <span class="va">tableX</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <div class="section level4">
 <h4 id="link-to-adjacency-matrix-vignette">link to adjacency matrix vignette<a class="anchor" aria-label="anchor" href="#link-to-adjacency-matrix-vignette"></a>
 </h4>
@@ -131,14 +139,15 @@ measures through <code>Error()</code> notation.</li>
 the feature types to be investigated. they can be found back using
 <code><a href="https://rdrr.io/r/base/names.html" class="external-link">names()</a></code>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">AnansiWeb</span><span class="op">)</span> </span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">AnansiWeb</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] "x" "y"</span></span></code></pre>
 <p><a href="https://thomazbastiaanssen.github.io/anansi/articles/adjacency_matrices.html">See
 the vignette on adjacency matrices.</a></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/anansi.html">anansi</a></span><span class="op">(</span><span class="va">AnansiWeb</span>, </span>
-<span>              formula <span class="op">=</span> <span class="op">~</span> <span class="va">treat_cat</span> <span class="op">*</span> <span class="va">score_num</span>, groups <span class="op">=</span> <span class="st">"treat_cat"</span>,</span>
-<span>              metadata <span class="op">=</span> <span class="va">metadata</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/anansi.html">anansi</a></span><span class="op">(</span><span class="va">AnansiWeb</span>,</span>
+<span>    formula <span class="op">=</span> <span class="op">~</span> <span class="va">treat_cat</span> <span class="op">*</span> <span class="va">score_num</span>, groups <span class="op">=</span> <span class="st">"treat_cat"</span>,</span>
+<span>    metadata <span class="op">=</span> <span class="va">metadata</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Fitting least-squares for following model:</span></span>
 <span><span class="co">## ~ x + treat_cat + score_num + treat_cat:score_num + x:treat_cat + x:score_num + x:treat_cat:score_num</span></span></code></pre>
 <pre><code><span><span class="co">## Running correlations for the following groups:</span></span>
@@ -150,7 +159,7 @@ including all of its interaction terms, on <code>y</code>. For example,
 if our input formula was: <code>y ~ x * (a + b + c)</code>. R rewrites
 this as follows:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/update.formula.html" class="external-link">update.formula</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">x</span> <span class="op">*</span> <span class="op">(</span><span class="va">a</span> <span class="op">+</span> <span class="va">b</span> <span class="op">+</span> <span class="va">c</span><span class="op">)</span>, <span class="va">.</span><span class="op">~</span><span class="va">.</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/update.formula.html" class="external-link">update.formula</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">x</span> <span class="op">*</span> <span class="op">(</span><span class="va">a</span> <span class="op">+</span> <span class="va">b</span> <span class="op">+</span> <span class="va">c</span><span class="op">)</span>, <span class="va">.</span> <span class="op">~</span> <span class="va">.</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## y ~ x + a + b + c + x:a + x:b + x:c</span></span></code></pre>
 <p>The variables that constitute the ‘full’ effect of x would be:
 <code>x + x:a + x:b + x:c</code>.</p>
@@ -181,10 +190,10 @@ associations describe the case where an association can be detected in
 one case but not in another.</p>
 <div class="figure">
 <img src="differential_associations_files/figure-html/fig-diffab-1.png" alt="An example of differential associations between hypothetical
-features Y and X. In both cases, phenotype C illustrates the differential 
-association compared to phenotypes A &amp; B. Disjointed associations describe 
-the scenario where there is a detectable association in all cases, but the 
-quality of the association differs. Emergent associations describe the case 
+features Y and X. In both cases, phenotype C illustrates the differential
+association compared to phenotypes A &amp; B. Disjointed associations describe
+the scenario where there is a detectable association in all cases, but the
+quality of the association differs. Emergent associations describe the case
 where an association can be detected in one case but not in another." width="700"><p class="caption">
 An example of differential associations between hypothetical features Y
 and X. In both cases, phenotype C illustrates the differential
