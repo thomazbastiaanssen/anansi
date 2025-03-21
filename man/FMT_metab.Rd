@@ -3,7 +3,8 @@
 \docType{data}
 \name{FMT_metab}
 \alias{FMT_metab}
-\title{Snippet of the CLR-transformed hippocampal metabolomics data from the FMT Aging study.}
+\title{Snippet of the CLR-transformed hippocampal metabolomics data from the FMT
+Aging study.}
 \format{
 A matrix object with three rows, compounds, and 36 columns, samples.
 }
@@ -14,6 +15,7 @@ A matrix object with three rows, compounds, and 36 columns, samples.
 FMT_metab
 }
 \description{
-Snippet of the CLR-transformed hippocampal metabolomics data from the FMT Aging study.
+Snippet of the CLR-transformed hippocampal metabolomics data from the FMT
+Aging study.
 }
 \keyword{datasets}

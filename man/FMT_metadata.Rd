@@ -5,7 +5,8 @@
 \alias{FMT_metadata}
 \title{Snippet of the metadata from the FMT Aging study.}
 \format{
-A data.frame object with 36 rows, samples, and two columns, denoting sample ID and treatemtn group, respectively.
+A data.frame object with 36 rows, samples, and two columns, denoting
+sample ID and treatemtn group, respectively.
 }
 \source{
 \doi{10.1038/s43587-021-00093-9}
@@ -14,8 +15,9 @@ A data.frame object with 36 rows, samples, and two columns, denoting sample ID a
 FMT_metadata
 }
 \description{
-There were three treatment groups in the study that all received faecal microbiota transplantation (FMT).
-Young mice that received FMT from young mice (Young yFMT),
-aged mice that received FMT from aged mice (Aged oFMT) and aged mice that received FMT from young mice (Aged yFMT).
+There were three treatment groups in the study that all received
+faecal microbiota transplantation (FMT). Young mice that received FMT
+from young mice (Young yFMT), aged mice that received FMT from aged mice
+(Aged oFMT) and aged mice that received FMT from young mice (Aged yFMT).
 }
 \keyword{datasets}

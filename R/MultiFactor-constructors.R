@@ -302,9 +302,9 @@ validLevels <- function(levs) {
         return("factor levels must be \"character\"")
     }
     if (any(d <- as.logical(vapply(levs, anyDuplicated, 1, USE.NAMES = FALSE)))) {
-        return(cat("duplicated factor levels in level number(s)", which(d)))
+        return(paste("duplicated factor levels in level number(s)", which(d)))
     }
-    ## 'else'	ok :
+    ## 'else' ok :
     TRUE
 }
 

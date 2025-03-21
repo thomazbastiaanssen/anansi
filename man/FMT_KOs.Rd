@@ -3,7 +3,8 @@
 \docType{data}
 \name{FMT_KOs}
 \alias{FMT_KOs}
-\title{Snippet of the untransformed inferred functional data from the FMT Aging study.}
+\title{Snippet of the untransformed inferred functional data from the FMT Aging
+study.}
 \format{
 A marix object with 6474 rows, KOs, and 36 columns, samples.
 }
@@ -14,7 +15,8 @@ A marix object with 6474 rows, KOs, and 36 columns, samples.
 FMT_KOs
 }
 \description{
-Piphillin was used to infer functions from the 16S sequencing data in terms of KOs.
-Unfortunately, the Piphillin algorithm is proprietary and has since been taken down.
+Piphillin was used to infer functions from the 16S sequencing
+data in terms of KOs. Unfortunately, the Piphillin algorithm is
+proprietary and has since been taken down.
 }
 \keyword{datasets}

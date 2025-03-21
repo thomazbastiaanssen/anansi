@@ -148,7 +148,8 @@ b <- data.frame(
 ggplot(rbind(a, b)) +
     aes(x = X, y = Y, fill = Phenotype, colour = Phenotype) +
     geom_point(size = 3, shape = 21, colour = "black") +
-    geom_smooth(method = "lm", se = F, linetype = "dashed", show.legend = F) +
+    geom_smooth(method = "lm", se = FALSE, 
+                linetype = "dashed", show.legend = FALSE) +
     facet_wrap(~plot) +
     theme_bw()
 ```

@@ -138,7 +138,8 @@
 anansi <- function(web, formula, groups = NULL, metadata = NULL,
                    adjust.method = "BH", verbose = TRUE,
                    return.format = "table", ...) {
-    return.format <- match.arg(return.format, choices = c("table", "list", "raw"))
+    return.format <- match.arg(return.format,
+                               choices = c("table", "list", "raw"))
     # generate anansiYarn input object
     input <- prepInput(
         web = web, formula = formula, groups = groups,
@@ -153,10 +154,8 @@ anansi <- function(web, formula, groups = NULL, metadata = NULL,
     metadata <- input$metadata
 
     out.list <- vector(
-        "list",
-        length = 1 + n.grps + (2 * length(int.terms))
+        "list", length = 1 + n.grps + (2 * length(int.terms))
     )
-
     out.list[seq_len(n.grps)] <- call_groupwise(
         web, groups,
         metadata, verbose
@@ -168,18 +167,17 @@ anansi <- function(web, formula, groups = NULL, metadata = NULL,
         seq_len(1 + (2 * length(int.terms)))] <- anansiDiffCor(
         web, sat_model, errorterm, int.terms, meta.frame, verbose
     )
-
     if (return.format != "raw") {
         results <- result.df(out.list, Matrix::as.matrix(web@dictionary))
         results <- anansi.p.adjust(results, adjust.method)
-        attr(results, "group_terms") <- named_group_list(group.id, groups, metadata)
+        attr(results, "group_terms") <-
+            named_group_list(group.id, groups, metadata)
         attr(results, "model_terms") <- named_term_list(int.terms, metadata)
     }
-
     switch(return.format,
-        "table" = return(results),
-        "list"  = return(list(results, input = input)),
-        "raw"   = return(out.list)
+           "table" = return(results),
+           "list"  = return(list(results, input = input)),
+           "raw"   = return(out.list)
     )
 }
 
@@ -209,12 +207,11 @@ prepInput <- function(web, formula, groups, metadata, verbose) {
     } else {
         labels(raw_terms)[-indErr]
     }
-
     sat_model <- make_saturated_model(formula, raw_terms, indErr, verbose)
-    error.term <- if (is.null(indErr)) {
-        NULL
-    } else {
-        deparse1(attr(raw_terms, "variables")[[1L + indErr]][[2L]], backtick = TRUE)
+    error.term <- if (is.null(indErr)) {NULL} else {
+        deparse1(
+            attr(raw_terms, "variables")[[1L + indErr]][[2L]],
+            backtick = TRUE)
     }
     input <- list(
         web = web,
@@ -242,7 +239,7 @@ check_groups <- function(groups, raw_terms, indErr, metadata, verbose) {
     if (!is.null(groups)) {
         missing_groups <- !groups %in% colnames(metadata)
         stopifnot(
-            "Grouping variable(s) not recognised. Please check input and labels. " =
+            "Grouping variable(s) not recognised. Please check input." =
                 !any(missing_groups)
         )
         n.groups <- 1 + length(unique(do.call(paste0, c(metadata[groups]))))
@@ -256,7 +253,7 @@ check_groups <- function(groups, raw_terms, indErr, metadata, verbose) {
     }
     if (!any(ind_o1)) {
         if (verbose) {
-            message("No grouping variable found for groupwise correlations. ")
+            message("No grouping variable found for groupwise correlations.")
         }
         return(list(NULL, 1))
     }
@@ -267,7 +264,9 @@ check_groups <- function(groups, raw_terms, indErr, metadata, verbose) {
         sub_meta[, unlist(lapply(sub_meta, is.categorical)), drop = FALSE]
 
     if (NCOL(sub_meta) == 0) {
-        if (verbose) message("No grouping variable found for groupwise correlations.")
+        if (verbose) {
+            message("No grouping variable found for groupwise correlations.")
+            }
         return(list(NULL, 1))
     }
     n.groups <- 1 + length(unique(do.call(paste0, c(sub_meta))))
@@ -295,7 +294,8 @@ make_saturated_model <- function(formula, raw_terms, indErr, verbose) {
     }
 
     # Case with repeated measures:
-    stopifnot("Only one Error() term allowed; more detected." = length(indErr) < 2)
+    stopifnot("Only one Error() term allowed; more detected." =
+                  length(indErr) < 2)
     errorterm <- attr(raw_terms, "variables")[[1L + indErr]]
     sat_model <- update.formula(old = formula, new = as.formula(
         paste(
@@ -311,7 +311,8 @@ make_saturated_model <- function(formula, raw_terms, indErr, verbose) {
         message(paste0(
             "Fitting least-squares for following model:\n",
             paste0(as.character(update.formula(old = formula, new = as.formula(
-                paste("~ x * 1 * (. -", deparse1(errorterm, backtick = TRUE), ")"),
+                paste("~ x * 1 * (. -",
+                      deparse1(errorterm, backtick = TRUE), ")"),
                 env = environment(formula)
             ))), " ", collapse = ""),
             "\nwith '",

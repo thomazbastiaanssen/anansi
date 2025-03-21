@@ -1,16 +1,25 @@
 #' Manages group-wise association calls
-#' @description If the `groups` argument is suitable, will also run correlation analysis per group. Typically, the main `anansi()` function will run this for you.
-#' @param web An `AnansiWeb` object, containing two tables with omics data and a dictionary that links them. See `weaveWebFromTables()` for how to weave a web.
-#' @param groups A categorical or continuous value necessary for differential correlations. Typically a state or treatment score.
-#' @param metadata A vector or data.frame of categorical or continuous value necessary for differential correlations. Typically a state or treatment score.
-#' @param verbose A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.
+#' @description If the `groups` argument is suitable, will also run correlation
+#'     analysis per group. Typically, the main `anansi()` function will run
+#'     this for you.
+#' @param web An `AnansiWeb` object, containing two tables with omics data and a
+#'      dictionary that links them. See `weaveWebFromTables()` for how to weave
+#'      a web.
+#' @param groups A categorical or continuous value necessary for differential
+#'     correlations. Typically a state or treatment score.
+#' @param metadata A vector or data.frame of categorical or continuous value
+#'     necessary for differential correlations. Typically a state or treatment
+#'     score.
+#' @param verbose A boolean. Toggles whether to print diagnostic information
+#'     while running. Useful for debugging errors on large datasets.
 #' @noRd
 #'
 call_groupwise <- function(web, groups, metadata, verbose) {
     if (is.null(groups)) {
         group.vec <- NULL
     } else {
-        group.vec <- apply(metadata[, groups, drop = FALSE], 1, paste, collapse = "_")
+        group.vec <-
+            apply(metadata[, groups, drop = FALSE], 1, paste, collapse = "_")
     }
     return(
         anansiCorTestByGroup(web, group.vec, verbose)
@@ -18,11 +27,18 @@ call_groupwise <- function(web, groups, metadata, verbose) {
 }
 
 #' Run correlations for all interacting metabolites and functions.
-#' @description If the `groups` argument is suitable, will also run correlation analysis per group. Typically, the main `anansi()` function will run this for you.
-#' @param web An `AnansiWeb` object, containing two tables with omics data and a dictionary that links them. See `weaveWebFromTables()` for how to weave a web.
-#' @param group.vec A character vector denoting group membership. Typically a state or treatment score.
-#' @param verbose A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.
-#' @return a list of `anansiTale` result objects, one for the total dataset and per group if applicable.
+#' @description If the `groups` argument is suitable, will also run correlation
+#'     analysis per group. Typically, the main `anansi()` function will run this
+#'     for you.
+#' @param web An `AnansiWeb` object, containing two tables with omics data and a
+#'     dictionary that links them. See `weaveWebFromTables()` for how to weave a
+#'     web.
+#' @param group.vec A character vector denoting group membership. Typically a
+#'     state or treatment score.
+#' @param verbose A boolean. Toggles whether to print diagnostic information
+#'     while running. Useful for debugging errors on large datasets.
+#' @return a list of `anansiTale` result objects, one for the total dataset and
+#'     per group if applicable.
 #' @seealso [anansi()]
 #'
 anansiCorTestByGroup <- function(web, group.vec, verbose = TRUE) {
@@ -63,9 +79,15 @@ anansiCorTestByGroup <- function(web, group.vec, verbose = TRUE) {
 
 #' Compute r-statistics for each featureY-featureX pair in the dictionary.
 #' Typically, the main `anansi()` function will run this for you.
-#' @param web An `AnansiWeb` object, containing two tables with omics data and a dictionary that links them. See `weaveWebFromTables()` for how to weave a web.
-#' @param group.bool A categorical or continuous value necessary for differential correlations. Typically a state or treatment score. If no argument provided, anansi will let you know and still to regular correlations according to your dictionary.
-#' @param verbose A boolean. Toggles whether to print diagnostic information while running. Useful for debugging errors on large datasets.
+#' @param web An `AnansiWeb` object, containing two tables with omics data and
+#'     a dictionary that links them. See `weaveWebFromTables()` for how to
+#'     weave a web.
+#' @param group.bool A categorical or continuous value necessary for
+#'     differential correlations. Typically a state or treatment score. If no
+#'     argument provided, anansi will let you know and still to regular
+#'     correlations according to your dictionary.
+#' @param verbose A boolean. Toggles whether to print diagnostic information
+#'     while running. Useful for debugging errors on large datasets.
 #' @return An `anansiTale` result object.
 #' @seealso [anansi()] \cr [anansiCorTestByGroup()]
 #' @importFrom stats pt
@@ -75,7 +97,7 @@ anansiCorPvalue <- function(web, group.bool, verbose) {
     # Compute correlation coefficients
     r <- anansiCor(web = web, group.bool = group.bool)
 
-    # Compute p-value through t-statistic, based on n and correlation coefficient.
+    # Compute p-value through t-statistic based on n and correlation coefficient
     n <- sum(group.bool)
     t <- abs((r * sqrt(n - 2)) / sqrt(1 - r^2))
     p <- 2 * (1 - pt(t, (n - 2)))
@@ -94,8 +116,11 @@ anansiCorPvalue <- function(web, group.bool, verbose) {
 
 #' Compute r-statistics for each featureY-featureX pair in the dictionary.
 #' Typically, the main `anansi()` function will run this for you.
-#' @param web An `AnansiWeb` object, containing two tables with omics data and a dictionary that links them. See `weaveWebFromTables()` for how to weave a web.
-#' @param group.bool A boolean vector used to select which samples should be included in the correlations.
+#' @param web An `AnansiWeb` object, containing two tables with omics data and a
+#'      dictionary that links them. See `weaveWebFromTables()` for how to weave
+#'      a web.
+#' @param group.bool A boolean vector used to select which samples should be
+#'      included in the correlations.
 #' @seealso [anansi()] \cr [anansiCorTestByGroup()]
 #' @return A matrix of r-statistics.
 #' @importFrom stats cor
