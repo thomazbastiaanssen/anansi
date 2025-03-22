@@ -284,7 +284,7 @@ droplevels.MultiFactor <- function(x, exclude = NULL, select = NULL, ...) {
             x@index[[r]][, lv] <- match(x_index[[r]], table = keep_ix)
         }
     }
-    x@map <- mapMultiFactor(x@index)
+    x@map <- mapMultiFactor(x@index, mode = "counts")
     validObject(x)
     return(x)
 }

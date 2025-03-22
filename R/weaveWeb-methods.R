@@ -203,7 +203,7 @@ subsetByPath <- function(link, all_terms) {
     steps <- stepSeq(term_list, dictionary(link))
     link@index <- link[steps]
     link@levels <- link@levels[all_terms]
-    link@map <- mapMultiFactor(link[steps])
+    link@map <- mapMultiFactor(link[steps], mode = "counts")
 
     return(link)
 }
@@ -278,7 +278,7 @@ trimByInput <- function(link, tableID, id) {
     xr[, id] <- match(xr.id, sort(unique(xr.id)))
     link@index[[r]] <- xr
 
-    link@map <- mapMultiFactor(link@index)
+    link@map <- mapMultiFactor(link@index, mode = "counts")
 
     return(link)
 }

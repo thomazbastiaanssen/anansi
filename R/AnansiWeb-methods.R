@@ -103,13 +103,13 @@ setMethod("tableY", "AnansiWeb", def = function(x, ...) x@tableY )
 #' @export
 #' @aliases tableX
 #'
-setMethod("tableX", "AnansiWeb", function(x, ...) x@tableX)
+setMethod("tableX", "AnansiWeb", def = function(x, ...) x@tableX )
 
 #' @rdname AnansiWeb-methods
 #' @inheritParams tableY
 #' @export
 #'
-setMethod("dictionary", "AnansiWeb", function(x, ...) x@dictionary)
+setMethod("dictionary", "AnansiWeb", def = function(x, ...) x@dictionary)
 
 #' @rdname AnansiWeb-methods
 #' @name `tableY<-`
@@ -150,7 +150,7 @@ setReplaceMethod("dictionary", "AnansiWeb", def = function(x, ..., value) {
 #' @rdname AnansiWeb-methods
 #' @export
 #'
-setMethod("show", "AnansiWeb", function(object) {
+setMethod("show", "AnansiWeb", def = function(object) {
     cat(class(object), " object with ", NROW(object$tableX), " observations:\n",
         "    Tables: ", names(object)[1], " (", NROW(object), " features) and ",
         names(object)[2], " (", NCOL(object), " features)\n",

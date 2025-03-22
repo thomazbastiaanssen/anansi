@@ -25,32 +25,25 @@
 MultiFactor <- function(x, levels = NULL, drop.unmatched = TRUE) {
     if (validLinkDF(x)) x <- list(x = x)
     stopifnot("Input not correctly formatted." = all(
-        vapply(as.list(x, use.names = FALSE), validLinkDF, NA, USE.NAMES = FALSE)
+        vapply(as.list(x, use.names = FALSE),
+               validLinkDF, NA, USE.NAMES = FALSE)
     ))
-
     if (is(x, "MultiFactor")) {
         if (is.null(levels)) {
             levels <- levels(x)
         }
         x <- x@index
     }
-
+    x <- checkMergers(x)
     if (drop.unmatched) {
         x <- trimMultiFactor(x)
     }
-
     m <- mapMultiFactor(x)
-
-    if (is(x, "MultiFactor") && is.null(levels)) {
-        levels <- levels(x)
-        x <- x@index
-    }
 
     # Integer DF Input
     if (all(vapply(x, validIntLinkDF, NA, USE.NAMES = FALSE))) {
         stopifnot(
-            "Input is integers, levels must be provided. " =
-                !is.null(levels)
+            "Input is integers, levels must be provided. " = !is.null(levels)
         )
         # Factor DF input
     } else if (all(vapply(x, validFactLinkDF, NA, USE.NAMES = FALSE))) {
@@ -82,17 +75,18 @@ MultiFactor <- function(x, levels = NULL, drop.unmatched = TRUE) {
 #' Matrix with link df names as rownames and id names as colnames. Called
 #' internally.
 #' @param x a named list of data frames with named character columns.
-#' @param int `Logical scalar` Whether to return integer counts (Default) or
-#'     otherwise a sparse pattern Matrix.
+#' @param mode `Character scalar` One of `counts`, `binary` or `pattern`.
+#'     Determines cell content of Matrix:  unique counts, 0/1 or or otherwise a
+#'     sparse pattern Matrix.
 #' @returns a sparse biadjacency Matrix with link df names as rownames and id
 #'     names as colnames. Values count unique features in that position.
 #'
-mapMultiFactor <- function(x, int = TRUE) {
+mapMultiFactor <- function(x, mode = "counts") {
     # Some flexibility in input
     if (is(x, "MultiFactor")) {
         x <- x@index
     }
-
+    mode <- match.arg(mode, choices = c("counts", "binary", "pattern"))
     all_names <- lapply(x, names)
     i <- factor(
         rep(
@@ -101,24 +95,98 @@ mapMultiFactor <- function(x, int = TRUE) {
         ),
         levels = names(all_names)
     )
-    j <- factor(unlist(all_names, use.names = FALSE),
+    j <- factor(
+        unlist(all_names, use.names = FALSE),
         levels = unique(unlist(all_names, use.names = FALSE))
     )
-    if (!int) {
-        return(sparseMatrix(i = i, j = j, dimnames = list(levels(i), levels(j))))
-    }
-    # Otherwise, add counts.
-    mx <- unlist(
-        lapply(x, function(y) {
-            lapply(y, function(z) length(unique(z)))
-        }),
-        use.names = TRUE
+
+    # mx is a vector of length i that determines the values of sparse Matrix.
+    mx <- switch(mode,
+                 "counts" = unlist(
+                     lapply(x, function(y) {
+                         lapply(y, function(z) length(unique(z)))
+                     }),
+                     use.names = FALSE),
+                 "binary"  = 1L,
+                 "pattern" = TRUE)
+
+return(
+    Matrix::sparseMatrix(
+        i = i,
+        j = j,
+        x = mx,
+        dimnames = list(
+            levels(i),
+            levels(j)
+        )
     )
-    return(
-        sparseMatrix(i = i, j = j, x = mx, dimnames = list(levels(i), levels(j)))
-    )
+)
 }
 
+#' @importFrom Matrix which tcrossprod
+#' @noRd
+#'
+checkMergers <- function(link, verbose = TRUE) {
+    d <- mapMultiFactor(link, mode = "binary")
+    dm <- rep(NROW(d), 2)
+    m <- Matrix::which(.row(dm) < .col(dm) & Matrix::tcrossprod(d) >= 2L, TRUE)
+    if(NROW(m) == 0L) {
+        # No duplicates, all good.
+        return(link)
+    }
+    if(verbose) {
+        message(
+            "Duplicate id pairs detected in elements: ",
+            apply(m, 1L, FUN = function(x) rownames(d)[x], simplify = FALSE),
+            "\nAttempting to solve with rbind()...\n"
+            )
+    }
+    # Otherwise, attempt to fix
+    mergeElements(link, d, m)
+}
+
+#' @noRd
+#'
+mergeElements <- function(link, d, m) {
+    dupeList <- apply(m, 1L, FUN = function(x) rownames(d)[x], simplify = FALSE)
+
+    full_match <- vapply(dupeList, function(x) {
+        Reduce(identical, lapply(link[x], function(y) { sort(colnames(y)) } ))
+    }, FUN.VALUE = FALSE)
+    if(!all(full_match)) {
+        stop("Cannot safely merge elements, names do not fully match.\n",
+             "Issue found in the following pairs of elements:\n",
+             apply(m[!full_match, , drop = FALSE], 1L,
+                   FUN = function(x) rownames(d)[x], simplify = FALSE))
+    }
+    # Collect all duplicates, they could be different sets of duplications.
+    all_dupes <- unique(c(m))
+    dupe_set  <- vector("list", 1L)
+    # as long as we have unaccounted duplicates, add to the dupe set.
+    i <- 1L
+    while(length(all_dupes) > 0 ){
+        xx  <- all_dupes[1]
+        mx  <- m[m[, 1] == xx | m[, 2] == xx, ]
+        x_dupes <- unique(c(mx))
+        dupe_set[[i]] <- x_dupes
+        i <- 1 + 1L
+        # Remove
+        all_dupes <- all_dupes[! all_dupes %in% x_dupes]
+    }
+    #merge and replace
+    index_merge <- vector("list", length(dupe_set))
+    for(i in seq_along(dupe_set)) {
+        index_merge[[i]] <- unique(do.call(
+            rbind.data.frame,
+            c(
+                link[dupe_set[[i]]],
+                make.row.names = FALSE)
+            ))
+    }
+    names(index_merge) <- paste0("merged_", seq_along(index_merge))
+    link <- c(link[-unique(c(m))], index_merge)
+    return(link)
+}
 
 #' @noRd
 #' @param x a list in `MultiFactor` formatting.
@@ -129,7 +197,7 @@ mapMultiFactor <- function(x, int = TRUE) {
 #'
 trimMultiFactor <- function(x) {
     # Determine positions of feature names that occur in several edge link dfs
-    m <- mapMultiFactor(x, int = FALSE)
+    m <- mapMultiFactor(x, mode = "pattern")
     jj <- colnames(m)[Matrix::colSums(m) > 1]
 
     # Sequentially subset over feature names
