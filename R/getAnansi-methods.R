@@ -38,8 +38,8 @@
 #'
 #' # Perform anansi analysis
 #' out <- getAnansi(mae,
-#'   tableY = "y", tableX = "x",
-#'   formula = ~ cat_ab
+#'     tableY = "y", tableX = "x",
+#'     formula = ~cat_ab
 #' )
 #'
 #' # View subset of results
@@ -59,28 +59,28 @@ NULL
 #' @importFrom SummarizedExperiment assay colData
 #'
 setMethod("getAnansi",
-  signature = c(x = "MultiAssayExperiment"),
-  function(x, tableY = 1, tableX = 2, formula, link = NULL, force_new = FALSE, ...) {
-    # Retrieve kwargs as list
-    kwargs <- list(...)
-    # Check fixed arguments
-    fixed_args <- c("web", "metadata")
-    remove <- names(kwargs) %in% fixed_args
-    # If fixed arguments in kwargs, remove them
-    if (any(remove)) {
-      removed <- paste0(names(kwargs[remove]), sep = "'", collapse = ", '")
-      kwargs <- kwargs[!remove]
-      stop("The arguments '", removed, " should not be used, as they are ",
-        "extracted from 'x'.",
-        call. = FALSE
-      )
+    signature = c(x = "MultiAssayExperiment"),
+    function(x, tableY = 1, tableX = 2, formula, link = NULL, force_new = FALSE, ...) {
+        # Retrieve kwargs as list
+        kwargs <- list(...)
+        # Check fixed arguments
+        fixed_args <- c("web", "metadata")
+        remove <- names(kwargs) %in% fixed_args
+        # If fixed arguments in kwargs, remove them
+        if (any(remove)) {
+            removed <- paste0(names(kwargs[remove]), sep = "'", collapse = ", '")
+            kwargs <- kwargs[!remove]
+            stop("The arguments '", removed, " should not be used, as they are ",
+                "extracted from 'x'.",
+                call. = FALSE
+            )
+        }
+        # Generate web object
+        w <- getWeb(x, tableY, tableX, link, ...)
+
+        # Generate anansi output
+        out <- anansi(web = w, formula = formula, ...)
+
+        return(out)
     }
-    # Generate web object
-    w <- getWeb(x, tableY, tableX, link, ...)
-
-    # Generate anansi output
-    out <- anansi(web = w, formula = formula, ...)
-
-    return(out)
-  }
 )

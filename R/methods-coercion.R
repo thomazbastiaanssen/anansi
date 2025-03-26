@@ -3,13 +3,13 @@
 #' Coerce AnansiWeb to and from other object types.
 #' @name coerceAnansi
 #' @examples
-#' #Create a random web
+#' # Create a random web
 #' web <- randomWeb()
 #'
-#' #To list
+#' # To list
 #' as.list(web)
 #'
-#' #To MultiAssayExperiment
+#' # To MultiAssayExperiment
 #' asMAE(web)
 #'
 NULL
@@ -31,8 +31,10 @@ asMAE <- function(x) as(x, "MultiAssayExperiment")
 #' @export
 #'
 setAs(from = "AnansiWeb", to = "list", def = function(from) {
-    out <- c(list(tableY = from@tableY, tableX = from@tableX,
-                dictionary = from@dictionary), from@metadata)
+    out <- c(list(
+        tableY = from@tableY, tableX = from@tableX,
+        dictionary = from@dictionary
+    ), from@metadata)
     names(out)[c(1L, 2L)] <- names(from)
     out
 })
@@ -43,19 +45,18 @@ setAs(from = "AnansiWeb", to = "list", def = function(from) {
 #' @export
 #'
 setAs(from = "AnansiWeb", to = "MultiAssayExperiment", def = function(from) {
-
-    tY  <- t(from@tableY)
-    tX  <- t(from@tableX)
+    tY <- t(tableY(from))
+    tX <- t(tableX(from))
     to_exp <- ExperimentList(
         y = SummarizedExperiment(tY),
         x = SummarizedExperiment(tX)
     )
     names(to_exp) <- names(from)
 
-    to_md  <- list(dictionary = from@dictionary)
-    to_cd  <- metadata(from, simplify = TRUE)
+    to_md <- list(dictionary = dictionary(from))
+    to_cd <- metadata(from, simplify = TRUE)
 
-    MultiAssayExperiment(
+    MultiAssayExperiment::MultiAssayExperiment(
         experiments = to_exp,
         metadata = to_md,
         colData = DataFrame(to_cd)
@@ -70,8 +71,9 @@ setAs(from = "AnansiWeb", to = "MultiAssayExperiment", def = function(from) {
 #' (`use.names = FALSE`).
 #' @export
 #'
-setMethod("as.list", c(x = "MultiFactor"), function(x, ..., use.names = TRUE)
-    as.list.MultiFactor(x, ..., use.names) )
+setMethod("as.list", c(x = "MultiFactor"), function(x, ..., use.names = TRUE) {
+    as.list.MultiFactor(x, ..., use.names)
+})
 
 #' @export
 #' @rdname coerceAnansi
@@ -81,11 +83,12 @@ setMethod("as.list", c(x = "MultiFactor"), function(x, ..., use.names = TRUE)
 #' @seealso [unfactor()]
 #' @examples
 #' x <- as.list(randomMultiFactor())
-#' identical(x, as.list(MultiFactor(x)) )
+#' identical(x, as.list(MultiFactor(x)))
 #'
-as.list.MultiFactor <- function(x, use.names = TRUE) ifelse(
-    use.names,
-    yes = return( unfactor(x) ),
-    no  = return( `names<-`(x@index, rownames(x)) )
-)
-
+as.list.MultiFactor <- function(x, use.names = TRUE) {
+    ifelse(
+        use.names,
+        yes = return(unfactor(x)),
+        no  = return(`names<-`(x@index, rownames(x)))
+    )
+}

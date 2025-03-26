@@ -6,6 +6,9 @@
 \alias{dim,MultiFactor-method}
 \alias{names,MultiFactor-method}
 \alias{dimnames,MultiFactor-method}
+\alias{[[,MultiFactor,ANY,ANY-method}
+\alias{[[<-,MultiFactor,ANY,ANY-method}
+\alias{c,MultiFactor-method}
 \alias{show,MultiFactor-method}
 \alias{unfactor,MultiFactor-method}
 \alias{droplevels.MultiFactor}
@@ -26,15 +29,21 @@
 
 \S4method{dimnames}{MultiFactor}(x)
 
+\S4method{[[}{MultiFactor,ANY,ANY}(x, i, j, ...)
+
+\S4method{[[}{MultiFactor,ANY,ANY}(x, i, j, ...) <- value
+
+\S4method{c}{MultiFactor}(x, ...)
+
 \S4method{show}{MultiFactor}(object)
 
 \S4method{unfactor}{MultiFactor}(x)
 
-droplevels.MultiFactor(x, ...)
+droplevels.MultiFactor(x, exclude = NULL, select = NULL, ...)
 
 \S4method{droplevels}{MultiFactor}(x, ...)
 
-\method{levels}{MultiFactor}(x)
+levels.MultiFactor(x)
 
 \S4method{levels}{MultiFactor}(x)
 
@@ -49,19 +58,22 @@ droplevels.MultiFactor(x, ...)
 \arguments{
 \item{x}{\code{MultiFactor} object}
 
-\item{object}{Any R object}
-
 \item{...}{
     Optional metadata columns.
   }
 
 \item{value}{a replacement character vector of suitable dimensions.}
 
-\item{subset}{\verb{logical expression} indicating rows to keep. Must contain variables
-found as column names.}
+\item{object}{Any R object}
+
+\item{exclude}{\code{NULL} or \verb{Named character list} of similar structure as
+\code{levels(MultiFactor)}. Which levels to drop from output.}
 
 \item{select}{\code{expression}. Which column names to consider. If missing
 (Default), consider all column names.}
+
+\item{subset}{\verb{logical expression} indicating rows to keep. Must contain variables
+found as column names.}
 }
 \value{
 A named character list
@@ -83,6 +95,12 @@ a set of methods to work with \code{MultiFactor}, a special type of list.
 
 \code{dimnames}: Display a vector of dims (n objects, n ids).
 
+Extract all elements that contain a given feature type.
+
+\verb{[[<-} should be used to replace, not add data.
+
+Combine two or more \code{MultiFactor} objects.
+
 \code{show}: Display the object
 
 Analogous to \code{factors}. \code{unfactor(MultiFactor)} returns a named
@@ -96,6 +114,12 @@ get object levels
 get object map
 }
 \details{
+if argument \code{i} is a vector, return all elements that contain at least that
+exact combination.
+
+Only one of \code{select} and \code{exclude} should be provided, as they are
+each others complement.
+
 \code{subset}: For \verb{MultiFactor objects}, sub-setting is only applied
 to data frames compatible with the expression. The rest are returned
 unaltered. Modeled after \code{subset()}.

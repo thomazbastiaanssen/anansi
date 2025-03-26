@@ -17,16 +17,16 @@
 #' \item [AnansiWeb()]: for general use.
 #' \item [AnansiWeb-methods()] for methods, including `$`
 #' operator.
-#'}
+#' }
 #'
 setClass("AnansiWeb",
-         contains = "Annotated",
-         slots = c(
-           tableY     = "matrix",
-           tableX     = "matrix",
-           dictionary = "Matrix",
-           metadata   = "list"
-         )
+    contains = "Annotated",
+    slots = c(
+        tableY     = "matrix",
+        tableX     = "matrix",
+        dictionary = "Matrix",
+        metadata   = "list"
+    )
 )
 
 #' is valid AnansiWeb?
@@ -39,11 +39,13 @@ setClass("AnansiWeb",
 #' @importFrom methods validObject
 #' @returns `TRUE` if passes, character vector otherwise.
 #'
-setValidity("AnansiWeb", method = function(object) ifelse(
-  test = validWeb(object),
-  yes = TRUE,
-  no = "object is not in a valid format.")
-)
+setValidity("AnansiWeb", method = function(object) {
+    ifelse(
+        test = validWeb(object),
+        yes = TRUE,
+        no = "object is not in a valid format."
+    )
+})
 
 #' MultiFactor S4 container class
 #' @name MultiFactor-class
@@ -63,13 +65,14 @@ setValidity("AnansiWeb", method = function(object) ifelse(
 #' \item [MultiFactor()]: for general use.
 #' \item [MultiFactor-methods()] for methods
 #' \item [igraph::igraph()].
-#'}
+#' }
 #'
 setClass("MultiFactor",
-
-         slots = c(index   = "list",
-                   levels  = "list",
-                   map     = "Matrix")
+    slots = c(
+        index = "list",
+        levels = "list",
+        map = "Matrix"
+    )
 )
 
 #' is valid MultiFactor?
@@ -82,37 +85,46 @@ setClass("MultiFactor",
 #' @importFrom methods validObject
 #' @returns `TRUE` if passes, character vector otherwise.
 #'
-setValidity("MultiFactor", method = function(object) ifelse(
-  test = validMultiFactor(object),
-  yes = TRUE,
-  no = "object is not in a valid format.")
-)
+setValidity("MultiFactor", method = function(object) {
+    ifelse(
+        test = validMultiFactor(object),
+        yes = TRUE,
+        no = "object is not in a valid format."
+    )
+})
 
 
 #' Is this a data.frame with exactly two columns that are named?
 #' @noRd
 validMultiFactor <- function(x) {
-  levels_valid <- validLevels(levels(x))
-  x <- x@index
-  values_valid <- vapply(x, validIntLinkDF, NA, USE.NAMES = FALSE)
-  no_missing   <- ! any(vapply(x, anyNA, NA, USE.NAMES = FALSE))
+    levels_valid <- validLevels(levels(x))
+    x <- x@index
+    values_valid <- vapply(x, validIntLinkDF, NA, USE.NAMES = FALSE)
+    no_missing <- !any(vapply(x, anyNA, NA, USE.NAMES = FALSE))
 
-  if(!isTRUE(levels_valid))
-    message("Levels are not structured correctly. ")
-  if(!isTRUE(all(values_valid)))
-    message("List content in positions ",
+    if (!isTRUE(levels_valid)) {
+        message("Levels are not structured correctly. ")
+    }
+    if (!isTRUE(all(values_valid))) {
+        message(
+            "List content in positions ",
             paste(which(!isTRUE(values_valid)), collapse = ", "),
-            " not structured correctly. ")
-  if(!no_missing)
-    message("Missing values are not allowed.")
+            " not structured correctly. "
+        )
+    }
+    if (!no_missing) {
+        message("Missing values are not allowed.")
+    }
 
-  if(
-    all(levels_valid,
-        isTRUE(values_valid),
-        isTRUE(all(no_missing))
-    )
-  ) return( TRUE )
-
+    if (
+        all(
+            levels_valid,
+            isTRUE(values_valid),
+            isTRUE(all(no_missing))
+        )
+    ) {
+        return(TRUE)
+    }
 }
 
 #' An S4 class to contain all `anansi` stats results so that they can
@@ -134,13 +146,13 @@ validMultiFactor <- function(x) {
 #'     stats output data coming out of the `anansi` pipeline.
 #'
 setClass("anansiTale",
-  slots = c(
-    subject   = "character",
-    type      = "character",
-    df        = "numeric",
-    estimates = "matrix",
-    f.values  = "matrix",
-    t.values  = "matrix",
-    p.values  = "matrix"
-  )
+    slots = c(
+        subject   = "character",
+        type      = "character",
+        df        = "numeric",
+        estimates = "matrix",
+        f.values  = "matrix",
+        t.values  = "matrix",
+        p.values  = "matrix"
+    )
 )

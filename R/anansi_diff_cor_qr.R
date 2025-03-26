@@ -27,11 +27,9 @@
 #' @importFrom future.apply future_apply
 #' @importFrom methods is
 #'
-anansiDiffCor <- function(
-        web, sat_model, errorterm, int.terms, metadata, verbose
-) {
-    tY  <- web@tableY
-    tX  <- web@tableX
+anansiDiffCor <- function(web, sat_model, errorterm, int.terms, metadata, verbose) {
+    tY <- web@tableY
+    tX <- web@tableX
     dic <- Matrix::as.matrix(web@dictionary)
 
     # Compute shape of model.matrix and initialize qr.mm
@@ -64,12 +62,12 @@ anansiDiffCor <- function(
 
     d.dim <- matrix(1, ncol = NCOL(dic), nrow = NROW(dic))
     full_model <- new("anansiTale",
-                      subject    = "full",
-                      type       = "r.squared",
-                      df         = df_mat[, 1],
-                      estimates  = d.dim * Y.TSS, # start with RSS0
-                      f.values   = d.dim,
-                      p.values   = d.dim
+        subject    = "full",
+        type       = "r.squared",
+        df         = df_mat[, 1],
+        estimates  = d.dim * Y.TSS, # start with RSS0
+        f.values   = d.dim,
+        p.values   = d.dim
     )
 
     disjointed <- lapply(
@@ -129,7 +127,7 @@ anansiDiffCor <- function(
     }
     model.list <- c(full_model, disjointed, emergent)
     # Add F and P statistics
-    out.list   <- lapply(model.list, get_PF, dic)
+    out.list <- lapply(model.list, get_PF, dic)
 
     return(out.list)
 }
@@ -152,8 +150,8 @@ fast.qr.resid <- function(x, y) {
 dfmat <- function(x.assign, x.int, all.assign, x.fct, n) {
     df0 <- colSums(
         !vapply(x.assign,
-                FUN.VALUE = vector("logical", length = length(all.assign)),
-                function(x) index.self.high(x, all.assign, x.fct)
+            FUN.VALUE = vector("logical", length = length(all.assign)),
+            function(x) index.self.high(x, all.assign, x.fct)
         )
     )
     df1 <- c(
@@ -175,9 +173,12 @@ make_contrasts <- function(metadata) {
     ))]
     if (length(f.names) > 0) {
         contr.in <- `names<-`(rep("contr.sum",
-                                  times = length(f.names)), f.names)
+            times = length(f.names)
+        ), f.names)
         contr.in[names(which(vapply(
-            metadata, FUN.VALUE = FALSE, is.ordered)))] <- "contr.poly"
+            metadata,
+            FUN.VALUE = FALSE, is.ordered
+        )))] <- "contr.poly"
     }
     return(as.list(contr.in))
 }
@@ -217,8 +218,8 @@ oddify <- function(x) x / (1 - x)
 get_PF <- function(object, d) {
     object@f.values[d] <- oddify(object@estimates[d]) * object@df[3]
     object@p.values[d] <- pf(object@f.values[d],
-                             df1 = object@df[1], df2 = object@df[2],
-                             lower.tail = FALSE
+        df1 = object@df[1], df2 = object@df[2],
+        lower.tail = FALSE
     )
 
     return(object)
@@ -328,12 +329,14 @@ get_x.fct <- function(sat_model, errorterm) {
 #' @noRd
 #'
 subset_metadata <- function(metadata, keep, raw_terms, indErr) {
-    if (!is.null(indErr)) {all_terms <-
-        c(all_terms, deparse1(attr(raw_terms, "variables")[[1L + indErr]][[2L]],
-                              backtick = TRUE
-        )
-        )
+    if (!is.null(indErr)) {
+        all_terms <-
+            c(all_terms, deparse1(attr(raw_terms, "variables")[[1L + indErr]][[2L]],
+                backtick = TRUE
+            ))
     }
-    return(cbind(x = 1,
-                 metadata[, colnames(metadata) %in% all_terms, drop = FALSE]))
+    return(cbind(
+        x = 1,
+        metadata[, colnames(metadata) %in% all_terms, drop = FALSE]
+    ))
 }

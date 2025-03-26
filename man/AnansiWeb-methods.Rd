@@ -6,13 +6,13 @@
 \alias{$<-,AnansiWeb-method}
 \alias{metadata,AnansiWeb-method}
 \alias{metadata<-,AnansiWeb-method}
-\alias{tableY,AnansiWeb-method}
 \alias{tableY}
 \alias{tableX,AnansiWeb-method}
+\alias{tableX}
 \alias{dictionary,AnansiWeb-method}
-\alias{tableY<-,AnansiWeb-method}
 \alias{`tableY<-`}
 \alias{tableX<-,AnansiWeb-method}
+\alias{`tableX<-`}
 \alias{dictionary<-,AnansiWeb-method}
 \alias{show,AnansiWeb-method}
 \alias{dimnames,AnansiWeb-method}
@@ -49,9 +49,7 @@
 \S4method{names}{AnansiWeb}(x)
 }
 \arguments{
-\item{x, object}{
-    object from which to extract element(s) or in which to replace element(s).
-  }
+\item{x}{\code{AnansiWeb}}
 
 \item{name}{
     a literal character string or a \link[base]{name} (possibly \link[base]{backtick}
@@ -60,13 +58,14 @@
     of the object.
   }
 
-\item{value}{typically an array-like \R object of a similar class as
-    \code{x}.}
+\item{value}{replacement \code{matrix} with same number of rows target.}
 
 \item{simplify}{\code{boolean}. If \code{TRUE} (Default), handles single data.frame
 arguments while ensuring compatibility with \code{S4Vectors} method.}
 
-\item{...}{further arguments.}
+\item{...}{additional arguments (currently not used).}
+
+\item{object}{Any R object}
 }
 \value{
 a specified \code{AnansiWeb} object.

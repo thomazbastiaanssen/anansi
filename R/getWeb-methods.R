@@ -51,10 +51,7 @@
 #' # Back to AnansiWeb
 #' outWeb <- getWeb(mae, tableY = "y", tableX = "x")
 #'
-setMethod("getWeb", signature = c(x = "MultiAssayExperiment"), function(
-        x, tableY = 1, tableX = 2, link = NULL, force_new = FALSE, ...
-        ) {
-
+setMethod("getWeb", signature = c(x = "MultiAssayExperiment"), function(x, tableY = 1, tableX = 2, link = NULL, force_new = FALSE, ...) {
     # Check experiments
     mia:::.test_experiment_of_mae(x, tableY)
     mia:::.test_experiment_of_mae(x, tableX)
@@ -66,25 +63,31 @@ setMethod("getWeb", signature = c(x = "MultiAssayExperiment"), function(
     tX <- t(assay(x, x_id))
 
     # Check if x already contains a dictionary
-    if(!force_new){
-    m <- metadata(x)
+    if (!force_new) {
+        m <- metadata(x)
 
-    if(is.null(link))
-        d <- "dictionary"
-    if(valid_selection(link, m))
-        d <- link
-    if(d %in% names(m))
-        return(AnansiWeb(tableX = tX, tableY = tY, dictionary = m[[d]],
-                         metadata = list(metadata = as.data.frame(colData(x))),
-                         ...) )
+        if (is.null(link)) {
+            d <- "dictionary"
+        }
+        if (valid_selection(link, m)) {
+            d <- link
+        }
+        if (d %in% names(m)) {
+            return(AnansiWeb(
+                tableX = tX, tableY = tY, dictionary = m[[d]],
+                metadata = list(metadata = as.data.frame(colData(x))),
+                ...
+            ))
+        }
     }
     # Generate web object
-    weaveWeb.default(x = x_id, y = y_id, link = link,
-                     tableX = tX, tableY = tY,
-                     metadata = list(metadata = as.data.frame(colData(x))),
-                     ...)
-    }
-)
+    weaveWeb.default(
+        x = x_id, y = y_id, link = link,
+        tableX = tX, tableY = tY,
+        metadata = list(metadata = as.data.frame(colData(x))),
+        ...
+    )
+})
 
 #' TRUE if i can select in x
 #' @noRd
@@ -94,13 +97,13 @@ setMethod("getWeb", signature = c(x = "MultiAssayExperiment"), function(
 #'
 valid_selection <- function(i, x) {
     # Need to be length 1.
-    if(length(i) != 1L) FALSE
+    if (length(i) != 1L) FALSE
 
     # If numeric, needs to be within element length of x
-    if(is.numeric(i)) i <= length(x)
+    if (is.numeric(i)) i <= length(x)
     # If character, x needs to be named and i needs to be within those names
-    if(is.character(i)){
-        if(is.null(names(x))) FALSE
+    if (is.character(i)) {
+        if (is.null(names(x))) FALSE
 
         !is.na(match(i, names(x)))
     }

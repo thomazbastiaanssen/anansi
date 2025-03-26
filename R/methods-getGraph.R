@@ -14,33 +14,32 @@
 #' @export
 #' @examples
 #' # Generate a regular igraph object
-#' g <- getGraph( kegg_link() )
+#' g <- getGraph(kegg_link())
 #' plot(g)
 #'
 #' # Output formats
-#' getGraph( ec2cpd, format =  "graph" )
-#' getGraph( ec2cpd, format = "igraph" )
+#' getGraph(ec2cpd, format = "graph")
+#' getGraph(ec2cpd, format = "igraph")
 #'
-#'
-setMethod("getGraph", "MultiFactor",
-          function(x, format = "igraph", ...) {
-            validObject(x)
+setMethod(
+    "getGraph", "MultiFactor",
+    function(x, format = "igraph", ...) {
+        validObject(x)
 
-            g <- graph_from_data_frame(getEdgeList(x), directed = FALSE)
+        g <- graph_from_data_frame(getEdgeList(x), directed = FALSE)
 
-            switch(format,
-                   "igraph" = {},
-                   "graph"  = g <- as_graphnel(g)
-            )
-            return(g)
-          }
+        switch(format,
+            "igraph" = {},
+            "graph"  = g <- as_graphnel(g)
+        )
+        return(g)
+    }
 )
 
 #' @export
 #' @rdname getGraph
 #'
-setMethod("getGraph", "list",
-          function(
-        x, format = "igraph", ...) getGraph( asMultiFactor(x), format
-        )
+setMethod(
+    "getGraph", "list",
+    function(x, format = "igraph", ...) getGraph(asMultiFactor(x), format)
 )

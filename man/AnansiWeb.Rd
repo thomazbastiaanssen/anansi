@@ -32,8 +32,10 @@ with features from \code{y} as rows and features from \code{x} as columns in
 
 tX <- `colnames<-`(replicate(5, (rnorm(36))), letters[1:5])
 tY <- `colnames<-`(replicate(3, (rnorm(36))), LETTERS[1:3])
-d <- matrix(TRUE, nrow = NCOL(tY), ncol = NCOL(tX),
-            dimnames = list(y = colnames(tY), x = colnames(tX)))
+d <- matrix(TRUE,
+    nrow = NCOL(tY), ncol = NCOL(tX),
+    dimnames = list(y = colnames(tY), x = colnames(tX))
+)
 
 AnansiWeb(tableX = tX, tableY = tY, dictionary = d)
 

@@ -25,13 +25,12 @@ Get a graph object out of an MultiFactor.
 }
 \examples{
 # Generate a regular igraph object
-g <- getGraph( kegg_link() )
+g <- getGraph(kegg_link())
 plot(g)
 
 # Output formats
-getGraph( ec2cpd, format =  "graph" )
-getGraph( ec2cpd, format = "igraph" )
-
+getGraph(ec2cpd, format = "graph")
+getGraph(ec2cpd, format = "igraph")
 
 }
 \seealso{

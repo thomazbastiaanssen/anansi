@@ -23,8 +23,10 @@
 #'
 #' tX <- `colnames<-`(replicate(5, (rnorm(36))), letters[1:5])
 #' tY <- `colnames<-`(replicate(3, (rnorm(36))), LETTERS[1:3])
-#' d <- matrix(TRUE, nrow = NCOL(tY), ncol = NCOL(tX),
-#'             dimnames = list(y = colnames(tY), x = colnames(tX)))
+#' d <- matrix(TRUE,
+#'     nrow = NCOL(tY), ncol = NCOL(tX),
+#'     dimnames = list(y = colnames(tY), x = colnames(tX))
+#' )
 #'
 #' AnansiWeb(tableX = tX, tableY = tY, dictionary = d)
 #'
@@ -39,31 +41,42 @@ NULL
 #' @export
 #'
 AnansiWeb <- function(tableX, tableY, dictionary, metadata = list(), ...) {
-  # coerce
-  if(!is(dictionary, "Matrix")) dictionary <-
-      drop0(Matrix(dictionary, sparse = TRUE))
-  if(!is(tableX, "matrix")) tableX <- as.matrix(tableX)
-  if(!is(tableY, "matrix")) tableY <- as.matrix(tableY)
+    # coerce
+    if (!is(dictionary, "Matrix")) {
+        dictionary <-
+            drop0(Matrix(dictionary, sparse = TRUE))
+    }
+    if (!is(tableX, "matrix")) tableX <- as.matrix(tableX)
+    if (!is(tableY, "matrix")) tableY <- as.matrix(tableY)
 
-  # check validity
-  stopifnot("'tableX' and 'tableY' need same number of rows (observations)" =
-            NROW(tableX) == NROW(tableY))
-  stopifnot("cols in 'tableY' need same amount as rows in dictionary" =
-              NCOL(tableY) == NROW(dictionary))
-  stopifnot("cols in 'tableX' need same amount as rows in dictionary" =
-              NCOL(tableX) == NCOL(dictionary))
-  if( is.null( names(dimnames(dictionary)) ) ||
-      any( names(dimnames(dictionary)) %in% "")) {
-    warning("Dimnames of 'dictionary' were missing; Assigned 'y' and 'x'.")
-       names(dimnames(dictionary)) <- c("y", "x")
+    # check validity
+    stopifnot(
+        "'tableX' and 'tableY' need same number of rows (observations)" =
+            NROW(tableX) == NROW(tableY)
+    )
+    stopifnot(
+        "cols in 'tableY' need same amount as rows in dictionary" =
+            NCOL(tableY) == NROW(dictionary)
+    )
+    stopifnot(
+        "cols in 'tableX' need same amount as rows in dictionary" =
+            NCOL(tableX) == NCOL(dictionary)
+    )
+    if (is.null(names(dimnames(dictionary))) ||
+        any(names(dimnames(dictionary)) %in% "")) {
+        warning("Dimnames of 'dictionary' were missing; Assigned 'y' and 'x'.")
+        names(dimnames(dictionary)) <- c("y", "x")
     }
 
-  if(!inherits(metadata, "list")) metadata <-
-    list(metadata = as.data.frame(metadata))
-  # return AnansiWeb
-  new("AnansiWeb",
+    if (!inherits(metadata, "list")) {
+        metadata <-
+            list(metadata = as.data.frame(metadata))
+    }
+    # return AnansiWeb
+    new("AnansiWeb",
         tableY     = tableY,
         tableX     = tableX,
         dictionary = dictionary,
-        metadata   = metadata)
-    }
+        metadata   = metadata
+    )
+}

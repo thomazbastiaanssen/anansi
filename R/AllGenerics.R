@@ -3,44 +3,51 @@
 #' @usage NULL
 #' @export
 #'
-setGeneric("getGraph", signature = c("x"),
-           function(x, ...) standardGeneric("getGraph")
+setGeneric("getGraph",
+    signature = c("x"),
+    function(x, ...) standardGeneric("getGraph")
 )
 
 #' @export
 #'
-setGeneric("tableX", signature = c("x"),
-           function(x, ...) standardGeneric("tableX")
+setGeneric("tableX",
+    signature = c("x"),
+    function(x, ...) standardGeneric("tableX")
 )
 
 #' @export
 #'
-setGeneric("tableX<-", signature = c("x"),
-           function(x, ..., value) standardGeneric("tableX<-")
+setGeneric("tableX<-",
+    signature = c("x"),
+    function(x, ..., value) standardGeneric("tableX<-")
 )
 
 #' @export
 #'
-setGeneric("tableY", signature = c("x"),
-           function(x, ...) standardGeneric("tableY")
+setGeneric("tableY",
+    signature = c("x"),
+    function(x, ...) standardGeneric("tableY")
 )
 
 #' @export
 #'
-setGeneric("tableY<-", signature = c("x"),
-           function(x, ..., value) standardGeneric("tableY<-")
+setGeneric("tableY<-",
+    signature = c("x"),
+    function(x, ..., value) standardGeneric("tableY<-")
 )
 
 #' @export
 #'
-setGeneric("dictionary", signature = c("x"),
-           function(x, ...) standardGeneric("dictionary")
+setGeneric("dictionary",
+    signature = c("x"),
+    function(x, ...) standardGeneric("dictionary")
 )
 
 #' @export
 #'
-setGeneric("dictionary<-", signature = c("x"),
-           function(x, ..., value) standardGeneric("dictionary<-")
+setGeneric("dictionary<-",
+    signature = c("x"),
+    function(x, ..., value) standardGeneric("dictionary<-")
 )
 
 
@@ -50,8 +57,9 @@ setGeneric("dictionary<-", signature = c("x"),
 #' @usage NULL
 #' @export
 #'
-setGeneric("getEdgeList", signature = c("x"),
-           function(x, ...) standardGeneric("getEdgeList")
+setGeneric("getEdgeList",
+    signature = c("x"),
+    function(x, ...) standardGeneric("getEdgeList")
 )
 
 #' weaveWeb wrapper for the MultiAssayExperiment class
@@ -59,22 +67,25 @@ setGeneric("getEdgeList", signature = c("x"),
 #' @usage NULL
 #' @export
 #'
-setGeneric("getWeb", signature = c("x"),
-           function(x, ...) standardGeneric("getWeb")
+setGeneric("getWeb",
+    signature = c("x"),
+    function(x, ...) standardGeneric("getWeb")
 )
 
 #' anansi wrapper for the MultiAssayExperiment class
 #'
 #' @rdname getAnansi
 #' @export
-setGeneric("getAnansi", signature = c("x"),
-           function(x, ...) standardGeneric("getAnansi")
+setGeneric("getAnansi",
+    signature = c("x"),
+    function(x, ...) standardGeneric("getAnansi")
 )
 
 #' miaViz style plotting wrapper for anansi output
 #'
 #' @rdname plotAnansi
 #' @export
-setGeneric("plotAnansi", signature = c("x"),
-           function(x, ...) standardGeneric("plotAnansi")
+setGeneric("plotAnansi",
+    signature = c("x"),
+    function(x, ...) standardGeneric("plotAnansi")
 )

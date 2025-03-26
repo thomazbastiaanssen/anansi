@@ -26,7 +26,7 @@ Construct an \code{MultiFactor} object from a from a validly shaped data frame o
 list of such data frames.
 }
 \examples{
-MultiFactor( kegg_link( ) )
+MultiFactor(kegg_link())
 
 }
 \seealso{

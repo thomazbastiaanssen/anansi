@@ -18,7 +18,7 @@ asMAE(x)
 
 \S4method{as.list}{MultiFactor}(x, ..., use.names = TRUE)
 
-\method{as.list}{MultiFactor}(x, use.names = TRUE)
+as.list.MultiFactor(x, use.names = TRUE)
 }
 \arguments{
 \item{x}{object to be coerced or tested.}
@@ -39,17 +39,17 @@ Coerce AnansiWeb to and from other object types.
 Convert MultiFactor to list
 }
 \examples{
-#Create a random web
+# Create a random web
 web <- randomWeb()
 
-#To list
+# To list
 as.list(web)
 
-#To MultiAssayExperiment
+# To MultiAssayExperiment
 asMAE(web)
 
 x <- as.list(randomMultiFactor())
-identical(x, as.list(MultiFactor(x)) )
+identical(x, as.list(MultiFactor(x)))
 
 }
 \seealso{
