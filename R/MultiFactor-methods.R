@@ -152,6 +152,47 @@ setReplaceMethod("[[", c("MultiFactor", "ANY", "ANY"), function(
     x
 })
 
+ff <- function(x, ...){
+args <- list(...)
+if (!length(args)) { return(x) }
+
+index <- c(x, ...)
+index
+}
+#' @export
+#' @rdname MultiFactor-methods
+#' @description Combine two or more `MultiFactor` objects.
+#'
+setMethod("c", "MultiFactor", function(x, ...) {
+
+    args <- list(...)
+    if (!length(args)) { return(x) }
+
+    ind <- Reduce(mergeMultiFactorInds, list(x@index, ...))
+
+    ind <- checkMergers(ind, TRUE)
+    lvs <- Reduce(mergeMultiFactorLvs, list(levels(x), ...))
+    MultiFactor(ind, levels = lvs)
+
+    return(x)
+})
+
+#' @noRd
+#' @param `MultiFactor@index` from first `MultiFactor` in `c()` Method.
+#' @param y a second `MultiFactor`
+#' @returns Merged index.
+mergeMultiFactorInds <- function(x, y) c(x, y@index)
+
+#' @noRd
+#' @param x `levels(MultiFactor)` from first `MultiFactor` in `c()` Method.
+#' @param y a second `MultiFactor`.
+#' @returns Merged levels
+mergeMultiFactorLvs <- function(x, y) {
+    y <- levels(y)
+    i <- intersect(names(x), names(y))
+    x[i] <- union(x[i], y[i])
+    return(c(x, y[! names(y) %in% i]))
+    }
 
 #' S4 Methods for MultiFactor
 #' @description `show`: Display the object

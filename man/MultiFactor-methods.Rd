@@ -8,6 +8,7 @@
 \alias{dimnames,MultiFactor-method}
 \alias{[[,MultiFactor,ANY,ANY-method}
 \alias{[[<-,MultiFactor,ANY,ANY-method}
+\alias{c,MultiFactor-method}
 \alias{show,MultiFactor-method}
 \alias{unfactor,MultiFactor-method}
 \alias{droplevels.MultiFactor}
@@ -31,6 +32,8 @@
 \S4method{[[}{MultiFactor,ANY,ANY}(x, i, j, ...)
 
 \S4method{[[}{MultiFactor,ANY,ANY}(x, i, j, ...) <- value
+
+\S4method{c}{MultiFactor}(x, ...)
 
 \S4method{show}{MultiFactor}(object)
 
@@ -95,6 +98,8 @@ a set of methods to work with \code{MultiFactor}, a special type of list.
 Extract all elements that contain a given feature type.
 
 \verb{[[<-} should be used to replace, not add data.
+
+Combine two or more \code{MultiFactor} objects.
 
 \code{show}: Display the object
 

@@ -6,6 +6,7 @@ names: Display a vector of dims (n objects, n ids).
 dimnames: Display a vector of dims (n objects, n ids).
 Extract all elements that contain a given feature type.
 [[&amp;lt;- should be used to replace, not add data.
+Combine two or more MultiFactor objects.
 show: Display the object
 Analogous to factors. unfactor(MultiFactor) returns a named
 list with character data frames with same dimensions as input.
@@ -19,6 +20,7 @@ names: Display a vector of dims (n objects, n ids).
 dimnames: Display a vector of dims (n objects, n ids).
 Extract all elements that contain a given feature type.
 [[&amp;lt;- should be used to replace, not add data.
+Combine two or more MultiFactor objects.
 show: Display the object
 Analogous to factors. unfactor(MultiFactor) returns a named
 list with character data frames with same dimensions as input.
@@ -79,6 +81,7 @@ get object map"></head><body>
 <p><code>dimnames</code>: Display a vector of dims (n objects, n ids).</p>
 <p>Extract all elements that contain a given feature type.</p>
 <p><code>[[&lt;-</code> should be used to replace, not add data.</p>
+<p>Combine two or more <code>MultiFactor</code> objects.</p>
 <p><code>show</code>: Display the object</p>
 <p>Analogous to <code>factors</code>. <code>unfactor(MultiFactor)</code> returns a named
 list with character data frames with same dimensions as input.</p>
@@ -109,6 +112,9 @@ list with character data frames with same dimensions as input.</p>
 <span><span class="va">x</span><span class="op">[[</span><span class="va">i</span>, <span class="va">j</span>, <span class="va">...</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
 <span></span>
 <span><span class="co"># S4 method for class 'MultiFactor'</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for class 'MultiFactor'</span></span>
 <span><span class="fu">show</span><span class="op">(</span><span class="va">object</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S4 method for class 'MultiFactor'</span></span>
@@ -119,7 +125,8 @@ list with character data frames with same dimensions as input.</p>
 <span><span class="co"># S4 method for class 'MultiFactor'</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/droplevels.html" class="external-link">droplevels</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">levels.MultiFactor</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span><span class="co"># S3 method for class 'MultiFactor'</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S4 method for class 'MultiFactor'</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>

@@ -39,11 +39,12 @@ model*.
 `Error()` notation. 
 
 # Getting started: The full model {#sec-da-1}
-Overview
-full model estimates the effect of x on y.
+After determining which pairs of features should be investigated, `anansi` fits
+several linear models for which it returns summary statistics. These user has 
+control over these models through the `formula` argument in `anansi(). `
 
-## formula syntax. 
-
+### Setup 
+[See the vignette](https://thomazbastiaanssen.github.io/anansi/articles/adjacency_matrices.html) for more about adjacency matrices and `weaveWeb()`. 
 ```{r formula-web-full} 
 # Setup AnansiWeb with some dummy data
 tableY <- matrix(rnorm(60 * 10),
@@ -62,34 +63,31 @@ metadata <- data.frame(
     score_num = rnorm(60)
 )
 
-AnansiWeb <- weaveWeb(y ~ x,
+web <- weaveWeb(y ~ x,
     link = "none",
     tableY = tableY, tableX = tableX
 )
 ```
-
-### link to adjacency matrix vignette
-The variables mentioned in the formula, `y ~ x`, control the feature types to be
-investigated. they can be found back using `names()`. 
-```{r link-names} 
-names(AnansiWeb)
-```
-[See the vignette on adjacency matrices.](https://thomazbastiaanssen.github.io/anansi/articles/adjacency_matrices.html) 
+## Formula syntax
+Anansi supports arbitrarily complex linear models as well as longitudinal 
+models sing the R formula syntax. The most basic model in anansi would be 
+`y ~ x`, where `y` is the feature from `tableY` and `x` is the corresponding 
+feature in `tableX`. 
+However, these two variables shouldn't be mentioned in the model. Rather, only additional covariates that could interact with x should be provided in the 
+`formula` argument. We also see this back in the message: 
 
 ```{r formula-anansi-full} 
-out <- anansi(AnansiWeb,
+out <- anansi(web,
     formula = ~ treat_cat * score_num, groups = "treat_cat",
     metadata = metadata
 )
 ```
-Anansi supports arbitrarily complex linear models as well as longitudinal models
-using the R formula syntax. 
 
 With 'full' model, we mean the total influence of `x`, including all of its 
 interaction terms, on `y`.
 For example, if our input formula was: 
 `y ~ x * (a + b + c)`. R rewrites this as follows: 
-```{r, reformulate}
+```{r, reformulate, echo = FALSE}
 update.formula(y ~ x * (a + b + c), . ~ .)
 ```
 The variables that constitute the 'full' effect of x would be: 
