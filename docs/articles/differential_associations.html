@@ -149,7 +149,7 @@ from <code>tableY</code> and <code>x</code> is the corresponding feature
 in <code>tableX</code>. However, these two variables shouldn’t be
 mentioned in the model. Rather, only additional covariates that could
 interact with x should be provided in the <code>formula</code> argument.
-We also see this back in teh</p>
+We also see this back in the message:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/anansi.html">anansi</a></span><span class="op">(</span><span class="va">web</span>,</span>
 <span>    formula <span class="op">=</span> <span class="op">~</span> <span class="va">treat_cat</span> <span class="op">*</span> <span class="va">score_num</span>, groups <span class="op">=</span> <span class="st">"treat_cat"</span>,</span>

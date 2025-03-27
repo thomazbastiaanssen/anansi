@@ -40,6 +40,8 @@ Imports:
 Suggests:
     BiocStyle,
     graph,
+    ggraph, 
+    tidygraph, 
     mia,
     patchwork,
     KEGGREST,

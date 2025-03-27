@@ -7,7 +7,7 @@
 \alias{names,MultiFactor-method}
 \alias{dimnames,MultiFactor-method}
 \alias{[[,MultiFactor,ANY,ANY-method}
-\alias{[[<-,MultiFactor,ANY,ANY-method}
+\alias{[[<-,MultiFactor,ANY,ANY,ANY-method}
 \alias{c,MultiFactor-method}
 \alias{show,MultiFactor-method}
 \alias{unfactor,MultiFactor-method}
@@ -31,7 +31,7 @@
 
 \S4method{[[}{MultiFactor,ANY,ANY}(x, i, j, ...)
 
-\S4method{[[}{MultiFactor,ANY,ANY}(x, i, j, ...) <- value
+\S4method{[[}{MultiFactor,ANY,ANY,ANY}(x, i, j, ...) <- value
 
 \S4method{c}{MultiFactor}(x, ...)
 
@@ -43,7 +43,7 @@ droplevels.MultiFactor(x, exclude = NULL, select = NULL, ...)
 
 \S4method{droplevels}{MultiFactor}(x, ...)
 
-levels.MultiFactor(x)
+\method{levels}{MultiFactor}(x)
 
 \S4method{levels}{MultiFactor}(x)
 
