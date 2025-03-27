@@ -18,7 +18,7 @@ asMAE(x)
 
 \S4method{as.list}{MultiFactor}(x, ..., use.names = TRUE)
 
-as.list.MultiFactor(x, use.names = TRUE)
+\method{as.list}{MultiFactor}(x, use.names = TRUE)
 }
 \arguments{
 \item{x}{object to be coerced or tested.}
