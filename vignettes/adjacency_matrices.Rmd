@@ -54,6 +54,7 @@ library(patchwork)
 library(ggraph)
 library(igraph)
 library(tidygraph)
+library(dplyr) 
 
 kd <- data.frame(
     enzyme = c(
@@ -89,7 +90,7 @@ d <- data.frame(
 
 graph_from_data_frame(d, directed = TRUE) |>
     as_tbl_graph() |> 
-    mutate(Legend = if_else(name %in% metabs,"Metabolite", "Enzyme")) |>
+    mutate(Legend = if_else(name %in% metabs, "Metabolite", "Enzyme")) |>
     
     ggraph() + 
     geom_edge_link(arrow = arrow(length = unit(4, 'mm')), 
