@@ -85,16 +85,17 @@ d <- data.frame(
            ), 
     vertices = c("isocitrate\ndehydrogenase", "ketoglutarate\ndehydrogenase", 
                  "succinyl-CoA\nsynthetase", "succinate\ndehydrogenase", 
-                 "fumarase","malate\ndehydrogenase", "citrate\nsynthase", 
-                 "aconitase", "aconitase")
+                 "\nfumarase","malate\ndehydrogenase", "citrate\nsynthase", 
+                 "aconitase\n", "aconitase\n")
     )
 
 krebs_layout <- data.frame(
-    x = (cos(seq(2*pi,0, length = 10) + pi/2) * 1.5)[c(3:9, 1:2)], 
-    y = (sin(seq(2*pi,0, length = 10) + pi/2) * 1.5)[c(3:9, 1:2)], 
+    x = (cos(seq(2*pi,0, length = 10) + pi/2) * 1.25)[c(3:9, 1:2)], 
+    y = (sin(seq(2*pi,0, length = 10) + pi/2) * 1.25)[c(3:9, 1:2)], 
     circular = F, 
-    name = c("isocitrate", "ketoglutarate", "succinyl-CoA", "succinate", 
-             "fumarate", "L-malate", "oxaloacetate", "citrate", "cis-aconitate"), 
+    name = c("isocitrate", "ketoglutarate", "succinyl-CoA", 
+             "succinate", "fumarate", "L-malate", 
+             "oxaloacetate", "citrate", "cis-aconitate"), 
     .ggraph.orig_index = 1:9, 
     .ggraph.index = 1:9)
 
@@ -107,22 +108,22 @@ graph_from_data_frame(d, directed = TRUE) |>
     geom_edge_link(
         arrow = arrow(length = unit(4, 'mm'), type = "closed"), 
         edge_width = 2.5, color = "black",
-        end_cap = circle(10, 'mm'), 
-        start_cap =  circle(9.75, 'mm')) + 
+        end_cap = circle(11.5, 'mm'), 
+        start_cap =  circle(11.25, 'mm')) + 
     geom_edge_link(
         aes(label = vertices), 
         arrow = arrow(length = unit(4, 'mm'), type = "closed"), 
         edge_width = 2, color = "dodgerblue",
-        end_cap = circle(10, 'mm'), 
-        start_cap =  circle(10, 'mm'),
+        end_cap = circle(11.5, 'mm'), 
+        start_cap =  circle(11.5, 'mm'),
         angle_calc = "along", 
-        label_dodge = unit(c(rep(7.5,  5), rep(-7.5,  4)), "mm"), 
-        label_size = 2
+        label_dodge = unit(c(rep(12,  5), rep(-12,  4)), "mm"), 
+        label_size = 3
     ) + 
     
     geom_node_label(aes(label = name), 
-                    size = 2, fill = "orange", show.legend = FALSE) +
-    coord_equal(xlim = c(-1.5, 1.5), ylim = c(-1.5, 1.5), 
+                    size = 3, fill = "orange", show.legend = FALSE) +
+    coord_equal(xlim = c(-1.25, 1.25), ylim = c(-1, 1.1), 
                 ratio = 1, clip = "off") +
     theme_graph()
 
