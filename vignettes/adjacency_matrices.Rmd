@@ -43,13 +43,14 @@ work with it
 Recall that the [citric acid cycle, or Krebs cycle](https://en.wikipedia.org/wiki/Citric_acid_cycle),
 is a central piece of metabolic machinery. In short, it enables oxidative 
 phosphorylation. See figure \@ref(fig:plot-krebs) below for a simplified 
-representation. In the figure, there are 8 unique enzymatic reactions and 9 
+representation with 8 unique enzymatic reactions and 9 
 unique metabolites. 
 
 ```{r}
-#| plot-krebs, echo=FALSE, fig.small=TRUE, warning=FALSE, message=FALSE,
-#| fig.cap="Simplified representation of the Krebs cycle. Boxes mark
-#| metabolites and arrows mark enyzmes. "
+#| plot-krebs, echo=FALSE, out.width='100%', out.height='100%', warning=FALSE,
+#| message=FALSE,
+#| fig.cap="Simplified representation of the Krebs cycle. Orange boxes mark
+#| metabolites and blue arrows represent enyzmes. "
 library(patchwork)
 library(ggraph)
 library(igraph)
@@ -59,7 +60,7 @@ library(dplyr)
 kd <- data.frame(
     enzyme = c(
         "isocitrate\ndehydrogenase", "aconitase", "aconitase",
-        "citrate\ndehydrogenase", "malate\ndehydrogenase", "fumarase",
+        "citrate\nsynthase", "malate\ndehydrogenase", "fumarase",
         "succinate\ndehydrogenase", "succinyl-CoA\nsynthetase",
         "ketoglutarate\ndehydrogenase"
     ),
@@ -93,11 +94,29 @@ graph_from_data_frame(d, directed = TRUE) |>
     mutate(Legend = if_else(name %in% metabs, "Metabolite", "Enzyme")) |>
     
     ggraph() + 
-    geom_edge_link(arrow = arrow(length = unit(4, 'mm')), 
-                   end_cap = circle(15, 'mm'), aes(label = vertices)) + 
-    geom_node_label(aes(label = name, fill = name), show.legend = FALSE) +
     
-    theme_void()
+    geom_edge_link(
+        arrow = arrow(length = unit(4, 'mm'), type = "closed"), 
+        edge_width = 2.5, color = "black",
+        end_cap = circle(10, 'mm'), 
+        start_cap =  circle(9.75, 'mm')) + 
+    geom_edge_link(
+        aes(label = vertices), 
+        arrow = arrow(length = unit(4, 'mm'), type = "closed"), 
+        edge_width = 2, color = "dodgerblue",
+        end_cap = circle(10, 'mm'), 
+        start_cap =  circle(10, 'mm'),
+        angle_calc = "along", 
+        label_dodge = unit(c(rep(7.5, 4), rep(-7.5,  4), 7.5), "mm"), 
+        label_size = 2
+    ) + 
+    
+    geom_node_label(aes(label = name), 
+                    size = 2, fill = "orange", show.legend = FALSE) +
+    coord_equal(xlim = c(-1.5, 1.5), ylim = c(-1.5, 1.5), 
+                ratio = 1, clip = "off") +
+    theme_graph()
+
 # 
 # ggplot(kd) +
 #     annotate("path",

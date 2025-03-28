@@ -175,7 +175,7 @@ The long format can be helpful to plug the data into `ggplot2`. Here, we
 recreate part of the results from the FMT Aging study.
 
 ```{r}
-#| plot_FMT, eval=TRUE, fig.width = 10, fig.height = 8,
+#| plot_FMT, eval=TRUE, fig.width=10, fig.height=8,
 #| fig.alt="Differential association plot, with facets separating metabolites
 #| and metabolites on the y-axis. x-axis depicts pearson's correlation
 #| coefficient."
