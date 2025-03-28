@@ -226,29 +226,36 @@ to the sparse graph in figure \@ref(fig:all-v-all) B can be seen in figure
 #| fig.cap="Matrix representation of the constrained analysis of the Krebs cycle,
 #| with cells marked with 'X' signifying tested feature-pairs."
 
-kl <- data.frame(
-    enzyme = factor(
-      c("aconitase","aconitase", "isocitrate\ndehydrogenase", 
-        "ketoglutarate\ndehydrogenase", "succinyl-CoA\nsynthetase", 
-        "succinate\ndehydrogenase", "fumarase",  
-        "malate\ndehydrogenase", "citrate\nsynthase"), 
-      levels = (
-        c("aconitase", "isocitrate\ndehydrogenase", 
-        "ketoglutarate\ndehydrogenase", "succinyl-CoA\nsynthetase", 
-        "succinate\ndehydrogenase", "fumarase",  
-        "malate\ndehydrogenase", "citrate\nsynthase"))), 
-    metab = factor(
-      c("citrate","cis-aconitate",  "isocitrate","ketoglutarate", 
-        "succinyl-CoA","succinate","fumarate","L-malate", "oxaloacetate"), 
-      levels = (
+krebs_edge_df <- data.frame(
+    Enzyme = factor(
+      c("isocitrate dehydrogenase", "isocitrate dehydrogenase", 
+        "ketoglutarate dehydrogenase", "ketoglutarate dehydrogenase", 
+        "succinyl-CoA synthetase", "succinyl-CoA synthetase", 
+        "succinate dehydrogenase", "succinate dehydrogenase", "fumarase", 
+        "fumarase", "malate dehydrogenase", "malate dehydrogenase", 
+        "citrate synthase", "citrate synthase", "aconitase", "aconitase",
+        "aconitase"), 
+      levels = 
+        c("aconitase", "isocitrate dehydrogenase", 
+        "ketoglutarate dehydrogenase", "succinyl-CoA synthetase", 
+        "succinate dehydrogenase", "fumarase",  
+        "malate dehydrogenase", "citrate\ synthase")), 
+    Metabolite = factor(
+      c("isocitrate", "ketoglutarate", "ketoglutarate", "succinyl-CoA",
+        "succinyl-CoA", "succinate", "succinate", "fumarate", "fumarate", 
+        "L-malate","L-malate", "oxaloacetate", "oxaloacetate", "citrate", 
+        "citrate", "cis-aconitate", "isocitrate"), 
+      levels = 
         c( "citrate","cis-aconitate",  "isocitrate", "ketoglutarate", 
-           "succinyl-CoA", "succinate","fumarate","L-malate", "oxaloacetate"))), 
-        lab = "X"
+           "succinyl-CoA", "succinate","fumarate","L-malate", "oxaloacetate"))
     )
-
-ggplot(kl) +
-    geom_text(aes(label = lab), x = I(0.5), y = I(0.5)) +
-    facet_grid(enzyme ~ metab, switch = "y", space = "free_x") +
+krebs_edge_df |> 
+       mutate(Enzyme = `levels<-`(Enzyme, 
+         gsub(x = levels(Enzyme), " ", replacement = "\n"))
+         ) |>
+ggplot() +
+    geom_text(label = "X", x = I(0.5), y = I(0.5)) +
+    facet_grid(Enzyme ~ Metabolite, switch = "y", space = "free_x") +
     theme_bw() +
     theme(
         strip.text.y.left = element_text(
@@ -388,19 +395,6 @@ names(w)
 ## Additional approaches
 There are numerous ways in which we can define an adjacency matrix. Here, we 
 demonstrate a graph-based and matrix based approach.
-
-```{r init-list, echo=FALSE}
-
-krebs_edge_df <- data.frame(
-  Enzyme = c("isocitrate dehydrogenase", "isocitrate dehydrogenase", 
-"ketoglutarate dehydrogenase", "ketoglutarate dehydrogenase", 
-"succinyl-CoA synthetase", "succinyl-CoA synthetase", 
-"succinate dehydrogenase", "succinate dehydrogenase", "fumarase", "fumarase", "malate dehydrogenase", "malate dehydrogenase", "citrate synthase", "citrate synthase", "aconitase", "aconitase", "aconitase"), 
-Metabolite = c("isocitrate", "ketoglutarate", "ketoglutarate", "succinyl-CoA", "succinyl-CoA", "succinate", "succinate", "fumarate", "fumarate", "L-malate", 
-"L-malate", "oxaloacetate", "oxaloacetate", "citrate", "citrate", 
-"cis-aconitate", "isocitrate")
-)
-```
 
 ### adjacency matrices with `igraph`
 Importantly, (bi)adjacency matrices can be understood as graphs. Two common 
