@@ -391,36 +391,50 @@ Here, we demonstrate a graph-based and matrix based approach.</p>
 <h4 id="adjacency-matrices-with-igraph">adjacency matrices with <code>igraph</code><a class="anchor" aria-label="anchor" href="#adjacency-matrices-with-igraph"></a>
 </h4>
 <p>Importantly, (bi)adjacency matrices can be understood as graphs. Two
-common packages that deal with graphs are <a href="https://r.igraph.org/" class="external-link"><code>igraph</code></a> and <a href="https://bioconductor.org/packages/graph/" class="external-link"><code>graph</code></a>.</p>
+common packages that deal with graphs are <a href="https://r.igraph.org/" class="external-link"><code>igraph</code></a> and <a href="https://bioconductor.org/packages/graph/" class="external-link"><code>graph</code></a>.
+To start off, we need to have a graph object, so let’s make one using
+<code>igraph</code>.</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r.igraph.org/" class="external-link">igraph</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Convert data.frame to graph</span></span>
+<span><span class="co"># Prepared data.frame for the occasion</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">krebs_edge_df</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##                        Enzyme    Metabolite</span></span>
+<span><span class="co">## 1    isocitrate dehydrogenase    isocitrate</span></span>
+<span><span class="co">## 2    isocitrate dehydrogenase ketoglutarate</span></span>
+<span><span class="co">## 3 ketoglutarate dehydrogenase ketoglutarate</span></span>
+<span><span class="co">## 4 ketoglutarate dehydrogenase  succinyl-CoA</span></span>
+<span><span class="co">## 5     succinyl-CoA synthetase  succinyl-CoA</span></span>
+<span><span class="co">## 6     succinyl-CoA synthetase     succinate</span></span></code></pre>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Convert data.frame to graph</span></span>
 <span><span class="va">g</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r.igraph.org/reference/graph_from_data_frame.html" class="external-link">graph_from_data_frame</a></span><span class="op">(</span><span class="va">krebs_edge_df</span>, directed <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <p>Now that we have constructed a graph, we still need to identify which
 features, vertices, belong to which data modality, in this case either
-enzymes and metabolites. <code>igraph</code> does this using a boolean
-vector, where <code>TRUE</code> values become columns, which corresponds
-to <code>tableX</code>, whereas <code>FALSE</code> values become rows,
-corresponding to <code>tableY</code>.</p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://r.igraph.org/reference/V.html" class="external-link">V</a></span><span class="op">(</span><span class="va">g</span><span class="op">)</span><span class="op">$</span><span class="va">type</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r.igraph.org/reference/V.html" class="external-link">V</a></span><span class="op">(</span><span class="va">g</span><span class="op">)</span><span class="op">$</span><span class="va">name</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">krebs_edge_df</span><span class="op">$</span><span class="va">Enzyme</span></span>
+enzymes and metabolites. Using the <code>igraph</code> package, this
+should be done through the <code>type</code> slot. <code>type</code> can
+be assigned a boolean vector, where <code>TRUE</code> values become
+columns, corresponding to features in <code>tableX</code>, whereas
+<code>FALSE</code> values become rows, which correspond to those in
+<code>tableY</code>.</p>
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://r.igraph.org/reference/V.html" class="external-link">V</a></span><span class="op">(</span><span class="va">g</span><span class="op">)</span><span class="op">$</span><span class="va">type</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r.igraph.org/reference/V.html" class="external-link">V</a></span><span class="op">(</span><span class="va">g</span><span class="op">)</span><span class="op">$</span><span class="va">name</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">krebs_edge_df</span><span class="op">$</span><span class="va">Metabolite</span></span>
 <span></span>
 <span><span class="co"># Now that we've defined type, we can convert to biadjacency matrix:</span></span>
 <span><span class="va">bi_mat1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r.igraph.org/reference/as_biadjacency_matrix.html" class="external-link">as_biadjacency_matrix</a></span><span class="op">(</span><span class="va">g</span>, sparse <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
+<span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">bi_mat1</span>, n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">5</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## 4 x 5 sparse Matrix of class "dgTMatrix"</span></span>
-<span><span class="co">##               aconitase citrate synthase fumarase succinate dehydrogenase</span></span>
-<span><span class="co">## cis-aconitate         1                .        .                       .</span></span>
-<span><span class="co">## citrate               1                1        .                       .</span></span>
-<span><span class="co">## fumarate              .                .        1                       1</span></span>
-<span><span class="co">## isocitrate            1                .        .                       .</span></span>
-<span><span class="co">##               isocitrate dehydrogenase</span></span>
-<span><span class="co">## cis-aconitate                        .</span></span>
-<span><span class="co">## citrate                              .</span></span>
-<span><span class="co">## fumarate                             .</span></span>
-<span><span class="co">## isocitrate                           1</span></span></code></pre>
+<span><span class="co">##                             isocitrate ketoglutarate succinyl-CoA succinate</span></span>
+<span><span class="co">## isocitrate dehydrogenase             1             1            .         .</span></span>
+<span><span class="co">## ketoglutarate dehydrogenase          .             1            1         .</span></span>
+<span><span class="co">## succinyl-CoA synthetase              .             .            1         1</span></span>
+<span><span class="co">## succinate dehydrogenase              .             .            .         1</span></span>
+<span><span class="co">##                             fumarate</span></span>
+<span><span class="co">## isocitrate dehydrogenase           .</span></span>
+<span><span class="co">## ketoglutarate dehydrogenase        .</span></span>
+<span><span class="co">## succinyl-CoA synthetase            .</span></span>
+<span><span class="co">## succinate dehydrogenase            1</span></span></code></pre>
 <p>Though biadjacency support in <code>graph</code> is currently
 limited, We note that igraph and graph objects can be converted using
 the <code><a href="https://r.igraph.org/reference/graph_from_graphnel.html" class="external-link">graph_from_graphnel()</a></code> and <code><a href="https://r.igraph.org/reference/as_graphnel.html" class="external-link">as_graphnel()</a></code>
@@ -432,7 +446,7 @@ functions in <code>igraph</code>.</p>
 <p>We can also define a matrix directly. Conveniently, sparse matrices
 can be defined easily from our starting data. The <code>Matrix</code>
 library provides fantastic support for this.</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://Matrix.R-forge.R-project.org" class="external-link">Matrix</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># For this approach, it's useful to prepare the input as two factors:</span></span>
@@ -467,7 +481,7 @@ library provides fantastic support for this.</p>
 <div class="section level2">
 <h2 id="session-info">Session info<a class="anchor" aria-label="anchor" href="#session-info"></a>
 </h2>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## R version 4.4.3 (2025-02-28)</span></span>
 <span><span class="co">## Platform: x86_64-pc-linux-gnu</span></span>
