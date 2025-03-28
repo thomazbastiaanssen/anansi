@@ -182,35 +182,34 @@ $8\times9=72$ hypotheses. Figure \@ref(fig:all-v-all) A.
 #| Krebs cycle. **A)** All-vs-all, with a full graph. **B)** Constrained, only
 #| linking metabolites an enzymes that are known to directly interact."
 
-
 colmat <- data.frame(
     name = c(
-        "aconitase", "citrate\nsynthase", "fumarase", "succinate\ndehydrogenase",
-        "isocitrate\ndehydrogenase", "malate\ndehydrogenase",
-        "succinyl-CoA\nsynthetase", "ketoglutarate\ndehydrogenase", "cis-aconitate",
-        "citrate", "fumarate", "isocitrate", "L-malate", "oxaloacetate", "succinate",
-        "succinyl-CoA", "ketoglutarate"
-    ),
+        "aconitase", "isocitrate\ndehydrogenase", "ketoglutarate\ndehydrogenase", 
+        "succinyl-CoA\nsynthetase", "succinate\ndehydrogenase",
+        "fumarase",  "malate\ndehydrogenase", "citrate\nsynthase",
+        
+        "citrate","cis-aconitate",  "isocitrate","ketoglutarate", 
+        "succinyl-CoA",  "succinate","fumarate","L-malate", "oxaloacetate"    ),
     y = c(seq(9, 1, length.out = 8), 9:1),
-    x = rep(c(0.3, 0.7), times = c(8, 9)),
+    x = rep(c(0.7, 0.3), times = c(8, 9)),
     fill = rep(c("Enzyme", "Metabolite"), times = c(8, 9))
 )
 
 p_0 <- ggplot() +
     annotate("segment",
-        x = c(0.28, 0.72), y = 0.875,
-        xend = c(0.28, 0.72), yend = 9.125, color = "gray"
+             x = c(0.28, 0.72), y = 0.875,
+             xend = c(0.28, 0.72), yend = 9.125, color = "gray"
     ) +
     geom_text(
         data = colmat, aes(y = y, x = x, label = name), colour = "black",
-        size = 3.25, hjust = c(rep(1, 8), rep(0, 9)), lineheight = 7 / 10,
-        nudge_x = c(rep(-0.03, 8), rep(0.03, 9))
+        size = 3.25, hjust = c(rep(0, 8), rep(1, 9)), lineheight = 7 / 10,
+        nudge_x = c(rep(0.03, 8), rep(-0.03, 9))
     ) +
     scale_fill_manual(values = c(Metabolite = "orange", Enzyme = "dodgerblue")) +
     coord_cartesian(xlim = c(1 / 20, 19 / 20), clip = "off") +
     annotate("text",
-        label = c("Enzymes", "Metabolites"),
-        x = c(2 / 8, 6 / 8), y = 9.6, size = 4
+             label = c("Metabolites", "Enzymes"),
+             x = c(2 / 8, 6 / 8), y = 9.6, size = 4
     ) +
     ylab(NULL) +
     xlab(NULL) +
@@ -226,7 +225,7 @@ p_a <- p_0 +
 
 p_b <- p_0 + geom_segment(
     data = expand.grid(seq(9, 1, length.out = 8), 9:1),
-    aes(y = Var1, yend = Var2), x = 3 / 10, xend = 7 / 10,
+    aes(y = Var2, yend = Var1), x = 3 / 10, xend = 7 / 10,
     color = "#393D47", inherit.aes = FALSE
 ) +
     geom_point(
@@ -236,11 +235,11 @@ p_b <- p_0 + geom_segment(
     )
 p_c <- p_0 + geom_segment(
     data = data.frame(
-        Var1 = seq(1, 9, length.out = 8)[
-            c(8, 8, 7, 6, 5, 8, 4, 6, 3, 7, 3, 5, 2, 2, 1, 4, 1)
+        Var2 = seq(1, 9, length.out = 8)[
+            c(8, 1, 8, 8, 7, 7, 6, 6, 5, 5, 4, 4, 3, 3, 2, 2, 1)
         ],
-        Var2 =
-            c(9, 8, 8, 7, 7, 6, 6, 5, 5, 4, 4, 3, 3, 2, 2, 1, 1)
+        Var1 =
+            c(9, 9, 8, 7, 7, 6, 6, 5, 5, 4, 4, 3, 3, 2, 2, 1, 1)
     ),
     aes(y = Var1, yend = Var2), x = 3 / 10, xend = 7 / 10,
     color = "#393D47", inherit.aes = FALSE
@@ -250,8 +249,9 @@ p_c <- p_0 + geom_segment(
         color = "black", shape = 21, size = 4, show.legend = FALSE
     )
 
-
 (p_b | p_c) + plot_annotation(tag_levels = "A")
+
+
 ```
 ### Knowledge-informed analyis of specific interactions
 Often however, only a subset of these comparisons is scientifically relevant to
@@ -272,8 +272,27 @@ to the sparse graph in figure \@ref(fig:all-v-all) B can be seen in figure
 #| fig.cap="Matrix representation of the constrained analysis of the Krebs cycle,
 #| with cells marked with 'X' signifying tested feature-pairs."
 
-kd$lab <- "X"
-ggplot(kd) +
+kl <- data.frame(
+    enzyme = factor(
+      c("aconitase","aconitase", "isocitrate\ndehydrogenase", 
+        "ketoglutarate\ndehydrogenase", "succinyl-CoA\nsynthetase", 
+        "succinate\ndehydrogenase", "fumarase",  
+        "malate\ndehydrogenase", "citrate\nsynthase"), 
+      levels = rev(
+        c("aconitase", "isocitrate\ndehydrogenase", 
+        "ketoglutarate\ndehydrogenase", "succinyl-CoA\nsynthetase", 
+        "succinate\ndehydrogenase", "fumarase",  
+        "malate\ndehydrogenase", "citrate\nsynthase"))), 
+    metab = factor(
+      c("citrate","cis-aconitate",  "isocitrate","ketoglutarate", 
+        "succinyl-CoA","succinate","fumarate","L-malate", "oxaloacetate"), 
+      levels = rev(
+        c( "citrate","cis-aconitate",  "isocitrate", "ketoglutarate", 
+           "succinyl-CoA", "succinate","fumarate","L-malate", "oxaloacetate"))), 
+        lab = "X"
+    )
+
+ggplot(kl) +
     geom_text(aes(label = lab), x = I(0.5), y = I(0.5)) +
     facet_grid(enzyme ~ metab, switch = "y", space = "free_x") +
     theme_bw() +
