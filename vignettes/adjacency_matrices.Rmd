@@ -117,7 +117,7 @@ graph_from_data_frame(d, directed = TRUE) |>
         end_cap = circle(11.5, 'mm'), 
         start_cap =  circle(11.5, 'mm'),
         angle_calc = "along", 
-        label_dodge = unit(c(rep(12,  5), rep(-12,  4)), "mm"), 
+        label_dodge = unit(c(rep(13, 5), rep(-13, 4)), "mm"), 
         label_size = 3
     ) + 
     
