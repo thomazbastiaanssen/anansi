@@ -18,12 +18,16 @@ asMAE(x)
 
 \S4method{as.list}{MultiFactor}(x, ..., use.names = TRUE)
 
-\method{as.list}{MultiFactor}(x, use.names = TRUE)
+\method{as.list}{MultiFactor}(x, ..., use.names = TRUE)
 }
 \arguments{
-\item{x}{object to be coerced or tested.}
+\item{x}{
+    The object to coerce.
+  }
 
-\item{...}{objects, possibly named.}
+\item{...}{
+    Additional arguments, for use in specific methods.
+  }
 
 \item{use.names}{\verb{Logical scalar}, whether output list should contain
 character (Default) or integer data frame. If \code{FALSE}, returns

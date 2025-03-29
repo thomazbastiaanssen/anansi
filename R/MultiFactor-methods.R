@@ -270,6 +270,7 @@ setMethod("unfactor", "MultiFactor", function(x) {
 #'     `levels(MultiFactor)`. Which levels to keep in output.
 #' @details Only one of `select` and `exclude` should be provided, as they are
 #'     each others complement.
+#' @usage droplevels(x, exclude = NULL, select = NULL, ...)
 #' @returns A MultiFactor
 #' @export
 #'

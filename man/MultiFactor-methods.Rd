@@ -39,7 +39,7 @@
 
 \S4method{unfactor}{MultiFactor}(x)
 
-droplevels.MultiFactor(x, exclude = NULL, select = NULL, ...)
+droplevels(x, exclude = NULL, select = NULL, ...)
 
 \S4method{droplevels}{MultiFactor}(x, ...)
 

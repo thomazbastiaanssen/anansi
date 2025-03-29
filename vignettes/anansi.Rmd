@@ -58,10 +58,10 @@ data(FMT_data)
 
 # Data preparation
 
-The main `anansi` function expects data in the `AnansiWeb` format; Basically a 
-list with exactly three tables: 
-The first table, `tableY`, should be a count table of metabolites.
-The second table, `tableX`, should be a count table of functions. 
+The main `anansi` function expects data in the `AnansiWeb` class format, which 
+contains three tables: 
+The first two tables, `tableY` and `tableX` are the feature tables of your two
+data modalities (e.g., metabolites, genes, microbes, ...). 
 Both tables should have columns as features and rows as samples.
 
 The third table should be a binary adjacency matrix with the column names of 
@@ -69,13 +69,12 @@ The third table should be a binary adjacency matrix with the column names of
 matrix is provided in the `anansi` library and is referred to as a dictionary 
 (because you use it to look up which metabolites interact with which functions).  
 
-Though this example uses metabolites and functions, `anansi` is able to handle 
-any type of 'omics data, as long as there is a dictionary available. Because of 
-this, anansi uses the type-naive nomenclature `tableY` and `tableX`. The Y and X
-refer to the position these measurements will have in the linear modeling 
-framework: 
+Though most of the examples use metabolites and functions, `anansi` is able to 
+handle any type of big/'omics data, as long as there is a dictionary available. Because of this, anansi uses the type-naive nomenclature `tableY` and `tableX`. 
+The Y and X refer to the position these measurements will have in the linear 
+modeling framework: 
 
-$$Y \sim X \times {\text{covariates}}$$
+$Y \sim X \times {\text{covariates}}$
 
 ### A note on functional microbiome data
 

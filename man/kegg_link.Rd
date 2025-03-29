@@ -9,7 +9,7 @@
 \format{
 \code{ec2ko}: a \code{data.frame} of two columns, named \code{"ec"}
 and \code{"ko"}. The IDs refer to KEGG orthologues. Enzyme commission numbers,
-ecs, typicallydescribe reactions captured by them.
+ecs, typically describe reactions captured by them.
 
 \code{ec2cpd}: a \code{data.frame} of two columns, named \code{"ec"} and \code{"cpd"}.
 The IDs refer to compounds in the KEGG database. Enzyme commission

@@ -16,7 +16,7 @@ NULL
 
 #' @rdname coerceAnansi
 #' @aliases as.list.AnansiWeb
-#' @inheritParams base::as.list
+#' @inheritParams BiocGenerics::as.list
 #' @export
 #'
 setMethod("as.list", c(x = "AnansiWeb"), function(x, ...) as(x, "list"))
@@ -76,6 +76,7 @@ setMethod("as.list", c(x = "MultiFactor"), function(x, ..., use.names = TRUE) {
 })
 
 #' @export
+#' @method as.list MultiFactor
 #' @rdname coerceAnansi
 #' @param use.names `Logical scalar`, whether output list should contain
 #'     character (Default) or integer data frame. If `FALSE`, returns
@@ -85,7 +86,7 @@ setMethod("as.list", c(x = "MultiFactor"), function(x, ..., use.names = TRUE) {
 #' x <- as.list(randomMultiFactor())
 #' identical(x, as.list(MultiFactor(x)))
 #'
-as.list.MultiFactor <- function(x, use.names = TRUE) {
+as.list.MultiFactor <- function(x, ..., use.names = TRUE) {
     ifelse(
         use.names,
         yes = return(unfactor(x)),
