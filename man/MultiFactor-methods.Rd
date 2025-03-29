@@ -3,11 +3,12 @@
 \name{MultiFactor-methods}
 \alias{MultiFactor-methods}
 \alias{getEdgeList,MultiFactor-method}
+\alias{getEdgeList}
 \alias{dim,MultiFactor-method}
 \alias{names,MultiFactor-method}
 \alias{dimnames,MultiFactor-method}
 \alias{[[,MultiFactor,ANY,ANY-method}
-\alias{[[<-,MultiFactor,ANY,ANY,ANY-method}
+\alias{[[<-,MultiFactor,ANY,ANY-method}
 \alias{c,MultiFactor-method}
 \alias{show,MultiFactor-method}
 \alias{unfactor,MultiFactor-method}
@@ -31,7 +32,7 @@
 
 \S4method{[[}{MultiFactor,ANY,ANY}(x, i, j, ...)
 
-\S4method{[[}{MultiFactor,ANY,ANY,ANY}(x, i, j, ...) <- value
+\S4method{[[}{MultiFactor,ANY,ANY}(x, i, j, ...) <- value
 
 \S4method{c}{MultiFactor}(x, ...)
 
@@ -39,11 +40,11 @@
 
 \S4method{unfactor}{MultiFactor}(x)
 
-droplevels(x, exclude = NULL, select = NULL, ...)
+droplevels(x, ...)
 
 \S4method{droplevels}{MultiFactor}(x, ...)
 
-\method{levels}{MultiFactor}(x)
+levels(x)
 
 \S4method{levels}{MultiFactor}(x)
 

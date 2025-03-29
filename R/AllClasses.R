@@ -13,6 +13,7 @@
 #'     `metadata()`.
 #' @importClassesFrom Matrix Matrix
 #' @importClassesFrom S4Vectors Annotated
+#' @importMethodsFrom S4Vectors metadata
 #' @seealso \itemize{
 #' \item [AnansiWeb()]: for general use.
 #' \item [AnansiWeb-methods()] for methods, including `$`

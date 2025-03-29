@@ -2,18 +2,24 @@
 % Please edit documentation in R/AnansiWeb-methods.R
 \name{AnansiWeb-methods}
 \alias{AnansiWeb-methods}
+\alias{tableY}
+\alias{`tableY<-`}
 \alias{$,AnansiWeb-method}
 \alias{$<-,AnansiWeb-method}
 \alias{metadata,AnansiWeb-method}
+\alias{dictionary}
 \alias{metadata<-,AnansiWeb-method}
-\alias{tableY}
+\alias{tableY,AnansiWeb-method}
 \alias{tableX,AnansiWeb-method}
 \alias{tableX}
 \alias{dictionary,AnansiWeb-method}
-\alias{`tableY<-`}
+\alias{`dictionary`}
+\alias{tableY<-}
+\alias{tableY<-,AnansiWeb-method}
 \alias{tableX<-,AnansiWeb-method}
-\alias{`tableX<-`}
+\alias{tableX<-}
 \alias{dictionary<-,AnansiWeb-method}
+\alias{dictionary<-}
 \alias{show,AnansiWeb-method}
 \alias{dimnames,AnansiWeb-method}
 \alias{dim,AnansiWeb-method}

@@ -1,5 +1,6 @@
 #' Get a graph object out of an MultiFactor.
 #' @rdname getGraph
+#' @aliases getGraph
 #' @param x `MultiFactor`
 #' @param format
 #' `Character scalar`, controls output format by package name.

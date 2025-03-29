@@ -10,6 +10,8 @@ NULL
 #' @description
 #' `getEdgeList`: Return a data frame in edge list format.
 #' @rdname MultiFactor-methods
+#' @aliases getEdgeList getEdgeList,MultiFactor-method
+#' @param x MultiFactor
 #' @export
 #'
 setMethod(
@@ -108,8 +110,6 @@ setReplaceMethod("[", c("MultiFactor", "ANY", "ANY", "list"), def = function(
     validObject(x)
     (x)
 })
-
-
 
 #' @export
 #' @description
@@ -270,7 +270,9 @@ setMethod("unfactor", "MultiFactor", function(x) {
 #'     `levels(MultiFactor)`. Which levels to keep in output.
 #' @details Only one of `select` and `exclude` should be provided, as they are
 #'     each others complement.
-#' @usage droplevels(x, exclude = NULL, select = NULL, ...)
+#' @usage droplevels(x, ...)
+#' @aliases droplevels.MultiFactor
+#' @method droplevels MultiFactor
 #' @returns A MultiFactor
 #' @export
 #'
@@ -313,7 +315,7 @@ droplevels.MultiFactor <- function(x, exclude = NULL, select = NULL, ...) {
     }
     # Section 2. Trimming the levels by indices. .
     for (lv in names(lvs)) {
-        # Loop over all cols. First determine which rows are relevant per col/type
+        # Loop over cols. First determine which rows are relevant per col/type
         rs <- rowsWithCol(d, lv, names = TRUE)
         x_index <- lapply(x@index[rs], `[[`, lv)
         # Get unique feature names in that type and are within levels.
@@ -338,11 +340,11 @@ setMethod("droplevels", "MultiFactor", function(x, ...) {
     droplevels.MultiFactor(x, ...)
 })
 
-
-# mergeROWS()
-
 #' S3/S4 combo for levels.
 #' @export
+#' @method levels MultiFactor
+#' @usage levels(x)
+#' @aliases levels.MultiFactor
 #' @description
 #' get object levels
 #' @returns a named list of character vectors.

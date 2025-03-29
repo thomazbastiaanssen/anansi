@@ -14,6 +14,7 @@
 #' \item [weaveWeb()]: for general use.
 #' }
 #' @importFrom methods slotNames slot slot<-
+#' @aliases tableY `tableY<-`
 #' @examples
 #' # prepare an AnansiWeb
 #' w <- weaveWeb(cpd ~ ko, link = kegg_link())
@@ -54,6 +55,7 @@ setReplaceMethod("$", "AnansiWeb", def = function(x, name, value) {
 #' @param simplify `boolean`. If `TRUE` (Default), handles single data.frame
 #'     arguments while ensuring compatibility with `S4Vectors` method.
 #' @rdname AnansiWeb-methods
+#' @aliases dictionary metadata,AnansiWeb-method
 #' @importFrom methods slot
 #'
 setMethod("metadata",
@@ -70,6 +72,7 @@ setMethod("metadata",
 #' @export
 #' @importMethodsFrom S4Vectors "metadata<-"
 #' @importFrom methods slot<-
+#' @aliases metadata<-,AnansiWeb-method
 #' @rdname AnansiWeb-methods
 #'
 setReplaceMethod("metadata", "AnansiWeb", def = function(
@@ -93,7 +96,7 @@ setReplaceMethod("metadata", "AnansiWeb", def = function(
 #' @name tableY
 #' @param x `AnansiWeb`
 #' @param ... additional arguments (currently not used).
-#' @aliases tableY
+#' @aliases tableY tableY,AnansiWeb-method
 #' @export
 #'
 setMethod("tableY", "AnansiWeb", def = function(x, ...) x@tableY )
@@ -101,19 +104,21 @@ setMethod("tableY", "AnansiWeb", def = function(x, ...) x@tableY )
 #' @rdname AnansiWeb-methods
 #' @inheritParams tableY
 #' @export
-#' @aliases tableX
+#' @aliases tableX tableX,AnansiWeb-method
 #'
 setMethod("tableX", "AnansiWeb", def = function(x, ...) x@tableX )
 
 #' @rdname AnansiWeb-methods
 #' @inheritParams tableY
+#' @aliases `dictionary` dictionary,AnansiWeb-method
 #' @export
 #'
 setMethod("dictionary", "AnansiWeb", def = function(x, ...) x@dictionary)
 
 #' @rdname AnansiWeb-methods
-#' @name `tableY<-`
+#' @name tableY<-
 #' @inheritParams tableY
+#' @aliases tableY<- tableY<-,AnansiWeb-method
 #' @param value replacement `matrix` with same number of rows target.
 #' @importFrom methods slot<-
 #'
@@ -125,8 +130,8 @@ setReplaceMethod("tableY", "AnansiWeb", def = function(x, ..., value) {
 
 #' @rdname AnansiWeb-methods
 #' @export
-#' @inheritParams `tableY<-`
-#' @aliases `tableX<-`
+#' @inheritParams tableY<-
+#' @aliases tableX<- tableX<-,AnansiWeb-method
 #'
 setReplaceMethod("tableX", "AnansiWeb", def = function(x, ..., value) {
     x@tableX <- value
@@ -135,7 +140,8 @@ setReplaceMethod("tableX", "AnansiWeb", def = function(x, ..., value) {
 })
 
 #' @rdname AnansiWeb-methods
-#' @inheritParams `tableY<-`
+#' @inheritParams tableY<-
+#' @aliases dictionary<- dictionary<-,AnansiWeb-method
 #' @export
 #'
 setReplaceMethod("dictionary", "AnansiWeb", def = function(x, ..., value) {
