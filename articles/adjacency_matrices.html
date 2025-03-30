@@ -199,7 +199,7 @@ to access the biadjacency matrix in the ‘dictionary’ slot.</p>
 <pre><code><span><span class="co">## [1] TRUE</span></span></code></pre>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Get the biadjacency matrix using the $ operator</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="../reference/AnansiWeb-methods.html">dictionary</a></span><span class="op">(</span><span class="va">form.web</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="../reference/AnansiWeb.html">dictionary</a></span><span class="op">(</span><span class="va">form.web</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## 10 x 10 sparse Matrix of class "ngCMatrix"</span></span></code></pre>
 <pre><code><span><span class="co">##   [[ suppressing 10 column names 'K00001', 'K00002', 'K00003' ... ]]</span></span></code></pre>
 <pre><code><span><span class="co">##            ko</span></span>
@@ -310,7 +310,7 @@ data set, this means we can link between any two of <code>ec</code>,
 <code>cpd</code> and <code>ko</code>, in either order.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Formula notation</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="../reference/AnansiWeb-methods.html">dictionary</a></span><span class="op">(</span><span class="fu"><a href="../reference/weaveWeb.html">weaveWeb</a></span><span class="op">(</span><span class="va">cpd</span> <span class="op">~</span> <span class="va">ko</span>, link <span class="op">=</span> <span class="fu"><a href="../reference/kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="../reference/AnansiWeb.html">dictionary</a></span><span class="op">(</span><span class="fu"><a href="../reference/weaveWeb.html">weaveWeb</a></span><span class="op">(</span><span class="va">cpd</span> <span class="op">~</span> <span class="va">ko</span>, link <span class="op">=</span> <span class="fu"><a href="../reference/kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## 10 x 10 sparse Matrix of class "ngCMatrix"</span></span></code></pre>
 <pre><code><span><span class="co">##   [[ suppressing 10 column names 'K00001', 'K00002', 'K00003' ... ]]</span></span></code></pre>
 <pre><code><span><span class="co">##         ko</span></span>
@@ -327,7 +327,7 @@ data set, this means we can link between any two of <code>ec</code>,
 <span><span class="co">##   C00010 . . . . . . . . . .</span></span></code></pre>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Character notation</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="../reference/AnansiWeb-methods.html">dictionary</a></span><span class="op">(</span><span class="fu"><a href="../reference/weaveWeb.html">weaveWeb</a></span><span class="op">(</span>y <span class="op">=</span> <span class="st">"ko"</span>, x <span class="op">=</span> <span class="st">"cpd"</span>, link <span class="op">=</span> <span class="fu"><a href="../reference/kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="../reference/AnansiWeb.html">dictionary</a></span><span class="op">(</span><span class="fu"><a href="../reference/weaveWeb.html">weaveWeb</a></span><span class="op">(</span>y <span class="op">=</span> <span class="st">"ko"</span>, x <span class="op">=</span> <span class="st">"cpd"</span>, link <span class="op">=</span> <span class="fu"><a href="../reference/kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## 10 x 10 sparse Matrix of class "ngCMatrix"</span></span></code></pre>
 <pre><code><span><span class="co">##   [[ suppressing 10 column names 'C00001', 'C00002', 'C00003' ... ]]</span></span></code></pre>
 <pre><code><span><span class="co">##         cpd</span></span>
@@ -509,50 +509,46 @@ library provides fantastic support for this.</p>
 <span><span class="co">## [9] BiocStyle_2.34.0</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## loaded via a namespace (and not attached):</span></span>
-<span><span class="co">##  [1] tidyselect_1.2.1            viridisLite_0.4.2          </span></span>
-<span><span class="co">##  [3] farver_2.1.2                viridis_0.6.5              </span></span>
-<span><span class="co">##  [5] fastmap_1.2.0               tweenr_2.0.3               </span></span>
-<span><span class="co">##  [7] digest_0.6.37               lifecycle_1.0.4            </span></span>
-<span><span class="co">##  [9] magrittr_2.0.3              compiler_4.4.3             </span></span>
-<span><span class="co">## [11] rlang_1.1.5                 sass_0.4.9                 </span></span>
-<span><span class="co">## [13] tools_4.4.3                 yaml_2.3.10                </span></span>
-<span><span class="co">## [15] knitr_1.50                  labeling_0.4.3             </span></span>
-<span><span class="co">## [17] graphlayouts_1.2.2          S4Arrays_1.6.0             </span></span>
-<span><span class="co">## [19] htmlwidgets_1.6.4           DelayedArray_0.32.0        </span></span>
-<span><span class="co">## [21] abind_1.4-8                 withr_3.0.2                </span></span>
-<span><span class="co">## [23] purrr_1.0.4                 BiocGenerics_0.52.0        </span></span>
-<span><span class="co">## [25] desc_1.4.3                  grid_4.4.3                 </span></span>
-<span><span class="co">## [27] polyclip_1.10-7             stats4_4.4.3               </span></span>
-<span><span class="co">## [29] colorspace_2.1-1            future_1.34.0              </span></span>
-<span><span class="co">## [31] globals_0.16.3              scales_1.3.0               </span></span>
-<span><span class="co">## [33] MASS_7.3-64                 MultiAssayExperiment_1.32.0</span></span>
-<span><span class="co">## [35] SummarizedExperiment_1.36.0 cli_3.6.4                  </span></span>
-<span><span class="co">## [37] rmarkdown_2.29              crayon_1.5.3               </span></span>
-<span><span class="co">## [39] ragg_1.3.3                  generics_0.1.3             </span></span>
-<span><span class="co">## [41] future.apply_1.11.3         httr_1.4.7                 </span></span>
-<span><span class="co">## [43] cachem_1.1.0                ggforce_0.4.2              </span></span>
-<span><span class="co">## [45] zlibbioc_1.52.0             parallel_4.4.3             </span></span>
-<span><span class="co">## [47] BiocManager_1.30.25         XVector_0.46.0             </span></span>
-<span><span class="co">## [49] matrixStats_1.5.0           vctrs_0.6.5                </span></span>
-<span><span class="co">## [51] jsonlite_2.0.0              bookdown_0.42              </span></span>
-<span><span class="co">## [53] IRanges_2.40.1              S4Vectors_0.44.0           </span></span>
-<span><span class="co">## [55] ggrepel_0.9.6               listenv_0.9.1              </span></span>
-<span><span class="co">## [57] systemfonts_1.2.1           jquerylib_0.1.4            </span></span>
-<span><span class="co">## [59] tidyr_1.3.1                 glue_1.8.0                 </span></span>
-<span><span class="co">## [61] parallelly_1.43.0           pkgdown_2.1.1              </span></span>
-<span><span class="co">## [63] codetools_0.2-20            gtable_0.3.6               </span></span>
-<span><span class="co">## [65] GenomeInfoDb_1.42.3         GenomicRanges_1.58.0       </span></span>
-<span><span class="co">## [67] UCSC.utils_1.2.0            munsell_0.5.1              </span></span>
-<span><span class="co">## [69] tibble_3.2.1                pillar_1.10.1              </span></span>
-<span><span class="co">## [71] htmltools_0.5.8.1           GenomeInfoDbData_1.2.13    </span></span>
-<span><span class="co">## [73] R6_2.6.1                    textshaping_1.0.0          </span></span>
-<span><span class="co">## [75] evaluate_1.0.3              lattice_0.22-6             </span></span>
-<span><span class="co">## [77] Biobase_2.66.0              memoise_2.0.1              </span></span>
-<span><span class="co">## [79] bslib_0.9.0                 Rcpp_1.0.14                </span></span>
-<span><span class="co">## [81] gridExtra_2.3               SparseArray_1.6.2          </span></span>
-<span><span class="co">## [83] xfun_0.51                   fs_1.6.5                   </span></span>
-<span><span class="co">## [85] MatrixGenerics_1.18.1       forcats_1.0.0              </span></span>
-<span><span class="co">## [87] pkgconfig_2.0.3</span></span></code></pre>
+<span><span class="co">##  [1] SummarizedExperiment_1.36.0 gtable_0.3.6               </span></span>
+<span><span class="co">##  [3] xfun_0.51                   bslib_0.9.0                </span></span>
+<span><span class="co">##  [5] htmlwidgets_1.6.4           ggrepel_0.9.6              </span></span>
+<span><span class="co">##  [7] Biobase_2.66.0              lattice_0.22-6             </span></span>
+<span><span class="co">##  [9] vctrs_0.6.5                 tools_4.4.3                </span></span>
+<span><span class="co">## [11] generics_0.1.3              stats4_4.4.3               </span></span>
+<span><span class="co">## [13] tibble_3.2.1                pkgconfig_2.0.3            </span></span>
+<span><span class="co">## [15] desc_1.4.3                  S4Vectors_0.44.0           </span></span>
+<span><span class="co">## [17] lifecycle_1.0.4             GenomeInfoDbData_1.2.13    </span></span>
+<span><span class="co">## [19] farver_2.1.2                compiler_4.4.3             </span></span>
+<span><span class="co">## [21] textshaping_1.0.0           munsell_0.5.1              </span></span>
+<span><span class="co">## [23] ggforce_0.4.2               graphlayouts_1.2.2         </span></span>
+<span><span class="co">## [25] GenomeInfoDb_1.42.3         htmltools_0.5.8.1          </span></span>
+<span><span class="co">## [27] sass_0.4.9                  yaml_2.3.10                </span></span>
+<span><span class="co">## [29] tidyr_1.3.1                 pkgdown_2.1.1              </span></span>
+<span><span class="co">## [31] pillar_1.10.1               crayon_1.5.3               </span></span>
+<span><span class="co">## [33] jquerylib_0.1.4             MASS_7.3-64                </span></span>
+<span><span class="co">## [35] DelayedArray_0.32.0         cachem_1.1.0               </span></span>
+<span><span class="co">## [37] viridis_0.6.5               abind_1.4-8                </span></span>
+<span><span class="co">## [39] tidyselect_1.2.1            digest_0.6.37              </span></span>
+<span><span class="co">## [41] purrr_1.0.4                 bookdown_0.42              </span></span>
+<span><span class="co">## [43] labeling_0.4.3              forcats_1.0.0              </span></span>
+<span><span class="co">## [45] polyclip_1.10-7             fastmap_1.2.0              </span></span>
+<span><span class="co">## [47] grid_4.4.3                  colorspace_2.1-1           </span></span>
+<span><span class="co">## [49] cli_3.6.4                   SparseArray_1.6.2          </span></span>
+<span><span class="co">## [51] magrittr_2.0.3              S4Arrays_1.6.0             </span></span>
+<span><span class="co">## [53] withr_3.0.2                 UCSC.utils_1.2.0           </span></span>
+<span><span class="co">## [55] scales_1.3.0                rmarkdown_2.29             </span></span>
+<span><span class="co">## [57] XVector_0.46.0              httr_1.4.7                 </span></span>
+<span><span class="co">## [59] matrixStats_1.5.0           gridExtra_2.3              </span></span>
+<span><span class="co">## [61] ragg_1.3.3                  memoise_2.0.1              </span></span>
+<span><span class="co">## [63] evaluate_1.0.3              knitr_1.50                 </span></span>
+<span><span class="co">## [65] GenomicRanges_1.58.0        IRanges_2.40.1             </span></span>
+<span><span class="co">## [67] MultiAssayExperiment_1.32.0 viridisLite_0.4.2          </span></span>
+<span><span class="co">## [69] rlang_1.1.5                 Rcpp_1.0.14                </span></span>
+<span><span class="co">## [71] glue_1.8.0                  tweenr_2.0.3               </span></span>
+<span><span class="co">## [73] BiocManager_1.30.25         BiocGenerics_0.52.0        </span></span>
+<span><span class="co">## [75] jsonlite_2.0.0              R6_2.6.1                   </span></span>
+<span><span class="co">## [77] MatrixGenerics_1.18.1       systemfonts_1.2.1          </span></span>
+<span><span class="co">## [79] fs_1.6.5                    zlibbioc_1.52.0</span></span></code></pre>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

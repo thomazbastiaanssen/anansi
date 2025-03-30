@@ -141,8 +141,7 @@ linked. If one or more <code>data.frame</code>s, colnames should be as specified
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index">
-<ul><li><p><a href="AnansiWeb-methods.html">AnansiWeb-methods</a>: For utility functions to get and set.</p></li>
-<li><p><code><a href="AnansiWeb.html">AnansiWeb()</a></code>: For more general constructor.</p></li>
+<ul><li><p><a href="AnansiWeb.html">AnansiWeb</a>: For general constructor and methods.</p></li>
 <li><p><code><a href="kegg_link.html">kegg_link()</a></code>: For examples of input for link argument.</p></li>
 <li><p><code><a href="getWeb.html">getWeb()</a></code>: For <code><a href="https://github.com/waldronlab/MultiAssayExperiment/reference/MultiAssayExperiment.html" class="external-link">MultiAssayExperiment::MultiAssayExperiment()</a></code>
 methods.</p></li>
@@ -173,8 +172,8 @@ methods.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># The following are equivalent to transposition:</span></span></span>
-<span class="r-in"><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu">weaveWeb</span><span class="op">(</span><span class="va">ko</span> <span class="op">~</span> <span class="va">cpd</span>, link <span class="op">=</span> <span class="fu"><a href="kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">dictionary</span></span></span>
-<span class="r-in"><span><span class="va">b</span> <span class="op">&lt;-</span> <span class="fu">weaveWeb</span><span class="op">(</span><span class="va">cpd</span> <span class="op">~</span> <span class="va">ko</span>, link <span class="op">=</span> <span class="fu"><a href="kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">dictionary</span></span></span>
+<span class="r-in"><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu">weaveWeb</span><span class="op">(</span><span class="va">ko</span> <span class="op">~</span> <span class="va">cpd</span>, link <span class="op">=</span> <span class="fu"><a href="kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="AnansiWeb.html">dictionary</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">b</span> <span class="op">&lt;-</span> <span class="fu">weaveWeb</span><span class="op">(</span><span class="va">cpd</span> <span class="op">~</span> <span class="va">ko</span>, link <span class="op">=</span> <span class="fu"><a href="kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="AnansiWeb.html">dictionary</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/identical.html" class="external-link">identical</a></span><span class="op">(</span><span class="va">a</span>, <span class="fu">Matrix</span><span class="fu">::</span><span class="fu">t</span><span class="op">(</span><span class="va">b</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>

@@ -233,52 +233,52 @@ interactions between the two assays.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Fitting least-squares for following model:</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ~ x + cat_ab + x:cat_ab </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Running correlations for the following groups:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  a, b</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>  b, a</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># View subset of results</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">out</span>, <span class="fl">5</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   feature_Y feature_X All_r.values All_t.values All_p.values a_r.values</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1       y_2       x_1   0.02713136    0.2686857    0.7887364  0.1206062</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2       y_3       x_1  -0.10124575    1.0074587    0.3161955 -0.1562478</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3       y_7       x_1   0.07142819    0.7089138    0.4800610  0.1471813</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4      y_10       x_1   0.02645448    0.2619776    0.7938885  0.1504429</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5      y_11       x_1  -0.06875136    0.6822180    0.4967104 -0.0605781</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   a_t.values a_p.values  b_r.values b_t.values b_p.values full_r.squared</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  0.8760991  0.3850054 -0.13055093  0.8734523  0.3871588    0.015473736</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  1.1407292  0.2592092 -0.04314083  0.2864306  0.7758928    0.012166585</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  1.0730249  0.2882144 -0.01816264  0.1204972  0.9046379    0.010227871</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  1.0973482  0.2775448 -0.09390326  0.6256483  0.5347776    0.013870312</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  0.4376386  0.6634607 -0.08411236  0.5599225  0.5783720    0.005137205</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   feature_Y feature_X All_r.values All_t.values All_p.values  b_r.values</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1       y_1       x_1   0.00258535   0.02559375    0.9796334 -0.05643566</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2       y_2       x_1  -0.04556572   0.45154659    0.6525934  0.05769589</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3       y_6       x_1   0.11093642   1.10503532    0.2718499  0.04420351</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4       y_7       x_1  -0.12850659   1.28278636    0.2025926  0.02209890</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5       y_8       x_1  -0.05910079   0.58609243    0.5591609  0.09887132</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   b_t.values b_p.values  a_r.values a_t.values a_p.values full_r.squared</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  0.3875210  0.7001199  0.03648797  0.2555860 0.79934039    0.002127277</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  0.3962031  0.6937483 -0.10485754  0.7380716 0.46399127    0.007609320</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  0.3033405  0.7629691  0.15972600  1.1326233 0.26288445    0.014444228</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  0.1515394  0.8801988 -0.27146220  1.9743750 0.05398934    0.034501000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  0.6811652  0.4991095 -0.20359035  1.4556187 0.15187548    0.022783722</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   full_f.values full_p.values disjointed_cat_ab_r.squared</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1     0.7544129     0.4730540                 0.014735931</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2     0.5911888     0.5556716                 0.001546877</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3     0.4960109     0.6105069                 0.005154451</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4     0.6751393     0.5114859                 0.013171891</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5     0.2478591     0.7809678                 0.000255938</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1     0.1023270     0.9028327                 0.002115178</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2     0.3680479     0.6930563                 0.006464888</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3     0.7034842     0.4973909                 0.002894405</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4     1.7152250     0.1853906                 0.018168026</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5     1.1191163     0.3307907                 0.020469724</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   disjointed_cat_ab_f.values disjointed_cat_ab_p.values</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1                 1.43580736                  0.2337688</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2                 0.14873026                  0.7006050</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3                 0.49739111                  0.4823564</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4                 1.28137971                  0.2604623</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5                 0.02457634                  0.8757566</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                  0.2034875                  0.6529378</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                  0.6246676                  0.4312661</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                  0.2786695                  0.5987927</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                  1.7764043                  0.1857461</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5                  2.0061590                  0.1598982</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   emergent_cat_ab_r.squared emergent_cat_ab_f.values emergent_cat_ab_p.values</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1              0.0004284329               0.04071857                0.8405136</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2              0.0004284329               0.04071857                0.8405136</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3              0.0004284329               0.04071857                0.8405136</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4              0.0004284329               0.04071857                0.8405136</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5              0.0004284329               0.04071857                0.8405136</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   All_q.values a_q.values b_q.values full_q.values disjointed_cat_ab_q.values</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1    0.9439249  0.8760266  0.8447102     0.8857616                  0.7316139</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2    0.8758453  0.8692472  0.9235411     0.8933251                  0.9702441</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3    0.8758453  0.8692472  0.9608516     0.9157604                  0.9085138</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4    0.9439249  0.8692472  0.9235411     0.8857616                  0.7316139</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5    0.8758453  0.8760266  0.9235411     0.9431241                  0.9702441</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                0.01245822                 1.198461                0.2763973</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                0.01245822                 1.198461                0.2763973</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                0.01245822                 1.198461                0.2763973</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                0.01245822                 1.198461                0.2763973</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5                0.01245822                 1.198461                0.2763973</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   All_q.values b_q.values a_q.values full_q.values disjointed_cat_ab_q.values</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    0.9807904  0.8401439  0.9841348     0.9708096                  0.9155455</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2    0.9764323  0.8401439  0.9493973     0.9708096                  0.9155455</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3    0.9145004  0.8422043  0.9493973     0.9066463                  0.9155455</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4    0.9145004  0.8801988  0.8638295     0.9066463                  0.9155455</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5    0.9764323  0.8239828  0.9460500     0.9066463                  0.9155455</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   emergent_cat_ab_q.values</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1                0.8405136</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2                0.8405136</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3                0.8405136</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4                0.8405136</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5                0.8405136</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                0.5527945</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                0.5527945</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                0.5527945</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                0.5527945</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5                0.5527945</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
