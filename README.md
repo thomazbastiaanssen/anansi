@@ -9,6 +9,9 @@
 issues](https://img.shields.io/github/issues/thomazbastiaanssen/anansi)](https://github.com/thomazbastiaanssen/anansi/issues)
 [![GitHub
 pulls](https://img.shields.io/github/issues-pr/thomazbastiaanssen/anansi)](https://github.com/thomazbastiaanssen/anansi/pulls)
+[![R-CMD-check](https://github.com/thomazbastiaanssen/anansi/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/thomazbastiaanssen/anansi/actions/workflows/R-CMD-check.yaml)
+[![Codecov test
+coverage](https://codecov.io/gh/thomazbastiaanssen/anansi/graph/badge.svg)](https://app.codecov.io/gh/thomazbastiaanssen/anansi)
 <!-- badges: end -->
 
 ## Introduction

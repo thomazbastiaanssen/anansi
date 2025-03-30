@@ -63,7 +63,7 @@ are known to interact.
 
 \itemize{
 \item \link{randomAnansi}, \code{\link[=kegg_link]{kegg_link()}}: Generate example input
-\item \link{AnansiWeb-methods}, \link{MultiFactor-methods}: Handle and manipulate
+\item \link{AnansiWeb-methods}, \linkS4class{MultiFactor}: Handle and manipulate
 input
 \item \link{coerceAnansi}: Coersion methods including to \code{list} and
 \code{MultiAssayExperiment}.

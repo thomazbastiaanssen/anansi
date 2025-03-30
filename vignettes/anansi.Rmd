@@ -150,7 +150,7 @@ anansi_out <- anansi(
     verbose = TRUE
 )
 ```
-# Spin to a table📝
+# Reporting output📝
 
 `anansi` returns a wide format table as an output. For general reporting, we 
 recommend sticking to the table format as it's the most legible. 
@@ -222,13 +222,11 @@ alternative to AnansiWeb. The latter can be converted to a MAE with the
 function `asMAE`.
 
 ```{r}
-#| bioc1, eval=TRUE
+#| bioc1, eval=TRUE, message=FALSE
 library(MultiAssayExperiment)
 
 # Store sample metadata into metadata slot of web object
-web@metadata <- data.frame(FMT_metadata, row.names = FMT_metadata$Sample_ID)
-# Ensure that metadata rows match tableX rows
-web@metadata <- web@metadata[match(rownames(web@tableX), rownames(web@metadata)), ]
+metadata(web) <- data.frame(FMT_metadata, row.names = FMT_metadata$Sample_ID)
 
 # Convert web to mae
 mae <- asMAE(web)

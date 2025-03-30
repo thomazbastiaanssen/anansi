@@ -1,10 +1,5 @@
-#' Make a MultiFactor
-#' @name MultiFactor
-#' @rdname MultiFactor
-#' @aliases asMultiFactor
-#' @description
-#' Construct an `MultiFactor` object from a from a validly shaped data frame or
-#' list of such data frames.
+#' @rdname MultiFactor-class
+#' @aliases asMultiFactor MultiFactor
 #' @param x `any` object, most likely `list` of data frames.
 #' @param levels an optional named list of vectors of the unique values (as
 #'     character strings) that x might have taken. The default is the unique set
@@ -16,8 +11,6 @@
 #' @export
 #' @seealso \itemize{
 #' \item [kegg_link()]: for an example of valid input.
-#' \item [MultiFactor-class()]: for class.
-#' \item [MultiFactor-methods()] for methods.
 #' }
 #' @examples
 #' MultiFactor(kegg_link())
@@ -67,6 +60,13 @@ MultiFactor <- function(x, levels = NULL, drop.unmatched = TRUE) {
     validObject(out)
     return(out)
 }
+
+#' @rdname MultiFactor-class
+#' @aliases asMultiFactor
+#' @export
+#'
+asMultiFactor <- MultiFactor
+
 
 #' @noRd
 #' @importFrom Matrix sparseMatrix
@@ -409,8 +409,3 @@ validFactLinkDF <- function(x) {
     validLinkDF(x) &&
         all(vapply(x, is.factor, NA, USE.NAMES = FALSE))
 }
-
-#' @rdname MultiFactor
-#' @export
-#'
-asMultiFactor <- MultiFactor

@@ -50,9 +50,6 @@ setValidity("AnansiWeb", method = function(object) {
 
 #' MultiFactor S4 container class
 #' @name MultiFactor-class
-#' @description
-#' `MultiFactor` is an S4 class to manage multiple sets of factors. Methods for
-#' `MultiFactor` aim to follow `factor` behaviour.
 #' @slot index Named `list` of named integer data frames of at least two columns
 #'     each. The column names correspond to names in the `levels` slot. Similar
 #'     to `factor`s, the integers in those columns correspond to the characters
@@ -64,7 +61,6 @@ setValidity("AnansiWeb", method = function(object) {
 #' @export
 #' @seealso \itemize{
 #' \item [MultiFactor()]: for general use.
-#' \item [MultiFactor-methods()] for methods
 #' \item [igraph::igraph()].
 #' }
 #'
