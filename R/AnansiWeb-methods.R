@@ -1,62 +1,79 @@
-#' Accessing and modifying information in AnansiWeb S4 class
-#' @name AnansiWeb-methods
-#' @description `AnansiWeb` supports `$` operator for getting and
-#' assigning values.
+#' AnansiWeb S4 container class
+#' @name AnansiWeb
+#' @description
+#' `AnansiWeb` is an S4 class containing two feature tables as well as a
+#' dictionary to link them. `AnansiWeb` is the main container that will
+#' hold your input data throughout the `anansi` pipeline.
 #'
-#' ` dimnames( x ) ` is shorthand for `dimnames( x$dictionary )` and
-#' `names( x )` is in turn shorthand for `names( dimnames(x) )`.
+#' Typical use of the `anansi` package will involve generating an `AnansiWeb`
+#' object using the `weaveWeb()` function.
 #'
-#' @returns a specified `AnansiWeb` object.
-#' @param ... further arguments.
+#' The function `AnansiWeb()` constructs an `AnansiWeb` object from two
+#' feature tables and an adjacency matrix.
+#'
+#' @usage
+#' ## Accessors
+#' \S4method{dimnames}{AnansiWeb}(x)
+#' \S4method{dim}{AnansiWeb}(x)
+#' \S4method{names}{AnansiWeb}(x)
+#'
+#' \S4method{tableY}{AnansiWeb}(x, ...)
+#' \S4method{tableY}{AnansiWeb}(x, ...) <- value
+#' \S4method{tableX}{AnansiWeb}(x, ...)
+#' \S4method{tableX}{AnansiWeb}(x, ...) <- value
+#' \S4method{dictionary}{AnansiWeb}(x, ...)
+#' \S4method{dictionary}{AnansiWeb}(x, ...) <- value
+#' \S4method{metadata}{AnansiWeb}(x, simplify = TRUE, ...)
+#' \S4method{metadata}{AnansiWeb}(x, simplify = TRUE, ...) <- value
+#'
+#' ## Coercion
+#' \S4method{as.list}{AnansiWeb}(x, ...)
+#' asMAE(x)
+#'
+#' @param x,object an `AnansiWeb` object on which a method will be applied.
 #'
 #' @seealso \itemize{
-#' \item [AnansiWeb-class()].
 #' \item [weaveWeb()]: for general use.
 #' }
 #' @importFrom methods slotNames slot slot<-
 #' @aliases tableY `tableY<-`
 #' @examples
-#' # prepare an AnansiWeb
-#' w <- weaveWeb(cpd ~ ko, link = kegg_link())
 #'
-#' w$dictionary
+#' # Methods for AnansiWeb
+#' dimnames(web)
+#' dim(web)
+#' names(web)
 #'
-#' names(w)
+#' tableX(web)
+#' tableY(web)
+#' dictionary(web)
+#'
+#' # Assign some random metadata
+#' metadata(web) <- data.frame(
+#'     id = row.names(tableY(web)),
+#'     a = rnorm(36),
+#'     b = sample(c("a", "b"), 36, TRUE),
+#'     row.names = "id"
+#' )
+#' metadata(web)
+#'
+#' # coerce To list
+#' weblist <- as.list(web)
+#'
+#' # Coerce to MultiAssayExperiment
+#' asMAE(web)
 #'
 NULL
 
-#' @noRd
-#' @export
-#' @importFrom utils .DollarNames
-.DollarNames.AnansiWeb <- function(x, pattern = "") {
-    grep(pattern, slotNames(x), value = TRUE)
-}
-
-#' @exportMethod $
-#' @inheritParams base::`$`
-#' @rdname AnansiWeb-methods
-#'
-setMethod("$", "AnansiWeb", definition = function(x, name) slot(x, name))
-
-#' @exportMethod $<-
-#' @importFrom S4Vectors metadata
-#' @inheritParams base::`$<-`
-#' @rdname AnansiWeb-methods
-#'
-setReplaceMethod("$", "AnansiWeb", def = function(x, name, value) {
-    slot(x, name) <- value
-    return(x)
-})
-
 #' @export
 #' @importClassesFrom S4Vectors Annotated
-#' @importFrom S4Vectors metadata
-#' @inheritParams S4Vectors::metadata
+#' @importMethodsFrom S4Vectors metadata
 #' @param simplify `boolean`. If `TRUE` (Default), handles single data.frame
 #'     arguments while ensuring compatibility with `S4Vectors` method.
-#' @rdname AnansiWeb-methods
+#' @rdname AnansiWeb
 #' @aliases dictionary metadata,AnansiWeb-method
 #' @importFrom methods slot
+#' @usage NULL
 #'
 setMethod("metadata",
     signature = c(x = "AnansiWeb"),
@@ -73,7 +90,8 @@ setMethod("metadata",
 #' @importMethodsFrom S4Vectors "metadata<-"
 #' @importFrom methods slot<-
 #' @aliases metadata<-,AnansiWeb-method
-#' @rdname AnansiWeb-methods
+#' @rdname AnansiWeb
+#' @usage NULL
 #'
 setReplaceMethod("metadata", "AnansiWeb", def = function(
     x, ..., simplify = TRUE, value) {
@@ -92,35 +110,32 @@ setReplaceMethod("metadata", "AnansiWeb", def = function(
     x
 })
 
-#' @rdname AnansiWeb-methods
-#' @name tableY
-#' @param x `AnansiWeb`
+#' @rdname AnansiWeb
 #' @param ... additional arguments (currently not used).
 #' @aliases tableY tableY,AnansiWeb-method
 #' @export
+#' @usage NULL
 #'
 setMethod("tableY", "AnansiWeb", def = function(x, ...) x@tableY )
 
-#' @rdname AnansiWeb-methods
-#' @inheritParams tableY
+#' @rdname AnansiWeb
 #' @export
 #' @aliases tableX tableX,AnansiWeb-method
+#' @usage NULL
 #'
 setMethod("tableX", "AnansiWeb", def = function(x, ...) x@tableX )
 
-#' @rdname AnansiWeb-methods
-#' @inheritParams tableY
+#' @rdname AnansiWeb
 #' @aliases `dictionary` dictionary,AnansiWeb-method
 #' @export
+#' @usage NULL
 #'
 setMethod("dictionary", "AnansiWeb", def = function(x, ...) x@dictionary)
 
-#' @rdname AnansiWeb-methods
-#' @name tableY<-
-#' @inheritParams tableY
+#' @rdname AnansiWeb
 #' @aliases tableY<- tableY<-,AnansiWeb-method
 #' @param value replacement `matrix` with same number of rows target.
-#' @importFrom methods slot<-
+#' @usage NULL
 #'
 setReplaceMethod("tableY", "AnansiWeb", def = function(x, ..., value) {
     x@tableY <- value
@@ -128,10 +143,10 @@ setReplaceMethod("tableY", "AnansiWeb", def = function(x, ..., value) {
     x
 })
 
-#' @rdname AnansiWeb-methods
+#' @rdname AnansiWeb
 #' @export
-#' @inheritParams tableY<-
 #' @aliases tableX<- tableX<-,AnansiWeb-method
+#' @usage NULL
 #'
 setReplaceMethod("tableX", "AnansiWeb", def = function(x, ..., value) {
     x@tableX <- value
@@ -139,10 +154,10 @@ setReplaceMethod("tableX", "AnansiWeb", def = function(x, ..., value) {
     x
 })
 
-#' @rdname AnansiWeb-methods
-#' @inheritParams tableY<-
+#' @rdname AnansiWeb
 #' @aliases dictionary<- dictionary<-,AnansiWeb-method
 #' @export
+#' @usage NULL
 #'
 setReplaceMethod("dictionary", "AnansiWeb", def = function(x, ..., value) {
     x@dictionary <- value
@@ -150,16 +165,14 @@ setReplaceMethod("dictionary", "AnansiWeb", def = function(x, ..., value) {
     x
 })
 
-#' @description `show`: Display the object
 #' @importFrom methods show
-#' @inheritParams methods::show
-#' @rdname AnansiWeb-methods
+#' @rdname AnansiWeb
 #' @export
 #'
 setMethod("show", "AnansiWeb", def = function(object) {
-    cat(class(object), " object with ", NROW(object$tableX), " observations:\n",
-        "    Tables: ", names(object)[1], " (", NROW(object), " features) and ",
-        names(object)[2], " (", NCOL(object), " features)\n",
+    cat(class(object), " object with ", NROW(tableX(object)),
+        " observations:\n    Tables: ", names(object)[1], " (", NROW(object),
+        " features) and ", names(object)[2], " (", NCOL(object), " features)\n",
         sep = ""
     )
     cat("Access content with $ operator. ",
@@ -169,27 +182,27 @@ setMethod("show", "AnansiWeb", def = function(object) {
     invisible(NULL)
 })
 
-#' @rdname AnansiWeb-methods
-#' @inheritParams base::dimnames
+#' @rdname AnansiWeb
 #' @export
+#' @usage NULL
 #'
 setMethod(
     "dimnames", "AnansiWeb",
     function(x) dimnames(x@dictionary)
 )
 
-#' @rdname AnansiWeb-methods
-#' @inheritParams base::dim
+#' @rdname AnansiWeb
 #' @export
+#' @usage NULL
 #'
 setMethod(
     "dim", "AnansiWeb",
     function(x) dim(x@dictionary)
 )
 
-#' @rdname AnansiWeb-methods
-#' @inheritParams base::names
+#' @rdname AnansiWeb
 #' @export
+#' @usage NULL
 #'
 setMethod("names", "AnansiWeb", function(x) names(dimnames(x@dictionary)))
 
@@ -278,12 +291,12 @@ tell_dfr <- function(tale) {
 #' Is this a data.frame with exactly two columns that are named?
 #' @noRd
 validWeb <- function(x) {
-    y_names <- identical(rownames(x), colnames(x$tableY))
-    x_names <- identical(colnames(x), colnames(x$tableX))
-    s_names <- identical(rownames(x$tableY), rownames(x$tableX))
+    y_names <- identical(rownames(x), colnames(tableY(x)))
+    x_names <- identical(colnames(x), colnames(tableX(x)))
+    s_names <- identical(rownames(tableY(x)), rownames(tableX(x)))
     meta_dim <- any(
-        NROW(x$metadata) == NROW(x$tableY),
-        prod(dim(x$metadata)) <= 1
+        NROW(metadata(x)) == NROW(tableY(x)),
+        prod(dim(metadata(x))) <= 1
     )
     if (!y_names) {
         message("colnames(tableY), rownames(dictionary) not identical.")

@@ -48,10 +48,6 @@ library(anansi)
 library(ggplot2)
 library(ggforce)
 
-# Anansi supports parallelisation through the future.apply framework.
-# You can call it like this:
-# plan(multisession)
-
 # load example data + metadata from FMT Aging study
 data(FMT_data)
 ```

@@ -24,7 +24,6 @@
 #' @return a list of `anansiTale` result objects, one for the total model,
 #' one for emergent correlations and one for disjointed correlations.
 #' @importFrom stats anova lm pf residuals model.matrix.default terms.formula
-#' @importFrom future.apply future_apply
 #' @importFrom methods is
 #'
 anansiDiffCor <- function(web, sat_model, errorterm, int.terms, metadata, verbose) {

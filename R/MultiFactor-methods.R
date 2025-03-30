@@ -1,6 +1,6 @@
 #' MultiFactor S4 container class
-#' @rdname MultiFactor-class
-#' @name MultiFactor-class
+#' @rdname MultiFactor
+#' @name MultiFactor
 #' @description
 #' `MultiFactor` is an S4 class to organize and manage multiple sets of factors,
 #' for instance when tracing or converting feature IDs across databases. Methods
@@ -9,18 +9,13 @@
 #' @details
 #' The most straightforward way to construct a `MultiFactor` object is as a
 #' named list of named data.frames. The columns of the data.frames indicate the
-#' category of factor in that column. A `MultiFactor` object presents itself
-#' similar to a `data.frame`, in the sense that level types can be called as
-#' columns and individual data.frame components can be called as rows.
+#' category of factor in that column.
 #'
-#' @section Constructor:
-#' Construct an `MultiFactor` object from a from a validly shaped data frame or
-#' list of such data frames.
+#' A `MultiFactor` object presents itself similar to a `data.frame`, in the
+#' sense that level types can be called as columns and individual data.frame
+#' components can be called as rows.
 #'
 #' @usage
-#' ## Constructor for `MultiFactor` objects
-#' MultiFactor(x, levels = NULL, drop.unmatched = TRUE)
-#'
 #' ## Accessors
 #' \S4method{dimnames}{MultiFactor}(x)
 #' \S4method{dim}{MultiFactor}(x)
@@ -29,10 +24,10 @@
 #' \S4method{dictionary}{MultiFactor}(x, ...)
 #' \S4method{dictionary}{MultiFactor}(x, ...) <- value
 #'
-#' ## Factor-like
+#' ## Factor manipulation
 #' \S4method{levels}{MultiFactor}(x)
 #' \S4method{unfactor}{MultiFactor}(x)
-#' \S4method{droplevels}{MultiFactor}(x, ...)
+#' \S4method{droplevels}{MultiFactor}(x, exclude = NULL, select = NULL, ...)
 #'
 #' ## Subsetting
 #' \S4method{[}{MultiFactor,ANY,ANY}(x, i, j, ..., drop = TRUE)
@@ -44,8 +39,13 @@
 #' ## Combining
 #' \S4method{c}{MultiFactor}(x, ...)
 #'
-#' @param x `MultiFactor` from which to extract element(s) or in which to
-#'     replace element(s).
+#' ## Coercion
+#' \S4method{as.list}{MultiFactor}(x, ..., use.names = TRUE)
+#'
+#' @param x,object `MultiFactor` on which the method should be applied, or, in
+#'     case of the constructor `MultiFactor()`, a named `list` of data.frames
+#'     with two named columns each, where elements that share a row indicates
+#'     thet are adjacent.
 #' @param i,j,... indices specifying elements to extract or replace. Indices are
 #'     numeric or character vectors or empty (missing) or NULL. Numeric values
 #'     are coerced to integer or whole numbers as by as.integer or for large
@@ -57,7 +57,7 @@
 NULL
 
 
-#' @rdname MultiFactor-class
+#' @rdname MultiFactor
 #' @aliases getEdgeList getEdgeList,MultiFactor-method
 #' @export
 #'
@@ -66,25 +66,28 @@ setMethod(
     function(x) as.data.frame(do.call(rbind, names(x)))
 )
 
-#' @rdname MultiFactor-class
+#' @rdname MultiFactor
 #' @aliases dim,MultiFactor-method
 #' @export
+#' @usage NULL
 #'
 setMethod("dim", "MultiFactor", function(x) {
     dim(x@map)
 })
 
-#' @rdname MultiFactor-class
+#' @rdname MultiFactor
 #' @aliases names,MultiFactor-method
 #' @export
+#' @usage NULL
 #'
 setMethod("names", "MultiFactor", function(x) {
     `names<-`(lapply(x@index, names), rownames(x))
 })
 
-#' @rdname MultiFactor-class
+#' @rdname MultiFactor
 #' @aliases dimnames,MultiFactor-method
 #' @export
+#' @usage NULL
 #'
 setMethod("dimnames", "MultiFactor", function(x) {
     dimnames(x@map)
@@ -92,8 +95,9 @@ setMethod("dimnames", "MultiFactor", function(x) {
 
 #' @param drop Whether to return a `list` (Default) or `MultiFactor`.
 #' @export
-#' @rdname MultiFactor-class
+#' @rdname MultiFactor
 #' @aliases [,MultiFactor,ANY,ANY-method
+#' @usage NULL
 #'
 setMethod("[", c("MultiFactor", "ANY", "ANY"), definition = function(
     x, i, j, ..., drop = TRUE) {
@@ -123,8 +127,9 @@ setMethod("[", c("MultiFactor", "ANY", "ANY"), definition = function(
 })
 
 #' @export
-#' @rdname MultiFactor-class
+#' @rdname MultiFactor
 #' @aliases [<-,MultiFactor,ANY,ANY,list-method
+#' @usage NULL
 #'
 setReplaceMethod("[", c("MultiFactor", "ANY", "ANY", "list"), def = function(
     x, i, j, ..., value) {
@@ -155,8 +160,9 @@ setReplaceMethod("[", c("MultiFactor", "ANY", "ANY", "list"), def = function(
 })
 
 #' @export
-#' @rdname MultiFactor-class
+#' @rdname MultiFactor
 #' @aliases [[,MultiFactor,ANY-method
+#' @usage NULL
 #'
 setMethod("[[", c("MultiFactor", "ANY"), function(x, i, ...) {
     d <- x@map
@@ -172,8 +178,9 @@ setMethod("[[", c("MultiFactor", "ANY"), function(x, i, ...) {
 })
 
 #' @export
-#' @rdname MultiFactor-class
+#' @rdname MultiFactor
 #' @aliases [[<-,MultiFactor,ANY,ANY-method
+#' @usage NULL
 #'
 setReplaceMethod("[[", c("MultiFactor", "ANY", "ANY"), function(
     x, i, ..., value) {
@@ -191,7 +198,8 @@ setReplaceMethod("[[", c("MultiFactor", "ANY", "ANY"), function(
 })
 
 #' @export
-#' @rdname MultiFactor-class
+#' @rdname MultiFactor
+#' @usage NULL
 #'
 setMethod("c", "MultiFactor", function(x, ...) {
 
@@ -210,9 +218,9 @@ setMethod("c", "MultiFactor", function(x, ...) {
 #' @description `show`: Display the object
 #' @importFrom methods show
 #' @importFrom Matrix sparseMatrix printSpMatrix
-#' @inheritParams methods::show
-#' @rdname MultiFactor-class
+#' @rdname MultiFactor
 #' @export
+#' @aliases show,MultiFactor-method
 #'
 setMethod("show", "MultiFactor", function(object) {
     cat("A list of class ", class(object), ",\n    ",
@@ -248,10 +256,10 @@ setMethod("show", "MultiFactor", function(object) {
     invisible(NULL)
 })
 
-#' @rdname MultiFactor-class
+#' @rdname MultiFactor
 #' @importMethodsFrom S4Vectors unfactor
-#' @inheritParams S4Vectors::unfactor
 #' @export
+#' @usage NULL
 #'
 setMethod("unfactor", "MultiFactor", function(x) {
     lv <- levels(x)
@@ -268,11 +276,10 @@ setMethod("unfactor", "MultiFactor", function(x) {
     return(x)
 })
 
-#' @rdname MultiFactor-class
+#' @rdname MultiFactor
 #' @description Analogous to `factors`. `droplevels(MultiFactor)` returns a
 #'     `MultiFactor` with unused levels removed.
 #' @importMethodsFrom S4Vectors droplevels
-#' @inheritParams base::droplevels
 #' @param exclude `NULL` or `Named character list` of similar structure as
 #'     `levels(MultiFactor)`. Which levels to drop from output.
 #' @param select `NULL` or `Named character list` of similar structure as
@@ -283,6 +290,7 @@ setMethod("unfactor", "MultiFactor", function(x) {
 #' @method droplevels MultiFactor
 #' @returns A MultiFactor
 #' @export
+#' @usage NULL
 #'
 droplevels.MultiFactor <- function(x, exclude = NULL, select = NULL, ...) {
     stopifnot(
@@ -341,11 +349,13 @@ droplevels.MultiFactor <- function(x, exclude = NULL, select = NULL, ...) {
     return(x)
 }
 
-#' @rdname MultiFactor-class
+#' @rdname MultiFactor
 #' @export
+#' @usage NULL
 #'
-setMethod("droplevels", "MultiFactor", function(x, ...) {
-    droplevels.MultiFactor(x, ...)
+setMethod("droplevels", "MultiFactor",
+          function(x, exclude = NULL, select = NULL, ...) {
+    droplevels.MultiFactor(x, exclude, select, ...)
 })
 
 #' S3/S4 combo for levels.
@@ -355,17 +365,21 @@ setMethod("droplevels", "MultiFactor", function(x, ...) {
 #' @description
 #' get object levels
 #' @returns a named list of character vectors.
-#' @rdname MultiFactor-class
+#' @rdname MultiFactor
+#' @usage NULL
 #'
 levels.MultiFactor <- function(x) x@levels
 
 #' @export
-#' @rdname MultiFactor-class
+#' @rdname MultiFactor
+#' @usage NULL
+#'
 setMethod("levels", "MultiFactor", levels.MultiFactor)
 
 #' @export
-#' @rdname MultiFactor-class
+#' @rdname MultiFactor
 #' @param value a replacement character vector of suitable dimensions.
+#' @usage NULL
 #'
 setReplaceMethod(
     "levels", "MultiFactor",
@@ -376,13 +390,15 @@ setReplaceMethod(
 )
 
 #' @export
-#' @rdname MultiFactor-class
+#' @rdname MultiFactor
 #' @aliases dictionary,MultiFactor-method
+#' @usage NULL
 #'
 setMethod("dictionary", "MultiFactor", function(x, ...) x@map)
 
 #' @export
-#' @rdname MultiFactor-class
+#' @rdname MultiFactor
+#' @usage NULL
 #'
 setReplaceMethod(
     "dictionary", "MultiFactor",
@@ -394,18 +410,19 @@ setReplaceMethod(
 )
 
 
-#' @rdname MultiFactor-class
+#' @rdname MultiFactor
 #' @param subset
 #' `logical expression` indicating rows to keep. Must contain variables
 #' found as column names.
 #' @param select `expression`. Which column names to consider. If missing
 #' (Default), consider all column names.
-#' @inheritParams BiocGenerics::subset
 #' @importMethodsFrom BiocGenerics subset
 #' @export
 #' @seealso [BiocGenerics::subset()].
 #' [weaveWeb()] for the AnansiWeb constructor functions that
 #' take link data frames.
+#' @usage NULL
+#'
 #' @examples
 #' # prep input
 #' l <- asMultiFactor(kegg_link())

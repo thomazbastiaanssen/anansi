@@ -1,27 +1,10 @@
-#' Coercion methods for AnansiWeb
-#' @description
-#' Coerce AnansiWeb to and from other object types.
-#' @name coerceAnansi
-#' @examples
-#' # Create a random web
-#' web <- randomWeb()
-#'
-#' # To list
-#' as.list(web)
-#'
-#' # To MultiAssayExperiment
-#' asMAE(web)
-#'
-NULL
-
-#' @rdname coerceAnansi
+#' @rdname AnansiWeb
 #' @aliases as.list.AnansiWeb
-#' @inheritParams BiocGenerics::as.list
 #' @export
 #'
 setMethod("as.list", c(x = "AnansiWeb"), function(x, ...) as(x, "list"))
 
-#' @rdname coerceAnansi
+#' @rdname AnansiWeb
 #' @aliases as.MAE as.MultiAssayExperiment asMultiAssayExperiment
 #' @export
 #'
@@ -63,10 +46,8 @@ setAs(from = "AnansiWeb", to = "MultiAssayExperiment", def = function(from) {
     )
 })
 
-#' @description Convert MultiFactor to list
-#' @rdname coerceAnansi
+#' @rdname MultiFactor
 #' @aliases as.list.MultiFactor
-#' @inheritParams BiocGenerics::as.list
 #' @returns a named list of character vectors (Default) or integers
 #' (`use.names = FALSE`).
 #' @export
@@ -77,14 +58,11 @@ setMethod("as.list", c(x = "MultiFactor"), function(x, ..., use.names = TRUE) {
 
 #' @export
 #' @method as.list MultiFactor
-#' @rdname coerceAnansi
+#' @rdname MultiFactor
 #' @param use.names `Logical scalar`, whether output list should contain
 #'     character (Default) or integer data frame. If `FALSE`, returns
 #'     `unfactor(x)`.
 #' @seealso [unfactor()]
-#' @examples
-#' x <- as.list(randomMultiFactor())
-#' identical(x, as.list(MultiFactor(x)))
 #'
 as.list.MultiFactor <- function(x, ..., use.names = TRUE) {
     ifelse(

@@ -1,11 +1,9 @@
 #' AnansiWeb S4 container class
-#' @name AnansiWeb-class
-#' @description
-#' `AnansiWeb` is an S4 class containing two feature tables as well as a
-#' dictionary to link them. `AnansiWeb` is the main container that will
-#' hold your input data throughout the `anansi` pipeline.
-#' @slot tableY,tableX `matrix` of measurements, data. Rows are samples and
-#'     columns are features. Access with `tableY()` and `tableX()`.
+#' @name AnansiWeb
+#' @rdname AnansiWeb
+#' @aliases AnansiWeb-class
+#' @slot tableY,tableX Two `matrix` objects of measurements, data. Rows are
+#'     samples and columns are features. Access with `tableY()` and `tableX()`.
 #' @slot dictionary `Matrix`, binary adjacency matrix. Optionally sparse.
 #'     Typically generated using the`weaveWeb()` function. Access with
 #'     `dictionary()`.
@@ -14,11 +12,6 @@
 #' @importClassesFrom Matrix Matrix
 #' @importClassesFrom S4Vectors Annotated
 #' @importMethodsFrom S4Vectors metadata
-#' @seealso \itemize{
-#' \item [AnansiWeb()]: for general use.
-#' \item [AnansiWeb-methods()] for methods, including `$`
-#' operator.
-#' }
 #'
 setClass("AnansiWeb",
     contains = "Annotated",
@@ -49,7 +42,9 @@ setValidity("AnansiWeb", method = function(object) {
 })
 
 #' MultiFactor S4 container class
-#' @name MultiFactor-class
+#' @rdname MultiFactor
+#' @name MultiFactor
+#' @aliases MultiFactor-class
 #' @slot index Named `list` of named integer data frames of at least two columns
 #'     each. The column names correspond to names in the `levels` slot. Similar
 #'     to `factor`s, the integers in those columns correspond to the characters
@@ -59,10 +54,6 @@ setValidity("AnansiWeb", method = function(object) {
 #'     Accesses through `dictionary(x)`.
 #' @importClassesFrom Matrix Matrix
 #' @export
-#' @seealso \itemize{
-#' \item [MultiFactor()]: for general use.
-#' \item [igraph::igraph()].
-#' }
 #'
 setClass("MultiFactor",
     slots = c(

@@ -25,8 +25,7 @@
 #' @param verbose `Logical scalar`. Whether to print diagnostic information
 #'     (Default: `TRUE`).
 #' @seealso \itemize{
-#'     \item [AnansiWeb-methods]: For utility functions to get and set.
-#'     \item [AnansiWeb()]: For more general constructor.
+#'     \item [AnansiWeb]: For general constructor and methods.
 #'     \item [kegg_link()]: For examples of input for link argument.
 #'     \item [getWeb()]: For [MultiAssayExperiment::MultiAssayExperiment()]
 #'     methods.
@@ -56,8 +55,8 @@
 #' identical(generic, kegg_wrapper)
 #'
 #' # The following are equivalent to transposition:
-#' a <- weaveWeb(ko ~ cpd, link = kegg_link())$dictionary
-#' b <- weaveWeb(cpd ~ ko, link = kegg_link())$dictionary
+#' a <- weaveWeb(ko ~ cpd, link = kegg_link()) |> dictionary()
+#' b <- weaveWeb(cpd ~ ko, link = kegg_link()) |> dictionary()
 #'
 #' identical(a, Matrix::t(b))
 #'

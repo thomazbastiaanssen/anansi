@@ -1,6 +1,5 @@
-#' @rdname MultiFactor-class
+#' @rdname MultiFactor
 #' @aliases asMultiFactor MultiFactor
-#' @param x `any` object, most likely `list` of data frames.
 #' @param levels an optional named list of vectors of the unique values (as
 #'     character strings) that x might have taken. The default is the unique set
 #'     of values taken by lapply(x, as.character), sorted into increasing order
@@ -8,6 +7,10 @@
 #' @param drop.unmatched `Logical scalar` If `TRUE` (Default), for feature types
 #'     that are seen at least twice, exclude features that only present in one
 #'     of their respective link data frames.
+#' @usage
+#' ## Constructor for `MultiFactor` objects
+#' MultiFactor(x, levels = NULL, drop.unmatched = TRUE)
+#'
 #' @export
 #' @seealso \itemize{
 #' \item [kegg_link()]: for an example of valid input.
@@ -61,12 +64,11 @@ MultiFactor <- function(x, levels = NULL, drop.unmatched = TRUE) {
     return(out)
 }
 
-#' @rdname MultiFactor-class
+#' @rdname MultiFactor
 #' @aliases asMultiFactor
 #' @export
 #'
 asMultiFactor <- MultiFactor
-
 
 #' @noRd
 #' @importFrom Matrix sparseMatrix

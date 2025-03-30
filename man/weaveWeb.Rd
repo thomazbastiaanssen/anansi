@@ -84,16 +84,15 @@ kegg_wrapper <- weaveKEGG(cpd ~ ko)
 identical(generic, kegg_wrapper)
 
 # The following are equivalent to transposition:
-a <- weaveWeb(ko ~ cpd, link = kegg_link())$dictionary
-b <- weaveWeb(cpd ~ ko, link = kegg_link())$dictionary
+a <- weaveWeb(ko ~ cpd, link = kegg_link()) |> dictionary()
+b <- weaveWeb(cpd ~ ko, link = kegg_link()) |> dictionary()
 
 identical(a, Matrix::t(b))
 
 }
 \seealso{
 \itemize{
-\item \link{AnansiWeb-methods}: For utility functions to get and set.
-\item \code{\link[=AnansiWeb]{AnansiWeb()}}: For more general constructor.
+\item \link{AnansiWeb}: For general constructor and methods.
 \item \code{\link[=kegg_link]{kegg_link()}}: For examples of input for link argument.
 \item \code{\link[=getWeb]{getWeb()}}: For \code{\link[MultiAssayExperiment:MultiAssayExperiment]{MultiAssayExperiment::MultiAssayExperiment()}}
 methods.

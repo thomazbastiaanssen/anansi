@@ -8,10 +8,8 @@
 #' ## 1. Input for `anansi()` with [AnansiWeb()] and [MultiFactor()]
 #' \itemize{
 #'     \item [randomAnansi], [kegg_link()]: Generate example input
-#'     \item [AnansiWeb-methods], [MultiFactor-class]: Handle and manipulate
+#'     \item [AnansiWeb], [MultiFactor]: Handle and manipulate
 #'     input
-#'     \item [coerceAnansi]: Coersion methods including to `list` and
-#'     `MultiAssayExperiment`.
 #'     }
 #'
 #' ## 2. Output and cross-compatibility
