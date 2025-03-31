@@ -240,23 +240,7 @@ take link data frames.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">MultiFactor</span><span class="op">(</span><span class="fu"><a href="kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> A list of class MultiFactor,</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     3 feature types across 2 edge lists.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          ec   ko  cpd</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ec2ko  4825 7270    .</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ec2cpd 4825    . 6754</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Values represent unique feature names in that edge list.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Levels:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ec  : 4825 Levels: 1.1.1.1 1.1.1.2 ... 1.14.13.253 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ko  : 7270 Levels: K00001 K00002 ... K28089 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cpd : 6754 Levels: C00001 C00002 ... C22998 </span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># prep input</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># prep input</span></span></span>
 <span class="r-in"><span><span class="va">l</span> <span class="op">&lt;-</span> <span class="fu">asMultiFactor</span><span class="op">(</span><span class="fu"><a href="kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Sub-setting is only performed on data frames that contain the arguments</span></span></span>

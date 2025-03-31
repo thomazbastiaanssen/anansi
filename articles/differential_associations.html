@@ -118,26 +118,7 @@ the vignette</a> for more about adjacency matrices and
 <code><a href="../reference/weaveWeb.html">weaveWeb()</a></code>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Setup AnansiWeb with some dummy data</span></span>
-<span><span class="va">tableY</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">60</span> <span class="op">*</span> <span class="fl">10</span><span class="op">)</span>,</span>
-<span>    nrow <span class="op">=</span> <span class="fl">60</span>,</span>
-<span>    dimnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ids <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">60</span>, y <span class="op">=</span> <span class="va">LETTERS</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">tableX</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">60</span> <span class="op">*</span> <span class="fl">20</span><span class="op">)</span>,</span>
-<span>    nrow <span class="op">=</span> <span class="fl">60</span>,</span>
-<span>    dimnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ids <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">60</span>, x <span class="op">=</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">20</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">metadata</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span>    subject_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"subject"</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">30</span>,<span class="fl">2</span><span class="op">)</span>, sep <span class="op">=</span> <span class="st">"_"</span><span class="op">)</span>,</span>
-<span>    treat_cat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span><span class="op">)</span>, each <span class="op">=</span> <span class="fl">20</span><span class="op">)</span>,</span>
-<span>    score_num <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">60</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">web</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/weaveWeb.html">weaveWeb</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">x</span>,</span>
-<span>    link <span class="op">=</span> <span class="st">"none"</span>,</span>
-<span>    tableY <span class="op">=</span> <span class="va">tableY</span>, tableX <span class="op">=</span> <span class="va">tableX</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">web</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/randomAnansi.html">krebsDemoWeb</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="formula-syntax">Formula syntax<a class="anchor" aria-label="anchor" href="#formula-syntax"></a>
@@ -152,22 +133,21 @@ interact with x should be provided in the <code>formula</code> argument.
 We also see this back in the message:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/anansi.html">anansi</a></span><span class="op">(</span><span class="va">web</span>,</span>
-<span>    formula <span class="op">=</span> <span class="op">~</span> <span class="va">treat_cat</span> <span class="op">*</span> <span class="va">score_num</span> <span class="op">+</span> <span class="fu">Error</span><span class="op">(</span><span class="va">subject_id</span><span class="op">)</span>,</span>
-<span>    groups <span class="op">=</span> <span class="st">"treat_cat"</span>,</span>
-<span>    metadata <span class="op">=</span> <span class="va">metadata</span>, return.format <span class="op">=</span> <span class="st">"list"</span></span>
+<span>    formula <span class="op">=</span> <span class="op">~</span> <span class="va">group_ab</span> <span class="op">+</span> <span class="va">score_a</span>, </span>
+<span>    groups <span class="op">=</span> <span class="st">"group_ab"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Fitting least-squares for following model:</span></span>
-<span><span class="co">## ~ x + treat_cat + score_num + treat_cat:score_num + x:treat_cat + x:score_num + x:treat_cat:score_num </span></span>
-<span><span class="co">## with 'subject_id' as random intercept.</span></span></code></pre>
+<span><span class="co">## ~ x + group_ab + score_a + x:group_ab + x:score_a</span></span></code></pre>
 <pre><code><span><span class="co">## Running correlations for the following groups:</span></span>
-<span><span class="co">##  A, B, C</span></span></code></pre>
+<span><span class="co">##  a, b</span></span></code></pre>
 <p>With ‘full’ model, we mean the total influence of <code>x</code>,
 including all of its interaction terms, on <code>y</code>. For example,
-if our input formula was: <code>y ~ x * (a + b + c)</code>. R rewrites
-this as follows:</p>
-<pre><code><span><span class="co">## y ~ x + a + b + c + x:a + x:b + x:c</span></span></code></pre>
+if our input formula was: <code>y ~ x * (group_ab + score_a)</code>. R
+rewrites this as follows:</p>
+<pre><code><span><span class="co">## y ~ x + group_ab + score_a + x:group_ab + x:score_a</span></span></code></pre>
 <p>The variables that constitute the ‘full’ effect of x would be:
 <code>x + x:a + x:b + x:c</code>.</p>
+<p><img src="differential_associations_files/figure-html/plot_full-1.png" width="700"></p>
 <div class="section level4">
 <h4 id="compare-to-lm-">compare to <code>lm()</code>.<a class="anchor" aria-label="anchor" href="#compare-to-lm-"></a>
 </h4>
@@ -225,8 +205,11 @@ emergent associations, respectively.</p>
 <div class="section level4">
 <h4 id="interpretation">Interpretation:<a class="anchor" aria-label="anchor" href="#interpretation"></a>
 </h4>
-<p>disjointed is term interaction with <code>x</code>, namely, drop
-<code>x:a</code>, <code>x:b</code>, <code>x:c</code>.</p>
+<p>Disjointed associations describe the situation where the
+<strong>slope</strong> of an association is explained by a term. We
+estimate this as interaction terms with <code>x</code>, namely, drop
+<code>x:a</code>, <code>x:b</code>, <code>x:c</code>.
+<img src="differential_associations_files/figure-html/disj-1.png" width="700"></p>
 </div>
 <div class="section level4">
 <h4 id="compare-to-lm-outcome-">compare to <code>lm()</code> outcome.<a class="anchor" aria-label="anchor" href="#compare-to-lm-outcome-"></a>
@@ -236,16 +219,20 @@ emergent associations, respectively.</p>
 <div class="section level3">
 <h3 id="emergent-association">Emergent association<a class="anchor" aria-label="anchor" href="#emergent-association"></a>
 </h3>
-<pre><code>decide on action. </code></pre>
+<p>Overview</p>
+<div class="section level4">
+<h4 id="interpretation-1">Interpretation:<a class="anchor" aria-label="anchor" href="#interpretation-1"></a>
+</h4>
+<p>Emergent associations describe the situation where the
+<strong>strength</strong> of an association is explained by a term.
+<img src="differential_associations_files/figure-html/emerg-1.png" width="700">
+# Repeated measures with <code>Error()</code> {#sec-da-3}</p>
 </div>
 </div>
-<div class="section level2">
-<h2 id="sec-da-3">Repeated measures with <code>Error()</code><a class="anchor" aria-label="anchor" href="#sec-da-3"></a>
-</h2>
 <div class="section level3">
 <h3 id="random-slopes-through-error">Random slopes through <code>Error()</code><a class="anchor" aria-label="anchor" href="#random-slopes-through-error"></a>
 </h3>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># out &lt;- anansi(AnansiWeb, formula = ~ treatment * temperature + Error(participant_id), metadata = metadata)</span></span></code></pre></div>
 <div class="section level4">
 <h4 id="compare-to-aov-error--">compare to <code>aov( Error() )</code>.<a class="anchor" aria-label="anchor" href="#compare-to-aov-error--"></a>
@@ -260,7 +247,7 @@ emergent associations, respectively.</p>
 <div class="section level2">
 <h2 id="session-info">Session info<a class="anchor" aria-label="anchor" href="#session-info"></a>
 </h2>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## R version 4.4.3 (2025-02-28)</span></span>
 <span><span class="co">## Platform: x86_64-pc-linux-gnu</span></span>
@@ -307,7 +294,7 @@ emergent associations, respectively.</p>
 <span><span class="co">## [37] nlme_3.1-167                tidyselect_1.2.1           </span></span>
 <span><span class="co">## [39] digest_0.6.37               purrr_1.0.4                </span></span>
 <span><span class="co">## [41] dplyr_1.1.4                 bookdown_0.42              </span></span>
-<span><span class="co">## [43] labeling_0.4.3              splines_4.4.3              </span></span>
+<span><span class="co">## [43] splines_4.4.3               labeling_0.4.3             </span></span>
 <span><span class="co">## [45] forcats_1.0.0               polyclip_1.10-7            </span></span>
 <span><span class="co">## [47] fastmap_1.2.0               grid_4.4.3                 </span></span>
 <span><span class="co">## [49] colorspace_2.1-1            cli_3.6.4                  </span></span>

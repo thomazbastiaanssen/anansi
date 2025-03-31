@@ -195,24 +195,27 @@ Typically generated using the<code><a href="weaveWeb.html">weaveWeb()</a></code>
 <span class="r-in"><span><span class="va">tY</span> <span class="op">&lt;-</span> <span class="fu">`dimnames&lt;-`</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">3</span>, <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">36</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                   value <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fl">36</span><span class="op">)</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                                <span class="va">LETTERS</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="cn">TRUE</span>,</span></span>
-<span class="r-in"><span>            nrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">NCOL</a></span><span class="op">(</span><span class="va">tY</span><span class="op">)</span>, ncol <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">NCOL</a></span><span class="op">(</span><span class="va">tX</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>            dimnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">tY</span><span class="op">)</span>, x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">tX</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="cn">TRUE</span>, nrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">NCOL</a></span><span class="op">(</span><span class="va">tY</span><span class="op">)</span>, ncol <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">NCOL</a></span><span class="op">(</span><span class="va">tX</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>            <span class="co"># Note: Dictionary should have named dimensions</span></span></span>
+<span class="r-in"><span>            dimnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>y_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">tY</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                            x_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">tX</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span>            <span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">web</span> <span class="op">&lt;-</span> <span class="fu">AnansiWeb</span><span class="op">(</span>tableX <span class="op">=</span> <span class="va">tX</span>, tableY <span class="op">=</span> <span class="va">tY</span>, dictionary <span class="op">=</span> <span class="va">d</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Methods for AnansiWeb</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/dimnames.html" class="external-link">dimnames</a></span><span class="op">(</span><span class="va">web</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $y_names</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "A" "B" "C"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $x</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_names</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "a" "b" "c" "d" "e"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">web</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 3 5</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">web</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "y" "x"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "y_names" "x_names"</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">tableX</span><span class="op">(</span><span class="va">web</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>               a           b           c           d           e</span>
@@ -292,11 +295,11 @@ Typically generated using the<code><a href="weaveWeb.html">weaveWeb()</a></code>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 36  0.07510590 -0.50359291  0.217837643</span>
 <span class="r-in"><span><span class="fu">dictionary</span><span class="op">(</span><span class="va">web</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3 x 5 sparse Matrix of class "lgCMatrix"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    x</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> y   a b c d e</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   A | | | | |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   B | | | | |</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   C | | | | |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        x_names</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> y_names a b c d e</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       A | | | | |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       B | | | | |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       C | | | | |</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Assign some random metadata</span></span></span>
 <span class="r-in"><span><span class="fu">metadata</span><span class="op">(</span><span class="va">web</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
@@ -352,8 +355,8 @@ Typically generated using the<code><a href="weaveWeb.html">weaveWeb()</a></code>
 <span class="r-out co"><span class="r-pr">#&gt;</span> A MultiAssayExperiment object of 2 listed</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  experiments with user-defined names and respective classes.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Containing an ExperimentList class object of length 2:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] y: SummarizedExperiment with 3 rows and 36 columns</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [2] x: SummarizedExperiment with 5 rows and 36 columns</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] y_names: SummarizedExperiment with 3 rows and 36 columns</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2] x_names: SummarizedExperiment with 5 rows and 36 columns</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Functionality:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  experiments() - obtain the ExperimentList instance</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  colData() - the primary/phenotype DataFrame</span>

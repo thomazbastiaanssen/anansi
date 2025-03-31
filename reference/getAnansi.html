@@ -228,10 +228,10 @@ interactions between the two assays.</p>
 <span class="r-in"><span><span class="co"># Perform anansi analysis</span></span></span>
 <span class="r-in"><span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu">getAnansi</span><span class="op">(</span><span class="va">mae</span>,</span></span>
 <span class="r-in"><span>    tableY <span class="op">=</span> <span class="st">"y"</span>, tableX <span class="op">=</span> <span class="st">"x"</span>,</span></span>
-<span class="r-in"><span>    formula <span class="op">=</span> <span class="op">~</span><span class="va">cat_ab</span></span></span>
+<span class="r-in"><span>    formula <span class="op">=</span> <span class="op">~</span><span class="va">group_ab</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Fitting least-squares for following model:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> ~ x + cat_ab + x:cat_ab </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ~ x + group_ab + x:group_ab </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Running correlations for the following groups:</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>  b, a</span>
 <span class="r-in"><span></span></span>
@@ -249,36 +249,36 @@ interactions between the two assays.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3  0.3033405  0.7629691  0.15972600  1.1326233 0.26288445    0.014444228</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4  0.1515394  0.8801988 -0.27146220  1.9743750 0.05398934    0.034501000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5  0.6811652  0.4991095 -0.20359035  1.4556187 0.15187548    0.022783722</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   full_f.values full_p.values disjointed_cat_ab_r.squared</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1     0.1023270     0.9028327                 0.002115178</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2     0.3680479     0.6930563                 0.006464888</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3     0.7034842     0.4973909                 0.002894405</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4     1.7152250     0.1853906                 0.018168026</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5     1.1191163     0.3307907                 0.020469724</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   disjointed_cat_ab_f.values disjointed_cat_ab_p.values</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1                  0.2034875                  0.6529378</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2                  0.6246676                  0.4312661</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3                  0.2786695                  0.5987927</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4                  1.7764043                  0.1857461</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5                  2.0061590                  0.1598982</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   emergent_cat_ab_r.squared emergent_cat_ab_f.values emergent_cat_ab_p.values</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1                0.01245822                 1.198461                0.2763973</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2                0.01245822                 1.198461                0.2763973</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3                0.01245822                 1.198461                0.2763973</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4                0.01245822                 1.198461                0.2763973</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5                0.01245822                 1.198461                0.2763973</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   All_q.values b_q.values a_q.values full_q.values disjointed_cat_ab_q.values</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1    0.9807904  0.8401439  0.9841348     0.9708096                  0.9155455</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2    0.9764323  0.8401439  0.9493973     0.9708096                  0.9155455</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3    0.9145004  0.8422043  0.9493973     0.9066463                  0.9155455</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4    0.9145004  0.8801988  0.8638295     0.9066463                  0.9155455</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5    0.9764323  0.8239828  0.9460500     0.9066463                  0.9155455</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   emergent_cat_ab_q.values</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1                0.5527945</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2                0.5527945</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3                0.5527945</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4                0.5527945</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5                0.5527945</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   full_f.values full_p.values disjointed_group_ab_r.squared</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1     0.1023270     0.9028327                   0.002115178</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2     0.3680479     0.6930563                   0.006464888</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3     0.7034842     0.4973909                   0.002894405</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4     1.7152250     0.1853906                   0.018168026</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5     1.1191163     0.3307907                   0.020469724</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   disjointed_group_ab_f.values disjointed_group_ab_p.values</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                    0.2034875                    0.6529378</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                    0.6246676                    0.4312661</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                    0.2786695                    0.5987927</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                    1.7764043                    0.1857461</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5                    2.0061590                    0.1598982</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   emergent_group_ab_r.squared emergent_group_ab_f.values</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                  0.01245822                   1.198461</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                  0.01245822                   1.198461</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                  0.01245822                   1.198461</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                  0.01245822                   1.198461</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5                  0.01245822                   1.198461</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   emergent_group_ab_p.values All_q.values b_q.values a_q.values full_q.values</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                  0.2763973    0.9807904  0.8401439  0.9841348     0.9708096</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                  0.2763973    0.9764323  0.8401439  0.9493973     0.9708096</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                  0.2763973    0.9145004  0.8422043  0.9493973     0.9066463</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                  0.2763973    0.9145004  0.8801988  0.8638295     0.9066463</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5                  0.2763973    0.9764323  0.8239828  0.9460500     0.9066463</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   disjointed_group_ab_q.values emergent_group_ab_q.values</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                    0.9155455                  0.5527945</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2                    0.9155455                  0.5527945</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3                    0.9155455                  0.5527945</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4                    0.9155455                  0.5527945</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5                    0.9155455                  0.5527945</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
