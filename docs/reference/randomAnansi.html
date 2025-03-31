@@ -53,6 +53,7 @@
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">randomWeb</span><span class="op">(</span></span>
 <span>  n_samples <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>  n_reps <span class="op">=</span> <span class="fl">1L</span>,</span>
 <span>  n_features_x <span class="op">=</span> <span class="fl">8</span>,</span>
 <span>  n_features_y <span class="op">=</span> <span class="fl">12</span>,</span>
 <span>  sparseness <span class="op">=</span> <span class="fl">0.5</span>,</span>
@@ -61,20 +62,24 @@
 <span>  dictionary <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">randomMultiFactor</span><span class="op">(</span>n_types <span class="op">=</span> <span class="fl">6</span>, n_features <span class="op">=</span> <span class="fl">100</span>, sparseness <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">randomMultiFactor</span><span class="op">(</span>n_types <span class="op">=</span> <span class="fl">6</span>, n_features <span class="op">=</span> <span class="fl">100</span>, sparseness <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">krebsDemoWeb</span><span class="op">(</span>n_samples <span class="op">=</span> <span class="fl">100</span>, n_reps <span class="op">=</span> <span class="fl">4L</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
 
 
-<dl><dt id="arg-n-samples">n_samples<a class="anchor" aria-label="anchor" href="#arg-n-samples"></a></dt>
-<dd><p><code>Numeric scalar</code> Number of samples to be generated.</p></dd>
+<dl><dt id="arg-n-samples-n-reps">n_samples, n_reps<a class="anchor" aria-label="anchor" href="#arg-n-samples-n-reps"></a></dt>
+<dd><p><code>Numeric scalar</code> Number of samples and repeated
+measures of those samples to be generated. Ignored if <code>tableY</code> and
+<code>tableX</code> are provided. (defaults: 10 samples without repeats)</p></dd>
 
 
 <dt id="arg-n-features-y-n-features-x">n_features_y, n_features_x<a class="anchor" aria-label="anchor" href="#arg-n-features-y-n-features-x"></a></dt>
 <dd><p><code>Numeric scalar</code> Number of features to be
-generated.</p></dd>
+generated. Ignored if <code>tableY</code> and <code>tableX</code> are provided.</p></dd>
 
 
 <dt id="arg-sparseness">sparseness<a class="anchor" aria-label="anchor" href="#arg-sparseness"></a></dt>
@@ -106,16 +111,22 @@ coercible to <code>Matrix</code>.</p></dd>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="AnansiWeb.html">AnansiWeb()</a></code>, <code><a href="MultiFactor-class.html">MultiFactor()</a></code></p></div>
+    <div class="dont-index"><p><code><a href="AnansiWeb.html">AnansiWeb()</a></code>, <code><a href="MultiFactor.html">MultiFactor()</a></code></p></div>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Make a random AnansiWeb object</span></span></span>
 <span class="r-in"><span><span class="fu">randomWeb</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> AnansiWeb object with 10 observations:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Tables: y (12 features) and x (8 features)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Access content with $ operator. Collapse with as.list().</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> AnansiWeb S4 object with 10 observations:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     tableY: y (12 features)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     tableX: x (8 features)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Accessors: tableX(), tableY(), dictionary(), metadata().</span>
+<span class="r-in"><span><span class="fu">krebsDemoWeb</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> AnansiWeb S4 object with 400 observations:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     tableY: Enzyme (8 features)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     tableX: Metabolite (9 features)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Accessors: tableX(), tableY(), dictionary(), metadata().</span>
 <span class="r-in"><span><span class="fu">randomMultiFactor</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> A list of class MultiFactor,</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     6 feature types across 5 edge lists.</span>

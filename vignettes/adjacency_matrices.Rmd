@@ -417,16 +417,16 @@ support for this.
 library(Matrix)
 
 # For this approach, it's useful to prepare the input as two factors:
-enzymes <- factor(krebs_edge_df$Enzyme)
-metabolites <- factor(krebs_edge_df$Metabolite)
+Enzyme <- factor(krebs_edge_df$Enzyme)
+Metabolite <- factor(krebs_edge_df$Metabolite)
 
 # We can get integers out of factors, corresponding to their level indices
 bi_mat2 <- sparseMatrix(
-    i = as.integer(enzymes),
-    j = as.integer(metabolites),
+    i = as.integer(Enzyme),
+    j = as.integer(Metabolite),
     dimnames = list(
-        levels(enzymes),
-        levels(metabolites)
+       Enzyme = levels(Enzyme),
+       Metabolite = levels(Metabolite)
     )
 )
 

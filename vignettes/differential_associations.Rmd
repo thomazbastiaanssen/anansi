@@ -47,26 +47,8 @@ control over these models through the `formula` argument in `anansi(). `
 [See the vignette](https://thomazbastiaanssen.github.io/anansi/articles/adjacency_matrices.html) for more about adjacency matrices and `weaveWeb()`. 
 ```{r formula-web-full} 
 # Setup AnansiWeb with some dummy data
-tableY <- matrix(rnorm(60 * 10),
-    nrow = 60,
-    dimnames = list(ids = 1:60, y = LETTERS[1:10])
-)
+web <- krebsDemoWeb()
 
-tableX <- matrix(rnorm(60 * 20),
-    nrow = 60,
-    dimnames = list(ids = 1:60, x = letters[1:20])
-)
-
-metadata <- data.frame(
-    subject_id = paste("subject", rep(1:30,2), sep = "_"),
-    treat_cat = rep(c("A", "B", "C"), each = 20),
-    score_num = rnorm(60)
-)
-
-web <- weaveWeb(y ~ x,
-    link = "none",
-    tableY = tableY, tableX = tableX
-)
 ```
 ## Formula syntax
 Anansi supports arbitrarily complex linear models as well as longitudinal 
@@ -78,21 +60,40 @@ However, these two variables shouldn't be mentioned in the model. Rather, only a
 
 ```{r formula-anansi-full} 
 out <- anansi(web,
-    formula = ~ treat_cat * score_num + Error(subject_id),
-    groups = "treat_cat",
-    metadata = metadata, return.format = "list"
+    formula = ~ group_ab + score_a, 
+    groups = "group_ab"
 )
 ```
 
 With 'full' model, we mean the total influence of `x`, including all of its 
 interaction terms, on `y`.
 For example, if our input formula was: 
-`y ~ x * (a + b + c)`. R rewrites this as follows: 
+`y ~ x * (group_ab + score_a)`. R rewrites this as follows: 
 ```{r, reformulate, echo = FALSE}
-update.formula(y ~ x * (a + b + c), . ~ .)
+update.formula(y ~ x * (group_ab + score_a), . ~ .)
 ```
 The variables that constitute the 'full' effect of x would be: 
 `x + x:a + x:b + x:c`. 
+
+```{r plot_full, echo=FALSE, warning=FALSE, message=FALSE}
+library(patchwork)
+library(ggplot2)
+
+full_df <- data.frame(
+  citrate = tableX(web)[,'citrate'], 
+  `cis-aconitate` = tableX(web)[,'cis-aconitate'],
+  aconitase = tableY(web)[,'aconitase']
+  )
+
+ggplot(full_df) + 
+  aes(x = aconitase, y = citrate) + 
+  ggplot(full_df) + 
+  aes(x = aconitase, y = cis.aconitate) + 
+  plot_layout(axes = 'collect', axis_titles = 'collect') &
+  scale_y_continuous(limits = c(-2.5, 2.5)) &
+  geom_point(shape = 21) &
+  theme_bw()
+```
 
 ### compare to `lm()`. 
 
@@ -125,9 +126,6 @@ detected in one case but not in another.
 #| the scenario where there is a detectable association in all cases, but the
 #| quality of the association differs. Emergent associations describe the case
 #| where an association can be detected in one case but not in another."
-
-library(patchwork)
-library(ggplot2)
 
 set.seed(1)
 a <- data.frame(
@@ -166,7 +164,39 @@ and emergent associations, respectively.
 Overview
 
 ### Interpretation:
-disjointed is term interaction with `x`, namely, drop `x:a`, `x:b`, `x:c`. 
+Disjointed associations describe the situation where the **slope** of an association is explained by a term. We estimate this as interaction terms with `x`, namely, drop `x:a`, `x:b`, `x:c`. 
+```{r disj, echo=FALSE} 
+l <- NROW(metadata(web))
+
+diff_df <- data.frame(
+  group_ab      = metadata(web)$group_ab, 
+  score_a_cat   = cut(metadata(web)$score_a, 
+                      quantile(metadata(web)$score_a, probs = seq(0,1, 1/5)), 
+                      include.lowest = TRUE
+                      ),
+  score_a       = metadata(web)$score_a,
+  isocitrate    = tableX(web)[,'isocitrate'],
+  ketoglutarate = tableX(web)[,'ketoglutarate'],
+  isocitrate.dehydrogenase = tableY(web)[,'isocitrate dehydrogenase'],
+  ketoglutarate.dehydrogenase = tableY(web)[,'ketoglutarate dehydrogenase'], 
+  succinyl.CoA  = tableX(web)[,'succinyl-CoA'],
+  succinate = tableX(web)[,'succinate'],
+  succinyl.CoA.synthetase = tableY(web)[,'succinyl-CoA synthetase'],
+  succinate.dehydrogenase = tableY(web)[,'succinate dehydrogenase']
+  )
+
+ggplot(diff_df) + 
+  aes(x = isocitrate.dehydrogenase, y = isocitrate) + 
+  facet_wrap(~group_ab, scales = "free") +
+
+  ggplot(diff_df) + 
+  aes(x = ketoglutarate.dehydrogenase, y = ketoglutarate) + 
+  facet_grid(~score_a_cat, scales = "free") +
+
+  plot_layout(axes = 'collect', axis_titles = 'collect', ncol = 1) &
+  geom_point(shape = 21) &
+  theme_bw()
+```
 
 ### compare to `lm()` outcome.
 
@@ -175,8 +205,28 @@ disjointed is term interaction with `x`, namely, drop `x:a`, `x:b`, `x:c`.
 ```
 
 ## Emergent association
-    decide on action. 
+Overview
 
+### Interpretation:
+Emergent associations describe the situation where the **strength** of an association is explained by a term. 
+```{r emerg, echo=FALSE}
+
+succinate_resids <- (residuals(lm(succinate ~ 
+                                       succinate.dehydrogenase + score_a, 
+                            data = diff_df, na.action = na.exclude)))
+
+ggplot(diff_df) + 
+  aes(x = succinyl.CoA.synthetase, y = succinyl.CoA) + 
+  facet_wrap(~group_ab, scales = "free") +
+
+  ggplot(diff_df) + 
+  aes(x = succinate.dehydrogenase, y = succinate) +
+  facet_grid(~score_a_cat) +
+  
+  plot_layout(axes = 'collect', axis_titles = 'collect', ncol = 1) &
+  geom_point(shape = 21) &
+  theme_bw()
+```
 # Repeated measures with `Error()` {#sec-da-3}
 
 ## Random slopes through `Error()`

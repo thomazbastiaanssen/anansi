@@ -4,10 +4,12 @@
 \alias{randomAnansi}
 \alias{randomWeb}
 \alias{randomMultiFactor}
+\alias{krebsDemoWeb}
 \title{Generate a random AnansiWeb or MultiFactor}
 \usage{
 randomWeb(
   n_samples = 10,
+  n_reps = 1L,
   n_features_x = 8,
   n_features_y = 12,
   sparseness = 0.5,
@@ -17,12 +19,16 @@ randomWeb(
 )
 
 randomMultiFactor(n_types = 6, n_features = 100, sparseness = 0.5)
+
+krebsDemoWeb(n_samples = 100, n_reps = 4L)
 }
 \arguments{
-\item{n_samples}{\verb{Numeric scalar} Number of samples to be generated.}
+\item{n_samples, n_reps}{\verb{Numeric scalar} Number of samples and repeated
+measures of those samples to be generated. Ignored if \code{tableY} and
+\code{tableX} are provided. (defaults: 10 samples without repeats)}
 
 \item{n_features_y, n_features_x}{\verb{Numeric scalar} Number of features to be
-generated.}
+generated. Ignored if \code{tableY} and \code{tableX} are provided.}
 
 \item{sparseness}{\verb{Numeric scalar}, proportion: How rare are connections}
 
@@ -46,6 +52,7 @@ Randomly generate a valid \code{AnansiWeb} or \code{MultiFactor} object.
 \examples{
 # Make a random AnansiWeb object
 randomWeb()
+krebsDemoWeb()
 randomMultiFactor()
 }
 \seealso{

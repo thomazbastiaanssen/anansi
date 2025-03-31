@@ -76,7 +76,7 @@ mae <- as(web, "MultiAssayExperiment")
 # Perform anansi analysis
 out <- getAnansi(mae,
     tableY = "y", tableX = "x",
-    formula = ~cat_ab
+    formula = ~group_ab
 )
 
 # View subset of results

@@ -69,7 +69,7 @@
 #' # Perform anansi analysis
 #' out <- getAnansi(mae,
 #'     tableY = "y", tableX = "x",
-#'     formula = ~cat_ab
+#'     formula = ~group_ab
 #' )
 #'
 #' # Select significant interactions
@@ -78,16 +78,16 @@
 #' # Visualise disjointed associations filled by group
 #' plotAnansi(out,
 #'     association.type = "disjointed",
-#'     model.var = "cat_ab",
+#'     model.var = "group_ab",
 #'     signif.threshold = 0.05,
 #'     fill_by = "group"
 #' )
 #'
-#' # Visualise full associations filled by category ('cat_ab')
+#' # Visualise full associations filled by category ('group_ab')
 #' plotAnansi(out,
 #'     association.type = "full",
 #'     signif.threshold = 0.05,
-#'     fill_by = "cat_ab"
+#'     fill_by = "group_ab"
 #' )
 #'
 #' @seealso

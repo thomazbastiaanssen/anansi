@@ -170,15 +170,12 @@ setReplaceMethod("dictionary", "AnansiWeb", def = function(x, ..., value) {
 #' @export
 #'
 setMethod("show", "AnansiWeb", def = function(object) {
-    cat(class(object), " object with ", NROW(tableX(object)),
-        " observations:\n    Tables: ", names(object)[1], " (", NROW(object),
-        " features) and ", names(object)[2], " (", NCOL(object), " features)\n",
+    cat(class(object), " S4 object with ", NROW(tableX(object)),
+        " observations:\n    tableY: ", names(object)[1], " (", NROW(object),
+        " features)\n    tableX: ", names(object)[2], " (", NCOL(object), " features)\n",
         sep = ""
     )
-    cat("Access content with $ operator. ",
-        "Collapse with as.list().",
-        sep = ""
-    )
+    cat("Accessors: tableX(), tableY(), dictionary(), metadata().")
     invisible(NULL)
 })
 

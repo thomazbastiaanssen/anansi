@@ -28,9 +28,12 @@
 #' tY <- `dimnames<-`(replicate(3, (rnorm(36))),
 #'                    value = list(as.character(seq_len(36)),
 #'                                 LETTERS[1:3]))
-#' d <- matrix(TRUE,
-#'             nrow = NCOL(tY), ncol = NCOL(tX),
-#'             dimnames = list(y = colnames(tY), x = colnames(tX))
+#'
+#' d <- matrix(TRUE, nrow = NCOL(tY), ncol = NCOL(tX),
+#'
+#'             # Note: Dictionary should have named dimensions
+#'             dimnames = list(y_names = colnames(tY),
+#'                             x_names = colnames(tX))
 #'             )
 #' web <- AnansiWeb(tableX = tX, tableY = tY, dictionary = d)
 #' @param metadata `list` of metadata. Optional.

@@ -156,8 +156,6 @@ Accesses through \code{dictionary(x)}.}
 }}
 
 \examples{
-MultiFactor(kegg_link())
-
 # prep input
 l <- asMultiFactor(kegg_link())
 

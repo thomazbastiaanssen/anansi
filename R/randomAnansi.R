@@ -2,9 +2,11 @@
 #' @name randomAnansi
 #' @description
 #' Randomly generate a valid `AnansiWeb` or `MultiFactor` object.
-#' @param n_samples `Numeric scalar` Number of samples to be generated.
+#' @param n_samples,n_reps `Numeric scalar` Number of samples and repeated
+#'     measures of those samples to be generated. Ignored if `tableY` and
+#'     `tableX` are provided. (defaults: 10 samples without repeats)
 #' @param n_features_y,n_features_x `Numeric scalar` Number of features to be
-#'     generated.
+#'     generated. Ignored if `tableY` and `tableX` are provided.
 #' @param tableY,tableX A table containing features of interest. Rows should be
 #'     samples and columns should be features. Y and X refer to the position of
 #'     the features in a formula: Y ~ X.
@@ -14,6 +16,7 @@
 #' @examples
 #' # Make a random AnansiWeb object
 #' randomWeb()
+#' krebsDemoWeb()
 #' randomMultiFactor()
 #' @seealso [AnansiWeb()], [MultiFactor()]
 #'
@@ -23,7 +26,8 @@ NULL
 #' @name randomWeb
 #' @export
 #'
-randomWeb <- function(n_samples = 10, n_features_x = 8, n_features_y = 12,
+randomWeb <- function(n_samples = 10, n_reps = 1L,
+                      n_features_x = 8, n_features_y = 12,
                       sparseness = 0.5, tableY = NULL, tableX = NULL,
                       dictionary = NULL) {
     stopifnot(
@@ -43,7 +47,8 @@ randomWeb <- function(n_samples = 10, n_features_x = 8, n_features_y = 12,
     # All missing: return full random Web
     if (all(c(is.null(tableY), is.null(tableX), is.null(dictionary)))) {
         return(
-            randomWebFull(n_samples, n_features_x, n_features_y, density)
+            randomWebFull(n_samples, n_reps,
+                          n_features_x, n_features_y, density)
         )
     }
     # Dictionary missing: make random fitting dictionary, return filled Web
@@ -53,7 +58,7 @@ randomWeb <- function(n_samples = 10, n_features_x = 8, n_features_y = 12,
         )
     }
     # Tables missing: make random fitting tables, return filled Web
-    return(randomWebTab(n_samples, dictionary))
+    return(randomWebTab(n_samples, n_reps, dictionary))
 }
 
 #' @rdname randomAnansi
@@ -90,6 +95,51 @@ randomMultiFactor <- function(n_types = 6, n_features = 100,
     asMultiFactor(out)
 }
 
+#' @rdname randomAnansi
+#' @aliases krebsDemoWeb
+#' @importFrom Matrix sparseMatrix
+#' @importFrom stats pnorm
+#' @export
+#'
+krebsDemoWeb <- function(n_samples = 100, n_reps = 4L) {
+    # Load krebs edgelist
+    krebs <- anansi::krebs
+
+    # Define dictionary
+    kd <- Matrix::sparseMatrix(
+        i = as.integer(krebs$Enzyme),
+        j = as.integer(krebs$Metabolite),
+        dimnames = lapply(krebs, levels)
+    )
+    # Generate web with metadata
+    w <- randomWeb(n_samples, n_reps, dictionary = kd)
+
+    # Spike demo associations
+    int_ab <- metadata(w)$group_ab == "a"
+    int_pr <- pnorm(metadata(w)$score_a)
+
+    # Positive association aconitase ~ citrate
+    tableY(w)[,1L] <- tableY(w)[,1L] * 0.25 +
+        tableX(w)[,1L] * 0.75
+    # Negative association aconitase ~ cis-aconitate
+    tableX(w)[,2L] <- tableX(w)[,2L] * 0.25 +
+        tableY(w)[,1L] * -0.75
+    # Disjointed association isocitrate dehydrogenase ~ isocitrate
+    tableY(w)[,2L] <- (tableY(w)[,2L] * 0.25 +
+        tableX(w)[,3L] * 0.75)
+    tableY(w)[int_ab,2L] = tableY(w)[int_ab,2L] * -1L
+    # Disjointed association ketoglutarate dehydrogenase ~ ketoglutarate
+    tableY(w)[,3L] <- tableY(w)[,3L] * 0.25 +
+        tableX(w)[,4L] * 0.75 * metadata(w)$score_a
+    # Emergent association succinyl-CoA synthetase ~ succinyl-CoA
+    tableY(w)[,4L] <- tableY(w)[,4L] * (0.25 + 0.50 * int_ab) +
+        tableX(w)[,5L] * (0.25 + 0.50 * !int_ab)
+    # Emergent association succinate dehydrogenase ~ succinate
+    tableY(w)[,5L] <- tableY(w)[,5L] * int_pr +
+        tableX(w)[,6L] * (1-int_pr)
+
+    return(w)
+}
 
 #' Generate a random AnansiWeb, without any prior components
 #' @description
@@ -99,20 +149,25 @@ randomMultiFactor <- function(n_types = 6, n_features = 100,
 #' @rdname randomAnansi
 #' @noRd
 #'
-randomWebFull <- function(n_samp, n_x, n_y, density) {
+randomWebFull <- function(n_samp, n_reps, n_x, n_y, density) {
+    rn <- paste0("sample_",
+              rep(seq_len(n_samp), each = n_reps),
+              "_",
+              seq_len(n_reps)
+    )
     tableY <- matrix(
-        data = rnorm(n_y * n_samp),
-        nrow = n_samp, ncol = n_y,
+        data = rnorm(n_y * n_samp * n_reps),
+        nrow = n_samp * n_reps, ncol = n_y,
         dimnames = list(
-            sample_id = paste0("sample_", seq_len(n_samp)),
+            sample_id = rn,
             y = paste0("y_", seq_len(n_y))
         )
     )
     tableX <- matrix(
-        data = rnorm(n_x * n_samp),
-        nrow = n_samp, ncol = n_x,
+        data = rnorm(n_x * n_samp * n_reps),
+        nrow = n_samp * n_reps, ncol = n_x,
         dimnames = list(
-            sample_id = paste0("sample_", seq_len(n_samp)),
+            sample_id = rn,
             x = paste0("x_", seq_len(n_x))
         )
     )
@@ -125,27 +180,29 @@ randomWebFull <- function(n_samp, n_x, n_y, density) {
 #' @rdname randomAnansi
 #' @noRd
 #'
-randomWebTab <- function(n_samp = 10, dictionary, metadata) {
+randomWebTab <- function(n_samp, n_reps, dictionary, metadata) {
     d <- dim(dictionary)
-    tableY <- matrix(
-        data = rnorm(d[1] * n_samp),
-        nrow = n_samp, ncol = d[1],
-        dimnames = list(
-            sample_id = paste0("sample_", seq_len(n_samp)),
-            y = rownames(dictionary)
-        )
+    rn <- paste0("sample_",
+                 rep(seq_len(n_samp), each = n_reps),
+                 "_",
+                 seq_len(n_reps)
     )
-    names(dimnames(tableY))[2] <- names(dimnames(dictionary))[1]
+    tableY <- matrix(
+        data = rnorm(d[1] * n_samp * n_reps),
+        nrow = n_samp * n_reps, ncol = d[1],
+        dimnames = c(list(
+            sample_id = rn),
+            dimnames(dictionary)[1])
+    )
     tableX <- matrix(
-        data = rnorm(d[2] * n_samp),
-        nrow = n_samp, ncol = d[2],
-        dimnames = list(
-            sample_id = paste0("sample_", seq_len(n_samp)),
-            x = colnames(dictionary)
-        )
+        data = rnorm(d[2] * n_samp * n_reps),
+        nrow = n_samp * n_reps, ncol = d[2],
+        dimnames = c(list(
+            sample_id = rn),
+            dimnames(dictionary)[2])
     )
     names(dimnames(tableX))[2] <- names(dimnames(dictionary))[2]
-    metadata <- randomWebMetadata(tableY)
+    metadata <- randomWebMetadata(tableY, n_samp, n_reps)
     # return AnansiWeb
     AnansiWeb(
         tableY = tableY, tableX = tableX,
@@ -188,14 +245,22 @@ randomWebDic <- function(tableY, tableX, density, metadata) {
 #' @rdname randomAnansi
 #' @noRd
 #'
-randomWebMetadata <- function(table) {
-    n_samples <- NROW(table)
+randomWebMetadata <- function(table, n_samples = NULL, n_reps = NULL) {
+    if(is.null(n_samples)) {
+        n_samples <- NROW(table)
+        n_reps <- 1L
+        }
     m <- data.frame(
-        cat_ab = sample(c("a", "b"), n_samples, replace = TRUE),
-        cat_XYZ = sample(c("X", "Y", "Z"), n_samples, replace = TRUE),
-        num_norm = rnorm(n_samples),
-        num_unif = runif(n_samples),
-        row.names = paste0("sample_", seq_len(n_samples))
+        sample_id = paste0("sample_", rep(seq_len(n_samples), each = n_reps)),
+        repeated  = paste0("rep_", seq_len(n_reps)),
+        group_ab  = rep(sample(c("a", "b"), n_samples,
+                               replace = TRUE), each = n_reps),
+        subtype   = rep(sample(c("x", "y", "z"), n_samples,
+                               replace = TRUE), each = n_reps),
+        score_a   = rnorm(n_samples),
+        score_b   = rnorm(n_samples),
+        score_c   = rnorm(n_samples),
+        row.names = row.names(table)
     )
     return(m)
 }

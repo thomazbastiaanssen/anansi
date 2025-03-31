@@ -1,6 +1,6 @@
 test_that("getAnansi", {
     # Combine experiments into MultiAssayExperiment object
-    web <- randomWeb(n_samples = 15)
+    web <- randomWeb(n_samples = 15, n_reps = 1)
     metadata(web)$cat_XYZ <- rep(c("X", "Y", "Z"), 5)
     mae <- as(web, "MultiAssayExperiment")
 
@@ -17,7 +17,7 @@ test_that("getAnansi", {
         getAnansi(mae,
             tableY = "y",
             tableX = "x",
-            formula = ~cat_ab, web = 0
+            formula = ~group_ab, web = 0
         ),
         "The arguments 'web' should not be used, as they are extracted from 'x'",
         fixed = TRUE

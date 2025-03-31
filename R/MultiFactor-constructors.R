@@ -15,8 +15,6 @@
 #' @seealso \itemize{
 #' \item [kegg_link()]: for an example of valid input.
 #' }
-#' @examples
-#' MultiFactor(kegg_link())
 #'
 MultiFactor <- function(x, levels = NULL, drop.unmatched = TRUE) {
     if (validLinkDF(x)) x <- list(x = x)
