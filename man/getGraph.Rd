@@ -18,6 +18,9 @@
 
 \item{...}{additional arguments (currently not used).}
 }
+\value{
+a specified graph object.
+}
 \description{
 Get a graph object out of an MultiFactor.
 }
@@ -33,6 +36,6 @@ getGraph(ec2cpd, format = "igraph")
 }
 \seealso{
 \code{\link[igraph:graph_from_data_frame]{igraph::graph_from_data_frame()}} and
-\code{\link[igraph:as_graphnel]{igraph::as_graphnel()}}, which are used under the hood,
-from \code{\link[igraph:aaa-igraph-package]{igraph::igraph()}} package.
+\code{\link[igraph:as_graphnel]{igraph::as_graphnel()}}, which are used under the hood, from
+\code{\link[igraph:aaa-igraph-package]{igraph::igraph()}} package.
 }

@@ -19,7 +19,6 @@ text-align: justify}
 
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-library(anansi)
 ```
 
 
@@ -40,193 +39,224 @@ model*.
 
 # Getting started: The full model {#sec-da-1}
 After determining which pairs of features should be investigated, `anansi` fits
-several linear models for which it returns summary statistics. These user has 
+several linear models for which it returns summary statistics. The user has 
 control over these models through the `formula` argument in `anansi(). `
 
-### Setup 
-[See the vignette](https://thomazbastiaanssen.github.io/anansi/articles/adjacency_matrices.html) for more about adjacency matrices and `weaveWeb()`. 
+## Setup 
+We will use the same example as in [the vignette on adjacency matrices](https://thomazbastiaanssen.github.io/anansi/articles/adjacency_matrices.html). There, we also explain for more about adjacency matrices, `AnansiWeb` class and using `weaveWeb()`. Please note that the data used in this example have been generated with statistical associations spiked in for this vignette. 
 ```{r formula-web-full} 
 # Setup AnansiWeb with some dummy data
+library(anansi)
 web <- krebsDemoWeb()
-
 ```
+
 ## Formula syntax
-Anansi supports arbitrarily complex linear models as well as longitudinal 
-models sing the R formula syntax. The most basic model in anansi would be 
-`y ~ x`, where `y` is the feature from `tableY` and `x` is the corresponding 
-feature in `tableX`. 
-However, these two variables shouldn't be mentioned in the model. Rather, only additional covariates that could interact with x should be provided in the 
-`formula` argument. We also see this back in the message: 
-
-```{r formula-anansi-full} 
-out <- anansi(web,
-    formula = ~ group_ab + score_a, 
-    groups = "group_ab"
-)
+For each of the feature-pairs that should be assessed, anansi fits similarly structured linear models. Anansi supports complex linear models as well as longitudinal models using the R formula syntax. The most basic model in anansi is:
+```{r,echo=FALSE}
+y ~ x
 ```
+where `y` refers to is the feature from `tableY` and `x` is the corresponding 
+feature in `tableX`. 
 
-With 'full' model, we mean the total influence of `x`, including all of its 
-interaction terms, on `y`.
-For example, if our input formula was: 
-`y ~ x * (group_ab + score_a)`. R rewrites this as follows: 
-```{r, reformulate, echo = FALSE}
-update.formula(y ~ x * (group_ab + score_a), . ~ .)
+Besides estimating the asociation between `y` and `x`, anansi also allows for the  inclusion of covariates that could influence this association. With **full model**, we mean the total influence of `x`, including all of its 
+interaction terms, on `y`. For example, if our input formula was: 
+
+```{r, formulate, echo = FALSE}
+f <- y ~ x * (group_ab + score_a)
+f
+```
+R rewrites this as follows: 
+```{r, reformulate, echo=FALSE}
+update.formula(f, . ~ .)
 ```
 The variables that constitute the 'full' effect of x would be: 
 `x + x:group_ab + x:score_a`. 
 
-```{r plot_full, echo=FALSE, warning=FALSE, message=FALSE}
+### Formula in anansi()
+When providing a formula argument in the main `anansi()` function, the `y` and `x` variables should not be mentioned, they are already implied. Rather, only additional covariates that could interact with `x` should be provided in the 
+`formula` argument. 
+
+```{r formula-anansi-full} 
+out <- anansi(web,
+    formula = ~ group_ab + score_a,
+    groups = "group_ab"
+)
+```
+Note that anansi tells us how how the rewritten model looks. 
+
+```{r plot_full, echo=FALSE, warning=FALSE, message=FALSE, fig.dim=c(6,3)}
 library(patchwork)
 library(ggplot2)
 
 full_df <- data.frame(
-  citrate = tableX(web)[,'citrate'], 
-  `cis-aconitate` = tableX(web)[,'cis-aconitate'],
-  aconitase = tableY(web)[,'aconitase']
-  )
+    citrate = tableX(web)[, "citrate"],
+    `cis-aconitate` = tableX(web)[, "cis-aconitate"],
+    aconitase = tableY(web)[, "aconitase"]
+)
 
-ggplot(full_df) + 
-  aes(x = aconitase, y = citrate) + 
-  facet_wrap( ~ "citrate")  +
+ggplot(full_df) +
+    aes(x = aconitase, y = citrate) +
+    facet_wrap(~"citrate") +
+    ggplot(full_df) +
+    aes(x = aconitase, y = cis.aconitate) +
+    labs(y = "cis-aconitate") +
+    facet_wrap(~"cis-aconitate") +
+    plot_layout(axes = "collect", axis_titles = "collect") &
 
-  ggplot(full_df) + 
-  aes(x = aconitase, y = cis.aconitate) + 
-  facet_wrap( ~ "cis-aconitate") +
-  
-  plot_layout(axes = 'collect', axis_titles = 'collect') &
+    geom_point(shape = 21, fill = "#ffffbf") &
 
-  scale_y_continuous(limits = c(-2.5, 2.5)) &
-  geom_point(shape = 21, fill = "#ffffbf") &
-  theme_bw()
-```
-
-### compare to `lm()`. 
-
-```{r lm-compare-full} 
+    coord_equal(ratio = 1, xlim = c(-2.5, 2.5), ylim = c(-2.5, 2.5)) &
+    theme_bw()
 ```
 
 # Differential association {#sec-da-2}
 
 In order to assess differences in associations based on one or more variables 
 (such as phenotype or treatment), we make use of the emergent and disjointed 
-association paradigm introduced in the context of proportionality \citep{diff_prop,quinn2017propr,part_corr} and apply it outside of the simplex. 
-Briefly, disjointed associations refer to the scenario where the \textit{slope} 
-of an association is dependent on a variable. On the other hand, emergent 
-associations refer to the scenario where the \textit{strength} of the scenario 
-is dependent on a variable. 
+association paradigm introduced in the context of proportionality \citep{diff_prop,quinn2017propr,part_corr} and apply it outside of the simplex.
 
 ## Disjointed associations
-Disjointed associations describe the scenario where there is 
-a detectable association in all cases, but the quality of that association 
-differs. 
-
-### Interpretation:
 Disjointed associations describe the situation where there is a detectable association in all cases, but the quality of that association, the **slope**, changes in a manner explained by a term. We estimate this as interaction terms with `x`. In our example we have two such terms, namely `x:group_ab` and `x:score_a`. 
 
-### Disjointed associations with categorical variables
+### Disjointed associations: Categorical variables
 
-```{r disj_cat, echo=FALSE} 
+```{r disj_cat, echo=FALSE, fig.dim=c(6,3)} 
 diff_df <- data.frame(
-  group_ab      = metadata(web)$group_ab, 
-  score_a_cat   = cut(metadata(web)$score_a, 
-                      quantile(metadata(web)$score_a, probs = seq(0,1, 1/5)), 
-                      include.lowest = TRUE
-                      ),
-  score_a       = metadata(web)$score_a,
-  isocitrate    = tableX(web)[,'isocitrate'],
-  ketoglutarate = tableX(web)[,'ketoglutarate'],
-  isocitrate.dehydrogenase = tableY(web)[,'isocitrate dehydrogenase'],
-  ketoglutarate.dehydrogenase = tableY(web)[,'ketoglutarate dehydrogenase'], 
-  succinyl.CoA  = tableX(web)[,'succinyl-CoA'],
-  succinate = tableX(web)[,'succinate'],
-  succinyl.CoA.synthetase = tableY(web)[,'succinyl-CoA synthetase'],
-  succinate.dehydrogenase = tableY(web)[,'succinate dehydrogenase']
-  )
+    group_ab = paste0("Treatment ", metadata(web)$group_ab),
+    score_a = metadata(web)$score_a,
+    score_a_cat = cut(
+        metadata(web)$score_a,
+        labels = c("0-20%", "20-40%", "40-60%", "60-80%", "80-100%"),
+        quantile(metadata(web)$score_a, probs = seq(0, 1, 1 / 5)),
+        include.lowest = TRUE
+    ),
+    repeated = metadata(web)$repeated,
+    sample_id = metadata(web)$sample_id,
+    isocitrate = tableX(web)[, "isocitrate"],
+    ketoglutarate = tableX(web)[, "ketoglutarate"],
+    isocitrate.dehydrogenase = tableY(web)[, "isocitrate dehydrogenase"],
+    ketoglutarate.dehydrogenase = tableY(web)[, "ketoglutarate dehydrogenase"],
+    succinyl.CoA = tableX(web)[, "succinyl-CoA"],
+    succinate = tableX(web)[, "succinate"],
+    succinyl.CoA.synthetase = tableY(web)[, "succinyl-CoA synthetase"],
+    succinate.dehydrogenase = tableY(web)[, "succinate dehydrogenase"],
+    fumarate = tableX(web)[, "fumarate"],
+    fumarase = tableY(web)[, "fumarase"]
+)
 
-ggplot(diff_df) + 
-  aes(x = isocitrate.dehydrogenase, y = isocitrate, fill = group_ab) + 
-  facet_wrap(~group_ab) +
-
-  geom_point(shape = 21, show.legend = FALSE) +
-  scale_fill_manual(values = c("a" = "#d73027", 
-                               "b" = "#2166ac")) + 
-  theme_bw() + 
-  coord_equal(ratio = 1)
+ggplot(diff_df) +
+    aes(x = isocitrate.dehydrogenase, y = isocitrate, fill = group_ab) +
+    facet_wrap(~group_ab, ) +
+    labs(x = "isocitrate dehydrogenase") +
+    geom_point(shape = 21, show.legend = FALSE) +
+    scale_fill_manual(values = c(
+        "Treatment a" = "#d73027",
+        "Treatment b" = "#2166ac"
+    )) +
+    theme_bw() +
+    coord_equal(ratio = 1, xlim = c(-2.5, 2.5), ylim = c(-2.5, 2.5))
 ```
 
-### Disjointed associations with continuous variables
+### Disjointed associations: Continuous variables
 
-```{r disj_cont, echo=FALSE} 
-
-  ggplot(diff_df) + 
-  
-  aes(x = ketoglutarate.dehydrogenase, y = ketoglutarate, fill = score_a) + 
-  facet_grid(~score_a_cat) +
-  
-  geom_point(shape = 21, show.legend = FALSE) +
-    scale_fill_gradient2(low = "#a50026", mid = "#ffffbf", high = "#313695", ) +
-
-  theme_bw() + 
-  coord_equal(ratio = 1)
+```{r disj_cont, echo=FALSE, fig.dim=c(10,4)} 
+ggplot(diff_df) +
+    aes(x = ketoglutarate.dehydrogenase, y = ketoglutarate, fill = score_a) +
+    facet_grid(~score_a_cat) +
+    geom_point(shape = 21, show.legend = FALSE) +
+    scale_fill_gradientn(
+        colors = c(
+            "#a50026", "#f46d43", "#ffffbf",
+            "#ffffbf", "#74add1", "#313695"
+        ),
+        values = c(0, 0.42, 0.49, 5.1, 0.58, 1),
+    ) +
+    labs(x = "ketoglutatate dehydrogenase") +
+    theme_bw() +
+    coord_equal(ratio = 1, xlim = c(-2.5, 2.5), ylim = c(-2.5, 2.5))
 ```
 
 ### compare to `lm()` outcome.
 
 ```{r lm-disj} 
-
 ```
 
 ## Emergent association
 Emergent associations describe the situation where the **strength** of an association is explained by a term interacting with x. We again estimate this as interaction terms with `x`. In our example we have two such terms, namely `x:group_ab` and `x:score_a`. 
 
-### Emergent associations with categorical variables
+### Emergent associations: Categorical variables
 
-```{r emerg_cat, echo=FALSE}
-
-ggplot(diff_df) + 
-  aes(x = succinyl.CoA.synthetase, y = succinyl.CoA, fill = group_ab) + 
-  facet_wrap(~group_ab) +
- 
-  geom_point(shape = 21, show.legend = FALSE) +
-   scale_fill_manual(values = c("a" = "#d73027", 
-                               "b" = "#2166ac")) + 
-  
-  theme_bw() + 
-  coord_equal(ratio = 1)
+```{r emerg_cat, echo=FALSE, fig.dim=c(6,3)}
+ggplot(diff_df) +
+    aes(x = succinyl.CoA.synthetase, y = succinyl.CoA, fill = group_ab) +
+    facet_wrap(~group_ab) +
+    geom_point(shape = 21, show.legend = FALSE) +
+    scale_fill_manual(values = c(
+        "Treatment a" = "#d73027",
+        "Treatment b" = "#2166ac"
+    )) +
+    labs(x = "succinyl-CoA synthetase", y = "succinyl-CoA") +
+    theme_bw() +
+    coord_equal(ratio = 1, xlim = c(-2.5, 2.5), ylim = c(-2.5, 2.5))
 ```
 
-### Emergent associations with continuous variables
+### Emergent associations: Continuous variables
 
-```{r emerg_cont, echo=FALSE}
-
-ggplot(diff_df) + 
-  aes(x = succinate.dehydrogenase, y = succinate, fill = score_a) +
-  facet_grid(~score_a_cat) +
-
-  geom_point(shape = 21, show.legend = FALSE) +
-    scale_fill_gradient2(low = "#a50026", mid = "#ffffbf", high = "#313695") +
-
-  theme_bw() + 
-  coord_equal(ratio = 1)
+```{r emerg_cont, echo=FALSE, fig.dim=c(10,4)}
+ggplot(diff_df) +
+    aes(x = succinate.dehydrogenase, y = succinate, fill = score_a) +
+    facet_grid(~score_a_cat) +
+    geom_point(shape = 21, show.legend = FALSE) +
+    scale_fill_gradientn(
+        colors = c(
+            "#a50026", "#f46d43", "#ffffbf",
+            "#ffffbf", "#74add1", "#313695"
+        ),
+        values = c(0, 0.42, 0.49, 5.1, 0.58, 1),
+    ) +
+    labs(x = "succinate dehydrogenase") +
+    theme_bw() +
+    coord_equal(ratio = 1, xlim = c(-2.5, 2.5), ylim = c(-2.5, 2.5))
 ```
 
-# Repeated measures with `Error()` {#sec-da-3}
+# Repeated measures {#sec-da-3}
 
 ## Random slopes through `Error()`
-
+Similar to `stats::aov()`, you can wrap a variable in `Error()` for `anansi()` 
+to treat it as a stratum, allowing for random intercepts. This is useful when 
+dealing with multiple measurements per subject, commonly due to a longitudinal 
+design. 
 ```{r intro-error} 
-# out <- anansi(AnansiWeb, formula = ~ treatment * temperature + Error(participant_id), metadata = metadata)
+out <- anansi(web,
+    formula = ~ group_ab + score_a + Error(sample_id),
+    groups = "group_ab"
+)
 ```
+Note that `anansi()` acknowledges the random intercept. 
 
 ### compare to `aov( Error() )`.
+We can use `aov()` to see how `Error()` works. `R` does not use orthogonal 
+contrasts and uses type-I sum-of-squares calculations by default. In other 
+words, the order of covariates matters. A variable wrapped in `Error()` gets 
+moved to the front of the line, so the rest of the model could be understood as 
+conditioned on the `Error()`-wrapped term. 
 
+Here is the model with `Error()`
 ```{r aov-error} 
+summary(
+    aov(fumarate ~ fumarase * repeated + Error(sample_id), data = diff_df)
+)
 ```
 
-### corresponding `lm()`
+And the equivalent model with `sample_id` moved to the front instead:.
+```{r aov-regular}
+summary(
+    aov(fumarate ~ sample_id + fumarase * repeated, data = diff_df)
+)
 
-```{r lm-error} 
+# See ?stats::aov for more.
 ```
+For every term except for `sample_id`, the results are equivalent. 
 
 # Session info
 

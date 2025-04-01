@@ -113,19 +113,27 @@ Typically generated using the\code{weaveWeb()} function. Access with
 
 # Use AnansiWeb() to consrtuct an AnansiWeb object from components:
 tX <- `dimnames<-`(replicate(5, (rnorm(36))),
-                   value = list(as.character(seq_len(36)),
-                                letters[1:5])
+    value = list(
+        as.character(seq_len(36)),
+        letters[1:5]
+    )
 )
 tY <- `dimnames<-`(replicate(3, (rnorm(36))),
-                   value = list(as.character(seq_len(36)),
-                                LETTERS[1:3]))
+    value = list(
+        as.character(seq_len(36)),
+        LETTERS[1:3]
+    )
+)
 
-d <- matrix(TRUE, nrow = NCOL(tY), ncol = NCOL(tX),
+d <- matrix(TRUE,
+    nrow = NCOL(tY), ncol = NCOL(tX),
 
-            # Note: Dictionary should have named dimensions
-            dimnames = list(y_names = colnames(tY),
-                            x_names = colnames(tX))
-            )
+    # Note: Dictionary should have named dimensions
+    dimnames = list(
+        y_names = colnames(tY),
+        x_names = colnames(tX)
+    )
+)
 web <- AnansiWeb(tableX = tX, tableY = tY, dictionary = d)
 
 # Methods for AnansiWeb

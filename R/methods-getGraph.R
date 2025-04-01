@@ -5,13 +5,12 @@
 #' @param format
 #' `Character scalar`, controls output format by package name.
 #' `"igraph"` and `"graph"` are supported.
-#'
 #' @param ... additional arguments (currently not used).
 #' @importFrom igraph graph_from_data_frame as_graphnel
-#' @seealso
-#' [igraph::graph_from_data_frame()] and
-#' [igraph::as_graphnel()], which are used under the hood,
-#' from [igraph::igraph()] package.
+#' @returns a specified graph object.
+#' @seealso [igraph::graph_from_data_frame()] and
+#'     [igraph::as_graphnel()], which are used under the hood, from
+#'     [igraph::igraph()] package.
 #' @export
 #' @examples
 #' # Generate a regular igraph object

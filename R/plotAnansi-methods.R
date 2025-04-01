@@ -115,11 +115,10 @@ setGeneric("plotAnansi",
 #' @importFrom S4Vectors isEmpty
 setMethod("plotAnansi",
     signature = c(x = "data.frame"),
-    function(
-        x, association.type = NULL, model.var = NULL,
-        signif.threshold = NULL, colour_by = NULL, color_by = colour_by,
-        fill_by = NULL, size_by = NULL, shape_by = NULL, y_position = "right",
-        x_lab = "cor", y_lab = "") {
+    function(x, association.type = NULL, model.var = NULL,
+             signif.threshold = NULL, colour_by = NULL, color_by = colour_by,
+             fill_by = NULL, size_by = NULL, shape_by = NULL, y_position = "right",
+             x_lab = "cor", y_lab = "") {
         # Create list of Booleans whether args are defined
         defined_args <- lapply(
             list(

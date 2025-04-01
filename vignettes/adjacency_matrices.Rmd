@@ -55,66 +55,78 @@ library(patchwork)
 library(ggraph)
 library(igraph)
 library(tidygraph)
-library(dplyr) 
+library(dplyr)
 
-metabs <- c("isocitrate", "cis-aconitate", "citrate", "oxaloacetate", 
-            "L-malate", "fumarate", "succinate", "succinyl-CoA", 
-            "ketoglutarate")
+metabs <- c(
+    "isocitrate", "cis-aconitate", "citrate", "oxaloacetate",
+    "L-malate", "fumarate", "succinate", "succinyl-CoA",
+    "ketoglutarate"
+)
 d <- data.frame(
-    from = c("isocitrate", "ketoglutarate", "succinyl-CoA", 
-             "succinate", "fumarate", "L-malate", "oxaloacetate", "citrate", 
-             "cis-aconitate"
-             ), 
-    to = c("ketoglutarate", "succinyl-CoA", "succinate", 
-           "fumarate", "L-malate", "oxaloacetate", "citrate", "cis-aconitate", 
-           "isocitrate"
-           ), 
-    vertices = c("isocitrate\ndehydrogenase", "ketoglutarate\ndehydrogenase", 
-                 "succinyl-CoA\nsynthetase", "succinate\ndehydrogenase", 
-                 "\nfumarase","malate\ndehydrogenase", "citrate\nsynthase", 
-                 "aconitase\n", "aconitase\n")
+    from = c(
+        "isocitrate", "ketoglutarate", "succinyl-CoA",
+        "succinate", "fumarate", "L-malate", "oxaloacetate", "citrate",
+        "cis-aconitate"
+    ),
+    to = c(
+        "ketoglutarate", "succinyl-CoA", "succinate",
+        "fumarate", "L-malate", "oxaloacetate", "citrate", "cis-aconitate",
+        "isocitrate"
+    ),
+    vertices = c(
+        "isocitrate\ndehydrogenase", "ketoglutarate\ndehydrogenase",
+        "succinyl-CoA\nsynthetase", "succinate\ndehydrogenase",
+        "\nfumarase", "malate\ndehydrogenase", "citrate\nsynthase",
+        "aconitase\n", "aconitase\n"
     )
+)
 
 krebs_layout <- data.frame(
-    x = (cos(seq(2*pi,0, length = 10) + pi/2) * 1.25)[c(3:9, 1:2)], 
-    y = (sin(seq(2*pi,0, length = 10) + pi/2) * 1.25)[c(3:9, 1:2)], 
-    circular = F, 
-    name = c("isocitrate", "ketoglutarate", "succinyl-CoA", 
-             "succinate", "fumarate", "L-malate", 
-             "oxaloacetate", "citrate", "cis-aconitate"), 
-    .ggraph.orig_index = 1:9, 
-    .ggraph.index = 1:9)
+    x = (cos(seq(2 * pi, 0, length = 10) + pi / 2) * 1.25)[c(3:9, 1:2)],
+    y = (sin(seq(2 * pi, 0, length = 10) + pi / 2) * 1.25)[c(3:9, 1:2)],
+    circular = FALSE,
+    name = c(
+        "isocitrate", "ketoglutarate", "succinyl-CoA",
+        "succinate", "fumarate", "L-malate",
+        "oxaloacetate", "citrate", "cis-aconitate"
+    ),
+    .ggraph.orig_index = 1:9,
+    .ggraph.index = 1:9
+)
 
 graph_from_data_frame(d, directed = TRUE) |>
-    as_tbl_graph() |> 
+    as_tbl_graph() |>
     mutate(Legend = if_else(name %in% metabs, "Metabolite", "Enzyme")) |>
-    
-    ggraph(layout = krebs_layout) + 
-    
+    ggraph(layout = krebs_layout) +
+
     geom_edge_link(
-        arrow = arrow(length = unit(4, 'mm'), type = "closed"), 
+        arrow = arrow(length = unit(4, "mm"), type = "closed"),
         edge_width = 2.5, color = "black",
-        end_cap = circle(11.5, 'mm'), 
-        start_cap =  circle(11.25, 'mm')) + 
-  
+        end_cap = circle(11.5, "mm"),
+        start_cap = circle(11.25, "mm")
+    ) +
+
     geom_edge_link(
-        aes(label = vertices), 
-        arrow = arrow(length = unit(4, 'mm'), type = "closed"), 
+        aes(label = vertices),
+        arrow = arrow(length = unit(4, "mm"), type = "closed"),
         edge_width = 2, color = "dodgerblue",
-        end_cap = circle(11.5, 'mm'), 
-        start_cap =  circle(11.5, 'mm'),
-        angle_calc = "along", 
-        label_dodge = unit(c(rep(13, 5), rep(-13, 4)), "mm"), 
+        end_cap = circle(11.5, "mm"),
+        start_cap = circle(11.5, "mm"),
+        angle_calc = "along",
+        label_dodge = unit(c(rep(13, 5), rep(-13, 4)), "mm"),
         label_size = 3.15
-    ) + 
-    
-    geom_node_label(aes(label = name), 
-                    size = 3.5, fill = "orange", 
-                    show.legend = FALSE, label.padding = unit(0.4, "lines"), 
-                    nudge_x = c(0, 0.1, 0.05, -0.05, -0.1, 0, -0.1, 0, 0.1)) +
-  
-    coord_equal(xlim = c(-1.25, 1.25), ylim = c(-1, 1), 
-                ratio = 1, clip = "off") +
+    ) +
+
+    geom_node_label(aes(label = name),
+        size = 3.5, fill = "orange",
+        show.legend = FALSE, label.padding = unit(0.4, "lines"),
+        nudge_x = c(0, 0.1, 0.05, -0.05, -0.1, 0, -0.1, 0, 0.1)
+    ) +
+
+    coord_equal(
+        xlim = c(-1.25, 1.25), ylim = c(-1, 1),
+        ratio = 1, clip = "off"
+    ) +
     theme_graph()
 ```
 
@@ -138,12 +150,12 @@ $8\times9=72$ hypotheses. Figure \@ref(fig:all-v-all) A.
 
 colmat <- data.frame(
     name = c(
-        "aconitase", "isocitrate\ndehydrogenase", "ketoglutarate\ndehydrogenase", 
+        "aconitase", "isocitrate\ndehydrogenase", "ketoglutarate\ndehydrogenase",
         "succinyl-CoA\nsynthetase", "succinate\ndehydrogenase",
-        "fumarase",  "malate\ndehydrogenase", "citrate\nsynthase",
-        
-        "citrate","cis-aconitate",  "isocitrate","ketoglutarate", 
-        "succinyl-CoA",  "succinate","fumarate","L-malate", "oxaloacetate"    ),
+        "fumarase", "malate\ndehydrogenase", "citrate\nsynthase",
+        "citrate", "cis-aconitate", "isocitrate", "ketoglutarate",
+        "succinyl-CoA", "succinate", "fumarate", "L-malate", "oxaloacetate"
+    ),
     y = c(seq(9, 1, length.out = 8), 9:1),
     x = rep(c(0.7, 0.3), times = c(8, 9)),
     fill = rep(c("Enzyme", "Metabolite"), times = c(8, 9))
@@ -151,8 +163,8 @@ colmat <- data.frame(
 
 p_0 <- ggplot() +
     annotate("segment",
-             x = c(0.28, 0.72), y = 0.875,
-             xend = c(0.28, 0.72), yend = 9.125, color = "gray"
+        x = c(0.28, 0.72), y = 0.875,
+        xend = c(0.28, 0.72), yend = 9.125, color = "gray"
     ) +
     geom_text(
         data = colmat, aes(y = y, x = x, label = name), colour = "black",
@@ -162,8 +174,8 @@ p_0 <- ggplot() +
     scale_fill_manual(values = c(Metabolite = "orange", Enzyme = "dodgerblue")) +
     coord_cartesian(xlim = c(1 / 20, 19 / 20), clip = "off") +
     annotate("text",
-             label = c("Metabolites", "Enzymes"),
-             x = c(2 / 8, 6 / 8), y = 9.6, size = 4
+        label = c("Metabolites", "Enzymes"),
+        x = c(2 / 8, 6 / 8), y = 9.6, size = 4
     ) +
     ylab(NULL) +
     xlab(NULL) +
@@ -204,8 +216,6 @@ p_c <- p_0 + geom_segment(
     )
 
 (p_b | p_c) + plot_annotation(tag_levels = "A")
-
-
 ```
 ### Knowledge-informed analyis of specific interactions
 Often however, only a subset of these comparisons is scientifically relevant to
@@ -223,17 +233,18 @@ to the sparse graph in figure \@ref(fig:all-v-all) B can be seen in figure
 
 ```{r}
 #| krebs-biadj, echo=FALSE, fig.small=TRUE,
-#| fig.cap="Matrix representation of the constrained analysis of the Krebs 
+#| fig.cap="Matrix representation of the constrained analysis of the Krebs
 #| cycle, with cells marked with 'X' signifying tested feature-pairs."
-#| 
+#|
 
 krebs_edge_df <- anansi::krebs
 
-krebs_edge_df |> 
-       mutate(Enzyme = `levels<-`(Enzyme, 
-         gsub(x = levels(Enzyme), " ", replacement = "\n"))
-         ) |>
-ggplot() +
+krebs_edge_df |>
+    mutate(Enzyme = `levels<-`(
+        Enzyme,
+        gsub(x = levels(Enzyme), " ", replacement = "\n")
+    )) |>
+    ggplot() +
     geom_text(label = "X", x = I(0.5), y = I(0.5)) +
     facet_grid(Enzyme ~ Metabolite, switch = "y", space = "free_x") +
     theme_bw() +
@@ -246,7 +257,7 @@ ggplot() +
         strip.background.y = element_rect(fill = "dodgerblue", color = "black"),
         panel.spacing = unit(0.1, "lines")
     ) +
-  coord_equal(ratio = 1) +
+    coord_equal(ratio = 1) +
     labs(x = NULL, y = NULL)
 ```
 
@@ -425,8 +436,8 @@ bi_mat2 <- sparseMatrix(
     i = as.integer(Enzyme),
     j = as.integer(Metabolite),
     dimnames = list(
-       Enzyme = levels(Enzyme),
-       Metabolite = levels(Metabolite)
+        Enzyme = levels(Enzyme),
+        Metabolite = levels(Metabolite)
     )
 )
 

@@ -20,7 +20,9 @@ MultiFactor <- function(x, levels = NULL, drop.unmatched = TRUE) {
     if (validLinkDF(x)) x <- list(x = x)
     stopifnot("Input not correctly formatted." = all(
         vapply(as.list(x, use.names = FALSE),
-               validLinkDF, NA, USE.NAMES = FALSE)
+            validLinkDF, NA,
+            USE.NAMES = FALSE
+        )
     ))
     if (is(x, "MultiFactor")) {
         if (is.null(levels)) {
@@ -102,25 +104,27 @@ mapMultiFactor <- function(x, mode = "counts") {
 
     # mx is a vector of length i that determines the values of sparse Matrix.
     mx <- switch(mode,
-                 "counts" = unlist(
-                     lapply(x, function(y) {
-                         lapply(y, function(z) length(unique(z)))
-                     }),
-                     use.names = FALSE),
-                 "binary"  = 1L,
-                 "pattern" = TRUE)
+        "counts" = unlist(
+            lapply(x, function(y) {
+                lapply(y, function(z) length(unique(z)))
+            }),
+            use.names = FALSE
+        ),
+        "binary" = 1L,
+        "pattern" = TRUE
+    )
 
-return(
-    Matrix::sparseMatrix(
-        i = i,
-        j = j,
-        x = mx,
-        dimnames = list(
-            levels(i),
-            levels(j)
+    return(
+        Matrix::sparseMatrix(
+            i = i,
+            j = j,
+            x = mx,
+            dimnames = list(
+                levels(i),
+                levels(j)
+            )
         )
     )
-)
 }
 
 #' @importFrom Matrix which tcrossprod
@@ -130,16 +134,16 @@ checkMergers <- function(link, verbose = TRUE) {
     d <- mapMultiFactor(link, mode = "binary")
     dm <- rep(NROW(d), 2)
     m <- Matrix::which(.row(dm) < .col(dm) & Matrix::tcrossprod(d) >= 2L, TRUE)
-    if(NROW(m) == 0L) {
+    if (NROW(m) == 0L) {
         # No duplicates, all good.
         return(link)
     }
-    if(verbose) {
+    if (verbose) {
         message(
             "Duplicate id pairs detected in elements: ",
             apply(m, 1L, FUN = function(x) rownames(d)[x], simplify = FALSE),
             "\nAttempting to solve with rbind()...\n"
-            )
+        )
     }
     # Otherwise, attempt to fix
     mergeElements(link, d, m)
@@ -151,37 +155,43 @@ mergeElements <- function(link, d, m) {
     dupeList <- apply(m, 1L, FUN = function(x) rownames(d)[x], simplify = FALSE)
 
     full_match <- vapply(dupeList, function(x) {
-        Reduce(identical, lapply(link[x], function(y) { sort(colnames(y)) } ))
+        Reduce(identical, lapply(link[x], function(y) {
+            sort(colnames(y))
+        }))
     }, FUN.VALUE = FALSE)
-    if(!all(full_match)) {
-        stop("Cannot safely merge elements, names do not fully match.\n",
-             "Issue found in the following pairs of elements:\n",
-             apply(m[!full_match, , drop = FALSE], 1L,
-                   FUN = function(x) rownames(d)[x], simplify = FALSE))
+    if (!all(full_match)) {
+        stop(
+            "Cannot safely merge elements, names do not fully match.\n",
+            "Issue found in the following pairs of elements:\n",
+            apply(m[!full_match, , drop = FALSE], 1L,
+                FUN = function(x) rownames(d)[x], simplify = FALSE
+            )
+        )
     }
     # Collect all duplicates, they could be different sets of duplications.
     all_dupes <- unique(c(m))
-    dupe_set  <- vector("list", 1L)
+    dupe_set <- vector("list", 1L)
     # as long as we have unaccounted duplicates, add to the dupe set.
     i <- 1L
-    while(length(all_dupes) > 0 ){
-        xx  <- all_dupes[1]
-        mx  <- m[m[, 1] == xx | m[, 2] == xx, ]
+    while (length(all_dupes) > 0) {
+        xx <- all_dupes[1]
+        mx <- m[m[, 1] == xx | m[, 2] == xx, ]
         x_dupes <- unique(c(mx))
         dupe_set[[i]] <- x_dupes
         i <- 1 + 1L
         # Remove
-        all_dupes <- all_dupes[! all_dupes %in% x_dupes]
+        all_dupes <- all_dupes[!all_dupes %in% x_dupes]
     }
-    #merge and replace
+    # merge and replace
     index_merge <- vector("list", length(dupe_set))
-    for(i in seq_along(dupe_set)) {
+    for (i in seq_along(dupe_set)) {
         index_merge[[i]] <- unique(do.call(
             rbind.data.frame,
             c(
                 link[dupe_set[[i]]],
-                make.row.names = FALSE)
-            ))
+                make.row.names = FALSE
+            )
+        ))
     }
     names(index_merge) <- paste0("merged_", seq_along(index_merge))
     link <- c(link[-unique(c(m))], index_merge)

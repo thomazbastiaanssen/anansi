@@ -47,8 +47,10 @@ randomWeb <- function(n_samples = 10, n_reps = 1L,
     # All missing: return full random Web
     if (all(c(is.null(tableY), is.null(tableX), is.null(dictionary)))) {
         return(
-            randomWebFull(n_samples, n_reps,
-                          n_features_x, n_features_y, density)
+            randomWebFull(
+                n_samples, n_reps,
+                n_features_x, n_features_y, density
+            )
         )
     }
     # Dictionary missing: make random fitting dictionary, return filled Web
@@ -119,24 +121,24 @@ krebsDemoWeb <- function(n_samples = 100, n_reps = 4L) {
     int_pr <- pnorm(metadata(w)$score_a)
 
     # Positive association aconitase ~ citrate
-    tableY(w)[,1L] <- tableY(w)[,1L] * 0.25 +
-        tableX(w)[,1L] * 0.75
+    tableY(w)[, 1L] <- scale(tableY(w)[, 1L] * 0.25 +
+        tableX(w)[, 1L] * 0.75)
     # Negative association aconitase ~ cis-aconitate
-    tableX(w)[,2L] <- tableX(w)[,2L] * 0.25 +
-        tableY(w)[,1L] * -0.75
+    tableX(w)[, 2L] <- scale(tableX(w)[, 2L] * 0.25 +
+        tableY(w)[, 1L] * -0.75)
     # Disjointed association isocitrate dehydrogenase ~ isocitrate
-    tableY(w)[,2L] <- (tableY(w)[,2L] * 0.25 +
-        tableX(w)[,3L] * 0.75)
-    tableY(w)[int_ab,2L] = tableY(w)[int_ab,2L] * -1L
+    tableY(w)[, 2L] <- scale(tableY(w)[, 2L] * 0.25 +
+        tableX(w)[, 3L] * 0.75)
+    tableY(w)[int_ab, 2L] <- tableY(w)[int_ab, 2L] * -1L
     # Disjointed association ketoglutarate dehydrogenase ~ ketoglutarate
-    tableY(w)[,3L] <- tableY(w)[,3L] * 0.25 +
-        tableX(w)[,4L] * 0.75 * metadata(w)$score_a
+    tableY(w)[, 3L] <- scale(tableY(w)[, 3L] * 0.25 +
+        tableX(w)[, 4L] * 0.75 * metadata(w)$score_a)
     # Emergent association succinyl-CoA synthetase ~ succinyl-CoA
-    tableY(w)[,4L] <- tableY(w)[,4L] * (0.25 + 0.50 * !int_ab) +
-        tableX(w)[,5L] * (0.25 + 0.50 * int_ab)
+    tableY(w)[, 4L] <- scale(tableY(w)[, 4L] * (0.25 + 0.50 * !int_ab) +
+        tableX(w)[, 5L] * (0.25 + 0.50 * int_ab))
     # Emergent association succinate dehydrogenase ~ succinate
-    tableY(w)[,5L] <- tableY(w)[,5L] * int_pr +
-        tableX(w)[,6L] * (1-int_pr)
+    tableY(w)[, 5L] <- scale(tableY(w)[, 5L] * int_pr +
+        tableX(w)[, 6L] * (1 - int_pr))
 
     return(w)
 }
@@ -150,10 +152,11 @@ krebsDemoWeb <- function(n_samples = 100, n_reps = 4L) {
 #' @noRd
 #'
 randomWebFull <- function(n_samp, n_reps, n_x, n_y, density) {
-    rn <- paste0("sample_",
-              rep(seq_len(n_samp), each = n_reps),
-              "_",
-              seq_len(n_reps)
+    rn <- paste0(
+        "sample_",
+        rep(seq_len(n_samp), each = n_reps),
+        "_",
+        seq_len(n_reps)
     )
     tableY <- matrix(
         data = rnorm(n_y * n_samp * n_reps),
@@ -182,24 +185,31 @@ randomWebFull <- function(n_samp, n_reps, n_x, n_y, density) {
 #'
 randomWebTab <- function(n_samp, n_reps, dictionary, metadata) {
     d <- dim(dictionary)
-    rn <- paste0("sample_",
-                 rep(seq_len(n_samp), each = n_reps),
-                 "_",
-                 seq_len(n_reps)
+    rn <- paste0(
+        "sample_",
+        rep(seq_len(n_samp), each = n_reps),
+        "_",
+        seq_len(n_reps)
     )
     tableY <- matrix(
         data = rnorm(d[1] * n_samp * n_reps),
         nrow = n_samp * n_reps, ncol = d[1],
-        dimnames = c(list(
-            sample_id = rn),
-            dimnames(dictionary)[1])
+        dimnames = c(
+            list(
+                sample_id = rn
+            ),
+            dimnames(dictionary)[1]
+        )
     )
     tableX <- matrix(
         data = rnorm(d[2] * n_samp * n_reps),
         nrow = n_samp * n_reps, ncol = d[2],
-        dimnames = c(list(
-            sample_id = rn),
-            dimnames(dictionary)[2])
+        dimnames = c(
+            list(
+                sample_id = rn
+            ),
+            dimnames(dictionary)[2]
+        )
     )
     names(dimnames(tableX))[2] <- names(dimnames(dictionary))[2]
     metadata <- randomWebMetadata(tableY, n_samp, n_reps)
@@ -246,20 +256,22 @@ randomWebDic <- function(tableY, tableX, density, metadata) {
 #' @noRd
 #'
 randomWebMetadata <- function(table, n_samples = NULL, n_reps = NULL) {
-    if(is.null(n_samples)) {
+    if (is.null(n_samples)) {
         n_samples <- NROW(table)
         n_reps <- 1L
-        }
+    }
     m <- data.frame(
         sample_id = paste0("sample_", rep(seq_len(n_samples), each = n_reps)),
-        repeated  = paste0("rep_", seq_len(n_reps)),
-        group_ab  = rep(sample(c("a", "b"), n_samples,
-                               replace = TRUE), each = n_reps),
-        subtype   = rep(sample(c("x", "y", "z"), n_samples,
-                               replace = TRUE), each = n_reps),
-        score_a   = rnorm(n_samples),
-        score_b   = rnorm(n_samples),
-        score_c   = rnorm(n_samples),
+        repeated = paste0("rep_", seq_len(n_reps)),
+        group_ab = rep(sample(c("a", "b"), n_samples,
+            replace = TRUE
+        ), each = n_reps),
+        subtype = rep(sample(c("x", "y", "z"), n_samples,
+            replace = TRUE
+        ), each = n_reps),
+        score_a = rnorm(n_samples),
+        score_b = rnorm(n_samples),
+        score_c = rnorm(n_samples),
         row.names = row.names(table)
     )
     return(m)

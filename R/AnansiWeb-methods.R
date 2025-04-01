@@ -116,14 +116,14 @@ setReplaceMethod("metadata", "AnansiWeb", def = function(
 #' @export
 #' @usage NULL
 #'
-setMethod("tableY", "AnansiWeb", def = function(x, ...) x@tableY )
+setMethod("tableY", "AnansiWeb", def = function(x, ...) x@tableY)
 
 #' @rdname AnansiWeb
 #' @export
 #' @aliases tableX tableX,AnansiWeb-method
 #' @usage NULL
 #'
-setMethod("tableX", "AnansiWeb", def = function(x, ...) x@tableX )
+setMethod("tableX", "AnansiWeb", def = function(x, ...) x@tableX)
 
 #' @rdname AnansiWeb
 #' @aliases `dictionary` dictionary,AnansiWeb-method

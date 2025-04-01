@@ -202,9 +202,10 @@ setReplaceMethod("[[", c("MultiFactor", "ANY", "ANY"), function(
 #' @usage NULL
 #'
 setMethod("c", "MultiFactor", function(x, ...) {
-
     args <- list(...)
-    if (!length(args)) { return(x) }
+    if (!length(args)) {
+        return(x)
+    }
 
     ind <- Reduce(mergeMultiFactorInds, list(x@index, ...))
 
@@ -353,10 +354,12 @@ droplevels.MultiFactor <- function(x, exclude = NULL, select = NULL, ...) {
 #' @export
 #' @usage NULL
 #'
-setMethod("droplevels", "MultiFactor",
-          function(x, exclude = NULL, select = NULL, ...) {
-    droplevels.MultiFactor(x, exclude, select, ...)
-})
+setMethod(
+    "droplevels", "MultiFactor",
+    function(x, exclude = NULL, select = NULL, ...) {
+        droplevels.MultiFactor(x, exclude, select, ...)
+    }
+)
 
 #' S3/S4 combo for levels.
 #' @export
@@ -494,8 +497,8 @@ mergeMultiFactorLvs <- function(x, y) {
     y <- levels(y)
     i <- intersect(names(x), names(y))
     x[i] <- union(x[i], y[i])
-    return(c(x, y[! names(y) %in% i]))
-    }
+    return(c(x, y[!names(y) %in% i]))
+}
 
 
 
