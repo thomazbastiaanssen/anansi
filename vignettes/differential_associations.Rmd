@@ -101,8 +101,10 @@ ggplot(full_df) +
     aes(x = aconitase, y = cis.aconitate) +
     labs(y = "cis-aconitate") +
     facet_wrap(~"cis-aconitate") +
-    plot_layout(axes = "collect", axis_titles = "collect") &
-
+    plot_layout(axes = "collect", axis_titles = "collect")  +
+  plot_annotation(
+    subtitle = "Both citrate and cis-aconitate ~ aconitase dehydrogenase." 
+    ) &
     geom_point(shape = 21, fill = "#ffffbf") &
 
     coord_equal(ratio = 1, xlim = c(-2.5, 2.5), ylim = c(-2.5, 2.5)) &
@@ -147,7 +149,10 @@ diff_df <- data.frame(
 ggplot(diff_df) +
     aes(x = isocitrate.dehydrogenase, y = isocitrate, fill = group_ab) +
     facet_wrap(~group_ab, ) +
-    labs(x = "isocitrate dehydrogenase") +
+    labs(x = "isocitrate dehydrogenase", 
+         subtitle = paste0("isocitrate ~ isocitrate dehydrogenase, ", 
+                           "by category (treatment).")
+         ) +
     geom_point(shape = 21, show.legend = FALSE) +
     scale_fill_manual(values = c(
         "Treatment a" = "#d73027",
@@ -161,18 +166,21 @@ ggplot(diff_df) +
 
 ```{r disj_cont, echo=FALSE, fig.dim=c(10,4)} 
 ggplot(diff_df) +
-    aes(x = ketoglutarate.dehydrogenase, y = ketoglutarate, fill = score_a) +
+    aes(x = ketoglutarate.dehydrogenase, 
+        y = ketoglutarate, 
+        fill = pnorm(score_a)) +
     facet_grid(~score_a_cat) +
     geom_point(shape = 21, show.legend = FALSE) +
-    scale_fill_gradientn(
-        colors = c(
-            "#a50026", "#f46d43", "#ffffbf",
-            "#ffffbf", "#74add1", "#313695"
-        ),
-        values = c(0, 0.42, 0.49, 5.1, 0.58, 1),
-    ) +
-    labs(x = "ketoglutatate dehydrogenase") +
+     scale_fill_gradientn(name = "Example health index",
+        colors = c("#a50026", "#f46d43", "#ffffbf", "#74add1", "#313695")
+        ) +
+    labs(x = "ketoglutatate dehydrogenase", 
+         subtitle = paste0("ketoglutarate ~ ketoglutarate dehydrogenase ", 
+                           "stratified by a third continuous variable.")
+         ) +
     theme_bw() +
+    guides(fill = guide_colourbar(position = "bottom", 
+                                      legend.direction = "horizontal")) +
     coord_equal(ratio = 1, xlim = c(-2.5, 2.5), ylim = c(-2.5, 2.5))
 ```
 
@@ -195,7 +203,10 @@ ggplot(diff_df) +
         "Treatment a" = "#d73027",
         "Treatment b" = "#2166ac"
     )) +
-    labs(x = "succinyl-CoA synthetase", y = "succinyl-CoA") +
+    labs(x = "succinyl-CoA synthetase", y = "succinyl-CoA", 
+         subtitle = paste0("succinyl-CoA ~ succinyl-CoA synthetase ", 
+                           "by category (treatment).")
+         ) +
     theme_bw() +
     coord_equal(ratio = 1, xlim = c(-2.5, 2.5), ylim = c(-2.5, 2.5))
 ```
@@ -204,19 +215,19 @@ ggplot(diff_df) +
 
 ```{r emerg_cont, echo=FALSE, fig.dim=c(10,4)}
 ggplot(diff_df) +
-    aes(x = succinate.dehydrogenase, y = succinate, fill = score_a) +
+    aes(x = succinate.dehydrogenase, y = succinate, fill = pnorm(score_a)) +
     facet_grid(~score_a_cat) +
     geom_point(shape = 21, show.legend = FALSE) +
-    scale_fill_gradientn(
-        colors = c(
-            "#a50026", "#f46d43", "#ffffbf",
-            "#ffffbf", "#74add1", "#313695"
-        ),
-        values = c(0, 0.42, 0.49, 5.1, 0.58, 1),
-    ) +
-    labs(x = "succinate dehydrogenase") +
+    scale_fill_gradientn(name = "Example health index",
+        colors = c("#a50026", "#f46d43", "#ffffbf", "#74add1", "#313695")
+        ) +
+    labs(x = "succinate dehydrogenase", 
+         subtitle = paste0("succinate ~ succinate dehydrogenase ", 
+                           "stratified by a third continuous variable.")
+         ) +
     theme_bw() +
     coord_equal(ratio = 1, xlim = c(-2.5, 2.5), ylim = c(-2.5, 2.5))
+
 ```
 
 # Repeated measures {#sec-da-3}
