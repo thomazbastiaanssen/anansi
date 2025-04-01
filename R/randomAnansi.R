@@ -132,8 +132,8 @@ krebsDemoWeb <- function(n_samples = 100, n_reps = 4L) {
     tableY(w)[,3L] <- tableY(w)[,3L] * 0.25 +
         tableX(w)[,4L] * 0.75 * metadata(w)$score_a
     # Emergent association succinyl-CoA synthetase ~ succinyl-CoA
-    tableY(w)[,4L] <- tableY(w)[,4L] * (0.25 + 0.50 * int_ab) +
-        tableX(w)[,5L] * (0.25 + 0.50 * !int_ab)
+    tableY(w)[,4L] <- tableY(w)[,4L] * (0.25 + 0.50 * !int_ab) +
+        tableX(w)[,5L] * (0.25 + 0.50 * int_ab)
     # Emergent association succinate dehydrogenase ~ succinate
     tableY(w)[,5L] <- tableY(w)[,5L] * int_pr +
         tableX(w)[,6L] * (1-int_pr)

@@ -73,7 +73,7 @@ For example, if our input formula was:
 update.formula(y ~ x * (group_ab + score_a), . ~ .)
 ```
 The variables that constitute the 'full' effect of x would be: 
-`x + x:a + x:b + x:c`. 
+`x + x:group_ab + x:score_a`. 
 
 ```{r plot_full, echo=FALSE, warning=FALSE, message=FALSE}
 library(patchwork)
@@ -87,11 +87,16 @@ full_df <- data.frame(
 
 ggplot(full_df) + 
   aes(x = aconitase, y = citrate) + 
+  facet_wrap( ~ "citrate")  +
+
   ggplot(full_df) + 
   aes(x = aconitase, y = cis.aconitate) + 
+  facet_wrap( ~ "cis-aconitate") +
+  
   plot_layout(axes = 'collect', axis_titles = 'collect') &
+
   scale_y_continuous(limits = c(-2.5, 2.5)) &
-  geom_point(shape = 21) &
+  geom_point(shape = 21, fill = "#ffffbf") &
   theme_bw()
 ```
 
@@ -108,66 +113,19 @@ association paradigm introduced in the context of proportionality \citep{diff_pr
 Briefly, disjointed associations refer to the scenario where the \textit{slope} 
 of an association is dependent on a variable. On the other hand, emergent 
 associations refer to the scenario where the \textit{strength} of the scenario 
-is dependent on a variable. See figure \@ref(fig:fig-diffab) for an illustrated 
-example. 
-
-An example of differential associations between hypothetical features Y and X. 
-In both cases, phenotype C illustrates the differential association compared to 
-phenotypes A \& B. Disjointed associations describe the scenario where there is 
-a detectable association in all cases, but the quality of that association 
-differs. Emergent associations describe the case where an association can be 
-detected in one case but not in another. 
-
-```{r} 
-#| fig-diffab, fig.wide=TRUE, warning=FALSE, message=FALSE, echo=FALSE,
-#| fig.cap="An example of differential associations between hypothetical
-#| features Y and X. In both cases, phenotype C illustrates the differential
-#| association compared to phenotypes A & B. Disjointed associations describe
-#| the scenario where there is a detectable association in all cases, but the
-#| quality of the association differs. Emergent associations describe the case
-#| where an association can be detected in one case but not in another."
-
-set.seed(1)
-a <- data.frame(
-    Y = c(1:10, (1:10) * 3 / 2, 10:1) + runif(30, -1, 1),
-    X = rep(1:10, 3) + runif(30, -1, 1),
-    Phenotype = rep(LETTERS[1:3], each = 10),
-    plot = "Disjointed Association"
-)
-
-b <- data.frame(
-    Y = c(1:10, (1:10) * 3 / 2, (1:10) * 5 / 4) + 
-      c(runif(20, -1, 1), runif(10, -7, 7)),
-    X = rep(1:10, 3) + c(runif(20, -1, 1), runif(10, -7, 7)),
-    Phenotype = rep(LETTERS[1:3], each = 10),
-    plot = "Emergent Association"
-)
-
-ggplot(rbind(a, b)) +
-    aes(x = X, y = Y, fill = Phenotype, colour = Phenotype) +
-    geom_point(size = 3, shape = 21, colour = "black") +
-    geom_smooth(method = "lm", se = FALSE, 
-                linetype = "dashed", show.legend = FALSE) +
-    facet_wrap(~plot) +
-    theme_bw()
-```
-
-The features Y and X are from different data sets and differential associations 
-can be expressed in the style of R classical linear models: 
-$lm(Y \sim X \underline{\times Phenotype})$ and 
-$lm( abs( residuals( lm(Y \sim X)) ) \sim \underline{Phenotype})$ for disjointed 
-and emergent associations, respectively. 
-
-### ref `propr` paper.
+is dependent on a variable. 
 
 ## Disjointed associations
-Overview
+Disjointed associations describe the scenario where there is 
+a detectable association in all cases, but the quality of that association 
+differs. 
 
 ### Interpretation:
-Disjointed associations describe the situation where the **slope** of an association is explained by a term. We estimate this as interaction terms with `x`, namely, drop `x:a`, `x:b`, `x:c`. 
-```{r disj, echo=FALSE} 
-l <- NROW(metadata(web))
+Disjointed associations describe the situation where there is a detectable association in all cases, but the quality of that association, the **slope**, changes in a manner explained by a term. We estimate this as interaction terms with `x`. In our example we have two such terms, namely `x:group_ab` and `x:score_a`. 
 
+### Disjointed associations with categorical variables
+
+```{r disj_cat, echo=FALSE} 
 diff_df <- data.frame(
   group_ab      = metadata(web)$group_ab, 
   score_a_cat   = cut(metadata(web)$score_a, 
@@ -186,16 +144,30 @@ diff_df <- data.frame(
   )
 
 ggplot(diff_df) + 
-  aes(x = isocitrate.dehydrogenase, y = isocitrate) + 
-  facet_wrap(~group_ab, scales = "free") +
+  aes(x = isocitrate.dehydrogenase, y = isocitrate, fill = group_ab) + 
+  facet_wrap(~group_ab) +
+
+  geom_point(shape = 21, show.legend = FALSE) +
+  scale_fill_manual(values = c("a" = "#d73027", 
+                               "b" = "#2166ac")) + 
+  theme_bw() + 
+  coord_equal(ratio = 1)
+```
+
+### Disjointed associations with continuous variables
+
+```{r disj_cont, echo=FALSE} 
 
   ggplot(diff_df) + 
-  aes(x = ketoglutarate.dehydrogenase, y = ketoglutarate) + 
-  facet_grid(~score_a_cat, scales = "free") +
+  
+  aes(x = ketoglutarate.dehydrogenase, y = ketoglutarate, fill = score_a) + 
+  facet_grid(~score_a_cat) +
+  
+  geom_point(shape = 21, show.legend = FALSE) +
+    scale_fill_gradient2(low = "#a50026", mid = "#ffffbf", high = "#313695", ) +
 
-  plot_layout(axes = 'collect', axis_titles = 'collect', ncol = 1) &
-  geom_point(shape = 21) &
-  theme_bw()
+  theme_bw() + 
+  coord_equal(ratio = 1)
 ```
 
 ### compare to `lm()` outcome.
@@ -205,28 +177,39 @@ ggplot(diff_df) +
 ```
 
 ## Emergent association
-Overview
+Emergent associations describe the situation where the **strength** of an association is explained by a term interacting with x. We again estimate this as interaction terms with `x`. In our example we have two such terms, namely `x:group_ab` and `x:score_a`. 
 
-### Interpretation:
-Emergent associations describe the situation where the **strength** of an association is explained by a term. 
-```{r emerg, echo=FALSE}
+### Emergent associations with categorical variables
 
-succinate_resids <- (residuals(lm(succinate ~ 
-                                       succinate.dehydrogenase + score_a, 
-                            data = diff_df, na.action = na.exclude)))
+```{r emerg_cat, echo=FALSE}
 
 ggplot(diff_df) + 
-  aes(x = succinyl.CoA.synthetase, y = succinyl.CoA) + 
-  facet_wrap(~group_ab, scales = "free") +
-
-  ggplot(diff_df) + 
-  aes(x = succinate.dehydrogenase, y = succinate) +
-  facet_grid(~score_a_cat) +
+  aes(x = succinyl.CoA.synthetase, y = succinyl.CoA, fill = group_ab) + 
+  facet_wrap(~group_ab) +
+ 
+  geom_point(shape = 21, show.legend = FALSE) +
+   scale_fill_manual(values = c("a" = "#d73027", 
+                               "b" = "#2166ac")) + 
   
-  plot_layout(axes = 'collect', axis_titles = 'collect', ncol = 1) &
-  geom_point(shape = 21) &
-  theme_bw()
+  theme_bw() + 
+  coord_equal(ratio = 1)
 ```
+
+### Emergent associations with continuous variables
+
+```{r emerg_cont, echo=FALSE}
+
+ggplot(diff_df) + 
+  aes(x = succinate.dehydrogenase, y = succinate, fill = score_a) +
+  facet_grid(~score_a_cat) +
+
+  geom_point(shape = 21, show.legend = FALSE) +
+    scale_fill_gradient2(low = "#a50026", mid = "#ffffbf", high = "#313695") +
+
+  theme_bw() + 
+  coord_equal(ratio = 1)
+```
+
 # Repeated measures with `Error()` {#sec-da-3}
 
 ## Random slopes through `Error()`
