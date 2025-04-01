@@ -17,7 +17,12 @@ body {
 text-align: justify}
 </style>
 
+```{r style, echo = FALSE, results = 'asis'}
+  BiocStyle::markdown()
+```
+    
 ```{r setup, include = FALSE}
+
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
@@ -44,6 +49,7 @@ control over these models through the `formula` argument in `anansi(). `
 
 ## Setup 
 We will use the same example as in [the vignette on adjacency matrices](https://thomazbastiaanssen.github.io/anansi/articles/adjacency_matrices.html). There, we also explain for more about adjacency matrices, `AnansiWeb` class and using `weaveWeb()`. Please note that the data used in this example have been generated with statistical associations spiked in for this vignette. 
+
 ```{r formula-web-full} 
 # Setup AnansiWeb with some dummy data
 library(anansi)
@@ -52,6 +58,7 @@ web <- krebsDemoWeb()
 
 ## Formula syntax
 For each of the feature-pairs that should be assessed, anansi fits similarly structured linear models. Anansi supports complex linear models as well as longitudinal models using the R formula syntax. The most basic model in anansi is:
+
 ```{r,echo=FALSE}
 y ~ x
 ```
@@ -82,9 +89,18 @@ out <- anansi(web,
     groups = "group_ab"
 )
 ```
-Note that anansi tells us how how the rewritten model looks. 
+Note that `anansi()` will tell us how the rewritten model looks if we don't set
+`verbose` to FALSE. 
 
-```{r plot_full, echo=FALSE, warning=FALSE, message=FALSE, fig.dim=c(6,3)}
+The full model simply estimates the total association between `y` and `x`, 
+making interpretation straightforward. We can imagine these associations to be
+positive or negative \@ref(fig:plot_full). 
+
+```{r}
+#| plot_full, echo=FALSE, warning=FALSE, message=FALSE, fig.dim=c(6,3), 
+#| out.width="80%", 
+#| fig.cap="Figure 1. Both citrate and cis-aconitate ~ aconitase dehydrogenase, sequentially." 
+#| 
 library(patchwork)
 library(ggplot2)
 
@@ -103,7 +119,7 @@ ggplot(full_df) +
     facet_wrap(~"cis-aconitate") +
     plot_layout(axes = "collect", axis_titles = "collect")  +
   plot_annotation(
-    subtitle = "Both citrate and cis-aconitate ~ aconitase dehydrogenase." 
+    subtitle = 
     ) &
     geom_point(shape = 21, fill = "#ffffbf") &
 
@@ -121,8 +137,15 @@ association paradigm introduced in the context of proportionality \citep{diff_pr
 Disjointed associations describe the situation where there is a detectable association in all cases, but the quality of that association, the **slope**, changes in a manner explained by a term. We estimate this as interaction terms with `x`. In our example we have two such terms, namely `x:group_ab` and `x:score_a`. 
 
 ### Disjointed associations: Categorical variables
+The figure below shows how such a disjointed association might look. We can
+imagine some sort of a pharmacological treatment that alters enzymatic 
+conversion rates to the point where association between the enzyme and 
+the metabolite *flips*. \@ref(fig:disj_cat)
 
-```{r disj_cat, echo=FALSE, fig.dim=c(6,3)} 
+```{r}
+#| disj_cat, echo=FALSE, fig.dim=c(6,3), out.width="80%", 
+#| fig.cap="isocitrate ~ isocitrate dehydrogenase by category (treatment)."
+#| 
 diff_df <- data.frame(
     group_ab = paste0("Treatment ", metadata(web)$group_ab),
     score_a = metadata(web)$score_a,
@@ -149,22 +172,24 @@ diff_df <- data.frame(
 ggplot(diff_df) +
     aes(x = isocitrate.dehydrogenase, y = isocitrate, fill = group_ab) +
     facet_wrap(~group_ab, ) +
-    labs(x = "isocitrate dehydrogenase", 
-         subtitle = paste0("isocitrate ~ isocitrate dehydrogenase, ", 
-                           "by category (treatment).")
-         ) +
+    labs(x = "isocitrate dehydrogenase") +
     geom_point(shape = 21, show.legend = FALSE) +
     scale_fill_manual(values = c(
         "Treatment a" = "#d73027",
         "Treatment b" = "#2166ac"
     )) +
     theme_bw() +
-    coord_equal(ratio = 1, xlim = c(-2.5, 2.5), ylim = c(-2.5, 2.5))
+    coord_equal(ratio = 1, xlim = c(-2.5, 2.5), ylim = c(-2.5, 2.5)) 
 ```
 
 ### Disjointed associations: Continuous variables
+Similarly, we could imagine that this flip is not binary or otherwise step-wise,
+but rather the result of a continuous variable. \@ref(fig:disj_cont)
 
-```{r disj_cont, echo=FALSE, fig.dim=c(10,4)} 
+```{r}
+#| disj_cont, echo=FALSE, fig.dim=c(10,3), 
+#| fig.cap="ketoglutarate ~ ketoglutarate dehydrogenase stratified by a third continuous variable."
+#| 
 ggplot(diff_df) +
     aes(x = ketoglutarate.dehydrogenase, 
         y = ketoglutarate, 
@@ -174,27 +199,28 @@ ggplot(diff_df) +
      scale_fill_gradientn(name = "Example health index",
         colors = c("#a50026", "#f46d43", "#ffffbf", "#74add1", "#313695")
         ) +
-    labs(x = "ketoglutatate dehydrogenase", 
-         subtitle = paste0("ketoglutarate ~ ketoglutarate dehydrogenase ", 
-                           "stratified by a third continuous variable.")
-         ) +
+    labs(x = "ketoglutatate dehydrogenase") +
     theme_bw() +
     guides(fill = guide_colourbar(position = "bottom", 
                                       legend.direction = "horizontal")) +
-    coord_equal(ratio = 1, xlim = c(-2.5, 2.5), ylim = c(-2.5, 2.5))
-```
-
-### compare to `lm()` outcome.
-
-```{r lm-disj} 
+    coord_equal(ratio = 1, xlim = c(-2.5, 2.5), ylim = c(-2.5, 2.5)) 
+     
 ```
 
 ## Emergent association
 Emergent associations describe the situation where the **strength** of an association is explained by a term interacting with x. We again estimate this as interaction terms with `x`. In our example we have two such terms, namely `x:group_ab` and `x:score_a`. 
 
 ### Emergent associations: Categorical variables
+The figure below shows how such a emergent association might look. We can
+imagine some sort of a pharmacological treatment that can completely shut down
+a biochemical pathway. As a result, the members of that pathway, which would 
+show a consistently strong association under physiological conditions, could 
+go *out of sync*. \@ref(fig:emerg_cat)
 
-```{r emerg_cat, echo=FALSE, fig.dim=c(6,3)}
+```{r}
+#| emerg_cat, echo=FALSE, fig.dim=c(6,3), out.width="80%",
+#| fig.cap="succinyl-CoA ~ succinyl-CoA synthetase by categorical variable (Treatment)."
+#| 
 ggplot(diff_df) +
     aes(x = succinyl.CoA.synthetase, y = succinyl.CoA, fill = group_ab) +
     facet_wrap(~group_ab) +
@@ -203,17 +229,22 @@ ggplot(diff_df) +
         "Treatment a" = "#d73027",
         "Treatment b" = "#2166ac"
     )) +
-    labs(x = "succinyl-CoA synthetase", y = "succinyl-CoA", 
-         subtitle = paste0("succinyl-CoA ~ succinyl-CoA synthetase ", 
-                           "by category (treatment).")
-         ) +
+    labs(x = "succinyl-CoA synthetase", y = "succinyl-CoA") +
     theme_bw() +
-    coord_equal(ratio = 1, xlim = c(-2.5, 2.5), ylim = c(-2.5, 2.5))
+    coord_equal(ratio = 1, xlim = c(-2.5, 2.5), ylim = c(-2.5, 2.5)) 
+
 ```
 
 ### Emergent associations: Continuous variables
+Similarly, we could imagine situations where this loss in association strength 
+happens gradually, rather than in a binary manner. For example, perhaps there is
+a strong association between a metabolite and an enzyme that metabolizes it 
+under physiological conditions, but this association weakens along with some health index or environmental variable. \@ref(fig:emerg_cont)
 
-```{r emerg_cont, echo=FALSE, fig.dim=c(10,4)}
+```{r}
+#| emerg_cont, echo=FALSE, fig.dim=c(10,3), 
+#| fig.cap="succinate ~ succinate dehydrogenase stratified by a third continuous variable."
+#| 
 ggplot(diff_df) +
     aes(x = succinate.dehydrogenase, y = succinate, fill = pnorm(score_a)) +
     facet_grid(~score_a_cat) +
@@ -221,13 +252,9 @@ ggplot(diff_df) +
     scale_fill_gradientn(name = "Example health index",
         colors = c("#a50026", "#f46d43", "#ffffbf", "#74add1", "#313695")
         ) +
-    labs(x = "succinate dehydrogenase", 
-         subtitle = paste0("succinate ~ succinate dehydrogenase ", 
-                           "stratified by a third continuous variable.")
-         ) +
+    labs(x = "succinate dehydrogenase") +
     theme_bw() +
     coord_equal(ratio = 1, xlim = c(-2.5, 2.5), ylim = c(-2.5, 2.5))
-
 ```
 
 # Repeated measures {#sec-da-3}

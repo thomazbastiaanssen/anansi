@@ -80,7 +80,18 @@
 body {
 text-align: justify}
 </style>
-<div class="section level2">
+<script type="text/javascript">
+document.addEventListener("DOMContentLoaded", function() {
+  document.querySelector("h1").className = "title";
+});
+</script><script type="text/javascript">
+document.addEventListener("DOMContentLoaded", function() {
+  var links = document.links;  
+  for (var i = 0, linksLength = links.length; i < linksLength; i++)
+    if (links[i].hostname != window.location.hostname)
+      links[i].target = '_blank';
+});
+</script><div class="section level2">
 <h2 class="unnumbered" id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
 <p>A common challenge in integrative analysis of high-dimensional data
@@ -163,8 +174,18 @@ that could interact with <code>x</code> should be provided in the
 <span><span class="co">## ~ x + group_ab + score_a + x:group_ab + x:score_a</span></span></code></pre>
 <pre><code><span><span class="co">## Running correlations for the following groups:</span></span>
 <span><span class="co">##  a, b</span></span></code></pre>
-<p>Note that anansi tells us how how the rewritten model looks.</p>
-<p><img src="differential_associations_files/figure-html/plot_full-1.png" width="576"></p>
+<p>Note that <code><a href="../reference/anansi.html">anansi()</a></code> will tell us how the rewritten model
+looks if we don’t set <code>verbose</code> to FALSE.</p>
+<p>The full model simply estimates the total association between
+<code>y</code> and <code>x</code>, making interpretation
+straightforward. We can imagine these associations to be positive or
+negative @ref{fig:plot_full}.</p>
+<div class="figure">
+<img src="differential_associations_files/figure-html/plot_full-1.png" alt="Figure 1. Both citrate and cis-aconitate ~ aconitase dehydrogenase, sequentially." width="80%"><p class="caption">
+Figure 1. Both citrate and cis-aconitate ~ aconitase dehydrogenase,
+sequentially.
+</p>
+</div>
 </div>
 </div>
 </div>
@@ -187,16 +208,27 @@ our example we have two such terms, namely <code>x:group_ab</code> and
 <div class="section level4">
 <h4 id="disjointed-associations-categorical-variables">Disjointed associations: Categorical variables<a class="anchor" aria-label="anchor" href="#disjointed-associations-categorical-variables"></a>
 </h4>
-<p><img src="differential_associations_files/figure-html/disj_cat-1.png" width="576"></p>
+The figure below shows how such a disjointed association might look. We
+can imagine some sort of a pharmacological treatment that alters
+enzymatic conversion rates to the point where association between the
+enzyme and the metabolite <em>flips</em>.
+<div class="figure">
+<img src="differential_associations_files/figure-html/disj_cat-1.png" alt="isocitrate ~ isocitrate dehydrogenase by category (treatment)." width="80%"><p class="caption">
+isocitrate ~ isocitrate dehydrogenase by category (treatment).
+</p>
+</div>
 </div>
 <div class="section level4">
 <h4 id="disjointed-associations-continuous-variables">Disjointed associations: Continuous variables<a class="anchor" aria-label="anchor" href="#disjointed-associations-continuous-variables"></a>
 </h4>
-<p><img src="differential_associations_files/figure-html/disj_cont-1.png" width="960"></p>
+Similarly, we could imagine that this flip is not binary or otherwise
+step-wise, but rather the result of a continuous variable.
+<div class="figure">
+<img src="differential_associations_files/figure-html/disj_cont-1.png" alt="ketoglutarate ~ ketoglutarate dehydrogenase stratified by a third continuous variable." width="960"><p class="caption">
+ketoglutarate ~ ketoglutarate dehydrogenase stratified by a third
+continuous variable.
+</p>
 </div>
-<div class="section level4">
-<h4 id="compare-to-lm-outcome-">compare to <code>lm()</code> outcome.<a class="anchor" aria-label="anchor" href="#compare-to-lm-outcome-"></a>
-</h4>
 </div>
 </div>
 <div class="section level3">
@@ -210,12 +242,32 @@ interacting with x. We again estimate this as interaction terms with
 <div class="section level4">
 <h4 id="emergent-associations-categorical-variables">Emergent associations: Categorical variables<a class="anchor" aria-label="anchor" href="#emergent-associations-categorical-variables"></a>
 </h4>
-<p><img src="differential_associations_files/figure-html/emerg_cat-1.png" width="576"></p>
+The figure below shows how such a emergent association might look. We
+can imagine some sort of a pharmacological treatment that can completely
+shut down a biochemical pathway. As a result, the members of that
+pathway, which would show a consistently strong association under
+physiological conditions, could go <em>out of sync</em>.
+<div class="figure">
+<img src="differential_associations_files/figure-html/emerg_cat-1.png" alt="succinyl-CoA ~ succinyl-CoA synthetase by categorical variable (Treatment)." width="80%"><p class="caption">
+succinyl-CoA ~ succinyl-CoA synthetase by categorical variable
+(Treatment).
+</p>
+</div>
 </div>
 <div class="section level4">
 <h4 id="emergent-associations-continuous-variables">Emergent associations: Continuous variables<a class="anchor" aria-label="anchor" href="#emergent-associations-continuous-variables"></a>
 </h4>
-<p><img src="differential_associations_files/figure-html/emerg_cont-1.png" width="960"></p>
+Similarly, we could imagine situations where this loss in association
+strength happens gradually, rather than in a binary manner. For example,
+perhaps there is a strong association between a metabolite and an enzyme
+that metabolizes it under physiological conditions, but this association
+weakens along with some health index or environmental variable.
+<div class="figure">
+<img src="differential_associations_files/figure-html/emerg_cont-1.png" alt="succinate ~ succinate dehydrogenase stratified by a third continuous variable." width="960"><p class="caption">
+succinate ~ succinate dehydrogenase stratified by a third continuous
+variable.
+</p>
+</div>
 </div>
 </div>
 </div>
