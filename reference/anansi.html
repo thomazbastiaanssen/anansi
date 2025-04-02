@@ -274,23 +274,10 @@ q-values for all operations.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">FMT_data</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Clean and prepare the example data.</span></span></span>
-<span class="r-in"><span><span class="co"># In the example dataset, the metabolites are already cleaned.</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">KOs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">floor</a></span><span class="op">(</span><span class="va">FMT_KOs</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">KOs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">KOs</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">KOs</span> <span class="op">&lt;-</span> <span class="va">KOs</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">KOs</span> <span class="op">==</span> <span class="fl">0</span>, <span class="fl">1</span>, <span class="va">sum</span><span class="op">)</span> <span class="op">&lt;=</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">KOs</span><span class="op">)</span> <span class="op">*</span> <span class="fl">0.90</span><span class="op">)</span>, <span class="op">]</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">KOs</span> <span class="op">&lt;-</span> <span class="va">KOs</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/row.names.html" class="external-link">row.names</a></span><span class="op">(</span><span class="va">KOs</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/sort.html" class="external-link">sort</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">ec2ko</span><span class="op">$</span><span class="va">ko</span><span class="op">)</span><span class="op">)</span>, <span class="op">]</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># CLR-transform.</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">KOs.exp</span> <span class="op">&lt;-</span> <span class="fu"><a href="clr_lite.html">clr_c</a></span><span class="op">(</span><span class="va">KOs</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Make sure that columns are features and rows are samples.</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">t1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">FMT_metab</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">t2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">KOs.exp</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">t2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">FMT_KOs</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Run anansi pipeline.</span></span></span>
 <span class="r-in"><span></span></span>
@@ -300,7 +287,7 @@ q-values for all operations.</p>
 <span class="r-in"><span>    tableX <span class="op">=</span> <span class="va">t2</span>,</span></span>
 <span class="r-in"><span>    link <span class="op">=</span> <span class="fu"><a href="kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Dropped features in tableX: 1249 remain. </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Dropped features in tableX: 2476 remain. </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">anansi_out</span> <span class="op">&lt;-</span> <span class="fu">anansi</span><span class="op">(</span></span></span>
 <span class="r-in"><span>    web <span class="op">=</span> <span class="va">web</span>,</span></span>
