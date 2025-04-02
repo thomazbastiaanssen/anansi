@@ -3,10 +3,10 @@
 \docType{data}
 \name{FMT_KOs}
 \alias{FMT_KOs}
-\title{Snippet of the untransformed inferred functional data from the FMT Aging
+\title{Snippet of the CLR-transformed inferred functional data from the FMT Aging
 study.}
 \format{
-A marix object with 6474 rows, KOs, and 36 columns, samples.
+A marix object with 6468 rows, KOs, and 36 columns, samples.
 }
 \source{
 \doi{10.1038/s43587-021-00093-9}

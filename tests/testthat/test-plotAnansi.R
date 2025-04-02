@@ -1,13 +1,9 @@
 test_that("plotAnansi", {
     library(ggplot2)
     data(FMT_data)
-    KOs <- floor(FMT_KOs)
-    KOs <- apply(KOs, c(1, 2), function(x) as.numeric(as.character(x)))
-    KOs <- KOs[apply(KOs == 0, 1, sum) <= (ncol(KOs) * 0.90), ]
-    KOs <- KOs[row.names(KOs) %in% sort(unique(ec2ko$ko)), ]
-    KOs.exp <- clr_c(KOs)
+
     t1 <- t(FMT_metab)
-    t2 <- t(KOs.exp)
+    t2 <- t(FMT_KOs)
     web <- weaveWeb(
         formula = cpd ~ ko,
         tableY = t1,
@@ -58,6 +54,6 @@ test_that("plotAnansi", {
         fill_by = "group"
     )
     expect_length(p$guides$guides, 2)
-    expect_equal(dim(p$data), c(196, 8))
+    expect_equal(dim(p$data), c(260, 8))
     expect_false(any(is.na(p$data[["fill"]])))
 })

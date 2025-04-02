@@ -74,14 +74,14 @@ kegg_link <- function() list(ec2ko = anansi::ec2ko, ec2cpd = anansi::ec2cpd)
 #'
 "FMT_metab"
 
-#' Snippet of the untransformed inferred functional data from the FMT Aging
+#' Snippet of the CLR-transformed inferred functional data from the FMT Aging
 #'     study.
 #'
 #' @description Piphillin was used to infer functions from the 16S sequencing
 #'     data in terms of KOs. Unfortunately, the Piphillin algorithm is
 #'     proprietary and has since been taken down.
 #'
-#' @format A marix object with 6474 rows, KOs, and 36 columns, samples.
+#' @format A marix object with 6468 rows, KOs, and 36 columns, samples.
 #' @source \doi{10.1038/s43587-021-00093-9}
 #'
 "FMT_KOs"

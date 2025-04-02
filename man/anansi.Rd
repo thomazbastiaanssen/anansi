@@ -99,23 +99,10 @@ correlation analysis, correlation by group and differential associations.
 
 data(FMT_data)
 
-# Clean and prepare the example data.
-# In the example dataset, the metabolites are already cleaned.
-
-KOs <- floor(FMT_KOs)
-KOs <- apply(KOs, c(1, 2), function(x) as.numeric(as.character(x)))
-KOs <- KOs[apply(KOs == 0, 1, sum) <= (ncol(KOs) * 0.90), ]
-
-KOs <- KOs[row.names(KOs) \%in\% sort(unique(ec2ko$ko)), ]
-
-# CLR-transform.
-
-KOs.exp <- clr_c(KOs)
-
 # Make sure that columns are features and rows are samples.
 
 t1 <- t(FMT_metab)
-t2 <- t(KOs.exp)
+t2 <- t(FMT_KOs)
 
 # Run anansi pipeline.
 
