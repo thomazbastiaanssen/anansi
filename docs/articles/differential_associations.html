@@ -179,7 +179,7 @@ looks if we don’t set <code>verbose</code> to FALSE.</p>
 <p>The full model simply estimates the total association between
 <code>y</code> and <code>x</code>, making interpretation
 straightforward. We can imagine these associations to be positive or
-negative @ref{fig:plot_full}.</p>
+negative.</p>
 <div class="figure">
 <img src="differential_associations_files/figure-html/plot_full-1.png" alt="Figure 1. Both citrate and cis-aconitate ~ aconitase dehydrogenase, sequentially." width="80%"><p class="caption">
 Figure 1. Both citrate and cis-aconitate ~ aconitase dehydrogenase,
@@ -208,10 +208,10 @@ our example we have two such terms, namely <code>x:group_ab</code> and
 <div class="section level4">
 <h4 id="disjointed-associations-categorical-variables">Disjointed associations: Categorical variables<a class="anchor" aria-label="anchor" href="#disjointed-associations-categorical-variables"></a>
 </h4>
-The figure below shows how such a disjointed association might look. We
-can imagine some sort of a pharmacological treatment that alters
+<p>The figure below shows how such a disjointed association might look.
+We can imagine some sort of a pharmacological treatment that alters
 enzymatic conversion rates to the point where association between the
-enzyme and the metabolite <em>flips</em>.
+enzyme and the metabolite <em>flips</em>.</p>
 <div class="figure">
 <img src="differential_associations_files/figure-html/disj_cat-1.png" alt="isocitrate ~ isocitrate dehydrogenase by category (treatment)." width="80%"><p class="caption">
 isocitrate ~ isocitrate dehydrogenase by category (treatment).
@@ -221,8 +221,8 @@ isocitrate ~ isocitrate dehydrogenase by category (treatment).
 <div class="section level4">
 <h4 id="disjointed-associations-continuous-variables">Disjointed associations: Continuous variables<a class="anchor" aria-label="anchor" href="#disjointed-associations-continuous-variables"></a>
 </h4>
-Similarly, we could imagine that this flip is not binary or otherwise
-step-wise, but rather the result of a continuous variable.
+<p>Similarly, we could imagine that this flip is not binary or otherwise
+step-wise, but rather the result of a continuous variable.</p>
 <div class="figure">
 <img src="differential_associations_files/figure-html/disj_cont-1.png" alt="ketoglutarate ~ ketoglutarate dehydrogenase stratified by a third continuous variable." width="960"><p class="caption">
 ketoglutarate ~ ketoglutarate dehydrogenase stratified by a third
@@ -242,11 +242,11 @@ interacting with x. We again estimate this as interaction terms with
 <div class="section level4">
 <h4 id="emergent-associations-categorical-variables">Emergent associations: Categorical variables<a class="anchor" aria-label="anchor" href="#emergent-associations-categorical-variables"></a>
 </h4>
-The figure below shows how such a emergent association might look. We
+<p>The figure below shows how such a emergent association might look. We
 can imagine some sort of a pharmacological treatment that can completely
 shut down a biochemical pathway. As a result, the members of that
 pathway, which would show a consistently strong association under
-physiological conditions, could go <em>out of sync</em>.
+physiological conditions, could go <em>out of sync</em>.</p>
 <div class="figure">
 <img src="differential_associations_files/figure-html/emerg_cat-1.png" alt="succinyl-CoA ~ succinyl-CoA synthetase by categorical variable (Treatment)." width="80%"><p class="caption">
 succinyl-CoA ~ succinyl-CoA synthetase by categorical variable
@@ -257,11 +257,11 @@ succinyl-CoA ~ succinyl-CoA synthetase by categorical variable
 <div class="section level4">
 <h4 id="emergent-associations-continuous-variables">Emergent associations: Continuous variables<a class="anchor" aria-label="anchor" href="#emergent-associations-continuous-variables"></a>
 </h4>
-Similarly, we could imagine situations where this loss in association
+<p>Similarly, we could imagine situations where this loss in association
 strength happens gradually, rather than in a binary manner. For example,
 perhaps there is a strong association between a metabolite and an enzyme
 that metabolizes it under physiological conditions, but this association
-weakens along with some health index or environmental variable.
+weakens along with some health index or environmental variable.</p>
 <div class="figure">
 <img src="differential_associations_files/figure-html/emerg_cont-1.png" alt="succinate ~ succinate dehydrogenase stratified by a third continuous variable." width="960"><p class="caption">
 succinate ~ succinate dehydrogenase stratified by a third continuous
@@ -386,32 +386,31 @@ equivalent.</p>
 <span><span class="co">## [21] textshaping_1.0.0           munsell_0.5.1              </span></span>
 <span><span class="co">## [23] ggforce_0.4.2               GenomeInfoDb_1.40.1        </span></span>
 <span><span class="co">## [25] htmltools_0.5.8.1           sass_0.4.9                 </span></span>
-<span><span class="co">## [27] yaml_2.3.10                 tidyr_1.3.1                </span></span>
-<span><span class="co">## [29] pkgdown_2.1.1               pillar_1.10.1              </span></span>
-<span><span class="co">## [31] crayon_1.5.3                jquerylib_0.1.4            </span></span>
-<span><span class="co">## [33] MASS_7.3-65                 DelayedArray_0.30.1        </span></span>
-<span><span class="co">## [35] cachem_1.1.0                abind_1.4-8                </span></span>
-<span><span class="co">## [37] tidyselect_1.2.1            digest_0.6.37              </span></span>
-<span><span class="co">## [39] purrr_1.0.4                 dplyr_1.1.4                </span></span>
-<span><span class="co">## [41] bookdown_0.42               labeling_0.4.3             </span></span>
-<span><span class="co">## [43] forcats_1.0.0               polyclip_1.10-7            </span></span>
-<span><span class="co">## [45] fastmap_1.2.0               grid_4.4.2                 </span></span>
-<span><span class="co">## [47] colorspace_2.1-1            cli_3.6.4                  </span></span>
-<span><span class="co">## [49] SparseArray_1.4.8           magrittr_2.0.3             </span></span>
-<span><span class="co">## [51] S4Arrays_1.4.1              withr_3.0.2                </span></span>
-<span><span class="co">## [53] UCSC.utils_1.0.0            scales_1.3.0               </span></span>
-<span><span class="co">## [55] rmarkdown_2.29              XVector_0.44.0             </span></span>
-<span><span class="co">## [57] httr_1.4.7                  matrixStats_1.5.0          </span></span>
-<span><span class="co">## [59] igraph_2.1.4                ragg_1.3.3                 </span></span>
-<span><span class="co">## [61] evaluate_1.0.3              knitr_1.50                 </span></span>
-<span><span class="co">## [63] GenomicRanges_1.56.2        IRanges_2.38.1             </span></span>
-<span><span class="co">## [65] MultiAssayExperiment_1.33.1 rlang_1.1.5                </span></span>
-<span><span class="co">## [67] Rcpp_1.0.14                 glue_1.8.0                 </span></span>
-<span><span class="co">## [69] tweenr_2.0.3                BiocManager_1.30.25        </span></span>
-<span><span class="co">## [71] BiocGenerics_0.50.0         rstudioapi_0.17.1          </span></span>
-<span><span class="co">## [73] jsonlite_1.9.1              R6_2.6.1                   </span></span>
-<span><span class="co">## [75] MatrixGenerics_1.16.0       systemfonts_1.2.1          </span></span>
-<span><span class="co">## [77] fs_1.6.5                    zlibbioc_1.50.0</span></span></code></pre>
+<span><span class="co">## [27] yaml_2.3.10                 pkgdown_2.1.1              </span></span>
+<span><span class="co">## [29] pillar_1.10.1               crayon_1.5.3               </span></span>
+<span><span class="co">## [31] jquerylib_0.1.4             MASS_7.3-65                </span></span>
+<span><span class="co">## [33] DelayedArray_0.30.1         cachem_1.1.0               </span></span>
+<span><span class="co">## [35] abind_1.4-8                 tidyselect_1.2.1           </span></span>
+<span><span class="co">## [37] digest_0.6.37               dplyr_1.1.4                </span></span>
+<span><span class="co">## [39] bookdown_0.42               labeling_0.4.3             </span></span>
+<span><span class="co">## [41] forcats_1.0.0               polyclip_1.10-7            </span></span>
+<span><span class="co">## [43] fastmap_1.2.0               grid_4.4.2                 </span></span>
+<span><span class="co">## [45] colorspace_2.1-1            cli_3.6.4                  </span></span>
+<span><span class="co">## [47] SparseArray_1.4.8           magrittr_2.0.3             </span></span>
+<span><span class="co">## [49] S4Arrays_1.4.1              withr_3.0.2                </span></span>
+<span><span class="co">## [51] UCSC.utils_1.0.0            scales_1.3.0               </span></span>
+<span><span class="co">## [53] rmarkdown_2.29              XVector_0.44.0             </span></span>
+<span><span class="co">## [55] httr_1.4.7                  matrixStats_1.5.0          </span></span>
+<span><span class="co">## [57] igraph_2.1.4                ragg_1.3.3                 </span></span>
+<span><span class="co">## [59] evaluate_1.0.3              knitr_1.50                 </span></span>
+<span><span class="co">## [61] GenomicRanges_1.56.2        IRanges_2.38.1             </span></span>
+<span><span class="co">## [63] MultiAssayExperiment_1.33.1 rlang_1.1.5                </span></span>
+<span><span class="co">## [65] Rcpp_1.0.14                 glue_1.8.0                 </span></span>
+<span><span class="co">## [67] tweenr_2.0.3                BiocManager_1.30.25        </span></span>
+<span><span class="co">## [69] BiocGenerics_0.50.0         rstudioapi_0.17.1          </span></span>
+<span><span class="co">## [71] jsonlite_1.9.1              R6_2.6.1                   </span></span>
+<span><span class="co">## [73] MatrixGenerics_1.16.0       systemfonts_1.2.1          </span></span>
+<span><span class="co">## [75] fs_1.6.5                    zlibbioc_1.50.0</span></span></code></pre>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

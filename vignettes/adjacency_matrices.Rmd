@@ -40,11 +40,9 @@ work with it
 # Understanding adjacency matrices {#sec-mat-1}
 
 ## Example from Biology: The Krebs cycle
-Recall that the [citric acid cycle, or Krebs cycle](https://en.wikipedia.org/wiki/Citric_acid_cycle),
-is a central piece of metabolic machinery. In short, it enables oxidative 
-phosphorylation. See figure \@ref(fig:plot-krebs) below for a simplified 
-representation with 8 unique enzymatic reactions and 9 
-unique metabolites. 
+Recall that the 
+[citric acid cycle, or Krebs cycle](https://en.wikipedia.org/wiki/Citric_acid_cycle), is a central piece of metabolic machinery. In short, it enables oxidative phosphorylation. See figure below for a simplified representation with 8 unique
+enzymatic reactions and 9 unique metabolites. 
 
 ```{r}
 #| plot-krebs, echo=FALSE, out.width='100%', out.height='100%', warning=FALSE,
@@ -140,7 +138,7 @@ data sets like two sets of features.
 ### All vs-all testing 
 If we were to perform an all-vs-all integrative analysis between our two data 
 sets, comprehensively testing every metabolite-enzyme pair, we'd test 
-$8\times9=72$ hypotheses. Figure \@ref(fig:all-v-all) A. 
+$8\times9=72$ hypotheses. 
 
 ```{r}
 #| all-v-all, echo=FALSE, fig.wide=TRUE, out.width='100%', out.height='60%',
@@ -220,16 +218,15 @@ p_c <- p_0 + geom_segment(
 ### Knowledge-informed analyis of specific interactions
 Often however, only a subset of these comparisons is scientifically relevant to
 investigate. In this case for instance, only 17 associations between 
-enzyme-metabolite pairs are likely to make sense. Figure \@ref(fig:all-v-all)
-A. Non-selectively testing all 72 associations actively harms statistical power, 
+enzyme-metabolite pairs are likely to make sense. 
+Non-selectively testing all 72 associations actively harms statistical power, 
 as 55 of these tests likely cannot be interpreted, but their p-values will still
 be tallied for the purpose of FDR and FWER. Moreover, they tend to obscure any 
 biologically interpretable findings. 
 
 In order to 'know' which features-pairs in your data set should be considered, 
 anansi requires a *biadjacency matrix*. The biadjacency matrix corresponding to
-to the sparse graph in figure \@ref(fig:all-v-all) B can be seen in figure 
-\@ref(fig:krebs-biadj). 
+to the sparser graph on the right can be seen in the figure below. 
 
 ```{r}
 #| krebs-biadj, echo=FALSE, fig.small=TRUE,

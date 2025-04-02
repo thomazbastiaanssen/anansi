@@ -256,7 +256,7 @@ plotAnansi(out,
     association.type = "disjointed",
     model.var = "Legend",
     signif.threshold = 0.05,
-    fill_by = "Legend"
+    fill_by = "group"
 )
 ```
 

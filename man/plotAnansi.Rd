@@ -109,11 +109,11 @@ plotAnansi(out,
     fill_by = "group"
 )
 
-# Visualise full associations filled by category ('group_ab')
+# Visualise full associations filled by group
 plotAnansi(out,
     association.type = "full",
     signif.threshold = 0.05,
-    fill_by = "group_ab"
+    fill_by = "group"
 )
 
 }

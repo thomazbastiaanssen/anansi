@@ -50,7 +50,7 @@ test_that("plotAnansi", {
     )
     expect_no_error(plotAnansi(out,
         association.type = "disjointed",
-        model.var = "Legend", shape_by = "Legend"
+        model.var = "Legend", shape_by = "group"
     ))
     # Check output plot
     p <- plotAnansi(out,

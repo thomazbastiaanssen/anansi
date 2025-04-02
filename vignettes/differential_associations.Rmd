@@ -94,7 +94,7 @@ Note that `anansi()` will tell us how the rewritten model looks if we don't set
 
 The full model simply estimates the total association between `y` and `x`, 
 making interpretation straightforward. We can imagine these associations to be
-positive or negative \@ref(fig:plot_full). 
+positive or negative. 
 
 ```{r}
 #| plot_full, echo=FALSE, warning=FALSE, message=FALSE, fig.dim=c(6,3), 
@@ -140,7 +140,7 @@ Disjointed associations describe the situation where there is a detectable assoc
 The figure below shows how such a disjointed association might look. We can
 imagine some sort of a pharmacological treatment that alters enzymatic 
 conversion rates to the point where association between the enzyme and 
-the metabolite *flips*. \@ref(fig:disj_cat)
+the metabolite *flips*. 
 
 ```{r}
 #| disj_cat, echo=FALSE, fig.dim=c(6,3), out.width="80%", 
@@ -184,7 +184,7 @@ ggplot(diff_df) +
 
 ### Disjointed associations: Continuous variables
 Similarly, we could imagine that this flip is not binary or otherwise step-wise,
-but rather the result of a continuous variable. \@ref(fig:disj_cont)
+but rather the result of a continuous variable. 
 
 ```{r}
 #| disj_cont, echo=FALSE, fig.dim=c(10,3), 
@@ -215,7 +215,7 @@ The figure below shows how such a emergent association might look. We can
 imagine some sort of a pharmacological treatment that can completely shut down
 a biochemical pathway. As a result, the members of that pathway, which would 
 show a consistently strong association under physiological conditions, could 
-go *out of sync*. \@ref(fig:emerg_cat)
+go *out of sync*. 
 
 ```{r}
 #| emerg_cat, echo=FALSE, fig.dim=c(6,3), out.width="80%",
@@ -239,7 +239,7 @@ ggplot(diff_df) +
 Similarly, we could imagine situations where this loss in association strength 
 happens gradually, rather than in a binary manner. For example, perhaps there is
 a strong association between a metabolite and an enzyme that metabolizes it 
-under physiological conditions, but this association weakens along with some health index or environmental variable. \@ref(fig:emerg_cont)
+under physiological conditions, but this association weakens along with some health index or environmental variable. 
 
 ```{r}
 #| emerg_cont, echo=FALSE, fig.dim=c(10,3), 

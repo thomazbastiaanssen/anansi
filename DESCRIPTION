@@ -33,12 +33,11 @@ Imports:
     MultiAssayExperiment, 
     rlang,
     ggplot2, 
-    ggforce,
-    tidyr,
-    dplyr,
-    tidyselect
+    ggforce
 Suggests:
     BiocStyle,
+    dplyr,
+    tidyr,
     graph,
     ggraph, 
     tidygraph, 

@@ -83,11 +83,11 @@
 #'     fill_by = "group"
 #' )
 #'
-#' # Visualise full associations filled by category ('group_ab')
+#' # Visualise full associations filled by group
 #' plotAnansi(out,
 #'     association.type = "full",
 #'     signif.threshold = 0.05,
-#'     fill_by = "group_ab"
+#'     fill_by = "group"
 #' )
 #'
 #' @seealso
@@ -195,7 +195,9 @@ setMethod("plotAnansi",
         match.arg(y_position, choices = c("left", "right"))
         # Assemble plot data
         pData <- data.frame(
-            x = x[["r.values"]], y = x[["feature_X"]],
+            x = x[["r.values"]],
+            y = x[["feature_X"]],
+            facet = x[["feature_Y"]],
             colour = if (defined_args[["colour_by"]]) x[[colour_by]] else NA,
             fill = if (defined_args[["fill_by"]]) x[[fill_by]] else NA,
             size = if (defined_args[["size_by"]]) x[[size_by]] else NA,
@@ -206,8 +208,7 @@ setMethod("plotAnansi",
                 )
             } else {
                 NA
-            },
-            facet = x[["feature_Y"]]
+            }
         )
         # Generate dotplot
         p <- .create_dotplot(
@@ -220,34 +221,38 @@ setMethod("plotAnansi",
 )
 ################################ HELP FUNCTIONS ################################
 # Convert anansi wide to long format
-#' @importFrom dplyr across mutate
-#' @importFrom tidyr pivot_longer pivot_wider separate_wider_regex replace_na
-#' @importFrom tidyselect all_of matches
+#' @description
+#' Base R pivot longer for group terms of anansi output object
+#' @param x data.frame, anansi() output.
+#' @return a pivoted table
+#' @noRd
 .wide2long <- function(x) {
-    # Create regex pattern to match group terms
-    patterns <- lapply(
-        attr(x, "group_terms"),
-        function(term) paste0("(?:", paste(term, collapse = "|"), ")_?")
-    )
-    group_cols <- c("group", names(patterns[-1]))
-    # Convert anansi wide to long format
-    x_long <- x |>
-        pivot_longer(matches(paste0("^", patterns[["All"]]))) |>
-        separate_wider_regex(
-            name,
-            c(group = patterns[["All"]], cor_param = ".\\.values$")
-        ) |>
-        pivot_wider(names_from = cor_param, values_from = value) |>
-        # Separate the group column into the original group terms
-        separate_wider_regex(group, unlist(patterns[-1]),
-            too_few = "align_start", cols_remove = FALSE
-        ) |>
-        mutate(across(
-            all_of(group_cols),
-            ~ gsub("_$", "", replace_na(., "All"))
-        ))
-    return(x_long)
+        mt <- attr(x, "model_terms")
+        gt <- attr(x, "group_terms")
+        groups <- gt$All
+        # To dodge partial matches, require front.
+        gr_regex <- paste0("^", groups, "_")
+
+        gterms <- gsub("All_", "", colnames(x)[grepl("^All_", colnames(x))])
+        l <- lapply(
+            X = gr_regex,
+            FUN = function(y) `colnames<-`(
+                x[,grepl(x = colnames(x), y), drop = FALSE],
+                gterms
+            )
+        )
+        d <- do.call(rbind.data.frame, l)
+
+        f <- `row.names<-.data.frame`(x[, -unlist(
+            lapply(X = gr_regex, FUN = function(y) grep(x = colnames(x), y)),
+            FALSE, FALSE), drop = FALSE], NULL)
+        x <- cbind(f, group = rep(groups, each = NROW(x)), d)
+        # Restore terms
+        x <- `attr<-`(x, "model_terms", mt)
+        x <- `attr<-`(x, "group_terms", gt)
+        x
 }
+
 # Check aesthetics
 .check_aes <- function(x, aes_name, aes_var) {
     # Check if aesthetic is defined
@@ -263,8 +268,8 @@ setMethod("plotAnansi",
 }
 # Create dotplot
 .create_dotplot <- function(pData, defined_args, association.type,
-                            signif.threshold, colour_by, fill_by, shape_by, size_by, y_position,
-                            x_lab, y_lab) {
+                            signif.threshold, colour_by, fill_by,
+                            shape_by, size_by, y_position, x_lab, y_lab) {
     # Create base plot
     p <- ggplot(data = pData) +
         aes(
@@ -273,13 +278,16 @@ setMethod("plotAnansi",
             size = .data$size, alpha = .data$alpha
         ) +
         geom_vline(xintercept = 0, linetype = "dashed", colour = "red")
-    # Set point size and shape if not defined
+    # Set point size, shape and border colour if not defined
     point_args <- list()
     if (!defined_args[["size_by"]]) {
         point_args["size"] <- 3
     }
     if (!defined_args[["shape_by"]]) {
         point_args["shape"] <- 21
+    }
+    if (!defined_args[["colour_by"]]) {
+        point_args["colour"] <- "black"
     }
     # Add points and facets
     p <- p + do.call(geom_point, point_args) +
