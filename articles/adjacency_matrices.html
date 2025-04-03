@@ -228,7 +228,10 @@ features between input data sets. The anansi package includes such data
 for the <a href="https://www.genome.jp/kegg/" class="external-link">KEGG database</a>, let’s
 take a look at some of it:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">ec2ko</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># Extract the data.frame from the list that kegg_link() returns </span></span>
+<span><span class="va">ec2ko</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span><span class="op">[[</span><span class="st">"ec2ko"</span><span class="op">]</span><span class="op">]</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">ec2ko</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##          ec     ko</span></span>
 <span><span class="co">## 1   1.1.1.1 K00001</span></span>
 <span><span class="co">## 2   1.1.1.2 K00002</span></span>
