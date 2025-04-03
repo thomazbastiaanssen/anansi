@@ -12,7 +12,7 @@ A marix object with 6468 rows, KOs, and 36 columns, samples.
 \doi{10.1038/s43587-021-00093-9}
 }
 \usage{
-FMT_KOs
+data("FMT_data", package = "anansi")
 }
 \description{
 Piphillin was used to infer functions from the 16S sequencing

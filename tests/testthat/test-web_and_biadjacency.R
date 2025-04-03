@@ -1,4 +1,6 @@
 test_that("kegg wrapper is equivalent", {
+    data("ec2cpd", package = "anansi", envir = environment())
+    data("ec2ko", package = "anansi", envir = environment())
     web_g <- weaveWeb(cpd ~ ko, link = list(ec2ko = ec2ko, ec2cpd = ec2cpd))
     web_k <- weaveKEGG(cpd ~ ko)
 

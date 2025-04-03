@@ -24,18 +24,18 @@ them.
 \code{KEGGREST}. Script to generate available in example.
 }
 \usage{
-ec2ko
+data("ec2ko", package = "anansi")
 
-ec2cpd
+data("ec2cpd", package = "anansi")
 
 kegg_link()
 }
 \value{
-\code{kegg_link} returns a list containing the two aforementioned
+\code{kegg_link()} returns a list containing the two aforementioned
 data.frames, \code{ec2cpd} and \code{ec2ko}.
 }
 \description{
-\code{kegg_links} is a convenience function to return a list containing two
+\code{kegg_link()} is a convenience function to return a list containing two
 \code{data.frame}s; \code{ec2cpd} and \code{ec2ko}. This will be their most likely use.
 \code{ec2cpd} and \code{ec2ko} are two \code{data.frame}s, used to link ko, ecs and cpd
 identifiers in the KEGG database.

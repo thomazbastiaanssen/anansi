@@ -43,6 +43,10 @@
 #' `weaveKEGG()` is a wrapper that sets `link` to `kegg_link()`.
 #' All variants are special cases of `weaveWeb()`.
 #' @examples
+#' # Setup demo tables
+#' ec2ko  <- kegg_link()[["ec2ko"]]
+#' ec2cpd <- kegg_link()[["ec2cpd"]]
+#'
 #' # Basic usage
 #' weaveWeb(cpd ~ ko, link = kegg_link())
 #' weaveWeb(x = "ko", y = "ec", link = ec2ko)

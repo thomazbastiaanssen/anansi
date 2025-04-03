@@ -105,14 +105,18 @@ randomMultiFactor <- function(n_types = 6, n_features = 100,
 #'
 krebsDemoWeb <- function(n_samples = 100, n_reps = 4L) {
     # Load krebs edgelist
-    krebs <- anansi::krebs
-
-    # Define dictionary
-    kd <- Matrix::sparseMatrix(
-        i = as.integer(krebs$Enzyme),
-        j = as.integer(krebs$Metabolite),
-        dimnames = lapply(krebs, levels)
-    )
+    kd <- local({
+        data("krebs", package = "anansi", envir = environment())
+        # explicitly assign from environment
+        krebs <- get("krebs")
+        # Define dictionary
+        return(
+            Matrix::sparseMatrix(
+                i = as.integer(krebs$Enzyme),
+                j = as.integer(krebs$Metabolite),
+                dimnames = lapply(krebs, levels))
+        )
+    })
     # Generate web with metadata
     w <- randomWeb(n_samples, n_reps, dictionary = kd)
 

@@ -12,7 +12,7 @@ sample ID and treatment group, respectively.
 \doi{10.1038/s43587-021-00093-9}
 }
 \usage{
-FMT_metadata
+data("FMT_data", package = "anansi")
 }
 \description{
 There were three treatment groups in the study that all received

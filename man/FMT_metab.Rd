@@ -12,7 +12,7 @@ A matrix object with three rows, compounds, and 36 columns, samples.
 \doi{10.1038/s43587-021-00093-9}
 }
 \usage{
-FMT_metab
+data("FMT_data", package = "anansi")
 }
 \description{
 Snippet of the CLR-transformed hippocampal metabolomics data from the FMT

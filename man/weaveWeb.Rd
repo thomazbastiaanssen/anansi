@@ -72,6 +72,10 @@ linked. If one or more \code{data.frame}s, colnames should be as specified in
 \code{x} and \code{y}.
 }
 \examples{
+# Setup demo tables
+ec2ko  <- kegg_link()[["ec2ko"]]
+ec2cpd <- kegg_link()[["ec2cpd"]]
+
 # Basic usage
 weaveWeb(cpd ~ ko, link = kegg_link())
 weaveWeb(x = "ko", y = "ec", link = ec2ko)

@@ -29,7 +29,10 @@ Get a graph object out of an MultiFactor.
 g <- getGraph(kegg_link())
 plot(g)
 
+
 # Output formats
+ec2cpd <- kegg_link()[["ec2cpd"]]
+
 getGraph(ec2cpd, format = "graph")
 getGraph(ec2cpd, format = "igraph")
 
