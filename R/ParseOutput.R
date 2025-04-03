@@ -1,3 +1,82 @@
+#' @noRd
+#'
+tell_F <- function(tale) {
+    if (is(tale, "anansiTale")) {
+        return(tale@f.values)
+    }
+    if (is.list(tale)) {
+        return(lapply(tale, tell_F))
+    }
+}
+
+#' @noRd
+#'
+tell_T <- function(tale) {
+    if (is(tale, "anansiTale")) {
+        return(tale@t.values)
+    }
+    if (is.list(tale)) {
+        return(lapply(tale, tell_T))
+    }
+}
+
+#' @noRd
+#'
+tell_P <- function(tale) {
+    if (is(tale, "anansiTale")) {
+        return(tale@p.values)
+    }
+    if (is.list(tale)) {
+        return(lapply(tale, tell_P))
+    }
+}
+
+
+#' @noRd
+#'
+tell_e <- function(tale) {
+    if (is(tale, "anansiTale")) {
+        return(tale@estimates)
+    }
+    if (is.list(tale)) {
+        return(lapply(tale, tell_e))
+    }
+}
+
+
+#' @noRd
+#'
+tell_df1 <- function(tale) {
+    if (is(tale, "anansiTale")) {
+        return(tale@df[1])
+    }
+    if (is.list(tale)) {
+        return(lapply(tale, tell_df1))
+    }
+}
+
+#' @noRd
+#'
+tell_df2 <- function(tale) {
+    if (is(tale, "anansiTale")) {
+        return(tale@df[2])
+    }
+    if (is.list(tale)) {
+        return(lapply(tale, tell_df2))
+    }
+}
+
+#' @noRd
+#'
+tell_dfr <- function(tale) {
+    if (is(tale, "anansiTale")) {
+        return(tale@df[3])
+    }
+    if (is.list(tale)) {
+        return(lapply(tale, tell_dfr))
+    }
+}
+
 #' Extract information from an anansiTale object and parse it into a neat table
 #' @param tale An `anansiTale` object
 #' @param dic A dictionary.
@@ -43,8 +122,8 @@ frame.tale.ols <- function(tale, dic) {
 result.df <- function(out.list, dic) {
     feature_labs <- expand.grid(
         feature_Y = row.names(dic),
-        feature_X = colnames(dic), stringsAsFactors = FALSE
-    )[dic, ]
+        feature_X = colnames(dic),
+        stringsAsFactors = FALSE)[dic, ]
 
     df.list <- c(feature_labs, lapply(out.list, frame.tale, dic))
     do.call(what = "cbind.data.frame", args = df.list, quote = TRUE)
