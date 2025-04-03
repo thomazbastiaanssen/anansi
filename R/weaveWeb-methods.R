@@ -139,7 +139,10 @@ weaveWeb.formula <- function(formula, link = NULL, tableX = NULL, tableY = NULL,
     terms <- all.vars(formula)
     if (is.null(link) || identical(link, "none")) {
         return(
-            weaveWeb.default(x = terms[2], y = terms[1], link, tableX, tableY)
+            weaveWeb.default(
+                x = terms[2], y = terms[1],
+                link, tableX, tableY
+            )
         )
     }
 
@@ -149,7 +152,10 @@ weaveWeb.formula <- function(formula, link = NULL, tableX = NULL, tableY = NULL,
         stop("Variables from 'formula' not found in 'link'.")
     }
 
-    weaveWeb.default(x = terms[2], y = terms[1], link, tableX, tableY, ...)
+    weaveWeb.default(
+        x = terms[2], y = terms[1],
+        link, tableX, tableY, ...
+    )
 }
 
 #' @rdname weaveWeb

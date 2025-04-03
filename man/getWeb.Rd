@@ -5,7 +5,7 @@
 \alias{getWeb,MultiAssayExperiment-method}
 \title{weaveWeb wrapper for the MultiAssayExperiment class}
 \usage{
-\S4method{getWeb}{MultiAssayExperiment}(x, tableY = 1, tableX = 2, link = NULL, force_new = FALSE, ...)
+\S4method{getWeb}{MultiAssayExperiment}(x, tableY = 1L, tableX = 2L, link = NULL, force_new = FALSE, ...)
 }
 \arguments{
 \item{x}{a \code{\link[MultiAssayExperiment:MultiAssayExperiment]{MultiAssayExperiment::MultiAssayExperiment()}}.}

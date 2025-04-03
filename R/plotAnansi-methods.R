@@ -101,8 +101,8 @@ NULL
 #' @rdname plotAnansi
 #' @export
 setGeneric("plotAnansi",
-    signature = c("x"),
-    function(x, ...) standardGeneric("plotAnansi")
+           signature = c("x"),
+           function(x, ...) standardGeneric("plotAnansi")
 )
 
 #' @rdname plotAnansi
@@ -113,12 +113,16 @@ setGeneric("plotAnansi",
 #' @importFrom ggforce facet_col
 #' @importFrom stats setNames
 #' @importFrom S4Vectors isEmpty
-setMethod("plotAnansi",
-    signature = c(x = "data.frame"),
-    function(x, association.type = NULL, model.var = NULL,
-             signif.threshold = NULL, colour_by = NULL, color_by = colour_by,
-             fill_by = NULL, size_by = NULL, shape_by = NULL, y_position = "right",
-             x_lab = "cor", y_lab = "") {
+setMethod(
+    "plotAnansi",
+    sig = c(x = "data.frame"),
+    def = function(
+        x, association.type = NULL, model.var = NULL,
+        signif.threshold = NULL,
+        colour_by = NULL, color_by = colour_by,
+        fill_by = NULL, size_by = NULL, shape_by = NULL,
+        y_position = "right", x_lab = "cor", y_lab = ""
+    ) {
         # Create list of Booleans whether args are defined
         defined_args <- lapply(
             list(
@@ -129,7 +133,9 @@ setMethod("plotAnansi",
         )
         # Check association.type
         if (defined_args[["association"]]) {
-            match.arg(association.type, choices = c("disjointed", "emergent", "full"))
+            match.arg(association.type,
+                      choices = c("disjointed", "emergent", "full")
+            )
         }
         # Check model.var
         if (defined_args[["model.var"]]) {
@@ -138,32 +144,32 @@ setMethod("plotAnansi",
         # Check association.type and model.var
         if (defined_args[["association"]] && !defined_args[["model.var"]] &&
             association.type %in% c("disjointed", "emergent")) {
-            stop("'model.var' must specify a variable of the anansi model when ",
-                "'association type' is set to ", association.type,
-                call. = FALSE
+            stop("'model.var' must specify a variable of the anansi model ",
+                 "when 'association type' is set to ", association.type,
+                 call. = FALSE
             )
         }
         if (defined_args[["association"]] && defined_args[["model.var"]] &&
             association.type == "full") {
             model.var <- NULL
-            warning("'model.var' is ignored when 'association type' is set to ",
-                association.type,
-                call. = FALSE
-            )
+            warning("'model.var' is ignored when 'association type' ",
+                    "is set to ", association.type, call. = FALSE)
             model.var <- NULL
         }
         # Derive p-value column from association.type and model.var
-        pval <- paste0(c(association.type, model.var, "p.values"), collapse = "_")
+        pval <-
+            paste0(c(association.type, model.var, "p.values"), collapse = "_")
         # Check x
         if (isEmpty(x)) {
             stop("'x' is an empty data.frame", call. = FALSE)
         }
-        if (!all(c("feature_X", "feature_Y") %in% colnames(x)) ||
-            !any(grepl(pval, names(x)))) {
-            stop("'x' must be the output of 'anansi' in the table format and must ",
-                "contain columns 'feature_X' ,'feature_Y', 'r.values' and '", pval, "'",
-                call. = FALSE
-            )
+        if (!all(c("feature_X", "feature_Y") %in% colnames(x))) {
+            stop("'x' must be the output of 'anansi' in the table format ",
+                 "and must contain columns 'feature_X' ,'feature_Y'",
+                 call. = FALSE)
+        }
+        if (!any(grepl(pval, names(x)))) {
+            stop("Could not find p-values in 'x'.", call. = FALSE)
         }
         # Convert anansi wide to long format
         x <- .wide2long(x)
@@ -175,20 +181,21 @@ setMethod("plotAnansi",
         defined_args <- c(
             defined_args,
             mapply(.check_aes,
-                aes_name = c("colour_by", "fill_by", "size_by", "shape_by"),
-                aes_var = list(colour_by, fill_by, size_by, shape_by),
-                MoreArgs = list(x = x), SIMPLIFY = FALSE
-            )
+                   aes_name = c("colour_by", "fill_by", "size_by", "shape_by"),
+                   aes_var = list(colour_by, fill_by, size_by, shape_by),
+                   MoreArgs = list(x = x), SIMPLIFY = FALSE)
         )
         # Check signif.threshold
-        if (defined_args[["signif"]] && (!is.numeric(signif.threshold) ||
-            signif.threshold < 0 || signif.threshold > 1)) {
-            stop("'signif.threshold' must be a number between 0 and 1", call. = FALSE)
+        if (defined_args[["signif"]] &&
+            (!is.numeric(signif.threshold) ||
+             signif.threshold < 0 || signif.threshold > 1)
+        ) {
+            stop("'signif.threshold' must be a number between 0 and 1",
+                 call. = FALSE)
         }
         if (!defined_args[["association"]] && defined_args[["signif"]]) {
-            warning("'signif.threshold' is ignored when 'association type' is not",
-                " defined",
-                call. = FALSE
+            warning("'signif.threshold' is ignored when ",
+                    "'association type' is not defined", call. = FALSE
             )
         }
         # Check y_position
@@ -204,7 +211,7 @@ setMethod("plotAnansi",
             shape = if (defined_args[["shape_by"]]) x[[shape_by]] else NA,
             alpha = if (defined_args[["signif"]]) {
                 factor(x[[pval]] < signif.threshold,
-                    levels = c(TRUE, FALSE)
+                       levels = c(TRUE, FALSE)
                 )
             } else {
                 NA
@@ -213,12 +220,12 @@ setMethod("plotAnansi",
         # Generate dotplot
         p <- .create_dotplot(
             pData, defined_args, association.type,
-            signif.threshold, colour_by, fill_by, shape_by, size_by, y_position,
+            signif.threshold, colour_by, fill_by,
+            shape_by, size_by, y_position,
             x_lab, y_lab
         )
         return(p)
-    }
-)
+    })
 ################################ HELP FUNCTIONS ################################
 # Convert anansi wide to long format
 #' @description
@@ -227,30 +234,33 @@ setMethod("plotAnansi",
 #' @return a pivoted table
 #' @noRd
 .wide2long <- function(x) {
-        mt <- attr(x, "model_terms")
-        gt <- attr(x, "group_terms")
-        groups <- gt$All
-        # To dodge partial matches, require front.
-        gr_regex <- paste0("^", groups, "_")
+    mt <- attr(x, "model_terms")
+    gt <- attr(x, "group_terms")
+    groups <- gt$All
+    # To dodge partial matches, require front.
+    gr_regex <- paste0("^", groups, "_")
 
-        gterms <- gsub("All_", "", colnames(x)[grepl("^All_", colnames(x))])
-        l <- lapply(
-            X = gr_regex,
-            FUN = function(y) `colnames<-`(
-                x[,grepl(x = colnames(x), y), drop = FALSE],
+    gterms <- gsub("All_", "", colnames(x)[grepl("^All_", colnames(x))])
+    l <- lapply(
+        X = gr_regex,
+        FUN = function(y) {
+            `colnames<-`(
+                x[, grepl(x = colnames(x), y), drop = FALSE],
                 gterms
             )
-        )
-        d <- do.call(rbind.data.frame, l)
+        }
+    )
+    d <- do.call(rbind.data.frame, l)
 
-        f <- `row.names<-.data.frame`(x[, -unlist(
-            lapply(X = gr_regex, FUN = function(y) grep(x = colnames(x), y)),
-            FALSE, FALSE), drop = FALSE], NULL)
-        x <- cbind(f, group = rep(groups, each = NROW(x)), d)
-        # Restore terms
-        x <- `attr<-`(x, "model_terms", mt)
-        x <- `attr<-`(x, "group_terms", gt)
-        x
+    f <- `row.names<-.data.frame`(x[, -unlist(
+        lapply(X = gr_regex, FUN = function(y) grep(x = colnames(x), y)),
+        FALSE, FALSE
+    ), drop = FALSE], NULL)
+    x <- cbind(f, group = rep(groups, each = NROW(x)), d)
+    # Restore terms
+    x <- `attr<-`(x, "model_terms", mt)
+    x <- `attr<-`(x, "group_terms", gt)
+    x
 }
 
 # Check aesthetics
@@ -260,8 +270,8 @@ setMethod("plotAnansi",
     # Rise exception if aesthetic is not character or not in x
     if (aes_defined && !(aes_var %in% colnames(x) && is.character(aes_var))) {
         stop("'", aes_name, "' must be a character string specifying the",
-            " name of a 'groups' term used in the original anansi call",
-            call. = FALSE
+             " name of a 'groups' term used in the original anansi call",
+             call. = FALSE
         )
     }
     return(aes_defined)
@@ -292,7 +302,9 @@ setMethod("plotAnansi",
     # Add points and facets
     p <- p + do.call(geom_point, point_args) +
         facet_col(~ .data$facet, space = "free", scales = "free_y") +
-        scale_x_continuous(limits = c(-1, 1), n.breaks = 11, expand = c(0, 0)) +
+        scale_x_continuous(
+            limits = c(-1, 1), n.breaks = 11, expand = c(0, 0)
+        ) +
         scale_y_discrete(limits = rev, position = y_position)
     # Add significance legend
     if (defined_args[["association"]] && defined_args[["signif"]]) {
@@ -308,15 +320,20 @@ setMethod("plotAnansi",
             shape = shape_by, size = size_by
         )
     # Remove legend if aesthetics and significance are not defined
-    if (!any(unlist(defined_args[c("colour_by", "fill_by", "size_by", "shape_by")])) &&
-        !defined_args[["signif"]]) {
+    if (!any(unlist(
+        defined_args[c("colour_by", "fill_by", "size_by", "shape_by")]
+    )) &&
+    !defined_args[["signif"]]) {
         p <- p + theme(legend.position = "none")
     }
     # Remove legend for undefined aesthetics
     guide_names <- c("colour", "fill", "alpha")[
         !unlist(defined_args[c("colour_by", "fill_by", "signif")])
     ]
-    guide_args <- setNames(as.list(rep("none", length(guide_names))), guide_names)
+    guide_args <- setNames(
+        as.list(rep("none", length(guide_names))),
+        guide_names
+    )
     p <- p + do.call(guides, guide_args)
     return(p)
 }

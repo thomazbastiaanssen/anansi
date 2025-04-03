@@ -187,7 +187,7 @@ ggplot(anansiLong) +
             "Aged yFMT" = "#ef8a62",
             "All" = "gray"
         ),
-        breaks = c("Young yFMT", "Aged oFMT", "Aged yFMT", "All"), 
+        breaks = c("Young yFMT", "Aged oFMT", "Aged yFMT", "All"),
         name = "Treatment"
     ) +
     theme_bw() +

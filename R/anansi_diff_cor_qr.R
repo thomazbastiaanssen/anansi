@@ -330,9 +330,13 @@ get_x.fct <- function(sat_model, errorterm) {
 subset_metadata <- function(metadata, keep, raw_terms, indErr) {
     if (!is.null(indErr)) {
         all_terms <-
-            c(all_terms, deparse1(attr(raw_terms, "variables")[[1L + indErr]][[2L]],
-                backtick = TRUE
-            ))
+            c(
+                all_terms,
+                deparse1(
+                    attr(raw_terms, "variables")[[1L + indErr]][[2L]],
+                    backtick = TRUE
+                )
+            )
     }
     return(cbind(
         x = 1,

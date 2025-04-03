@@ -67,7 +67,10 @@
 #' # Use tidyr to wrangle the correlation r-values to a single column
 #' anansiLong <- anansi_out |>
 #'     pivot_longer(starts_with("All") | contains("FMT")) |>
-#'     separate_wider_delim(name, delim = "_", names = c("cor_group", "param")) |>
+#'     separate_wider_delim(
+#'         name,
+#'         delim = "_", names = c("cor_group", "param")
+#'     ) |>
 #'     pivot_wider(names_from = param, values_from = value)
 #'
 #' # Only consider interactions where the entire model fits well enough.

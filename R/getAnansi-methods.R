@@ -58,9 +58,12 @@ NULL
 #' @importFrom MultiAssayExperiment MultiAssayExperiment
 #' @importFrom SummarizedExperiment assay colData
 #'
-setMethod("getAnansi",
-    signature = c(x = "MultiAssayExperiment"),
-    function(x, tableY = 1, tableX = 2, formula, link = NULL, force_new = FALSE, ...) {
+setMethod(
+    "getAnansi", sig = c(x = "MultiAssayExperiment"),
+    def = function(
+        x, tableY = 1, tableX = 2, formula,
+        link = NULL, force_new = FALSE, ...
+    ) {
         # Retrieve kwargs as list
         kwargs <- list(...)
         # Check fixed arguments
@@ -68,11 +71,16 @@ setMethod("getAnansi",
         remove <- names(kwargs) %in% fixed_args
         # If fixed arguments in kwargs, remove them
         if (any(remove)) {
-            removed <- paste0(names(kwargs[remove]), sep = "'", collapse = ", '")
+            removed <- paste0(
+                names(kwargs[remove]),
+                sep = "'", collapse = ", '"
+            )
             kwargs <- kwargs[!remove]
-            stop("The arguments '", removed, " should not be used, as they are ",
-                "extracted from 'x'.",
-                call. = FALSE
+            stop("The arguments '",
+                 removed,
+                 " should not be used, ",
+                 "as they are extracted from 'x'.",
+                 call. = FALSE
             )
         }
         # Generate web object
@@ -82,5 +90,4 @@ setMethod("getAnansi",
         out <- anansi(web = w, formula = formula, ...)
 
         return(out)
-    }
-)
+    })

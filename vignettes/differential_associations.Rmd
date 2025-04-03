@@ -18,11 +18,10 @@ text-align: justify}
 </style>
 
 ```{r style, echo = FALSE, results = 'asis'}
-  BiocStyle::markdown()
+BiocStyle::markdown()
 ```
     
 ```{r setup, include = FALSE}
-
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
@@ -97,10 +96,10 @@ making interpretation straightforward. We can imagine these associations to be
 positive or negative. 
 
 ```{r}
-#| plot_full, echo=FALSE, warning=FALSE, message=FALSE, fig.dim=c(6,3), 
-#| out.width="80%", 
-#| fig.cap="Figure 1. Both citrate and cis-aconitate ~ aconitase dehydrogenase, sequentially." 
-#| 
+#| plot_full, echo=FALSE, warning=FALSE, message=FALSE, fig.dim=c(6,3),
+#| out.width="80%",
+#| fig.cap="Figure 1. Both citrate and cis-aconitate ~ aconitase dehydrogenase, sequentially."
+#|
 library(patchwork)
 library(ggplot2)
 
@@ -117,10 +116,10 @@ ggplot(full_df) +
     aes(x = aconitase, y = cis.aconitate) +
     labs(y = "cis-aconitate") +
     facet_wrap(~"cis-aconitate") +
-    plot_layout(axes = "collect", axis_titles = "collect")  +
-  plot_annotation(
-    subtitle = 
-    ) &
+    plot_layout(axes = "collect", axis_titles = "collect") +
+    plot_annotation(
+        subtitle =
+        ) &
     geom_point(shape = 21, fill = "#ffffbf") &
 
     coord_equal(ratio = 1, xlim = c(-2.5, 2.5), ylim = c(-2.5, 2.5)) &
@@ -143,9 +142,9 @@ conversion rates to the point where association between the enzyme and
 the metabolite *flips*. 
 
 ```{r}
-#| disj_cat, echo=FALSE, fig.dim=c(6,3), out.width="80%", 
+#| disj_cat, echo=FALSE, fig.dim=c(6,3), out.width="80%",
 #| fig.cap="isocitrate ~ isocitrate dehydrogenase by category (treatment)."
-#| 
+#|
 diff_df <- data.frame(
     group_ab = paste0("Treatment ", metadata(web)$group_ab),
     score_a = metadata(web)$score_a,
@@ -179,7 +178,7 @@ ggplot(diff_df) +
         "Treatment b" = "#2166ac"
     )) +
     theme_bw() +
-    coord_equal(ratio = 1, xlim = c(-2.5, 2.5), ylim = c(-2.5, 2.5)) 
+    coord_equal(ratio = 1, xlim = c(-2.5, 2.5), ylim = c(-2.5, 2.5))
 ```
 
 ### Disjointed associations: Continuous variables
@@ -187,24 +186,28 @@ Similarly, we could imagine that this flip is not binary or otherwise step-wise,
 but rather the result of a continuous variable. 
 
 ```{r}
-#| disj_cont, echo=FALSE, fig.dim=c(10,3), 
+#| disj_cont, echo=FALSE, fig.dim=c(10,3),
 #| fig.cap="ketoglutarate ~ ketoglutarate dehydrogenase stratified by a third continuous variable."
-#| 
+#|
 ggplot(diff_df) +
-    aes(x = ketoglutarate.dehydrogenase, 
-        y = ketoglutarate, 
-        fill = pnorm(score_a)) +
+    aes(
+        x = ketoglutarate.dehydrogenase,
+        y = ketoglutarate,
+        fill = pnorm(score_a)
+    ) +
     facet_grid(~score_a_cat) +
     geom_point(shape = 21, show.legend = FALSE) +
-     scale_fill_gradientn(name = "Example health index",
+    scale_fill_gradientn(
+        name = "Example health index",
         colors = c("#a50026", "#f46d43", "#ffffbf", "#74add1", "#313695")
-        ) +
+    ) +
     labs(x = "ketoglutatate dehydrogenase") +
     theme_bw() +
-    guides(fill = guide_colourbar(position = "bottom", 
-                                      legend.direction = "horizontal")) +
-    coord_equal(ratio = 1, xlim = c(-2.5, 2.5), ylim = c(-2.5, 2.5)) 
-     
+    guides(fill = guide_colourbar(
+        position = "bottom",
+        legend.direction = "horizontal"
+    )) +
+    coord_equal(ratio = 1, xlim = c(-2.5, 2.5), ylim = c(-2.5, 2.5))
 ```
 
 ## Emergent association
@@ -220,7 +223,7 @@ go *out of sync*.
 ```{r}
 #| emerg_cat, echo=FALSE, fig.dim=c(6,3), out.width="80%",
 #| fig.cap="succinyl-CoA ~ succinyl-CoA synthetase by categorical variable (Treatment)."
-#| 
+#|
 ggplot(diff_df) +
     aes(x = succinyl.CoA.synthetase, y = succinyl.CoA, fill = group_ab) +
     facet_wrap(~group_ab) +
@@ -231,8 +234,7 @@ ggplot(diff_df) +
     )) +
     labs(x = "succinyl-CoA synthetase", y = "succinyl-CoA") +
     theme_bw() +
-    coord_equal(ratio = 1, xlim = c(-2.5, 2.5), ylim = c(-2.5, 2.5)) 
-
+    coord_equal(ratio = 1, xlim = c(-2.5, 2.5), ylim = c(-2.5, 2.5))
 ```
 
 ### Emergent associations: Continuous variables
@@ -242,16 +244,17 @@ a strong association between a metabolite and an enzyme that metabolizes it
 under physiological conditions, but this association weakens along with some health index or environmental variable. 
 
 ```{r}
-#| emerg_cont, echo=FALSE, fig.dim=c(10,3), 
+#| emerg_cont, echo=FALSE, fig.dim=c(10,3),
 #| fig.cap="succinate ~ succinate dehydrogenase stratified by a third continuous variable."
-#| 
+#|
 ggplot(diff_df) +
     aes(x = succinate.dehydrogenase, y = succinate, fill = pnorm(score_a)) +
     facet_grid(~score_a_cat) +
     geom_point(shape = 21, show.legend = FALSE) +
-    scale_fill_gradientn(name = "Example health index",
+    scale_fill_gradientn(
+        name = "Example health index",
         colors = c("#a50026", "#f46d43", "#ffffbf", "#74add1", "#313695")
-        ) +
+    ) +
     labs(x = "succinate dehydrogenase") +
     theme_bw() +
     coord_equal(ratio = 1, xlim = c(-2.5, 2.5), ylim = c(-2.5, 2.5))

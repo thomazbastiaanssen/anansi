@@ -51,7 +51,8 @@
 #' # Back to AnansiWeb
 #' outWeb <- getWeb(mae, tableY = "y", tableX = "x")
 #'
-setMethod("getWeb", signature = c(x = "MultiAssayExperiment"), function(x, tableY = 1, tableX = 2, link = NULL, force_new = FALSE, ...) {
+setMethod("getWeb", signature = c(x = "MultiAssayExperiment"), function(x, tableY = 1L, tableX = 2L,
+                                                                        link = NULL, force_new = FALSE, ...) {
     # Check experiments
     mia:::.test_experiment_of_mae(x, tableY)
     mia:::.test_experiment_of_mae(x, tableX)
