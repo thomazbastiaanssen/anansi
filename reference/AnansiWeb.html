@@ -98,17 +98,22 @@ feature tables and an adjacency matrix.</p>
 <span><span class="fu">metadata</span><span class="op">(</span><span class="va">x</span>, simplify <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">value</span></span>
 <span></span>
 <span><span class="co">## Coercion</span></span>
-<span><span class="co"># S4 method for class 'AnansiWeb'</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">as.list</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
 <span><span class="fu">asMAE</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S4 method for class 'AnansiWeb'</span></span>
-<span><span class="fu">show</span><span class="op">(</span><span class="va">object</span><span class="op">)</span></span>
-<span></span>
 <span><span class="co"># S4 method for class 'AnansiWeb'</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">as.list</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="co"># S4 method for class 'AnansiWeb'</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span></span>
+<span>    <span class="va">x</span>, row.names <span class="op">=</span> <span class="cn">NULL</span>, optional <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span></span>
+<span>    <span class="op">)</span></span>
 <span></span>
-<span><span class="fu">asMAE</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></code></pre></div>
+<span><span class="co">## To list of data frames with feature pairs</span></span>
+<span><span class="co"># S4 method for class 'AnansiWeb'</span></span>
+<span><span class="fu">getFeaturePairs</span><span class="op">(</span></span>
+<span>    <span class="va">x</span>, which <span class="op">=</span> <span class="cn">NULL</span>, with.metadata <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for class 'AnansiWeb'</span></span>
+<span><span class="fu">show</span><span class="op">(</span><span class="va">object</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -146,12 +151,27 @@ arguments while ensuring compatibility with <code>S4Vectors</code> method.</p></
 <dt id="arg-value">value<a class="anchor" aria-label="anchor" href="#arg-value"></a></dt>
 <dd><p>replacement <code>matrix</code> with same number of rows target.</p></dd>
 
+
+<dt id="arg-which">which<a class="anchor" aria-label="anchor" href="#arg-which"></a></dt>
+<dd><p><code>integer matrix</code>, indicating pair positions in <code>tableY(x)</code> and
+<code>tableX(x)</code>, respectively. If <code>NULL</code> (default):
+<code>Matrix::which(dictionary(x), TRUE)</code>.</p></dd>
+
+
+<dt id="arg-with-metadata">with.metadata<a class="anchor" aria-label="anchor" href="#arg-with-metadata"></a></dt>
+<dd><p><code>Logical scalar</code> whether to append metadata to output</p></dd>
+
+
+<dt id="arg-row-names-optional">row.names, optional<a class="anchor" aria-label="anchor" href="#arg-row-names-optional"></a></dt>
+<dd><p>Ignored, for S4 generic. See ?base::as.data.frame.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>an <code>AnansiWeb</code> object, with sparse binary biadjacency matrix
 with features from <code>y</code> as rows and features from <code>x</code> as columns in
 <code>dictionary</code> slot.</p>
+<p>A list of data.frames with the paired data</p>
     </div>
     <div class="section level2">
     <h2 id="slots">Slots<a class="anchor" aria-label="anchor" href="#slots"></a></h2>
@@ -164,7 +184,7 @@ samples and columns are features. Access with <code>tableY()</code> and <code>ta
 
 <dt><code>dictionary</code></dt>
 <dd><p><code>Matrix</code>, binary adjacency matrix. Optionally sparse.
-Typically generated using the<code><a href="weaveWeb.html">weaveWeb()</a></code> function. Access with
+Typically generated using the <code><a href="weaveWeb.html">weaveWeb()</a></code> function. Access with
 <code>dictionary()</code>.</p></dd>
 
 
@@ -373,6 +393,49 @@ Typically generated using the<code><a href="weaveWeb.html">weaveWeb()</a></code>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  *Format() - convert into a long or wide DataFrame</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  assays() - convert ExperimentList to a SimpleList of matrices</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  exportClass() - save data to flat files</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Extract data.frames in pairs (only show first)</span></span></span>
+<span class="r-in"><span><span class="fu">getFeaturePairs</span><span class="op">(</span><span class="va">web</span><span class="op">)</span><span class="op">[</span><span class="fl">1L</span><span class="op">]</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>              A            a</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  -1.04166838 -1.400043517</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  -1.14652385  0.255317055</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  -1.67532730 -2.437263611</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4   1.52593866 -0.005571287</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5   0.55418551  0.621552721</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6   1.99311026  1.148411606</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7  -0.15412074 -1.821817661</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8   2.56440834 -0.247325302</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9   1.06199914 -0.244199607</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10  1.14269488 -0.282705449</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11  1.12383884 -0.553699384</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12 -0.39700149  0.628982042</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13 -0.82326115  2.065024895</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14 -0.57888462 -1.630989402</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15  1.76378938  0.512426950</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16  0.13299215 -1.863011492</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17  0.37649933 -0.522012515</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18  1.13870765 -0.052601910</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19  1.24126308  0.542996343</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20  0.61209094 -0.914074827</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21 -0.42938009  0.468154420</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22  1.36046133  0.362951256</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23 -0.07085743 -1.304543545</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24 -0.27215368  0.737776321</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25 -2.44668003  1.888504929</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26  0.06548664 -0.097445104</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27 -1.09850890 -0.935847354</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28 -0.63317818 -0.015950311</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29 -2.06365445 -0.826788954</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30  2.64893203 -1.512399651</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 31 -1.15339839  0.935363190</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 32 -0.34063788  0.176488611</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 33  0.78636258  0.243685465</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 34 -1.27051311  1.623548883</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 35  0.54214155  0.112038083</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 36  0.07510590 -0.133997013</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
