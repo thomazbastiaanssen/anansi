@@ -1,11 +1,36 @@
 #' @rdname AnansiWeb
-#' @aliases as.list.AnansiWeb
+#' @aliases as.list.AnansiWeb coerce,AnansiWeb-list
+#' @usage NULL
 #' @export
 #'
 setMethod("as.list", c(x = "AnansiWeb"), function(x, ...) as(x, "list"))
 
 #' @rdname AnansiWeb
+#' @param row.names,optional Ignored, for S4 generic. See ?base::as.data.frame.
+#' @aliases as.data.frame.AnansiWeb-method coerce,AnansiWeb-data.frame
+#' @importMethodsFrom BiocGenerics as.data.frame
+#' @usage NULL
+#' @export
+#'
+setMethod("as.data.frame", c(x = "AnansiWeb"),
+          function(x, row.names = NULL, optional = FALSE, ...)
+              as.data.frame.AnansiWeb(x) )
+
+#' @rdname AnansiWeb
+#' @aliases as.data.frame.AnansiWeb
+#' @method as.data.frame AnansiWeb
+#' @noRd
+#'
+as.data.frame.AnansiWeb <- function(x) {
+    cbind(tableY(x),
+          tableX(x),
+          metadata(x, simplify = TRUE)
+    )
+}
+
+#' @rdname AnansiWeb
 #' @aliases as.MAE as.MultiAssayExperiment asMultiAssayExperiment
+#' @usage NULL
 #' @export
 #'
 asMAE <- function(x) as(x, "MultiAssayExperiment")
@@ -45,6 +70,13 @@ setAs(from = "AnansiWeb", to = "MultiAssayExperiment", def = function(from) {
         colData = DataFrame(to_cd)
     )
 })
+
+#' @export
+#'
+setAs(from = "AnansiWeb", to = "data.frame", def = function(from) {
+    as.data.frame.AnansiWeb(from)
+})
+
 
 #' @rdname MultiFactor
 #' @aliases as.list.MultiFactor

@@ -27,8 +27,16 @@
 #' \S4method{metadata}{AnansiWeb}(x, simplify = TRUE, ...) <- value
 #'
 #' ## Coercion
-#' \S4method{as.list}{AnansiWeb}(x, ...)
 #' asMAE(x)
+#' \S4method{as.list}{AnansiWeb}(x, ...)
+#' \S4method{as.data.frame}{AnansiWeb}(
+#'     x, row.names = NULL, optional = FALSE, ...
+#'     )
+#'
+#' ## To list of data frames with feature pairs
+#' \S4method{getFeaturePairs}{AnansiWeb}(
+#'     x, which = NULL, with.metadata = FALSE, ...
+#' )
 #'
 #' @param x,object an `AnansiWeb` object on which a method will be applied.
 #'
@@ -62,6 +70,10 @@
 #'
 #' # Coerce to MultiAssayExperiment
 #' asMAE(web)
+#'
+#' # Extract data.frames in pairs (only show first)
+#' getFeaturePairs(web)[1L]
+#'
 #'
 NULL
 
@@ -203,6 +215,56 @@ setMethod(
 #' @usage NULL
 #'
 setMethod("names", "AnansiWeb", function(x) names(dimnames(x@dictionary)))
+
+
+#' @rdname AnansiWeb
+#' @aliases getFeaturePairs getFeaturePairs,AnansiWeb-method
+#' @importFrom Matrix which
+#' @param which `integer matrix`, indicating pair positions in `tableY(x)` and
+#'     `tableX(x)`, respectively. If `NULL` (default):
+#'     `Matrix::which(dictionary(x), TRUE)`.
+#' @param with.metadata `Logical scalar` whether to append metadata to output
+#' @return A list of data.frames with the paired data
+#' @usage NULL
+#' @export
+#'
+setMethod(getFeaturePairs, "AnansiWeb",
+          function(x, which = NULL, with.metadata = FALSE, ...) {
+              getFeaturePairs.AnansiWeb(x, which, with.metadata) }
+          )
+
+#' @rdname AnansiWeb
+#' @noRd
+getFeaturePairs.AnansiWeb <- function(x, which = NULL, with.metadata = FALSE) {
+    if(is.null(which)) {
+        which <- Matrix::which(dictionary(x), arr.ind = TRUE, useNames = FALSE)
+    }
+    tX <- tableX(x)
+    tY <- tableY(x)
+    xnames <- colnames(tX)
+    ynames <- colnames(tY)
+    if(!with.metadata) {
+        return(
+            lapply(seq_len(NROW(which)),
+                   FUN = function(z) cbind(tY[,which[z,1L], drop = FALSE],
+                                           tX[,which[z,2L], drop = FALSE]
+                   )
+            )
+        )
+    } else {
+        metadata <- metadata(x)
+        return(
+            lapply(seq_len(NROW(which)),
+                   FUN = function(z) cbind(tY[,which[z,1L], drop = FALSE],
+                                           tX[,which[z,2L], drop = FALSE],
+                                           metadata
+                   )
+            )
+        )
+
+    }
+}
+
 
 #' @noRd
 #'

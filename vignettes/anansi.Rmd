@@ -195,6 +195,45 @@ ggplot(anansiLong) +
     xlab("Pearson's \u03c1")
 ```
 
+We can also also use the web object to pull up specific pairs of features. 
+The [`patchwork`](https://patchwork.data-imaginist.com/) provides a wonderful interface to combine plots. We can use `getFeaturePairs()` to extract the
+relevant data from our `AnansiWeb` object in a convenient list format:   
+```{r}
+#| multiplot, eval=TRUE, message=FALSE
+library(patchwork)
+
+# Get a list containing data.frames for each feature pair. 
+feature_pairs <- getFeaturePairs(web)
+
+# For each, prepare a ggplot object with those features on x & y axes. 
+plot_list <- lapply(
+    feature_pairs, 
+    FUN = function(pair_i) {
+        ggplot(pair_i) + 
+            aes(y = .data[[colnames(pair_i)[1L]]], 
+                x = .data[[colnames(pair_i)[2L]]]) + 
+        # We'll use facet_grid for labels instead of labs(). 
+            facet_grid(colnames(pair_i)[1L] ~ colnames(pair_i)[2L])
+    }
+)
+
+# Feed the first six of our ggplots to patchwork, using wrap_plots()
+wrap_plots(plot_list[seq_len(6L)], guides = 'collect') &
+  # Continue as with an ordinary ggplot, but use & instead of +
+    geom_point(shape = 21, aes(fill = FMT_metadata$Legend) ) &
+    geom_smooth(method = "lm", se = FALSE, 
+                aes(group = FMT_metadata$Legend) ) &
+    theme_bw() & 
+    labs(x = NULL, y = NULL)
+```
+These types of visualizations of feature pairs work best when the amount of 
+feature pairs to be plotted is modest.
+
+### Note on using `patchwork` with `anansi`: 
+Especially for large numers of featire pairs, it's much more efficient to add shared elements to the patchwork using the `&` operator, rather than adding them
+to the initial `ggplot()` calls in the `lapply()` loop. 
+
+
 # Bioconductor pipeline
 
 anansi also supports the Bioconductor class MultiAssayExperiment (MAE) as an

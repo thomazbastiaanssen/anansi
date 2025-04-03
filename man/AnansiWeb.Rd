@@ -25,8 +25,14 @@
 \alias{dimnames,AnansiWeb-method}
 \alias{dim,AnansiWeb-method}
 \alias{names,AnansiWeb-method}
+\alias{getFeaturePairs,AnansiWeb-method}
+\alias{getFeaturePairs}
 \alias{as.list,AnansiWeb-method}
 \alias{as.list.AnansiWeb}
+\alias{coerce,AnansiWeb-list}
+\alias{as.data.frame,AnansiWeb-method}
+\alias{as.data.frame.AnansiWeb-method}
+\alias{coerce,AnansiWeb-data.frame}
 \alias{asMAE}
 \alias{as.MAE}
 \alias{as.MultiAssayExperiment}
@@ -51,14 +57,18 @@ AnansiWeb(tableX, tableY, dictionary, metadata = list(), ...)
 \S4method{metadata}{AnansiWeb}(x, simplify = TRUE, ...) <- value
 
 ## Coercion
-\S4method{as.list}{AnansiWeb}(x, ...)
 asMAE(x)
+\S4method{as.list}{AnansiWeb}(x, ...)
+\S4method{as.data.frame}{AnansiWeb}(
+    x, row.names = NULL, optional = FALSE, ...
+    )
+
+## To list of data frames with feature pairs
+\S4method{getFeaturePairs}{AnansiWeb}(
+    x, which = NULL, with.metadata = FALSE, ...
+)
 
 \S4method{show}{AnansiWeb}(object)
-
-\S4method{as.list}{AnansiWeb}(x, ...)
-
-asMAE(x)
 }
 \arguments{
 \item{tableY, tableX}{A table containing features of interest. Rows should be
@@ -78,11 +88,21 @@ to \code{Matrix}}
 arguments while ensuring compatibility with \code{S4Vectors} method.}
 
 \item{value}{replacement \code{matrix} with same number of rows target.}
+
+\item{which}{\verb{integer matrix}, indicating pair positions in \code{tableY(x)} and
+\code{tableX(x)}, respectively. If \code{NULL} (default):
+\code{Matrix::which(dictionary(x), TRUE)}.}
+
+\item{with.metadata}{\verb{Logical scalar} whether to append metadata to output}
+
+\item{row.names, optional}{Ignored, for S4 generic. See ?base::as.data.frame.}
 }
 \value{
 an \code{AnansiWeb} object, with sparse binary biadjacency matrix
 with features from \code{y} as rows and features from \code{x} as columns in
 \code{dictionary} slot.
+
+A list of data.frames with the paired data
 }
 \description{
 \code{AnansiWeb} is an S4 class containing two feature tables as well as a
@@ -102,7 +122,7 @@ feature tables and an adjacency matrix.
 samples and columns are features. Access with \code{tableY()} and \code{tableX()}.}
 
 \item{\code{dictionary}}{\code{Matrix}, binary adjacency matrix. Optionally sparse.
-Typically generated using the\code{weaveWeb()} function. Access with
+Typically generated using the \code{weaveWeb()} function. Access with
 \code{dictionary()}.}
 
 \item{\code{metadata}}{Optional \code{data.frame} of sample metadata. Access with
@@ -159,6 +179,10 @@ weblist <- as.list(web)
 
 # Coerce to MultiAssayExperiment
 asMAE(web)
+
+# Extract data.frames in pairs (only show first)
+getFeaturePairs(web)[1L]
+
 
 }
 \seealso{

@@ -16,7 +16,6 @@
 \alias{[<-,MultiFactor,ANY,ANY,list-method}
 \alias{[[,MultiFactor,ANY,ANY-method}
 \alias{[[,MultiFactor,ANY-method}
-\alias{[[<-,MultiFactor,ANY,ANY,ANY-method}
 \alias{[[<-,MultiFactor,ANY,ANY-method}
 \alias{c,MultiFactor-method}
 \alias{show,MultiFactor-method}

@@ -5,7 +5,7 @@
 #' @slot tableY,tableX Two `matrix` objects of measurements, data. Rows are
 #'     samples and columns are features. Access with `tableY()` and `tableX()`.
 #' @slot dictionary `Matrix`, binary adjacency matrix. Optionally sparse.
-#'     Typically generated using the`weaveWeb()` function. Access with
+#'     Typically generated using the `weaveWeb()` function. Access with
 #'     `dictionary()`.
 #' @slot metadata Optional `data.frame` of sample metadata. Access with
 #'     `metadata()`.
