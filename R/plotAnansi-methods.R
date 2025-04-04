@@ -26,7 +26,7 @@
 #'
 #' @param fill_by `Character scalar`. Specifies one of the `groups`
 #'    terms used in the original `anansi` call, `x` by which points
-#'    should be filled (Default: `NULL`)
+#'    should be filled (Default: `"group"`)
 #'
 #' @param size_by `Character scalar`. Specifies one of the `groups`
 #'    terms used in the original `anansi` call, `x` by which points
@@ -120,7 +120,7 @@ setMethod(
         x, association.type = NULL, model.var = NULL,
         signif.threshold = NULL,
         colour_by = NULL, color_by = colour_by,
-        fill_by = NULL, size_by = NULL, shape_by = NULL,
+        fill_by = "group", size_by = NULL, shape_by = NULL,
         y_position = "right", x_lab = "cor", y_lab = ""
     ) {
         # Create list of Booleans whether args are defined
@@ -256,7 +256,12 @@ setMethod(
         lapply(X = gr_regex, FUN = function(y) grep(x = colnames(x), y)),
         FALSE, FALSE
     ), drop = FALSE], NULL)
-    x <- cbind(f, group = rep(groups, each = NROW(x)), d)
+    # If "All" is in group column, make it the last level.
+    groups <- factor(rep(groups, each = NROW(x)),
+                        levels = c(groups[groups != "All"],
+                                   groups[groups == "All"])
+                        )
+    x <- cbind(f, group = groups, d)
     # Restore terms
     x <- `attr<-`(x, "model_terms", mt)
     x <- `attr<-`(x, "group_terms", gt)
@@ -335,5 +340,6 @@ setMethod(
         guide_names
     )
     p <- p + do.call(guides, guide_args)
+
     return(p)
 }

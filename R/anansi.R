@@ -258,14 +258,14 @@ check_groups <- function(groups, raw_terms, indErr, metadata, verbose) {
     sub_meta <-
         sub_meta[, unlist(lapply(sub_meta, is.categorical)), drop = FALSE]
 
-    if (NCOL(sub_meta) == 0) {
+    if (NCOL(sub_meta) == 0L) {
         if (verbose) {
             message("No grouping variable found for groupwise correlations.")
         }
-        return(list(NULL, 1))
+        return(list(NULL, 1L))
     }
-    n.groups <- 1 + length(unique(do.call(paste0, c(sub_meta))))
-
+    n.groups <- 1L + length(unique(do.call(paste0, c(sub_meta))))
+    groups <- colnames(sub_meta)
     return(list(groups, n.groups))
 }
 
@@ -334,11 +334,11 @@ is.categorical <- function(x) is.character(x) || is.factor(x) || is.ordered(x)
 #' @noRd
 #'
 lvs_or_num <- function(x) {
-    ifelse(
-        test = is.categorical(x),
-        yes = unique(as.character(x)),
-        no = "numeric"
-    )
+    if(is.categorical(x)) {
+        return(unique(as.character(x)))
+    } # else
+    return( "numeric" )
+
 }
 
 #' Provide name and levels for categories for group terms
@@ -364,7 +364,7 @@ named_term_list <- function(t, m) {
     f_order <- t[order_one]
     h_order <- t[!order_one]
 
-    f_list <- lapply(m[f_order], lvs_or_num)
+    f_list <- lapply(m[,f_order, drop = FALSE], lvs_or_num)
     h_list <- NULL
     if (length(h_order) != 0) {
         m_num <- !unlist(lapply(m, is.categorical))

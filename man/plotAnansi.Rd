@@ -16,7 +16,7 @@ plotAnansi(x, ...)
   signif.threshold = NULL,
   colour_by = NULL,
   color_by = colour_by,
-  fill_by = NULL,
+  fill_by = "group",
   size_by = NULL,
   shape_by = NULL,
   y_position = "right",
@@ -49,7 +49,7 @@ should be coloured. (Default: \code{NULL})}
 
 \item{fill_by}{\verb{Character scalar}. Specifies one of the \code{groups}
 terms used in the original \code{anansi} call, \code{x} by which points
-should be filled (Default: \code{NULL})}
+should be filled (Default: \code{"group"})}
 
 \item{size_by}{\verb{Character scalar}. Specifies one of the \code{groups}
 terms used in the original \code{anansi} call, \code{x} by which points
