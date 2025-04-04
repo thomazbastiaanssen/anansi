@@ -23,8 +23,14 @@
 #' `Character scalar` or `numeric scalar`. Selects experiment
 #' corresponding to `tableY` and `tableX` from `experiments(x)`
 #' of `MultiAssayExperiment` object by name or index, name is recommended.
-#' (Default slots: `Y = 1`, `X = 2`).
-#'
+#' (Default slots: `Y = 1L`, `X = 2L`).
+#' @param typeY,typeX `Character scalar` or `numeric scalar`. Selects assay from
+#' experiments to `tableY` and `tableX` from `experiments(x)`.
+#' (Default: `1L` - the first assay in that experiment).
+#' @param experiment1,experiment2 synonymous args to `tableY,tableX` for
+#'     compatibility with `mia` argument style.
+#' @param assay.type1,assay.type2 synonymous args to `typeY,typeX` for
+#'     compatibility with `mia` argument style.
 #' @returns an `AnansiWeb` object, with sparse binary biadjacency matrix
 #' with features from `y` as rows and features from `x` as columns in
 #' `dictionary` slot. If x already contains a dictionary in metadata, use
@@ -51,17 +57,29 @@
 #' # Back to AnansiWeb
 #' outWeb <- getWeb(mae, tableY = "y", tableX = "x")
 #'
-setMethod("getWeb", signature = c(x = "MultiAssayExperiment"), function(x, tableY = 1L, tableX = 2L,
-                                                                        link = NULL, force_new = FALSE, ...) {
+setMethod("getWeb",
+          signature = c(x = "MultiAssayExperiment"),
+          function(
+        x, link = NULL, ...,
+        tableY = NULL, tableX = NULL,
+        typeY = NULL, typeX = NULL,
+        force_new = FALSE,
+        experiment1 = NULL, experiment2 = NULL,
+        assay.type1 = NULL, assay.type2 = NULL
+    ) {
+      y_ids <- .test_coherent(tableY, experiment1, typeY, assay.type1)
+      x_ids <- .test_coherent(tableX, experiment2, typeX, assay.type2)
+      tableY <- y_ids[[1L]]
+      tableX <- x_ids[[1L]]
     # Check experiments
     mia:::.test_experiment_of_mae(x, tableY)
     mia:::.test_experiment_of_mae(x, tableX)
-    y_id <- names(experiments(x)[tableY])
-    x_id <- names(experiments(x)[tableX])
+    y_exp <- names(experiments(x)[tableY])
+    x_exp <- names(experiments(x)[tableX])
 
     # Extract assays
-    tY <- t(assay(x, y_id))
-    tX <- t(assay(x, x_id))
+    tY <- t(assay(experiments(x)[tableY], y_ids[[2L]]))
+    tX <- t(assay(experiments(x)[tableX], x_ids[[2L]]))
 
     # Check if x already contains a dictionary
     if (!force_new) {
@@ -83,12 +101,13 @@ setMethod("getWeb", signature = c(x = "MultiAssayExperiment"), function(x, table
     }
     # Generate web object
     weaveWeb.default(
-        x = x_id, y = y_id, link = link,
+        x = x_exp, y = y_exp, link = link,
         tableX = tX, tableY = tY,
         metadata = list(metadata = as.data.frame(colData(x))),
         ...
     )
-})
+    }
+)
 
 #' TRUE if i can select in x
 #' @noRd
@@ -110,4 +129,23 @@ valid_selection <- function(i, x) {
     }
     # If that didn't work, invalid selection. return FALSE.
     FALSE
+}
+
+#' @noRd
+.test_coherent <- function(tab, exp, tab.type, ass.type) {
+    e_out <- unique(c(tab, exp))
+    if(length(e_out) == 0L) {e_out <- 1L}
+    stopifnot(
+        "args 'tableY,X' cannot contradict args 'experiment1,2'." =
+                  length(e_out) == 1L
+        )
+
+    t_out <- unique(c(tab.type, ass.type))
+    if(length(t_out) == 0L) {t_out <- 1L}
+    stopifnot(
+        "args 'typeY,X.' cannot contradict args 'assay.type1,2'." =
+                  length(t_out) == 1L
+        )
+
+    return(list(e_out, t_out))
 }

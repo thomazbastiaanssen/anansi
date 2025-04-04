@@ -9,12 +9,12 @@ getAnansi(x, ...)
 
 \S4method{getAnansi}{MultiAssayExperiment}(
   x,
-  tableY = 1,
-  tableX = 2,
   formula,
   link = NULL,
-  force_new = FALSE,
-  ...
+  tableY = NULL,
+  tableX = NULL,
+  ...,
+  force_new = FALSE
 )
 }
 \arguments{
@@ -22,11 +22,6 @@ getAnansi(x, ...)
 
 \item{...}{additional parameters that can be passed to
 \code{\link[=AnansiWeb]{AnansiWeb()}} or \code{\link[=anansi]{anansi()}}.}
-
-\item{tableY, tableX}{\verb{Character scalar} or \verb{numeric scalar}. Selects experiment
-corresponding to \code{tableY} and \code{tableX} from \code{experiments(x)}
-of \code{MultiAssayExperiment} object by name or index, name is recommended.
-(Default slots: \code{Y = 1}, \code{X = 2}).}
 
 \item{formula}{A formula object. Used to assess differential associations.}
 
@@ -36,6 +31,11 @@ of \code{MultiAssayExperiment} object by name or index, name is recommended.
 \item data.frame with two columns
 \item list with two such data.frames
 }}
+
+\item{tableY, tableX}{\verb{Character scalar} or \verb{numeric scalar}. Selects experiment
+corresponding to \code{tableY} and \code{tableX} from \code{experiments(x)}
+of \code{MultiAssayExperiment} object by name or index, name is recommended.
+(Default slots: \code{Y = 1L}, \code{X = 2L}).}
 
 \item{force_new}{\code{boolean} If x already has a dictionary \code{Matrix}
 in metadata, ignore it and generate a new object anyway? (Default: FALSE).}

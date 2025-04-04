@@ -61,8 +61,8 @@ NULL
 setMethod(
     "getAnansi", sig = c(x = "MultiAssayExperiment"),
     def = function(
-        x, tableY = 1, tableX = 2, formula,
-        link = NULL, force_new = FALSE, ...
+        x, formula, link = NULL, tableY = NULL, tableX = NULL, ...,
+        force_new = FALSE
     ) {
         # Retrieve kwargs as list
         kwargs <- list(...)
@@ -84,7 +84,7 @@ setMethod(
             )
         }
         # Generate web object
-        w <- getWeb(x, tableY, tableX, link, ...)
+        w <- getWeb(x, link, tableY = tableY, tableX = tableX, ...)
 
         # Generate anansi output
         out <- anansi(web = w, formula = formula, ...)

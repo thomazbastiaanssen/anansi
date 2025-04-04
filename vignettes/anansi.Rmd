@@ -220,11 +220,23 @@ plot_list <- lapply(
 # Feed the first six of our ggplots to patchwork, using wrap_plots()
 wrap_plots(plot_list[seq_len(6L)], guides = 'collect') &
   # Continue as with an ordinary ggplot, but use & instead of +
-    geom_point(shape = 21, aes(fill = FMT_metadata$Legend) ) &
+    geom_point(shape = 21, show.legend = FALSE, 
+               aes(fill = FMT_metadata$Legend)) &
     geom_smooth(method = "lm", se = FALSE, 
-                aes(group = FMT_metadata$Legend) ) &
+                aes(colour = FMT_metadata$Legend), 
+                show.legend = FALSE) &
+
+  # Appearance
+    scale_fill_manual(
+      aesthetics = c("colour", "fill"),
+        values = c(
+            "Young yFMT" = "#2166ac",
+            "Aged oFMT" = "#b2182b",
+            "Aged yFMT" = "#ef8a62",
+            "All" = "gray")
+        ) &
     theme_bw() & 
-    labs(x = NULL, y = NULL)
+    labs(x = NULL, y = NULL) 
 ```
 These types of visualizations of feature pairs work best when the amount of 
 feature pairs to be plotted is modest.
@@ -257,7 +269,7 @@ output as `anansi`.
 ```{r}
 #| bioc2, eval=TRUE
 
-out <- getAnansi(mae,
+out <- getAnansi(x = mae,
     tableY = "cpd", tableX = "ko",
     formula = ~Legend,
     adjust.method = "BH",

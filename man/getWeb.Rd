@@ -5,17 +5,25 @@
 \alias{getWeb,MultiAssayExperiment-method}
 \title{weaveWeb wrapper for the MultiAssayExperiment class}
 \usage{
-\S4method{getWeb}{MultiAssayExperiment}(x, tableY = 1L, tableX = 2L, link = NULL, force_new = FALSE, ...)
+\S4method{getWeb}{MultiAssayExperiment}(
+  x,
+  link = NULL,
+  ...,
+  tableY = NULL,
+  tableX = NULL,
+  typeY = NULL,
+  typeX = NULL,
+  force_new = FALSE,
+  experiment1 = NULL,
+  experiment2 = NULL,
+  assay.type1 = NULL,
+  assay.type2 = NULL
+)
 }
 \arguments{
 \item{x}{a \code{\link[MultiAssayExperiment:MultiAssayExperiment]{MultiAssayExperiment::MultiAssayExperiment()}}.}
 
 \item{...}{additional parameters passed to \code{\link[=AnansiWeb]{AnansiWeb()}}.}
-
-\item{tableY, tableX}{\verb{Character scalar} or \verb{numeric scalar}. Selects experiment
-corresponding to \code{tableY} and \code{tableX} from \code{experiments(x)}
-of \code{MultiAssayExperiment} object by name or index, name is recommended.
-(Default slots: \code{Y = 1}, \code{X = 2}).}
 
 \item{link}{One of the following:
 \itemize{
@@ -24,8 +32,23 @@ of \code{MultiAssayExperiment} object by name or index, name is recommended.
 \item list with two such data.frames
 }}
 
+\item{tableY, tableX}{\verb{Character scalar} or \verb{numeric scalar}. Selects experiment
+corresponding to \code{tableY} and \code{tableX} from \code{experiments(x)}
+of \code{MultiAssayExperiment} object by name or index, name is recommended.
+(Default slots: \code{Y = 1L}, \code{X = 2L}).}
+
+\item{typeY, typeX}{\verb{Character scalar} or \verb{numeric scalar}. Selects assay from
+experiments to \code{tableY} and \code{tableX} from \code{experiments(x)}.
+(Default: \code{1L} - the first assay in that experiment).}
+
 \item{force_new}{\code{boolean} If x already has a dictionary \code{Matrix}
 in metadata, ignore it and generate a new object anyway? (Default: FALSE).}
+
+\item{experiment1, experiment2}{synonymous args to \verb{tableY,tableX} for
+compatibility with \code{mia} argument style.}
+
+\item{assay.type1, assay.type2}{synonymous args to \verb{typeY,typeX} for
+compatibility with \code{mia} argument style.}
 }
 \value{
 an \code{AnansiWeb} object, with sparse binary biadjacency matrix
