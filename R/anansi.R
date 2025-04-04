@@ -138,7 +138,6 @@ anansi <- function(web, formula, groups = NULL, metadata = NULL,
     )
     int.terms <- input$int.terms
     groups <- input$groups
-    n.grps <- input$n.grps
     group.id <- input$group.id
     errorterm <- input$error.term
     sat_model <- input$lm.formula
@@ -146,17 +145,17 @@ anansi <- function(web, formula, groups = NULL, metadata = NULL,
 
     out.list <- vector(
         "list",
-        length = 1 + n.grps + (2 * length(int.terms))
+        length = 1 + length(group.id) + (2 * length(int.terms))
     )
-    out.list[seq_len(n.grps)] <- call_groupwise(
+    out.list[seq_along(group.id)] <- call_groupwise(
         web, groups,
         metadata, verbose
     )
     # Sort out metadata formatting for differential association testing
     meta.frame <- model.frame(formula = sat_model, cbind(x = 1, metadata))
 
-    out.list[n.grps +
-        seq_len(1 + (2 * length(int.terms)))] <- anansiDiffCor(
+    out.list[length(group.id) +
+        seq_len(1L + (2L * length(int.terms)))] <- anansiDiffCor(
         web, sat_model, errorterm, int.terms, meta.frame, verbose
     )
     if (return.format != "raw") {
@@ -214,11 +213,7 @@ prepInput <- function(web, formula, groups, metadata, verbose) {
         error.term = error.term,
         int.terms = all_terms,
         groups = groups[[1]],
-        n.grps = groups[[2]],
-        group.id = c("All", unique(apply(metadata[, groups[[1]], drop = FALSE],
-            1, paste,
-            collapse = "_"
-        ))),
+        group.id = groups[[2]],
         metadata = `row.names<-.data.frame`(metadata, NULL)
     )
 
@@ -237,8 +232,8 @@ check_groups <- function(groups, raw_terms, indErr, metadata, verbose) {
             "Grouping variable(s) not recognised. Please check input." =
                 !any(missing_groups)
         )
-        n.groups <- 1 + length(unique(do.call(paste0, c(metadata[groups]))))
-        return(list(groups, n.groups))
+        group.id <- check_missing_combos(metadata[groups])
+        return(list(groups, group.id))
     }
 
     # If no input, look for categorical variables
@@ -255,8 +250,7 @@ check_groups <- function(groups, raw_terms, indErr, metadata, verbose) {
     groups <- labels(raw_terms)[ind_o1]
 
     sub_meta <- metadata[, groups, drop = FALSE]
-    sub_meta <-
-        sub_meta[, unlist(lapply(sub_meta, is.categorical)), drop = FALSE]
+    sub_meta <- sub_meta[, vapply(sub_meta, is.categorical, NA), drop = FALSE]
 
     if (NCOL(sub_meta) == 0L) {
         if (verbose) {
@@ -264,9 +258,8 @@ check_groups <- function(groups, raw_terms, indErr, metadata, verbose) {
         }
         return(list(NULL, 1L))
     }
-    n.groups <- 1L + length(unique(do.call(paste0, c(sub_meta))))
-    groups <- colnames(sub_meta)
-    return(list(groups, n.groups))
+    group.id <- check_missing_combos(sub_meta)
+    return(list(groups, group.id))
 }
 
 #' Prepare saturated model, deal with `Error` terms.
@@ -378,4 +371,29 @@ named_term_list <- function(t, m) {
     }
 
     return(c(f_list, h_list))
+}
+
+#' Check whether any combination of categories in group argument is missing
+#'
+#' @noRd
+#'
+check_missing_combos <- function(metadata) {
+
+    group.factor <- interaction(metadata, sep = "_")
+    empir.factor <- factor(group.factor)
+    if("All" %in% levels(group.factor)) {
+        stop("'All' cannot be present in columns of 'group' argument.")
+    }
+    if(nlevels(group.factor) > nlevels(empir.factor)) {
+        missing_lv <- paste(setdiff(levels(group.factor),
+                                    levels(empir.factor)),
+                            collapse=", ")
+        warning("Missing combinations of categorical variables: ",
+                missing_lv, "\n",
+                "NAs introduced; Estimated effects may be unbalanced.",
+                call. = FALSE)
+    }
+
+    group.id <- c("All", levels(empir.factor))
+    return(group.id)
 }
