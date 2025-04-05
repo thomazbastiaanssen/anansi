@@ -98,6 +98,12 @@ arguments while ensuring compatibility with \code{S4Vectors} method.}
 \item{arr.ind, useNames}{See ?base::which. \code{AnansiWeb} default returns a
 two-column array index.}
 
+\item{FUN}{a function with at least two arguments. The variables \code{x} and \code{y},
+in order, refer to the corresponding values of feature pairs in \code{tableX}
+and \code{tableY}.}
+
+\item{MoreArgs, SIMPLIFY, USE.NAMES}{see ?base::mapply}
+
 \item{which}{\verb{integer matrix}, indicating pair positions in \code{tableY(x)} and
 \code{tableX(x)}, respectively. If \code{NULL} (default):
 \code{Matrix::which(dictionary(x), TRUE)}.}

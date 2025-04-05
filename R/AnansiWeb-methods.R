@@ -227,7 +227,7 @@ setMethod("names", "AnansiWeb", function(x) names(dimnames(x@dictionary)))
 
 #' @rdname AnansiWeb
 #' @aliases which,AnansiWeb-method
-#' @importMethodsFrom Matrix which
+#' @importMethodsFrom BiocGenerics which
 #' @param arr.ind,useNames See ?base::which. `AnansiWeb` default returns a
 #'     two-column array index.
 #' @export
@@ -235,28 +235,37 @@ setMethod("names", "AnansiWeb", function(x) names(dimnames(x@dictionary)))
 #'
 setMethod("which", signature = c(x = "AnansiWeb"),
           function(x, arr.ind = TRUE, useNames = FALSE)
-              Matrix::which(x@dictionary, arr.ind, useNames))
+              which.AnansiWeb(x, arr.ind, useNames) )
+
+#' @noRd
+#' @importMethodsFrom Matrix which
+#'
+which.AnansiWeb <- function(x, arr.ind = TRUE, useNames = FALSE)
+    Matrix::which(x@dictionary, arr.ind, useNames)
 
 #' @rdname AnansiWeb
 #' @aliases mapply,AnansiWeb-method
 #' @importMethodsFrom BiocGenerics mapply
+#' @param FUN a function with at least two arguments. The variables `x` and `y`,
+#'     in order, refer to the corresponding values of feature pairs in `tableX`
+#'     and `tableY`.
+#' @param MoreArgs,SIMPLIFY,USE.NAMES see ?base::mapply
 #' @export
 #' @usage NULL
 #'
 setMethod("mapply", signature = c(... = "AnansiWeb"),
           function(
-        FUN, ..., MoreArgs = NULL, SIMPLIFY = TRUE, USE.NAMES = FALSE
-        ) {
-              tY <- as.data.frame.matrix(tableY(...))
-              tX <- as.data.frame.matrix(tableX(...))
-              wh <- which(..., useNames = FALSE)
-              mapply(
-                      x = tX[,wh[,2L]],
-                      y = tY[,wh[,1L]],
-                  FUN = FUN, MoreArgs = MoreArgs,
-                  SIMPLIFY = SIMPLIFY, USE.NAMES = USE.NAMES)
+        FUN, ..., MoreArgs = NULL, SIMPLIFY = TRUE, USE.NAMES = TRUE
+          ) {
+              tY <- as.data.frame.matrix(tableY(...), make.names = FALSE)
+              tX <- as.data.frame.matrix(tableX(...), make.names = FALSE)
+              wh <- which.AnansiWeb(...)
 
+              .mapply(FUN,
+                      dots = list(x = tX[wh[,2L]], y = tY[wh[,1L]]),
+                      MoreArgs)
           }
+
 )
 
 #' @rdname AnansiWeb
