@@ -106,11 +106,17 @@ feature tables and an adjacency matrix.</p>
 <span>    <span class="va">x</span>, row.names <span class="op">=</span> <span class="cn">NULL</span>, optional <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span></span>
 <span>    <span class="op">)</span></span>
 <span></span>
-<span><span class="co">## To list of data frames with feature pairs</span></span>
+<span><span class="co">## Utilities on feature pairs</span></span>
+<span><span class="co"># S4 method for class 'AnansiWeb'</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">x</span>, arr.ind <span class="op">=</span> <span class="cn">TRUE</span>, useNames <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="co"># S4 method for class 'AnansiWeb'</span></span>
 <span><span class="fu">getFeaturePairs</span><span class="op">(</span></span>
 <span>    <span class="va">x</span>, which <span class="op">=</span> <span class="cn">NULL</span>, with.metadata <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span></span>
 <span><span class="op">)</span></span>
+<span><span class="co"># S4 method for class 'AnansiWeb'</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/mapply.html" class="external-link">mapply</a></span><span class="op">(</span></span>
+<span>    <span class="va">FUN</span>, <span class="va">...</span>, MoreArgs <span class="op">=</span> <span class="cn">NULL</span>, SIMPLIFY <span class="op">=</span> <span class="cn">TRUE</span>, USE.NAMES <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>    <span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S4 method for class 'AnansiWeb'</span></span>
 <span><span class="fu">show</span><span class="op">(</span><span class="va">object</span><span class="op">)</span></span></code></pre></div>
@@ -150,6 +156,11 @@ arguments while ensuring compatibility with <code>S4Vectors</code> method.</p></
 
 <dt id="arg-value">value<a class="anchor" aria-label="anchor" href="#arg-value"></a></dt>
 <dd><p>replacement <code>matrix</code> with same number of rows target.</p></dd>
+
+
+<dt id="arg-arr-ind-usenames">arr.ind, useNames<a class="anchor" aria-label="anchor" href="#arg-arr-ind-usenames"></a></dt>
+<dd><p>See ?base::which. <code>AnansiWeb</code> default returns a
+two-column array index.</p></dd>
 
 
 <dt id="arg-which">which<a class="anchor" aria-label="anchor" href="#arg-which"></a></dt>
@@ -435,6 +446,14 @@ Typically generated using the <code><a href="weaveWeb.html">weaveWeb()</a></code
 <span class="r-out co"><span class="r-pr">#&gt;</span> 35  0.54214155  0.112038083</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 36  0.07510590 -0.133997013</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/mapply.html" class="external-link">mapply</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    FUN <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    <span class="va">web</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] -0.04798083  0.06035449  0.32607170  0.21244171  0.26101305  0.13758072</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] -0.13706694 -0.13116275 -0.24363013  0.07428211 -0.26138248  0.07189662</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13]  0.09469575 -0.06728680 -0.07338832</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
