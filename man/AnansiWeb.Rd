@@ -25,6 +25,8 @@
 \alias{dimnames,AnansiWeb-method}
 \alias{dim,AnansiWeb-method}
 \alias{names,AnansiWeb-method}
+\alias{which,AnansiWeb-method}
+\alias{mapply,AnansiWeb-method}
 \alias{getFeaturePairs,AnansiWeb-method}
 \alias{getFeaturePairs}
 \alias{as.list,AnansiWeb-method}
@@ -63,10 +65,14 @@ asMAE(x)
     x, row.names = NULL, optional = FALSE, ...
     )
 
-## To list of data frames with feature pairs
+## Utilities on feature pairs
+\S4method{which}{AnansiWeb}(x, arr.ind = TRUE, useNames = FALSE)
 \S4method{getFeaturePairs}{AnansiWeb}(
     x, which = NULL, with.metadata = FALSE, ...
 )
+\S4method{mapply}{AnansiWeb}(
+    FUN, ..., MoreArgs = NULL, SIMPLIFY = TRUE, USE.NAMES = TRUE
+    )
 
 \S4method{show}{AnansiWeb}(object)
 }
@@ -88,6 +94,9 @@ to \code{Matrix}}
 arguments while ensuring compatibility with \code{S4Vectors} method.}
 
 \item{value}{replacement \code{matrix} with same number of rows target.}
+
+\item{arr.ind, useNames}{See ?base::which. \code{AnansiWeb} default returns a
+two-column array index.}
 
 \item{which}{\verb{integer matrix}, indicating pair positions in \code{tableY(x)} and
 \code{tableX(x)}, respectively. If \code{NULL} (default):
@@ -182,6 +191,11 @@ asMAE(web)
 
 # Extract data.frames in pairs (only show first)
 getFeaturePairs(web)[1L]
+
+mapply(
+    FUN = function(x, y) cor(x, y),
+    web
+    )
 
 
 }

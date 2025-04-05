@@ -33,10 +33,14 @@
 #'     x, row.names = NULL, optional = FALSE, ...
 #'     )
 #'
-#' ## To list of data frames with feature pairs
+#' ## Utilities on feature pairs
+#' \S4method{which}{AnansiWeb}(x, arr.ind = TRUE, useNames = FALSE)
 #' \S4method{getFeaturePairs}{AnansiWeb}(
 #'     x, which = NULL, with.metadata = FALSE, ...
 #' )
+#' \S4method{mapply}{AnansiWeb}(
+#'     FUN, ..., MoreArgs = NULL, SIMPLIFY = TRUE, USE.NAMES = TRUE
+#'     )
 #'
 #' @param x,object an `AnansiWeb` object on which a method will be applied.
 #'
@@ -73,6 +77,11 @@
 #'
 #' # Extract data.frames in pairs (only show first)
 #' getFeaturePairs(web)[1L]
+#'
+#' mapply(
+#'     FUN = function(x, y) cor(x, y),
+#'     web
+#'     )
 #'
 #'
 NULL
@@ -216,6 +225,39 @@ setMethod(
 #'
 setMethod("names", "AnansiWeb", function(x) names(dimnames(x@dictionary)))
 
+#' @rdname AnansiWeb
+#' @aliases which,AnansiWeb-method
+#' @importMethodsFrom Matrix which
+#' @param arr.ind,useNames See ?base::which. `AnansiWeb` default returns a
+#'     two-column array index.
+#' @export
+#' @usage NULL
+#'
+setMethod("which", signature = c(x = "AnansiWeb"),
+          function(x, arr.ind = TRUE, useNames = FALSE)
+              Matrix::which(x@dictionary, arr.ind, useNames))
+
+#' @rdname AnansiWeb
+#' @aliases mapply,AnansiWeb-method
+#' @importMethodsFrom BiocGenerics mapply
+#' @export
+#' @usage NULL
+#'
+setMethod("mapply", signature = c(... = "AnansiWeb"),
+          function(
+        FUN, ..., MoreArgs = NULL, SIMPLIFY = TRUE, USE.NAMES = FALSE
+        ) {
+              tY <- as.data.frame.matrix(tableY(...))
+              tX <- as.data.frame.matrix(tableX(...))
+              wh <- which(..., useNames = FALSE)
+              mapply(
+                      x = tX[,wh[,2L]],
+                      y = tY[,wh[,1L]],
+                  FUN = FUN, MoreArgs = MoreArgs,
+                  SIMPLIFY = SIMPLIFY, USE.NAMES = USE.NAMES)
+
+          }
+)
 
 #' @rdname AnansiWeb
 #' @aliases getFeaturePairs getFeaturePairs,AnansiWeb-method
@@ -237,7 +279,7 @@ setMethod(getFeaturePairs, "AnansiWeb",
 #' @noRd
 getFeaturePairs.AnansiWeb <- function(x, which = NULL, with.metadata = FALSE) {
     if(is.null(which)) {
-        which <- Matrix::which(dictionary(x), arr.ind = TRUE, useNames = FALSE)
+        which <- which(x)
     }
     tX <- tableX(x)
     tY <- tableY(x)
