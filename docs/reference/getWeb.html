@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">anansi</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.6.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.7.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,7 +52,20 @@
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S4 method for class 'MultiAssayExperiment'</span></span>
-<span><span class="fu">getWeb</span><span class="op">(</span><span class="va">x</span>, tableY <span class="op">=</span> <span class="fl">1</span>, tableX <span class="op">=</span> <span class="fl">2</span>, link <span class="op">=</span> <span class="cn">NULL</span>, force_new <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">getWeb</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  link <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  tableY <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  tableX <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  typeY <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  typeX <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  force_new <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  experiment1 <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  experiment2 <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  assay.type1 <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  assay.type2 <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -67,13 +80,6 @@
 <dd><p>additional parameters passed to <code><a href="AnansiWeb.html">AnansiWeb()</a></code>.</p></dd>
 
 
-<dt id="arg-tabley-tablex">tableY, tableX<a class="anchor" aria-label="anchor" href="#arg-tabley-tablex"></a></dt>
-<dd><p><code>Character scalar</code> or <code>numeric scalar</code>. Selects experiment
-corresponding to <code>tableY</code> and <code>tableX</code> from <code>experiments(x)</code>
-of <code>MultiAssayExperiment</code> object by name or index, name is recommended.
-(Default slots: <code>Y = 1</code>, <code>X = 2</code>).</p></dd>
-
-
 <dt id="arg-link">link<a class="anchor" aria-label="anchor" href="#arg-link"></a></dt>
 <dd><p>One of the following:</p><ul><li><p>Character scalar with value "none"</p></li>
 <li><p>data.frame with two columns</p></li>
@@ -81,9 +87,32 @@ of <code>MultiAssayExperiment</code> object by name or index, name is recommende
 </ul></dd>
 
 
+<dt id="arg-tabley-tablex">tableY, tableX<a class="anchor" aria-label="anchor" href="#arg-tabley-tablex"></a></dt>
+<dd><p><code>Character scalar</code> or <code>numeric scalar</code>. Selects experiment
+corresponding to <code>tableY</code> and <code>tableX</code> from <code>experiments(x)</code>
+of <code>MultiAssayExperiment</code> object by name or index, name is recommended.
+(Default slots: <code>Y = 1L</code>, <code>X = 2L</code>).</p></dd>
+
+
+<dt id="arg-typey-typex">typeY, typeX<a class="anchor" aria-label="anchor" href="#arg-typey-typex"></a></dt>
+<dd><p><code>Character scalar</code> or <code>numeric scalar</code>. Selects assay from
+experiments to <code>tableY</code> and <code>tableX</code> from <code>experiments(x)</code>.
+(Default: <code>1L</code> - the first assay in that experiment).</p></dd>
+
+
 <dt id="arg-force-new">force_new<a class="anchor" aria-label="anchor" href="#arg-force-new"></a></dt>
 <dd><p><code>boolean</code> If x already has a dictionary <code>Matrix</code>
 in metadata, ignore it and generate a new object anyway? (Default: FALSE).</p></dd>
+
+
+<dt id="arg-experiment-experiment-">experiment1, experiment2<a class="anchor" aria-label="anchor" href="#arg-experiment-experiment-"></a></dt>
+<dd><p>synonymous args to <code>tableY,tableX</code> for
+compatibility with <code>mia</code> argument style.</p></dd>
+
+
+<dt id="arg-assay-type-assay-type-">assay.type1, assay.type2<a class="anchor" aria-label="anchor" href="#arg-assay-type-assay-type-"></a></dt>
+<dd><p>synonymous args to <code>typeY,typeX</code> for
+compatibility with <code>mia</code> argument style.</p></dd>
 
 </dl></div>
     <div class="section level2">

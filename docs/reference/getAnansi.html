@@ -13,7 +13,7 @@ anansi() in the given order."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">anansi</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.6.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.7.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -65,12 +65,12 @@ object. It applies the functions <code><a href="weaveWeb.html">weaveWeb()</a></c
 <span><span class="co"># S4 method for class 'MultiAssayExperiment'</span></span>
 <span><span class="fu">getAnansi</span><span class="op">(</span></span>
 <span>  <span class="va">x</span>,</span>
-<span>  tableY <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>  tableX <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  <span class="va">formula</span>,</span>
 <span>  link <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  force_new <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  <span class="va">...</span></span>
+<span>  tableY <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  tableX <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  force_new <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -87,13 +87,6 @@ object. It applies the functions <code><a href="weaveWeb.html">weaveWeb()</a></c
 <code><a href="AnansiWeb.html">AnansiWeb()</a></code> or <code><a href="anansi.html">anansi()</a></code>.</p></dd>
 
 
-<dt id="arg-tabley-tablex">tableY, tableX<a class="anchor" aria-label="anchor" href="#arg-tabley-tablex"></a></dt>
-<dd><p><code>Character scalar</code> or <code>numeric scalar</code>. Selects experiment
-corresponding to <code>tableY</code> and <code>tableX</code> from <code>experiments(x)</code>
-of <code>MultiAssayExperiment</code> object by name or index, name is recommended.
-(Default slots: <code>Y = 1</code>, <code>X = 2</code>).</p></dd>
-
-
 <dt id="arg-formula">formula<a class="anchor" aria-label="anchor" href="#arg-formula"></a></dt>
 <dd><p>A formula object. Used to assess differential associations.</p></dd>
 
@@ -103,6 +96,13 @@ of <code>MultiAssayExperiment</code> object by name or index, name is recommende
 <li><p>data.frame with two columns</p></li>
 <li><p>list with two such data.frames</p></li>
 </ul></dd>
+
+
+<dt id="arg-tabley-tablex">tableY, tableX<a class="anchor" aria-label="anchor" href="#arg-tabley-tablex"></a></dt>
+<dd><p><code>Character scalar</code> or <code>numeric scalar</code>. Selects experiment
+corresponding to <code>tableY</code> and <code>tableX</code> from <code>experiments(x)</code>
+of <code>MultiAssayExperiment</code> object by name or index, name is recommended.
+(Default slots: <code>Y = 1L</code>, <code>X = 2L</code>).</p></dd>
 
 
 <dt id="arg-force-new">force_new<a class="anchor" aria-label="anchor" href="#arg-force-new"></a></dt>

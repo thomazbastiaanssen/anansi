@@ -21,7 +21,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">anansi</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.6.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.7.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -153,26 +153,9 @@ All of these algorithms can produce functional count data in terms of
 KEGG Orthologues (KOs). These tables can be directly plugged in to
 <code>anansi</code>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Clean and CLR-transform the KEGG orthologue table.</span></span>
-<span></span>
-<span><span class="co"># Only keep functions that are represented in the dictionary.</span></span>
-<span><span class="va">KOs</span> <span class="op">&lt;-</span> <span class="va">FMT_KOs</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/row.names.html" class="external-link">row.names</a></span><span class="op">(</span><span class="va">FMT_KOs</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/sort.html" class="external-link">sort</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">ec2ko</span><span class="op">$</span><span class="va">ko</span><span class="op">)</span><span class="op">)</span>, <span class="op">]</span></span>
-<span></span>
-<span><span class="co"># Cut the decimal part off.</span></span>
-<span><span class="va">KOs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">floor</a></span><span class="op">(</span><span class="va">KOs</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Ensure all entires are numbers.</span></span>
-<span><span class="va">KOs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">KOs</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Remove all features with &lt; 10% prevalence in the dataset.</span></span>
-<span><span class="va">KOs</span> <span class="op">&lt;-</span> <span class="va">KOs</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">KOs</span> <span class="op">==</span> <span class="fl">0</span>, <span class="fl">1</span>, <span class="va">sum</span><span class="op">)</span> <span class="op">&lt;=</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">KOs</span><span class="op">)</span> <span class="op">*</span> <span class="fl">0.90</span><span class="op">)</span>, <span class="op">]</span></span>
-<span></span>
-<span><span class="co"># Perform a centered log-ratio transformation on the functional count table.</span></span>
-<span><span class="va">KOs.exp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/clr_lite.html">clr_c</a></span><span class="op">(</span><span class="va">KOs</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># anansi expects samples to be rows and features to be columns.</span></span>
+<code class="sourceCode R"><span><span class="co"># anansi expects samples to be rows and features to be columns.</span></span>
 <span><span class="va">t1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">FMT_metab</span><span class="op">)</span></span>
-<span><span class="va">t2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">KOs.exp</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">t2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">FMT_KOs</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -195,7 +178,7 @@ vignette on adjacency matrices.</a></p>
 <span>    tableX <span class="op">=</span> <span class="va">t2</span>,</span>
 <span>    link <span class="op">=</span> <span class="fu"><a href="../reference/kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Dropped features in tableX: 1249 remain.</span></span></code></pre>
+<pre><code><span><span class="co">## Dropped features in tableX: 2476 remain.</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="run-anansi">Run anansi🕷️<a class="anchor" aria-label="anchor" href="#run-anansi"></a>
@@ -277,7 +260,8 @@ Aging study.</p>
 <span>            <span class="st">"Aged yFMT"</span> <span class="op">=</span> <span class="st">"#ef8a62"</span>,</span>
 <span>            <span class="st">"All"</span> <span class="op">=</span> <span class="st">"gray"</span></span>
 <span>        <span class="op">)</span>,</span>
-<span>        breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Young yFMT"</span>, <span class="st">"Aged oFMT"</span>, <span class="st">"Aged yFMT"</span>, <span class="st">"All"</span><span class="op">)</span>, <span class="st">"Treatment"</span></span>
+<span>        breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Young yFMT"</span>, <span class="st">"Aged oFMT"</span>, <span class="st">"Aged yFMT"</span>, <span class="st">"All"</span><span class="op">)</span>,</span>
+<span>        name <span class="op">=</span> <span class="st">"Treatment"</span></span>
 <span>    <span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">""</span><span class="op">)</span> <span class="op">+</span></span>
@@ -285,6 +269,60 @@ Aging study.</p>
 <p><img src="anansi_files/figure-html/plot_FMT-1.png" alt="Differential association plot, with facets separating metabolites
 and metabolites on the y-axis. x-axis depicts pearson's correlation
 coefficient." width="960"></p>
+<p>We can also also use the web object to pull up specific pairs of
+features. The <a href="https://patchwork.data-imaginist.com/" class="external-link"><code>patchwork</code></a>
+provides a wonderful interface to combine plots. We can use
+<code><a href="../reference/AnansiWeb.html">getFeaturePairs()</a></code> to extract the relevant data from our
+<code>AnansiWeb</code> object in a convenient list format:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com" class="external-link">patchwork</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Get a list containing data.frames for each feature pair. </span></span>
+<span><span class="va">feature_pairs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/AnansiWeb.html">getFeaturePairs</a></span><span class="op">(</span><span class="va">web</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># For each, prepare a ggplot object with those features on x &amp; y axes. </span></span>
+<span><span class="va">plot_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span></span>
+<span>    <span class="va">feature_pairs</span>, </span>
+<span>    FUN <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">pair_i</span><span class="op">)</span> <span class="op">{</span></span>
+<span>        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">pair_i</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>            <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">.data</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">pair_i</span><span class="op">)</span><span class="op">[</span><span class="fl">1L</span><span class="op">]</span><span class="op">]</span><span class="op">]</span>, </span>
+<span>                x <span class="op">=</span> <span class="va">.data</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">pair_i</span><span class="op">)</span><span class="op">[</span><span class="fl">2L</span><span class="op">]</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>        <span class="co"># We'll use facet_grid for labels instead of labs(). </span></span>
+<span>            <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html" class="external-link">facet_grid</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">pair_i</span><span class="op">)</span><span class="op">[</span><span class="fl">1L</span><span class="op">]</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">pair_i</span><span class="op">)</span><span class="op">[</span><span class="fl">2L</span><span class="op">]</span><span class="op">)</span></span>
+<span>    <span class="op">}</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Feed the first six of our ggplots to patchwork, using wrap_plots()</span></span>
+<span><span class="fu"><a href="https://patchwork.data-imaginist.com/reference/wrap_plots.html" class="external-link">wrap_plots</a></span><span class="op">(</span><span class="va">plot_list</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fl">6L</span><span class="op">)</span><span class="op">]</span>, guides <span class="op">=</span> <span class="st">'collect'</span><span class="op">)</span> <span class="op">&amp;</span></span>
+<span>  <span class="co"># Continue as with an ordinary ggplot, but use &amp; instead of +</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>shape <span class="op">=</span> <span class="fl">21</span>, show.legend <span class="op">=</span> <span class="cn">FALSE</span>, </span>
+<span>               <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">FMT_metadata</span><span class="op">$</span><span class="va">Legend</span><span class="op">)</span><span class="op">)</span> <span class="op">&amp;</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html" class="external-link">geom_smooth</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"lm"</span>, se <span class="op">=</span> <span class="cn">FALSE</span>, </span>
+<span>                <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="va">FMT_metadata</span><span class="op">$</span><span class="va">Legend</span><span class="op">)</span>, </span>
+<span>                show.legend <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">&amp;</span></span>
+<span></span>
+<span>  <span class="co"># Appearance</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_fill_manual</a></span><span class="op">(</span></span>
+<span>      aesthetics <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"colour"</span>, <span class="st">"fill"</span><span class="op">)</span>,</span>
+<span>        values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>            <span class="st">"Young yFMT"</span> <span class="op">=</span> <span class="st">"#2166ac"</span>,</span>
+<span>            <span class="st">"Aged oFMT"</span> <span class="op">=</span> <span class="st">"#b2182b"</span>,</span>
+<span>            <span class="st">"Aged yFMT"</span> <span class="op">=</span> <span class="st">"#ef8a62"</span>,</span>
+<span>            <span class="st">"All"</span> <span class="op">=</span> <span class="st">"gray"</span><span class="op">)</span></span>
+<span>        <span class="op">)</span> <span class="op">&amp;</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">&amp;</span> </span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="cn">NULL</span>, y <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> </span></code></pre></div>
+<p><img src="anansi_files/figure-html/multiplot-1.png" width="700">
+These types of visualizations of feature pairs work best when the amount
+of feature pairs to be plotted is modest.</p>
+<div class="section level4">
+<h4 id="note-on-using-patchwork-with-anansi">Note on using <code>patchwork</code> with <code>anansi</code>:<a class="anchor" aria-label="anchor" href="#note-on-using-patchwork-with-anansi"></a>
+</h4>
+<p>Especially for large numers of featire pairs, it’s much more
+efficient to add shared elements to the patchwork using the
+<code>&amp;</code> operator, rather than adding them to the initial
+<code><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot()</a></code> calls in the <code><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply()</a></code> loop.</p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="bioconductor-pipeline">Bioconductor pipeline<a class="anchor" aria-label="anchor" href="#bioconductor-pipeline"></a>
@@ -292,7 +330,7 @@ coefficient." width="960"></p>
 <p>anansi also supports the Bioconductor class MultiAssayExperiment
 (MAE) as an alternative to AnansiWeb. The latter can be converted to a
 MAE with the function <code>asMAE</code>.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://waldronlab.io/MultiAssayExperiment/" class="external-link">MultiAssayExperiment</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Store sample metadata into metadata slot of web object</span></span>
@@ -302,8 +340,8 @@ MAE with the function <code>asMAE</code>.</p>
 <span><span class="va">mae</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/AnansiWeb.html">asMAE</a></span><span class="op">(</span><span class="va">web</span><span class="op">)</span></span></code></pre></div>
 <p>The MAE object can be passed to the <code>getAnansi</code> function,
 which returns the same output as <code>anansi</code>.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getAnansi.html">getAnansi</a></span><span class="op">(</span><span class="va">mae</span>,</span>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getAnansi.html">getAnansi</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">mae</span>,</span>
 <span>    tableY <span class="op">=</span> <span class="st">"cpd"</span>, tableX <span class="op">=</span> <span class="st">"ko"</span>,</span>
 <span>    formula <span class="op">=</span> <span class="op">~</span><span class="va">Legend</span>,</span>
 <span>    adjust.method <span class="op">=</span> <span class="st">"BH"</span>,</span>
@@ -316,7 +354,7 @@ which returns the same output as <code>anansi</code>.</p>
 <p>Finally, the output of anansi can be visualised with
 <code>plotAnansi</code> by specifying the type of association to
 use.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Filter associations by q value</span></span>
 <span><span class="va">out</span> <span class="op">&lt;-</span> <span class="va">out</span><span class="op">[</span><span class="va">out</span><span class="op">$</span><span class="va">full_q.values</span> <span class="op">&lt;</span> <span class="fl">0.2</span>, <span class="op">]</span></span>
 <span></span>
@@ -332,7 +370,7 @@ use.</p>
 <div class="section level2">
 <h2 id="session-info">Session info<a class="anchor" aria-label="anchor" href="#session-info"></a>
 </h2>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## R version 4.4.2 (2024-10-31)</span></span>
 <span><span class="co">## Platform: x86_64-pc-linux-gnu</span></span>
@@ -363,9 +401,9 @@ use.</p>
 <span><span class="co">##  [5] GenomeInfoDb_1.40.1         IRanges_2.38.1             </span></span>
 <span><span class="co">##  [7] S4Vectors_0.42.1            BiocGenerics_0.50.0        </span></span>
 <span><span class="co">##  [9] MatrixGenerics_1.16.0       matrixStats_1.5.0          </span></span>
-<span><span class="co">## [11] tidyr_1.3.1                 ggforce_0.4.2              </span></span>
-<span><span class="co">## [13] ggplot2_3.5.1               anansi_0.6.0               </span></span>
-<span><span class="co">## [15] BiocStyle_2.32.1           </span></span>
+<span><span class="co">## [11] patchwork_1.3.0             tidyr_1.3.1                </span></span>
+<span><span class="co">## [13] ggforce_0.4.2               ggplot2_3.5.1              </span></span>
+<span><span class="co">## [15] anansi_0.7.0                BiocStyle_2.32.1           </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## loaded via a namespace (and not attached):</span></span>
 <span><span class="co">##   [1] splines_4.4.2                   cellranger_1.1.0               </span></span>
@@ -402,7 +440,7 @@ use.</p>
 <span><span class="co">##  [63] treeio_1.28.0                   ragg_1.3.3                     </span></span>
 <span><span class="co">##  [65] Rcpp_1.0.14                     glue_1.8.0                     </span></span>
 <span><span class="co">##  [67] gridExtra_2.3                   SparseArray_1.4.8              </span></span>
-<span><span class="co">##  [69] mgcv_1.9-1                      xfun_0.51                      </span></span>
+<span><span class="co">##  [69] xfun_0.51                       mgcv_1.9-1                     </span></span>
 <span><span class="co">##  [71] TreeSummarizedExperiment_2.12.0 dplyr_1.1.4                    </span></span>
 <span><span class="co">##  [73] withr_3.0.2                     BiocManager_1.30.25            </span></span>
 <span><span class="co">##  [75] fastmap_1.2.0                   rhdf5filters_1.16.0            </span></span>
@@ -441,11 +479,10 @@ use.</p>
 <span><span class="co">## [141] BiocParallel_1.38.0             munsell_0.5.1                  </span></span>
 <span><span class="co">## [143] Biostrings_2.72.1               lazyeval_0.2.2                 </span></span>
 <span><span class="co">## [145] Matrix_1.7-3                    hms_1.1.3                      </span></span>
-<span><span class="co">## [147] patchwork_1.3.0                 sparseMatrixStats_1.16.0       </span></span>
-<span><span class="co">## [149] Rhdf5lib_1.26.0                 rbibutils_2.3                  </span></span>
-<span><span class="co">## [151] gridtext_0.1.5                  igraph_2.1.4                   </span></span>
-<span><span class="co">## [153] bslib_0.9.0                     readxl_1.4.5                   </span></span>
-<span><span class="co">## [155] ape_5.8-1</span></span></code></pre>
+<span><span class="co">## [147] sparseMatrixStats_1.16.0        Rhdf5lib_1.26.0                </span></span>
+<span><span class="co">## [149] rbibutils_2.3                   gridtext_0.1.5                 </span></span>
+<span><span class="co">## [151] igraph_2.1.4                    bslib_0.9.0                    </span></span>
+<span><span class="co">## [153] readxl_1.4.5                    ape_5.8-1</span></span></code></pre>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
