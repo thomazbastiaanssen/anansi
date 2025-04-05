@@ -209,6 +209,33 @@ ggplot(diff_df) +
     )) +
     coord_equal(ratio = 1, xlim = c(-2.5, 2.5), ylim = c(-2.5, 2.5))
 ```
+### Equivalent `stats::lm()` model
+We can use `mapply()` on an `AnansiWeb` object to run a function on the
+observations for each pair of features. 
+We can use this to confirm the statistical output of `anansi()` against the
+`stats` package: 
+```{r}
+#| disj-lm
+
+score_lm <- mapply(web, FUN = function(x, y) {
+             anova(
+             lm(y ~ x * (group_ab + score_a), data = metadata(web))
+           )$`F value`[5L]
+    })
+
+group_lm <- mapply(web, FUN = function(x, y) {
+           anova(
+           lm(y ~ x * (score_a + group_ab), data = metadata(web))
+           )$`F value`[5L]
+    })
+
+all.equal(score_lm, out$disjointed_score_a_f.values)
+all.equal(group_lm, out$disjointed_group_ab_f.values)
+
+```
+We run two separate `mapply()` calls for the two interaction terms. Because of
+the way `anova()` calculates sum-of-squares (type-I), the order of variables
+matters for `anova()`.
 
 ## Emergent association
 Emergent associations describe the situation where the **strength** of an association is explained by a term interacting with x. We again estimate this as interaction terms with `x`. In our example we have two such terms, namely `x:group_ab` and `x:score_a`. 
@@ -268,7 +295,7 @@ to treat it as a stratum, allowing for random intercepts. This is useful when
 dealing with multiple measurements per subject, commonly due to a longitudinal 
 design. 
 ```{r intro-error} 
-out <- anansi(web,
+outErr <- anansi(web,
     formula = ~ group_ab + score_a + Error(sample_id),
     groups = "group_ab"
 )

@@ -261,9 +261,13 @@ setMethod("mapply", signature = c(... = "AnansiWeb"),
               tX <- as.data.frame.matrix(tableX(...), make.names = FALSE)
               wh <- which.AnansiWeb(...)
 
-              .mapply(FUN,
-                      dots = list(x = tX[wh[,2L]], y = tY[wh[,1L]]),
-                      MoreArgs)
+              out <- .mapply(FUN,
+                             dots = list(x = tX[wh[,2L]], y = tY[wh[,1L]]),
+                             MoreArgs)
+              if(SIMPLIFY) {
+                  out <- simplify2array(out)
+              }
+              return(out)
           }
 
 )
