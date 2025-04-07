@@ -239,16 +239,16 @@ use this to confirm the statistical output of <code><a href="../reference/anansi
 against the <code>stats</code> package:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">score_lm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mapply.html" class="external-link">mapply</a></span><span class="op">(</span><span class="va">web</span>, FUN <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="op">{</span></span>
-<span>             <span class="fu"><a href="https://rdrr.io/r/stats/anova.html" class="external-link">anova</a></span><span class="op">(</span></span>
-<span>             <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">x</span> <span class="op">*</span> <span class="op">(</span><span class="va">group_ab</span> <span class="op">+</span> <span class="va">score_a</span><span class="op">)</span>, data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Annotated-class.html" class="external-link">metadata</a></span><span class="op">(</span><span class="va">web</span><span class="op">)</span><span class="op">)</span></span>
-<span>           <span class="op">)</span><span class="op">$</span><span class="va">`F value`</span><span class="op">[</span><span class="fl">5L</span><span class="op">]</span></span>
-<span>    <span class="op">}</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/stats/anova.html" class="external-link">anova</a></span><span class="op">(</span></span>
+<span>        <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">x</span> <span class="op">*</span> <span class="op">(</span><span class="va">group_ab</span> <span class="op">+</span> <span class="va">score_a</span><span class="op">)</span>, data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Annotated-class.html" class="external-link">metadata</a></span><span class="op">(</span><span class="va">web</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="op">)</span><span class="op">$</span><span class="va">`F value`</span><span class="op">[</span><span class="fl">5L</span><span class="op">]</span></span>
+<span><span class="op">}</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">group_lm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mapply.html" class="external-link">mapply</a></span><span class="op">(</span><span class="va">web</span>, FUN <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="op">{</span></span>
-<span>           <span class="fu"><a href="https://rdrr.io/r/stats/anova.html" class="external-link">anova</a></span><span class="op">(</span></span>
-<span>           <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">x</span> <span class="op">*</span> <span class="op">(</span><span class="va">score_a</span> <span class="op">+</span> <span class="va">group_ab</span><span class="op">)</span>, data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Annotated-class.html" class="external-link">metadata</a></span><span class="op">(</span><span class="va">web</span><span class="op">)</span><span class="op">)</span></span>
-<span>           <span class="op">)</span><span class="op">$</span><span class="va">`F value`</span><span class="op">[</span><span class="fl">5L</span><span class="op">]</span></span>
-<span>    <span class="op">}</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/stats/anova.html" class="external-link">anova</a></span><span class="op">(</span></span>
+<span>        <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">x</span> <span class="op">*</span> <span class="op">(</span><span class="va">score_a</span> <span class="op">+</span> <span class="va">group_ab</span><span class="op">)</span>, data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Annotated-class.html" class="external-link">metadata</a></span><span class="op">(</span><span class="va">web</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="op">)</span><span class="op">$</span><span class="va">`F value`</span><span class="op">[</span><span class="fl">5L</span><span class="op">]</span></span>
+<span><span class="op">}</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/Matrix/man/all.equal-methods.html" class="external-link">all.equal</a></span><span class="op">(</span><span class="va">score_lm</span>, <span class="va">out</span><span class="op">$</span><span class="va">disjointed_score_a_f.values</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] TRUE</span></span></code></pre>
@@ -415,7 +415,7 @@ equivalent.</p>
 <span><span class="co">## [23] ggforce_0.4.2               GenomeInfoDb_1.42.3        </span></span>
 <span><span class="co">## [25] htmltools_0.5.8.1           sass_0.4.9                 </span></span>
 <span><span class="co">## [27] yaml_2.3.10                 pkgdown_2.1.1              </span></span>
-<span><span class="co">## [29] pillar_1.10.1               crayon_1.5.3               </span></span>
+<span><span class="co">## [29] pillar_1.10.2               crayon_1.5.3               </span></span>
 <span><span class="co">## [31] jquerylib_0.1.4             MASS_7.3-64                </span></span>
 <span><span class="co">## [33] DelayedArray_0.32.0         cachem_1.1.0               </span></span>
 <span><span class="co">## [35] abind_1.4-8                 tidyselect_1.2.1           </span></span>
