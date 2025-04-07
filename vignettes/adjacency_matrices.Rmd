@@ -237,7 +237,7 @@ to the sparser graph on the right can be seen in the figure below.
 krebs_edge_df <- local({
     data("krebs", package = "anansi")
     return(krebs)
-    })
+})
 
 krebs_edge_df |>
     mutate(Enzyme = `levels<-`(
@@ -300,7 +300,7 @@ package includes such data for the [KEGG database](https://www.genome.jp/kegg/),
 let's take a look at some of it:
 
 ```{r peakec2ko}
-# Extract the data.frame from the list that kegg_link() returns 
+# Extract the data.frame from the list that kegg_link() returns
 ec2ko <- kegg_link()[["ec2ko"]]
 
 head(ec2ko)

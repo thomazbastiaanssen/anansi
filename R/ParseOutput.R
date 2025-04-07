@@ -123,7 +123,8 @@ result.df <- function(out.list, dic) {
     feature_labs <- expand.grid(
         feature_Y = row.names(dic),
         feature_X = colnames(dic),
-        stringsAsFactors = FALSE)[dic, ]
+        stringsAsFactors = FALSE
+    )[dic, ]
 
     df.list <- c(feature_labs, lapply(out.list, frame.tale, dic))
     do.call(what = "cbind.data.frame", args = df.list, quote = TRUE)

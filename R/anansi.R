@@ -128,9 +128,8 @@
 anansi <- function(web, formula, groups = NULL, metadata = NULL,
                    adjust.method = "BH", verbose = TRUE,
                    return.format = "table", ...) {
-    return.format <- match.arg(return.format,
-        choices = c("table", "list", "raw")
-    )
+    return.format <-
+        match.arg(return.format, choices = c("table", "list", "raw"))
     # generate anansiYarn input object
     input <- prepInput(
         web = web, formula = formula, groups = groups,
@@ -327,11 +326,10 @@ is.categorical <- function(x) is.character(x) || is.factor(x) || is.ordered(x)
 #' @noRd
 #'
 lvs_or_num <- function(x) {
-    if(is.categorical(x)) {
+    if (is.categorical(x)) {
         return(unique(as.character(x)))
     } # else
-    return( "numeric" )
-
+    return("numeric")
 }
 
 #' Provide name and levels for categories for group terms
@@ -357,7 +355,7 @@ named_term_list <- function(t, m) {
     f_order <- t[order_one]
     h_order <- t[!order_one]
 
-    f_list <- lapply(m[,f_order, drop = FALSE], lvs_or_num)
+    f_list <- lapply(m[, f_order, drop = FALSE], lvs_or_num)
     h_list <- NULL
     if (length(h_order) != 0) {
         m_num <- !unlist(lapply(m, is.categorical))
@@ -378,20 +376,24 @@ named_term_list <- function(t, m) {
 #' @noRd
 #'
 check_missing_combos <- function(metadata) {
-
     group.factor <- interaction(metadata, sep = "_")
     empir.factor <- factor(group.factor)
-    if("All" %in% levels(group.factor)) {
+    if ("All" %in% levels(group.factor)) {
         stop("'All' cannot be present in columns of 'group' argument.")
     }
-    if(nlevels(group.factor) > nlevels(empir.factor)) {
-        missing_lv <- paste(setdiff(levels(group.factor),
-                                    levels(empir.factor)),
-                            collapse=", ")
+    if (nlevels(group.factor) > nlevels(empir.factor)) {
+        missing_lv <- paste(
+            setdiff(
+                levels(group.factor),
+                levels(empir.factor)
+            ),
+            collapse = ", "
+        )
         warning("Missing combinations of categorical variables: ",
-                missing_lv, "\n",
-                "NAs introduced; Estimated effects may be unbalanced.",
-                call. = FALSE)
+            missing_lv, "\n",
+            "NAs introduced; Estimated effects may be unbalanced.",
+            call. = FALSE
+        )
     }
 
     group.id <- c("All", levels(empir.factor))

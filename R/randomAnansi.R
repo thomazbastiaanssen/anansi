@@ -114,7 +114,8 @@ krebsDemoWeb <- function(n_samples = 100, n_reps = 4L) {
             Matrix::sparseMatrix(
                 i = as.integer(krebs$Enzyme),
                 j = as.integer(krebs$Metabolite),
-                dimnames = lapply(krebs, levels))
+                dimnames = lapply(krebs, levels)
+            )
         )
     })
     # Generate web with metadata

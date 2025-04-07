@@ -101,8 +101,8 @@ NULL
 #' @rdname plotAnansi
 #' @export
 setGeneric("plotAnansi",
-           signature = c("x"),
-           function(x, ...) standardGeneric("plotAnansi")
+    signature = c("x"),
+    function(x, ...) standardGeneric("plotAnansi")
 )
 
 #' @rdname plotAnansi
@@ -116,13 +116,11 @@ setGeneric("plotAnansi",
 setMethod(
     "plotAnansi",
     sig = c(x = "data.frame"),
-    def = function(
-        x, association.type = NULL, model.var = NULL,
-        signif.threshold = NULL,
-        colour_by = NULL, color_by = colour_by,
-        fill_by = "group", size_by = NULL, shape_by = NULL,
-        y_position = "right", x_lab = "cor", y_lab = ""
-    ) {
+    def = function(x, association.type = NULL, model.var = NULL,
+                   signif.threshold = NULL,
+                   colour_by = NULL, color_by = colour_by,
+                   fill_by = "group", size_by = NULL, shape_by = NULL,
+                   y_position = "right", x_lab = "cor", y_lab = "") {
         # Create list of Booleans whether args are defined
         defined_args <- lapply(
             list(
@@ -134,7 +132,7 @@ setMethod(
         # Check association.type
         if (defined_args[["association"]]) {
             match.arg(association.type,
-                      choices = c("disjointed", "emergent", "full")
+                choices = c("disjointed", "emergent", "full")
             )
         }
         # Check model.var
@@ -145,15 +143,17 @@ setMethod(
         if (defined_args[["association"]] && !defined_args[["model.var"]] &&
             association.type %in% c("disjointed", "emergent")) {
             stop("'model.var' must specify a variable of the anansi model ",
-                 "when 'association type' is set to ", association.type,
-                 call. = FALSE
+                "when 'association type' is set to ", association.type,
+                call. = FALSE
             )
         }
         if (defined_args[["association"]] && defined_args[["model.var"]] &&
             association.type == "full") {
             model.var <- NULL
             warning("'model.var' is ignored when 'association type' ",
-                    "is set to ", association.type, call. = FALSE)
+                "is set to ", association.type,
+                call. = FALSE
+            )
             model.var <- NULL
         }
         # Derive p-value column from association.type and model.var
@@ -165,8 +165,9 @@ setMethod(
         }
         if (!all(c("feature_X", "feature_Y") %in% colnames(x))) {
             stop("'x' must be the output of 'anansi' in the table format ",
-                 "and must contain columns 'feature_X' ,'feature_Y'",
-                 call. = FALSE)
+                "and must contain columns 'feature_X' ,'feature_Y'",
+                call. = FALSE
+            )
         }
         if (!any(grepl(pval, names(x)))) {
             stop("Could not find p-values in 'x'.", call. = FALSE)
@@ -181,21 +182,24 @@ setMethod(
         defined_args <- c(
             defined_args,
             mapply(.check_aes,
-                   aes_name = c("colour_by", "fill_by", "size_by", "shape_by"),
-                   aes_var = list(colour_by, fill_by, size_by, shape_by),
-                   MoreArgs = list(x = x), SIMPLIFY = FALSE)
+                aes_name = c("colour_by", "fill_by", "size_by", "shape_by"),
+                aes_var = list(colour_by, fill_by, size_by, shape_by),
+                MoreArgs = list(x = x), SIMPLIFY = FALSE
+            )
         )
         # Check signif.threshold
         if (defined_args[["signif"]] &&
             (!is.numeric(signif.threshold) ||
-             signif.threshold < 0 || signif.threshold > 1)
+                signif.threshold < 0 || signif.threshold > 1)
         ) {
             stop("'signif.threshold' must be a number between 0 and 1",
-                 call. = FALSE)
+                call. = FALSE
+            )
         }
         if (!defined_args[["association"]] && defined_args[["signif"]]) {
             warning("'signif.threshold' is ignored when ",
-                    "'association type' is not defined", call. = FALSE
+                "'association type' is not defined",
+                call. = FALSE
             )
         }
         # Check y_position
@@ -211,7 +215,7 @@ setMethod(
             shape = if (defined_args[["shape_by"]]) x[[shape_by]] else NA,
             alpha = if (defined_args[["signif"]]) {
                 factor(x[[pval]] < signif.threshold,
-                       levels = c(TRUE, FALSE)
+                    levels = c(TRUE, FALSE)
                 )
             } else {
                 NA
@@ -225,7 +229,8 @@ setMethod(
             x_lab, y_lab
         )
         return(p)
-    })
+    }
+)
 ################################ HELP FUNCTIONS ################################
 # Convert anansi wide to long format
 #' @description
@@ -258,9 +263,11 @@ setMethod(
     ), drop = FALSE], NULL)
     # If "All" is in group column, make it the last level.
     groups <- factor(rep(groups, each = NROW(x)),
-                        levels = c(groups[groups != "All"],
-                                   groups[groups == "All"])
-                        )
+        levels = c(
+            groups[groups != "All"],
+            groups[groups == "All"]
+        )
+    )
     x <- cbind(f, group = groups, d)
     # Restore terms
     x <- `attr<-`(x, "model_terms", mt)
@@ -275,8 +282,8 @@ setMethod(
     # Rise exception if aesthetic is not character or not in x
     if (aes_defined && !(aes_var %in% colnames(x) && is.character(aes_var))) {
         stop("'", aes_name, "' must be a character string specifying the",
-             " name of a 'groups' term used in the original anansi call",
-             call. = FALSE
+            " name of a 'groups' term used in the original anansi call",
+            call. = FALSE
         )
     }
     return(aes_defined)
@@ -328,7 +335,7 @@ setMethod(
     if (!any(unlist(
         defined_args[c("colour_by", "fill_by", "size_by", "shape_by")]
     )) &&
-    !defined_args[["signif"]]) {
+        !defined_args[["signif"]]) {
         p <- p + theme(legend.position = "none")
     }
     # Remove legend for undefined aesthetics

@@ -58,54 +58,52 @@
 #' outWeb <- getWeb(mae, tableY = "y", tableX = "x")
 #'
 setMethod("getWeb",
-          signature = c(x = "MultiAssayExperiment"),
-          function(
-        x, link = NULL, ...,
-        tableY = NULL, tableX = NULL,
-        typeY = NULL, typeX = NULL,
-        force_new = FALSE,
-        experiment1 = NULL, experiment2 = NULL,
-        assay.type1 = NULL, assay.type2 = NULL
-    ) {
-      y_ids <- .test_coherent(tableY, experiment1, typeY, assay.type1)
-      x_ids <- .test_coherent(tableX, experiment2, typeX, assay.type2)
-      tableY <- y_ids[[1L]]
-      tableX <- x_ids[[1L]]
-    # Check experiments
-    mia:::.test_experiment_of_mae(x, tableY)
-    mia:::.test_experiment_of_mae(x, tableX)
-    y_exp <- names(experiments(x)[tableY])
-    x_exp <- names(experiments(x)[tableX])
+    signature = c(x = "MultiAssayExperiment"),
+    function(x, link = NULL, ...,
+             tableY = NULL, tableX = NULL,
+             typeY = NULL, typeX = NULL,
+             force_new = FALSE,
+             experiment1 = NULL, experiment2 = NULL,
+             assay.type1 = NULL, assay.type2 = NULL) {
+        y_ids <- .test_coherent(tableY, experiment1, typeY, assay.type1)
+        x_ids <- .test_coherent(tableX, experiment2, typeX, assay.type2)
+        tableY <- y_ids[[1L]]
+        tableX <- x_ids[[1L]]
+        # Check experiments
+        mia:::.test_experiment_of_mae(x, tableY)
+        mia:::.test_experiment_of_mae(x, tableX)
+        y_exp <- names(experiments(x)[tableY])
+        x_exp <- names(experiments(x)[tableX])
 
-    # Extract assays
-    tY <- t(assay(experiments(x)[tableY], y_ids[[2L]]))
-    tX <- t(assay(experiments(x)[tableX], x_ids[[2L]]))
+        # Extract assays
+        tY <- t(assay(experiments(x)[tableY], y_ids[[2L]]))
+        tX <- t(assay(experiments(x)[tableX], x_ids[[2L]]))
 
-    # Check if x already contains a dictionary
-    if (!force_new) {
-        m <- metadata(x)
+        # Check if x already contains a dictionary
+        if (!force_new) {
+            m <- metadata(x)
 
-        if (is.null(link)) {
-            d <- "dictionary"
+            if (is.null(link)) {
+                d <- "dictionary"
+            }
+            if (valid_selection(link, m)) {
+                d <- link
+            }
+            if (d %in% names(m)) {
+                return(AnansiWeb(
+                    tableX = tX, tableY = tY, dictionary = m[[d]],
+                    metadata = list(metadata = as.data.frame(colData(x))),
+                    ...
+                ))
+            }
         }
-        if (valid_selection(link, m)) {
-            d <- link
-        }
-        if (d %in% names(m)) {
-            return(AnansiWeb(
-                tableX = tX, tableY = tY, dictionary = m[[d]],
-                metadata = list(metadata = as.data.frame(colData(x))),
-                ...
-            ))
-        }
-    }
-    # Generate web object
-    weaveWeb.default(
-        x = x_exp, y = y_exp, link = link,
-        tableX = tX, tableY = tY,
-        metadata = list(metadata = as.data.frame(colData(x))),
-        ...
-    )
+        # Generate web object
+        weaveWeb.default(
+            x = x_exp, y = y_exp, link = link,
+            tableX = tX, tableY = tY,
+            metadata = list(metadata = as.data.frame(colData(x))),
+            ...
+        )
     }
 )
 
@@ -134,18 +132,22 @@ valid_selection <- function(i, x) {
 #' @noRd
 .test_coherent <- function(tab, exp, tab.type, ass.type) {
     e_out <- unique(c(tab, exp))
-    if(length(e_out) == 0L) {e_out <- 1L}
+    if (length(e_out) == 0L) {
+        e_out <- 1L
+    }
     stopifnot(
         "args 'tableY,X' cannot contradict args 'experiment1,2'." =
-                  length(e_out) == 1L
-        )
+            length(e_out) == 1L
+    )
 
     t_out <- unique(c(tab.type, ass.type))
-    if(length(t_out) == 0L) {t_out <- 1L}
+    if (length(t_out) == 0L) {
+        t_out <- 1L
+    }
     stopifnot(
         "args 'typeY,X.' cannot contradict args 'assay.type1,2'." =
-                  length(t_out) == 1L
-        )
+            length(t_out) == 1L
+    )
 
     return(list(e_out, t_out))
 }

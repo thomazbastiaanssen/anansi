@@ -59,11 +59,10 @@ NULL
 #' @importFrom SummarizedExperiment assay colData
 #'
 setMethod(
-    "getAnansi", sig = c(x = "MultiAssayExperiment"),
-    def = function(
-        x, formula, link = NULL, tableY = NULL, tableX = NULL, ...,
-        force_new = FALSE
-    ) {
+    "getAnansi",
+    sig = c(x = "MultiAssayExperiment"),
+    def = function(x, formula, link = NULL, tableY = NULL, tableX = NULL, ...,
+                   force_new = FALSE) {
         # Retrieve kwargs as list
         kwargs <- list(...)
         # Check fixed arguments
@@ -77,10 +76,10 @@ setMethod(
             )
             kwargs <- kwargs[!remove]
             stop("The arguments '",
-                 removed,
-                 " should not be used, ",
-                 "as they are extracted from 'x'.",
-                 call. = FALSE
+                removed,
+                " should not be used, ",
+                "as they are extracted from 'x'.",
+                call. = FALSE
             )
         }
         # Generate web object
@@ -90,4 +89,5 @@ setMethod(
         out <- anansi(web = w, formula = formula, ...)
 
         return(out)
-    })
+    }
+)

@@ -39,8 +39,8 @@ setGeneric("getEdgeList",
 )
 
 setGeneric("getFeaturePairs",
-           signature = c("x"),
-           function(x, ...) standardGeneric("getFeaturePairs")
+    signature = c("x"),
+    function(x, ...) standardGeneric("getFeaturePairs")
 )
 
 #' weaveWeb wrapper for the MultiAssayExperiment class

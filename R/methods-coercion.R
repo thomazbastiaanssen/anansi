@@ -12,9 +12,12 @@ setMethod("as.list", c(x = "AnansiWeb"), function(x, ...) as(x, "list"))
 #' @usage NULL
 #' @export
 #'
-setMethod("as.data.frame", c(x = "AnansiWeb"),
-          function(x, row.names = NULL, optional = FALSE, ...)
-              as.data.frame.AnansiWeb(x) )
+setMethod(
+    "as.data.frame", c(x = "AnansiWeb"),
+    function(x, row.names = NULL, optional = FALSE, ...) {
+        as.data.frame.AnansiWeb(x)
+    }
+)
 
 #' @rdname AnansiWeb
 #' @aliases as.data.frame.AnansiWeb
@@ -22,9 +25,10 @@ setMethod("as.data.frame", c(x = "AnansiWeb"),
 #' @noRd
 #'
 as.data.frame.AnansiWeb <- function(x) {
-    cbind(tableY(x),
-          tableX(x),
-          metadata(x, simplify = TRUE)
+    cbind(
+        tableY(x),
+        tableX(x),
+        metadata(x, simplify = TRUE)
     )
 }
 

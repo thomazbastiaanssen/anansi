@@ -44,7 +44,7 @@
 #' All variants are special cases of `weaveWeb()`.
 #' @examples
 #' # Setup demo tables
-#' ec2ko  <- kegg_link()[["ec2ko"]]
+#' ec2ko <- kegg_link()[["ec2ko"]]
 #' ec2cpd <- kegg_link()[["ec2cpd"]]
 #'
 #' # Basic usage

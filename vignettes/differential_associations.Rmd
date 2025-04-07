@@ -218,20 +218,19 @@ We can use this to confirm the statistical output of `anansi()` against the
 #| disj-lm
 
 score_lm <- mapply(web, FUN = function(x, y) {
-             anova(
-             lm(y ~ x * (group_ab + score_a), data = metadata(web))
-           )$`F value`[5L]
-    })
+    anova(
+        lm(y ~ x * (group_ab + score_a), data = metadata(web))
+    )$`F value`[5L]
+})
 
 group_lm <- mapply(web, FUN = function(x, y) {
-           anova(
-           lm(y ~ x * (score_a + group_ab), data = metadata(web))
-           )$`F value`[5L]
-    })
+    anova(
+        lm(y ~ x * (score_a + group_ab), data = metadata(web))
+    )$`F value`[5L]
+})
 
 all.equal(score_lm, out$disjointed_score_a_f.values)
 all.equal(group_lm, out$disjointed_group_ab_f.values)
-
 ```
 We run two separate `mapply()` calls for the two interaction terms. Because of
 the way `anova()` calculates sum-of-squares (type-I), the order of variables

@@ -81,8 +81,7 @@
 #' mapply(
 #'     FUN = function(x, y) cor(x, y),
 #'     web
-#'     )
-#'
+#' )
 #'
 NULL
 
@@ -233,15 +232,19 @@ setMethod("names", "AnansiWeb", function(x) names(dimnames(x@dictionary)))
 #' @export
 #' @usage NULL
 #'
-setMethod("which", signature = c(x = "AnansiWeb"),
-          function(x, arr.ind = TRUE, useNames = FALSE)
-              which.AnansiWeb(x, arr.ind, useNames) )
+setMethod("which",
+    signature = c(x = "AnansiWeb"),
+    function(x, arr.ind = TRUE, useNames = FALSE) {
+        which.AnansiWeb(x, arr.ind, useNames)
+    }
+)
 
 #' @noRd
 #' @importMethodsFrom Matrix which
 #'
-which.AnansiWeb <- function(x, arr.ind = TRUE, useNames = FALSE)
+which.AnansiWeb <- function(x, arr.ind = TRUE, useNames = FALSE) {
     Matrix::which(x@dictionary, arr.ind, useNames)
+}
 
 #' @rdname AnansiWeb
 #' @aliases mapply,AnansiWeb-method
@@ -253,23 +256,22 @@ which.AnansiWeb <- function(x, arr.ind = TRUE, useNames = FALSE)
 #' @export
 #' @usage NULL
 #'
-setMethod("mapply", signature = c(... = "AnansiWeb"),
-          function(
-        FUN, ..., MoreArgs = NULL, SIMPLIFY = TRUE, USE.NAMES = TRUE
-          ) {
-              tY <- as.data.frame.matrix(tableY(...), make.names = FALSE)
-              tX <- as.data.frame.matrix(tableX(...), make.names = FALSE)
-              wh <- which.AnansiWeb(...)
+setMethod("mapply",
+    signature = c(... = "AnansiWeb"),
+    function(FUN, ..., MoreArgs = NULL, SIMPLIFY = TRUE, USE.NAMES = TRUE) {
+        tY <- as.data.frame.matrix(tableY(...), make.names = FALSE)
+        tX <- as.data.frame.matrix(tableX(...), make.names = FALSE)
+        wh <- which.AnansiWeb(...)
 
-              out <- .mapply(FUN,
-                             dots = list(x = tX[wh[,2L]], y = tY[wh[,1L]]),
-                             MoreArgs)
-              if(SIMPLIFY) {
-                  out <- simplify2array(out)
-              }
-              return(out)
-          }
-
+        out <- .mapply(FUN,
+            dots = list(x = tX[wh[, 2L]], y = tY[wh[, 1L]]),
+            MoreArgs
+        )
+        if (SIMPLIFY) {
+            out <- simplify2array(out)
+        }
+        return(out)
+    }
 )
 
 #' @rdname AnansiWeb
@@ -283,40 +285,47 @@ setMethod("mapply", signature = c(... = "AnansiWeb"),
 #' @usage NULL
 #' @export
 #'
-setMethod(getFeaturePairs, "AnansiWeb",
-          function(x, which = NULL, with.metadata = FALSE, ...) {
-              getFeaturePairs.AnansiWeb(x, which, with.metadata) }
-          )
+setMethod(
+    getFeaturePairs, "AnansiWeb",
+    function(x, which = NULL, with.metadata = FALSE, ...) {
+        getFeaturePairs.AnansiWeb(x, which, with.metadata)
+    }
+)
 
 #' @rdname AnansiWeb
 #' @noRd
 getFeaturePairs.AnansiWeb <- function(x, which = NULL, with.metadata = FALSE) {
-    if(is.null(which)) {
+    if (is.null(which)) {
         which <- which(x)
     }
     tX <- tableX(x)
     tY <- tableY(x)
     xnames <- colnames(tX)
     ynames <- colnames(tY)
-    if(!with.metadata) {
+    if (!with.metadata) {
         return(
             lapply(seq_len(NROW(which)),
-                   FUN = function(z) cbind(tY[,which[z,1L], drop = FALSE],
-                                           tX[,which[z,2L], drop = FALSE]
-                   )
+                FUN = function(z) {
+                    cbind(
+                        tY[, which[z, 1L], drop = FALSE],
+                        tX[, which[z, 2L], drop = FALSE]
+                    )
+                }
             )
         )
     } else {
         metadata <- metadata(x)
         return(
             lapply(seq_len(NROW(which)),
-                   FUN = function(z) cbind(tY[,which[z,1L], drop = FALSE],
-                                           tX[,which[z,2L], drop = FALSE],
-                                           metadata
-                   )
+                FUN = function(z) {
+                    cbind(
+                        tY[, which[z, 1L], drop = FALSE],
+                        tX[, which[z, 2L], drop = FALSE],
+                        metadata
+                    )
+                }
             )
         )
-
     }
 }
 

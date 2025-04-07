@@ -67,11 +67,13 @@
 #'
 #' @export
 #'
-kegg_link <- function() local({
-    data("ec2ko", package = "anansi", envir = environment())
-    data("ec2cpd", package = "anansi", envir = environment())
-    return(list(ec2ko = get("ec2ko"), ec2cpd = get("ec2cpd")))
-})
+kegg_link <- function() {
+    local({
+        data("ec2ko", package = "anansi", envir = environment())
+        data("ec2cpd", package = "anansi", envir = environment())
+        return(list(ec2ko = get("ec2ko"), ec2cpd = get("ec2cpd")))
+    })
+}
 
 #' Snippet of the CLR-transformed hippocampal metabolomics data from the FMT
 #'     Aging study.

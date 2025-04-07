@@ -73,7 +73,7 @@ linked. If one or more \code{data.frame}s, colnames should be as specified in
 }
 \examples{
 # Setup demo tables
-ec2ko  <- kegg_link()[["ec2ko"]]
+ec2ko <- kegg_link()[["ec2ko"]]
 ec2cpd <- kegg_link()[["ec2cpd"]]
 
 # Basic usage

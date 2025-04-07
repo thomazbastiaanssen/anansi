@@ -201,8 +201,7 @@ getFeaturePairs(web)[1L]
 mapply(
     FUN = function(x, y) cor(x, y),
     web
-    )
-
+)
 
 }
 \seealso{
