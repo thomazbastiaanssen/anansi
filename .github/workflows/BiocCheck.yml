@@ -22,6 +22,8 @@
 
 on:
   push:
+    branches:
+    - devel
   pull_request:
 
 name: BiocCheck
