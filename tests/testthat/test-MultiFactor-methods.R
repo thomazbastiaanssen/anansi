@@ -1,5 +1,6 @@
+x <- MultiFactor(kegg_link())
+
 test_that("MultiFactor on a MultiFactor returns itself", {
-    x <- MultiFactor(kegg_link())
 
     expect_identical(
         x, MultiFactor(x)
