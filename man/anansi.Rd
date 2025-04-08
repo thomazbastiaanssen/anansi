@@ -43,8 +43,8 @@ the base R \code{stats} package.}
 (Default: \code{TRUE}).
 while running. Useful for debugging errors on large datasets.}
 
-\item{return.format}{\verb{Character scalar}. Should be one of \code{"table"}
-, \code{"list"}, or \code{"raw"}. Should the output of \code{\link[=anansi]{anansi()}}
+\item{return.format}{\verb{Character scalar}. Should be one of \code{"table"},
+\code{"list"}, or \code{"raw"}. Should the output of \code{\link[=anansi]{anansi()}}
 respectively be a wide \code{data.frame} of results, a list containing the results
 and input, or a list of raw output (used for testing purposes).
 convenient use. (Default: \code{"table"})}

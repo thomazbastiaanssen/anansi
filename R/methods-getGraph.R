@@ -25,15 +25,18 @@
 #' getGraph(ec2cpd, format = "igraph")
 #'
 setMethod(
-    "getGraph", "MultiFactor",
+    "getGraph",
+    "MultiFactor",
     function(x, format = "igraph", ...) {
         validObject(x)
 
         g <- graph_from_data_frame(getEdgeList(x), directed = FALSE)
 
-        switch(format,
-            "igraph" = {},
-            "graph"  = g <- as_graphnel(g)
+        switch(
+            format,
+            "igraph" = {
+            },
+            "graph" = g <- as_graphnel(g)
         )
         return(g)
     }
@@ -43,6 +46,7 @@ setMethod(
 #' @rdname getGraph
 #'
 setMethod(
-    "getGraph", "list",
+    "getGraph",
+    "list",
     function(x, format = "igraph", ...) getGraph(asMultiFactor(x), format)
 )

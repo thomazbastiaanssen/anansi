@@ -23,14 +23,14 @@
 #' @param verbose `Logical scalar`. Whether to print diagnostic information
 #'     (Default: `TRUE`).
 #' while running. Useful for debugging errors on large datasets.
-#' @param return.format `Character scalar`. Should be one of `"table"`
-#' , `"list"`, or `"raw"`. Should the output of [anansi()]
+#' @param return.format `Character scalar`. Should be one of `"table"`,
+#'     `"list"`, or `"raw"`. Should the output of [anansi()]
 #' respectively be a wide `data.frame` of results, a list containing the results
 #' and input, or a list of raw output (used for testing purposes).
 #' convenient use. (Default: `"table"`)
 #' @param ... additional arguments (currently not used).
 #' @return A list of lists containing correlation coefficients, p-values and
-#' q-values for all operations.
+#'     q-values for all operations.
 #' @importFrom stats model.frame
 #' @export
 #' @examples
@@ -125,15 +125,25 @@
 #'
 #' p
 #'
-anansi <- function(web, formula, groups = NULL, metadata = NULL,
-                   adjust.method = "BH", verbose = TRUE,
-                   return.format = "table", ...) {
+anansi <- function(
+    web,
+    formula,
+    groups = NULL,
+    metadata = NULL,
+    adjust.method = "BH",
+    verbose = TRUE,
+    return.format = "table",
+    ...
+) {
     return.format <-
         match.arg(return.format, choices = c("table", "list", "raw"))
     # generate anansiYarn input object
     input <- prepInput(
-        web = web, formula = formula, groups = groups,
-        metadata = metadata, verbose = verbose
+        web = web,
+        formula = formula,
+        groups = groups,
+        metadata = metadata,
+        verbose = verbose
     )
     int.terms <- input$int.terms
     groups <- input$groups
@@ -147,15 +157,24 @@ anansi <- function(web, formula, groups = NULL, metadata = NULL,
         length = 1 + length(group.id) + (2 * length(int.terms))
     )
     out.list[seq_along(group.id)] <- call_groupwise(
-        web, groups,
-        metadata, verbose
+        web,
+        groups,
+        metadata,
+        verbose
     )
     # Sort out metadata formatting for differential association testing
     meta.frame <- model.frame(formula = sat_model, cbind(x = 1, metadata))
 
-    out.list[length(group.id) +
-        seq_len(1L + (2L * length(int.terms)))] <- anansiDiffCor(
-        web, sat_model, errorterm, int.terms, meta.frame, verbose
+    out.list[
+        length(group.id) +
+            seq_len(1L + (2L * length(int.terms)))
+    ] <- anansiDiffCor(
+        web,
+        sat_model,
+        errorterm,
+        int.terms,
+        meta.frame,
+        verbose
     )
     if (return.format != "raw") {
         results <- result.df(out.list, Matrix::as.matrix(web@dictionary))
@@ -164,10 +183,11 @@ anansi <- function(web, formula, groups = NULL, metadata = NULL,
             named_group_list(group.id, groups, metadata)
         attr(results, "model_terms") <- named_term_list(int.terms, metadata)
     }
-    switch(return.format,
+    switch(
+        return.format,
         "table" = return(results),
-        "list"  = return(list(results, input = input)),
-        "raw"   = return(out.list)
+        "list" = return(list(results, input = input)),
+        "raw" = return(out.list)
     )
 }
 
@@ -184,8 +204,10 @@ prepInput <- function(web, formula, groups, metadata, verbose) {
     if (!is.data.frame(metadata)) metadata <- metadata[["metadata"]]
 
     stopifnot(
-        "No metadata argument provided or found in AnansiWeb" =
-            prod(dim(metadata)) > 0
+        "No metadata argument provided or found in AnansiWeb" = prod(dim(
+            metadata
+        )) >
+            0
     )
     raw_terms <- terms.formula(formula, "Error", data = metadata)
     indErr <- attr(raw_terms, "specials")$Error
@@ -228,8 +250,9 @@ check_groups <- function(groups, raw_terms, indErr, metadata, verbose) {
     if (!is.null(groups)) {
         missing_groups <- !groups %in% colnames(metadata)
         stopifnot(
-            "Grouping variable(s) not recognised. Please check input." =
-                !any(missing_groups)
+            "Grouping variable(s) not recognised. Please check input." = !any(
+                missing_groups
+            )
         )
         group.id <- check_missing_combos(metadata[groups])
         return(list(groups, group.id))
@@ -282,30 +305,40 @@ make_saturated_model <- function(formula, raw_terms, indErr, verbose) {
 
     # Case with repeated measures:
     stopifnot(
-        "Only one Error() term allowed; more detected." =
-            length(indErr) < 2
+        "Only one Error() term allowed; more detected." = length(indErr) < 2
     )
     errorterm <- attr(raw_terms, "variables")[[1L + indErr]]
-    sat_model <- update.formula(old = formula, new = as.formula(
-        paste(
-            "~",
-            deparse1(errorterm[[2L]], backtick = TRUE),
-            "+ x * 1 * (. -",
-            deparse1(errorterm, backtick = TRUE),
-            ")"
-        ),
-        env = environment(formula)
-    ))
+    sat_model <- update.formula(
+        old = formula,
+        new = as.formula(
+            paste(
+                "~",
+                deparse1(errorterm[[2L]], backtick = TRUE),
+                "+ x * 1 * (. -",
+                deparse1(errorterm, backtick = TRUE),
+                ")"
+            ),
+            env = environment(formula)
+        )
+    )
     if (verbose) {
         message(paste0(
             "Fitting least-squares for following model:\n",
-            paste0(as.character(update.formula(old = formula, new = as.formula(
-                paste(
-                    "~ x * 1 * (. -",
-                    deparse1(errorterm, backtick = TRUE), ")"
-                ),
-                env = environment(formula)
-            ))), " ", collapse = ""),
+            paste0(
+                as.character(update.formula(
+                    old = formula,
+                    new = as.formula(
+                        paste(
+                            "~ x * 1 * (. -",
+                            deparse1(errorterm, backtick = TRUE),
+                            ")"
+                        ),
+                        env = environment(formula)
+                    )
+                )),
+                " ",
+                collapse = ""
+            ),
             "\nwith '",
             deparse1(errorterm[[2L]], backtick = TRUE),
             "' as random intercept."
@@ -389,8 +422,10 @@ check_missing_combos <- function(metadata) {
             ),
             collapse = ", "
         )
-        warning("Missing combinations of categorical variables: ",
-            missing_lv, "\n",
+        warning(
+            "Missing combinations of categorical variables: ",
+            missing_lv,
+            "\n",
             "NAs introduced; Estimated effects may be unbalanced.",
             call. = FALSE
         )

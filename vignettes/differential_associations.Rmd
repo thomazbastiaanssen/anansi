@@ -22,9 +22,13 @@ BiocStyle::markdown()
 ```
     
 ```{r setup, include = FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, 
+                      tidy.opts = list(width.cutoff = 80), 
+                      tidy = TRUE)
+# long links
+adj_link <- paste0("https://thomazbastiaanssen.github.io/anansi/", 
+               "articles/adjacency_matrices.html")
 ```
-
 
 # Overview {-}
 A common challenge in integrative analysis of high-dimensional data sets is 
@@ -35,8 +39,8 @@ form of a (bi)adjacency matrix.
 
 This vignette is divided by three sections:
 
-* [Section 1](#sec-da-1) introduces the anansi framework and covers the *full 
-model*.  
+* [Section 1](#sec-da-1) introduces the anansi framework and covers the 
+    *full model*.  
 * [Section 2](#sec-da-2) Covers differential associations
 * [Section 3](#sec-da-3) Discusses incorporating repeated measures through 
 `Error()` notation. 
@@ -47,7 +51,11 @@ several linear models for which it returns summary statistics. The user has
 control over these models through the `formula` argument in `anansi(). `
 
 ## Setup 
-We will use the same example as in [the vignette on adjacency matrices](https://thomazbastiaanssen.github.io/anansi/articles/adjacency_matrices.html). There, we also explain for more about adjacency matrices, `AnansiWeb` class and using `weaveWeb()`. Please note that the data used in this example have been generated with statistical associations spiked in for this vignette. 
+We will use the same example as in 
+[the vignette on adjacency matrices]`r sprintf("(%s)", adj_link)`. There, we 
+also explain for more about adjacency matrices, `AnansiWeb` class and 
+using `weaveWeb()`. Please note that the data used in this example have been 
+generated with statistical associations spiked in for this vignette. 
 
 ```{r formula-web-full} 
 # Setup AnansiWeb with some dummy data
@@ -56,7 +64,10 @@ web <- krebsDemoWeb()
 ```
 
 ## Formula syntax
-For each of the feature-pairs that should be assessed, anansi fits similarly structured linear models. Anansi supports complex linear models as well as longitudinal models using the R formula syntax. The most basic model in anansi is:
+For each of the feature-pairs that should be assessed, anansi fits similarly 
+structured linear models. Anansi supports complex linear models as well as 
+longitudinal models using the R formula syntax. The most basic model in anansi 
+is:
 
 ```{r,echo=FALSE}
 y ~ x
@@ -64,7 +75,9 @@ y ~ x
 where `y` refers to is the feature from `tableY` and `x` is the corresponding 
 feature in `tableX`. 
 
-Besides estimating the asociation between `y` and `x`, anansi also allows for the  inclusion of covariates that could influence this association. With **full model**, we mean the total influence of `x`, including all of its 
+Besides estimating the asociation between `y` and `x`, anansi also allows for 
+the  inclusion of covariates that could influence this association. With 
+**full model**, we mean the total influence of `x`, including all of its 
 interaction terms, on `y`. For example, if our input formula was: 
 
 ```{r, formulate, echo = FALSE}
@@ -79,7 +92,9 @@ The variables that constitute the 'full' effect of x would be:
 `x + x:group_ab + x:score_a`. 
 
 ### Formula in anansi()
-When providing a formula argument in the main `anansi()` function, the `y` and `x` variables should not be mentioned, they are already implied. Rather, only additional covariates that could interact with `x` should be provided in the 
+When providing a formula argument in the main `anansi()` function, the `y` and 
+`x` variables should not be mentioned, they are already implied. Rather, only 
+additional covariates that could interact with `x` should be provided in the 
 `formula` argument. 
 
 ```{r formula-anansi-full} 
@@ -133,7 +148,11 @@ In order to assess differences in associations based on one or more variables
 association paradigm introduced in the context of proportionality \citep{diff_prop,quinn2017propr,part_corr} and apply it outside of the simplex.
 
 ## Disjointed associations
-Disjointed associations describe the situation where there is a detectable association in all cases, but the quality of that association, the **slope**, changes in a manner explained by a term. We estimate this as interaction terms with `x`. In our example we have two such terms, namely `x:group_ab` and `x:score_a`. 
+Disjointed associations describe the situation where there is a detectable 
+association in all cases, but the quality of that association, the **slope**, 
+changes in a manner explained by a term. We estimate this as interaction terms 
+with `x`. In our example we have two such terms, namely `x:group_ab` and 
+`x:score_a`. 
 
 ### Disjointed associations: Categorical variables
 The figure below shows how such a disjointed association might look. We can
@@ -237,7 +256,10 @@ the way `anova()` calculates sum-of-squares (type-I), the order of variables
 matters for `anova()`.
 
 ## Emergent association
-Emergent associations describe the situation where the **strength** of an association is explained by a term interacting with x. We again estimate this as interaction terms with `x`. In our example we have two such terms, namely `x:group_ab` and `x:score_a`. 
+Emergent associations describe the situation where the **strength** of an 
+association is explained by a term interacting with x. We again estimate this as
+interaction terms with `x`. In our example we have two such terms, namely 
+`x:group_ab` and `x:score_a`. 
 
 ### Emergent associations: Categorical variables
 The figure below shows how such a emergent association might look. We can
@@ -267,7 +289,8 @@ ggplot(diff_df) +
 Similarly, we could imagine situations where this loss in association strength 
 happens gradually, rather than in a binary manner. For example, perhaps there is
 a strong association between a metabolite and an enzyme that metabolizes it 
-under physiological conditions, but this association weakens along with some health index or environmental variable. 
+under physiological conditions, but this association weakens along with some 
+health index or environmental variable. 
 
 ```{r}
 #| emerg_cont, echo=FALSE, fig.dim=c(10,3),

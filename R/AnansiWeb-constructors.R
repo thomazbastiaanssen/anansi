@@ -60,19 +60,27 @@ AnansiWeb <- function(tableX, tableY, dictionary, metadata = list(), ...) {
 
     # check validity
     stopifnot(
-        "'tableX' and 'tableY' need same number of rows (observations)" =
-            NROW(tableX) == NROW(tableY)
+        "'tableX' and 'tableY' need same number of rows (observations)" = NROW(
+            tableX
+        ) ==
+            NROW(tableY)
     )
     stopifnot(
-        "cols in 'tableY' need same amount as rows in dictionary" =
-            NCOL(tableY) == NROW(dictionary)
+        "cols in 'tableY' need same amount as rows in dictionary" = NCOL(
+            tableY
+        ) ==
+            NROW(dictionary)
     )
     stopifnot(
-        "cols in 'tableX' need same amount as rows in dictionary" =
-            NCOL(tableX) == NCOL(dictionary)
+        "cols in 'tableX' need same amount as rows in dictionary" = NCOL(
+            tableX
+        ) ==
+            NCOL(dictionary)
     )
-    if (is.null(names(dimnames(dictionary))) ||
-        any(names(dimnames(dictionary)) %in% "")) {
+    if (
+        is.null(names(dimnames(dictionary))) ||
+            any(names(dimnames(dictionary)) %in% "")
+    ) {
         warning("Dimnames of 'dictionary' were missing; Assigned 'y' and 'x'.")
         names(dimnames(dictionary)) <- c("y", "x")
     }
@@ -82,10 +90,11 @@ AnansiWeb <- function(tableX, tableY, dictionary, metadata = list(), ...) {
             list(metadata = as.data.frame(metadata))
     }
     # return AnansiWeb
-    new("AnansiWeb",
-        tableY     = tableY,
-        tableX     = tableX,
+    new(
+        "AnansiWeb",
+        tableY = tableY,
+        tableX = tableX,
         dictionary = dictionary,
-        metadata   = metadata
+        metadata = metadata
     )
 }

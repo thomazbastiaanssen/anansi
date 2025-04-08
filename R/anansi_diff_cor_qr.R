@@ -26,7 +26,14 @@
 #' @importFrom stats anova lm pf residuals model.matrix.default terms.formula
 #' @importFrom methods is
 #'
-anansiDiffCor <- function(web, sat_model, errorterm, int.terms, metadata, verbose) {
+anansiDiffCor <- function(
+    web,
+    sat_model,
+    errorterm,
+    int.terms,
+    metadata,
+    verbose
+) {
     tY <- web@tableY
     tX <- web@tableX
     dic <- Matrix::as.matrix(web@dictionary)
@@ -60,25 +67,27 @@ anansiDiffCor <- function(web, sat_model, errorterm, int.terms, metadata, verbos
     df_mat <- dfmat(x.assign, x.int, all.assign, x.fct, n)
 
     d.dim <- matrix(1, ncol = NCOL(dic), nrow = NROW(dic))
-    full_model <- new("anansiTale",
-        subject    = "full",
-        type       = "r.squared",
-        df         = df_mat[, 1],
-        estimates  = d.dim * Y.TSS, # start with RSS0
-        f.values   = d.dim,
-        p.values   = d.dim
+    full_model <- new(
+        "anansiTale",
+        subject = "full",
+        type = "r.squared",
+        df = df_mat[, 1],
+        estimates = d.dim * Y.TSS, # start with RSS0
+        f.values = d.dim,
+        p.values = d.dim
     )
 
     disjointed <- lapply(
         seq_len(length(int.terms)),
         function(x) {
-            new("anansiTale",
-                subject    = paste("disjointed", int.terms[x], sep = "_"),
-                type       = "r.squared",
-                df         = df_mat[, x + 1],
-                estimates  = d.dim,
-                f.values   = d.dim,
-                p.values   = d.dim
+            new(
+                "anansiTale",
+                subject = paste("disjointed", int.terms[x], sep = "_"),
+                type = "r.squared",
+                df = df_mat[, x + 1],
+                estimates = d.dim,
+                f.values = d.dim,
+                p.values = d.dim
             )
         }
     )
@@ -86,20 +95,21 @@ anansiDiffCor <- function(web, sat_model, errorterm, int.terms, metadata, verbos
     emergent <- lapply(
         seq_len(length(int.terms)),
         function(x) {
-            new("anansiTale",
-                subject    = paste("emergent", int.terms[x], sep = "_"),
-                type       = "r.squared",
-                df         = df_mat[, x + 1] + c(0, -1, -1 / df_mat[1, x + 1]),
-                estimates  = d.dim,
-                f.values   = d.dim,
-                p.values   = d.dim
+            new(
+                "anansiTale",
+                subject = paste("emergent", int.terms[x], sep = "_"),
+                type = "r.squared",
+                df = df_mat[, x + 1] + c(0, -1, -1 / df_mat[1, x + 1]),
+                estimates = d.dim,
+                f.values = d.dim,
+                p.values = d.dim
             )
         }
     )
 
     # Compute R^2 for full model
-    full_model@estimates[dic] <- 1 - (
-        unlist(lapply(
+    full_model@estimates[dic] <- 1 -
+        (unlist(lapply(
             seq_len(NCOL(tX)),
             function(x) R_full(y = x, mm, tY, tX, dic, x.fct, x.vars)
         )) /
@@ -148,7 +158,8 @@ fast.qr.resid <- function(x, y) {
 #'
 dfmat <- function(x.assign, x.int, all.assign, x.fct, n) {
     df0 <- colSums(
-        !vapply(x.assign,
+        !vapply(
+            x.assign,
             FUN.VALUE = vector("logical", length = length(all.assign)),
             function(x) index.self.high(x, all.assign, x.fct)
         )
@@ -171,12 +182,14 @@ make_contrasts <- function(metadata) {
         function(x) (is.character(x) || is.factor(x) || is.logical(x))
     ))]
     if (length(f.names) > 0) {
-        contr.in <- `names<-`(rep("contr.sum",
-            times = length(f.names)
-        ), f.names)
+        contr.in <- `names<-`(
+            rep("contr.sum", times = length(f.names)),
+            f.names
+        )
         contr.in[names(which(vapply(
             metadata,
-            FUN.VALUE = FALSE, is.ordered
+            FUN.VALUE = FALSE,
+            is.ordered
         )))] <- "contr.poly"
     }
     return(as.list(contr.in))
@@ -188,7 +201,8 @@ build.mm <- function(sat_model, metadata) {
     contr <- make_contrasts(metadata)
 
     return(model.matrix.default(
-        sat_model, metadata,
+        sat_model,
+        metadata,
         contrasts.arg = contr
     ))
 }
@@ -216,8 +230,10 @@ oddify <- function(x) x / (1 - x)
 #'
 get_PF <- function(object, d) {
     object@f.values[d] <- oddify(object@estimates[d]) * object@df[3]
-    object@p.values[d] <- pf(object@f.values[d],
-        df1 = object@df[1], df2 = object@df[2],
+    object@p.values[d] <- pf(
+        object@f.values[d],
+        df1 = object@df[1],
+        df2 = object@df[2],
         lower.tail = FALSE
     )
 
@@ -231,7 +247,6 @@ R_disj <- function(y.vals, qr.mm, i.disj) {
     # Disjointed
     mm.0 <- qr.mm[, i.disj[, 1]]
     mm.1 <- qr.mm[, i.disj[, 2]]
-
 
     # Cycle through dropping interactions with x, incl higher order.
     RSS_i0 <- SS(fast.qr.resid(y = y.vals, x = mm.0))
@@ -281,21 +296,29 @@ R_full <- function(y, mm, tY, tX, dic, x.fct, x.vars) {
 #' @noRd
 #'
 index.self.high <- function(x, all.assign, x.fct) {
-    all.assign %in% which(apply(
-        x.fct * x.fct[, x] == x.fct[, x],
-        MARGIN = 2, all
-    ))
+    all.assign %in%
+        which(apply(
+            x.fct * x.fct[, x] == x.fct[, x],
+            MARGIN = 2,
+            all
+        ))
 }
 
 #' @noRd
 #'
 index.high <- function(x, all.assign, x.fct) {
-    all.assign %in% which(
-        `[[<-`(apply(
-            x.fct * x.fct[, x] == x.fct[, x],
-            MARGIN = 2, all
-        ), subscript = x, FALSE)
-    )
+    all.assign %in%
+        which(
+            `[[<-`(
+                apply(
+                    x.fct * x.fct[, x] == x.fct[, x],
+                    MARGIN = 2,
+                    all
+                ),
+                subscript = x,
+                FALSE
+            )
+        )
 }
 
 #' @noRd
@@ -303,10 +326,12 @@ index.high <- function(x, all.assign, x.fct) {
 index.disj <- function(x, all.assign, x.fct) {
     # first is full null,
     # second is parameter to investigate returned
-    i0 <- !all.assign %in% which(apply(
-        x.fct * x.fct[, x] == x.fct[, x],
-        MARGIN = 2, all
-    ))
+    i0 <- !all.assign %in%
+        which(apply(
+            x.fct * x.fct[, x] == x.fct[, x],
+            MARGIN = 2,
+            all
+        ))
     ix <- all.assign %in% x
     cbind(i0, i1 = i0 | ix, ix)
 }

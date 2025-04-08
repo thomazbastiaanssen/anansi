@@ -100,7 +100,8 @@ NULL
 
 #' @rdname plotAnansi
 #' @export
-setGeneric("plotAnansi",
+setGeneric(
+    "plotAnansi",
     signature = c("x"),
     function(x, ...) standardGeneric("plotAnansi")
 )
@@ -116,22 +117,33 @@ setGeneric("plotAnansi",
 setMethod(
     "plotAnansi",
     sig = c(x = "data.frame"),
-    def = function(x, association.type = NULL, model.var = NULL,
-                   signif.threshold = NULL,
-                   colour_by = NULL, color_by = colour_by,
-                   fill_by = "group", size_by = NULL, shape_by = NULL,
-                   y_position = "right", x_lab = "cor", y_lab = "") {
+    def = function(
+        x,
+        association.type = NULL,
+        model.var = NULL,
+        signif.threshold = NULL,
+        colour_by = NULL,
+        color_by = colour_by,
+        fill_by = "group",
+        size_by = NULL,
+        shape_by = NULL,
+        y_position = "right",
+        x_lab = "cor",
+        y_lab = ""
+    ) {
         # Create list of Booleans whether args are defined
         defined_args <- lapply(
             list(
                 association = association.type,
-                model.var = model.var, signif = signif.threshold
+                model.var = model.var,
+                signif = signif.threshold
             ),
             function(x) !is.null(x)
         )
         # Check association.type
         if (defined_args[["association"]]) {
-            match.arg(association.type,
+            match.arg(
+                association.type,
                 choices = c("disjointed", "emergent", "full")
             )
         }
@@ -140,18 +152,28 @@ setMethod(
             match.arg(model.var, names(attr(x, "model_terms")))
         }
         # Check association.type and model.var
-        if (defined_args[["association"]] && !defined_args[["model.var"]] &&
-            association.type %in% c("disjointed", "emergent")) {
-            stop("'model.var' must specify a variable of the anansi model ",
-                "when 'association type' is set to ", association.type,
+        if (
+            defined_args[["association"]] &&
+                !defined_args[["model.var"]] &&
+                association.type %in% c("disjointed", "emergent")
+        ) {
+            stop(
+                "'model.var' must specify a variable of the anansi model ",
+                "when 'association type' is set to ",
+                association.type,
                 call. = FALSE
             )
         }
-        if (defined_args[["association"]] && defined_args[["model.var"]] &&
-            association.type == "full") {
+        if (
+            defined_args[["association"]] &&
+                defined_args[["model.var"]] &&
+                association.type == "full"
+        ) {
             model.var <- NULL
-            warning("'model.var' is ignored when 'association type' ",
-                "is set to ", association.type,
+            warning(
+                "'model.var' is ignored when 'association type' ",
+                "is set to ",
+                association.type,
                 call. = FALSE
             )
             model.var <- NULL
@@ -164,7 +186,8 @@ setMethod(
             stop("'x' is an empty data.frame", call. = FALSE)
         }
         if (!all(c("feature_X", "feature_Y") %in% colnames(x))) {
-            stop("'x' must be the output of 'anansi' in the table format ",
+            stop(
+                "'x' must be the output of 'anansi' in the table format ",
                 "and must contain columns 'feature_X' ,'feature_Y'",
                 call. = FALSE
             )
@@ -181,23 +204,29 @@ setMethod(
         # Check aesthetics
         defined_args <- c(
             defined_args,
-            mapply(.check_aes,
+            mapply(
+                .check_aes,
                 aes_name = c("colour_by", "fill_by", "size_by", "shape_by"),
                 aes_var = list(colour_by, fill_by, size_by, shape_by),
-                MoreArgs = list(x = x), SIMPLIFY = FALSE
+                MoreArgs = list(x = x),
+                SIMPLIFY = FALSE
             )
         )
         # Check signif.threshold
-        if (defined_args[["signif"]] &&
-            (!is.numeric(signif.threshold) ||
-                signif.threshold < 0 || signif.threshold > 1)
+        if (
+            defined_args[["signif"]] &&
+                (!is.numeric(signif.threshold) ||
+                    signif.threshold < 0 ||
+                    signif.threshold > 1)
         ) {
-            stop("'signif.threshold' must be a number between 0 and 1",
+            stop(
+                "'signif.threshold' must be a number between 0 and 1",
                 call. = FALSE
             )
         }
         if (!defined_args[["association"]] && defined_args[["signif"]]) {
-            warning("'signif.threshold' is ignored when ",
+            warning(
+                "'signif.threshold' is ignored when ",
                 "'association type' is not defined",
                 call. = FALSE
             )
@@ -214,19 +243,24 @@ setMethod(
             size = if (defined_args[["size_by"]]) x[[size_by]] else NA,
             shape = if (defined_args[["shape_by"]]) x[[shape_by]] else NA,
             alpha = if (defined_args[["signif"]]) {
-                factor(x[[pval]] < signif.threshold,
-                    levels = c(TRUE, FALSE)
-                )
+                factor(x[[pval]] < signif.threshold, levels = c(TRUE, FALSE))
             } else {
                 NA
             }
         )
         # Generate dotplot
         p <- .create_dotplot(
-            pData, defined_args, association.type,
-            signif.threshold, colour_by, fill_by,
-            shape_by, size_by, y_position,
-            x_lab, y_lab
+            pData,
+            defined_args,
+            association.type,
+            signif.threshold,
+            colour_by,
+            fill_by,
+            shape_by,
+            size_by,
+            y_position,
+            x_lab,
+            y_lab
         )
         return(p)
     }
@@ -257,12 +291,23 @@ setMethod(
     )
     d <- do.call(rbind.data.frame, l)
 
-    f <- `row.names<-.data.frame`(x[, -unlist(
-        lapply(X = gr_regex, FUN = function(y) grep(x = colnames(x), y)),
-        FALSE, FALSE
-    ), drop = FALSE], NULL)
+    f <- `row.names<-.data.frame`(
+        x[,
+            -unlist(
+                lapply(
+                    X = gr_regex,
+                    FUN = function(y) grep(x = colnames(x), y)
+                ),
+                FALSE,
+                FALSE
+            ),
+            drop = FALSE
+        ],
+        NULL
+    )
     # If "All" is in group column, make it the last level.
-    groups <- factor(rep(groups, each = NROW(x)),
+    groups <- factor(
+        rep(groups, each = NROW(x)),
         levels = c(
             groups[groups != "All"],
             groups[groups == "All"]
@@ -281,7 +326,10 @@ setMethod(
     aes_defined <- !is.null(aes_var)
     # Rise exception if aesthetic is not character or not in x
     if (aes_defined && !(aes_var %in% colnames(x) && is.character(aes_var))) {
-        stop("'", aes_name, "' must be a character string specifying the",
+        stop(
+            "'",
+            aes_name,
+            "' must be a character string specifying the",
             " name of a 'groups' term used in the original anansi call",
             call. = FALSE
         )
@@ -289,15 +337,29 @@ setMethod(
     return(aes_defined)
 }
 # Create dotplot
-.create_dotplot <- function(pData, defined_args, association.type,
-                            signif.threshold, colour_by, fill_by,
-                            shape_by, size_by, y_position, x_lab, y_lab) {
+.create_dotplot <- function(
+    pData,
+    defined_args,
+    association.type,
+    signif.threshold,
+    colour_by,
+    fill_by,
+    shape_by,
+    size_by,
+    y_position,
+    x_lab,
+    y_lab
+) {
     # Create base plot
     p <- ggplot(data = pData) +
         aes(
-            x = .data$x, y = .data$y, colour = .data$colour,
-            fill = .data$fill, shape = .data$shape,
-            size = .data$size, alpha = .data$alpha
+            x = .data$x,
+            y = .data$y,
+            colour = .data$colour,
+            fill = .data$fill,
+            shape = .data$shape,
+            size = .data$size,
+            alpha = .data$alpha
         ) +
         geom_vline(xintercept = 0, linetype = "dashed", colour = "red")
     # Set point size, shape and border colour if not defined
@@ -312,30 +374,41 @@ setMethod(
         point_args["colour"] <- "black"
     }
     # Add points and facets
-    p <- p + do.call(geom_point, point_args) +
+    p <- p +
+        do.call(geom_point, point_args) +
         facet_col(~ .data$facet, space = "free", scales = "free_y") +
         scale_x_continuous(
-            limits = c(-1, 1), n.breaks = 11, expand = c(0, 0)
+            limits = c(-1, 1),
+            n.breaks = 11,
+            expand = c(0, 0)
         ) +
         scale_y_discrete(limits = rev, position = y_position)
     # Add significance legend
     if (defined_args[["association"]] && defined_args[["signif"]]) {
-        p <- p + scale_alpha_manual(
-            values = c("TRUE" = 1, "FALSE" = 1 / 3),
-            paste(association.type, "association\np <", signif.threshold)
-        )
+        p <- p +
+            scale_alpha_manual(
+                values = c("TRUE" = 1, "FALSE" = 1 / 3),
+                paste(association.type, "association\np <", signif.threshold)
+            )
     }
     # Add labels
-    p <- p + theme_bw() +
+    p <- p +
+        theme_bw() +
         labs(
-            x = x_lab, y = y_lab, fill = fill_by, colour = colour_by,
-            shape = shape_by, size = size_by
+            x = x_lab,
+            y = y_lab,
+            fill = fill_by,
+            colour = colour_by,
+            shape = shape_by,
+            size = size_by
         )
     # Remove legend if aesthetics and significance are not defined
-    if (!any(unlist(
-        defined_args[c("colour_by", "fill_by", "size_by", "shape_by")]
-    )) &&
-        !defined_args[["signif"]]) {
+    if (
+        !any(unlist(
+            defined_args[c("colour_by", "fill_by", "size_by", "shape_by")]
+        )) &&
+            !defined_args[["signif"]]
+    ) {
         p <- p + theme(legend.position = "none")
     }
     # Remove legend for undefined aesthetics

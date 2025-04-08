@@ -13,13 +13,14 @@
 #' @importClassesFrom S4Vectors Annotated
 #' @importMethodsFrom S4Vectors metadata
 #'
-setClass("AnansiWeb",
+setClass(
+    "AnansiWeb",
     contains = "Annotated",
     slots = c(
-        tableY     = "matrix",
-        tableX     = "matrix",
+        tableY = "matrix",
+        tableX = "matrix",
         dictionary = "Matrix",
-        metadata   = "list"
+        metadata = "list"
     )
 )
 
@@ -55,7 +56,8 @@ setValidity("AnansiWeb", method = function(object) {
 #' @importClassesFrom Matrix Matrix
 #' @export
 #'
-setClass("MultiFactor",
+setClass(
+    "MultiFactor",
     slots = c(
         index = "list",
         levels = "list",
@@ -133,14 +135,15 @@ validMultiFactor <- function(x) {
 #' @description `anansiTale` is the main container that will hold your
 #'     stats output data coming out of the `anansi` pipeline.
 #'
-setClass("anansiTale",
+setClass(
+    "anansiTale",
     slots = c(
-        subject   = "character",
-        type      = "character",
-        df        = "numeric",
+        subject = "character",
+        type = "character",
+        df = "numeric",
         estimates = "matrix",
-        f.values  = "matrix",
-        t.values  = "matrix",
-        p.values  = "matrix"
+        f.values = "matrix",
+        t.values = "matrix",
+        p.values = "matrix"
     )
 )

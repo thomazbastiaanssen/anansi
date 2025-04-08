@@ -1,44 +1,53 @@
-setGeneric("getGraph",
+setGeneric(
+    "getGraph",
     signature = c("x"),
     function(x, ...) standardGeneric("getGraph")
 )
 
-setGeneric("tableX",
+setGeneric(
+    "tableX",
     signature = c("x"),
     function(x, ...) standardGeneric("tableX")
 )
 
-setGeneric("tableX<-",
+setGeneric(
+    "tableX<-",
     signature = c("x"),
     function(x, ..., value) standardGeneric("tableX<-")
 )
 
-setGeneric("tableY",
+setGeneric(
+    "tableY",
     signature = c("x"),
     function(x, ...) standardGeneric("tableY")
 )
 
-setGeneric("tableY<-",
+setGeneric(
+    "tableY<-",
     signature = c("x"),
     function(x, ..., value) standardGeneric("tableY<-")
 )
 
-setGeneric("dictionary",
+setGeneric(
+    "dictionary",
     signature = c("x"),
     function(x, ...) standardGeneric("dictionary")
 )
 
-setGeneric("dictionary<-",
+setGeneric(
+    "dictionary<-",
     signature = c("x"),
     function(x, ..., value) standardGeneric("dictionary<-")
 )
 
-setGeneric("getEdgeList",
+setGeneric(
+    "getEdgeList",
     signature = c("x"),
     function(x, ...) standardGeneric("getEdgeList")
 )
 
-setGeneric("getFeaturePairs",
+setGeneric(
+    "getFeaturePairs",
     signature = c("x"),
     function(x, ...) standardGeneric("getFeaturePairs")
 )
@@ -48,7 +57,8 @@ setGeneric("getFeaturePairs",
 #' @usage NULL
 #' @export
 #'
-setGeneric("getWeb",
+setGeneric(
+    "getWeb",
     signature = c("x"),
     function(x, ...) standardGeneric("getWeb")
 )
@@ -57,7 +67,8 @@ setGeneric("getWeb",
 #'
 #' @rdname getAnansi
 #' @export
-setGeneric("getAnansi",
+setGeneric(
+    "getAnansi",
     signature = c("x"),
     function(x, ...) standardGeneric("getAnansi")
 )
@@ -66,7 +77,8 @@ setGeneric("getAnansi",
 #'
 #' @rdname plotAnansi
 #' @export
-setGeneric("plotAnansi",
+setGeneric(
+    "plotAnansi",
     signature = c("x"),
     function(x, ...) standardGeneric("plotAnansi")
 )

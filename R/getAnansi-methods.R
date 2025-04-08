@@ -7,7 +7,7 @@
 #' @inheritParams anansi
 #' @inheritParams getWeb
 #' @param ... additional parameters that can be passed to
-#'   [AnansiWeb()] or [anansi()].
+#'     [AnansiWeb()] or [anansi()].
 #'
 #' @details
 #' This wrapper of [anansi()] allows to perform a complete anansi
@@ -61,8 +61,15 @@ NULL
 setMethod(
     "getAnansi",
     sig = c(x = "MultiAssayExperiment"),
-    def = function(x, formula, link = NULL, tableY = NULL, tableX = NULL, ...,
-                   force_new = FALSE) {
+    def = function(
+        x,
+        formula,
+        link = NULL,
+        tableY = NULL,
+        tableX = NULL,
+        ...,
+        force_new = FALSE
+    ) {
         # Retrieve kwargs as list
         kwargs <- list(...)
         # Check fixed arguments
@@ -72,10 +79,12 @@ setMethod(
         if (any(remove)) {
             removed <- paste0(
                 names(kwargs[remove]),
-                sep = "'", collapse = ", '"
+                sep = "'",
+                collapse = ", '"
             )
             kwargs <- kwargs[!remove]
-            stop("The arguments '",
+            stop(
+                "The arguments '",
                 removed,
                 " should not be used, ",
                 "as they are extracted from 'x'.",

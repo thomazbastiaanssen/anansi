@@ -4,20 +4,27 @@ test_that("getAnansi", {
     metadata(web)$cat_XYZ <- rep(c("X", "Y", "Z"), 5)
     mae <- as(web, "MultiAssayExperiment")
 
-    expect_error(getAnansi(mae, tableY = "wrong_name"),
+    expect_error(
+        getAnansi(mae, tableY = "wrong_name"),
         "'tableY' must be numeric or character value specifying experiment in experiment(x)",
         fixed = TRUE
     )
-    expect_error(getAnansi(mae,
-        tableY = "y",
-        tableX = "x",
-        return.format = "wrong_input"
-    ), class = "error")
     expect_error(
-        getAnansi(mae,
+        getAnansi(
+            mae,
             tableY = "y",
             tableX = "x",
-            formula = ~group_ab, web = 0
+            return.format = "wrong_input"
+        ),
+        class = "error"
+    )
+    expect_error(
+        getAnansi(
+            mae,
+            tableY = "y",
+            tableX = "x",
+            formula = ~group_ab,
+            web = 0
         ),
         "The arguments 'web' should not be used, as they are extracted from 'x'",
         fixed = TRUE
@@ -25,34 +32,45 @@ test_that("getAnansi", {
     ### Check identity with original anansi output ###
 
     table1 <- anansi(
-        web = web, formula = ~cat_XYZ,
+        web = web,
+        formula = ~cat_XYZ,
         verbose = FALSE
     )
     list1 <- anansi(
-        web = web, formula = ~cat_XYZ,
-        verbose = FALSE, return.format = "list"
+        web = web,
+        formula = ~cat_XYZ,
+        verbose = FALSE,
+        return.format = "list"
     )
     raw1 <- anansi(
-        web = web, formula = ~cat_XYZ,
-        verbose = FALSE, return.format = "raw"
+        web = web,
+        formula = ~cat_XYZ,
+        verbose = FALSE,
+        return.format = "raw"
     )
 
-    table2 <- getAnansi(mae,
-        tableY = "y",
-        tableX = "x",
-        formula = ~cat_XYZ, verbose = FALSE
-    )
-    list2 <- getAnansi(mae,
+    table2 <- getAnansi(
+        mae,
         tableY = "y",
         tableX = "x",
         formula = ~cat_XYZ,
-        return.format = "list", verbose = FALSE
+        verbose = FALSE
     )
-    raw2 <- getAnansi(mae,
+    list2 <- getAnansi(
+        mae,
         tableY = "y",
         tableX = "x",
         formula = ~cat_XYZ,
-        return.format = "raw", verbose = FALSE
+        return.format = "list",
+        verbose = FALSE
+    )
+    raw2 <- getAnansi(
+        mae,
+        tableY = "y",
+        tableX = "x",
+        formula = ~cat_XYZ,
+        return.format = "raw",
+        verbose = FALSE
     )
 
     expect_identical(table1, table2)

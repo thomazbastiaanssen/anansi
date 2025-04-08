@@ -10,3 +10,4 @@
 ^pkgdown$
 ^dev$
 ^\.github$
+^\.air\.toml$

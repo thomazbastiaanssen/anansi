@@ -95,7 +95,8 @@ NULL
 #' @importFrom methods slot
 #' @usage NULL
 #'
-setMethod("metadata",
+setMethod(
+    "metadata",
     signature = c(x = "AnansiWeb"),
     definition = function(x, simplify = TRUE, ...) {
         m <- x@metadata
@@ -113,22 +114,30 @@ setMethod("metadata",
 #' @rdname AnansiWeb
 #' @usage NULL
 #'
-setReplaceMethod("metadata", "AnansiWeb", def = function(
-    x, ..., simplify = TRUE, value) {
-    if (simplify && inherits(value, "data.frame")) {
-        x@metadata[["metadata"]] <- as.data.frame(value)
-        return(x)
+setReplaceMethod(
+    "metadata",
+    "AnansiWeb",
+    def = function(
+        x,
+        ...,
+        simplify = TRUE,
+        value
+    ) {
+        if (simplify && inherits(value, "data.frame")) {
+            x@metadata[["metadata"]] <- as.data.frame(value)
+            return(x)
+        }
+        if (!is.list(value)) {
+            stop("replacement 'metadata' value must be a list")
+        }
+        if (!length(value)) {
+            names(value) <- NULL
+        } # instead of character()
+        x@metadata <- value
+        validObject(x)
+        x
     }
-    if (!is.list(value)) {
-        stop("replacement 'metadata' value must be a list")
-    }
-    if (!length(value)) {
-        names(value) <- NULL
-    } # instead of character()
-    x@metadata <- value
-    validObject(x)
-    x
-})
+)
 
 #' @rdname AnansiWeb
 #' @param ... additional arguments (currently not used).
@@ -190,9 +199,18 @@ setReplaceMethod("dictionary", "AnansiWeb", def = function(x, ..., value) {
 #' @export
 #'
 setMethod("show", "AnansiWeb", def = function(object) {
-    cat(class(object), " S4 object with ", NROW(tableX(object)),
-        " observations:\n    tableY: ", names(object)[1], " (", NROW(object),
-        " features)\n    tableX: ", names(object)[2], " (", NCOL(object),
+    cat(
+        class(object),
+        " S4 object with ",
+        NROW(tableX(object)),
+        " observations:\n    tableY: ",
+        names(object)[1],
+        " (",
+        NROW(object),
+        " features)\n    tableX: ",
+        names(object)[2],
+        " (",
+        NCOL(object),
         " features)\n",
         sep = ""
     )
@@ -205,7 +223,8 @@ setMethod("show", "AnansiWeb", def = function(object) {
 #' @usage NULL
 #'
 setMethod(
-    "dimnames", "AnansiWeb",
+    "dimnames",
+    "AnansiWeb",
     function(x) dimnames(x@dictionary)
 )
 
@@ -214,7 +233,8 @@ setMethod(
 #' @usage NULL
 #'
 setMethod(
-    "dim", "AnansiWeb",
+    "dim",
+    "AnansiWeb",
     function(x) dim(x@dictionary)
 )
 
@@ -232,7 +252,8 @@ setMethod("names", "AnansiWeb", function(x) names(dimnames(x@dictionary)))
 #' @export
 #' @usage NULL
 #'
-setMethod("which",
+setMethod(
+    "which",
     signature = c(x = "AnansiWeb"),
     function(x, arr.ind = TRUE, useNames = FALSE) {
         which.AnansiWeb(x, arr.ind, useNames)
@@ -256,14 +277,16 @@ which.AnansiWeb <- function(x, arr.ind = TRUE, useNames = FALSE) {
 #' @export
 #' @usage NULL
 #'
-setMethod("mapply",
+setMethod(
+    "mapply",
     signature = c(... = "AnansiWeb"),
     function(FUN, ..., MoreArgs = NULL, SIMPLIFY = TRUE, USE.NAMES = TRUE) {
         tY <- as.data.frame.matrix(tableY(...), make.names = FALSE)
         tX <- as.data.frame.matrix(tableX(...), make.names = FALSE)
         wh <- which.AnansiWeb(...)
 
-        out <- .mapply(FUN,
+        out <- .mapply(
+            FUN,
             dots = list(x = tX[wh[, 2L]], y = tY[wh[, 1L]]),
             MoreArgs
         )
@@ -286,7 +309,8 @@ setMethod("mapply",
 #' @export
 #'
 setMethod(
-    getFeaturePairs, "AnansiWeb",
+    getFeaturePairs,
+    "AnansiWeb",
     function(x, which = NULL, with.metadata = FALSE, ...) {
         getFeaturePairs.AnansiWeb(x, which, with.metadata)
     }
@@ -304,27 +328,23 @@ getFeaturePairs.AnansiWeb <- function(x, which = NULL, with.metadata = FALSE) {
     ynames <- colnames(tY)
     if (!with.metadata) {
         return(
-            lapply(seq_len(NROW(which)),
-                FUN = function(z) {
-                    cbind(
-                        tY[, which[z, 1L], drop = FALSE],
-                        tX[, which[z, 2L], drop = FALSE]
-                    )
-                }
-            )
+            lapply(seq_len(NROW(which)), FUN = function(z) {
+                cbind(
+                    tY[, which[z, 1L], drop = FALSE],
+                    tX[, which[z, 2L], drop = FALSE]
+                )
+            })
         )
     } else {
         metadata <- metadata(x)
         return(
-            lapply(seq_len(NROW(which)),
-                FUN = function(z) {
-                    cbind(
-                        tY[, which[z, 1L], drop = FALSE],
-                        tX[, which[z, 2L], drop = FALSE],
-                        metadata
-                    )
-                }
-            )
+            lapply(seq_len(NROW(which)), FUN = function(z) {
+                cbind(
+                    tY[, which[z, 1L], drop = FALSE],
+                    tX[, which[z, 2L], drop = FALSE],
+                    metadata
+                )
+            })
         )
     }
 }

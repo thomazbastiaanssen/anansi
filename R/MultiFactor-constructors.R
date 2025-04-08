@@ -18,12 +18,16 @@
 #'
 MultiFactor <- function(x, levels = NULL, drop.unmatched = TRUE) {
     if (validLinkDF(x)) x <- list(x = x)
-    stopifnot("Input not correctly formatted." = all(
-        vapply(as.list(x, use.names = FALSE),
-            validLinkDF, NA,
-            USE.NAMES = FALSE
+    stopifnot(
+        "Input not correctly formatted." = all(
+            vapply(
+                as.list(x, use.names = FALSE),
+                validLinkDF,
+                NA,
+                USE.NAMES = FALSE
+            )
         )
-    ))
+    )
     if (is(x, "MultiFactor")) {
         if (is.null(levels)) {
             levels <- levels(x)
@@ -103,7 +107,8 @@ mapMultiFactor <- function(x, mode = "counts") {
     )
 
     # mx is a vector of length i that determines the values of sparse Matrix.
-    mx <- switch(mode,
+    mx <- switch(
+        mode,
         "counts" = unlist(
             lapply(x, function(y) {
                 lapply(y, function(z) length(unique(z)))
@@ -154,17 +159,27 @@ checkMergers <- function(link, verbose = TRUE) {
 mergeElements <- function(link, d, m) {
     dupeList <- apply(m, 1L, FUN = function(x) rownames(d)[x], simplify = FALSE)
 
-    full_match <- vapply(dupeList, function(x) {
-        Reduce(identical, lapply(link[x], function(y) {
-            sort(colnames(y))
-        }))
-    }, FUN.VALUE = FALSE)
+    full_match <- vapply(
+        dupeList,
+        function(x) {
+            Reduce(
+                identical,
+                lapply(link[x], function(y) {
+                    sort(colnames(y))
+                })
+            )
+        },
+        FUN.VALUE = FALSE
+    )
     if (!all(full_match)) {
         stop(
             "Cannot safely merge elements, names do not fully match.\n",
             "Issue found in the following pairs of elements:\n",
-            apply(m[!full_match, , drop = FALSE], 1L,
-                FUN = function(x) rownames(d)[x], simplify = FALSE
+            apply(
+                m[!full_match, , drop = FALSE],
+                1L,
+                FUN = function(x) rownames(d)[x],
+                simplify = FALSE
             )
         )
     }
@@ -246,7 +261,8 @@ generateMultiFactorLevels <- function(x, m) {
                         x[rowsWithCol(m, y, FALSE)],
                         function(z) unique(z[[lv_names[y]]])
                     ),
-                    FALSE, FALSE
+                    FALSE,
+                    FALSE
                 )
             )
         }
@@ -276,7 +292,8 @@ factorInputMultiFactorLevels <- function(x, m) {
                         x[rowsWithCol(m, y, FALSE)],
                         function(z) levels(z[[lv_names[y]]])
                     ),
-                    FALSE, FALSE
+                    FALSE,
+                    FALSE
                 )
             )
         }
@@ -361,9 +378,13 @@ factToIntDF <- function(x) {
 #'
 lv_list_char <- function(id, x) {
     sort(
-        unique(unlist(lapply(x, function(y) {
-            unique(y[[id]])
-        }), recursive = FALSE, use.names = FALSE))
+        unique(unlist(
+            lapply(x, function(y) {
+                unique(y[[id]])
+            }),
+            recursive = FALSE,
+            use.names = FALSE
+        ))
     )
 }
 
@@ -373,15 +394,20 @@ lv_list_char <- function(id, x) {
 #' Based on base::factor object validation.
 #'
 validLevels <- function(levs) {
-    if (any(vapply(
-        levs, function(x) any(!is.character(x)), NA,
-        USE.NAMES = FALSE
-    ))) {
+    if (
+        any(vapply(
+            levs,
+            function(x) any(!is.character(x)),
+            NA,
+            USE.NAMES = FALSE
+        ))
+    ) {
         return("factor levels must be \"character\"")
     }
-    if (any(
-        d <- as.logical(vapply(levs, anyDuplicated, 1, USE.NAMES = FALSE))
-    )
+    if (
+        any(
+            d <- as.logical(vapply(levs, anyDuplicated, 1, USE.NAMES = FALSE))
+        )
     ) {
         return(paste("duplicated factor levels in level number(s)", which(d)))
     }
@@ -393,7 +419,8 @@ validLevels <- function(levs) {
 #' @noRd
 validLinkDF <- function(x) {
     is.data.frame(x) &&
-        NCOL(x) >= 2L && length(colnames(x)) == NCOL(x)
+        NCOL(x) >= 2L &&
+        length(colnames(x)) == NCOL(x)
 }
 
 #' @noRd

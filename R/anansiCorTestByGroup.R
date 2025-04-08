@@ -52,7 +52,8 @@ anansiCorTestByGroup <- function(web, group.vec, verbose = TRUE) {
     # first run for all groups together
     out_list$All <- anansiCorPvalue(
         web,
-        group.bool = rep(TRUE, NROW(web@tableY)), verbose
+        group.bool = rep(TRUE, NROW(web@tableY)),
+        verbose
     )
 
     if (!is.null(all_groups)) {
@@ -66,7 +67,8 @@ anansiCorTestByGroup <- function(web, group.vec, verbose = TRUE) {
         for (i in seq_along(all_groups)) {
             out_by_group <- anansiCorPvalue(
                 web,
-                group.bool = group.vec == all_groups[i], verbose
+                group.bool = group.vec == all_groups[i],
+                verbose
             )
             out_by_group@subject <- all_groups[i]
             out_list[[i + 1]] <- out_by_group
@@ -103,13 +105,14 @@ anansiCorPvalue <- function(web, group.bool, verbose) {
     p <- 2 * (1 - pt(t, (n - 2)))
 
     # Collate correlation coefficients, p-values and q-values into an anansiTale
-    out <- new("anansiTale",
-        subject     = "All",
-        type        = "r.values",
-        estimates   = r,
-        df          = n - 2,
-        t.values    = t,
-        p.values    = p
+    out <- new(
+        "anansiTale",
+        subject = "All",
+        type = "r.values",
+        estimates = r,
+        df = n - 2,
+        t.values = t,
+        p.values = p
     )
     return(out)
 }
@@ -130,7 +133,8 @@ anansiCor <- function(web, group.bool) {
     cors <- cor(
         x = web@tableY[group.bool, ],
         y = web@tableX[group.bool, ],
-        method = "pearson", use = "pairwise.complete.obs"
+        method = "pearson",
+        use = "pairwise.complete.obs"
     )
     cors[!Matrix::as.matrix(web@dictionary)] <- 0
     # set non-canonical correlations to zero using the binary adjacency matrix.
