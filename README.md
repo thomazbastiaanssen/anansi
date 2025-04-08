@@ -10,7 +10,7 @@ issues](https://img.shields.io/github/issues/thomazbastiaanssen/anansi)](https:/
 [![GitHub
 pulls](https://img.shields.io/github/issues-pr/thomazbastiaanssen/anansi)](https://github.com/thomazbastiaanssen/anansi/pulls)
 [![R
-BiocCheck()](https://github.com/thomazbastiaanssen/anansi/actions/workflows/BiocCheck.yaml/badge.svg)](https://github.com/thomazbastiaanssen/anansi/actions/workflows/BiocCheck.yaml)
+BiocCheck](https://github.com/thomazbastiaanssen/anansi/actions/workflows/test.yml/badge.svg)](https://github.com/thomazbastiaanssen/anansi/actions/workflows/test.yml)
 [![Codecov test
 coverage](https://codecov.io/gh/thomazbastiaanssen/anansi/graph/badge.svg)](https://app.codecov.io/gh/thomazbastiaanssen/anansi)
 <!-- badges: end -->
