@@ -77,12 +77,23 @@ weaveWeb <- function(x, ...) UseMethod("weaveWeb")
 #' @order 1
 #' @export
 #'
-weaveWeb.default <- function(x, y, link = NULL, tableX = NULL, tableY = NULL,
-                             metadata = NULL, verbose = TRUE, ...) {
+weaveWeb.default <- function(
+    x,
+    y,
+    link = NULL,
+    tableX = NULL,
+    tableY = NULL,
+    metadata = NULL,
+    verbose = TRUE,
+    ...
+) {
     terms <- c(y, x)
     stopifnot(
-        "both 'x' and 'y' terms must be provided as character" =
-            is(terms, "character") && length(terms) == 2L
+        "both 'x' and 'y' terms must be provided as character" = is(
+            terms,
+            "character"
+        ) &&
+            length(terms) == 2L
     )
     if (identical(link, "none")) {
         return(web_missing_link(tableX, tableY, terms))
@@ -124,10 +135,10 @@ weaveWeb.default <- function(x, y, link = NULL, tableX = NULL, tableY = NULL,
     }
     #
     AnansiWeb(
-        tableY     = as.matrix(tableY)[, rownames(d), drop = FALSE],
-        tableX     = as.matrix(tableX)[, colnames(d), drop = FALSE],
+        tableY = as.matrix(tableY)[, rownames(d), drop = FALSE],
+        tableX = as.matrix(tableX)[, colnames(d), drop = FALSE],
         dictionary = d,
-        metadata   = metadata
+        metadata = metadata
     )
 }
 
@@ -135,7 +146,13 @@ weaveWeb.default <- function(x, y, link = NULL, tableX = NULL, tableY = NULL,
 #' @export
 #' @order 2
 #'
-weaveWeb.formula <- function(formula, link = NULL, tableX = NULL, tableY = NULL, ...) {
+weaveWeb.formula <- function(
+    formula,
+    link = NULL,
+    tableX = NULL,
+    tableY = NULL,
+    ...
+) {
     if (missing(formula) || (length(formula) != 3L)) {
         stop("'formula' missing or incorrect")
     }
@@ -144,8 +161,11 @@ weaveWeb.formula <- function(formula, link = NULL, tableX = NULL, tableY = NULL,
     if (is.null(link) || identical(link, "none")) {
         return(
             weaveWeb.default(
-                x = terms[2], y = terms[1],
-                link, tableX, tableY
+                x = terms[2],
+                y = terms[1],
+                link,
+                tableX,
+                tableY
             )
         )
     }
@@ -157,8 +177,12 @@ weaveWeb.formula <- function(formula, link = NULL, tableX = NULL, tableY = NULL,
     }
 
     weaveWeb.default(
-        x = terms[2], y = terms[1],
-        link, tableX, tableY, ...
+        x = terms[2],
+        y = terms[1],
+        link,
+        tableX,
+        tableY,
+        ...
     )
 }
 
@@ -166,7 +190,6 @@ weaveWeb.formula <- function(formula, link = NULL, tableX = NULL, tableY = NULL,
 #' @export
 #'
 weaveKEGG <- function(x, ...) weaveWeb(x, link = kegg_link(), ...)
-
 
 
 ###############################################################################
@@ -180,8 +203,9 @@ weaveKEGG <- function(x, ...) weaveWeb(x, link = kegg_link(), ...)
 #'
 termSeq <- function(x, y, link) {
     stopifnot(
-        "both 'x' and 'y' terms must be found as colnames in 'link'" =
-            all(c(x, y) %in% colnames(link))
+        "both 'x' and 'y' terms must be found as colnames in 'link'" = all(
+            c(x, y) %in% colnames(link)
+        )
     )
     g <- getGraph(link)
     sp <- igraph::shortest_paths(g, from = y, to = x, output = "vpath")
@@ -196,9 +220,13 @@ termSeq <- function(x, y, link) {
 #' @noRd
 #'
 stepSeq <- function(term_list, d) {
-    vapply(term_list, rowsWithCol,
-        d = d, name = FALSE,
-        FUN.VALUE = 0L, USE.NAMES = FALSE
+    vapply(
+        term_list,
+        rowsWithCol,
+        d = d,
+        name = FALSE,
+        FUN.VALUE = 0L,
+        USE.NAMES = FALSE
     )
 }
 
@@ -206,7 +234,8 @@ stepSeq <- function(term_list, d) {
 #' @noRd
 #'
 subsetByPath <- function(link, all_terms) {
-    term_list <- lapply(seq_len(length(all_terms) - 1L),
+    term_list <- lapply(
+        seq_len(length(all_terms) - 1L),
         FUN = function(x) all_terms[c(x, x + 1L)]
     )
     steps <- stepSeq(term_list, dictionary(link))
@@ -225,7 +254,8 @@ subsetByPath <- function(link, all_terms) {
 #' @noRd
 #'
 dictionaryMatrix <- function(link, all_terms) {
-    term_list <- lapply(seq_len(length(all_terms) - 1L),
+    term_list <- lapply(
+        seq_len(length(all_terms) - 1L),
         FUN = function(x) all_terms[c(x, x + 1L)]
     )
     steps <- stepSeq(term_list, dictionary(link))
@@ -234,14 +264,16 @@ dictionaryMatrix <- function(link, all_terms) {
 
     # Handle simple case of one link df first, return sparse matrix.
     if (length(steps) == 1L) {
-        return(mapFromLink(all_terms,
+        return(mapFromLink(
+            all_terms,
             df = link@index[[steps]],
             dims = lv_len[all_terms]
         ))
     }
     lv_list <- lapply(term_list, function(x) lv_len[x])
     # Otherwise, make a list of matrices to Reduce to final dictionary
-    mat_list <- mapply(mapFromLink,
+    mat_list <- mapply(
+        mapFromLink,
         terms = term_list,
         df = link@index[steps],
         dims = lv_list

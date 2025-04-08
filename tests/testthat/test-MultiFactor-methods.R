@@ -1,9 +1,9 @@
 x <- MultiFactor(kegg_link())
 
 test_that("MultiFactor on a MultiFactor returns itself", {
-
     expect_identical(
-        x, MultiFactor(x)
+        x,
+        MultiFactor(x)
     )
 })
 

@@ -84,8 +84,9 @@ tell_dfr <- function(tale) {
 #' @return A wide format data.frame with summary statistics by feature pair.
 #'
 frame.tale <- function(tale, dic) {
-    switch(tale@type,
-        "r.values"  = frame.tale.cor(tale, dic),
+    switch(
+        tale@type,
+        "r.values" = frame.tale.cor(tale, dic),
         "r.squared" = frame.tale.ols(tale, dic)
     )
 }
@@ -141,8 +142,10 @@ anansi.p.adjust <- function(results, method) {
     p.cols <- grep("p.values", colnames(results))
     q.cols <- apply(results[, p.cols, drop = FALSE], 2, p.adjust, method)
     colnames(q.cols) <- gsub(
-        "_p.values", "_q.values",
-        x = colnames(q.cols), fixed = TRUE
+        "_p.values",
+        "_q.values",
+        x = colnames(q.cols),
+        fixed = TRUE
     )
     cbind.data.frame(results, q.cols)
 }

@@ -62,7 +62,8 @@ NULL
 #' @export
 #'
 setMethod(
-    "getEdgeList", "MultiFactor",
+    "getEdgeList",
+    "MultiFactor",
     function(x) as.data.frame(do.call(rbind, names(x)))
 )
 
@@ -99,65 +100,83 @@ setMethod("dimnames", "MultiFactor", function(x) {
 #' @aliases [,MultiFactor,ANY,ANY-method
 #' @usage NULL
 #'
-setMethod("[", c("MultiFactor", "ANY", "ANY"), definition = function(
-    x, i, j, ..., drop = TRUE) {
-    if (missing(i) && missing(j)) {
-        return(x)
-    }
-    d <- dictionary(x)
-    l <- levels(x)
-    x <- x@index
-    if (!missing(i)) ii <- rownames(d[i, , drop = FALSE])
-    if (!missing(j)) jj <- colnames(d[, j, drop = FALSE])
+setMethod(
+    "[",
+    c("MultiFactor", "ANY", "ANY"),
+    definition = function(
+        x,
+        i,
+        j,
+        ...,
+        drop = TRUE
+    ) {
+        if (missing(i) && missing(j)) {
+            return(x)
+        }
+        d <- dictionary(x)
+        l <- levels(x)
+        x <- x@index
+        if (!missing(i)) ii <- rownames(d[i, , drop = FALSE])
+        if (!missing(j)) jj <- colnames(d[, j, drop = FALSE])
 
-    if (missing(i)) {
-        ii <- rowsWithCol(d, jj, FALSE)
-        x <- lapply(x[ii], `[`, i = jj)
-    } else if (missing(j)) {
-        x <- x[ii]
-    } else {
-        x <- lapply(x[ii], `[`, i = jj)
-    }
+        if (missing(i)) {
+            ii <- rowsWithCol(d, jj, FALSE)
+            x <- lapply(x[ii], `[`, i = jj)
+        } else if (missing(j)) {
+            x <- x[ii]
+        } else {
+            x <- lapply(x[ii], `[`, i = jj)
+        }
 
-    if (drop) {
-        return(x)
-    }
+        if (drop) {
+            return(x)
+        }
 
-    MultiFactor(x, levels = l)
-})
+        MultiFactor(x, levels = l)
+    }
+)
 
 #' @export
 #' @rdname MultiFactor
 #' @aliases [<-,MultiFactor,ANY,ANY,list-method
 #' @usage NULL
 #'
-setReplaceMethod("[", c("MultiFactor", "ANY", "ANY", "list"), def = function(
-    x, i, j, ..., value) {
-    if (missing(i) && missing(j)) {
-        return(value)
-    }
-    d <- dictionary(x)
-    if (!missing(i)) ii <- rownames(d[i, , drop = FALSE])
-    if (!missing(j)) jj <- colnames(d[, j, drop = FALSE])
-
-    if (missing(j)) {
-        x@index[ii] <- value
-        validObject(x)
-        return(x)
-    }
-
-    if (missing(i)) {
-        ii <- rowsWithCol(d, jj, names = TRUE)
-    }
-
-    for (i in ii) {
-        for (j in jj) {
-            x@index[[i]][, j] <- value[[i]][, j]
+setReplaceMethod(
+    "[",
+    c("MultiFactor", "ANY", "ANY", "list"),
+    def = function(
+        x,
+        i,
+        j,
+        ...,
+        value
+    ) {
+        if (missing(i) && missing(j)) {
+            return(value)
         }
+        d <- dictionary(x)
+        if (!missing(i)) ii <- rownames(d[i, , drop = FALSE])
+        if (!missing(j)) jj <- colnames(d[, j, drop = FALSE])
+
+        if (missing(j)) {
+            x@index[ii] <- value
+            validObject(x)
+            return(x)
+        }
+
+        if (missing(i)) {
+            ii <- rowsWithCol(d, jj, names = TRUE)
+        }
+
+        for (i in ii) {
+            for (j in jj) {
+                x@index[[i]][, j] <- value[[i]][, j]
+            }
+        }
+        validObject(x)
+        (x)
     }
-    validObject(x)
-    (x)
-})
+)
 
 #' @export
 #' @rdname MultiFactor
@@ -182,20 +201,28 @@ setMethod("[[", c("MultiFactor", "ANY"), function(x, i, ...) {
 #' @aliases [[<-,MultiFactor,ANY,ANY-method
 #' @usage NULL
 #'
-setReplaceMethod("[[", c("MultiFactor", "ANY", "ANY"), function(
-    x, i, ..., value) {
-    d <- x@map
-    # If i can't index d, stop. Appending not supported through `[[<-`.
-    if (!all(i %in% colnames(d))) {
-        if (anyNA(colnames(d)[i]) || length(colnames(d)[i]) != length(i)) {
-            stop("No levels corresponding to `i` found in MultiFactor. ")
+setReplaceMethod(
+    "[[",
+    c("MultiFactor", "ANY", "ANY"),
+    function(
+        x,
+        i,
+        ...,
+        value
+    ) {
+        d <- x@map
+        # If i can't index d, stop. Appending not supported through `[[<-`.
+        if (!all(i %in% colnames(d))) {
+            if (anyNA(colnames(d)[i]) || length(colnames(d)[i]) != length(i)) {
+                stop("No levels corresponding to `i` found in MultiFactor. ")
+            }
         }
+        ii <- rowsWithCol(d, i, FALSE)
+        x@index[ii] <- value
+        validObject(x)
+        x
     }
-    ii <- rowsWithCol(d, i, FALSE)
-    x@index[ii] <- value
-    validObject(x)
-    x
-})
+)
 
 #' @export
 #' @rdname MultiFactor
@@ -224,14 +251,20 @@ setMethod("c", "MultiFactor", function(x, ...) {
 #' @aliases show,MultiFactor-method
 #'
 setMethod("show", "MultiFactor", function(object) {
-    cat("A list of class ", class(object), ",\n    ",
-        NCOL(object), " feature types across ", NROW(object),
+    cat(
+        "A list of class ",
+        class(object),
+        ",\n    ",
+        NCOL(object),
+        " feature types across ",
+        NROW(object),
         " edge lists.\n\n",
         sep = ""
     )
     printSpMatrix(object@map)
 
-    cat("\nValues represent unique feature names in that edge list.\n\n",
+    cat(
+        "\nValues represent unique feature names in that edge list.\n\n",
         "Levels:\n\n",
         sep = ""
     )
@@ -239,15 +272,21 @@ setMethod("show", "MultiFactor", function(object) {
     nm_w <- max(nchar(nlevels(object)))
     for (id in colnames(object)) {
         num_lvs <- length(levels(object)[[id]])
-        cat(format(id, width = id_w), " : ",
-            format(num_lvs, width = nm_w), " Levels: ",
+        cat(
+            format(id, width = id_w),
+            " : ",
+            format(num_lvs, width = nm_w),
+            " Levels: ",
             sep = ""
         )
 
         if (num_lvs > 4L) {
             cat(
-                levels(object)[[id]][1], levels(object)[[id]][2], "...",
-                levels(object)[[id]][num_lvs], "\n",
+                levels(object)[[id]][1],
+                levels(object)[[id]][2],
+                "...",
+                levels(object)[[id]][num_lvs],
+                "\n",
                 sep = " "
             )
         } else {
@@ -295,8 +334,11 @@ setMethod("unfactor", "MultiFactor", function(x) {
 #'
 droplevels.MultiFactor <- function(x, exclude = NULL, select = NULL, ...) {
     stopifnot(
-        "Only one of 'exclude' and 'select' may be provided" =
-            sum(is.null(exclude), is.null(select)) > 0L
+        "Only one of 'exclude' and 'select' may be provided" = sum(
+            is.null(exclude),
+            is.null(select)
+        ) >
+            0L
     )
     stopifnot("'x' is not a MultiFactor." = is(x, "MultiFactor"))
     # Section 1. Trimming the indices by user input
@@ -304,8 +346,10 @@ droplevels.MultiFactor <- function(x, exclude = NULL, select = NULL, ...) {
     d <- dictionary(x)
     if (!is.null(exclude)) {
         stopifnot(
-            "`'exclude' must be a named list of character vectors ." =
-                is.list(exclude) && any(names(exclude) %in% names(lvs))
+            "`'exclude' must be a named list of character vectors ." = is.list(
+                exclude
+            ) &&
+                any(names(exclude) %in% names(lvs))
         )
         # Names not mentioned will be left alone.
         jj <- intersect(names(exclude), names(lvs))
@@ -318,8 +362,10 @@ droplevels.MultiFactor <- function(x, exclude = NULL, select = NULL, ...) {
         }
     } else if (!is.null(select)) {
         stopifnot(
-            "'select' argument must be a named list of character vectors." =
-                is.list(select) && any(names(select) %in% names(lvs))
+            "'select' arg must be a named list of character vectors." = is.list(
+                select
+            ) &&
+                any(names(select) %in% names(lvs))
         )
         jj <- intersect(names(select), names(lvs))
         for (j in jj) {
@@ -355,7 +401,8 @@ droplevels.MultiFactor <- function(x, exclude = NULL, select = NULL, ...) {
 #' @usage NULL
 #'
 setMethod(
-    "droplevels", "MultiFactor",
+    "droplevels",
+    "MultiFactor",
     function(x, exclude = NULL, select = NULL, ...) {
         droplevels.MultiFactor(x, exclude, select, ...)
     }
@@ -385,7 +432,8 @@ setMethod("levels", "MultiFactor", levels.MultiFactor)
 #' @usage NULL
 #'
 setReplaceMethod(
-    "levels", "MultiFactor",
+    "levels",
+    "MultiFactor",
     function(x, value) {
         x@levels <- value
         x
@@ -404,7 +452,8 @@ setMethod("dictionary", "MultiFactor", function(x, ...) x@map)
 #' @usage NULL
 #'
 setReplaceMethod(
-    "dictionary", "MultiFactor",
+    "dictionary",
+    "MultiFactor",
     function(x, ..., value) {
         x@map <- value
         validObject(x)
@@ -478,7 +527,6 @@ setMethod("subset", "MultiFactor", function(x, subset, select, ...) {
 })
 
 
-
 ##############################################################################
 ##############################################################################
 ##############################################################################
@@ -499,7 +547,6 @@ mergeMultiFactorLvs <- function(x, y) {
     x[i] <- union(x[i], y[i])
     return(c(x, y[!names(y) %in% i]))
 }
-
 
 
 #' @param d `MultiFactor@map`

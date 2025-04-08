@@ -13,7 +13,8 @@ setMethod("as.list", c(x = "AnansiWeb"), function(x, ...) as(x, "list"))
 #' @export
 #'
 setMethod(
-    "as.data.frame", c(x = "AnansiWeb"),
+    "as.data.frame",
+    c(x = "AnansiWeb"),
     function(x, row.names = NULL, optional = FALSE, ...) {
         as.data.frame.AnansiWeb(x)
     }
@@ -43,10 +44,14 @@ asMAE <- function(x) as(x, "MultiAssayExperiment")
 #' @export
 #'
 setAs(from = "AnansiWeb", to = "list", def = function(from) {
-    out <- c(list(
-        tableY = from@tableY, tableX = from@tableX,
-        dictionary = from@dictionary
-    ), from@metadata)
+    out <- c(
+        list(
+            tableY = from@tableY,
+            tableX = from@tableX,
+            dictionary = from@dictionary
+        ),
+        from@metadata
+    )
     names(out)[c(1L, 2L)] <- names(from)
     out
 })
@@ -104,6 +109,6 @@ as.list.MultiFactor <- function(x, ..., use.names = TRUE) {
     ifelse(
         use.names,
         yes = return(unfactor(x)),
-        no  = return(`names<-`(x@index, rownames(x)))
+        no = return(`names<-`(x@index, rownames(x)))
     )
 }

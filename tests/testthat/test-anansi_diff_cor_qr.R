@@ -2,8 +2,10 @@ test_that("full and disjointed parameters correspond to stats::lm()", {
     tX <- `colnames<-`(replicate(5, c(scale(rnorm(36)))), letters[1:5])
     tY <- `colnames<-`(replicate(3, c(scale(rnorm(36)))), LETTERS[1:3])
 
-    d <- matrix(TRUE,
-        nrow = NCOL(tY), ncol = NCOL(tX),
+    d <- matrix(
+        TRUE,
+        nrow = NCOL(tY),
+        ncol = NCOL(tX),
         dimnames = list(y = colnames(tY), x = colnames(tX))
     )
 
@@ -19,8 +21,11 @@ test_that("full and disjointed parameters correspond to stats::lm()", {
     )
 
     anansi.res <- anansi(
-        web = web, metadata = m, formula = ~categorical,
-        verbose = FALSE, return.format = "raw"
+        web = web,
+        metadata = m,
+        formula = ~categorical,
+        verbose = FALSE,
+        return.format = "raw"
     )
     a.full <- anansi.res[[5]]
     a.disj <- anansi.res[[6]]
@@ -40,7 +45,6 @@ test_that("full and disjointed parameters correspond to stats::lm()", {
     )
 
     t.disj.F <- t.full.F <- t.full.P <- t.disj.P <- t.disj <- t.full
-
 
     for (y in seq_len(NCOL(tY))) {
         m$y.val <- y.val <- tY[, y]
@@ -83,13 +87,14 @@ test_that("full and disjointed parameters correspond to stats::lm()", {
     # And test repeated measurements through random intercepts
     # with Error() notation
     anansi.res <- anansi(
-        web = web, metadata = m,
+        web = web,
+        metadata = m,
         formula = ~ continuous + Error(categorical),
-        verbose = FALSE, return.format = "raw"
+        verbose = FALSE,
+        return.format = "raw"
     )
     a.full <- anansi.res[[2]]
     a.disj <- anansi.res[[3]]
-
 
     a.full.F <- tell_F(a.full)
     a.disj.F <- tell_F(a.disj)

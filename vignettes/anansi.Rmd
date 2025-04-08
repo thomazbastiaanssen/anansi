@@ -18,7 +18,15 @@ text-align: justify}
 </style>
 
 ```{r setup, include = FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, 
+                      tidy.opts = list(width.cutoff = 80), 
+                      tidy = TRUE)
+# long links
+adj_link <- paste0("https://thomazbastiaanssen.github.io/anansi/", 
+               "articles/adjacency_matrices.html")
+dif_link <- paste0("https://thomazbastiaanssen.github.io/anansi/", 
+               "articles/differential_associations.html")
+
 library(anansi)
 ```
 
@@ -66,7 +74,8 @@ matrix is provided in the `anansi` library and is referred to as a dictionary
 (because you use it to look up which metabolites interact with which functions).  
 
 Though most of the examples use metabolites and functions, `anansi` is able to 
-handle any type of big/'omics data, as long as there is a dictionary available. Because of this, anansi uses the type-naive nomenclature `tableY` and `tableX`. 
+handle any type of big/'omics data, as long as there is a dictionary available. 
+Because of this, anansi uses the type-naive nomenclature `tableY` and `tableX`. 
 The Y and X refer to the position these measurements will have in the linear 
 modeling framework: 
 
@@ -99,8 +108,8 @@ track of which features from the two input data sets should should be considered
 as pairs. 
 
 With `anansi`, we provide a pre-built map between ko, cpd and ec features of the
-KEGG database, but users can provide their own maps. [See vignette on adjacency matrices.](https://thomazbastiaanssen.github.io/anansi/articles/adjacency_matrices.html)
-
+KEGG database, but users can provide their own maps. 
+[See vignette on adjacency matrices.]`r sprintf("(%s)", adj_link)`
 
 ```{r, eval=TRUE}
 web <- weaveWeb(
@@ -132,7 +141,8 @@ anansi_out <- anansi(
 # Reporting output📝
 
 `anansi` returns a wide format table as an output. For general reporting, we 
-recommend sticking to the table format as it's the most legible. Let's take a look at the structure of the output table:
+recommend sticking to the table format as it's the most legible. Let's take a 
+look at the structure of the output table:
 
 ```{r, eval=TRUE}
 # General structure of anansi() output
@@ -150,7 +160,8 @@ emergent associations. For each of these models we report four parameters.
 For correlations we provide $\rho$ - Pearson's coefficient - and the
 $t$-statistic, whereas we provide their squared counterparts for the other
 models: $R^2$ and the $F$ statistic. For all models, we additionally provide
-p-values and adjusted p-values. [For more on this, see the vignette on differential associations](https://thomazbastiaanssen.github.io/anansi/articles/differential_associations.html). 
+p-values and adjusted p-values. For more on this, 
+[see the vignette on differential associations]`r sprintf("(%s)", dif_link)`. 
 
 # Plot the results
 
@@ -158,7 +169,7 @@ The long format can be helpful to plug the data into `ggplot2`. Here, we
 recreate the style of the figure from the FMT Aging study.
 
 ```{r}
-#| plot_FMT, eval=TRUE, fig.width=10, fig.height=8,
+#| plot_FMT, eval=TRUE, fig.width=10, fig.height=8, tidy=FALSE,
 #| fig.alt="Differential association plot, with facets separating metabolites
 #| and metabolites on the y-axis. x-axis depicts pearson's correlation
 #| coefficient."
@@ -181,9 +192,11 @@ ggplot(anansiLong) +
 
     # Define aesthetics
     aes(
-        x = r.values, y = feature_X,
-        fill = cor_group, alpha = disjointed_Legend_p.values < 0.05
-    ) +
+        x = r.values, 
+        y = feature_X,
+        fill = cor_group, 
+        alpha = disjointed_Legend_p.values < 0.05
+        ) +
 
     # Make a vertical dashed red line at x = 0
     geom_vline(xintercept = 0, linetype = "dashed", colour = "red") +
@@ -222,7 +235,7 @@ wonderful interface to combine plots. We can use `getFeaturePairs()` to
 extract the relevant data from our `AnansiWeb` object in a convenient list
 format:   
 ```{r}
-#| multiplot, eval=TRUE, message=FALSE
+#| multiplot, eval=TRUE, message=FALSE, tidy = FALSE
 library(patchwork)
 
 # Get a list containing data.frames for each feature pair.
@@ -272,7 +285,8 @@ These types of visualizations of feature pairs work best when the amount of
 feature pairs to be plotted is modest.
 
 ### Note on using `patchwork` with `anansi`: 
-Especially for large numers of featire pairs, it's much more efficient to add shared elements to the patchwork using the `&` operator, rather than adding them
+Especially for large numers of featire pairs, it's much more efficient to add 
+shared elements to the patchwork using the `&` operator, rather than adding them
 to the initial `ggplot()` calls in the `lapply()` loop. 
 
 
@@ -308,7 +322,7 @@ out <- getAnansi(
 )
 ```
 
-Finally, the output of anansi can be visualised with `plotAnansi` by specifying
+Finally, the output of anansi can be visualized with `plotAnansi` by specifying
 the type of association to use.
 
 ```{r}

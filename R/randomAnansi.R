@@ -26,21 +26,32 @@ NULL
 #' @name randomWeb
 #' @export
 #'
-randomWeb <- function(n_samples = 10, n_reps = 1L,
-                      n_features_x = 8, n_features_y = 12,
-                      sparseness = 0.5, tableY = NULL, tableX = NULL,
-                      dictionary = NULL) {
+randomWeb <- function(
+    n_samples = 10,
+    n_reps = 1L,
+    n_features_x = 8,
+    n_features_y = 12,
+    sparseness = 0.5,
+    tableY = NULL,
+    tableX = NULL,
+    dictionary = NULL
+) {
     stopifnot(
-        "'sparseness' must be a proportion [0-1]. " =
-            sparseness <= 1 && sparseness > 0
+        "'sparseness' must be a proportion [0-1]. " = sparseness <= 1 &&
+            sparseness > 0
     )
     stopifnot(
-        "At least one of 'tableY,tableX', 'dictionary' should be NULL." =
-            any(c(is.null(tableY), is.null(tableX), is.null(dictionary)))
+        "At least one of 'tableY,tableX', 'dictionary' should be NULL." = any(c(
+            is.null(tableY),
+            is.null(tableX),
+            is.null(dictionary)
+        ))
     )
     stopifnot(
-        "'tableY,tableX' should either both be provided or both NULL. " =
-            is.null(tableY) == is.null(tableX)
+        "Both 'tableY,tableX' should be provided or NULL. " = is.null(
+            tableY
+        ) ==
+            is.null(tableX)
     )
 
     density <- 1 - sparseness
@@ -48,8 +59,11 @@ randomWeb <- function(n_samples = 10, n_reps = 1L,
     if (all(c(is.null(tableY), is.null(tableX), is.null(dictionary)))) {
         return(
             randomWebFull(
-                n_samples, n_reps,
-                n_features_x, n_features_y, density
+                n_samples,
+                n_reps,
+                n_features_x,
+                n_features_y,
+                density
             )
         )
     }
@@ -69,19 +83,20 @@ randomWeb <- function(n_samples = 10, n_reps = 1L,
 #' @param sparseness `Numeric scalar`, proportion: How rare are connections
 #' @export
 #'
-randomMultiFactor <- function(n_types = 6, n_features = 100,
-                              sparseness = 0.5) {
+randomMultiFactor <- function(n_types = 6, n_features = 100, sparseness = 0.5) {
     stopifnot(
-        "'sparseness' must be a proportion [0-1]. " =
-            sparseness <= 1 && sparseness > 0
+        "'sparseness' must be a proportion [0-1]. " = sparseness <= 1 &&
+            sparseness > 0
     )
     n_types <- max(min(n_types, 26), 2)
     ids <- letters[seq_len(n_types)]
     out_names <- paste0(ids[-n_types], "2", ids[-1L])
     id_list <- lapply(ids, function(x) {
-        paste(x, formatC(seq_len(n_features),
-            digits = 2, flag = "0"
-        ), sep = "_")
+        paste(
+            x,
+            formatC(seq_len(n_features), digits = 2, flag = "0"),
+            sep = "_"
+        )
     })
 
     out <- lapply(seq_len(n_types - 1), FUN = function(x) {
@@ -126,24 +141,26 @@ krebsDemoWeb <- function(n_samples = 100, n_reps = 4L) {
     int_pr <- pnorm(metadata(w)$score_a)
 
     # Positive association aconitase ~ citrate
-    tableY(w)[, 1L] <- scale(tableY(w)[, 1L] * 0.25 +
-        tableX(w)[, 1L] * 0.75)
+    tableY(w)[, 1L] <- scale(tableY(w)[, 1L] * 0.25 + tableX(w)[, 1L] * 0.75)
     # Negative association aconitase ~ cis-aconitate
-    tableX(w)[, 2L] <- scale(tableX(w)[, 2L] * 0.25 +
-        tableY(w)[, 1L] * -0.75)
+    tableX(w)[, 2L] <- scale(tableX(w)[, 2L] * 0.25 + tableY(w)[, 1L] * -0.75)
     # Disjointed association isocitrate dehydrogenase ~ isocitrate
-    tableY(w)[, 2L] <- scale(tableY(w)[, 2L] * 0.25 +
-        tableX(w)[, 3L] * 0.75)
+    tableY(w)[, 2L] <- scale(tableY(w)[, 2L] * 0.25 + tableX(w)[, 3L] * 0.75)
     tableY(w)[int_ab, 2L] <- tableY(w)[int_ab, 2L] * -1L
     # Disjointed association ketoglutarate dehydrogenase ~ ketoglutarate
-    tableY(w)[, 3L] <- scale(tableY(w)[, 3L] * 0.25 +
-        tableX(w)[, 4L] * 0.75 * metadata(w)$score_a)
+    tableY(w)[, 3L] <- scale(
+        tableY(w)[, 3L] * 0.25 + tableX(w)[, 4L] * 0.75 * metadata(w)$score_a
+    )
     # Emergent association succinyl-CoA synthetase ~ succinyl-CoA
-    tableY(w)[, 4L] <- scale(tableY(w)[, 4L] * (0.25 + 0.50 * !int_ab) +
-        tableX(w)[, 5L] * (0.25 + 0.50 * int_ab))
+    tableY(w)[, 4L] <- scale(
+        tableY(w)[, 4L] *
+            (0.25 + 0.50 * !int_ab) +
+            tableX(w)[, 5L] * (0.25 + 0.50 * int_ab)
+    )
     # Emergent association succinate dehydrogenase ~ succinate
-    tableY(w)[, 5L] <- scale(tableY(w)[, 5L] * int_pr +
-        tableX(w)[, 6L] * (1 - int_pr))
+    tableY(w)[, 5L] <- scale(
+        tableY(w)[, 5L] * int_pr + tableX(w)[, 6L] * (1 - int_pr)
+    )
 
     return(w)
 }
@@ -165,7 +182,8 @@ randomWebFull <- function(n_samp, n_reps, n_x, n_y, density) {
     )
     tableY <- matrix(
         data = rnorm(n_y * n_samp * n_reps),
-        nrow = n_samp * n_reps, ncol = n_y,
+        nrow = n_samp * n_reps,
+        ncol = n_y,
         dimnames = list(
             sample_id = rn,
             y = paste0("y_", seq_len(n_y))
@@ -173,7 +191,8 @@ randomWebFull <- function(n_samp, n_reps, n_x, n_y, density) {
     )
     tableX <- matrix(
         data = rnorm(n_x * n_samp * n_reps),
-        nrow = n_samp * n_reps, ncol = n_x,
+        nrow = n_samp * n_reps,
+        ncol = n_x,
         dimnames = list(
             sample_id = rn,
             x = paste0("x_", seq_len(n_x))
@@ -198,7 +217,8 @@ randomWebTab <- function(n_samp, n_reps, dictionary, metadata) {
     )
     tableY <- matrix(
         data = rnorm(d[1] * n_samp * n_reps),
-        nrow = n_samp * n_reps, ncol = d[1],
+        nrow = n_samp * n_reps,
+        ncol = d[1],
         dimnames = c(
             list(
                 sample_id = rn
@@ -208,7 +228,8 @@ randomWebTab <- function(n_samp, n_reps, dictionary, metadata) {
     )
     tableX <- matrix(
         data = rnorm(d[2] * n_samp * n_reps),
-        nrow = n_samp * n_reps, ncol = d[2],
+        nrow = n_samp * n_reps,
+        ncol = d[2],
         dimnames = c(
             list(
                 sample_id = rn
@@ -220,8 +241,10 @@ randomWebTab <- function(n_samp, n_reps, dictionary, metadata) {
     metadata <- randomWebMetadata(tableY, n_samp, n_reps)
     # return AnansiWeb
     AnansiWeb(
-        tableY = tableY, tableX = tableX,
-        dictionary = dictionary, metadata = list(metadata = metadata)
+        tableY = tableY,
+        tableX = tableX,
+        dictionary = dictionary,
+        metadata = list(metadata = metadata)
     )
 }
 
@@ -234,8 +257,10 @@ randomWebTab <- function(n_samp, n_reps, dictionary, metadata) {
 #'
 randomWebDic <- function(tableY, tableX, density, metadata) {
     dictionary <- rsparsematrix(
-        nrow = NCOL(tableY), ncol = NCOL(tableX),
-        density = density, rand.x = NULL,
+        nrow = NCOL(tableY),
+        ncol = NCOL(tableX),
+        density = density,
+        rand.x = NULL,
         dimnames = list(
             y = colnames(tableY),
             x = colnames(tableX)
@@ -248,8 +273,10 @@ randomWebDic <- function(tableY, tableX, density, metadata) {
     metadata <- randomWebMetadata(tableY)
     # return AnansiWeb
     AnansiWeb(
-        tableY = tableY, tableX = tableX,
-        dictionary = dictionary, metadata = list(metadata = metadata)
+        tableY = tableY,
+        tableX = tableX,
+        dictionary = dictionary,
+        metadata = list(metadata = metadata)
     )
 }
 
@@ -268,12 +295,14 @@ randomWebMetadata <- function(table, n_samples = NULL, n_reps = NULL) {
     m <- data.frame(
         sample_id = paste0("sample_", rep(seq_len(n_samples), each = n_reps)),
         repeated = paste0("rep_", seq_len(n_reps)),
-        group_ab = rep(sample(c("a", "b"), n_samples,
-            replace = TRUE
-        ), each = n_reps),
-        subtype = rep(sample(c("x", "y", "z"), n_samples,
-            replace = TRUE
-        ), each = n_reps),
+        group_ab = rep(
+            sample(c("a", "b"), n_samples, replace = TRUE),
+            each = n_reps
+        ),
+        subtype = rep(
+            sample(c("x", "y", "z"), n_samples, replace = TRUE),
+            each = n_reps
+        ),
         score_a = rnorm(n_samples),
         score_b = rnorm(n_samples),
         score_c = rnorm(n_samples),
