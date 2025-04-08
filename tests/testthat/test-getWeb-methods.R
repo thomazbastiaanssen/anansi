@@ -2,7 +2,7 @@ test_that("conversion from web to mae to web works", {
     # Make a random anansiWeb
     web1 <- randomWeb()
     # Combine experiments into MultiAssayExperiment object
-    mae1 <- as(web1, "MultiAssayExperiment")
+    mae1 <- asMAE(web1)
     # Back to AnansiWeb
     web2 <- getWeb(x = mae1, tableY = "y", tableX = "x")
     # Once more, my friends

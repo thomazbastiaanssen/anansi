@@ -1,21 +1,53 @@
-x <- MultiFactor(kegg_link())
+test_that("Delayed shedding levels works; MultiFactor returns MultiFactor", {
+    x <- MultiFactor(kegg_link(), drop.unmatched = FALSE)
 
-test_that("MultiFactor on a MultiFactor returns itself", {
     expect_identical(
-        x,
+        MultiFactor(x),
         MultiFactor(x)
     )
 })
 
 
+test_that("Dropping levels works", {
+    x <- randomMultiFactor(n_features = 10)
+    y <- droplevels(x, select = list(a = "a_001"))
+
+    expect_error(
+        droplevels(
+            x,
+            select = list(a = "a_001"),
+            exclude = list(d = c("d_001"))
+        ),
+        regexp = "Only one of 'exclude' and 'select' may be provided"
+    )
+
+    expect_identical(dim(y), c(5L, 6L))
+    expect_identical(names(names(y)), rownames(y))
+    expect_identical(y, y[])
+})
+
+x <- randomMultiFactor(n_features = 10, n_types = 3)
+
 test_that("MultiFactor indexing works", {
     expect_identical(
         x,
-        asMultiFactor(x[["ec"]], levels = levels(x))
+        asMultiFactor(x[["b"]], levels = levels(x))
     )
 
     expect_identical(
         x,
-        MultiFactor(c(x[["ko"]], x[["cpd"]]), levels = levels(x))
+        MultiFactor(c(x[["a"]], x[["c"]]), levels = levels(x))
     )
+})
+
+test_that("MultiFactor get/set works", {
+    #two-way equivalence
+    expect_identical(x[["a"]], x[["a"]] <- x[, c("a", "b")])
+    expect_identical(x[, c("a", "b")], x[, c("a", "b")] <- x[["a"]])
+
+    expect_identical(dictionary(x), dictionary(x) <- dictionary(x))
+})
+
+test_that("show works", {
+    expect_null(show(x))
 })
