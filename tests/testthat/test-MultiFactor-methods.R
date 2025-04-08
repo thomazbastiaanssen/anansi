@@ -1,16 +1,14 @@
-test_that("Delayed shedding levels works; MultiFactor returns MultiFactor", {
-    x <- MultiFactor(kegg_link(), drop.unmatched = FALSE)
+x <- MultiFactor(kegg_link(), drop.unmatched = FALSE)
 
+test_that("Delayed shedding levels works; MultiFactor returns MultiFactor", {
     expect_identical(
         MultiFactor(x),
         MultiFactor(x)
     )
 })
 
-
 test_that("Dropping levels works", {
     x <- randomMultiFactor(n_features = 10)
-    y <- droplevels(x, select = list(a = "a_001"))
 
     expect_error(
         droplevels(
@@ -20,6 +18,10 @@ test_that("Dropping levels works", {
         ),
         regexp = "Only one of 'exclude' and 'select' may be provided"
     )
+    y <- droplevels(x, select = list(a = "a_010"))
+    z <- droplevels(x, exclude = list(a = paste0("a_00", seq(1, 9))))
+
+    expect_identical(y, z)
 
     expect_identical(dim(y), c(5L, 6L))
     expect_identical(names(names(y)), rownames(y))
@@ -47,6 +49,7 @@ test_that("MultiFactor get/set works", {
 
     expect_identical(dictionary(x), dictionary(x) <- dictionary(x))
 })
+
 
 test_that("show works", {
     expect_null(show(x))
