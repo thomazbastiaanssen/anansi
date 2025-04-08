@@ -107,9 +107,9 @@ in the context of the anansi framework.<br>
 <h3 id="example-from-biology-the-krebs-cycle">Example from Biology: The Krebs cycle<a class="anchor" aria-label="anchor" href="#example-from-biology-the-krebs-cycle"></a>
 </h3>
 <p>Recall that the <a href="https://en.wikipedia.org/wiki/Citric_acid_cycle" class="external-link">citric acid
-cycle, or Krebs cycle</a>, is a central piece of metabolic machinery. In
-short, it enables oxidative phosphorylation. See figure below for a
-simplified representation with 8 unique enzymatic reactions and 9 unique
+cycle, or Krebs cycle</a>, is a central piece of metabolic machinery
+involved in oxidative phosphorylation. See figure below for a simplified
+representation with 8 unique enzymatic reactions and 9 unique
 metabolites.</p>
 <div class="figure">
 <img src="adjacency_matrices_files/figure-html/plot-krebs-1.png" alt="Simplified representation of the Krebs cycle. Orange boxes mark
@@ -354,30 +354,18 @@ data set, this means we can link between any two of <code>ec</code>,
 through <code><a href="../reference/AnansiWeb.html">AnansiWeb()</a></code>:</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Prep some dummy input tables</span></span>
-<span><span class="va">tX</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span><span class="op">)</span>,</span>
-<span>    nrow <span class="op">=</span> <span class="fl">6</span>,</span>
-<span>    dimnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="cn">NULL</span>, x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"x"</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span>, sep <span class="op">=</span> <span class="st">"_"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span><span class="va">tY</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span>,</span>
-<span>    nrow <span class="op">=</span> <span class="fl">6</span>,</span>
-<span>    dimnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="cn">NULL</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"y"</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fl">7</span><span class="op">)</span>, sep <span class="op">=</span> <span class="st">"_"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
+<span><span class="va">tX</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">6</span>, dimnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="cn">NULL</span>, x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"x"</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span>,</span>
+<span>    sep <span class="op">=</span> <span class="st">"_"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">tY</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">6</span>, dimnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="cn">NULL</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"y"</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fl">7</span><span class="op">)</span>,</span>
+<span>    sep <span class="op">=</span> <span class="st">"_"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Prep biadjacency matrix</span></span>
-<span><span class="co"># base::matrix is fine too, but will get coerced to Matrix::Matrix.</span></span>
-<span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span></span>
-<span>    data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">FALSE</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">35</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
-<span>    nrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">NCOL</a></span><span class="op">(</span><span class="va">tY</span><span class="op">)</span>,</span>
-<span>    ncol <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">NCOL</a></span><span class="op">(</span><span class="va">tX</span><span class="op">)</span>,</span>
-<span>    dimnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">tY</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">tX</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
+<span><span class="co"># Prep biadjacency matrix base::matrix is fine too, but will get coerced to</span></span>
+<span><span class="co"># Matrix::Matrix.</span></span>
+<span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">FALSE</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">35</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">NCOL</a></span><span class="op">(</span><span class="va">tY</span><span class="op">)</span>,</span>
+<span>    ncol <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">NCOL</a></span><span class="op">(</span><span class="va">tX</span><span class="op">)</span>, dimnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">tY</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">tX</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># make the AnansiWeb</span></span>
-<span><span class="va">w</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/AnansiWeb.html">AnansiWeb</a></span><span class="op">(</span></span>
-<span>    tableY <span class="op">=</span> <span class="va">tY</span>,</span>
-<span>    tableX <span class="op">=</span> <span class="va">tX</span>,</span>
-<span>    dictionary <span class="op">=</span> <span class="va">d</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">w</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/AnansiWeb.html">AnansiWeb</a></span><span class="op">(</span>tableY <span class="op">=</span> <span class="va">tY</span>, tableX <span class="op">=</span> <span class="va">tX</span>, dictionary <span class="op">=</span> <span class="va">d</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Warning in AnansiWeb(tableY = tY, tableX = tX, dictionary = d): Dimnames of</span></span>
 <span><span class="co">## 'dictionary' were missing; Assigned 'y' and 'x'.</span></span></code></pre>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
@@ -457,14 +445,8 @@ library provides fantastic support for this.</p>
 <span><span class="va">Metabolite</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">krebs_edge_df</span><span class="op">$</span><span class="va">Metabolite</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># We can get integers out of factors, corresponding to their level indices</span></span>
-<span><span class="va">bi_mat2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/Matrix/man/sparseMatrix.html" class="external-link">sparseMatrix</a></span><span class="op">(</span></span>
-<span>    i <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="va">Enzyme</span><span class="op">)</span>,</span>
-<span>    j <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="va">Metabolite</span><span class="op">)</span>,</span>
-<span>    dimnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>        Enzyme <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Factor-class.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">Enzyme</span><span class="op">)</span>,</span>
-<span>        Metabolite <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Factor-class.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">Metabolite</span><span class="op">)</span></span>
-<span>    <span class="op">)</span></span>
-<span><span class="op">)</span></span>
+<span><span class="va">bi_mat2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/Matrix/man/sparseMatrix.html" class="external-link">sparseMatrix</a></span><span class="op">(</span>i <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="va">Enzyme</span><span class="op">)</span>, j <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="va">Metabolite</span><span class="op">)</span>, dimnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>Enzyme <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Factor-class.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">Enzyme</span><span class="op">)</span>,</span>
+<span>    Metabolite <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Factor-class.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">Metabolite</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">bi_mat2</span>, n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">5</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## 4 x 5 sparse Matrix of class "ngCMatrix"</span></span>
@@ -514,46 +496,47 @@ library provides fantastic support for this.</p>
 <span><span class="co">## [9] BiocStyle_2.34.0</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## loaded via a namespace (and not attached):</span></span>
-<span><span class="co">##  [1] SummarizedExperiment_1.36.0 gtable_0.3.6               </span></span>
-<span><span class="co">##  [3] xfun_0.52                   bslib_0.9.0                </span></span>
-<span><span class="co">##  [5] htmlwidgets_1.6.4           ggrepel_0.9.6              </span></span>
-<span><span class="co">##  [7] Biobase_2.66.0              lattice_0.22-6             </span></span>
-<span><span class="co">##  [9] vctrs_0.6.5                 tools_4.4.3                </span></span>
-<span><span class="co">## [11] generics_0.1.3              stats4_4.4.3               </span></span>
-<span><span class="co">## [13] tibble_3.2.1                pkgconfig_2.0.3            </span></span>
-<span><span class="co">## [15] desc_1.4.3                  S4Vectors_0.44.0           </span></span>
-<span><span class="co">## [17] lifecycle_1.0.4             GenomeInfoDbData_1.2.13    </span></span>
-<span><span class="co">## [19] farver_2.1.2                compiler_4.4.3             </span></span>
-<span><span class="co">## [21] textshaping_1.0.0           munsell_0.5.1              </span></span>
-<span><span class="co">## [23] ggforce_0.4.2               graphlayouts_1.2.2         </span></span>
-<span><span class="co">## [25] GenomeInfoDb_1.42.3         htmltools_0.5.8.1          </span></span>
-<span><span class="co">## [27] sass_0.4.9                  yaml_2.3.10                </span></span>
-<span><span class="co">## [29] tidyr_1.3.1                 pkgdown_2.1.1              </span></span>
-<span><span class="co">## [31] pillar_1.10.2               crayon_1.5.3               </span></span>
-<span><span class="co">## [33] jquerylib_0.1.4             MASS_7.3-64                </span></span>
-<span><span class="co">## [35] DelayedArray_0.32.0         cachem_1.1.0               </span></span>
-<span><span class="co">## [37] viridis_0.6.5               abind_1.4-8                </span></span>
-<span><span class="co">## [39] tidyselect_1.2.1            digest_0.6.37              </span></span>
-<span><span class="co">## [41] purrr_1.0.4                 bookdown_0.42              </span></span>
-<span><span class="co">## [43] labeling_0.4.3              forcats_1.0.0              </span></span>
-<span><span class="co">## [45] polyclip_1.10-7             fastmap_1.2.0              </span></span>
-<span><span class="co">## [47] grid_4.4.3                  colorspace_2.1-1           </span></span>
-<span><span class="co">## [49] cli_3.6.4                   SparseArray_1.6.2          </span></span>
-<span><span class="co">## [51] magrittr_2.0.3              S4Arrays_1.6.0             </span></span>
-<span><span class="co">## [53] withr_3.0.2                 UCSC.utils_1.2.0           </span></span>
-<span><span class="co">## [55] scales_1.3.0                rmarkdown_2.29             </span></span>
-<span><span class="co">## [57] XVector_0.46.0              httr_1.4.7                 </span></span>
-<span><span class="co">## [59] matrixStats_1.5.0           gridExtra_2.3              </span></span>
-<span><span class="co">## [61] ragg_1.3.3                  memoise_2.0.1              </span></span>
-<span><span class="co">## [63] evaluate_1.0.3              knitr_1.50                 </span></span>
-<span><span class="co">## [65] GenomicRanges_1.58.0        IRanges_2.40.1             </span></span>
-<span><span class="co">## [67] MultiAssayExperiment_1.32.0 viridisLite_0.4.2          </span></span>
-<span><span class="co">## [69] rlang_1.1.5                 Rcpp_1.0.14                </span></span>
-<span><span class="co">## [71] glue_1.8.0                  tweenr_2.0.3               </span></span>
-<span><span class="co">## [73] BiocManager_1.30.25         BiocGenerics_0.52.0        </span></span>
-<span><span class="co">## [75] jsonlite_2.0.0              R6_2.6.1                   </span></span>
-<span><span class="co">## [77] MatrixGenerics_1.18.1       systemfonts_1.2.2          </span></span>
-<span><span class="co">## [79] fs_1.6.5                    zlibbioc_1.52.0</span></span></code></pre>
+<span><span class="co">##  [1] tidyselect_1.2.1            viridisLite_0.4.2          </span></span>
+<span><span class="co">##  [3] farver_2.1.2                viridis_0.6.5              </span></span>
+<span><span class="co">##  [5] fastmap_1.2.0               tweenr_2.0.3               </span></span>
+<span><span class="co">##  [7] digest_0.6.37               lifecycle_1.0.4            </span></span>
+<span><span class="co">##  [9] magrittr_2.0.3              compiler_4.4.3             </span></span>
+<span><span class="co">## [11] rlang_1.1.5                 sass_0.4.9                 </span></span>
+<span><span class="co">## [13] tools_4.4.3                 yaml_2.3.10                </span></span>
+<span><span class="co">## [15] knitr_1.50                  S4Arrays_1.6.0             </span></span>
+<span><span class="co">## [17] labeling_0.4.3              graphlayouts_1.2.2         </span></span>
+<span><span class="co">## [19] htmlwidgets_1.6.4           DelayedArray_0.32.0        </span></span>
+<span><span class="co">## [21] abind_1.4-8                 withr_3.0.2                </span></span>
+<span><span class="co">## [23] purrr_1.0.4                 BiocGenerics_0.52.0        </span></span>
+<span><span class="co">## [25] desc_1.4.3                  grid_4.4.3                 </span></span>
+<span><span class="co">## [27] polyclip_1.10-7             stats4_4.4.3               </span></span>
+<span><span class="co">## [29] colorspace_2.1-1            scales_1.3.0               </span></span>
+<span><span class="co">## [31] MASS_7.3-64                 MultiAssayExperiment_1.32.0</span></span>
+<span><span class="co">## [33] SummarizedExperiment_1.36.0 cli_3.6.4                  </span></span>
+<span><span class="co">## [35] rmarkdown_2.29              crayon_1.5.3               </span></span>
+<span><span class="co">## [37] ragg_1.3.3                  generics_0.1.3             </span></span>
+<span><span class="co">## [39] httr_1.4.7                  cachem_1.1.0               </span></span>
+<span><span class="co">## [41] ggforce_0.4.2               zlibbioc_1.52.0            </span></span>
+<span><span class="co">## [43] BiocManager_1.30.25         formatR_1.14               </span></span>
+<span><span class="co">## [45] XVector_0.46.0              matrixStats_1.5.0          </span></span>
+<span><span class="co">## [47] vctrs_0.6.5                 jsonlite_2.0.0             </span></span>
+<span><span class="co">## [49] bookdown_0.42               IRanges_2.40.1             </span></span>
+<span><span class="co">## [51] S4Vectors_0.44.0            ggrepel_0.9.6              </span></span>
+<span><span class="co">## [53] systemfonts_1.2.2           jquerylib_0.1.4            </span></span>
+<span><span class="co">## [55] tidyr_1.3.1                 glue_1.8.0                 </span></span>
+<span><span class="co">## [57] pkgdown_2.1.1               gtable_0.3.6               </span></span>
+<span><span class="co">## [59] GenomeInfoDb_1.42.3         GenomicRanges_1.58.0       </span></span>
+<span><span class="co">## [61] UCSC.utils_1.2.0            munsell_0.5.1              </span></span>
+<span><span class="co">## [63] tibble_3.2.1                pillar_1.10.2              </span></span>
+<span><span class="co">## [65] htmltools_0.5.8.1           GenomeInfoDbData_1.2.13    </span></span>
+<span><span class="co">## [67] R6_2.6.1                    textshaping_1.0.0          </span></span>
+<span><span class="co">## [69] evaluate_1.0.3              lattice_0.22-6             </span></span>
+<span><span class="co">## [71] Biobase_2.66.0              memoise_2.0.1              </span></span>
+<span><span class="co">## [73] bslib_0.9.0                 Rcpp_1.0.14                </span></span>
+<span><span class="co">## [75] gridExtra_2.3               SparseArray_1.6.2          </span></span>
+<span><span class="co">## [77] xfun_0.52                   fs_1.6.5                   </span></span>
+<span><span class="co">## [79] MatrixGenerics_1.18.1       forcats_1.0.0              </span></span>
+<span><span class="co">## [81] pkgconfig_2.0.3</span></span></code></pre>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
