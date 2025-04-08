@@ -11,3 +11,4 @@
 ^dev$
 ^\.github$
 ^\.air\.toml$
+^\.travis\.yml$
