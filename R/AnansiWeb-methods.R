@@ -287,9 +287,16 @@ setMethod(
 
         out <- .mapply(
             FUN,
-            dots = list(x = tX[wh[, 2L]], y = tY[wh[, 1L]]),
+            dots = list(
+                x = tX[wh[, 2L]],
+                y = tY[wh[, 1L]]
+            ),
             MoreArgs
         )
+        if (USE.NAMES) {
+            names(out) <- paste0(colnames(tX)[wh[, 2L]], colnames(tY)[wh[, 1L]])
+        }
+
         if (SIMPLIFY) {
             out <- simplify2array(out)
         }
