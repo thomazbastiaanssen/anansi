@@ -3,7 +3,12 @@ x <- randomWeb()
 test_that("getFeaturePairs and mapply work", {
     expect_equal(
         lapply(
-            mapply(x, FUN = function(x, y) cbind(y, x), SIMPLIFY = FALSE),
+            mapply(
+                x,
+                FUN = function(x, y) cbind(y, x),
+                USE.NAMES = FALSE,
+                SIMPLIFY = FALSE
+            ),
             unname
         ),
         lapply(getFeaturePairs(x), unname)
