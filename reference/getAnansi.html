@@ -123,11 +123,12 @@ raw output (used for testing purposes).</p>
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>This wrapper of <code><a href="anansi.html">anansi()</a></code> allows to perform a complete anansi
 analysis directly on objects of class
-<code><a href="https://github.com/waldronlab/MultiAssayExperiment/reference/MultiAssayExperiment.html" class="external-link">MultiAssayExperiment::MultiAssayExperiment()</a></code>
-. First, the assays specified by <code>assay.typeY</code> and <code>assay.typeX</code>
-are passed to <code><a href="AnansiWeb.html">AnansiWeb()</a></code> to build an AnansiWeb object.
-Next, this object is fed to the main <code><a href="anansi.html">anansi()</a></code> function to compute
-interactions between the two assays.</p>
+<code><a href="https://github.com/waldronlab/MultiAssayExperiment/reference/MultiAssayExperiment.html" class="external-link">MultiAssayExperiment::MultiAssayExperiment()</a></code>. First, the assays from
+experiments specified by <code>tableX</code> and <code>tableY</code> are passed to <code><a href="AnansiWeb.html">AnansiWeb()</a></code> to
+build an AnansiWeb object. If there are more than one assay in that
+experiment, the specific assay can by specified using <code>assay.type1</code> and
+<code>assay.type2</code>. Next, this object is fed to the main <code><a href="anansi.html">anansi()</a></code> function to
+compute interactions between the two assays.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -223,7 +224,7 @@ interactions between the two assays.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> The following object is masked from ‘package:base’:</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>     strsplit</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> This is mia version 1.15.36</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> This is mia version 1.17.0</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> - Online documentation and vignettes: https://microbiome.github.io/mia/</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> - Online book 'Orchestrating Microbiome Analysis (OMA)': https://microbiome.github.io/OMA/docs/devel/</span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">TreeSummarizedExperiment</span><span class="op">)</span></span></span>
