@@ -24,9 +24,10 @@
 #' corresponding to `tableY` and `tableX` from `experiments(x)`
 #' of `MultiAssayExperiment` object by name or index, name is recommended.
 #' (Default slots: `Y = 1L`, `X = 2L`).
-#' @param typeY,typeX `Character scalar` or `numeric scalar`. Selects assay from
-#' experiments to `tableY` and `tableX` from `experiments(x)`.
-#' (Default: `1L` - the first assay in that experiment).
+#' @param typeY,typeX
+#' `Character scalar` or `numeric scalar`. Selects assay from experiments to
+#' `tableY` and `tableX` from `experiments(x)`. (Default: `1L` - the first assay
+#'  in that experiment).
 #' @param experiment1,experiment2 synonymous args to `tableY,tableX` for
 #'     compatibility with `mia` argument style.
 #' @param assay.type1,assay.type2 synonymous args to `typeY,typeX` for

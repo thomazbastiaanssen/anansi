@@ -57,11 +57,12 @@ object. It applies the functions \code{\link[=weaveWeb]{weaveWeb()}} and
 \details{
 This wrapper of \code{\link[=anansi]{anansi()}} allows to perform a complete anansi
 analysis directly on objects of class
-\code{\link[MultiAssayExperiment:MultiAssayExperiment]{MultiAssayExperiment::MultiAssayExperiment()}}
-. First, the assays specified by \code{assay.typeY} and \code{assay.typeX}
-are passed to \code{\link[=AnansiWeb]{AnansiWeb()}} to build an AnansiWeb object.
-Next, this object is fed to the main \code{\link[=anansi]{anansi()}} function to compute
-interactions between the two assays.
+\code{\link[MultiAssayExperiment:MultiAssayExperiment]{MultiAssayExperiment::MultiAssayExperiment()}}. First, the assays from
+experiments specified by \code{tableX} and \code{tableY} are passed to \code{\link[=AnansiWeb]{AnansiWeb()}} to
+build an AnansiWeb object. If there are more than one assay in that
+experiment, the specific assay can by specified using \code{assay.type1} and
+\code{assay.type2}. Next, this object is fed to the main \code{\link[=anansi]{anansi()}} function to
+compute interactions between the two assays.
 }
 \examples{
 

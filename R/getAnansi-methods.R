@@ -12,11 +12,12 @@
 #' @details
 #' This wrapper of [anansi()] allows to perform a complete anansi
 #' analysis directly on objects of class
-#' [MultiAssayExperiment::MultiAssayExperiment()]
-#' . First, the assays specified by `assay.typeY` and `assay.typeX`
-#' are passed to [AnansiWeb()] to build an AnansiWeb object.
-#' Next, this object is fed to the main [anansi()] function to compute
-#' interactions between the two assays.
+#' [MultiAssayExperiment::MultiAssayExperiment()]. First, the assays from
+#' experiments specified by `tableX` and `tableY` are passed to [AnansiWeb()] to
+#' build an AnansiWeb object. If there are more than one assay in that
+#' experiment, the specific assay can by specified using `assay.type1` and
+#' `assay.type2`. Next, this object is fed to the main [anansi()] function to
+#' compute interactions between the two assays.
 #'
 #' @return
 #' If `return.format` is `"table"` (default), a wide format data.frame
