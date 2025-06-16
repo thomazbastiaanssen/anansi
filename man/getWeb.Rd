@@ -37,9 +37,9 @@ corresponding to \code{tableY} and \code{tableX} from \code{experiments(x)}
 of \code{MultiAssayExperiment} object by name or index, name is recommended.
 (Default slots: \code{Y = 1L}, \code{X = 2L}).}
 
-\item{typeY, typeX}{\verb{Character scalar} or \verb{numeric scalar}. Selects assay from
-experiments to \code{tableY} and \code{tableX} from \code{experiments(x)}.
-(Default: \code{1L} - the first assay in that experiment).}
+\item{typeY, typeX}{\verb{Character scalar} or \verb{numeric scalar}. Selects assay from experiments to
+\code{tableY} and \code{tableX} from \code{experiments(x)}. (Default: \code{1L} - the first assay
+in that experiment).}
 
 \item{force_new}{\code{boolean} If x already has a dictionary \code{Matrix}
 in metadata, ignore it and generate a new object anyway? (Default: FALSE).}
