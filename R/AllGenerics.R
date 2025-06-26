@@ -52,28 +52,26 @@ setGeneric(
     function(x, ...) standardGeneric("getFeaturePairs")
 )
 
-#' weaveWeb wrapper for the MultiAssayExperiment class
-#' @rdname getWeb
-#' @usage NULL
+#' @rdname weaveWeb
 #' @export
 #'
 setGeneric(
-    "getWeb",
+    "weaveWeb",
     signature = c("x"),
-    function(x, ...) standardGeneric("getWeb")
+    function(x, ...) standardGeneric("weaveWeb")
 )
 
-#' anansi wrapper for the MultiAssayExperiment class
+#' Run anansi
 #'
 #' @rdname getAnansi
 #' @export
 setGeneric(
-    "getAnansi",
+    "anansi",
     signature = c("x"),
-    function(x, ...) standardGeneric("getAnansi")
+    function(x, ...) standardGeneric("anansi")
 )
 
-#' miaViz style plotting wrapper for anansi output
+#' Bioc style plotting wrapper for anansi output
 #'
 #' @rdname plotAnansi
 #' @export
