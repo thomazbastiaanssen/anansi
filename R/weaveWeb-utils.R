@@ -168,3 +168,26 @@ web_missing_link <- function(tableX, tableY, terms, metadata = NULL) {
     # If that didn't work, invalid selection. return FALSE.
     FALSE
 }
+
+.check_fixed_args <- function(kwargs) {
+    # Check fixed arguments
+    fixed_args <- c("web", "metadata")
+    remove <- names(kwargs) %in% fixed_args
+    # If fixed arguments in kwargs, remove them
+    if (any(remove)) {
+        removed <- paste0(
+            names(kwargs[remove]),
+            sep = "'",
+            collapse = ", '"
+        )
+        warning(
+            "The arguments '",
+            removed,
+            " should not be used, ",
+            "as they are extracted from 'x'.",
+            call. = FALSE
+        )
+    }
+    kwargs <- kwargs[!remove]
+    return(kwargs)
+}

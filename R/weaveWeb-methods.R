@@ -146,11 +146,11 @@ setMethod("weaveWeb", signature = c(x = "formula"),
         tableY = NULL,
         ...
     ) {
-        if (missing(formula) || (length(formula) != 3L)) {
+        if (missing(x) || (length(x) != 3L)) {
             stop("'formula' missing or incorrect")
         }
     
-        terms <- all.vars(formula)
+        terms <- all.vars(x)
         if (is.null(link) || identical(link, "none")) {
             return(
                 weaveWeb(
@@ -185,48 +185,54 @@ setMethod("weaveWeb", signature = c(x = "formula"),
 #'
 weaveKEGG <- function(x, ...) weaveWeb(x, link = kegg_link(), ...)
 
-
+#' @rdname weaveWeb
+#' @export
+#' @importFrom SummarizedExperiment colData assay assayNames
+#' @importFrom MultiAssayExperiment MultiAssayExperiment
+#'
 setMethod(
     "weaveWeb",
     signature = c(x = "MultiAssayExperiment"),
     function(
         x,
-        experiment1 = NULL,
-        experiment2 = NULL,
-        assay.type1 = NULL,
-        assay.type2 = NULL,
+        experiment1, experiment2,
+        assay.type1, assay.type2,
         link = NULL,
         force_new = FALSE,
         ...
     ) {
         # Retrieve kwargs as list
         kwargs <- list(...)
-        # Check fixed arguments
-        fixed_args <- c("web", "metadata")
-        remove <- names(kwargs) %in% fixed_args
-        # If fixed arguments in kwargs, remove them
-        if (any(remove)) {
-          removed <- paste0(
-            names(kwargs[remove]),
-            sep = "'",
-            collapse = ", '"
-          )
-          kwargs <- kwargs[!remove]
-          stop(
-            "The arguments '",
-            removed,
-            " should not be used, ",
-            "as they are extracted from 'x'.",
-            call. = FALSE
-          )
+        # Check kwargs
+        kwargs <- .check_fixed_args(kwargs)
+        # Check experiment names
+        if (!is.character(experiment1) || !is.character(experiment2)) {
+            stop("experiment1 and experiment2 must be character scalars.",
+                call. = FALSE)
         }
-        # Check experiments
-        mia:::.test_experiment_of_mae(x, experiment1)
-        mia:::.test_experiment_of_mae(x, experiment2)
+        # Check assay names
+        if (!is.character(assay.type1) || !is.character(assay.type2)) {
+            stop("assay.type1 and assay.type2 must be character scalars",
+                 call. = FALSE)
+        }
+        # Check whether experiments are present
+        if (!all(c(experiment1, experiment2) %in% names(x))){
+            stop("experiment1 and experiment2 must specify the name of two",
+                "experiments of x.", call. = FALSE) 
+        }
+        # Extract experiments
+        exp1 <- x[[experiment1]]
+        exp2 <- x[[experiment2]]
+        # Check whether assays are present
+        # Check whether assays are present
+        if (!assay.type1 %in% assayNames(exp1) ||
+            !assay.type2 %in% assayNames(exp2)) {
+            stop("assay.type1 and assay.type2 must specify the name of assays ",
+                "in x or its corresponding altExps.", call. = FALSE)
+        }
         # Extract assays
-        tX <- t(assay(x[[experiment1]], assay.type1))
-        tY <- t(assay(x[[experiment2]], assay.type2))
-        
+        tX <- t(assay(exp1, assay.type1))
+        tY <- t(assay(exp2, assay.type2))
         # Check if x already contains a dictionary
         if (!force_new) {
             m <- metadata(x)
@@ -260,62 +266,48 @@ setMethod(
     }
 )
 
-#' @importFrom SingleCellExperiment SingleCellExperiment
+#' @rdname weaveWeb
+#' @export
+#' @importFrom SummarizedExperiment colData assay assayNames
+#' @importFrom SingleCellExperiment SingleCellExperiment altExp altExpNames
 setMethod(
     "weaveWeb",
     signature = c(x = "SingleCellExperiment"),
     function(
         x,
-        assay.type1 = NULL,
-        assay.type2 = NULL,
-        altexp1 = NULL,
-        altexp2 = NULL,
+        assay.type1, assay.type2,
+        altexp1 = NULL, altexp2 = NULL,
         link = NULL,
         force_new = FALSE,
         ...
     ) {
         # Retrieve kwargs as list
         kwargs <- list(...)
-        # Check fixed arguments
-        fixed_args <- c("web", "metadata")
-        remove <- names(kwargs) %in% fixed_args
-        # If fixed arguments in kwargs, remove them
-        if (any(remove)) {
-          removed <- paste0(
-            names(kwargs[remove]),
-            sep = "'",
-            collapse = ", '"
-          )
-          kwargs <- kwargs[!remove]
-          stop(
-            "The arguments '",
-            removed,
-            " should not be used, ",
-            "as they are extracted from 'x'.",
-            call. = FALSE
-          )
+        # Check kwargs
+        kwargs <- .check_fixed_args(kwargs)
+        # Check assays
+        if (!is.character(assay.type1) || !is.character(assay.type2)) {
+            stop("assay.type1 and assay.type2 must be character scalars.",
+                call. = FALSE)
         }
-        if (is.null(assay.type1) || is.null(assay.type2)) {
-            stop("assay.type1 and assay.type2 must be given.", call. = FALSE)
-        }
-        
+        # Check altExps
         if (!is.null(altexp1) && altexp1 %in% altExpNames(x)){
-            x <- altExp(x, altexp1)
+            exp1 <- altExp(x, altexp1)
         }
         if (!is.null(altexp2) && altexp2 %in% altExpNames(x)){
-            y <- altExp(x, altexp2)
+            exp2 <- altExp(x, altexp2)
         } else {
-            y <- x
+            exp2 <- x
         }
-        
-        stopifnot(
-            !assay.type1 %in% assayNames(x),
-            !assay.type2 %in% assayNames(y)
-        )
-        
-        tX <- t(assay(x, assay.type1))
-        tY <- t(assay(y, assay.type2))
-        
+        # Check whether assays are present
+        if (!assay.type1 %in% assayNames(exp1) ||
+            !assay.type2 %in% assayNames(exp2)) {
+            stop("assay.type1 and assay.type2 must specify the name of assays ",
+                "in x or its corresponding altExps.", call. = FALSE)
+        }
+        # Extract assays
+        tX <- t(assay(exp1, assay.type1))
+        tY <- t(assay(exp2, assay.type2))
         # Check if x already contains a dictionary
         if (!force_new) {
             m <- metadata(x)
