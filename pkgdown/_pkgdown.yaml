@@ -12,3 +12,40 @@ template:
 
 development:
   mode: auto
+
+reference:
+- title: Association
+- contents:
+  - weaveWeb
+  - anansi-package
+  - getAnansi
+  - getWeb
+  - getGraph
+- title: Visualisation
+- contents:
+  - plotAnansi
+- title: Classes
+- contents:
+  - AnansiWeb
+  - MultiFactor
+  - anansiTale-class
+- title: Datasets
+- contents:
+  - randomAnansi
+  - FMT_KOs
+  - FMT_metab
+  - FMT_metadata
+  - krebs
+  - ec2ko
+- title: Internal utils
+- contents:
+  - anansiCor
+  - anansiCorPvalue
+  - anansiCorTestByGroup
+  - anansiDiffCor
+  - is.categorical
+  - named_group_list
+  - named_term_list
+  
+
+
