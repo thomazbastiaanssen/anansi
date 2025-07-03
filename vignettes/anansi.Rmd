@@ -331,7 +331,7 @@ output, ready for the `anansi` function.
 #| bioc2, eval=TRUE
 
 web2 <- weaveWeb(
-    x = mae,
+    mae,
     tableY = "cpd", tableX = "ko",
     link = kegg_link()
 )

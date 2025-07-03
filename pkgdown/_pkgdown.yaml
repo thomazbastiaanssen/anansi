@@ -18,8 +18,6 @@ reference:
 - contents:
   - weaveWeb
   - anansi-package
-  - getAnansi
-  - getWeb
   - getGraph
 - title: Visualisation
 - contents:
@@ -46,6 +44,6 @@ reference:
   - is.categorical
   - named_group_list
   - named_term_list
-  
+
 
 

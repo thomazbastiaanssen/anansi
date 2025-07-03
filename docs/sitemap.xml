@@ -58,14 +58,12 @@
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/dimnames,anansiWeb-method.html</loc></url>
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/ec2ko.html</loc></url>
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/frame.tale.html</loc></url>
-<url><loc>https://thomazbastiaanssen.github.io/anansi/reference/getAnansi.html</loc></url>
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/getEdgeList,AnansiLinkMap-method.html</loc></url>
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/getEdgeList,anansiLinkMap-method.html</loc></url>
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/getGraph,AnansiLinkMap-method.html</loc></url>
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/getGraph,MultiFactor-method.html</loc></url>
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/getGraph,anansiLinkMap-method.html</loc></url>
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/getGraph.html</loc></url>
-<url><loc>https://thomazbastiaanssen.github.io/anansi/reference/getWeb.html</loc></url>
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/impute_zeroes.html</loc></url>
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/index.html</loc></url>
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/is.categorical.html</loc></url>
@@ -100,6 +98,8 @@
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/subset,anansiLinkMap-method.html</loc></url>
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/subset-MultiFactor-ANY-ANY-list-method.html</loc></url>
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/terms,anansiWeb-method.html</loc></url>
+<url><loc>https://thomazbastiaanssen.github.io/anansi/reference/weaveWeb.default.html</loc></url>
+<url><loc>https://thomazbastiaanssen.github.io/anansi/reference/weaveWeb.formula.html</loc></url>
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/weaveWeb.html</loc></url>
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/weaveWebFromTables.html</loc></url>
 <url><loc>https://thomazbastiaanssen.github.io/anansi/reference/web.default.html</loc></url>
