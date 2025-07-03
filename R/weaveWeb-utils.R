@@ -218,3 +218,17 @@ web_missing_link <- function(tableX, tableY, terms, metadata = NULL) {
 
     return(list(e_out, t_out))
 }
+
+#' @importFrom SummarizedExperiment assay assayNames
+#' @importFrom SingleCellExperiment altExp altExpNames
+.get_table_from_tse <- function(tse, id){
+    all_assays <- c(assayNames(tse), altExpNames(tse))
+    if( !id %in% all_assays ) {
+        stop("no assay with name ",id, " found.", call. = FALSE)
+    }
+    if( id %in% assayNames(tse) ){
+        return( tse )
+    } else {
+        return( altExp(tse, id) )
+    }
+}

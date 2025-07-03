@@ -71,8 +71,6 @@ input
 \subsection{2. Output and cross-compatibility}{
 
 \itemize{
-\item \code{\link[=getAnansi]{getAnansi()}}: Compatibility with \link[mia:mia-package]{mia::mia} and
-\link[MultiAssayExperiment:MultiAssayExperiment]{MultiAssayExperiment::MultiAssayExperiment}
 \item \code{\link[=getGraph]{getGraph()}}: Compatibility with \link[igraph:aaa-igraph-package]{igraph::igraph}
 \item \code{\link[=plotAnansi]{plotAnansi()}}: Plot output in the style of \link[miaViz:miaViz-package]{miaViz::miaViz}
 }

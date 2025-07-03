@@ -26,8 +26,10 @@ plotAnansi(x, ...)
 )
 }
 \arguments{
-\item{x}{a \code{data.frame} object output of \code{\link[=getAnansi]{getAnansi()}} in
+\item{x}{a \code{data.frame} object output of \code{\link[=anansi]{anansi()}} in
 the table format.}
+
+\item{...}{additional parameters}
 
 \item{layout}{\verb{Character scalar}. Specifies the plot layout to generate. It
 must be one of \verb{c("dotplot, graph)}. (Default: \code{dotplot})}
@@ -84,14 +86,14 @@ A ggplot2 object.
 }
 \description{
 \code{plotAnansi} generates an association plot from the output of
-\code{\link[=getAnansi]{getAnansi()}} in the table format. It provides a convenient way to
+\code{\link[=anansi]{anansi()}} in the table format. It provides a convenient way to
 visually assess relevant results from the anansi analysis, either in the
 form of a dotplot or a graph.
 }
 \details{
 \code{plotAnansi} provides a standardised method to visualise the results
 of anansi by means of a differential association plot. The input for this
-function should be generated from \code{\link[=getAnansi]{getAnansi()}} or
+function should be generated from \code{\link[=anansi]{anansi()}} or
 \code{\link[=anansi]{anansi()}}, with \code{return.format = "table"}
 }
 \examples{
@@ -99,6 +101,7 @@ function should be generated from \code{\link[=getAnansi]{getAnansi()}} or
 library(mia)
 library(TreeSummarizedExperiment)
 library(MultiAssayExperiment)
+library(ggraph)
 
 web <- randomWeb(n_samples = 100)
 mae <- as(web, "MultiAssayExperiment")
@@ -144,6 +147,5 @@ plotAnansi(out,
 
 }
 \seealso{
-\code{\link[=getAnansi]{getAnansi()}}
 \code{\link[=anansi]{anansi()}}
 }

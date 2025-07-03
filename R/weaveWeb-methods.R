@@ -27,8 +27,6 @@
 #' @seealso \itemize{
 #'     \item [AnansiWeb]: For general constructor and methods.
 #'     \item [kegg_link()]: For examples of input for link argument.
-#'     \item [getWeb()]: For [MultiAssayExperiment::MultiAssayExperiment()]
-#'     methods.
 #' }
 #'
 #' @returns an `AnansiWeb` object, with sparse binary biadjacency matrix
@@ -189,6 +187,22 @@ weaveKEGG <- function(x, ...) weaveWeb(x, link = kegg_link(), ...)
 #' @export
 #' @importFrom SummarizedExperiment colData assay assayNames
 #' @importFrom MultiAssayExperiment MultiAssayExperiment experiments
+#' @param ... additional parameters passed to [AnansiWeb()].
+#' @param force_new `boolean` If x already has a dictionary `Matrix` in
+#'     metadata, ignore it and generate a new object anyway? (Default: FALSE).
+#' @param tableY,tableX
+#' `Character scalar` or `numeric scalar`. Selects experiment
+#' corresponding to `tableY` and `tableX` from `experiments(x)` of
+#' `MultiAssayExperiment` object by name or index, name is recommended.
+#' (Default slots: `Y = 1L`, `X = 2L`).
+#' @param typeY,typeX
+#' `Character scalar` or `numeric scalar`. Selects assay from experiments to
+#' `tableY` and `tableX` from `experiments(x)`. (Default: `1L` - the first assay
+#'  in that experiment).
+#' @param experiment1,experiment2 synonymous args to `tableY,tableX` for
+#'     compatibility with `mia` argument style.
+#' @param assay.type1,assay.type2 synonymous args to `typeY,typeX` for
+#'     compatibility with `mia` argument style.
 #'
 setMethod(
     "weaveWeb",
@@ -218,8 +232,6 @@ setMethod(
         # Check experiments
         mia:::.test_experiment_of_mae(x, tableY)
         mia:::.test_experiment_of_mae(x, tableX)
-        y_exp <- names(experiments(x)[tableY])
-        x_exp <- names(experiments(x)[tableX])
 
         # Extract assays
         tY <- t(assay(experiments(x)[tableY], y_ids[[2L]]))
@@ -245,8 +257,8 @@ setMethod(
         }
         # Else, generate web object
         weaveWeb(
-            x = x_exp,
-            y = y_exp,
+            x = tableX,
+            y = tableY,
             link = link,
             tableX = tX,
             tableY = tY,
@@ -261,6 +273,7 @@ setMethod(
 #' @importClassesFrom SingleCellExperiment SingleCellExperiment
 #' @importFrom SummarizedExperiment colData assay assayNames
 #' @importFrom SingleCellExperiment SingleCellExperiment altExp altExpNames
+#'
 setMethod(
     "weaveWeb",
     signature = c(x = "SingleCellExperiment"),
@@ -285,30 +298,21 @@ setMethod(
 
         y_ids <- .test_coherent(tableY, experiment1, typeY, assay.type1)
         x_ids <- .test_coherent(tableX, experiment2, typeX, assay.type2)
+        tableY <- y_ids[[1L]]
+        tableX <- x_ids[[1L]]
 
-        # Check assays
-        if (!is.character(assay.type1) || !is.character(assay.type2)) {
-            stop("assay.type1 and assay.type2 must be character scalars.",
-                call. = FALSE)
-        }
-        # Check altExps
-        if (!is.null(altexp1) && altexp1 %in% altExpNames(x)){
-            exp1 <- altExp(x, altexp1)
-        }
-        if (!is.null(altexp2) && altexp2 %in% altExpNames(x)){
-            exp2 <- altExp(x, altexp2)
-        } else {
-            exp2 <- x
-        }
-        # Check whether assays are present
-        if (!assay.type1 %in% assayNames(exp1) ||
-            !assay.type2 %in% assayNames(exp2)) {
+        y_tse <- .get_table_from_tse(x, tableY)
+        x_tse <- .get_table_from_tse(x, tableX)
+
+        if (!y_ids[[2L]] %in% assayNames(y_tse) ||
+            !x_ids[[2L]] %in% assayNames(x_tse)) {
             stop("assay.type1 and assay.type2 must specify the name of assays ",
-                "in x or its corresponding altExps.", call. = FALSE)
+                 "in x or its corresponding altExps.", call. = FALSE)
         }
         # Extract assays
-        tX <- t(assay(exp1, assay.type1))
-        tY <- t(assay(exp2, assay.type2))
+        tY <- t(assay(y_tse, y_ids[[2L]]))
+        tX <- t(assay(x_tse, x_ids[[2L]]))
+
         # Check if x already contains a dictionary
         if (!force_new) {
             m <- metadata(x)
@@ -331,8 +335,8 @@ setMethod(
         }
         # Generate web object
         weaveWeb(
-            x = assay.type1,
-            y = assay.type2,
+            x = tableX,
+            y = tableY,
             link = link,
             tableX = tX,
             tableY = tY,

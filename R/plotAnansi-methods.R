@@ -1,11 +1,11 @@
 #' Dissociation plot
 #'
 #' `plotAnansi` generates an association plot from the output of
-#' [getAnansi()] in the table format. It provides a convenient way to
+#' [anansi()] in the table format. It provides a convenient way to
 #' visually assess relevant results from the anansi analysis, either in the
 #' form of a dotplot or a graph.
 #'
-#' @param x a `data.frame` object output of [getAnansi()] in
+#' @param x a `data.frame` object output of [anansi()] in
 #'   the table format.
 #'
 #' @param layout `Character scalar`. Specifies the plot layout to generate. It
@@ -57,11 +57,12 @@
 #' @param show.cor `Logical scalar`. Whether correlation edges should be
 #'   labelled with correlation coefficients when `layout` is `graph`.
 #'   (Default: `FALSE`)
+#' @param ... additional parameters
 #'
 #' @details
 #' `plotAnansi` provides a standardised method to visualise the results
 #' of anansi by means of a differential association plot. The input for this
-#' function should be generated from [getAnansi()] or
+#' function should be generated from [anansi()] or
 #' [anansi()], with `return.format = "table"`
 #'
 #' @return
@@ -72,6 +73,7 @@
 #' library(mia)
 #' library(TreeSummarizedExperiment)
 #' library(MultiAssayExperiment)
+#' library(ggraph)
 #'
 #' web <- randomWeb(n_samples = 100)
 #' mae <- as(web, "MultiAssayExperiment")
@@ -115,10 +117,7 @@
 #'     signif.threshold = 0.05
 #' )
 #'
-#' @seealso
-#' [getAnansi()]
-#' [anansi()]
-#'
+#' @seealso [anansi()]
 #' @name plotAnansi
 #'
 NULL
@@ -388,6 +387,7 @@ setMethod(
     signif.threshold,
     show.cor
 ) {
+  requireNamespace("ggraph")
     graph_list <- lapply(
         unique(pData$facet),
         .plot_facet_graph,
@@ -415,7 +415,7 @@ setMethod(
     signif.threshold,
     show.cor
 ) {
-  require("ggraph")
+  requireNamespace("ggraph")
     # Select group
     pData <- pData[pData$facet == facet, ]
     # Retrieve node data
