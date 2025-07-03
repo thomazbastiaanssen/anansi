@@ -55,7 +55,7 @@ All variants are special cases of weaveWeb()."></head><body>
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Weave an AnansiWeb</h1>
-      <small class="dont-index">Source: <a href="https://github.com/thomazbastiaanssen/anansi/blob/devel/R/weaveWeb-methods.R" class="external-link"><code>R/weaveWeb-methods.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/thomazbastiaanssen/anansi/blob/devel/R/AllGenerics.R" class="external-link"><code>R/AllGenerics.R</code></a>, <a href="https://github.com/thomazbastiaanssen/anansi/blob/devel/R/weaveWeb-methods.R" class="external-link"><code>R/weaveWeb-methods.R</code></a></small>
       <div class="d-none name"><code>weaveWeb.Rd</code></div>
     </div>
 
@@ -71,7 +71,7 @@ All variants are special cases of <code>weaveWeb()</code>.</p>
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">weaveWeb</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Default S3 method</span></span>
+<span><span class="co"># S4 method for class 'character'</span></span>
 <span><span class="fu">weaveWeb</span><span class="op">(</span></span>
 <span>  <span class="va">x</span>,</span>
 <span>  <span class="va">y</span>,</span>
@@ -83,10 +83,42 @@ All variants are special cases of <code>weaveWeb()</code>.</p>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># S3 method for class 'formula'</span></span>
-<span><span class="fu">weaveWeb</span><span class="op">(</span><span class="va">formula</span>, link <span class="op">=</span> <span class="cn">NULL</span>, tableX <span class="op">=</span> <span class="cn">NULL</span>, tableY <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="co"># S4 method for class 'formula'</span></span>
+<span><span class="fu">weaveWeb</span><span class="op">(</span><span class="va">x</span>, link <span class="op">=</span> <span class="cn">NULL</span>, tableX <span class="op">=</span> <span class="cn">NULL</span>, tableY <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">weaveKEGG</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">weaveKEGG</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for class 'MultiAssayExperiment'</span></span>
+<span><span class="fu">weaveWeb</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  link <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  tableY <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  tableX <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  typeY <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  typeX <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  force_new <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  experiment1 <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  experiment2 <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  assay.type1 <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  assay.type2 <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S4 method for class 'SingleCellExperiment'</span></span>
+<span><span class="fu">weaveWeb</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  link <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  tableY <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  tableX <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  typeY <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  typeX <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  force_new <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  experiment1 <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  experiment2 <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  assay.type1 <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  assay.type2 <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -99,7 +131,7 @@ linked. Should be found in the column names of <code>link</code>.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>further arguments.</p></dd>
+<dd><p>additional parameters passed to <code><a href="AnansiWeb.html">AnansiWeb()</a></code>.</p></dd>
 
 
 <dt id="arg-link">link<a class="anchor" aria-label="anchor" href="#arg-link"></a></dt>
@@ -110,9 +142,10 @@ linked. Should be found in the column names of <code>link</code>.</p></dd>
 
 
 <dt id="arg-tabley-tablex">tableY, tableX<a class="anchor" aria-label="anchor" href="#arg-tabley-tablex"></a></dt>
-<dd><p>A table containing features of interest. Rows should be
-samples and columns should be features. Y and X refer to the position of
-the features in a formula: Y ~ X.</p></dd>
+<dd><p><code>Character scalar</code> or <code>numeric scalar</code>. Selects experiment
+corresponding to <code>tableY</code> and <code>tableX</code> from <code>experiments(x)</code> of
+<code>MultiAssayExperiment</code> object by name or index, name is recommended.
+(Default slots: <code>Y = 1L</code>, <code>X = 2L</code>).</p></dd>
 
 
 <dt id="arg-metadata">metadata<a class="anchor" aria-label="anchor" href="#arg-metadata"></a></dt>
@@ -124,6 +157,27 @@ output. Can be accessed from <code>AnansiWeb</code> generated by <code>weaveWeb(
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
 <dd><p><code>Logical scalar</code>. Whether to print diagnostic information
 (Default: <code>TRUE</code>).</p></dd>
+
+
+<dt id="arg-typey-typex">typeY, typeX<a class="anchor" aria-label="anchor" href="#arg-typey-typex"></a></dt>
+<dd><p><code>Character scalar</code> or <code>numeric scalar</code>. Selects assay from experiments to
+<code>tableY</code> and <code>tableX</code> from <code>experiments(x)</code>. (Default: <code>1L</code> - the first assay
+in that experiment).</p></dd>
+
+
+<dt id="arg-force-new">force_new<a class="anchor" aria-label="anchor" href="#arg-force-new"></a></dt>
+<dd><p><code>boolean</code> If x already has a dictionary <code>Matrix</code> in
+metadata, ignore it and generate a new object anyway? (Default: FALSE).</p></dd>
+
+
+<dt id="arg-experiment-experiment-">experiment1, experiment2<a class="anchor" aria-label="anchor" href="#arg-experiment-experiment-"></a></dt>
+<dd><p>synonymous args to <code>tableY,tableX</code> for
+compatibility with <code>mia</code> argument style.</p></dd>
+
+
+<dt id="arg-assay-type-assay-type-">assay.type1, assay.type2<a class="anchor" aria-label="anchor" href="#arg-assay-type-assay-type-"></a></dt>
+<dd><p>synonymous args to <code>typeY,typeX</code> for
+compatibility with <code>mia</code> argument style.</p></dd>
 
 
 <dt id="arg-formula">formula<a class="anchor" aria-label="anchor" href="#arg-formula"></a></dt>
@@ -149,8 +203,6 @@ linked. If one or more <code>data.frame</code>s, colnames should be as specified
     <div class="dont-index">
 <ul><li><p><a href="AnansiWeb.html">AnansiWeb</a>: For general constructor and methods.</p></li>
 <li><p><code><a href="kegg_link.html">kegg_link()</a></code>: For examples of input for link argument.</p></li>
-<li><p><code><a href="getWeb.html">getWeb()</a></code>: For <code><a href="https://github.com/waldronlab/MultiAssayExperiment/reference/MultiAssayExperiment.html" class="external-link">MultiAssayExperiment::MultiAssayExperiment()</a></code>
-methods.</p></li>
 </ul></div>
     </div>
 
