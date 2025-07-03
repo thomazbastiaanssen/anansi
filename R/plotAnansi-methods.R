@@ -7,7 +7,7 @@
 #'
 #' @param x a `data.frame` object output of [getAnansi()] in
 #'   the table format.
-#'   
+#'
 #' @param layout `Character scalar`. Specifies the plot layout to generate. It
 #'   must be one of `c("dotplot, graph)`. (Default: `dotplot`)
 #'
@@ -18,7 +18,7 @@
 #' @param model.var `Character scalar`. Specifies the name of a variable
 #'   in the anansi model. It is relevant only when `association.type` is
 #'   `"disjointed"` or `"emergent"`. (Default: `NULL`)
-#'   
+#'
 #' @param group `Character scalar`. Selects one of the groups included in the
 #'   anansi model. It is relevant only when `layout` is `graph`.
 #'   (Default: `All`)
@@ -53,7 +53,7 @@
 #' @param y_position `Character scalar`. Specifies the position of the y
 #'   labels. It should be either `"left"` or `"right"`.
 #'   (Default: `"right"`)
-#' 
+#'
 #' @param show.cor `Logical scalar`. Whether correlation edges should be
 #'   labelled with correlation coefficients when `layout` is `graph`.
 #'   (Default: `FALSE`)
@@ -77,10 +77,9 @@
 #' mae <- as(web, "MultiAssayExperiment")
 #'
 #' # Perform anansi analysis
-#' out <- getAnansi(mae,
-#'     tableY = "y", tableX = "x",
-#'     formula = ~group_ab
-#' )
+#' out <- weaveWeb(mae,
+#'     tableY = "y", tableX = "x"
+#' ) |> anansi(formula = ~group_ab)
 #'
 #' # Select significant interactions
 #' out <- out[out$full_p.values < 0.05, ]
@@ -99,7 +98,7 @@
 #'     signif.threshold = 0.05,
 #'     fill_by = "group"
 #' )
-#' 
+#'
 #' # Visualise full associations as graph
 #' plotAnansi(out,
 #'     layout = "graph",
@@ -107,7 +106,7 @@
 #'     signif.threshold = 0.05,
 #'     show.cor = TRUE
 #' )
-#' 
+#'
 #' # Visualise disjointed associations as graph
 #' plotAnansi(out,
 #'     layout = "graph",
@@ -123,14 +122,6 @@
 #' @name plotAnansi
 #'
 NULL
-
-#' @rdname plotAnansi
-#' @export
-setGeneric(
-    "plotAnansi",
-    signature = c("x"),
-    function(x, ...) standardGeneric("plotAnansi")
-)
 
 #' @rdname plotAnansi
 #' @export
@@ -409,7 +400,7 @@ setMethod(
 
     p <- wrap_plots(graph_list) +
       plot_layout(guides = "collect")
-    
+
     return(p)
 }
 
@@ -424,6 +415,7 @@ setMethod(
     signif.threshold,
     show.cor
 ) {
+  require("ggraph")
     # Select group
     pData <- pData[pData$facet == facet, ]
     # Retrieve node data
@@ -442,7 +434,7 @@ setMethod(
     # Combine node and edge data into graph
     graph <- tbl_graph(nodes = node_data, edges = edge_data)
     # Visualise graph
-    p <- ggraph(graph, layout = 'kk') + 
+    p <- ggraph(graph, layout = 'kk') +
         geom_edge_link(aes(colour = .data$cor, label = .data$label),
             label_size = 3) +
         scale_edge_colour_gradient2(low = "blue", high = "red", limits = c(-1, 1))

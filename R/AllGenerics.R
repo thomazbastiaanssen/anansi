@@ -61,16 +61,6 @@ setGeneric(
     function(x, ...) standardGeneric("weaveWeb")
 )
 
-#' Run anansi
-#'
-#' @rdname getAnansi
-#' @export
-setGeneric(
-    "anansi",
-    signature = c("x"),
-    function(x, ...) standardGeneric("anansi")
-)
-
 #' Bioc style plotting wrapper for anansi output
 #'
 #' @rdname plotAnansi

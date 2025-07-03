@@ -3,10 +3,8 @@
 \name{plotAnansi}
 \alias{plotAnansi}
 \alias{plotAnansi,data.frame-method}
-\title{miaViz style plotting wrapper for anansi output}
+\title{Bioc style plotting wrapper for anansi output}
 \usage{
-plotAnansi(x, ...)
-
 plotAnansi(x, ...)
 
 \S4method{plotAnansi}{data.frame}(
@@ -106,10 +104,9 @@ web <- randomWeb(n_samples = 100)
 mae <- as(web, "MultiAssayExperiment")
 
 # Perform anansi analysis
-out <- getAnansi(mae,
-    tableY = "y", tableX = "x",
-    formula = ~group_ab
-)
+out <- weaveWeb(mae,
+    tableY = "y", tableX = "x"
+) |> anansi(formula = ~group_ab)
 
 # Select significant interactions
 out <- out[out$full_p.values < 0.05, ]

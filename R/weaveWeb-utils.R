@@ -191,3 +191,30 @@ web_missing_link <- function(tableX, tableY, terms, metadata = NULL) {
     kwargs <- kwargs[!remove]
     return(kwargs)
 }
+
+#' @noRd
+.test_coherent <- function(tab, exp, tab.type, ass.type) {
+    e_out <- unique(c(tab, exp))
+    if (length(e_out) == 0L) {
+        e_out <- 1L
+    }
+    stopifnot(
+        "args 'tableY,X' cannot contradict args 'experiment1,2'." = length(
+            e_out
+        ) ==
+            1L
+    )
+
+    t_out <- unique(c(tab.type, ass.type))
+    if (length(t_out) == 0L) {
+        t_out <- 1L
+    }
+    stopifnot(
+        "args 'typeY,X.' cannot contradict args 'assay.type1,2'." = length(
+            t_out
+        ) ==
+            1L
+    )
+
+    return(list(e_out, t_out))
+}

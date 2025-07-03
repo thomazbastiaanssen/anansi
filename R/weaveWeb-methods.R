@@ -91,13 +91,13 @@ setMethod("weaveWeb", signature = c(x = "character"),
         if (identical(link, "none")) {
             return(web_missing_link(tableX, tableY, terms))
         }
-    
+
         # Ensure link is a MultiFactor
         link <- MultiFactor(link)
         # Determine required ids in order, only keep relevant elements of link.
         all_terms <- termSeq(x, y, link)
         link <- subsetByPath(link, all_terms)
-    
+
         # Trim link levels and tables based on feature overlap
         if (!is.null(tableX)) {
             keep <- sort(intersect(colnames(tableX), levels(link)[[x]]))
@@ -119,7 +119,7 @@ setMethod("weaveWeb", signature = c(x = "character"),
         d <- dictionaryMatrix(link, all_terms)
         dimnames(d) <- list(y = colnames(tableY), x = colnames(tableX))
         names(dimnames(d)) <- c(y, x)
-    
+
         # Dummy tables if missing
         if (is.null(tableX) && is.null(tableY)) {
             dimnames(d) <- levels(link)[terms]
@@ -149,7 +149,7 @@ setMethod("weaveWeb", signature = c(x = "formula"),
         if (missing(x) || (length(x) != 3L)) {
             stop("'formula' missing or incorrect")
         }
-    
+
         terms <- all.vars(x)
         if (is.null(link) || identical(link, "none")) {
             return(
@@ -162,13 +162,13 @@ setMethod("weaveWeb", signature = c(x = "formula"),
                 )
             )
         }
-    
+
         link <- MultiFactor(link)
-    
+
         if (sum(terms %in% colnames(link)) != 2L) {
             stop("Variables from 'formula' not found in 'link'.")
         }
-    
+
         weaveWeb(
             x = terms[2],
             y = terms[1],
@@ -188,58 +188,48 @@ weaveKEGG <- function(x, ...) weaveWeb(x, link = kegg_link(), ...)
 #' @rdname weaveWeb
 #' @export
 #' @importFrom SummarizedExperiment colData assay assayNames
-#' @importFrom MultiAssayExperiment MultiAssayExperiment
+#' @importFrom MultiAssayExperiment MultiAssayExperiment experiments
 #'
 setMethod(
     "weaveWeb",
     signature = c(x = "MultiAssayExperiment"),
     function(
         x,
-        experiment1, experiment2,
-        assay.type1, assay.type2,
         link = NULL,
+        ...,
+        tableY = NULL,
+        tableX = NULL,
+        typeY = NULL,
+        typeX = NULL,
         force_new = FALSE,
-        ...
+        experiment1 = NULL,
+        experiment2 = NULL,
+        assay.type1 = NULL,
+        assay.type2 = NULL
     ) {
         # Retrieve kwargs as list
         kwargs <- list(...)
         # Check kwargs
         kwargs <- .check_fixed_args(kwargs)
-        # Check experiment names
-        if (!is.character(experiment1) || !is.character(experiment2)) {
-            stop("experiment1 and experiment2 must be character scalars.",
-                call. = FALSE)
-        }
-        # Check assay names
-        if (!is.character(assay.type1) || !is.character(assay.type2)) {
-            stop("assay.type1 and assay.type2 must be character scalars",
-                 call. = FALSE)
-        }
-        # Check whether experiments are present
-        if (!all(c(experiment1, experiment2) %in% names(x))){
-            stop("experiment1 and experiment2 must specify the name of two",
-                "experiments of x.", call. = FALSE) 
-        }
-        # Extract experiments
-        exp1 <- x[[experiment1]]
-        exp2 <- x[[experiment2]]
-        # Check whether assays are present
-        # Check whether assays are present
-        if (!assay.type1 %in% assayNames(exp1) ||
-            !assay.type2 %in% assayNames(exp2)) {
-            stop("assay.type1 and assay.type2 must specify the name of assays ",
-                "in x or its corresponding altExps.", call. = FALSE)
-        }
+        y_ids <- .test_coherent(tableY, experiment1, typeY, assay.type1)
+        x_ids <- .test_coherent(tableX, experiment2, typeX, assay.type2)
+        tableY <- y_ids[[1L]]
+        tableX <- x_ids[[1L]]
+        # Check experiments
+        mia:::.test_experiment_of_mae(x, tableY)
+        mia:::.test_experiment_of_mae(x, tableX)
+        y_exp <- names(experiments(x)[tableY])
+        x_exp <- names(experiments(x)[tableX])
+
         # Extract assays
-        tX <- t(assay(exp1, assay.type1))
-        tY <- t(assay(exp2, assay.type2))
+        tY <- t(assay(experiments(x)[tableY], y_ids[[2L]]))
+        tX <- t(assay(experiments(x)[tableX], x_ids[[2L]]))
+
         # Check if x already contains a dictionary
         if (!force_new) {
             m <- metadata(x)
 
-            if (is.null(link)) {
-                d <- "dictionary"
-            }
+            d <- if( is.null(link) ) {"dictionary"} else {""}
             if (.check_valid_selection(link, m)) {
                 d <- link
             }
@@ -253,10 +243,10 @@ setMethod(
                 ))
             }
         }
-        # Generate web object
+        # Else, generate web object
         weaveWeb(
-            x = assay.type1,
-            y = assay.type2,
+            x = x_exp,
+            y = y_exp,
             link = link,
             tableX = tX,
             tableY = tY,
@@ -268,6 +258,7 @@ setMethod(
 
 #' @rdname weaveWeb
 #' @export
+#' @importClassesFrom SingleCellExperiment SingleCellExperiment
 #' @importFrom SummarizedExperiment colData assay assayNames
 #' @importFrom SingleCellExperiment SingleCellExperiment altExp altExpNames
 setMethod(
@@ -275,16 +266,26 @@ setMethod(
     signature = c(x = "SingleCellExperiment"),
     function(
         x,
-        assay.type1, assay.type2,
-        altexp1 = NULL, altexp2 = NULL,
         link = NULL,
+        ...,
+        tableY = NULL,
+        tableX = NULL,
+        typeY = NULL,
+        typeX = NULL,
         force_new = FALSE,
-        ...
+        experiment1 = NULL,
+        experiment2 = NULL,
+        assay.type1 = NULL,
+        assay.type2 = NULL
     ) {
         # Retrieve kwargs as list
         kwargs <- list(...)
         # Check kwargs
         kwargs <- .check_fixed_args(kwargs)
+
+        y_ids <- .test_coherent(tableY, experiment1, typeY, assay.type1)
+        x_ids <- .test_coherent(tableX, experiment2, typeX, assay.type2)
+
         # Check assays
         if (!is.character(assay.type1) || !is.character(assay.type2)) {
             stop("assay.type1 and assay.type2 must be character scalars.",

@@ -313,9 +313,14 @@ output as `anansi`.
 ```{r}
 #| bioc2, eval=TRUE
 
-out <- getAnansi(
+web2 <- weaveWeb(
     x = mae,
     tableY = "cpd", tableX = "ko",
+    link = kegg_link()
+)
+
+out <- anansi(
+    web = web2,
     formula = ~Legend,
     adjust.method = "BH",
     verbose = TRUE
