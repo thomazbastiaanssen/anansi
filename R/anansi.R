@@ -46,7 +46,7 @@
 #' # Run anansi pipeline.
 #'
 #' web <- weaveWeb(
-#'     formula = cpd ~ ko,
+#'     cpd ~ ko,
 #'     tableY = t1,
 #'     tableX = t2,
 #'     link = kegg_link()

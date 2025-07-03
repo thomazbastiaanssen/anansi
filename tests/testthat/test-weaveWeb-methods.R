@@ -1,25 +1,24 @@
-test_that("getAnansi", {
+test_that("weaveWeb mae methods", {
     # Combine experiments into MultiAssayExperiment object
     web <- randomWeb(n_samples = 15, n_reps = 1)
     metadata(web)$cat_XYZ <- rep(c("X", "Y", "Z"), 5)
     mae <- as(web, "MultiAssayExperiment")
 
+    web2 <- weaveWeb(x = mae, tableY = "y", tableX = "x")
+    # Once more, my friends
+    mae2 <- as(web2, "MultiAssayExperiment")
+
+    expect_identical(web, web2)
+    expect_identical(mae, mae2)
+
     expect_error(
-        getAnansi(mae, tableY = "wrong_name"),
+        weaveWeb(mae, tableY = "wrong_name"),
         "'tableY' must be numeric or character value specifying experiment in experiment(x)",
         fixed = TRUE
     )
-    expect_error(
-        getAnansi(
-            mae,
-            tableY = "y",
-            tableX = "x",
-            return.format = "wrong_input"
-        ),
-        class = "error"
-    )
-    expect_error(
-        getAnansi(
+
+    expect_warning(
+        weaveWeb(
             mae,
             tableY = "y",
             tableX = "x",
@@ -49,29 +48,29 @@ test_that("getAnansi", {
         return.format = "raw"
     )
 
-    table2 <- getAnansi(
+    table2 <- weaveWeb(
         mae,
         tableY = "y",
-        tableX = "x",
+        tableX = "x"
+    ) |> anansi(
         formula = ~cat_XYZ,
-        verbose = FALSE
-    )
-    list2 <- getAnansi(
+        verbose = FALSE)
+    list2 <- weaveWeb(
         mae,
         tableY = "y",
-        tableX = "x",
+        tableX = "x"
+    ) |> anansi(
         formula = ~cat_XYZ,
         return.format = "list",
-        verbose = FALSE
-    )
-    raw2 <- getAnansi(
+        verbose = FALSE)
+    raw2 <- weaveWeb(
         mae,
         tableY = "y",
-        tableX = "x",
+        tableX = "x"
+    ) |> anansi(
         formula = ~cat_XYZ,
         return.format = "raw",
-        verbose = FALSE
-    )
+        verbose = FALSE)
 
     expect_identical(table1, table2)
     expect_identical(list1, list2)

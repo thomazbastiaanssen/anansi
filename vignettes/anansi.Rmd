@@ -324,15 +324,20 @@ metadata(web) <- data.frame(FMT_metadata, row.names = FMT_metadata$Sample_ID)
 mae <- asMAE(web)
 ```
 
-The MAE object can be passed to the `getAnansi` function, which returns the same
-output as `anansi`.
+The MAE object can be passed to the `weaveWeb` function, which returns the same
+output, ready for the `anansi` function.
 
 ```{r}
 #| bioc2, eval=TRUE
 
-out <- getAnansi(
+web2 <- weaveWeb(
     x = mae,
     tableY = "cpd", tableX = "ko",
+    link = kegg_link()
+)
+
+out <- anansi(
+    web = web2,
     formula = ~Legend,
     adjust.method = "BH",
     verbose = TRUE
