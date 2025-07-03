@@ -207,8 +207,6 @@ mapply(
 \seealso{
 \itemize{
 \item \code{\link[=kegg_link]{kegg_link()}}: For examples of input for link argument.
-\item \code{\link[=getWeb]{getWeb()}}: For
-\code{\link[MultiAssayExperiment:MultiAssayExperiment]{MultiAssayExperiment::MultiAssayExperiment()}} methods.
 }
 
 \itemize{

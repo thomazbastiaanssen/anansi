@@ -3,16 +3,16 @@
 \name{plotAnansi}
 \alias{plotAnansi}
 \alias{plotAnansi,data.frame-method}
-\title{miaViz style plotting wrapper for anansi output}
+\title{Bioc style plotting wrapper for anansi output}
 \usage{
-plotAnansi(x, ...)
-
 plotAnansi(x, ...)
 
 \S4method{plotAnansi}{data.frame}(
   x,
+  layout = "dotplot",
   association.type = NULL,
   model.var = NULL,
+  group = "All",
   signif.threshold = NULL,
   colour_by = NULL,
   color_by = colour_by,
@@ -21,14 +21,18 @@ plotAnansi(x, ...)
   shape_by = NULL,
   y_position = "right",
   x_lab = "cor",
-  y_lab = ""
+  y_lab = "",
+  show.cor = FALSE
 )
 }
 \arguments{
-\item{x}{a \code{data.frame} object output of \code{\link[=getAnansi]{getAnansi()}} in
+\item{x}{a \code{data.frame} object output of \code{\link[=anansi]{anansi()}} in
 the table format.}
 
-\item{...}{additional arguments}
+\item{...}{additional parameters}
+
+\item{layout}{\verb{Character scalar}. Specifies the plot layout to generate. It
+must be one of \verb{c("dotplot, graph)}. (Default: \code{dotplot})}
 
 \item{association.type}{\verb{Character scalar}. Specifies the type of
 association to show in the plot. One of \code{"disjointed"},
@@ -37,6 +41,10 @@ association to show in the plot. One of \code{"disjointed"},
 \item{model.var}{\verb{Character scalar}. Specifies the name of a variable
 in the anansi model. It is relevant only when \code{association.type} is
 \code{"disjointed"} or \code{"emergent"}. (Default: \code{NULL})}
+
+\item{group}{\verb{Character scalar}. Selects one of the groups included in the
+anansi model. It is relevant only when \code{layout} is \code{graph}.
+(Default: \code{All})}
 
 \item{signif.threshold}{\verb{Numeric scalar}. Specifies the threshold to
 mark the significance of \code{association.type}. (Default: \code{NULL})}
@@ -68,19 +76,24 @@ labels. It should be either \code{"left"} or \code{"right"}.
 
 \item{y_lab}{\verb{Character scalar}. Specifies the label of the y axis.
 (Default: \code{""})}
+
+\item{show.cor}{\verb{Logical scalar}. Whether correlation edges should be
+labelled with correlation coefficients when \code{layout} is \code{graph}.
+(Default: \code{FALSE})}
 }
 \value{
 A ggplot2 object.
 }
 \description{
-\code{plotAnansi} generates a standard dissociation plot from the output of
-\code{\link[=getAnansi]{getAnansi()}} in the table format. It provides a convenient way to
-visually assess relevant results from the anansi analysis.
+\code{plotAnansi} generates an association plot from the output of
+\code{\link[=anansi]{anansi()}} in the table format. It provides a convenient way to
+visually assess relevant results from the anansi analysis, either in the
+form of a dotplot or a graph.
 }
 \details{
 \code{plotAnansi} provides a standardised method to visualise the results
 of anansi by means of a differential association plot. The input for this
-function should be generated from \code{\link[=getAnansi]{getAnansi()}} or
+function should be generated from \code{\link[=anansi]{anansi()}} or
 \code{\link[=anansi]{anansi()}}, with \code{return.format = "table"}
 }
 \examples{
@@ -88,15 +101,15 @@ function should be generated from \code{\link[=getAnansi]{getAnansi()}} or
 library(mia)
 library(TreeSummarizedExperiment)
 library(MultiAssayExperiment)
+library(ggraph)
 
 web <- randomWeb(n_samples = 100)
 mae <- as(web, "MultiAssayExperiment")
 
 # Perform anansi analysis
-out <- getAnansi(mae,
-    tableY = "y", tableX = "x",
-    formula = ~group_ab
-)
+out <- weaveWeb(mae,
+    tableY = "y", tableX = "x"
+) |> anansi(formula = ~group_ab)
 
 # Select significant interactions
 out <- out[out$full_p.values < 0.05, ]
@@ -116,8 +129,23 @@ plotAnansi(out,
     fill_by = "group"
 )
 
+# Visualise full associations as graph
+plotAnansi(out,
+    layout = "graph",
+    association.type = "full",
+    signif.threshold = 0.05,
+    show.cor = TRUE
+)
+
+# Visualise disjointed associations as graph
+plotAnansi(out,
+    layout = "graph",
+    association.type = "disjointed",
+    model.var = "group_ab",
+    signif.threshold = 0.05
+)
+
 }
 \seealso{
-\code{\link[=getAnansi]{getAnansi()}}
 \code{\link[=anansi]{anansi()}}
 }

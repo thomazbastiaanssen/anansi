@@ -14,8 +14,6 @@
 #'
 #' ## 2. Output and cross-compatibility
 #' \itemize{
-#'     \item [`getAnansi()`]: Compatibility with [mia::mia] and
-#'     [MultiAssayExperiment::MultiAssayExperiment]
 #'     \item [`getGraph()`]: Compatibility with [igraph::igraph]
 #'     \item [`plotAnansi()`]: Plot output in the style of [miaViz::miaViz]
 #'     }

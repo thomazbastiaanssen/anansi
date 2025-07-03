@@ -8,10 +8,7 @@
 #' @param ... further arguments.
 #' @seealso \itemize{
 #'  \item [kegg_link()]: For examples of input for link argument.
-#'  \item [getWeb()]: For
-#'  [MultiAssayExperiment::MultiAssayExperiment()] methods.
 #' }
-#'
 #' @returns an `AnansiWeb` object, with sparse binary biadjacency matrix
 #' with features from `y` as rows and features from `x` as columns in
 #' `dictionary` slot.

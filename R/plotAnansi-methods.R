@@ -1,19 +1,27 @@
 #' Dissociation plot
 #'
-#' `plotAnansi` generates a standard dissociation plot from the output of
-#' [getAnansi()] in the table format. It provides a convenient way to
-#' visually assess relevant results from the anansi analysis.
+#' `plotAnansi` generates an association plot from the output of
+#' [anansi()] in the table format. It provides a convenient way to
+#' visually assess relevant results from the anansi analysis, either in the
+#' form of a dotplot or a graph.
 #'
-#' @param x a `data.frame` object output of [getAnansi()] in
+#' @param x a `data.frame` object output of [anansi()] in
 #'   the table format.
 #'
+#' @param layout `Character scalar`. Specifies the plot layout to generate. It
+#'   must be one of `c("dotplot, graph)`. (Default: `dotplot`)
+#'
 #' @param association.type `Character scalar`. Specifies the type of
-#' association to show in the plot. One of `"disjointed"`,
+#'   association to show in the plot. One of `"disjointed"`,
 #'   `"emergent"` and `"full"`. (Default: `NULL`)
 #'
 #' @param model.var `Character scalar`. Specifies the name of a variable
-#' in the anansi model. It is relevant only when `association.type` is
+#'   in the anansi model. It is relevant only when `association.type` is
 #'   `"disjointed"` or `"emergent"`. (Default: `NULL`)
+#'
+#' @param group `Character scalar`. Selects one of the groups included in the
+#'   anansi model. It is relevant only when `layout` is `graph`.
+#'   (Default: `All`)
 #'
 #' @param signif.threshold `Numeric scalar`. Specifies the threshold to
 #'   mark the significance of `association.type`. (Default: `NULL`)
@@ -46,12 +54,15 @@
 #'   labels. It should be either `"left"` or `"right"`.
 #'   (Default: `"right"`)
 #'
-#' @param ... additional arguments
+#' @param show.cor `Logical scalar`. Whether correlation edges should be
+#'   labelled with correlation coefficients when `layout` is `graph`.
+#'   (Default: `FALSE`)
+#' @param ... additional parameters
 #'
 #' @details
 #' `plotAnansi` provides a standardised method to visualise the results
 #' of anansi by means of a differential association plot. The input for this
-#' function should be generated from [getAnansi()] or
+#' function should be generated from [anansi()] or
 #' [anansi()], with `return.format = "table"`
 #'
 #' @return
@@ -62,15 +73,15 @@
 #' library(mia)
 #' library(TreeSummarizedExperiment)
 #' library(MultiAssayExperiment)
+#' library(ggraph)
 #'
 #' web <- randomWeb(n_samples = 100)
 #' mae <- as(web, "MultiAssayExperiment")
 #'
 #' # Perform anansi analysis
-#' out <- getAnansi(mae,
-#'     tableY = "y", tableX = "x",
-#'     formula = ~group_ab
-#' )
+#' out <- weaveWeb(mae,
+#'     tableY = "y", tableX = "x"
+#' ) |> anansi(formula = ~group_ab)
 #'
 #' # Select significant interactions
 #' out <- out[out$full_p.values < 0.05, ]
@@ -90,21 +101,26 @@
 #'     fill_by = "group"
 #' )
 #'
-#' @seealso
-#' [getAnansi()]
-#' [anansi()]
+#' # Visualise full associations as graph
+#' plotAnansi(out,
+#'     layout = "graph",
+#'     association.type = "full",
+#'     signif.threshold = 0.05,
+#'     show.cor = TRUE
+#' )
 #'
+#' # Visualise disjointed associations as graph
+#' plotAnansi(out,
+#'     layout = "graph",
+#'     association.type = "disjointed",
+#'     model.var = "group_ab",
+#'     signif.threshold = 0.05
+#' )
+#'
+#' @seealso [anansi()]
 #' @name plotAnansi
 #'
 NULL
-
-#' @rdname plotAnansi
-#' @export
-setGeneric(
-    "plotAnansi",
-    signature = c("x"),
-    function(x, ...) standardGeneric("plotAnansi")
-)
 
 #' @rdname plotAnansi
 #' @export
@@ -119,8 +135,10 @@ setMethod(
     sig = c(x = "data.frame"),
     def = function(
         x,
+        layout = "dotplot",
         association.type = NULL,
         model.var = NULL,
+        group = "All",
         signif.threshold = NULL,
         colour_by = NULL,
         color_by = colour_by,
@@ -129,7 +147,8 @@ setMethod(
         shape_by = NULL,
         y_position = "right",
         x_lab = "cor",
-        y_lab = ""
+        y_lab = "",
+        show.cor = FALSE
     ) {
         # Create list of Booleans whether args are defined
         defined_args <- lapply(
@@ -150,6 +169,10 @@ setMethod(
         # Check model.var
         if (defined_args[["model.var"]]) {
             match.arg(model.var, names(attr(x, "model_terms")))
+        }
+        # Check that group is valid for graph layout
+        if (layout == "graph") {
+            match.arg(group, attr(x, "group_terms")$All)
         }
         # Check association.type and model.var
         if (
@@ -197,6 +220,10 @@ setMethod(
         }
         # Convert anansi wide to long format
         x <- .wide2long(x)
+        # Select group for graph layout
+        if (layout == "graph") {
+            x <- x[x$group == group, ]
+        }
         # Update colour_by if color_by is defined
         if (!is.null(color_by) && is.null(colour_by)) {
             colour_by <- color_by
@@ -233,6 +260,10 @@ setMethod(
         }
         # Check y_position
         match.arg(y_position, choices = c("left", "right"))
+        # Check show.cor
+        if (!is.logical(show.cor)) {
+            stop("'show.cor' must be either TRUE or FALSE.", call. = FALSE)
+        }
         # Assemble plot data
         pData <- data.frame(
             x = x[["r.values"]],
@@ -248,20 +279,31 @@ setMethod(
                 NA
             }
         )
-        # Generate dotplot
-        p <- .create_dotplot(
-            pData,
-            defined_args,
-            association.type,
-            signif.threshold,
-            colour_by,
-            fill_by,
-            shape_by,
-            size_by,
-            y_position,
-            x_lab,
-            y_lab
-        )
+        if (layout == "dotplot") {
+            # Generate dotplot
+            p <- .create_dotplot(
+                pData,
+                defined_args,
+                association.type,
+                signif.threshold,
+                colour_by,
+                fill_by,
+                shape_by,
+                size_by,
+                y_position,
+                x_lab,
+                y_lab
+            )
+        } else if (layout == "graph") {
+            # Generate graph plot
+            p <- .create_graphplot(
+                pData,
+                defined_args,
+                association.type,
+                signif.threshold,
+                show.cor
+            )
+        }
         return(p)
     }
 )
@@ -335,6 +377,91 @@ setMethod(
         )
     }
     return(aes_defined)
+}
+# Create graph plot
+#' @importFrom patchwork wrap_plots plot_layout
+.create_graphplot <- function(
+    pData,
+    defined_args,
+    association.type,
+    signif.threshold,
+    show.cor
+) {
+  requireNamespace("ggraph")
+    graph_list <- lapply(
+        unique(pData$facet),
+        .plot_facet_graph,
+        pData = pData,
+        defined_args = defined_args,
+        association.type = association.type,
+        signif.threshold = signif.threshold,
+        show.cor = show.cor
+    )
+
+    p <- wrap_plots(graph_list) +
+      plot_layout(guides = "collect")
+
+    return(p)
+}
+
+#' @importFrom tidygraph tbl_graph
+#' @importFrom ggraph ggraph geom_edge_link scale_edge_colour_gradient2
+#'   geom_node_point geom_node_text theme_graph
+.plot_facet_graph <- function(
+    facet,
+    pData,
+    defined_args,
+    association.type,
+    signif.threshold,
+    show.cor
+) {
+  requireNamespace("ggraph")
+    # Select group
+    pData <- pData[pData$facet == facet, ]
+    # Retrieve node data
+    node_data <- data.frame(
+        node_key = c(facet, pData$y),
+        alpha = factor(c(TRUE, as.character(pData$alpha)),
+            levels = c(TRUE, FALSE))
+    )
+    # Retrieve edge data
+    edge_data <- data.frame(
+        from = facet,
+        to = pData$y,
+        cor = pData$x,
+        label = if (show.cor) round(pData$x, 2) else NA
+    )
+    # Combine node and edge data into graph
+    graph <- tbl_graph(nodes = node_data, edges = edge_data)
+    # Visualise graph
+    p <- ggraph(graph, layout = 'kk') +
+        geom_edge_link(aes(colour = .data$cor, label = .data$label),
+            label_size = 3) +
+        scale_edge_colour_gradient2(low = "blue", high = "red", limits = c(-1, 1))
+    # Add nodes
+    if (defined_args[["signif"]]) {
+        p <- p + geom_node_point(aes(alpha = .data$alpha))
+    } else {
+        p <- p + geom_node_point()
+    }
+    # Add node text
+    p <- p + geom_node_text(aes(label = .data$node_key), repel = TRUE)
+    # Add significance legend
+    if (defined_args[["association"]] && defined_args[["signif"]]) {
+        p <- p +
+            scale_alpha_manual(
+                values = c("TRUE" = 1, "FALSE" = 1 / 3),
+                paste(association.type, "association\np <", signif.threshold)
+            )
+    }
+    # Apply graph theme
+    p <- p + theme_graph()
+    # Remove legend when all associations are (non-)significant
+    if (length(unique(node_data$alpha)) != 2L) {
+        p <- p +
+            guides(alpha = "none")
+    }
+    return(p)
 }
 # Create dotplot
 .create_dotplot <- function(
