@@ -101,8 +101,17 @@ features interact canonically.</p>
 <div class="section level3">
 <h3 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h3>
+<p>Install the development version from <a href="https://github.com/thomazbastiaanssen/anansi" class="external-link">GitHub</a> with
+<code>remotes</code>:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># install and load anansi devtools::install_github('thomazbastiaanssen/anansi')</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"thomazbastiaanssen/anansi"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="setup">Setup<a class="anchor" aria-label="anchor" href="#setup"></a>
+</h3>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># load anansi</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/thomazbastiaanssen/anansi" class="external-link">anansi</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># load ggplot2 and ggforce to plot results</span></span>
@@ -150,7 +159,7 @@ function. For shotgun metagenomics, HUMANn3 in the bioBakery suite can
 be used. All of these algorithms can produce functional count data in
 terms of KEGG Orthologues (KOs) organised as tables, which can be
 directly passed to <code>anansi</code> as follows:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># anansi expects samples to be rows and features to be columns.</span></span>
 <span><span class="va">t1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">FMT_metab</span><span class="op">)</span></span>
 <span><span class="va">t2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">FMT_KOs</span><span class="op">)</span></span></code></pre></div>
@@ -169,7 +178,7 @@ input data sets should be considered as pairs.</p>
 feature annotations from the KEGG database, but users can also provide
 their own custom maps. <a href="https://thomazbastiaanssen.github.io/anansi/articles/adjacency_matrices.html">See
 vignette on adjacency matrices.</a></p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Create AnansiWeb object from tables</span></span>
 <span><span class="va">web</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/weaveWeb.html">weaveWeb</a></span><span class="op">(</span><span class="va">cpd</span> <span class="op">~</span> <span class="va">ko</span>, tableY <span class="op">=</span> <span class="va">t1</span>, tableX <span class="op">=</span> <span class="va">t2</span>, link <span class="op">=</span> <span class="fu"><a href="../reference/kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Dropped features in tableX: 2476 remain.</span></span></code></pre>
@@ -192,7 +201,7 @@ differential associations between treatments, we use the formula
 information about the data set. Its rows correspond to samples and its
 columns to variables that can be used in <code>formula</code> as c.</li>
 </ol>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Run anansi on AnansiWeb object</span></span>
 <span><span class="va">anansi_out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/anansi.html">anansi</a></span><span class="op">(</span>web <span class="op">=</span> <span class="va">web</span>, formula <span class="op">=</span> <span class="op">~</span><span class="va">Legend</span>, metadata <span class="op">=</span> <span class="va">FMT_metadata</span>, adjust.method <span class="op">=</span> <span class="st">"BH"</span>,</span>
 <span>    verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
@@ -209,7 +218,7 @@ columns to variables that can be used in <code>formula</code> as c.</li>
 to the more legible <code>table</code> format by specifying the
 <code>return.format</code> argument. Let’s take a look at the structure
 of the output table:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># General structure of anansi() output</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">anansi_out</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">5</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##   feature_Y feature_X All_r.values All_t.values All_p.values</span></span>
@@ -218,7 +227,7 @@ of the output table:</p>
 <span><span class="co">## 3    C00041    K00259  -0.21708011    1.2967052   0.20346437</span></span>
 <span><span class="co">## 4    C00064    K00265  -0.25811198    1.5578255   0.12853530</span></span>
 <span><span class="co">## 5    C00064    K00266  -0.05235448    0.3056957   0.76170027</span></span></code></pre>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Let's take a look at the column names</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">anansi_out</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##  [1] "feature_Y"                   "feature_X"                  </span></span>
@@ -310,7 +319,7 @@ the vignette on differential associations</a>.</p>
 <p>The long format can be helpful to plug the data into
 <code>ggplot2</code>. Here, we recreate the style of the figure from the
 FMT Aging study.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Use tidyr to wrangle the correlation r-values to a single column</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a></span><span class="op">)</span></span>
 <span></span>
@@ -375,7 +384,7 @@ specific pairs of features. The <a href="https://patchwork.data-imaginist.com/" 
 provides a wonderful interface to combine plots. We can use
 <code><a href="../reference/AnansiWeb.html">getFeaturePairs()</a></code> to extract the relevant data from our
 <code>AnansiWeb</code> object in a convenient list format:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com" class="external-link">patchwork</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Get a list containing data.frames for each feature pair.</span></span>
@@ -426,7 +435,7 @@ of feature pairs to be plotted is modest.</p>
 <div class="section level4">
 <h4 id="note-on-using-patchwork-with-anansi">Note on using <code>patchwork</code> with <code>anansi</code>:<a class="anchor" aria-label="anchor" href="#note-on-using-patchwork-with-anansi"></a>
 </h4>
-<p>Especially for large numers of featire pairs, it’s much more
+<p>Especially for large numbers of feature pairs, it’s much more
 efficient to add shared elements to the patchwork using the
 <code>&amp;</code> operator, rather than adding them to the initial
 <code><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot()</a></code> calls in the <code><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply()</a></code> loop.</p>
@@ -440,7 +449,7 @@ efficient to add shared elements to the patchwork using the
 <code>MultiAssayExperiment</code> (MAE) as an alternative to
 <code>AnansiWeb</code>. The latter can be converted to a MAE with the
 function <code>asMAE</code>.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://waldronlab.io/MultiAssayExperiment/" class="external-link">MultiAssayExperiment</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Store sample metadata into metadata slot of web object</span></span>
@@ -451,7 +460,7 @@ function <code>asMAE</code>.</p>
 <p>The MAE object can be passed to the <code>weaveWeb</code> function,
 which returns the same output, ready for the <code>anansi</code>
 function.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">web2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/weaveWeb.html">weaveWeb</a></span><span class="op">(</span><span class="va">mae</span>, tableY <span class="op">=</span> <span class="st">"cpd"</span>, tableX <span class="op">=</span> <span class="st">"ko"</span>, link <span class="op">=</span> <span class="fu"><a href="../reference/kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/anansi.html">anansi</a></span><span class="op">(</span>web <span class="op">=</span> <span class="va">web2</span>, formula <span class="op">=</span> <span class="op">~</span><span class="va">Legend</span>, adjust.method <span class="op">=</span> <span class="st">"BH"</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
@@ -462,7 +471,7 @@ function.</p>
 <p>Finally, the output of <code>anansi</code> can be visualised with
 <code>plotAnansi</code> by specifying the type of association to
 use.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Filter associations by q value</span></span>
 <span><span class="va">out</span> <span class="op">&lt;-</span> <span class="va">out</span><span class="op">[</span><span class="va">out</span><span class="op">$</span><span class="va">full_q.values</span> <span class="op">&lt;</span> <span class="fl">0.2</span>, <span class="op">]</span></span>
 <span></span>
@@ -474,7 +483,7 @@ use.</p>
 <div class="section level2">
 <h2 id="session-info">Session info<a class="anchor" aria-label="anchor" href="#session-info"></a>
 </h2>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## R version 4.4.2 (2024-10-31)</span></span>
 <span><span class="co">## Platform: x86_64-pc-linux-gnu</span></span>
@@ -500,7 +509,7 @@ use.</p>
 <span><span class="co">## [8] base     </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## other attached packages:</span></span>
-<span><span class="co">##  [1] MultiAssayExperiment_1.33.1 SummarizedExperiment_1.34.0</span></span>
+<span><span class="co">##  [1] MultiAssayExperiment_1.30.3 SummarizedExperiment_1.34.0</span></span>
 <span><span class="co">##  [3] Biobase_2.66.0              GenomicRanges_1.56.2       </span></span>
 <span><span class="co">##  [5] GenomeInfoDb_1.40.1         IRanges_2.38.1             </span></span>
 <span><span class="co">##  [7] S4Vectors_0.42.1            BiocGenerics_0.50.0        </span></span>
@@ -511,7 +520,7 @@ use.</p>
 <span><span class="co">## </span></span>
 <span><span class="co">## loaded via a namespace (and not attached):</span></span>
 <span><span class="co">##   [1] splines_4.4.2                   cellranger_1.1.0               </span></span>
-<span><span class="co">##   [3] tibble_3.2.1                    polyclip_1.10-7                </span></span>
+<span><span class="co">##   [3] tibble_3.3.0                    polyclip_1.10-7                </span></span>
 <span><span class="co">##   [5] rpart_4.1.24                    DirichletMultinomial_1.46.0    </span></span>
 <span><span class="co">##   [7] lifecycle_1.0.4                 Rdpack_2.6.3                   </span></span>
 <span><span class="co">##   [9] lattice_0.22-6                  MASS_7.3-65                    </span></span>
@@ -554,7 +563,7 @@ use.</p>
 <span><span class="co">##  [83] rsvd_1.0.5                      R6_2.6.1                       </span></span>
 <span><span class="co">##  [85] estimability_1.5.1              textshaping_1.0.0              </span></span>
 <span><span class="co">##  [87] colorspace_2.1-1                lpSolve_5.6.23                 </span></span>
-<span><span class="co">##  [89] generics_0.1.3                  data.table_1.17.0              </span></span>
+<span><span class="co">##  [89] generics_0.1.4                  data.table_1.17.0              </span></span>
 <span><span class="co">##  [91] DECIPHER_3.0.0                  graphlayouts_1.2.2             </span></span>
 <span><span class="co">##  [93] httr_1.4.7                      htmlwidgets_1.6.4              </span></span>
 <span><span class="co">##  [95] S4Arrays_1.4.1                  pkgconfig_2.0.3                </span></span>
@@ -569,19 +578,19 @@ use.</p>
 <span><span class="co">## [113] cachem_1.1.0                    zoo_1.8-13                     </span></span>
 <span><span class="co">## [115] stringr_1.5.1                   parallel_4.4.2                 </span></span>
 <span><span class="co">## [117] vipor_0.4.7                     foreign_0.8-88                 </span></span>
-<span><span class="co">## [119] desc_1.4.3                      pillar_1.10.1                  </span></span>
+<span><span class="co">## [119] desc_1.4.3                      pillar_1.11.0                  </span></span>
 <span><span class="co">## [121] grid_4.4.2                      vctrs_0.6.5                    </span></span>
 <span><span class="co">## [123] slam_0.1-55                     BiocSingular_1.20.0            </span></span>
 <span><span class="co">## [125] beachmat_2.20.0                 xtable_1.8-4                   </span></span>
 <span><span class="co">## [127] cluster_2.1.8.1                 beeswarm_0.4.0                 </span></span>
 <span><span class="co">## [129] htmlTable_2.4.3                 evaluate_1.0.3                 </span></span>
 <span><span class="co">## [131] readr_2.1.5                     mvtnorm_1.3-3                  </span></span>
-<span><span class="co">## [133] cli_3.6.4                       compiler_4.4.2                 </span></span>
-<span><span class="co">## [135] rlang_1.1.5                     crayon_1.5.3                   </span></span>
+<span><span class="co">## [133] cli_3.6.5                       compiler_4.4.2                 </span></span>
+<span><span class="co">## [135] rlang_1.1.6                     crayon_1.5.3                   </span></span>
 <span><span class="co">## [137] labeling_0.4.3                  mediation_4.5.0                </span></span>
 <span><span class="co">## [139] plyr_1.8.9                      forcats_1.0.0                  </span></span>
 <span><span class="co">## [141] fs_1.6.5                        ggbeeswarm_0.7.2               </span></span>
-<span><span class="co">## [143] stringi_1.8.4                   viridisLite_0.4.2              </span></span>
+<span><span class="co">## [143] stringi_1.8.7                   viridisLite_0.4.2              </span></span>
 <span><span class="co">## [145] BiocParallel_1.38.0             munsell_0.5.1                  </span></span>
 <span><span class="co">## [147] Biostrings_2.72.1               lazyeval_0.2.2                 </span></span>
 <span><span class="co">## [149] Matrix_1.7-3                    hms_1.1.3                      </span></span>

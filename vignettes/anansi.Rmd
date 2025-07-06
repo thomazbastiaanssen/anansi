@@ -47,9 +47,16 @@ of host-microbe interactions, it is perfectly capable of handling any other pair
 of data sets where some features interact canonically. 
 
 ## Installation
+Install the development version from
+[GitHub](https://github.com/thomazbastiaanssen/anansi) with `remotes`: 
+```{r, 'remotes-install', eval = FALSE}
+install.packages("remotes")
+remotes::install_github("thomazbastiaanssen/anansi")
+```
+
+## Setup
 ```{r, eval=TRUE}
-# install and load anansi
-# devtools::install_github("thomazbastiaanssen/anansi")
+# load anansi
 library(anansi)
 
 # load ggplot2 and ggforce to plot results
@@ -148,9 +155,10 @@ anansi_out <- anansi(
 ```
 # Reporting output📝
 
-By default, `anansi` outputs a table in the `wide` format. For general reporting,
-we  recommend sticking to the more legible `table` format by specifying the
-`return.format` argument. Let's take a look at the structure of the output table:
+By default, `anansi` outputs a table in the `wide` format. For general 
+reporting, we  recommend sticking to the more legible `table` format by 
+specifying the `return.format` argument. Let's take a look at the structure of 
+the output table:
 
 ```{r, eval=TRUE}
 # General structure of anansi() output
@@ -302,7 +310,7 @@ These types of visualizations of feature pairs work best when the amount of
 feature pairs to be plotted is modest.
 
 ### Note on using `patchwork` with `anansi`: 
-Especially for large numers of featire pairs, it's much more efficient to add 
+Especially for large numbers of feature pairs, it's much more efficient to add 
 shared elements to the patchwork using the `&` operator, rather than adding them
 to the initial `ggplot()` calls in the `lapply()` loop. 
 
