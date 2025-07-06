@@ -100,12 +100,19 @@ document.addEventListener("DOMContentLoaded", function() {
 </script><div class="section level2">
 <h2 class="unnumbered" id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
-<p>A common challenge in integrative analysis of high-dimensional data
-sets is subsequent biological interpretation. Anansi addresses this
-challenge by only considering pairwise associations that are known to
-occur <em>a priori</em>. In order to achieve this, we need to provide
-this relational information to anansi in the form of a (bi)adjacency
-matrix.</p>
+<p>The goal of <code>anansi</code> is to provide a framework to
+interrogate interactions between different ’omics datasets, or more
+generally, between data modalities. More concretely, this involves
+estimating the association between pairs of features in several
+contexts. Anansi uses a (bi)adjacency matrix to determine which pars of
+features to investigate. For more on the <a href="https://thomazbastiaanssen.github.io/anansi/articles/adjacency_matrices.html">adjacency
+matrix, see the vignette</a>. Here, we will discuss the different
+statistical models used to estimate the associations between
+feature-pairs.</p>
+<p>Anansi aims to follow the style of <code><a href="https://rdrr.io/r/stats/lm.html" class="external-link">stats::lm()</a></code> and this
+vignette provides equivalent models in <code>stats</code> as theoretical
+familiar ground. For these reasons, I warmly recommend the documentation
+of <code>stats</code> for further reading.</p>
 <p>This vignette is divided by three sections:</p>
 <ul>
 <li>
@@ -131,11 +138,11 @@ summary statistics. The user has control over these models through the
 <h3 id="setup">Setup<a class="anchor" aria-label="anchor" href="#setup"></a>
 </h3>
 <p>We will use the same example as in <a href="https://thomazbastiaanssen.github.io/anansi/articles/adjacency_matrices.html">the
-vignette on adjacency matrices</a>. There, we also explain for more
-about adjacency matrices, <code>AnansiWeb</code> class and using
+vignette on adjacency matrices</a>. There, we also introduce the
+<code>AnansiWeb</code> class and demonstrate using
 <code><a href="../reference/weaveWeb.html">weaveWeb()</a></code>. Please note that the data used in this example
-have been generated with statistical associations spiked in for this
-vignette.</p>
+have been generated with statistical associations manually spiked in for
+this vignette.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Setup AnansiWeb with some dummy data</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/thomazbastiaanssen/anansi" class="external-link">anansi</a></span><span class="op">)</span></span>
@@ -431,7 +438,7 @@ equivalent.</p>
 <span><span class="co">## [67] knitr_1.50                  GenomicRanges_1.61.1       </span></span>
 <span><span class="co">## [69] IRanges_2.43.0              MultiAssayExperiment_1.35.3</span></span>
 <span><span class="co">## [71] viridisLite_0.4.2           rlang_1.1.6                </span></span>
-<span><span class="co">## [73] Rcpp_1.0.14                 glue_1.8.0                 </span></span>
+<span><span class="co">## [73] Rcpp_1.1.0                  glue_1.8.0                 </span></span>
 <span><span class="co">## [75] tweenr_2.0.3                BiocManager_1.30.26        </span></span>
 <span><span class="co">## [77] formatR_1.14                BiocGenerics_0.55.0        </span></span>
 <span><span class="co">## [79] jsonlite_2.0.0              R6_2.6.1                   </span></span>
