@@ -31,11 +31,19 @@ adj_link <- paste0("https://thomazbastiaanssen.github.io/anansi/",
 ```
 
 # Overview {-}
-A common challenge in integrative analysis of high-dimensional data sets is 
-subsequent biological interpretation. Anansi addresses this challenge by only 
-considering pairwise associations that are known to occur *a priori*. In order
-to achieve this, we need to provide this relational information to anansi in the
-form of a (bi)adjacency matrix. 
+The goal of `anansi` is to provide a framework to interrogate interactions 
+between different 'omics datasets, or more generally, between data modalities. 
+More concretely, this involves estimating the association between pairs of 
+features in several contexts. 
+Anansi uses a (bi)adjacency matrix to determine which pars of features to 
+investigate. For more on the 
+[adjacency matrix, see the vignette]`r sprintf("(%s)", adj_link)`. Here, we will 
+discuss the different statistical models used to estimate the associations 
+between feature-pairs. 
+
+Anansi aims to follow the style of `stats::lm()` and this vignette provides 
+equivalent models in `stats` as theoretical familiar ground. For these reasons, 
+I warmly recommend the documentation of `stats` for further reading. 
 
 This vignette is divided by three sections:
 
@@ -53,9 +61,9 @@ control over these models through the `formula` argument in `anansi(). `
 ## Setup 
 We will use the same example as in 
 [the vignette on adjacency matrices]`r sprintf("(%s)", adj_link)`. There, we 
-also explain for more about adjacency matrices, `AnansiWeb` class and 
-using `weaveWeb()`. Please note that the data used in this example have been 
-generated with statistical associations spiked in for this vignette. 
+also introduce the `AnansiWeb` class and demonstrate using `weaveWeb()`. Please 
+note that the data used in this example have been generated with statistical 
+associations manually spiked in for this vignette. 
 
 ```{r formula-web-full} 
 # Setup AnansiWeb with some dummy data
@@ -145,7 +153,8 @@ ggplot(full_df) +
 
 In order to assess differences in associations based on one or more variables 
 (such as phenotype or treatment), we make use of the emergent and disjointed 
-association paradigm introduced in the context of proportionality \citep{diff_prop,quinn2017propr,part_corr} and apply it outside of the simplex.
+association paradigm introduced in the context of proportionality 
+\citep{diff_prop,quinn2017propr,part_corr} and apply it outside of the simplex.
 
 ## Disjointed associations
 Disjointed associations describe the situation where there is a detectable 

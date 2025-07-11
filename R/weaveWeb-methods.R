@@ -80,12 +80,14 @@ setMethod("weaveWeb", signature = c(x = "character"),
     ) {
         terms <- c(y, x)
         stopifnot(
-            "both 'x' and 'y' terms must be provided as character" = is(
-                terms,
-                "character"
-            ) &&
-                length(terms) == 2L
-        )
+            "both 'x' and 'y' terms must be provided as character" =
+                is(terms, "character" ) && length(terms) == 2L )
+        if(is.null(link)) {
+            stop(
+                "'link' argument not provided. To explicitly disable ",
+                "knowledge-based selection, use link = 'none' instead. "
+            )
+        }
         if (identical(link, "none")) {
             return(web_missing_link(tableX, tableY, terms))
         }
@@ -229,9 +231,10 @@ setMethod(
         x_ids <- .test_coherent(tableX, experiment2, typeX, assay.type2)
         tableY <- y_ids[[1L]]
         tableX <- x_ids[[1L]]
+
         # Check experiments
-        mia:::.test_experiment_of_mae(x, tableY)
-        mia:::.test_experiment_of_mae(x, tableX)
+        .test_mae_has_exp(x, tableY)
+        .test_mae_has_exp(x, tableX)
 
         # Extract assays
         tY <- t(assay(experiments(x)[tableY], y_ids[[2L]]))
@@ -301,17 +304,13 @@ setMethod(
         tableY <- y_ids[[1L]]
         tableX <- x_ids[[1L]]
 
-        y_tse <- .get_table_from_tse(x, tableY)
-        x_tse <- .get_table_from_tse(x, tableX)
 
-        if (!y_ids[[2L]] %in% assayNames(y_tse) ||
-            !x_ids[[2L]] %in% assayNames(x_tse)) {
-            stop("assay.type1 and assay.type2 must specify the name of assays ",
-                 "in x or its corresponding altExps.", call. = FALSE)
-        }
+        tse_list <- .get_table_from_tse(x, tableY, tableX)
+
+
         # Extract assays
-        tY <- t(assay(y_tse, y_ids[[2L]]))
-        tX <- t(assay(x_tse, x_ids[[2L]]))
+        tY <- t(assay(tse_list[[1L]], y_ids[[2L]]))
+        tX <- t(assay(tse_list[[2L]], x_ids[[2L]]))
 
         # Check if x already contains a dictionary
         if (!force_new) {
@@ -328,15 +327,17 @@ setMethod(
                     tableX = tX,
                     tableY = tY,
                     dictionary = m[[d]],
-                    metadata = list(metadata = as.data.frame(colData(x))),
+                    metadata = list(
+                        metadata = as.data.frame(colData(x))
+                        ),
                     ...
                 ))
             }
         }
         # Generate web object
         weaveWeb(
-            x = tableX,
-            y = tableY,
+            x = names(tse_list)[2L],
+            y = names(tse_list)[1L],
             link = link,
             tableX = tX,
             tableY = tY,
