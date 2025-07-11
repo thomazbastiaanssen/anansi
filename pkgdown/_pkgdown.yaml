@@ -35,6 +35,9 @@ reference:
   - FMT_metadata
   - krebs
   - ec2ko
+- title: Conversion utils
+- contents:
+  - linkBiobakeryMap
 - title: Internal utils
 - contents:
   - anansiCor
