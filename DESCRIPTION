@@ -22,6 +22,7 @@ Description: Studies including both microbiome and metabolomics data are
     differential association. 
 Depends: R (>= 4.4.0)
 Imports:
+    S7,
     stats,
     methods,
     igraph,

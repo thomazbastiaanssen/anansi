@@ -68,8 +68,7 @@ NULL
 #' @rdname weaveWeb
 #' @export
 #'
-setMethod("weaveWeb", signature = c(x = "character"),
-    function(
+method(weaveWeb, S7::class_character) <- function(
         x, y,
         link = NULL,
         tableX = NULL,
@@ -134,12 +133,11 @@ setMethod("weaveWeb", signature = c(x = "character"),
             metadata = metadata
         )
     }
-)
+
 
 #' @rdname weaveWeb
 #' @export
-setMethod("weaveWeb", signature = c(x = "formula"),
-    function(
+method(weaveWeb, S7::class_formula) <- function(
         x,
         link = NULL,
         tableX = NULL,
@@ -178,7 +176,6 @@ setMethod("weaveWeb", signature = c(x = "formula"),
             ...
         )
     }
-)
 
 #' @rdname weaveWeb
 #' @export
@@ -206,10 +203,7 @@ weaveKEGG <- function(x, ...) weaveWeb(x, link = kegg_link(), ...)
 #' @param assay.type1,assay.type2 synonymous args to `typeY,typeX` for
 #'     compatibility with `mia` argument style.
 #'
-setMethod(
-    "weaveWeb",
-    signature = c(x = "MultiAssayExperiment"),
-    function(
+method(weaveWeb, getClass("MultiAssayExperiment", where = "MultiAssayExperiment")) <- function(
         x,
         link = NULL,
         ...,
@@ -269,7 +263,6 @@ setMethod(
             ...
         )
     }
-)
 
 #' @rdname weaveWeb
 #' @export
@@ -277,10 +270,7 @@ setMethod(
 #' @importFrom SummarizedExperiment colData assay assayNames
 #' @importFrom SingleCellExperiment SingleCellExperiment altExp altExpNames
 #'
-setMethod(
-    "weaveWeb",
-    signature = c(x = "SingleCellExperiment"),
-    function(
+method(weaveWeb, getClass("SingleCellExperiment", where = "SingleCellExperiment")) <- function(
         x,
         link = NULL,
         ...,
@@ -345,4 +335,3 @@ setMethod(
             ...
         )
     }
-)

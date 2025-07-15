@@ -13,34 +13,36 @@
 #'
 #' @usage
 #' ## Accessors
-#' \S4method{dimnames}{AnansiWeb}(x)
-#' \S4method{dim}{AnansiWeb}(x)
-#' \S4method{names}{AnansiWeb}(x)
+#' dimnames(AnansiWeb}(x)
+#' dim(AnansiWeb}(x)
+#' names(AnansiWeb}(x)
 #'
-#' \S4method{tableY}{AnansiWeb}(x, ...)
-#' \S4method{tableY}{AnansiWeb}(x, ...) <- value
-#' \S4method{tableX}{AnansiWeb}(x, ...)
-#' \S4method{tableX}{AnansiWeb}(x, ...) <- value
-#' \S4method{dictionary}{AnansiWeb}(x, ...)
-#' \S4method{dictionary}{AnansiWeb}(x, ...) <- value
-#' \S4method{metadata}{AnansiWeb}(x, simplify = TRUE, ...)
-#' \S4method{metadata}{AnansiWeb}(x, simplify = TRUE, ...) <- value
+#' tableY(AnansiWeb)
+#' tableY(AnansiWeb) <- value
+#' tableX(AnansiWeb)
+#' tableX(AnansiWeb) <- value
+#' dictionary(AnansiWeb)
+#' dictionary(AnansiWeb) <- value
+#' metadata(AnansiWeb, simplify = TRUE)
+#' metadata(AnansiWeb, simplify = TRUE) <- value
 #'
 #' ## Coercion
 #' asMAE(x)
-#' \S4method{as.list}{AnansiWeb}(x, ...)
-#' \S4method{as.data.frame}{AnansiWeb}(
-#'     x, row.names = NULL, optional = FALSE, ...
-#'     )
+#' as.list(AnansiWeb)
+#' as.data.frame(
+#'     AnansiWeb, row.names = NULL, optional = FALSE
+#'  )
 #'
 #' ## Utilities on feature pairs
-#' \S4method{which}{AnansiWeb}(x, arr.ind = TRUE, useNames = FALSE)
-#' \S4method{getFeaturePairs}{AnansiWeb}(
-#'     x, which = NULL, with.metadata = FALSE, ...
+#' which(AnansiWeb, arr.ind = TRUE, useNames = FALSE)
+#' getFeaturePairs(
+#'     AnansiWeb, which = NULL, with.metadata = FALSE, ...
 #' )
-#' \S4method{mapply}{AnansiWeb}(
-#'     FUN, ..., MoreArgs = NULL, SIMPLIFY = TRUE, USE.NAMES = TRUE
-#'     )
+#' mapply(
+#'     AnansiWeb,
+#'     FUN,
+#'     MoreArgs = NULL, SIMPLIFY = TRUE, USE.NAMES = TRUE
+#' )
 #'
 #' @param x,object an `AnansiWeb` object on which a method will be applied.
 #'
@@ -95,49 +97,13 @@ NULL
 #' @importFrom methods slot
 #' @usage NULL
 #'
-setMethod(
-    "metadata",
-    signature = c(x = "AnansiWeb"),
-    definition = function(x, simplify = TRUE, ...) {
+method(metadata, AnansiWeb) <- function(x, simplify = TRUE, ...) {
         m <- x@metadata
         if (simplify && "metadata" %in% names(m)) {
             return(m[["metadata"]])
         }
         return(m)
     }
-)
-
-#' @export
-#' @importMethodsFrom S4Vectors "metadata<-"
-#' @importFrom methods slot<-
-#' @aliases metadata<-,AnansiWeb-method
-#' @rdname AnansiWeb
-#' @usage NULL
-#'
-setReplaceMethod(
-    "metadata",
-    "AnansiWeb",
-    def = function(
-        x,
-        ...,
-        simplify = TRUE,
-        value
-    ) {
-        if (simplify && inherits(value, "data.frame")) {
-            x@metadata[["metadata"]] <- as.data.frame(value)
-            return(x)
-        }
-        if (!is.list(value)) {
-            stop("replacement 'metadata' value must be a list")
-        }
-        if (!length(value)) {
-            names(value) <- NULL
-        } # instead of character()
-        x@metadata <- value
-        validObject(x)
-        x
-    }
-)
 
 #' @rdname AnansiWeb
 #' @param ... additional arguments (currently not used).
@@ -145,60 +111,32 @@ setReplaceMethod(
 #' @export
 #' @usage NULL
 #'
-setMethod("tableY", "AnansiWeb", def = function(x, ...) x@tableY)
+method(tableY, AnansiWeb) <- function(x, ...) x@tableY
 
 #' @rdname AnansiWeb
 #' @export
 #' @aliases tableX tableX,AnansiWeb-method
 #' @usage NULL
 #'
-setMethod("tableX", "AnansiWeb", def = function(x, ...) x@tableX)
+method(tableX, AnansiWeb) <- function(x, ...) x@tableX
 
 #' @rdname AnansiWeb
 #' @aliases `dictionary` dictionary,AnansiWeb-method
 #' @export
 #' @usage NULL
 #'
-setMethod("dictionary", "AnansiWeb", def = function(x, ...) x@dictionary)
+method(dictionary, AnansiWeb) <- function(x, ...) {x@dictionary}
 
-#' @rdname AnansiWeb
-#' @aliases tableY<- tableY<-,AnansiWeb-method
-#' @param value replacement `matrix` with same number of rows target.
-#' @usage NULL
-#'
-setReplaceMethod("tableY", "AnansiWeb", def = function(x, ..., value) {
-    x@tableY <- value
-    validObject(x)
-    x
-})
-
-#' @rdname AnansiWeb
-#' @export
-#' @aliases tableX<- tableX<-,AnansiWeb-method
-#' @usage NULL
-#'
-setReplaceMethod("tableX", "AnansiWeb", def = function(x, ..., value) {
-    x@tableX <- value
-    validObject(x)
-    x
-})
-
-#' @rdname AnansiWeb
-#' @aliases dictionary<- dictionary<-,AnansiWeb-method
-#' @export
-#' @usage NULL
-#'
-setReplaceMethod("dictionary", "AnansiWeb", def = function(x, ..., value) {
+method(`dictionary<-`, AnansiWeb) <- function(x, ...) {
     x@dictionary <- value
-    validObject(x)
     x
-})
+}
 
 #' @importFrom methods show
 #' @rdname AnansiWeb
 #' @export
 #'
-setMethod("show", "AnansiWeb", def = function(object) {
+method(show, AnansiWeb) <- function(object) {
     cat(
         class(object),
         " S4 object with ",
@@ -216,56 +154,42 @@ setMethod("show", "AnansiWeb", def = function(object) {
     )
     cat("Accessors: tableX(), tableY(), dictionary(), metadata().")
     invisible(NULL)
-})
+}
 
 #' @rdname AnansiWeb
 #' @export
 #' @usage NULL
 #'
-setMethod(
-    "dimnames",
-    "AnansiWeb",
-    function(x) dimnames(x@dictionary)
-)
+method(dimnames, AnansiWeb) <- function(x) dimnames(x@dictionary)
+
+
 
 #' @rdname AnansiWeb
 #' @export
 #' @usage NULL
 #'
-setMethod(
-    "dim",
-    "AnansiWeb",
-    function(x) dim(x@dictionary)
-)
+method(dim, AnansiWeb) <- function(x) dim(x@dictionary)
+
 
 #' @rdname AnansiWeb
 #' @export
 #' @usage NULL
 #'
-setMethod("names", "AnansiWeb", function(x) names(dimnames(x@dictionary)))
+method(names, AnansiWeb) <- function(x) names(dimnames(x@dictionary))
 
 #' @rdname AnansiWeb
 #' @aliases which,AnansiWeb-method
 #' @importMethodsFrom BiocGenerics which
 #' @param arr.ind,useNames See ?base::which. `AnansiWeb` default returns a
 #'     two-column array index.
+#' @importMethodsFrom Matrix which
 #' @export
 #' @usage NULL
 #'
-setMethod(
-    "which",
-    signature = c(x = "AnansiWeb"),
-    function(x, arr.ind = TRUE, useNames = FALSE) {
-        which.AnansiWeb(x, arr.ind, useNames)
+method(which, AnansiWeb) <- function(x, arr.ind = TRUE, useNames = FALSE) {
+        Matrix::which(x@dictionary, arr.ind, useNames)
     }
-)
 
-#' @noRd
-#' @importMethodsFrom Matrix which
-#'
-which.AnansiWeb <- function(x, arr.ind = TRUE, useNames = FALSE) {
-    Matrix::which(x@dictionary, arr.ind, useNames)
-}
 
 #' @rdname AnansiWeb
 #' @aliases mapply,AnansiWeb-method
@@ -277,13 +201,10 @@ which.AnansiWeb <- function(x, arr.ind = TRUE, useNames = FALSE) {
 #' @export
 #' @usage NULL
 #'
-setMethod(
-    "mapply",
-    signature = c(... = "AnansiWeb"),
-    function(FUN, ..., MoreArgs = NULL, SIMPLIFY = TRUE, USE.NAMES = TRUE) {
+method(mapply, AnansiWeb) <- function(FUN, ..., MoreArgs = NULL, SIMPLIFY = TRUE, USE.NAMES = TRUE) {
         tY <- as.data.frame.matrix(tableY(...), make.names = FALSE)
         tX <- as.data.frame.matrix(tableX(...), make.names = FALSE)
-        wh <- which.AnansiWeb(...)
+        wh <- which(...)
 
         out <- .mapply(
             FUN,
@@ -302,7 +223,7 @@ setMethod(
         }
         return(out)
     }
-)
+
 
 #' @rdname AnansiWeb
 #' @aliases getFeaturePairs getFeaturePairs,AnansiWeb-method
@@ -315,17 +236,7 @@ setMethod(
 #' @usage NULL
 #' @export
 #'
-setMethod(
-    getFeaturePairs,
-    "AnansiWeb",
-    function(x, which = NULL, with.metadata = FALSE, ...) {
-        getFeaturePairs.AnansiWeb(x, which, with.metadata)
-    }
-)
-
-#' @rdname AnansiWeb
-#' @noRd
-getFeaturePairs.AnansiWeb <- function(x, which = NULL, with.metadata = FALSE) {
+method(getFeaturePairs, AnansiWeb) <-  function(x, which = NULL, with.metadata = FALSE) {
     if (is.null(which)) {
         which <- which(x)
     }
@@ -355,7 +266,6 @@ getFeaturePairs.AnansiWeb <- function(x, which = NULL, with.metadata = FALSE) {
         )
     }
 }
-
 
 ################################################################################
 ################################################################################

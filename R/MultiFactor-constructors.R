@@ -1,79 +1,3 @@
-#' @rdname MultiFactor
-#' @aliases asMultiFactor MultiFactor
-#' @param levels an optional named list of vectors of the unique values (as
-#'     character strings) that x might have taken. The default is the unique set
-#'     of values taken by lapply(x, as.character), sorted into increasing order
-#'     of x.
-#' @param drop.unmatched `Logical scalar` If `TRUE` (Default), for feature types
-#'     that are seen at least twice, exclude features that only present in one
-#'     of their respective link data frames.
-#' @usage
-#' ## Constructor for `MultiFactor` objects
-#' MultiFactor(x, levels = NULL, drop.unmatched = TRUE)
-#'
-#' @export
-#' @seealso \itemize{
-#' \item [kegg_link()]: for an example of valid input.
-#' }
-#'
-MultiFactor <- function(x, levels = NULL, drop.unmatched = TRUE) {
-    if (validLinkDF(x)) x <- list(x = x)
-    stopifnot(
-        "Input not correctly formatted." = all(
-            vapply(
-                as.list(x, use.names = FALSE),
-                validLinkDF,
-                NA,
-                USE.NAMES = FALSE
-            )
-        )
-    )
-    if (is(x, "MultiFactor")) {
-        if (is.null(levels)) {
-            levels <- levels(x)
-        }
-        x <- x@index
-    }
-    x <- checkMergers(x)
-    if (drop.unmatched) {
-        x <- trimMultiFactor(x)
-    }
-    m <- mapMultiFactor(x)
-
-    # Integer DF Input
-    if (all(vapply(x, validIntLinkDF, NA, USE.NAMES = FALSE))) {
-        stopifnot(
-            "Input is integers, levels must be provided. " = !is.null(levels)
-        )
-        # Factor DF input
-    } else if (all(vapply(x, validFactLinkDF, NA, USE.NAMES = FALSE))) {
-        if (is.null(levels)) {
-            levels <- factorInputMultiFactorLevels(x, m)
-        }
-        x <- listFactRefactor(x, m, levels)
-        x <- lapply(x, factToIntDF)
-        # Character DF input
-    } else if (all(vapply(x, validCharLinkDF, NA, USE.NAMES = FALSE))) {
-        if (is.null(levels)) {
-            levels <- generateMultiFactorLevels(x, m)
-        }
-        x <- listCharToIntegers(x, m, levels)
-    }
-    # Get rid of row.names.
-    x <- lapply(x, `row.names<-.data.frame`, value = NULL)
-
-    # Out
-    out <- new("MultiFactor", index = x, levels = levels, map = m)
-    validObject(out)
-    return(out)
-}
-
-#' @rdname MultiFactor
-#' @aliases asMultiFactor
-#' @export
-#'
-asMultiFactor <- MultiFactor
-
 #' @noRd
 #' @importFrom Matrix sparseMatrix
 #' @description
@@ -93,7 +17,7 @@ mapMultiFactor <- function(x, mode = "counts") {
         x <- x@index
     }
     mode <- match.arg(mode, choices = c("counts", "binary", "pattern"))
-    all_names <- lapply(x, names)
+    all_names <- lapply(x, base::names)
     i <- factor(
         rep(
             names(all_names),

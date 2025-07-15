@@ -130,10 +130,7 @@ NULL
 #' @importFrom ggforce facet_col
 #' @importFrom stats setNames
 #' @importFrom S4Vectors isEmpty
-setMethod(
-    "plotAnansi",
-    sig = c(x = "data.frame"),
-    def = function(
+method(plotAnansi, class_data.frame) <- function(
         x,
         layout = "dotplot",
         association.type = NULL,
@@ -305,8 +302,8 @@ setMethod(
             )
         }
         return(p)
-    }
-)
+}
+
 ################################ HELP FUNCTIONS ################################
 # Convert anansi wide to long format
 #' @description

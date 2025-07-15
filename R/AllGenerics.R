@@ -1,72 +1,36 @@
-setGeneric(
-    "getGraph",
-    signature = c("x"),
-    function(x, ...) standardGeneric("getGraph")
-)
+getEdgeList        <- S7::new_generic("getEdgeList", "x")
+getGraph           <- S7::new_generic("getGraph", "x")
+getFeaturePairs    <- S7::new_generic("getFeaturePairs", "x")
 
-setGeneric(
-    "tableX",
-    signature = c("x"),
-    function(x, ...) standardGeneric("tableX")
-)
+weaveWeb           <- S7::new_generic("getFeaturePairs", "x")
+plotAnansi         <- S7::new_generic("plotAnansi", "x")
 
-setGeneric(
-    "tableX<-",
-    signature = c("x"),
-    function(x, ..., value) standardGeneric("tableX<-")
-)
 
-setGeneric(
-    "tableY",
-    signature = c("x"),
-    function(x, ...) standardGeneric("tableY")
-)
+tableX      <- S7::new_generic("tableX", "x")
+tableY      <- S7::new_generic("tableY", "x")
+`tableX<-`  <- S7::new_generic("tableX<-", "x")
+`tableY<-`  <- S7::new_generic("tableY<-", "x")
+dictionary     <- S7::new_generic("dictionary", "x")
+`dictionary<-` <- S7::new_generic("dictionary<-", "x")
 
-setGeneric(
-    "tableY<-",
-    signature = c("x"),
-    function(x, ..., value) standardGeneric("tableY<-")
-)
+metadata       <- S7::new_external_generic("S4Vectors", "metadata", "x")
+which          <- S7::new_external_generic("BiocGenerics", "which", "x")
+mapply         <- S7::new_external_generic("BiocGenerics", "mapply", "...")
 
-setGeneric(
-    "dictionary",
-    signature = c("x"),
-    function(x, ...) standardGeneric("dictionary")
-)
+as.data.frame  <- S7::new_external_generic("base", "as.data.frame", "x")
 
-setGeneric(
-    "dictionary<-",
-    signature = c("x"),
-    function(x, ..., value) standardGeneric("dictionary<-")
-)
 
-setGeneric(
-    "getEdgeList",
-    signature = c("x"),
-    function(x, ...) standardGeneric("getEdgeList")
-)
+# Externals
+unfactor     <- S7::new_external_generic("S4Vectors", "unfactor", "x")
+# droplevels   <- S7::new_external_generic("base","droplevels", "x")
+# levels       <- S7::new_external_generic("base", "levels", "x")
+# as.list      <- S7::new_external_generic("base", "as.list", "x")
+# show         <- S7::new_external_generic("methods", "show", "object")
+# names        <- S7::new_external_generic("base", "names", "x")
+# dim          <- S7::new_external_generic("base", "dim", "x")
+# dimnames     <- S7::new_external_generic("base", "dimnames", "x")
 
-setGeneric(
-    "getFeaturePairs",
-    signature = c("x"),
-    function(x, ...) standardGeneric("getFeaturePairs")
-)
 
-#' @rdname weaveWeb
-#' @export
-#'
-setGeneric(
-    "weaveWeb",
-    signature = c("x"),
-    function(x, ...) standardGeneric("weaveWeb")
-)
 
-#' Bioc style plotting wrapper for anansi output
-#'
-#' @rdname plotAnansi
-#' @export
-setGeneric(
-    "plotAnansi",
-    signature = c("x"),
-    function(x, ...) standardGeneric("plotAnansi")
-)
+
+

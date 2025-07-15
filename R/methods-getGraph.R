@@ -1,5 +1,5 @@
 #' Get a graph object out of an MultiFactor.
-#' @rdname getGraph
+#' @name getGraph
 #' @aliases getGraph
 #' @param x `MultiFactor`
 #' @param format
@@ -24,11 +24,7 @@
 #' getGraph(ec2cpd, format = "graph")
 #' getGraph(ec2cpd, format = "igraph")
 #'
-setMethod(
-    "getGraph",
-    "MultiFactor",
-    function(x, format = "igraph", ...) {
-        validObject(x)
+method(getGraph, MultiFactor) <- function(x, format = "igraph") {
 
         g <- graph_from_data_frame(getEdgeList(x), directed = FALSE)
 
@@ -40,13 +36,11 @@ setMethod(
         )
         return(g)
     }
-)
 
-#' @export
-#' @rdname getGraph
-#'
-setMethod(
-    "getGraph",
-    "list",
-    function(x, format = "igraph", ...) getGraph(asMultiFactor(x), format)
-)
+#' #' @export
+#' #' @rdname getGraph
+#' #'
+#' method(getGraph, S7::class_list) <- function(x, format = "igraph") {
+#'     getGraph(asMultiFactor(x), format)
+#' }
+
