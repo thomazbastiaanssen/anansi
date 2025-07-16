@@ -122,6 +122,7 @@
 #'
 NULL
 
+#' @name plotAnansi
 #' @rdname plotAnansi
 #' @export
 #' @importFrom rlang .data

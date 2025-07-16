@@ -4,6 +4,23 @@
 \alias{AnansiWeb}
 \alias{tableY}
 \alias{`tableY<-`}
+\alias{dictionary}
+\alias{metadata,AnansiWeb-method}
+\alias{tableY,AnansiWeb-method}
+\alias{tableX}
+\alias{tableX,AnansiWeb-method}
+\alias{`dictionary`}
+\alias{dictionary,AnansiWeb-method}
+\alias{`dictionary<-`}
+\alias{dictionary<-,AnansiWeb-method}
+\alias{which,AnansiWeb-method}
+\alias{mapply,AnansiWeb-method}
+\alias{getFeaturePairs}
+\alias{getFeaturePairs,AnansiWeb-method}
+\alias{as.list.AnansiWeb}
+\alias{coerce,AnansiWeb-list}
+\alias{as.data.frame.AnansiWeb-method}
+\alias{coerce,AnansiWeb-data.frame}
 \alias{asMAE}
 \alias{as.MAE}
 \alias{as.MultiAssayExperiment}
@@ -43,6 +60,32 @@ mapply(
 )
 
 asMAE(x)
+}
+\arguments{
+\item{x, object}{an \code{AnansiWeb} object on which a method will be applied.}
+
+\item{simplify}{\code{boolean}. If \code{TRUE} (Default), handles single data.frame
+arguments while ensuring compatibility with \code{S4Vectors} method.}
+
+\item{arr.ind, useNames}{See ?base::which. \code{AnansiWeb} default returns a
+two-column array index.}
+
+\item{FUN}{a function with at least two arguments. The variables \code{x} and \code{y},
+in order, refer to the corresponding values of feature pairs in \code{tableX}
+and \code{tableY}.}
+
+\item{MoreArgs, SIMPLIFY, USE.NAMES}{see ?base::mapply}
+
+\item{which}{\verb{integer matrix}, indicating pair positions in \code{tableY(x)} and
+\code{tableX(x)}, respectively. If \code{NULL} (default):
+\code{Matrix::which(dictionary(x), TRUE)}.}
+
+\item{with.metadata}{\verb{Logical scalar} whether to append metadata to output}
+
+\item{row.names, optional}{Ignored, for S4 generic. See ?base::as.data.frame.}
+}
+\value{
+A list of data.frames with the paired data
 }
 \description{
 \code{AnansiWeb} is an S4 class containing two feature tables as well as a

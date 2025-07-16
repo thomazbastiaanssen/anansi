@@ -1,3 +1,4 @@
+#' @name AnansiWeb
 #' @rdname AnansiWeb
 #' @aliases as.list.AnansiWeb coerce,AnansiWeb-list
 #' @usage NULL
@@ -15,6 +16,8 @@ method(as.list, AnansiWeb)  <- function(x) {
     names(out)[c(1L, 2L)] <- names(x)
     out
 }
+
+#' @name AnansiWeb
 #' @rdname AnansiWeb
 #' @param row.names,optional Ignored, for S4 generic. See ?base::as.data.frame.
 #' @aliases as.data.frame.AnansiWeb-method coerce,AnansiWeb-data.frame
@@ -30,7 +33,7 @@ method(as.data.frame, AnansiWeb) <- function(x) {
     )
 }
 
-
+#' @name AnansiWeb
 #' @rdname AnansiWeb
 #' @aliases as.MAE as.MultiAssayExperiment asMultiAssayExperiment
 #' @importClassesFrom MultiAssayExperiment MultiAssayExperiment
@@ -57,7 +60,7 @@ asMAE <- function(x)  {
     )
 }
 
-
+#' @name MultiFactor
 #' @rdname MultiFactor
 #' @aliases as.list.MultiFactor
 #' @returns a named list of character vectors (Default) or integers

@@ -85,13 +85,13 @@
 #' )
 NULL
 
+#' @name AnansiWeb
 #' @rdname AnansiWeb
 #' @importClassesFrom S4Vectors Annotated
 #' @importMethodsFrom S4Vectors metadata
 #' @param x,object an `AnansiWeb` object on which a method will be applied.
 #' @param simplify `boolean`. If `TRUE` (Default), handles single data.frame
 #'     arguments while ensuring compatibility with `S4Vectors` method.
-#' @param ... additional arguments (currently not used).
 #' @aliases dictionary metadata,AnansiWeb-method
 #' @importFrom methods slot
 #' @export
@@ -105,6 +105,7 @@ method(metadata, AnansiWeb) <- function(x, simplify = TRUE) {
         return(m)
     }
 
+#' @name AnansiWeb
 #' @rdname AnansiWeb
 #' @aliases tableY tableY,AnansiWeb-method
 #' @export
@@ -112,6 +113,7 @@ method(metadata, AnansiWeb) <- function(x, simplify = TRUE) {
 #'
 method(tableY, AnansiWeb) <- function(x) x@tableY
 
+#' @name AnansiWeb
 #' @rdname AnansiWeb
 #' @export
 #' @aliases tableX tableX,AnansiWeb-method
@@ -119,6 +121,7 @@ method(tableY, AnansiWeb) <- function(x) x@tableY
 #'
 method(tableX, AnansiWeb) <- function(x) x@tableX
 
+#' @name AnansiWeb
 #' @rdname AnansiWeb
 #' @aliases `dictionary` dictionary,AnansiWeb-method
 #' @export
@@ -126,6 +129,7 @@ method(tableX, AnansiWeb) <- function(x) x@tableX
 #'
 method(dictionary, AnansiWeb) <- function(x) {x@dictionary}
 
+#' @name AnansiWeb
 #' @rdname AnansiWeb
 #' @aliases `dictionary<-` dictionary<-,AnansiWeb-method
 #' @export
@@ -136,6 +140,7 @@ method(`dictionary<-`, AnansiWeb) <- function(x, value) {
     x
 }
 
+#' @name AnansiWeb
 #' @importFrom methods show
 #' @rdname AnansiWeb
 #' @export
@@ -160,6 +165,7 @@ method(show, AnansiWeb) <- function(object) {
     invisible(NULL)
 }
 
+#' @name AnansiWeb
 #' @rdname AnansiWeb
 #' @export
 #' @usage NULL
@@ -167,20 +173,21 @@ method(show, AnansiWeb) <- function(object) {
 method(dimnames, AnansiWeb) <- function(x) dimnames(x@dictionary)
 
 
-
+#' @name AnansiWeb
 #' @rdname AnansiWeb
 #' @export
 #' @usage NULL
 #'
 method(dim, AnansiWeb) <- function(x) dim(x@dictionary)
 
-
+#' @name AnansiWeb
 #' @rdname AnansiWeb
 #' @export
 #' @usage NULL
 #'
 method(names, AnansiWeb) <- function(x) names(dimnames(x@dictionary))
 
+#' @name AnansiWeb
 #' @rdname AnansiWeb
 #' @aliases which,AnansiWeb-method
 #' @importMethodsFrom BiocGenerics which
@@ -194,7 +201,7 @@ method(which, AnansiWeb) <- function(x, arr.ind = TRUE, useNames = FALSE) {
     Matrix::which(x@dictionary, arr.ind, useNames)
 }
 
-
+#' @name AnansiWeb
 #' @rdname AnansiWeb
 #' @aliases mapply,AnansiWeb-method
 #' @importMethodsFrom BiocGenerics mapply
@@ -228,7 +235,7 @@ method(mapply, AnansiWeb) <- function(FUN, ..., MoreArgs = NULL, SIMPLIFY = TRUE
         return(out)
     }
 
-
+#' @name AnansiWeb
 #' @rdname AnansiWeb
 #' @aliases getFeaturePairs getFeaturePairs,AnansiWeb-method
 #' @importFrom Matrix which

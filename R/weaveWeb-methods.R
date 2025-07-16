@@ -64,7 +64,7 @@
 #'
 NULL
 
-
+#' @name weaveWeb
 #' @rdname weaveWeb
 #' @export
 #'
@@ -76,65 +76,65 @@ method(weaveWeb, S7::class_character) <- function(
         metadata = NULL,
         verbose = TRUE,
         ...
-    ) {
-        terms <- c(y, x)
-        stopifnot(
-            "both 'x' and 'y' terms must be provided as character" =
-                is(terms, "character" ) && length(terms) == 2L )
-        if(is.null(link)) {
-            stop(
-                "'link' argument not provided. To explicitly disable ",
-                "knowledge-based selection, use link = 'none' instead. "
-            )
-        }
-        if (identical(link, "none")) {
-            return(web_missing_link(tableX, tableY, terms))
-        }
-
-        # Ensure link is a MultiFactor
-        link <- MultiFactor(link)
-        # Determine required ids in order, only keep relevant elements of link.
-        all_terms <- termSeq(x, y, link)
-        link <- subsetByPath(link, all_terms)
-
-        # Trim link levels and tables based on feature overlap
-        if (!is.null(tableX)) {
-            keep <- sort(intersect(colnames(tableX), levels(link)[[x]]))
-            if (verbose && length(keep) < NCOL(tableX)) {
-                message("Dropped features in tableX: ", length(keep), " remain. ")
-            }
-            tableX <- tableX[, keep]
-            link <- trimByInput(link, tableX, x)
-        }
-        if (!is.null(tableY)) {
-            keep <- sort(intersect(colnames(tableY), levels(link)[[y]]))
-            if (verbose && length(keep) < NCOL(tableY)) {
-                message("Dropped features in tableY: ", length(keep), " remain. ")
-            }
-            tableY <- tableY[, keep]
-            link <- trimByInput(link, tableY, y)
-        }
-        # Construct dictionary
-        d <- dictionaryMatrix(link, all_terms)
-        dimnames(d) <- list(y = colnames(tableY), x = colnames(tableX))
-        names(dimnames(d)) <- c(y, x)
-
-        # Dummy tables if missing
-        if (is.null(tableX) && is.null(tableY)) {
-            dimnames(d) <- levels(link)[terms]
-            tableY <- matrix(ncol = NROW(d), dimnames = list(NULL, rownames(d)))
-            tableX <- matrix(ncol = NCOL(d), dimnames = list(NULL, colnames(d)))
-        }
-        # Create web
-        AnansiWeb(
-            tableY = as.matrix(tableY)[, rownames(d), drop = FALSE],
-            tableX = as.matrix(tableX)[, colnames(d), drop = FALSE],
-            dictionary = d,
-            metadata = metadata
+) {
+    terms <- c(y, x)
+    stopifnot(
+        "both 'x' and 'y' terms must be provided as character" =
+            is(terms, "character" ) && length(terms) == 2L )
+    if(is.null(link)) {
+        stop(
+            "'link' argument not provided. To explicitly disable ",
+            "knowledge-based selection, use link = 'none' instead. "
         )
     }
+    if (identical(link, "none")) {
+        return(web_missing_link(tableX, tableY, terms))
+    }
 
+    # Ensure link is a MultiFactor
+    link <- MultiFactor(link)
+    # Determine required ids in order, only keep relevant elements of link.
+    all_terms <- termSeq(x, y, link)
+    link <- subsetByPath(link, all_terms)
 
+    # Trim link levels and tables based on feature overlap
+    if (!is.null(tableX)) {
+        keep <- sort(intersect(colnames(tableX), levels(link)[[x]]))
+        if (verbose && length(keep) < NCOL(tableX)) {
+            message("Dropped features in tableX: ", length(keep), " remain. ")
+        }
+        tableX <- tableX[, keep]
+        link <- trimByInput(link, tableX, x)
+    }
+    if (!is.null(tableY)) {
+        keep <- sort(intersect(colnames(tableY), levels(link)[[y]]))
+        if (verbose && length(keep) < NCOL(tableY)) {
+            message("Dropped features in tableY: ", length(keep), " remain. ")
+        }
+        tableY <- tableY[, keep]
+        link <- trimByInput(link, tableY, y)
+    }
+    # Construct dictionary
+    d <- dictionaryMatrix(link, all_terms)
+    dimnames(d) <- list(y = colnames(tableY), x = colnames(tableX))
+    names(dimnames(d)) <- c(y, x)
+
+    # Dummy tables if missing
+    if (is.null(tableX) && is.null(tableY)) {
+        dimnames(d) <- levels(link)[terms]
+        tableY <- matrix(ncol = NROW(d), dimnames = list(NULL, rownames(d)))
+        tableX <- matrix(ncol = NCOL(d), dimnames = list(NULL, colnames(d)))
+    }
+    # Create web
+    AnansiWeb(
+        tableY = as.matrix(tableY)[, rownames(d), drop = FALSE],
+        tableX = as.matrix(tableX)[, colnames(d), drop = FALSE],
+        dictionary = d,
+        metadata = metadata
+    )
+}
+
+#' @name weaveWeb
 #' @rdname weaveWeb
 #' @export
 method(weaveWeb, S7::class_formula) <- function(
@@ -143,45 +143,46 @@ method(weaveWeb, S7::class_formula) <- function(
         tableX = NULL,
         tableY = NULL,
         ...
-    ) {
-        if (missing(x) || (length(x) != 3L)) {
-            stop("'formula' missing or incorrect")
-        }
+) {
+    if (missing(x) || (length(x) != 3L)) {
+        stop("'formula' missing or incorrect")
+    }
 
-        terms <- all.vars(x)
-        if (is.null(link) || identical(link, "none")) {
-            return(
-                weaveWeb(
-                    x = terms[2],
-                    y = terms[1],
-                    link,
-                    tableX,
-                    tableY
-                )
+    terms <- all.vars(x)
+    if (is.null(link) || identical(link, "none")) {
+        return(
+            weaveWeb(
+                x = terms[2],
+                y = terms[1],
+                link,
+                tableX,
+                tableY
             )
-        }
-
-        link <- MultiFactor(link)
-
-        if (sum(terms %in% colnames(link)) != 2L) {
-            stop("Variables from 'formula' not found in 'link'.")
-        }
-
-        weaveWeb(
-            x = terms[2],
-            y = terms[1],
-            link,
-            tableX,
-            tableY,
-            ...
         )
     }
+
+    link <- MultiFactor(link)
+
+    if (sum(terms %in% colnames(link)) != 2L) {
+        stop("Variables from 'formula' not found in 'link'.")
+    }
+
+    weaveWeb(
+        x = terms[2],
+        y = terms[1],
+        link,
+        tableX,
+        tableY,
+        ...
+    )
+}
 
 #' @rdname weaveWeb
 #' @export
 #'
 weaveKEGG <- function(x, ...) weaveWeb(x, link = kegg_link(), ...)
 
+#' @name weaveWeb
 #' @rdname weaveWeb
 #' @export
 #' @importFrom SummarizedExperiment colData assay assayNames
@@ -203,7 +204,10 @@ weaveKEGG <- function(x, ...) weaveWeb(x, link = kegg_link(), ...)
 #' @param assay.type1,assay.type2 synonymous args to `typeY,typeX` for
 #'     compatibility with `mia` argument style.
 #'
-method(weaveWeb, getClass("MultiAssayExperiment", where = "MultiAssayExperiment")) <- function(
+method(
+    weaveWeb,
+    getClass( "MultiAssayExperiment", where = "MultiAssayExperiment")
+) <- function(
         x,
         link = NULL,
         ...,
@@ -216,61 +220,65 @@ method(weaveWeb, getClass("MultiAssayExperiment", where = "MultiAssayExperiment"
         experiment2 = NULL,
         assay.type1 = NULL,
         assay.type2 = NULL
-    ) {
-        # Retrieve kwargs as list
-        kwargs <- list(...)
-        # Check kwargs
-        kwargs <- .check_fixed_args(kwargs)
-        y_ids <- .test_coherent(tableY, experiment1, typeY, assay.type1)
-        x_ids <- .test_coherent(tableX, experiment2, typeX, assay.type2)
-        tableY <- y_ids[[1L]]
-        tableX <- x_ids[[1L]]
+) {
+    # Retrieve kwargs as list
+    kwargs <- list(...)
+    # Check kwargs
+    kwargs <- .check_fixed_args(kwargs)
+    y_ids <- .test_coherent(tableY, experiment1, typeY, assay.type1)
+    x_ids <- .test_coherent(tableX, experiment2, typeX, assay.type2)
+    tableY <- y_ids[[1L]]
+    tableX <- x_ids[[1L]]
 
-        # Check experiments
-        .test_mae_has_exp(x, tableY)
-        .test_mae_has_exp(x, tableX)
+    # Check experiments
+    .test_mae_has_exp(x, tableY)
+    .test_mae_has_exp(x, tableX)
 
-        # Extract assays
-        tY <- t(assay(experiments(x)[tableY], y_ids[[2L]]))
-        tX <- t(assay(experiments(x)[tableX], x_ids[[2L]]))
+    # Extract assays
+    tY <- t(assay(experiments(x)[tableY], y_ids[[2L]]))
+    tX <- t(assay(experiments(x)[tableX], x_ids[[2L]]))
 
-        # Check if x already contains a dictionary
-        if (!force_new) {
-            m <- metadata(x)
+    # Check if x already contains a dictionary
+    if (!force_new) {
+        m <- metadata(x)
 
-            d <- if( is.null(link) ) {"dictionary"} else {""}
-            if (.check_valid_selection(link, m)) {
-                d <- link
-            }
-            if (d %in% names(m)) {
-                return(AnansiWeb(
-                    tableX = tX,
-                    tableY = tY,
-                    dictionary = m[[d]],
-                    metadata = list(metadata = as.data.frame(colData(x))),
-                    ...
-                ))
-            }
+        d <- if( is.null(link) ) {"dictionary"} else {""}
+        if (.check_valid_selection(link, m)) {
+            d <- link
         }
-        # Else, generate web object
-        weaveWeb(
-            x = tableX,
-            y = tableY,
-            link = link,
-            tableX = tX,
-            tableY = tY,
-            metadata = list(metadata = as.data.frame(colData(x))),
-            ...
-        )
+        if (d %in% names(m)) {
+            return(AnansiWeb(
+                tableX = tX,
+                tableY = tY,
+                dictionary = m[[d]],
+                metadata = list(metadata = as.data.frame(colData(x))),
+                ...
+            ))
+        }
     }
+    # Else, generate web object
+    weaveWeb(
+        x = tableX,
+        y = tableY,
+        link = link,
+        tableX = tX,
+        tableY = tY,
+        metadata = list(metadata = as.data.frame(colData(x))),
+        ...
+    )
+}
 
+#' @name weaveWeb
 #' @rdname weaveWeb
 #' @export
 #' @importClassesFrom SingleCellExperiment SingleCellExperiment
 #' @importFrom SummarizedExperiment colData assay assayNames
 #' @importFrom SingleCellExperiment SingleCellExperiment altExp altExpNames
 #'
-method(weaveWeb, getClass("SingleCellExperiment", where = "SingleCellExperiment")) <- function(
+method(
+    weaveWeb,
+    getClass("SingleCellExperiment", where = "SingleCellExperiment")
+) <- function(
         x,
         link = NULL,
         ...,
@@ -283,55 +291,55 @@ method(weaveWeb, getClass("SingleCellExperiment", where = "SingleCellExperiment"
         experiment2 = NULL,
         assay.type1 = NULL,
         assay.type2 = NULL
-    ) {
-        # Retrieve kwargs as list
-        kwargs <- list(...)
-        # Check kwargs
-        kwargs <- .check_fixed_args(kwargs)
+) {
+    # Retrieve kwargs as list
+    kwargs <- list(...)
+    # Check kwargs
+    kwargs <- .check_fixed_args(kwargs)
 
-        y_ids <- .test_coherent(tableY, experiment1, typeY, assay.type1)
-        x_ids <- .test_coherent(tableX, experiment2, typeX, assay.type2)
-        tableY <- y_ids[[1L]]
-        tableX <- x_ids[[1L]]
-
-
-        tse_list <- .get_table_from_tse(x, tableY, tableX)
+    y_ids <- .test_coherent(tableY, experiment1, typeY, assay.type1)
+    x_ids <- .test_coherent(tableX, experiment2, typeX, assay.type2)
+    tableY <- y_ids[[1L]]
+    tableX <- x_ids[[1L]]
 
 
-        # Extract assays
-        tY <- t(assay(tse_list[[1L]], y_ids[[2L]]))
-        tX <- t(assay(tse_list[[2L]], x_ids[[2L]]))
+    tse_list <- .get_table_from_tse(x, tableY, tableX)
 
-        # Check if x already contains a dictionary
-        if (!force_new) {
-            m <- metadata(x)
 
-            if (is.null(link)) {
-                d <- "dictionary"
-            }
-            if (.check_valid_selection(link, m)) {
-                d <- link
-            }
-            if (d %in% names(m)) {
-                return(AnansiWeb(
-                    tableX = tX,
-                    tableY = tY,
-                    dictionary = m[[d]],
-                    metadata = list(
-                        metadata = as.data.frame(colData(x))
-                        ),
-                    ...
-                ))
-            }
+    # Extract assays
+    tY <- t(assay(tse_list[[1L]], y_ids[[2L]]))
+    tX <- t(assay(tse_list[[2L]], x_ids[[2L]]))
+
+    # Check if x already contains a dictionary
+    if (!force_new) {
+        m <- metadata(x)
+
+        if (is.null(link)) {
+            d <- "dictionary"
         }
-        # Generate web object
-        weaveWeb(
-            x = names(tse_list)[2L],
-            y = names(tse_list)[1L],
-            link = link,
-            tableX = tX,
-            tableY = tY,
-            metadata = list(metadata = as.data.frame(colData(x))),
-            ...
-        )
+        if (.check_valid_selection(link, m)) {
+            d <- link
+        }
+        if (d %in% names(m)) {
+            return(AnansiWeb(
+                tableX = tX,
+                tableY = tY,
+                dictionary = m[[d]],
+                metadata = list(
+                    metadata = as.data.frame(colData(x))
+                ),
+                ...
+            ))
+        }
     }
+    # Generate web object
+    weaveWeb(
+        x = names(tse_list)[2L],
+        y = names(tse_list)[1L],
+        link = link,
+        tableX = tX,
+        tableY = tY,
+        metadata = list(metadata = as.data.frame(colData(x))),
+        ...
+    )
+}

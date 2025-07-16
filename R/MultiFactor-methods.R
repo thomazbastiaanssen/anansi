@@ -50,6 +50,7 @@
 #'     replaced.
 NULL
 
+#' @name MultiFactor
 #' @rdname MultiFactor
 #' @aliases getEdgeList getEdgeList,MultiFactor-method
 #' @importFrom S7 "method<-"
@@ -59,7 +60,7 @@ method(getEdgeList, MultiFactor) <- function(x) {
     as.data.frame(do.call(rbind, base::names(x)))
     }
 
-
+#' @name MultiFactor
 #' @rdname MultiFactor
 #' @aliases dim,MultiFactor-method
 #' @export
@@ -69,6 +70,7 @@ method(dim, MultiFactor) <- function(x) {
     dim(x@map)
     }
 
+#' @name MultiFactor
 #' @rdname MultiFactor
 #' @aliases names,MultiFactor-method
 #' @export
@@ -78,6 +80,7 @@ method(names, MultiFactor) <- function(x) {
     lapply(x@index, base::names)
 }
 
+#' @name MultiFactor
 #' @rdname MultiFactor
 #' @aliases dimnames,MultiFactor-method
 #' @export
@@ -87,7 +90,7 @@ method(dimnames, MultiFactor) <- function(x) {
     dimnames(x@map)
 }
 
-
+#' @name MultiFactor
 #' @rdname MultiFactor
 #' @importMethodsFrom S4Vectors unfactor
 #' @export
@@ -108,6 +111,7 @@ method(unfactor, MultiFactor) <- function(x) {
     return(x)
 }
 
+#' @name MultiFactor
 #' @rdname MultiFactor
 #' @description Analogous to `factors`. `droplevels(MultiFactor)` returns a
 #'     `MultiFactor` with unused levels removed.
@@ -186,18 +190,21 @@ method(droplevels, MultiFactor) <- function(x, exclude = NULL, select = NULL) {
     x@map <- mapMultiFactor(x@index, mode = "counts")
     return(x)    }
 
-#' @export
+#' @name MultiFactor
 #' @rdname MultiFactor
 #' @param value a replacement character vector of suitable dimensions.
+#' @export
 #' @usage NULL
 #'
 method(levels, MultiFactor) <- function(x, value) {
     x@levels
 }
 
-#' @export
+
+#' @name MultiFactor
 #' @rdname MultiFactor
 #' @aliases dictionary,MultiFactor-method
+#' @export
 #' @usage NULL
 #'
 method(dictionary, MultiFactor) <- function(x) {
