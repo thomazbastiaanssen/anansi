@@ -14,10 +14,23 @@ dictionary     <- S7::new_generic("dictionary", "x")
 `dictionary<-` <- S7::new_generic("dictionary<-", "x")
 
 metadata       <- S7::new_external_generic("S4Vectors", "metadata", "x")
-which          <- S7::new_external_generic("BiocGenerics", "which", "x")
-mapply         <- S7::new_external_generic("BiocGenerics", "mapply", "...")
 
-as.data.frame  <- S7::new_external_generic("base", "as.data.frame", "x")
+
+# Workarounds
+which <- S7::new_generic("which", "x")
+
+# Define method for your class
+S7::method(which, MultiFactor) <- function(x) {
+    # your implementation of which
+}
+
+# For every other class (base, S3, S4, S7), run BiocGenerics
+S7::method(which, S7::class_any) <- function(x) {
+    BiocGenerics::which(x)
+}
+#mapply         <- S7::new_external_generic("BiocGenerics", "mapply", "...")
+
+as.data.frame  <- S7::new_external_generic("BiocGenerics", "as.data.frame", "x")
 
 
 # Externals

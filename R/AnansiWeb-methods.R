@@ -13,9 +13,9 @@
 #'
 #' @usage
 #' ## Accessors
-#' dimnames(AnansiWeb}(x)
-#' dim(AnansiWeb}(x)
-#' names(AnansiWeb}(x)
+#' dimnames(AnansiWebx)
+#' dim(AnansiWeb)
+#' names(AnansiWeb)
 #'
 #' tableY(AnansiWeb)
 #' tableY(AnansiWeb) <- value
@@ -44,7 +44,6 @@
 #'     MoreArgs = NULL, SIMPLIFY = TRUE, USE.NAMES = TRUE
 #' )
 #'
-#' @param x,object an `AnansiWeb` object on which a method will be applied.
 #'
 #' @seealso \itemize{
 #' \item [weaveWeb()]: for general use.
@@ -84,20 +83,21 @@
 #'     FUN = function(x, y) cor(x, y),
 #'     web
 #' )
-#'
 NULL
 
-#' @export
+#' @rdname AnansiWeb
 #' @importClassesFrom S4Vectors Annotated
 #' @importMethodsFrom S4Vectors metadata
+#' @param x,object an `AnansiWeb` object on which a method will be applied.
 #' @param simplify `boolean`. If `TRUE` (Default), handles single data.frame
 #'     arguments while ensuring compatibility with `S4Vectors` method.
-#' @rdname AnansiWeb
+#' @param ... additional arguments (currently not used).
 #' @aliases dictionary metadata,AnansiWeb-method
 #' @importFrom methods slot
+#' @export
 #' @usage NULL
 #'
-method(metadata, AnansiWeb) <- function(x, simplify = TRUE, ...) {
+method(metadata, AnansiWeb) <- function(x, simplify = TRUE) {
         m <- x@metadata
         if (simplify && "metadata" %in% names(m)) {
             return(m[["metadata"]])
@@ -106,28 +106,32 @@ method(metadata, AnansiWeb) <- function(x, simplify = TRUE, ...) {
     }
 
 #' @rdname AnansiWeb
-#' @param ... additional arguments (currently not used).
 #' @aliases tableY tableY,AnansiWeb-method
 #' @export
 #' @usage NULL
 #'
-method(tableY, AnansiWeb) <- function(x, ...) x@tableY
+method(tableY, AnansiWeb) <- function(x) x@tableY
 
 #' @rdname AnansiWeb
 #' @export
 #' @aliases tableX tableX,AnansiWeb-method
 #' @usage NULL
 #'
-method(tableX, AnansiWeb) <- function(x, ...) x@tableX
+method(tableX, AnansiWeb) <- function(x) x@tableX
 
 #' @rdname AnansiWeb
 #' @aliases `dictionary` dictionary,AnansiWeb-method
 #' @export
 #' @usage NULL
 #'
-method(dictionary, AnansiWeb) <- function(x, ...) {x@dictionary}
+method(dictionary, AnansiWeb) <- function(x) {x@dictionary}
 
-method(`dictionary<-`, AnansiWeb) <- function(x, ...) {
+#' @rdname AnansiWeb
+#' @aliases `dictionary<-` dictionary<-,AnansiWeb-method
+#' @export
+#' @usage NULL
+#'
+method(`dictionary<-`, AnansiWeb) <- function(x, value) {
     x@dictionary <- value
     x
 }
@@ -187,8 +191,8 @@ method(names, AnansiWeb) <- function(x) names(dimnames(x@dictionary))
 #' @usage NULL
 #'
 method(which, AnansiWeb) <- function(x, arr.ind = TRUE, useNames = FALSE) {
-        Matrix::which(x@dictionary, arr.ind, useNames)
-    }
+    Matrix::which(x@dictionary, arr.ind, useNames)
+}
 
 
 #' @rdname AnansiWeb

@@ -37,7 +37,7 @@ call_groupwise <- function(web, groups, metadata, verbose) {
 #'     state or treatment score.
 #' @param verbose A boolean. Toggles whether to print diagnostic information
 #'     while running. Useful for debugging errors on large datasets.
-#' @return a list of `anansiTale` result objects, one for the total dataset and
+#' @return a list of `AnansiTale` result objects, one for the total dataset and
 #'     per group if applicable.
 #' @seealso [anansi()]
 #'
@@ -90,7 +90,7 @@ anansiCorTestByGroup <- function(web, group.vec, verbose = TRUE) {
 #'     correlations according to your dictionary.
 #' @param verbose A boolean. Toggles whether to print diagnostic information
 #'     while running. Useful for debugging errors on large datasets.
-#' @return An `anansiTale` result object.
+#' @return An `AnansiTale` result object.
 #' @seealso [anansi()] \cr [anansiCorTestByGroup()]
 #' @importFrom stats pt
 #' @importFrom methods new
@@ -104,9 +104,9 @@ anansiCorPvalue <- function(web, group.bool, verbose) {
     t <- abs((r * sqrt(n - 2)) / sqrt(1 - r^2))
     p <- 2 * (1 - pt(t, (n - 2)))
 
-    # Collate correlation coefficients, p-values and q-values into an anansiTale
+    # Collate correlation coefficients, p-values and q-values into an AnansiTale
     out <- new(
-        "anansiTale",
+        "AnansiTale",
         subject = "All",
         type = "r.values",
         estimates = r,

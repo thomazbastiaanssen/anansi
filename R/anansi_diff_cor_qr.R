@@ -21,7 +21,7 @@
 #' according to your dictionary.
 #' @param verbose A boolean. Toggles whether to print diagnostic information
 #' while running. Useful for debugging errors on large datasets.
-#' @return a list of `anansiTale` result objects, one for the total model,
+#' @return a list of `AnansiTale` result objects, one for the total model,
 #' one for emergent correlations and one for disjointed correlations.
 #' @importFrom stats anova lm pf residuals model.matrix.default terms.formula
 #' @importFrom methods is
@@ -68,7 +68,7 @@ anansiDiffCor <- function(
 
     d.dim <- matrix(1, ncol = NCOL(dic), nrow = NROW(dic))
     full_model <- new(
-        "anansiTale",
+        "AnansiTale",
         subject = "full",
         type = "r.squared",
         df = df_mat[, 1],
@@ -81,7 +81,7 @@ anansiDiffCor <- function(
         seq_len(length(int.terms)),
         function(x) {
             new(
-                "anansiTale",
+                "AnansiTale",
                 subject = paste("disjointed", int.terms[x], sep = "_"),
                 type = "r.squared",
                 df = df_mat[, x + 1],
@@ -96,7 +96,7 @@ anansiDiffCor <- function(
         seq_len(length(int.terms)),
         function(x) {
             new(
-                "anansiTale",
+                "AnansiTale",
                 subject = paste("emergent", int.terms[x], sep = "_"),
                 type = "r.squared",
                 df = df_mat[, x + 1] + c(0, -1, -1 / df_mat[1, x + 1]),
@@ -222,9 +222,9 @@ SS <- function(x) {
 #'
 oddify <- function(x) x / (1 - x)
 
-#' Compute F and P statistic for `anansiTale` object.
-#' @description Populate `anansiTale` object with F statistics.
-#' @param object An `anansiTale` object.
+#' Compute F and P statistic for `AnansiTale` object.
+#' @description Populate `AnansiTale` object with F statistics.
+#' @param object An `AnansiTale` object.
 #' @param d A binary adjacency matrix, corresponding to the relevant dictionary
 #' @noRd
 #'

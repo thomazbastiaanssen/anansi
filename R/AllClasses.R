@@ -5,8 +5,8 @@
 }
 
 #' MultiFactor S7 container class
-#' @name MultiFactor
-#' @aliases MultiFactor-class
+#' @name MultiFactor-class
+#' @aliases MultiFactor-constructor
 #' @slot index Named `list` of named integer data frames of at least two columns
 #'     each. The column names correspond to names in the `levels` slot. Similar
 #'     to `factor`s, the integers in those columns correspond to the characters
@@ -80,8 +80,8 @@ MultiFactor <- S7::new_class(
 )
 
 
-#' @rdname MultiFactor
-#' @aliases asMultiFactor MultiFactor
+#' @rdname MultiFactor-class
+#' @aliases asMultiFactor
 #' @param levels an optional named list of vectors of the unique values (as
 #'     character strings) that x might have taken. The default is the unique set
 #'     of values taken by lapply(x, as.character), sorted into increasing order
@@ -103,9 +103,8 @@ asMultiFactor <- function(x, levels = NULL, drop.unmatched = TRUE) {
 }
 
 #' AnansiWeb S7 container class
-#' @name AnansiWeb
-#' @rdname AnansiWeb
-#' @aliases AnansiWeb-class
+#' @name AnansiWeb-class
+#' @aliases AnansiWeb-class AnansiWeb-constructor
 #' @slot tableY,tableX Two `matrix` objects of measurements, data. Rows are
 #'     samples and columns are features. Access with `tableY()` and `tableX()`.
 #' @slot dictionary `Matrix`, binary adjacency matrix. Optionally sparse.
@@ -222,6 +221,7 @@ AnansiWeb <- S7::new_class(
 
 #' An S7 class to contain all `anansi` stats results so that they can
 #' easily be extracted.
+#' @name AnansiTale
 #'
 #' @slot subject A character that describes the data that was queried.
 #' @slot type A character that describes type of parameter contained in the
@@ -235,11 +235,11 @@ AnansiWeb <- S7::new_class(
 #' @slot t.values A matrix containing the t-values, for correlations.
 #' @slot p.values A matrix containing the p.values for the parameters named in
 #'     the `type` slot.
-#' @description `anansiTale` is the main container that will hold your
+#' @description `AnansiTale` is the main container that will hold your
 #'     stats output data coming out of the `anansi` pipeline.
 #'
-anansiTale <- S7::new_class(
-    "anansiTale",
+AnansiTale <- S7::new_class(
+    "AnansiTale",
     package = "anansi",
     properties = list(
         subject = S7::class_character,
