@@ -131,7 +131,7 @@ NULL
 #' @importFrom ggforce facet_col
 #' @importFrom stats setNames
 #' @importFrom S4Vectors isEmpty
-method(plotAnansi, class_data.frame) <- function(
+method(plotAnansi, S7::class_data.frame) <- function(
         x,
         layout = "dotplot",
         association.type = NULL,

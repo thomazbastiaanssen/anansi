@@ -1,7 +1,7 @@
 #' @noRd
 #'
 tell_F <- function(tale) {
-    if (is(tale, "AnansiTale")) {
+    if (is(tale, "anansi::AnansiTale")) {
         return(tale@f.values)
     }
     if (is.list(tale)) {
@@ -12,7 +12,7 @@ tell_F <- function(tale) {
 #' @noRd
 #'
 tell_T <- function(tale) {
-    if (is(tale, "AnansiTale")) {
+    if (is(tale, "anansi::AnansiTale")) {
         return(tale@t.values)
     }
     if (is.list(tale)) {
@@ -23,7 +23,7 @@ tell_T <- function(tale) {
 #' @noRd
 #'
 tell_P <- function(tale) {
-    if (is(tale, "AnansiTale")) {
+    if (is(tale, "anansi::AnansiTale")) {
         return(tale@p.values)
     }
     if (is.list(tale)) {
@@ -35,7 +35,7 @@ tell_P <- function(tale) {
 #' @noRd
 #'
 tell_e <- function(tale) {
-    if (is(tale, "AnansiTale")) {
+    if (is(tale, "anansi::AnansiTale")) {
         return(tale@estimates)
     }
     if (is.list(tale)) {
@@ -47,7 +47,7 @@ tell_e <- function(tale) {
 #' @noRd
 #'
 tell_df1 <- function(tale) {
-    if (is(tale, "AnansiTale")) {
+    if (is(tale, "anansi::AnansiTale")) {
         return(tale@df[1])
     }
     if (is.list(tale)) {
@@ -58,7 +58,7 @@ tell_df1 <- function(tale) {
 #' @noRd
 #'
 tell_df2 <- function(tale) {
-    if (is(tale, "AnansiTale")) {
+    if (is(tale, "anansi::AnansiTale")) {
         return(tale@df[2])
     }
     if (is.list(tale)) {
@@ -69,7 +69,7 @@ tell_df2 <- function(tale) {
 #' @noRd
 #'
 tell_dfr <- function(tale) {
-    if (is(tale, "AnansiTale")) {
+    if (is(tale, "anansi::AnansiTale")) {
         return(tale@df[3])
     }
     if (is.list(tale)) {

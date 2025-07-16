@@ -1,7 +1,7 @@
-#' AnansiWeb S4 container class
+#' AnansiWeb S7 container class
 #' @name AnansiWeb
 #' @description
-#' `AnansiWeb` is an S4 class containing two feature tables as well as a
+#' `AnansiWeb` is an S7 class containing two feature tables as well as a
 #' dictionary to link them. `AnansiWeb` is the main container that will
 #' hold your input data throughout the `anansi` pipeline.
 #'
@@ -87,8 +87,6 @@ NULL
 
 #' @name AnansiWeb
 #' @rdname AnansiWeb
-#' @importClassesFrom S4Vectors Annotated
-#' @importMethodsFrom S4Vectors metadata
 #' @param x,object an `AnansiWeb` object on which a method will be applied.
 #' @param simplify `boolean`. If `TRUE` (Default), handles single data.frame
 #'     arguments while ensuring compatibility with `S4Vectors` method.
@@ -98,12 +96,12 @@ NULL
 #' @usage NULL
 #'
 method(metadata, AnansiWeb) <- function(x, simplify = TRUE) {
-        m <- x@metadata
-        if (simplify && "metadata" %in% names(m)) {
-            return(m[["metadata"]])
-        }
-        return(m)
+    m <- x@metadata
+    if (simplify && "metadata" %in% names(m)) {
+        return(m[["metadata"]])
     }
+    return(m)
+}
 
 #' @name AnansiWeb
 #' @rdname AnansiWeb
@@ -111,7 +109,7 @@ method(metadata, AnansiWeb) <- function(x, simplify = TRUE) {
 #' @export
 #' @usage NULL
 #'
-method(tableY, AnansiWeb) <- function(x) x@tableY
+method(tableY, AnansiWeb) <- function(x) {x@tableY}
 
 #' @name AnansiWeb
 #' @rdname AnansiWeb
@@ -119,11 +117,34 @@ method(tableY, AnansiWeb) <- function(x) x@tableY
 #' @aliases tableX tableX,AnansiWeb-method
 #' @usage NULL
 #'
-method(tableX, AnansiWeb) <- function(x) x@tableX
+method(tableX, AnansiWeb) <- function(x) {x@tableX}
 
 #' @name AnansiWeb
 #' @rdname AnansiWeb
-#' @aliases `dictionary` dictionary,AnansiWeb-method
+#' @aliases tableY tableY,AnansiWeb-method
+#' @export
+#' @usage NULL
+#'
+method(`tableY<-`, AnansiWeb) <- function(x, value) {
+    x@tableY <- value
+    x
+}
+
+
+#' @name AnansiWeb
+#' @rdname AnansiWeb
+#' @export
+#' @aliases `tableY<-` tableY<-,AnansiWeb-method
+#' @usage NULL
+#'
+method(`tableX<-`, AnansiWeb) <- function(x, value) {
+    x@tableX <- value
+    x
+}
+
+#' @name AnansiWeb
+#' @rdname AnansiWeb
+#' @aliases `tableX<-`,AnansiWeb-method
 #' @export
 #' @usage NULL
 #'
@@ -148,7 +169,7 @@ method(`dictionary<-`, AnansiWeb) <- function(x, value) {
 method(show, AnansiWeb) <- function(object) {
     cat(
         class(object),
-        " S4 object with ",
+        " S7 object with ",
         NROW(tableX(object)),
         " observations:\n    tableY: ",
         names(object)[1],
@@ -187,53 +208,50 @@ method(dim, AnansiWeb) <- function(x) dim(x@dictionary)
 #'
 method(names, AnansiWeb) <- function(x) names(dimnames(x@dictionary))
 
-#' @name AnansiWeb
-#' @rdname AnansiWeb
-#' @aliases which,AnansiWeb-method
-#' @importMethodsFrom BiocGenerics which
-#' @param arr.ind,useNames See ?base::which. `AnansiWeb` default returns a
-#'     two-column array index.
-#' @importMethodsFrom Matrix which
-#' @export
-#' @usage NULL
+#' #' @name AnansiWeb
+#' #' @rdname AnansiWeb
+#' #' @aliases which,AnansiWeb-method
+#' #' @param arr.ind,useNames See ?base::which. `AnansiWeb` default returns a
+#' #'     two-column array index.
+#' #' @export
+#' #' @usage NULL
+#' #'
+#' method(which, AnansiWeb) <- function(x, arr.ind = TRUE, useNames = FALSE) {
+#'     Matrix::which(x@dictionary, arr.ind, useNames)
+#' }
+
+#' #' @name AnansiWeb
+#' #' @rdname AnansiWeb
+#' #' @aliases mapply,AnansiWeb-method
+#' #' @param FUN a function with at least two arguments. The variables `x` and `y`,
+#' #'     in order, refer to the corresponding values of feature pairs in `tableX`
+#' #'     and `tableY`.
+#' #' @param MoreArgs,SIMPLIFY,USE.NAMES see ?base::mapply
+#' #' @export
+#' #' @usage NULL
+#' #'
+#' method(mapply, AnansiWeb) <- function(FUN, ..., MoreArgs = NULL, SIMPLIFY = TRUE, USE.NAMES = TRUE) {
+#'         tY <- as.data.frame.matrix(tableY(...), make.names = FALSE)
+#'         tX <- as.data.frame.matrix(tableX(...), make.names = FALSE)
+#'         wh <- which(...)
 #'
-method(which, AnansiWeb) <- function(x, arr.ind = TRUE, useNames = FALSE) {
-    Matrix::which(x@dictionary, arr.ind, useNames)
-}
-
-#' @name AnansiWeb
-#' @rdname AnansiWeb
-#' @aliases mapply,AnansiWeb-method
-#' @importMethodsFrom BiocGenerics mapply
-#' @param FUN a function with at least two arguments. The variables `x` and `y`,
-#'     in order, refer to the corresponding values of feature pairs in `tableX`
-#'     and `tableY`.
-#' @param MoreArgs,SIMPLIFY,USE.NAMES see ?base::mapply
-#' @export
-#' @usage NULL
+#'         out <- .mapply(
+#'             FUN,
+#'             dots = list(
+#'                 x = tX[wh[, 2L]],
+#'                 y = tY[wh[, 1L]]
+#'             ),
+#'             MoreArgs
+#'         )
+#'         if (USE.NAMES) {
+#'             names(out) <- paste0(colnames(tX)[wh[, 2L]], colnames(tY)[wh[, 1L]])
+#'         }
 #'
-method(mapply, AnansiWeb) <- function(FUN, ..., MoreArgs = NULL, SIMPLIFY = TRUE, USE.NAMES = TRUE) {
-        tY <- as.data.frame.matrix(tableY(...), make.names = FALSE)
-        tX <- as.data.frame.matrix(tableX(...), make.names = FALSE)
-        wh <- which(...)
-
-        out <- .mapply(
-            FUN,
-            dots = list(
-                x = tX[wh[, 2L]],
-                y = tY[wh[, 1L]]
-            ),
-            MoreArgs
-        )
-        if (USE.NAMES) {
-            names(out) <- paste0(colnames(tX)[wh[, 2L]], colnames(tY)[wh[, 1L]])
-        }
-
-        if (SIMPLIFY) {
-            out <- simplify2array(out)
-        }
-        return(out)
-    }
+#'         if (SIMPLIFY) {
+#'             out <- simplify2array(out)
+#'         }
+#'         return(out)
+#'     }
 
 #' @name AnansiWeb
 #' @rdname AnansiWeb

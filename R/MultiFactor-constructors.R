@@ -153,7 +153,7 @@ trimMultiFactor <- function(x) {
     for (j in jj) {
         # Select all those data frames where that term is mentioned
         ii <- rowsWithCol(m, j, FALSE)
-        keep <- Reduce(intersect, lapply(x[ii], `[[`, j))
+        keep <- Reduce(intersect, lapply(x[ii], base::`[[`, j))
 
         # Filter feature ids in each df to only universally shared ones.
         x[ii] <- lapply(x[ii], function(df) {

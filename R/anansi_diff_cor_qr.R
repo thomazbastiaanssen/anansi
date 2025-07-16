@@ -67,8 +67,7 @@ anansiDiffCor <- function(
     df_mat <- dfmat(x.assign, x.int, all.assign, x.fct, n)
 
     d.dim <- matrix(1, ncol = NCOL(dic), nrow = NROW(dic))
-    full_model <- new(
-        "AnansiTale",
+    full_model <- AnansiTale(
         subject = "full",
         type = "r.squared",
         df = df_mat[, 1],
@@ -80,8 +79,7 @@ anansiDiffCor <- function(
     disjointed <- lapply(
         seq_len(length(int.terms)),
         function(x) {
-            new(
-                "AnansiTale",
+            AnansiTale(
                 subject = paste("disjointed", int.terms[x], sep = "_"),
                 type = "r.squared",
                 df = df_mat[, x + 1],
@@ -95,8 +93,7 @@ anansiDiffCor <- function(
     emergent <- lapply(
         seq_len(length(int.terms)),
         function(x) {
-            new(
-                "AnansiTale",
+            AnansiTale(
                 subject = paste("emergent", int.terms[x], sep = "_"),
                 type = "r.squared",
                 df = df_mat[, x + 1] + c(0, -1, -1 / df_mat[1, x + 1]),

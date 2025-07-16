@@ -1,12 +1,3 @@
-# enable usage of <S7_object>@name in package code
-#' @rawNamespace if (getRversion() < "4.3.0") importFrom("S7", "@")
-.onLoad <- function(...) {
-    S7::methods_register()
-}
-
-#' MultiFactor S7 container class
-#' @name MultiFactor-class
-#' @aliases MultiFactor-constructor
 #' @slot index Named `list` of named integer data frames of at least two columns
 #'     each. The column names correspond to names in the `levels` slot. Similar
 #'     to `factor`s, the integers in those columns correspond to the characters
@@ -15,7 +6,7 @@
 #' @slot map `(sparse)Matrix` specifying which elements contain which levels.
 #'     Accesses through `dictionary(x)`.
 #' @importFrom S7 new_class
-#' @export MultiFactor
+#' @export
 #'
 MultiFactor <- S7::new_class(
     "MultiFactor",
@@ -23,7 +14,7 @@ MultiFactor <- S7::new_class(
     properties = list(
         index = S7::class_list,
         levels = S7::class_list,
-        map = S7::class_any
+        map =     getClass("Matrix", where = "Matrix")
     ),
     constructor = function(x, levels = NULL, drop.unmatched = TRUE) {
         if (validLinkDF(x)) {x <- list(x = x) }
@@ -80,7 +71,7 @@ MultiFactor <- S7::new_class(
 )
 
 
-#' @rdname MultiFactor-class
+#' @rdname MultiFactor
 #' @aliases asMultiFactor
 #' @param levels an optional named list of vectors of the unique values (as
 #'     character strings) that x might have taken. The default is the unique set
@@ -102,9 +93,6 @@ asMultiFactor <- function(x, levels = NULL, drop.unmatched = TRUE) {
     MultiFactor(x, levels, drop.unmatched)
 }
 
-#' AnansiWeb S7 container class
-#' @name AnansiWeb-class
-#' @aliases AnansiWeb-class AnansiWeb-constructor
 #' @slot tableY,tableX Two `matrix` objects of measurements, data. Rows are
 #'     samples and columns are features. Access with `tableY()` and `tableX()`.
 #' @slot dictionary `Matrix`, binary adjacency matrix. Optionally sparse.
@@ -217,12 +205,11 @@ AnansiWeb <- S7::new_class(
     }
 
 )
+S7::S4_register(AnansiWeb)
 
 
 #' An S7 class to contain all `anansi` stats results so that they can
 #' easily be extracted.
-#' @name AnansiTale
-#'
 #' @slot subject A character that describes the data that was queried.
 #' @slot type A character that describes type of parameter contained in the
 #'     `estimates` slot. For example r.values for correlations or r.squared
@@ -237,6 +224,7 @@ AnansiWeb <- S7::new_class(
 #'     the `type` slot.
 #' @description `AnansiTale` is the main container that will hold your
 #'     stats output data coming out of the `anansi` pipeline.
+#' @export
 #'
 AnansiTale <- S7::new_class(
     "AnansiTale",

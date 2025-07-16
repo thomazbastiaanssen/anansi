@@ -105,8 +105,7 @@ anansiCorPvalue <- function(web, group.bool, verbose) {
     p <- 2 * (1 - pt(t, (n - 2)))
 
     # Collate correlation coefficients, p-values and q-values into an AnansiTale
-    out <- new(
-        "AnansiTale",
+    out <- AnansiTale(
         subject = "All",
         type = "r.values",
         estimates = r,

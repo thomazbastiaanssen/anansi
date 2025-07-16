@@ -195,7 +195,6 @@ anansi <- function(
 #' Assess formula, trim metadata and prepare output for anansi workflow
 #' @description Initialize `anansiInput` component of output. Should not be
 #' called by user.
-#' @importFrom S4Vectors as.data.frame.DataFrame
 #' @noRd
 #'
 prepInput <- function(web, formula, groups, metadata, verbose) {

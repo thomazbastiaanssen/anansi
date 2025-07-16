@@ -21,7 +21,6 @@ method(as.list, AnansiWeb)  <- function(x) {
 #' @rdname AnansiWeb
 #' @param row.names,optional Ignored, for S4 generic. See ?base::as.data.frame.
 #' @aliases as.data.frame.AnansiWeb-method coerce,AnansiWeb-data.frame
-#' @importMethodsFrom BiocGenerics as.data.frame
 #' @usage NULL
 #' @export
 #'

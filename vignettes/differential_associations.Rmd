@@ -28,6 +28,7 @@ knitr::opts_chunk$set(echo = TRUE,
 # long links
 adj_link <- paste0("https://thomazbastiaanssen.github.io/anansi/", 
                "articles/adjacency_matrices.html")
+library(S7)
 ```
 
 # Overview {-}

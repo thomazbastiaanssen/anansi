@@ -92,7 +92,6 @@ method(dimnames, MultiFactor) <- function(x) {
 
 #' @name MultiFactor
 #' @rdname MultiFactor
-#' @importMethodsFrom S4Vectors unfactor
 #' @export
 #' @usage NULL
 #'
@@ -115,7 +114,6 @@ method(unfactor, MultiFactor) <- function(x) {
 #' @rdname MultiFactor
 #' @description Analogous to `factors`. `droplevels(MultiFactor)` returns a
 #'     `MultiFactor` with unused levels removed.
-#' @importMethodsFrom S4Vectors droplevels
 #' @param exclude `NULL` or `Named character list` of similar structure as
 #'     `levels(MultiFactor)`. Which levels to drop from output.
 #' @param select `NULL` or `Named character list` of similar structure as
@@ -209,6 +207,124 @@ method(levels, MultiFactor) <- function(x, value) {
 #'
 method(dictionary, MultiFactor) <- function(x) {
     x@map}
+
+
+#' @param drop Whether to return a `list` (Default) or `MultiFactor`.
+#' @export
+#' @name MultiFactor
+#' @rdname MultiFactor
+#' @aliases [,MultiFactor,ANY,ANY-method
+#' @usage NULL
+#'
+method(`[`, MultiFactor) <- function(
+        x,
+        ...,
+        i,
+        j,
+        drop = TRUE
+        ) {
+        if (missing(i) && missing(j)) {
+            x@index
+        }
+        d <- dictionary(x)
+        l <- levels(x)
+        x <- x@index
+        if (!missing(i)) ii <- rownames(d[i, , drop = FALSE])
+        if (!missing(j)) jj <- colnames(d[, j, drop = FALSE])
+
+        if (missing(i)) {
+            ii <- rowsWithCol(d, jj, FALSE)
+            x <- lapply(x[ii], `[`, i = jj)
+        } else if (missing(j)) {
+            x <- x[ii]
+        } else {
+            x <- lapply(x[ii], `[`, i = jj)
+        }
+
+        x
+
+}
+
+#' @export
+#' @name MultiFactor
+#' @rdname MultiFactor
+#' @aliases [<-,MultiFactor,ANY,ANY,list-method
+#' @usage NULL
+#'
+method(`[<-`, MultiFactor) <- function(
+        x,
+        ...,
+        i = class_missing,
+        j = class_missing,
+        value
+    ) {
+        if (missing(i) && missing(j)) {
+            return(value)
+        }
+        d <- dictionary(x)
+        if (!missing(i)) ii <- rownames(d[i, , drop = FALSE])
+        if (!missing(j)) jj <- colnames(d[, j, drop = FALSE])
+
+        if (missing(j)) {
+            x@index[ii] <- value
+            return(x)
+        }
+
+        if (missing(i)) {
+            ii <- rowsWithCol(d, jj, names = TRUE)
+        }
+
+        for (i in ii) {
+            for (j in jj) {
+                x@index[[i]][, j] <- value[[i]][, j]
+            }
+        }
+        (x)
+    }
+
+
+#' @export
+#' @rdname MultiFactor
+#' @name MultiFactor
+#' @aliases [[,MultiFactor,ANY-method
+#' @usage NULL
+#'
+method(`[[`, MultiFactor) <- function(x, i) {
+    d <- x@map
+    # If i can't index d, return NULL
+    if (!all(i %in% colnames(d))) {
+        if (anyNA(colnames(d)[i]) || length(colnames(d)[i]) != length(i)) {
+            return(NULL)
+        }
+    }
+    # Otherwise, return selected elements.
+    ii <- rowsWithCol(d, i, FALSE)
+    x[ii]
+}
+
+#' @export
+#' @rdname MultiFactor
+#' @name MultiFactor
+#' @aliases [[<-,MultiFactor,ANY,ANY-method
+#' @usage NULL
+#'
+method(`[[<-`, MultiFactor) <- function(
+        x,
+        i,
+        value
+    ) {
+        d <- x@map
+        # If i can't index d, stop. Appending not supported through `[[<-`.
+        if (!all(i %in% colnames(d))) {
+            if (anyNA(colnames(d)[i]) || length(colnames(d)[i]) != length(i)) {
+                stop("No levels corresponding to `i` found in MultiFactor. ")
+            }
+        }
+        ii <- rowsWithCol(d, i, FALSE)
+        x@index[ii] <- value
+        x
+    }
+
 
 
 
