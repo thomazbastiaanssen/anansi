@@ -92,6 +92,16 @@ method(dimnames, MultiFactor) <- function(x) {
 
 #' @name MultiFactor
 #' @rdname MultiFactor
+#' @aliases levels,MultiFactor-method
+#' @export
+#' @usage NULL
+#'
+method(levels, MultiFactor) <- function(x) {
+    x@levels
+}
+
+#' @name MultiFactor
+#' @rdname MultiFactor
 #' @export
 #' @usage NULL
 #'
@@ -134,7 +144,7 @@ method(droplevels, MultiFactor) <- function(x, exclude = NULL, select = NULL) {
         ) >
             0L
     )
-    stopifnot("'x' is not a MultiFactor." = is(x, MultiFactor))
+    stopifnot("'x' is not a MultiFactor." = is(x, "anansi::MultiFactor"))
     # Section 1. Trimming the indices by user input
     lvs <- levels(x)
     d <- dictionary(x)
@@ -206,7 +216,19 @@ method(levels, MultiFactor) <- function(x, value) {
 #' @usage NULL
 #'
 method(dictionary, MultiFactor) <- function(x) {
-    x@map}
+    x@map
+}
+
+#' @name MultiFactor
+#' @rdname MultiFactor
+#' @aliases dictionary,MultiFactor-method
+#' @export
+#' @usage NULL
+#'
+method(`dictionary<-`, MultiFactor) <- function(x, value) {
+    x@map <- value
+    x
+}
 
 
 #' @param drop Whether to return a `list` (Default) or `MultiFactor`.
@@ -216,32 +238,45 @@ method(dictionary, MultiFactor) <- function(x) {
 #' @aliases [,MultiFactor,ANY,ANY-method
 #' @usage NULL
 #'
-method(`[`, MultiFactor) <- function(
-        x,
-        ...,
-        i,
-        j,
-        drop = TRUE
-        ) {
-        if (missing(i) && missing(j)) {
-            x@index
-        }
-        d <- dictionary(x)
-        l <- levels(x)
-        x <- x@index
-        if (!missing(i)) ii <- rownames(d[i, , drop = FALSE])
-        if (!missing(j)) jj <- colnames(d[, j, drop = FALSE])
+method(`[`, MultiFactor) <- function(x, ..., drop = TRUE) {
 
-        if (missing(i)) {
+    dot_args <- rlang::dots_list(
+        ..., .preserve_empty = TRUE, .ignore_empty = "none"
+    )
+    dot_len <- length(dot_args)
+    stopifnot("Too many arguments provided" = dot_len %in% seq(0L, 2L, 1L))
+    missing_i <- rlang::is_missing(dot_args[[1L]])
+
+    if(dot_len == 0L || (dot_len == 1L && missing_i)) { return(x) }
+
+    d <- dictionary(x)
+    l <- levels(x)
+    x <- x@index
+
+    if (dot_len == 1L) {
+        ii <- rownames(d[dot_args[[1L]], , drop = FALSE])
+        x <- x[ii]
+    }
+    if (dot_len == 2L) {
+        missing_j <- rlang::is_missing(dot_args[[2L]])
+        if (!missing_i) ii <- rownames(d[dot_args[[1L]], , drop = FALSE])
+        if (!missing_j) jj <- colnames(d[, dot_args[[2L]], drop = FALSE])
+
+        if (missing_i) {
             ii <- rowsWithCol(d, jj, FALSE)
             x <- lapply(x[ii], `[`, i = jj)
-        } else if (missing(j)) {
+        } else if (missing_j) {
             x <- x[ii]
         } else {
             x <- lapply(x[ii], `[`, i = jj)
         }
+    }
 
-        x
+    if (drop) {
+        return(x)
+    }
+
+    MultiFactor(x, levels = l)
 
 }
 
@@ -254,33 +289,42 @@ method(`[`, MultiFactor) <- function(
 method(`[<-`, MultiFactor) <- function(
         x,
         ...,
-        i = class_missing,
-        j = class_missing,
         value
     ) {
-        if (missing(i) && missing(j)) {
-            return(value)
-        }
-        d <- dictionary(x)
-        if (!missing(i)) ii <- rownames(d[i, , drop = FALSE])
-        if (!missing(j)) jj <- colnames(d[, j, drop = FALSE])
+    dot_args <- rlang::dots_list(
+        ..., .preserve_empty = TRUE, .ignore_empty = "none"
+    )
+    dot_len <- length(dot_args)
+    stopifnot("Too many arguments provided" = dot_len %in% seq(0L, 2L, 1L))
 
-        if (missing(j)) {
-            x@index[ii] <- value
-            return(x)
-        }
+    if(dot_len == 0L) { return(x) }
 
-        if (missing(i)) {
-            ii <- rowsWithCol(d, jj, names = TRUE)
-        }
+    d <- dictionary(x)
 
-        for (i in ii) {
-            for (j in jj) {
-                x@index[[i]][, j] <- value[[i]][, j]
-            }
-        }
-        (x)
+    missing_i <- rlang::is_missing(dot_args[[1]])
+    missing_j <- if (dot_len == 1L) TRUE else {
+        rlang::is_missing(dot_args[[2L]])
     }
+
+    if (!missing_i) ii <- rownames(d[dot_args[[1]], , drop = FALSE])
+    if (!missing_j) jj <- colnames(d[, dot_args[[2]], drop = FALSE])
+
+    if (missing_j) {
+        x@index[ii] <- value
+        return(x)
+    }
+
+    if (missing_i) {
+        ii <- rowsWithCol(d, jj, names = TRUE)
+    }
+
+    for (i in ii) {
+        for (j in jj) {
+            x@index[[i]][, j] <- value[[i]][, j]
+        }
+    }
+    return(x)
+}
 
 
 #' @export
@@ -289,9 +333,20 @@ method(`[<-`, MultiFactor) <- function(
 #' @aliases [[,MultiFactor,ANY-method
 #' @usage NULL
 #'
-method(`[[`, MultiFactor) <- function(x, i) {
+method(`[[`, MultiFactor) <- function(x, ...) {
+    i <- rlang::dots_list(
+        ..., .preserve_empty = TRUE, .ignore_empty = "none"
+    )
+    i_len <- length(i)
+    stopifnot("Too many arguments provided" = i_len %in% seq(0L, 1L, 1L))
+
+    # Empty returns self
+    if(i_len == 0L) {return(x)}
+    i <- i[[1L]]
     d <- x@map
+
     # If i can't index d, return NULL
+
     if (!all(i %in% colnames(d))) {
         if (anyNA(colnames(d)[i]) || length(colnames(d)[i]) != length(i)) {
             return(NULL)
@@ -310,10 +365,15 @@ method(`[[`, MultiFactor) <- function(x, i) {
 #'
 method(`[[<-`, MultiFactor) <- function(
         x,
-        i,
+        ...,
         value
     ) {
-        d <- x@map
+    i <- rlang::dots_list(
+        ..., .preserve_empty = TRUE, .ignore_empty = "none"
+    )
+    stopifnot("exactly one indexing value is required." = length(i) == 1L)
+    i <- i[[1L]]
+    d <- x@map
         # If i can't index d, stop. Appending not supported through `[[<-`.
         if (!all(i %in% colnames(d))) {
             if (anyNA(colnames(d)[i]) || length(colnames(d)[i]) != length(i)) {

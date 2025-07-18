@@ -38,7 +38,7 @@
 #' getFeaturePairs(
 #'     AnansiWeb, which = NULL, with.metadata = FALSE, ...
 #' )
-#' mapply(
+#' pairwiseApply(
 #'     AnansiWeb,
 #'     FUN,
 #'     MoreArgs = NULL, SIMPLIFY = TRUE, USE.NAMES = TRUE
@@ -79,7 +79,7 @@
 #' # Extract data.frames in pairs (only show first)
 #' getFeaturePairs(web)[1L]
 #'
-#' mapply(
+#' pairwiseApply(
 #'     FUN = function(x, y) cor(x, y),
 #'     web
 #' )
@@ -90,8 +90,9 @@ NULL
 #' @param x,object an `AnansiWeb` object on which a method will be applied.
 #' @param simplify `boolean`. If `TRUE` (Default), handles single data.frame
 #'     arguments while ensuring compatibility with `S4Vectors` method.
-#' @aliases dictionary metadata,AnansiWeb-method
+#' @aliases metadata,AnansiWeb-method
 #' @importFrom methods slot
+#' @importFrom S4Vectors metadata
 #' @export
 #' @usage NULL
 #'
@@ -101,6 +102,32 @@ method(metadata, AnansiWeb) <- function(x, simplify = TRUE) {
         return(m[["metadata"]])
     }
     return(m)
+}
+
+#' @name AnansiWeb
+#' @rdname AnansiWeb
+#' @param x,object an `AnansiWeb` object on which a method will be applied.
+#' @param simplify `boolean`. If `TRUE` (Default), handles single data.frame
+#'     arguments while ensuring compatibility with `S4Vectors` method.
+#' @aliases metadata<-,AnansiWeb-method
+#' @importFrom methods slot
+#' @importMethodsFrom S4Vectors metadata<-
+#' @export
+#' @usage NULL
+#'
+method(`metadata<-`, AnansiWeb) <- function(x, simplify = TRUE, value) {
+    if (simplify && inherits(value, "data.frame")) {
+        x@metadata[["metadata"]] <- as.data.frame(value)
+        return(x)
+    }
+    if (!is.list(value)) {
+        stop("replacement 'metadata' value must be a list")
+    }
+    if (!length(value)) {
+        names(value) <- NULL
+    } # instead of character()
+    x@metadata <- value
+    x
 }
 
 #' @name AnansiWeb
@@ -208,50 +235,53 @@ method(dim, AnansiWeb) <- function(x) dim(x@dictionary)
 #'
 method(names, AnansiWeb) <- function(x) names(dimnames(x@dictionary))
 
-#' #' @name AnansiWeb
-#' #' @rdname AnansiWeb
-#' #' @aliases which,AnansiWeb-method
-#' #' @param arr.ind,useNames See ?base::which. `AnansiWeb` default returns a
-#' #'     two-column array index.
-#' #' @export
-#' #' @usage NULL
-#' #'
-#' method(which, AnansiWeb) <- function(x, arr.ind = TRUE, useNames = FALSE) {
-#'     Matrix::which(x@dictionary, arr.ind, useNames)
-#' }
+#' @name AnansiWeb
+#' @rdname AnansiWeb
+#' @aliases which,AnansiWeb-method
+#' @param arr.ind,useNames See ?base::which. `AnansiWeb` default returns a
+#'     two-column array index.
+#' @export
+#' @usage NULL
+#'
+method(which, AnansiWeb) <- function(x, arr.ind = TRUE, useNames = FALSE) {
+    Matrix::which(x@dictionary, arr.ind, useNames)
+}
 
-#' #' @name AnansiWeb
-#' #' @rdname AnansiWeb
-#' #' @aliases mapply,AnansiWeb-method
-#' #' @param FUN a function with at least two arguments. The variables `x` and `y`,
-#' #'     in order, refer to the corresponding values of feature pairs in `tableX`
-#' #'     and `tableY`.
-#' #' @param MoreArgs,SIMPLIFY,USE.NAMES see ?base::mapply
-#' #' @export
-#' #' @usage NULL
-#' #'
-#' method(mapply, AnansiWeb) <- function(FUN, ..., MoreArgs = NULL, SIMPLIFY = TRUE, USE.NAMES = TRUE) {
-#'         tY <- as.data.frame.matrix(tableY(...), make.names = FALSE)
-#'         tX <- as.data.frame.matrix(tableX(...), make.names = FALSE)
-#'         wh <- which(...)
+#' @name AnansiWeb
+#' @rdname AnansiWeb
+#' @aliases pairwiseApply,AnansiWeb-method
+#' @param FUN a function with at least two arguments. The variables `x` and `y`,
+#'     in order, refer to the corresponding values of feature pairs in `tableX`
+#'     and `tableY`.
+#' @param MoreArgs,SIMPLIFY,USE.NAMES see ?base::mapply
+#' @export
+#' @usage NULL
 #'
-#'         out <- .mapply(
-#'             FUN,
-#'             dots = list(
-#'                 x = tX[wh[, 2L]],
-#'                 y = tY[wh[, 1L]]
-#'             ),
-#'             MoreArgs
-#'         )
-#'         if (USE.NAMES) {
-#'             names(out) <- paste0(colnames(tX)[wh[, 2L]], colnames(tY)[wh[, 1L]])
-#'         }
-#'
-#'         if (SIMPLIFY) {
-#'             out <- simplify2array(out)
-#'         }
-#'         return(out)
-#'     }
+method(pairwiseApply, AnansiWeb) <- function(
+        X, FUN, MoreArgs = NULL, SIMPLIFY = TRUE, USE.NAMES = TRUE
+        ) {
+
+        tY <- as.data.frame.matrix(tableY(X), make.names = FALSE)
+        tX <- as.data.frame.matrix(tableX(X), make.names = FALSE)
+        wh <- which(X)
+
+        out <- base::.mapply(
+            FUN,
+            dots = list(
+                x = tX[wh[, 2L]],
+                y = tY[wh[, 1L]]
+            ),
+            MoreArgs
+        )
+        if (USE.NAMES) {
+            names(out) <- paste0(colnames(tX)[wh[, 2L]], colnames(tY)[wh[, 1L]])
+        }
+
+        if (SIMPLIFY) {
+            out <- simplify2array(out)
+        }
+        return(out)
+    }
 
 #' @name AnansiWeb
 #' @rdname AnansiWeb

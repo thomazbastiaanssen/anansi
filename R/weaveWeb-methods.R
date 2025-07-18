@@ -74,8 +74,7 @@ method(weaveWeb, S7::class_character) <- function(
         tableX = NULL,
         tableY = NULL,
         metadata = NULL,
-        verbose = TRUE,
-        ...
+        verbose = TRUE
 ) {
     terms <- c(y, x)
     stopifnot(
@@ -92,7 +91,7 @@ method(weaveWeb, S7::class_character) <- function(
     }
 
     # Ensure link is a MultiFactor
-    link <- MultiFactor(link)
+        link <- MultiFactor(link, drop.unmatched = TRUE)
     # Determine required ids in order, only keep relevant elements of link.
     all_terms <- termSeq(x, y, link)
     link <- subsetByPath(link, all_terms)
@@ -142,7 +141,8 @@ method(weaveWeb, S7::class_formula) <- function(
         link = NULL,
         tableX = NULL,
         tableY = NULL,
-        ...
+        metadata = NULL,
+        verbose = TRUE
 ) {
     if (missing(x) || (length(x) != 3L)) {
         stop("'formula' missing or incorrect")
@@ -156,12 +156,14 @@ method(weaveWeb, S7::class_formula) <- function(
                 y = terms[1],
                 link,
                 tableX,
-                tableY
+                tableY,
+                metadata,
+                verbose
             )
         )
     }
 
-    link <- MultiFactor(link)
+        link <- MultiFactor(link, drop.unmatched = TRUE)
 
     if (sum(terms %in% colnames(link)) != 2L) {
         stop("Variables from 'formula' not found in 'link'.")
@@ -173,7 +175,8 @@ method(weaveWeb, S7::class_formula) <- function(
         link,
         tableX,
         tableY,
-        ...
+        metadata,
+        verbose
     )
 }
 
@@ -210,7 +213,6 @@ method(
 ) <- function(
         x,
         link = NULL,
-        ...,
         tableY = NULL,
         tableX = NULL,
         typeY = NULL,
@@ -221,10 +223,6 @@ method(
         assay.type1 = NULL,
         assay.type2 = NULL
 ) {
-    # Retrieve kwargs as list
-    kwargs <- list(...)
-    # Check kwargs
-    kwargs <- .check_fixed_args(kwargs)
     y_ids <- .test_coherent(tableY, experiment1, typeY, assay.type1)
     x_ids <- .test_coherent(tableX, experiment2, typeX, assay.type2)
     tableY <- y_ids[[1L]]
@@ -251,9 +249,8 @@ method(
                 tableX = tX,
                 tableY = tY,
                 dictionary = m[[d]],
-                metadata = list(metadata = as.data.frame(colData(x))),
-                ...
-            ))
+                metadata = list(metadata = as.data.frame(colData(x)))
+                ))
         }
     }
     # Else, generate web object
@@ -263,9 +260,8 @@ method(
         link = link,
         tableX = tX,
         tableY = tY,
-        metadata = list(metadata = as.data.frame(colData(x))),
-        ...
-    )
+        metadata = list(metadata = as.data.frame(colData(x)))
+        )
 }
 
 #' @name weaveWeb
@@ -281,7 +277,6 @@ method(
 ) <- function(
         x,
         link = NULL,
-        ...,
         tableY = NULL,
         tableX = NULL,
         typeY = NULL,
@@ -292,11 +287,6 @@ method(
         assay.type1 = NULL,
         assay.type2 = NULL
 ) {
-    # Retrieve kwargs as list
-    kwargs <- list(...)
-    # Check kwargs
-    kwargs <- .check_fixed_args(kwargs)
-
     y_ids <- .test_coherent(tableY, experiment1, typeY, assay.type1)
     x_ids <- .test_coherent(tableX, experiment2, typeX, assay.type2)
     tableY <- y_ids[[1L]]
@@ -327,8 +317,7 @@ method(
                 dictionary = m[[d]],
                 metadata = list(
                     metadata = as.data.frame(colData(x))
-                ),
-                ...
+                )
             ))
         }
     }
@@ -339,7 +328,6 @@ method(
         link = link,
         tableX = tX,
         tableY = tY,
-        metadata = list(metadata = as.data.frame(colData(x))),
-        ...
+        metadata = list(metadata = as.data.frame(colData(x)))
     )
 }

@@ -16,7 +16,7 @@ MultiFactor <- S7::new_class(
         levels = S7::class_list,
         map =     getClass("Matrix", where = "Matrix")
     ),
-    constructor = function(x, levels = NULL, drop.unmatched = TRUE) {
+    constructor = function(x, levels = NULL, drop.unmatched = FALSE) {
         if (validLinkDF(x)) {x <- list(x = x) }
         stopifnot(
             "Input not correctly formatted." = all(
@@ -28,7 +28,7 @@ MultiFactor <- S7::new_class(
                 )
             )
         )
-        if (is(x, "MultiFactor")) {
+        if (is(x, "anansi::MultiFactor")) {
             if (is.null(levels)) {
                 levels <- levels(x)
             }
@@ -150,8 +150,8 @@ AnansiWeb <- S7::new_class(
     "AnansiWeb",
     package = "anansi",
     properties = list(
-        tableY = S7::class_numeric,
-        tableX = S7::class_numeric,
+        tableY = S7::class_numeric | S7::class_logical,
+        tableX = S7::class_numeric | S7::class_logical,
         dictionary = S7::class_any,
         metadata = S7::class_list
     ),

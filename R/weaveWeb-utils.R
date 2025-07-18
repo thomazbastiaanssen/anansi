@@ -57,8 +57,7 @@ dictionaryMatrix <- function(link, all_terms) {
         FUN = function(x) all_terms[c(x, x + 1L)]
     )
     steps <- stepSeq(term_list, dictionary(link))
-
-    lv_len <- vapply(levels(link), length, 0L, USE.NAMES = TRUE)
+    lv_len <- vapply(X = levels(link), FUN = length, 0L, USE.NAMES = TRUE)
 
     # Handle simple case of one link df first, return sparse matrix.
     if (length(steps) == 1L) {
@@ -71,7 +70,7 @@ dictionaryMatrix <- function(link, all_terms) {
     lv_list <- lapply(term_list, function(x) lv_len[x])
     # Otherwise, make a list of matrices to Reduce to final dictionary
     mat_list <- mapply(
-        mapFromLink,
+        FUN = mapFromLink,
         terms = term_list,
         df = link@index[steps],
         dims = lv_list
@@ -87,7 +86,7 @@ dictionaryMatrix <- function(link, all_terms) {
 #' @noRd
 #'
 mapFromLink <- function(terms, df, dims) {
-    sparseMatrix(i = df[[terms[1]]], j = df[[terms[2]]], dims = dims)
+    Matrix::sparseMatrix(i = df[[terms[1]]], j = df[[terms[2]]], dims = dims)
 }
 
 #' @description Called by weaveWeb to subset link to inly include the features

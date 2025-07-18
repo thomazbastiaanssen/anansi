@@ -239,20 +239,20 @@ ggplot(diff_df) +
     coord_equal(ratio = 1, xlim = c(-2.5, 2.5), ylim = c(-2.5, 2.5))
 ```
 ### Equivalent `stats::lm()` model
-We can use `mapply()` on an `AnansiWeb` object to run a function on the
+We can use `pairwiseApply()` on an `AnansiWeb` object to run a function on the
 observations for each pair of features. 
 We can use this to confirm the statistical output of `anansi()` against the
 `stats` package: 
 ```{r}
 #| disj-lm
 
-score_lm <- mapply(web, FUN = function(x, y) {
+score_lm <- pairwiseApply(web, FUN = function(x, y) {
     anova(
         lm(y ~ x * (group_ab + score_a), data = metadata(web))
     )$`F value`[5L]
 })
 
-group_lm <- mapply(web, FUN = function(x, y) {
+group_lm <- pairwiseApply(web, FUN = function(x, y) {
     anova(
         lm(y ~ x * (score_a + group_ab), data = metadata(web))
     )$`F value`[5L]
@@ -261,7 +261,7 @@ group_lm <- mapply(web, FUN = function(x, y) {
 all.equal(score_lm, out$disjointed_score_a_f.values)
 all.equal(group_lm, out$disjointed_group_ab_f.values)
 ```
-We run two separate `mapply()` calls for the two interaction terms. Because of
+We run two separate `pairwiseApply()` calls for the two interaction terms. Because of
 the way `anova()` calculates sum-of-squares (type-I), the order of variables
 matters for `anova()`.
 

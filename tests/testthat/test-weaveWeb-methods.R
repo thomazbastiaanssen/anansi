@@ -1,12 +1,13 @@
 test_that("weaveWeb mae methods", {
+
     # Combine experiments into MultiAssayExperiment object
     web <- randomWeb(n_samples = 15, n_reps = 1)
-    metadata(web)$cat_XYZ <- rep(c("X", "Y", "Z"), 5)
-    mae <- as(web, "MultiAssayExperiment")
+    S4Vectors::metadata(web)$cat_XYZ <- rep(c("X", "Y", "Z"), 5)
+    mae <- asMAE(web)
 
     web2 <- weaveWeb(x = mae, tableY = "y", tableX = "x")
     # Once more, my friends
-    mae2 <- as(web2, "MultiAssayExperiment")
+    mae2 <- asMAE(web)
 
     expect_identical(web, web2)
     expect_identical(mae, mae2)
@@ -17,15 +18,14 @@ test_that("weaveWeb mae methods", {
         fixed = TRUE
     )
 
-    expect_warning(
+    expect_error(
         weaveWeb(
             mae,
             tableY = "y",
             tableX = "x",
-            formula = ~group_ab,
             web = 0
         ),
-        "The arguments 'web' should not be used, as they are extracted from 'x'",
+        "unused argument (web = 0)",
         fixed = TRUE
     )
     ### Check identity with original anansi output ###

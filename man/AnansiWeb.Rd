@@ -5,8 +5,8 @@
 \alias{AnansiWeb}
 \alias{tableY}
 \alias{`tableY<-`}
-\alias{dictionary}
 \alias{metadata,AnansiWeb-method}
+\alias{metadata<-,AnansiWeb-method}
 \alias{tableY,AnansiWeb-method}
 \alias{tableX}
 \alias{tableX,AnansiWeb-method}
@@ -14,6 +14,8 @@
 \alias{`tableX<-`,AnansiWeb-method}
 \alias{`dictionary<-`}
 \alias{dictionary<-,AnansiWeb-method}
+\alias{which,AnansiWeb-method}
+\alias{pairwiseApply,AnansiWeb-method}
 \alias{getFeaturePairs}
 \alias{getFeaturePairs,AnansiWeb-method}
 \alias{as.list.AnansiWeb}
@@ -55,7 +57,7 @@ which(AnansiWeb, arr.ind = TRUE, useNames = FALSE)
 getFeaturePairs(
     AnansiWeb, which = NULL, with.metadata = FALSE, ...
 )
-mapply(
+pairwiseApply(
     AnansiWeb,
     FUN,
     MoreArgs = NULL, SIMPLIFY = TRUE, USE.NAMES = TRUE
@@ -77,6 +79,15 @@ to \code{Matrix}}
 
 \item{simplify}{\code{boolean}. If \code{TRUE} (Default), handles single data.frame
 arguments while ensuring compatibility with \code{S4Vectors} method.}
+
+\item{arr.ind, useNames}{See ?base::which. \code{AnansiWeb} default returns a
+two-column array index.}
+
+\item{FUN}{a function with at least two arguments. The variables \code{x} and \code{y},
+in order, refer to the corresponding values of feature pairs in \code{tableX}
+and \code{tableY}.}
+
+\item{MoreArgs, SIMPLIFY, USE.NAMES}{see ?base::mapply}
 
 \item{which}{\verb{integer matrix}, indicating pair positions in \code{tableY(x)} and
 \code{tableX(x)}, respectively. If \code{NULL} (default):
@@ -103,27 +114,6 @@ object using the \code{weaveWeb()} function.
 
 The function \code{AnansiWeb()} constructs an \code{AnansiWeb} object from two
 feature tables and an adjacency matrix.
-
-\if{html}{\out{<div class="sourceCode">}}\preformatted{    out <- .mapply(
-        FUN,
-        dots = list(
-            x = tX[wh[, 2L]],
-            y = tY[wh[, 1L]]
-        ),
-        MoreArgs
-    )
-    if (USE.NAMES) \{
-        names(out) <- paste0(colnames(tX)[wh[, 2L]], colnames(tY)[wh[, 1L]])
-    \}
-}\if{html}{\out{</div>}}
-}
-\details{
-\if{html}{\out{<div class="sourceCode">}}\preformatted{    if (SIMPLIFY) \{
-        out <- simplify2array(out)
-    \}
-    return(out)
-\}
-}\if{html}{\out{</div>}}
 }
 \section{Slots}{
 
@@ -194,7 +184,7 @@ asMAE(web)
 # Extract data.frames in pairs (only show first)
 getFeaturePairs(web)[1L]
 
-mapply(
+pairwiseApply(
     FUN = function(x, y) cor(x, y),
     web
 )

@@ -70,7 +70,7 @@ asMAE <- function(x)  {
 #' @seealso [unfactor()]
 #' @export
 #'
-method(as.list, MultiFactor) <- function(x, ..., use.names = TRUE) {
+method(as.list, MultiFactor) <- function(x, use.names = TRUE) {
     ifelse(
         use.names,
         yes = return(unfactor(x)),

@@ -9,6 +9,7 @@
 \alias{dim,MultiFactor-method}
 \alias{names,MultiFactor-method}
 \alias{dimnames,MultiFactor-method}
+\alias{levels,MultiFactor-method}
 \alias{droplevels.MultiFactor}
 \alias{droplevels,MultiFactor-method}
 \alias{dictionary,MultiFactor-method}

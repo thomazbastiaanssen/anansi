@@ -13,7 +13,7 @@
 #'
 mapMultiFactor <- function(x, mode = "counts") {
     # Some flexibility in input
-    if (is(x, "MultiFactor")) {
+    if (is(x, "anansi::MultiFactor")) {
         x <- x@index
     }
     mode <- match.arg(mode, choices = c("counts", "binary", "pattern"))
