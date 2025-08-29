@@ -21,10 +21,10 @@
 #' tableY(AnansiWeb) <- value
 #' tableX(AnansiWeb)
 #' tableX(AnansiWeb) <- value
-#' dictionary(AnansiWeb)
-#' dictionary(AnansiWeb) <- value
-#' metadata(AnansiWeb, simplify = TRUE)
-#' metadata(AnansiWeb, simplify = TRUE) <- value
+#' AnansiWeb@dictionary
+#' AnansiWeb@dictionary <- value
+#' AnansiWeb@metadata
+#' AnansiWeb@metadata <- value
 #'
 #' ## Coercion
 #' asMAE(x)
@@ -57,18 +57,17 @@
 #' dim(web)
 #' names(web)
 #'
-#' tableX(web)
-#' tableY(web)
-#' dictionary(web)
+#' web@tableX
+#' web@tableY
+#' web@dictionary
 #'
 #' # Assign some random metadata
-#' metadata(web) <- data.frame(
-#'     id = row.names(tableY(web)),
+#' web@metadata <- data.frame(
+#'     id = row.names(web@tableY),
 #'     a = rnorm(36),
 #'     b = sample(c("a", "b"), 36, TRUE),
 #'     row.names = "id"
 #' )
-#' metadata(web)
 #'
 #' # coerce To list
 #' weblist <- as.list(web)
@@ -86,118 +85,15 @@
 NULL
 
 #' @name AnansiWeb
-#' @rdname AnansiWeb
-#' @param x,object an `AnansiWeb` object on which a method will be applied.
-#' @param simplify `boolean`. If `TRUE` (Default), handles single data.frame
-#'     arguments while ensuring compatibility with `S4Vectors` method.
-#' @aliases metadata,AnansiWeb-method
-#' @importFrom methods slot
-#' @importFrom S4Vectors metadata
-#' @export
-#' @usage NULL
-#'
-method(metadata, AnansiWeb) <- function(x, simplify = TRUE) {
-    m <- x@metadata
-    if (simplify && "metadata" %in% names(m)) {
-        return(m[["metadata"]])
-    }
-    return(m)
-}
-
-#' @name AnansiWeb
-#' @rdname AnansiWeb
-#' @param x,object an `AnansiWeb` object on which a method will be applied.
-#' @param simplify `boolean`. If `TRUE` (Default), handles single data.frame
-#'     arguments while ensuring compatibility with `S4Vectors` method.
-#' @aliases metadata<-,AnansiWeb-method
-#' @importFrom methods slot
-#' @importMethodsFrom S4Vectors metadata<-
-#' @export
-#' @usage NULL
-#'
-method(`metadata<-`, AnansiWeb) <- function(x, simplify = TRUE, value) {
-    if (simplify && inherits(value, "data.frame")) {
-        x@metadata[["metadata"]] <- as.data.frame(value)
-        return(x)
-    }
-    if (!is.list(value)) {
-        stop("replacement 'metadata' value must be a list")
-    }
-    if (!length(value)) {
-        names(value) <- NULL
-    } # instead of character()
-    x@metadata <- value
-    x
-}
-
-#' @name AnansiWeb
-#' @rdname AnansiWeb
-#' @aliases tableY tableY,AnansiWeb-method
-#' @export
-#' @usage NULL
-#'
-method(tableY, AnansiWeb) <- function(x) {x@tableY}
-
-#' @name AnansiWeb
-#' @rdname AnansiWeb
-#' @export
-#' @aliases tableX tableX,AnansiWeb-method
-#' @usage NULL
-#'
-method(tableX, AnansiWeb) <- function(x) {x@tableX}
-
-#' @name AnansiWeb
-#' @rdname AnansiWeb
-#' @aliases tableY tableY,AnansiWeb-method
-#' @export
-#' @usage NULL
-#'
-method(`tableY<-`, AnansiWeb) <- function(x, value) {
-    x@tableY <- value
-    x
-}
-
-
-#' @name AnansiWeb
-#' @rdname AnansiWeb
-#' @export
-#' @aliases `tableY<-` tableY<-,AnansiWeb-method
-#' @usage NULL
-#'
-method(`tableX<-`, AnansiWeb) <- function(x, value) {
-    x@tableX <- value
-    x
-}
-
-#' @name AnansiWeb
-#' @rdname AnansiWeb
-#' @aliases `tableX<-`,AnansiWeb-method
-#' @export
-#' @usage NULL
-#'
-method(dictionary, AnansiWeb) <- function(x) {x@dictionary}
-
-#' @name AnansiWeb
-#' @rdname AnansiWeb
-#' @aliases `dictionary<-` dictionary<-,AnansiWeb-method
-#' @export
-#' @usage NULL
-#'
-method(`dictionary<-`, AnansiWeb) <- function(x, value) {
-    x@dictionary <- value
-    x
-}
-
-#' @name AnansiWeb
 #' @importFrom methods show
 #' @rdname AnansiWeb
 #' @export
 #'
-method(show, AnansiWeb) <- function(object) {
+S7::method(show, AnansiWeb) <- function(object) {
     cat(
         class(object),
         " S7 object with ",
-        NROW(tableX(object)),
+        NROW(object@tableX),
         " observations:\n    tableY: ",
         names(object)[1],
         " (",
@@ -209,7 +105,7 @@ method(show, AnansiWeb) <- function(object) {
         " features)\n",
         sep = ""
     )
-    cat("Accessors: tableX(), tableY(), dictionary(), metadata().")
+    cat("Use $ to access: tableX, tableY, dictionary, metadata.")
     invisible(NULL)
 }
 
@@ -218,7 +114,7 @@ method(show, AnansiWeb) <- function(object) {
 #' @export
 #' @usage NULL
 #'
-method(dimnames, AnansiWeb) <- function(x) dimnames(x@dictionary)
+S7::method(dimnames, AnansiWeb) <- function(x) dimnames(x@dictionary)
 
 
 #' @name AnansiWeb
@@ -226,14 +122,14 @@ method(dimnames, AnansiWeb) <- function(x) dimnames(x@dictionary)
 #' @export
 #' @usage NULL
 #'
-method(dim, AnansiWeb) <- function(x) dim(x@dictionary)
+S7::method(dim, AnansiWeb) <- function(x) dim(x@dictionary)
 
 #' @name AnansiWeb
 #' @rdname AnansiWeb
 #' @export
 #' @usage NULL
 #'
-method(names, AnansiWeb) <- function(x) names(dimnames(x@dictionary))
+S7::method(names, AnansiWeb) <- function(x) names(dimnames(x@dictionary))
 
 #' @name AnansiWeb
 #' @rdname AnansiWeb
@@ -243,7 +139,7 @@ method(names, AnansiWeb) <- function(x) names(dimnames(x@dictionary))
 #' @export
 #' @usage NULL
 #'
-method(which, AnansiWeb) <- function(x, arr.ind = TRUE, useNames = FALSE) {
+S7::method(which, AnansiWeb) <- function(x, arr.ind = TRUE, useNames = FALSE) {
     Matrix::which(x@dictionary, arr.ind, useNames)
 }
 
@@ -257,12 +153,12 @@ method(which, AnansiWeb) <- function(x, arr.ind = TRUE, useNames = FALSE) {
 #' @export
 #' @usage NULL
 #'
-method(pairwiseApply, AnansiWeb) <- function(
+S7::method(pairwiseApply, AnansiWeb) <- function(
         X, FUN, MoreArgs = NULL, SIMPLIFY = TRUE, USE.NAMES = TRUE
         ) {
 
-        tY <- as.data.frame.matrix(tableY(X), make.names = FALSE)
-        tX <- as.data.frame.matrix(tableX(X), make.names = FALSE)
+        tY <- as.data.frame.matrix(X@tableY, make.names = FALSE)
+        tX <- as.data.frame.matrix(X@tableX, make.names = FALSE)
         wh <- which(X)
 
         out <- base::.mapply(
@@ -287,20 +183,20 @@ method(pairwiseApply, AnansiWeb) <- function(
 #' @rdname AnansiWeb
 #' @aliases getFeaturePairs getFeaturePairs,AnansiWeb-method
 #' @importFrom Matrix which
-#' @param which `integer matrix`, indicating pair positions in `tableY(x)` and
-#'     `tableX(x)`, respectively. If `NULL` (default):
-#'     `Matrix::which(dictionary(x), TRUE)`.
+#' @param which `integer matrix`, indicating pair positions in `x@tableY` and
+#'     `x@tableX`, respectively. If `NULL` (default):
+#'     `Matrix::which(x@dictionary, TRUE)`.
 #' @param with.metadata `Logical scalar` whether to append metadata to output
 #' @return A list of data.frames with the paired data
 #' @usage NULL
 #' @export
 #'
-method(getFeaturePairs, AnansiWeb) <-  function(x, which = NULL, with.metadata = FALSE) {
+S7::method(getFeaturePairs, AnansiWeb) <-  function(x, which = NULL, with.metadata = FALSE) {
     if (is.null(which)) {
         which <- which(x)
     }
-    tX <- tableX(x)
-    tY <- tableY(x)
+    tX <- x@tableX
+    tY <- x@tableY
     xnames <- colnames(tX)
     ynames <- colnames(tY)
     if (!with.metadata) {
@@ -313,7 +209,7 @@ method(getFeaturePairs, AnansiWeb) <-  function(x, which = NULL, with.metadata =
             })
         )
     } else {
-        metadata <- metadata(x)
+        metadata <- x@metadata
         return(
             lapply(seq_len(NROW(which)), FUN = function(z) {
                 cbind(
@@ -332,12 +228,12 @@ method(getFeaturePairs, AnansiWeb) <-  function(x, which = NULL, with.metadata =
 #' Is this a data.frame with exactly two columns that are named?
 #' @noRd
 validWeb <- function(x) {
-    y_names <- identical(rownames(x), colnames(tableY(x)))
-    x_names <- identical(colnames(x), colnames(tableX(x)))
-    s_names <- identical(rownames(tableY(x)), rownames(tableX(x)))
+    y_names <- identical(rownames(x), colnames(x@tableY))
+    x_names <- identical(colnames(x), colnames(x@tableX))
+    s_names <- identical(rownames(x@tableY), rownames(x@tableX))
     meta_dim <- any(
-        NROW(metadata(x)) == NROW(tableY(x)),
-        prod(dim(metadata(x))) <= 1
+        NROW(x@metadata) == NROW(x@tableY),
+        prod(dim(x@metadata)) <= 1
     )
     if (!y_names) {
         message("colnames(tableY), rownames(dictionary) not identical.")

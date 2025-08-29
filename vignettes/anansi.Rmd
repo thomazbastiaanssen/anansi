@@ -326,7 +326,7 @@ function `asMAE`.
 library(MultiAssayExperiment)
 
 # Store sample metadata into metadata slot of web object
-metadata(web) <- data.frame(FMT_metadata, row.names = FMT_metadata$Sample_ID)
+web@metadata <- `rownames<-`(FMT_metadata, FMT_metadata$Sample_ID)
 
 # Convert web to mae
 mae <- asMAE(web)
@@ -348,7 +348,7 @@ out <- anansi(
     web = web2,
     formula = ~Legend,
     adjust.method = "BH",
-    verbose = TRUE
+    verbose = TRUE, 
 )
 ```
 

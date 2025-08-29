@@ -4,15 +4,8 @@
 #' @usage NULL
 #' @export
 #'
-method(as.list, AnansiWeb)  <- function(x) {
-    out <- c(
-        list(
-            tableY = x@tableY,
-            tableX = x@tableX,
-            dictionary = x@dictionary
-        ),
-        x@metadata
-    )
+S7::method(as.list, AnansiWeb)  <- function(x) {
+    out <- S7::props(x)
     names(out)[c(1L, 2L)] <- names(x)
     out
 }
@@ -24,11 +17,11 @@ method(as.list, AnansiWeb)  <- function(x) {
 #' @usage NULL
 #' @export
 #'
-method(as.data.frame, AnansiWeb) <- function(x) {
+S7::method(as.data.frame, AnansiWeb) <- function(x) {
     cbind(
-        tableY(x),
-        tableX(x),
-        metadata(x, simplify = TRUE)
+        x@tableY,
+        x@tableX,
+        x@metadata
     )
 }
 
@@ -41,22 +34,30 @@ method(as.data.frame, AnansiWeb) <- function(x) {
 #' @export
 #'
 asMAE <- function(x)  {
-    tY <- t(tableY(x))
-    tX <- t(tableX(x))
+
+    tY <- t(x@tableY)
+    tX <- t(x@tableX)
     to_exp <- ExperimentList(
-        y = SummarizedExperiment(tY),
-        x = SummarizedExperiment(tX)
+        y = SummarizedExperiment::SummarizedExperiment(tY),
+        x = SummarizedExperiment::SummarizedExperiment(tX)
     )
     names(to_exp) <- names(x)
 
-    to_md <- list(dictionary = dictionary(x))
-    to_cd <- metadata(x, simplify = TRUE)
+    to_md <- list(dictionary = x@dictionary)
+    to_cd <- x@metadata
 
-    MultiAssayExperiment::MultiAssayExperiment(
-        experiments = to_exp,
-        metadata = to_md,
-        colData = DataFrame(to_cd)
-    )
+    if(prod(dim.data.frame(to_cd)) == 0L) {
+            MultiAssayExperiment::MultiAssayExperiment(
+                experiments = to_exp,
+                metadata = to_md
+            )
+        } else {
+            MultiAssayExperiment::MultiAssayExperiment(
+                experiments = to_exp,
+                metadata = to_md,
+                colData = to_cd
+            )
+        }
 }
 
 #' @name MultiFactor
@@ -70,7 +71,7 @@ asMAE <- function(x)  {
 #' @seealso [unfactor()]
 #' @export
 #'
-method(as.list, MultiFactor) <- function(x, use.names = TRUE) {
+S7::method(as.list, MultiFactor) <- function(x, use.names = TRUE) {
     ifelse(
         use.names,
         yes = return(unfactor(x)),

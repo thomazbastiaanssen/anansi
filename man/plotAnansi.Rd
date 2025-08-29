@@ -82,7 +82,7 @@ library(MultiAssayExperiment)
 library(ggraph)
 
 web <- randomWeb(n_samples = 100)
-mae <- as(web, "MultiAssayExperiment")
+mae <- asMAE(web)
 
 # Perform anansi analysis
 out <- weaveWeb(mae,

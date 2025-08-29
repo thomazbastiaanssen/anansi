@@ -2,7 +2,7 @@ test_that("weaveWeb mae methods", {
 
     # Combine experiments into MultiAssayExperiment object
     web <- randomWeb(n_samples = 15, n_reps = 1)
-    S4Vectors::metadata(web)$cat_XYZ <- rep(c("X", "Y", "Z"), 5)
+    web@metadata$cat_XYZ <- rep(c("X", "Y", "Z"), 5)
     mae <- asMAE(web)
 
     web2 <- weaveWeb(x = mae, tableY = "y", tableX = "x")

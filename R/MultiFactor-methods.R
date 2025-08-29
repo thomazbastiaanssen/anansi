@@ -20,8 +20,8 @@
 #' dimnames(MultiFactor)
 #' dim(MultiFactor)
 #' names(MultiFactor)
-#' dictionary(MultiFactor)
-#' dictionary(MultiFactor) <- value
+#'
+#' MultiFactor@map <- value
 #'
 #' ## Factor manipulation
 #' levels(MultiFactor)
@@ -56,7 +56,7 @@ NULL
 #' @importFrom S7 "method<-"
 #' @export
 #'
-method(getEdgeList, MultiFactor) <- function(x) {
+S7::method(getEdgeList, MultiFactor) <- function(x) {
     as.data.frame(do.call(rbind, base::names(x)))
     }
 
@@ -66,7 +66,7 @@ method(getEdgeList, MultiFactor) <- function(x) {
 #' @export
 #' @usage NULL
 #'
-method(dim, MultiFactor) <- function(x) {
+S7::method(dim, MultiFactor) <- function(x) {
     dim(x@map)
     }
 
@@ -76,7 +76,7 @@ method(dim, MultiFactor) <- function(x) {
 #' @export
 #' @usage NULL
 #'
-method(names, MultiFactor) <- function(x) {
+S7::method(names, MultiFactor) <- function(x) {
     lapply(x@index, base::names)
 }
 
@@ -86,7 +86,7 @@ method(names, MultiFactor) <- function(x) {
 #' @export
 #' @usage NULL
 #'
-method(dimnames, MultiFactor) <- function(x) {
+S7::method(dimnames, MultiFactor) <- function(x) {
     dimnames(x@map)
 }
 
@@ -96,7 +96,7 @@ method(dimnames, MultiFactor) <- function(x) {
 #' @export
 #' @usage NULL
 #'
-method(levels, MultiFactor) <- function(x) {
+S7::method(levels, MultiFactor) <- function(x) {
     x@levels
 }
 
@@ -105,7 +105,7 @@ method(levels, MultiFactor) <- function(x) {
 #' @export
 #' @usage NULL
 #'
-method(unfactor, MultiFactor) <- function(x) {
+S7::method(unfactor, MultiFactor) <- function(x) {
     lv <- levels(x)
     ns <- rownames(x)
     x <- x@index
@@ -136,7 +136,7 @@ method(unfactor, MultiFactor) <- function(x) {
 #' @export
 #' @usage NULL
 #'
-method(droplevels, MultiFactor) <- function(x, exclude = NULL, select = NULL) {
+S7::method(droplevels, MultiFactor) <- function(x, exclude = NULL, select = NULL) {
     stopifnot(
         "Only one of 'exclude' and 'select' may be provided" = sum(
             is.null(exclude),
@@ -147,7 +147,7 @@ method(droplevels, MultiFactor) <- function(x, exclude = NULL, select = NULL) {
     stopifnot("'x' is not a MultiFactor." = is(x, "anansi::MultiFactor"))
     # Section 1. Trimming the indices by user input
     lvs <- levels(x)
-    d <- dictionary(x)
+    d <- x@map
     if (!is.null(exclude)) {
         stopifnot(
             "`'exclude' must be a named list of character vectors ." = is.list(
@@ -204,30 +204,8 @@ method(droplevels, MultiFactor) <- function(x, exclude = NULL, select = NULL) {
 #' @export
 #' @usage NULL
 #'
-method(levels, MultiFactor) <- function(x, value) {
+S7::method(levels, MultiFactor) <- function(x, value) {
     x@levels
-}
-
-
-#' @name MultiFactor
-#' @rdname MultiFactor
-#' @aliases dictionary,MultiFactor-method
-#' @export
-#' @usage NULL
-#'
-method(dictionary, MultiFactor) <- function(x) {
-    x@map
-}
-
-#' @name MultiFactor
-#' @rdname MultiFactor
-#' @aliases dictionary,MultiFactor-method
-#' @export
-#' @usage NULL
-#'
-method(`dictionary<-`, MultiFactor) <- function(x, value) {
-    x@map <- value
-    x
 }
 
 
@@ -238,7 +216,7 @@ method(`dictionary<-`, MultiFactor) <- function(x, value) {
 #' @aliases [,MultiFactor,ANY,ANY-method
 #' @usage NULL
 #'
-method(`[`, MultiFactor) <- function(x, ..., drop = TRUE) {
+S7::method(`[`, MultiFactor) <- function(x, ..., drop = TRUE) {
 
     dot_args <- rlang::dots_list(
         ..., .preserve_empty = TRUE, .ignore_empty = "none"
@@ -249,7 +227,7 @@ method(`[`, MultiFactor) <- function(x, ..., drop = TRUE) {
 
     if(dot_len == 0L || (dot_len == 1L && missing_i)) { return(x) }
 
-    d <- dictionary(x)
+    d <- x@map
     l <- levels(x)
     x <- x@index
 
@@ -286,7 +264,7 @@ method(`[`, MultiFactor) <- function(x, ..., drop = TRUE) {
 #' @aliases [<-,MultiFactor,ANY,ANY,list-method
 #' @usage NULL
 #'
-method(`[<-`, MultiFactor) <- function(
+S7::method(`[<-`, MultiFactor) <- function(
         x,
         ...,
         value
@@ -299,7 +277,7 @@ method(`[<-`, MultiFactor) <- function(
 
     if(dot_len == 0L) { return(x) }
 
-    d <- dictionary(x)
+    d <- x@map
 
     missing_i <- rlang::is_missing(dot_args[[1]])
     missing_j <- if (dot_len == 1L) TRUE else {
@@ -333,7 +311,7 @@ method(`[<-`, MultiFactor) <- function(
 #' @aliases [[,MultiFactor,ANY-method
 #' @usage NULL
 #'
-method(`[[`, MultiFactor) <- function(x, ...) {
+S7::method(`[[`, MultiFactor) <- function(x, ...) {
     i <- rlang::dots_list(
         ..., .preserve_empty = TRUE, .ignore_empty = "none"
     )
@@ -363,7 +341,7 @@ method(`[[`, MultiFactor) <- function(x, ...) {
 #' @aliases [[<-,MultiFactor,ANY,ANY-method
 #' @usage NULL
 #'
-method(`[[<-`, MultiFactor) <- function(
+S7::method(`[[<-`, MultiFactor) <- function(
         x,
         ...,
         value

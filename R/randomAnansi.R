@@ -137,29 +137,29 @@ krebsDemoWeb <- function(n_samples = 100, n_reps = 4L) {
     w <- randomWeb(n_samples, n_reps, dictionary = kd)
 
     # Spike demo associations
-    int_ab <- metadata(w)$group_ab == "a"
-    int_pr <- pnorm(metadata(w)$score_a)
+    int_ab <- w@metadata$group_ab == "a"
+    int_pr <- pnorm(w@metadata$score_a)
 
     # Positive association aconitase ~ citrate
-    tableY(w)[, 1L] <- scale(tableY(w)[, 1L] * 0.25 + tableX(w)[, 1L] * 0.75)
+    w@tableY[, 1L] <- scale(w@tableY[, 1L] * 0.25 + w@tableX[, 1L] * 0.75)
     # Negative association aconitase ~ cis-aconitate
-    tableX(w)[, 2L] <- scale(tableX(w)[, 2L] * 0.25 + tableY(w)[, 1L] * -0.75)
+    w@tableX[, 2L] <- scale(w@tableX[, 2L] * 0.25 + w@tableY[, 1L] * -0.75)
     # Disjointed association isocitrate dehydrogenase ~ isocitrate
-    tableY(w)[, 2L] <- scale(tableY(w)[, 2L] * 0.25 + tableX(w)[, 3L] * 0.75)
-    tableY(w)[int_ab, 2L] <- tableY(w)[int_ab, 2L] * -1L
+    w@tableY[, 2L] <- scale(w@tableY[, 2L] * 0.25 + w@tableX[, 3L] * 0.75)
+    w@tableY[int_ab, 2L] <- w@tableY[int_ab, 2L] * -1L
     # Disjointed association ketoglutarate dehydrogenase ~ ketoglutarate
-    tableY(w)[, 3L] <- scale(
-        tableY(w)[, 3L] * 0.25 + tableX(w)[, 4L] * 0.75 * metadata(w)$score_a
+    w@tableY[, 3L] <- scale(
+        w@tableY[, 3L] * 0.25 + w@tableX[, 4L] * 0.75 * w@metadata$score_a
     )
     # Emergent association succinyl-CoA synthetase ~ succinyl-CoA
-    tableY(w)[, 4L] <- scale(
-        tableY(w)[, 4L] *
+    w@tableY[, 4L] <- scale(
+        w@tableY[, 4L] *
             (0.25 + 0.50 * !int_ab) +
-            tableX(w)[, 5L] * (0.25 + 0.50 * int_ab)
+            w@tableX[, 5L] * (0.25 + 0.50 * int_ab)
     )
     # Emergent association succinate dehydrogenase ~ succinate
-    tableY(w)[, 5L] <- scale(
-        tableY(w)[, 5L] * int_pr + tableX(w)[, 6L] * (1 - int_pr)
+    w@tableY[, 5L] <- scale(
+        w@tableY[, 5L] * int_pr + w@tableX[, 6L] * (1 - int_pr)
     )
 
     return(w)
@@ -244,7 +244,7 @@ randomWebTab <- function(n_samp, n_reps, dictionary, metadata) {
         tableY = tableY,
         tableX = tableX,
         dictionary = dictionary,
-        metadata = list(metadata = metadata)
+        metadata = metadata
     )
 }
 
@@ -276,7 +276,7 @@ randomWebDic <- function(tableY, tableX, density, metadata) {
         tableY = tableY,
         tableX = tableX,
         dictionary = dictionary,
-        metadata = list(metadata = metadata)
+        metadata = metadata
     )
 }
 

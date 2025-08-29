@@ -5,15 +5,6 @@
 \alias{AnansiWeb}
 \alias{tableY}
 \alias{`tableY<-`}
-\alias{metadata,AnansiWeb-method}
-\alias{metadata<-,AnansiWeb-method}
-\alias{tableY,AnansiWeb-method}
-\alias{tableX}
-\alias{tableX,AnansiWeb-method}
-\alias{tableY<-,AnansiWeb-method}
-\alias{`tableX<-`,AnansiWeb-method}
-\alias{`dictionary<-`}
-\alias{dictionary<-,AnansiWeb-method}
 \alias{which,AnansiWeb-method}
 \alias{pairwiseApply,AnansiWeb-method}
 \alias{getFeaturePairs}
@@ -40,10 +31,10 @@ tableY(AnansiWeb)
 tableY(AnansiWeb) <- value
 tableX(AnansiWeb)
 tableX(AnansiWeb) <- value
-dictionary(AnansiWeb)
-dictionary(AnansiWeb) <- value
-metadata(AnansiWeb, simplify = TRUE)
-metadata(AnansiWeb, simplify = TRUE) <- value
+AnansiWeb@dictionary
+AnansiWeb@dictionary <- value
+AnansiWeb@metadata
+AnansiWeb@metadata <- value
 
 ## Coercion
 asMAE(x)
@@ -75,11 +66,6 @@ to \code{Matrix}}
 
 \item{metadata}{\code{list} of metadata. Optional.}
 
-\item{x, object}{an \code{AnansiWeb} object on which a method will be applied.}
-
-\item{simplify}{\code{boolean}. If \code{TRUE} (Default), handles single data.frame
-arguments while ensuring compatibility with \code{S4Vectors} method.}
-
 \item{arr.ind, useNames}{See ?base::which. \code{AnansiWeb} default returns a
 two-column array index.}
 
@@ -89,9 +75,9 @@ and \code{tableY}.}
 
 \item{MoreArgs, SIMPLIFY, USE.NAMES}{see ?base::mapply}
 
-\item{which}{\verb{integer matrix}, indicating pair positions in \code{tableY(x)} and
-\code{tableX(x)}, respectively. If \code{NULL} (default):
-\code{Matrix::which(dictionary(x), TRUE)}.}
+\item{which}{\verb{integer matrix}, indicating pair positions in \code{x@tableY} and
+\code{x@tableX}, respectively. If \code{NULL} (default):
+\code{Matrix::which(x@dictionary, TRUE)}.}
 
 \item{with.metadata}{\verb{Logical scalar} whether to append metadata to output}
 
@@ -119,14 +105,14 @@ feature tables and an adjacency matrix.
 
 \describe{
 \item{\code{tableY,tableX}}{Two \code{matrix} objects of measurements, data. Rows are
-samples and columns are features. Access with \code{tableY()} and \code{tableX()}.}
+samples and columns are features. Access with \verb{@tableY} and \verb{@tableX}.}
 
 \item{\code{dictionary}}{\code{Matrix}, binary adjacency matrix. Optionally sparse.
 Typically generated using the \code{weaveWeb()} function. Access with
-\code{dictionary()}.}
+\verb{@dictionary}.}
 
 \item{\code{metadata}}{Optional \code{data.frame} of sample metadata. Access with
-\code{metadata()}.}
+\verb{@metadata}.}
 }}
 
 \examples{
@@ -162,18 +148,17 @@ dimnames(web)
 dim(web)
 names(web)
 
-tableX(web)
-tableY(web)
-dictionary(web)
+web@tableX
+web@tableY
+web@dictionary
 
 # Assign some random metadata
-metadata(web) <- data.frame(
-    id = row.names(tableY(web)),
+web@metadata <- data.frame(
+    id = row.names(web@tableY),
     a = rnorm(36),
     b = sample(c("a", "b"), 36, TRUE),
     row.names = "id"
 )
-metadata(web)
 
 # coerce To list
 weblist <- as.list(web)

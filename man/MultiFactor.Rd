@@ -12,7 +12,6 @@
 \alias{levels,MultiFactor-method}
 \alias{droplevels.MultiFactor}
 \alias{droplevels,MultiFactor-method}
-\alias{dictionary,MultiFactor-method}
 \alias{[,MultiFactor,ANY,ANY-method}
 \alias{[<-,MultiFactor,ANY,ANY,list-method}
 \alias{[[,MultiFactor,ANY-method}
@@ -27,8 +26,8 @@ MultiFactor(x, levels = NULL, drop.unmatched = TRUE)
 dimnames(MultiFactor)
 dim(MultiFactor)
 names(MultiFactor)
-dictionary(MultiFactor)
-dictionary(MultiFactor) <- value
+
+MultiFactor@map <- value
 
 ## Factor manipulation
 levels(MultiFactor)

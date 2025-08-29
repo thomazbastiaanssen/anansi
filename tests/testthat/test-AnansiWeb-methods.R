@@ -24,10 +24,3 @@ test_that("AnansiWeb coersion to data.frame and list works", {
     b <- do.call(cbind, unname(as.list(x)[c("y", "x", "metadata")]))
     expect_equal(a, b)
 })
-
-test_that("AnansiWeb metadata is robust", {
-    expect_identical(
-        metadata(x, simplify = TRUE) <- list(metadata(x)),
-        metadata(x, simplify = FALSE) <- metadata(x, simplify = FALSE)
-    )
-})

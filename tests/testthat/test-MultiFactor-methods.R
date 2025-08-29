@@ -44,12 +44,11 @@ test_that("MultiFactor indexing works", {
 })
 
 test_that("MultiFactor get/set works", {
-    requireNamespace("S4Vectors")
     #two-way equivalence
     expect_identical(x[["a"]], x[["a"]] <- x[, c("a", "b")])
     expect_identical(x[, c("a", "b")], x[, c("a", "b")] <- x[["a"]])
 
-    expect_identical(dictionary(x), dictionary(x) <- dictionary(x))
+    expect_identical(x@map, x@map <- x@map)
 })
 
 

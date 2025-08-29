@@ -76,7 +76,7 @@
 #' library(ggraph)
 #'
 #' web <- randomWeb(n_samples = 100)
-#' mae <- as(web, "MultiAssayExperiment")
+#' mae <- asMAE(web)
 #'
 #' # Perform anansi analysis
 #' out <- weaveWeb(mae,
@@ -131,7 +131,7 @@ NULL
 #' @importFrom ggforce facet_col
 #' @importFrom stats setNames
 #' @importFrom S4Vectors isEmpty
-method(plotAnansi, S7::class_data.frame) <- function(
+S7::method(plotAnansi, S7::class_data.frame) <- function(
         x,
         layout = "dotplot",
         association.type = NULL,

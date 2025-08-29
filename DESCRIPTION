@@ -28,7 +28,6 @@ Imports:
     igraph,
     Matrix,
     forcats,
-    BiocGenerics,
     S4Vectors,
     SummarizedExperiment,
     SingleCellExperiment,

@@ -4,7 +4,7 @@
 #'     in that level. Accessed through regular list methods (e.g., `[`, `[[`).
 #' @slot levels `Named list of character vectors`. Accessed through `levels(x)`
 #' @slot map `(sparse)Matrix` specifying which elements contain which levels.
-#'     Accesses through `dictionary(x)`.
+#'     Accesses through `x@dictionary`.
 #' @importFrom S7 new_class
 #' @export
 #'
@@ -94,12 +94,12 @@ asMultiFactor <- function(x, levels = NULL, drop.unmatched = TRUE) {
 }
 
 #' @slot tableY,tableX Two `matrix` objects of measurements, data. Rows are
-#'     samples and columns are features. Access with `tableY()` and `tableX()`.
+#'     samples and columns are features. Access with `@tableY` and `@tableX`.
 #' @slot dictionary `Matrix`, binary adjacency matrix. Optionally sparse.
 #'     Typically generated using the `weaveWeb()` function. Access with
-#'     `dictionary()`.
+#'     `@dictionary`.
 #' @slot metadata Optional `data.frame` of sample metadata. Access with
-#'     `metadata()`.
+#'     `@metadata`.
 #' @param tableY,tableX A table containing features of interest. Rows should be
 #'     samples and columns should be features. Y and X refer to the position of
 #'     the features in a formula: Y ~ X.
@@ -153,9 +153,9 @@ AnansiWeb <- S7::new_class(
         tableY = S7::class_numeric | S7::class_logical,
         tableX = S7::class_numeric | S7::class_logical,
         dictionary = S7::class_any,
-        metadata = S7::class_list
+        metadata = S7::class_data.frame
     ),
-    constructor = function(tableX, tableY, dictionary, metadata = list()) {
+    constructor = function(tableX, tableY, dictionary, metadata = data.frame()) {
         # coerce
         if (!is(dictionary, "Matrix")) {
             dictionary <- drop0(Matrix(dictionary, sparse = TRUE))
@@ -190,17 +190,13 @@ AnansiWeb <- S7::new_class(
             names(dimnames(dictionary)) <- c("y", "x")
         }
 
-        if (!inherits(metadata, "list")) {
-            metadata <-
-                list(metadata = as.data.frame(metadata))
-        }
         # return AnansiWeb
         S7::new_object(
             S7::S7_object(),
             tableY = tableY,
             tableX = tableX,
             dictionary = dictionary,
-            metadata = metadata
+            metadata = as.data.frame(metadata)
         )
     }
 

@@ -13,31 +13,6 @@ weaveWeb           <- S7::new_generic("weaveWeb",   "x")
 #' @export
 plotAnansi         <- S7::new_generic("plotAnansi", "x")
 
-#' @export
-tableX         <- S7::new_generic("tableX",         "x")
-
-#' @export
-tableY         <- S7::new_generic("tableY",         "x")
-
-#' @export
-`tableX<-`     <- S7::new_generic("tableX<-",       "x")
-
-#' @export
-`tableY<-`     <- S7::new_generic("tableY<-",       "x")
-
-#' @export
-dictionary     <- S7::new_generic("dictionary",     "x")
-
-#' @export
-`dictionary<-` <- S7::new_generic("dictionary<-",   "x")
-
-#' @export
-metadata       <- S7::new_external_generic("S4Vectors", "metadata", "x")
-
-#' @export
-`metadata<-`   <- S7::new_external_generic("S4Vectors", "metadata<-", "x")
-
-
 # Workarounds
 #' @export
 which <- S7::new_generic("which", "x")

@@ -29,6 +29,7 @@ knitr::opts_chunk$set(echo = TRUE,
 adj_link <- paste0("https://thomazbastiaanssen.github.io/anansi/", 
                "articles/adjacency_matrices.html")
 library(S7)
+
 ```
 
 # Overview {-}
@@ -128,9 +129,9 @@ library(patchwork)
 library(ggplot2)
 
 full_df <- data.frame(
-    citrate = tableX(web)[, "citrate"],
-    `cis-aconitate` = tableX(web)[, "cis-aconitate"],
-    aconitase = tableY(web)[, "aconitase"]
+    citrate = web@tableX[, "citrate"],
+    `cis-aconitate` = web@tableX[, "cis-aconitate"],
+    aconitase = web@tableY[, "aconitase"]
 )
 
 ggplot(full_df) +
@@ -175,26 +176,26 @@ the metabolite *flips*.
 #| fig.cap="isocitrate ~ isocitrate dehydrogenase by category (treatment)."
 #|
 diff_df <- data.frame(
-    group_ab = paste0("Treatment ", metadata(web)$group_ab),
-    score_a = metadata(web)$score_a,
+    group_ab = paste0("Treatment ", web@metadata$group_ab),
+    score_a = web@metadata$score_a,
     score_a_cat = cut(
-        metadata(web)$score_a,
+        web@metadata$score_a,
         labels = c("0-20%", "20-40%", "40-60%", "60-80%", "80-100%"),
-        quantile(metadata(web)$score_a, probs = seq(0, 1, 1 / 5)),
+        quantile(web@metadata$score_a, probs = seq(0, 1, 1 / 5)),
         include.lowest = TRUE
     ),
-    repeated = metadata(web)$repeated,
-    sample_id = metadata(web)$sample_id,
-    isocitrate = tableX(web)[, "isocitrate"],
-    ketoglutarate = tableX(web)[, "ketoglutarate"],
-    isocitrate.dehydrogenase = tableY(web)[, "isocitrate dehydrogenase"],
-    ketoglutarate.dehydrogenase = tableY(web)[, "ketoglutarate dehydrogenase"],
-    succinyl.CoA = tableX(web)[, "succinyl-CoA"],
-    succinate = tableX(web)[, "succinate"],
-    succinyl.CoA.synthetase = tableY(web)[, "succinyl-CoA synthetase"],
-    succinate.dehydrogenase = tableY(web)[, "succinate dehydrogenase"],
-    fumarate = tableX(web)[, "fumarate"],
-    fumarase = tableY(web)[, "fumarase"]
+    repeated = web@metadata$repeated,
+    sample_id = web@metadata$sample_id,
+    isocitrate = web@tableX[, "isocitrate"],
+    ketoglutarate = web@tableX[, "ketoglutarate"],
+    isocitrate.dehydrogenase = web@tableY[, "isocitrate dehydrogenase"],
+    ketoglutarate.dehydrogenase = web@tableY[, "ketoglutarate dehydrogenase"],
+    succinyl.CoA = web@tableX[, "succinyl-CoA"],
+    succinate = web@tableX[, "succinate"],
+    succinyl.CoA.synthetase = web@tableY[, "succinyl-CoA synthetase"],
+    succinate.dehydrogenase = web@tableY[, "succinate dehydrogenase"],
+    fumarate = web@tableX[, "fumarate"],
+    fumarase = web@tableY[, "fumarase"]
 )
 
 ggplot(diff_df) +
@@ -248,13 +249,13 @@ We can use this to confirm the statistical output of `anansi()` against the
 
 score_lm <- pairwiseApply(web, FUN = function(x, y) {
     anova(
-        lm(y ~ x * (group_ab + score_a), data = metadata(web))
+        lm(y ~ x * (group_ab + score_a), data = web@metadata)
     )$`F value`[5L]
 })
 
 group_lm <- pairwiseApply(web, FUN = function(x, y) {
     anova(
-        lm(y ~ x * (score_a + group_ab), data = metadata(web))
+        lm(y ~ x * (score_a + group_ab), data = web@metadata)
     )$`F value`[5L]
 })
 
