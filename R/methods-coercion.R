@@ -4,7 +4,7 @@
 #' @usage NULL
 #' @export
 #'
-S7::method(as.list, AnansiWeb)  <- function(x) {
+S7::method(as.list, AnansiWeb)  <- function(x, ...) {
     out <- S7::props(x)
     names(out)[c(1L, 2L)] <- names(x)
     out
@@ -17,7 +17,7 @@ S7::method(as.list, AnansiWeb)  <- function(x) {
 #' @usage NULL
 #' @export
 #'
-S7::method(as.data.frame, AnansiWeb) <- function(x) {
+S7::method(as.data.frame, AnansiWeb) <- function(x, ...) {
     cbind(
         x@tableY,
         x@tableX,

@@ -25,7 +25,7 @@
 \title{AnansiWeb S7 container class}
 \usage{
 ## Constructor for `AnansiWeb` objects
-AnansiWeb(tableX, tableY, dictionary, metadata = list(), ...)
+AnansiWeb(tableX, tableY, dictionary, metadata = data.frame(), ...)
 
 ## Accessors
 dimnames(x)
@@ -34,11 +34,11 @@ names(x)
 
 ## Coercion
 asMAE(x)
-as.list(x)
-as.data.frame(x)
+as.list(x, ...)
+as.data.frame(x, ...)
 
 ## Utilities on feature pairs
-pairs(x)
+pairs(x, ...)
 getFeaturePairs(
     x, which = NULL, with.metadata = FALSE, ...
 )

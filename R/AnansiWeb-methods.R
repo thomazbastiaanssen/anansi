@@ -21,11 +21,11 @@
 #'
 #' ## Coercion
 #' asMAE(x)
-#' as.list(x)
-#' as.data.frame(x)
+#' as.list(x, ...)
+#' as.data.frame(x, ...)
 #'
 #' ## Utilities on feature pairs
-#' pairs(x)
+#' pairs(x, ...)
 #' getFeaturePairs(
 #'     x, which = NULL, with.metadata = FALSE, ...
 #' )

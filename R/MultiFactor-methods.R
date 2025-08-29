@@ -38,7 +38,7 @@
 #'     case of the constructor `MultiFactor()`, a named `list` of data.frames
 #'     with two named columns each, where elements that share a row indicates
 #'     thet are adjacent.
-#' @param i,j,... indices specifying elements to extract or replace. Indices are
+#' @param ... `i,j` indices specifying elements to extract or replace. Indices are
 #'     numeric or character vectors or empty (missing) or NULL. Numeric values
 #'     are coerced to integer or whole numbers as by as.integer or for large
 #'     values by trunc (and hence truncated towards zero). Character vectors
@@ -217,7 +217,7 @@ S7::method(`levels<-`, MultiFactor) <- function(x, value) {
 #' @export
 #' @name MultiFactor
 #' @rdname MultiFactor
-#' @aliases [,MultiFactor,ANY,ANY-method
+#' @aliases [.anansi::MultiFactor
 #' @usage NULL
 #'
 S7::method(`[`, MultiFactor) <- function(x, ..., drop = TRUE) {
@@ -265,7 +265,7 @@ S7::method(`[`, MultiFactor) <- function(x, ..., drop = TRUE) {
 #' @export
 #' @name MultiFactor
 #' @rdname MultiFactor
-#' @aliases [<-,MultiFactor,ANY,ANY,list-method
+#' @aliases [<-.anansi::MultiFactor
 #' @usage NULL
 #'
 S7::method(`[<-`, MultiFactor) <- function(
@@ -312,7 +312,7 @@ S7::method(`[<-`, MultiFactor) <- function(
 #' @export
 #' @rdname MultiFactor
 #' @name MultiFactor
-#' @aliases [[,MultiFactor,ANY-method
+#' @aliases [[.anansi::MultiFactor
 #' @usage NULL
 #'
 S7::method(`[[`, MultiFactor) <- function(x, ...) {
@@ -342,7 +342,7 @@ S7::method(`[[`, MultiFactor) <- function(x, ...) {
 #' @export
 #' @rdname MultiFactor
 #' @name MultiFactor
-#' @aliases [[<-,MultiFactor,ANY,ANY-method
+#' @aliases [[<-.anansi::MultiFactor
 #' @usage NULL
 #'
 S7::method(`[[<-`, MultiFactor) <- function(

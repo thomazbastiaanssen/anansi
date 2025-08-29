@@ -118,7 +118,7 @@ asMultiFactor <- function(x, levels = NULL, drop.unmatched = TRUE) {
 #' `dictionary` slot.
 #' @usage
 #' ## Constructor for `AnansiWeb` objects
-#' AnansiWeb(tableX, tableY, dictionary, metadata = list(), ...)
+#' AnansiWeb(tableX, tableY, dictionary, metadata = data.frame(), ...)
 #' @examples
 #'
 #' # Use AnansiWeb() to consrtuct an AnansiWeb object from components:

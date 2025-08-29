@@ -11,10 +11,10 @@
 \alias{levels.anansi::MultiFactor}
 \alias{unfactor,anansi::MultiFactor-method}
 \alias{droplevels.anansi::MultiFactor}
-\alias{[,MultiFactor,ANY,ANY-method}
-\alias{[<-,MultiFactor,ANY,ANY,list-method}
-\alias{[[,MultiFactor,ANY-method}
-\alias{[[<-,MultiFactor,ANY,ANY-method}
+\alias{[.anansi::MultiFactor}
+\alias{[<-.anansi::MultiFactor}
+\alias{[[.anansi::MultiFactor}
+\alias{[[<-.anansi::MultiFactor}
 \alias{as.list.anansi::MultiFactor}
 \title{MultiFactor S7 container class}
 \usage{
@@ -49,7 +49,7 @@ of x.}
 that are seen at least twice, exclude features that only present in one
 of their respective link data frames.}
 
-\item{i, j, ...}{indices specifying elements to extract or replace. Indices are
+\item{...}{\verb{i,j} indices specifying elements to extract or replace. Indices are
 numeric or character vectors or empty (missing) or NULL. Numeric values
 are coerced to integer or whole numbers as by as.integer or for large
 values by trunc (and hence truncated towards zero). Character vectors

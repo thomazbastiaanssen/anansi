@@ -6,6 +6,12 @@
 \title{Weave an AnansiWeb}
 \usage{
 weaveKEGG(x, ...)
+
+weaveWeb(
+x, link = NULL, tableY = NULL, tableX = NULL, typeY = NULL, typeX = NULL,
+force_new = FALSE, experiment1 = NULL, experiment2 = NULL,
+assay.type1 = NULL, assay.type2 = NULL
+)
 }
 \arguments{
 \item{x, y}{\verb{Character scalar}, names of feature types that should be
