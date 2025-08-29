@@ -17,10 +17,10 @@
 #' dim(AnansiWeb)
 #' names(AnansiWeb)
 #'
-#' tableY(AnansiWeb)
-#' tableY(AnansiWeb) <- value
-#' tableX(AnansiWeb)
-#' tableX(AnansiWeb) <- value
+#' AnansiWeb@tableY
+#' AnansiWeb@tableY <- value
+#' AnansiWeb@tableX
+#' AnansiWeb@tableX <- value
 #' AnansiWeb@dictionary
 #' AnansiWeb@dictionary <- value
 #' AnansiWeb@metadata
