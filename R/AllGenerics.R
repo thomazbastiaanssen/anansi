@@ -24,7 +24,6 @@ S7::method(which, S7::class_any) <- function(x) {
 }
 
 
-#' Workarounds
 #' @export
 pairwiseApply <- S7::new_generic("pairwiseApply", "X")
 

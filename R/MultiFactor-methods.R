@@ -36,6 +36,11 @@
 #'
 #' ## Coercion
 #' as.list(MultiFactor, ..., use.names = TRUE)
+#' @examples
+#' x <- MultiFactor(kegg_link())
+#' x
+#' dimnames(x)
+#' levels(x)
 #'
 #' @param x,object `MultiFactor` on which the method should be applied, or, in
 #'     case of the constructor `MultiFactor()`, a named `list` of data.frames

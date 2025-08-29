@@ -104,6 +104,13 @@ components can be called as rows.
 Only one of \code{select} and \code{exclude} should be provided, as they are
 each others complement.
 }
+\examples{
+x <- MultiFactor(kegg_link())
+x
+dimnames(x)
+levels(x)
+
+}
 \seealso{
 \itemize{
 \item \code{\link[=kegg_link]{kegg_link()}}: for an example of valid input.
