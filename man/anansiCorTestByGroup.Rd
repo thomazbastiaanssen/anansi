@@ -18,7 +18,7 @@ state or treatment score.}
 while running. Useful for debugging errors on large datasets.}
 }
 \value{
-a list of \code{anansiTale} result objects, one for the total dataset and
+a list of \code{AnansiTale} result objects, one for the total dataset and
 per group if applicable.
 }
 \description{

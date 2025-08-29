@@ -76,7 +76,7 @@
 #' library(ggraph)
 #'
 #' web <- randomWeb(n_samples = 100)
-#' mae <- as(web, "MultiAssayExperiment")
+#' mae <- asMAE(web)
 #'
 #' # Perform anansi analysis
 #' out <- weaveWeb(mae,
@@ -122,6 +122,7 @@
 #'
 NULL
 
+#' @name plotAnansi
 #' @rdname plotAnansi
 #' @export
 #' @importFrom rlang .data
@@ -130,10 +131,7 @@ NULL
 #' @importFrom ggforce facet_col
 #' @importFrom stats setNames
 #' @importFrom S4Vectors isEmpty
-setMethod(
-    "plotAnansi",
-    sig = c(x = "data.frame"),
-    def = function(
+S7::method(plotAnansi, S7::class_data.frame) <- function(
         x,
         layout = "dotplot",
         association.type = NULL,
@@ -305,8 +303,8 @@ setMethod(
             )
         }
         return(p)
-    }
-)
+}
+
 ################################ HELP FUNCTIONS ################################
 # Convert anansi wide to long format
 #' @description

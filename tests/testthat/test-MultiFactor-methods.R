@@ -1,3 +1,4 @@
+
 x <- MultiFactor(kegg_link(), drop.unmatched = FALSE)
 
 test_that("Delayed shedding levels works; MultiFactor returns MultiFactor", {
@@ -47,7 +48,7 @@ test_that("MultiFactor get/set works", {
     expect_identical(x[["a"]], x[["a"]] <- x[, c("a", "b")])
     expect_identical(x[, c("a", "b")], x[, c("a", "b")] <- x[["a"]])
 
-    expect_identical(dictionary(x), dictionary(x) <- dictionary(x))
+    expect_identical(x@map, x@map <- x@map)
 })
 
 

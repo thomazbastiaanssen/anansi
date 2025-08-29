@@ -15,7 +15,7 @@ termSeq <- function(x, y, link) {
 
 #' Find the order in which link data frames should be listed
 #' @param term_list list of `Character vectors`, each with length of two.
-#' @param d dictionary(link).
+#' @param d link@map.
 #' @returns a numeric vector with order in which row data frames should be
 #'     traversed.
 #' @noRd
@@ -36,7 +36,7 @@ subsetByPath <- function(link, all_terms) {
         seq_len(length(all_terms) - 1L),
         FUN = function(x) all_terms[c(x, x + 1L)]
     )
-    steps <- stepSeq(term_list, dictionary(link))
+    steps <- stepSeq(term_list, link@map)
     link@index <- link[steps]
     link@levels <- link@levels[all_terms]
     link@map <- mapMultiFactor(link[steps], mode = "counts")
@@ -56,9 +56,8 @@ dictionaryMatrix <- function(link, all_terms) {
         seq_len(length(all_terms) - 1L),
         FUN = function(x) all_terms[c(x, x + 1L)]
     )
-    steps <- stepSeq(term_list, dictionary(link))
-
-    lv_len <- vapply(levels(link), length, 0L, USE.NAMES = TRUE)
+    steps <- stepSeq(term_list, link@map)
+    lv_len <- vapply(X = levels(link), FUN = length, 0L, USE.NAMES = TRUE)
 
     # Handle simple case of one link df first, return sparse matrix.
     if (length(steps) == 1L) {
@@ -71,7 +70,7 @@ dictionaryMatrix <- function(link, all_terms) {
     lv_list <- lapply(term_list, function(x) lv_len[x])
     # Otherwise, make a list of matrices to Reduce to final dictionary
     mat_list <- mapply(
-        mapFromLink,
+        FUN = mapFromLink,
         terms = term_list,
         df = link@index[steps],
         dims = lv_list
@@ -87,7 +86,7 @@ dictionaryMatrix <- function(link, all_terms) {
 #' @noRd
 #'
 mapFromLink <- function(terms, df, dims) {
-    sparseMatrix(i = df[[terms[1]]], j = df[[terms[2]]], dims = dims)
+    Matrix::sparseMatrix(i = df[[terms[1]]], j = df[[terms[2]]], dims = dims)
 }
 
 #' @description Called by weaveWeb to subset link to inly include the features
@@ -100,7 +99,7 @@ mapFromLink <- function(terms, df, dims) {
 #'
 trimByInput <- function(link, tableID, id) {
     lv <- levels(link)[[id]]
-    d <- dictionary(link)
+    d <- link@map
     r <- rowsWithCol(d, id)
     stopifnot(
         "Feature names appeared in several index elements. " = length(r) == 1L

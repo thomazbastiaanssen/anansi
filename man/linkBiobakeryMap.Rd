@@ -11,7 +11,7 @@ linkBiobakeryMap(map)
 mapping files.}
 }
 \value{
-a two-column \code{data.frame} that can be convrted into an adjaceny
+a two-column \code{data.frame} that can be converted into an adjacency
 matrix used as input for \code{weaveWeb()}.
 }
 \description{

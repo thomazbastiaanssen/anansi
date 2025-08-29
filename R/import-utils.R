@@ -1,7 +1,7 @@
 #' make a link data.frame for biobakery mapping files input
 #' @param map `Character`, result from `readLines()` on uncompressed humann
 #'     mapping files.
-#' @returns a two-column `data.frame` that can be convrted into an adjaceny
+#' @returns a two-column `data.frame` that can be converted into an adjacency
 #'     matrix used as input for `weaveWeb()`.
 #' @seealso [weaveWeb()]
 #' @export

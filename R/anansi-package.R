@@ -28,5 +28,5 @@
 #' @aliases anansi-package
 #' @name anansi
 #' @keywords internal
+#' @docType package
 "_PACKAGE"
-NULL
