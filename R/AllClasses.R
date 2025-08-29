@@ -204,8 +204,8 @@ AnansiWeb <- S7::new_class(
 S7::S4_register(AnansiWeb)
 
 
-#' An S7 class to contain all `anansi` stats results so that they can
-#' easily be extracted.
+#' An S7 class to contain all `anansi` stats results. Not intended for general
+#' use.
 #' @slot subject A character that describes the data that was queried.
 #' @slot type A character that describes type of parameter contained in the
 #'     `estimates` slot. For example r.values for correlations or r.squared
@@ -220,6 +220,7 @@ S7::S4_register(AnansiWeb)
 #'     the `type` slot.
 #' @description `AnansiTale` is the main container that will hold your
 #'     stats output data coming out of the `anansi` pipeline.
+#' @returns an `AnansiTale` object.
 #' @export
 #'
 AnansiTale <- S7::new_class(

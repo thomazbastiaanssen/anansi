@@ -2,8 +2,8 @@
 % Please edit documentation in R/AllClasses.R
 \name{AnansiTale}
 \alias{AnansiTale}
-\title{An S7 class to contain all \code{anansi} stats results so that they can
-easily be extracted.}
+\title{An S7 class to contain all \code{anansi} stats results. Not intended for general
+use.}
 \usage{
 AnansiTale(
   subject = character(0),
@@ -14,6 +14,9 @@ AnansiTale(
   t.values = integer(0),
   p.values = integer(0)
 )
+}
+\value{
+an \code{AnansiTale} object.
 }
 \description{
 \code{AnansiTale} is the main container that will hold your
