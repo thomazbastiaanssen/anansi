@@ -13,9 +13,10 @@ S7::method(as.list, AnansiWeb)  <- function(x, ...) {
 #' @name AnansiWeb
 #' @rdname AnansiWeb
 #' @aliases as.data.frame.anansi::AnansiWeb as.data.frame,anansi::AnansiWeb-method
+#' @param row.names,optional Ignored, for S4 generic. See ?base::as.data.frame.
 #' @importFrom S4Vectors as.data.frame
-#' @usage NULL
-#' @export
+#' @usage as.data.frame(x, ...)
+#' `as.data.frame.anansi::AnansiWeb`
 #'
 S7::method(as.data.frame, AnansiWeb) <- function(x, ...) {
     cbind(
@@ -27,7 +28,7 @@ S7::method(as.data.frame, AnansiWeb) <- function(x, ...) {
 
 #' @name AnansiWeb
 #' @rdname AnansiWeb
-#' @aliases as.MAE as.MultiAssayExperiment asMultiAssayExperiment
+#' @aliases as.MAE asMAE as.MultiAssayExperiment asMultiAssayExperiment
 #' @importClassesFrom MultiAssayExperiment MultiAssayExperiment
 #' @importFrom MultiAssayExperiment MultiAssayExperiment ExperimentList
 #' @importFrom SummarizedExperiment SummarizedExperiment

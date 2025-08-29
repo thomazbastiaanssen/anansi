@@ -118,7 +118,7 @@ asMultiFactor <- function(x, levels = NULL, drop.unmatched = TRUE) {
 #' `dictionary` slot.
 #' @usage
 #' ## Constructor for `AnansiWeb` objects
-#' AnansiWeb(tableX, tableY, dictionary, metadata = data.frame(), ...)
+#' AnansiWeb(tableX, tableY, dictionary, metadata = data.frame())
 #' @examples
 #'
 #' # Use AnansiWeb() to consrtuct an AnansiWeb object from components:
@@ -219,7 +219,18 @@ S7::S4_register(AnansiWeb)
 #'     the `type` slot.
 #' @description `AnansiTale` is the main container that will hold your
 #'     stats output data coming out of the `anansi` pipeline.
-#' @returns an `AnansiTale` object.
+#' @param subject A character that describes the data that was queried.
+#' @param type A character that describes type of parameter contained in the
+#'     `estimates` slot. For example r.values for correlations or r.squared
+#'     for models.
+#' @param df a vector of length 2, containing df1 and df2 corresponding to the
+#'     F-ratio considered.
+#' @param estimates A matrix containing the estimates for the parameters named in
+#'     the `type` slot.
+#' @param f.values A matrix containing the f-values, for least-squares.
+#' @param t.values A matrix containing the t-values, for correlations.
+#' @param p.values A matrix containing the p.values for the parameters named in
+#'     the `type` slot.
 #' @export
 #'
 AnansiTale <- S7::new_class(

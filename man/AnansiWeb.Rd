@@ -3,18 +3,17 @@
 %   R/methods-coercion.R
 \name{AnansiWeb}
 \alias{AnansiWeb}
-\alias{tableY}
-\alias{`tableY<-`}
 \alias{show,anansi::AnansiWeb-method}
 \alias{dimnames.anansi::AnansiWeb}
 \alias{dim.anansi::AnansiWeb}
 \alias{names.anansi::AnansiWeb}
+\alias{pairs}
 \alias{pairs,anansi::AnansiWeb-method}
 \alias{pairs.anansi::AnansiWeb}
 \alias{pairwiseApply}
 \alias{pairwiseApply.anansi::AnansiWeb}
 \alias{getFeaturePairs}
-\alias{getFeaturePairs.anansi::AnansiWeb}
+\alias{getFeaturePairs,anansi::AnansiWeb-method}
 \alias{as.list,anansi::AnansiWeb-method}
 \alias{as.data.frame.anansi::AnansiWeb}
 \alias{as.data.frame,anansi::AnansiWeb-method}
@@ -25,7 +24,7 @@
 \title{AnansiWeb S7 container class}
 \usage{
 ## Constructor for `AnansiWeb` objects
-AnansiWeb(tableX, tableY, dictionary, metadata = data.frame(), ...)
+AnansiWeb(tableX, tableY, dictionary, metadata = data.frame())
 
 ## Accessors
 dimnames(x)
@@ -35,7 +34,7 @@ names(x)
 ## Coercion
 asMAE(x)
 as.list(x, ...)
-as.data.frame(x, ...)
+as.data.frame(x, row.names = NULL, optional = FALSE, ...)
 
 ## Utilities on feature pairs
 pairs(x, ...)
@@ -47,6 +46,13 @@ pairwiseApply(
     FUN,
     MoreArgs = NULL, SIMPLIFY = TRUE, USE.NAMES = TRUE
 )
+
+dim(x)
+
+names(x)
+
+as.data.frame(x, ...)
+`as.data.frame.anansi::AnansiWeb`
 
 asMAE(x)
 }
@@ -75,6 +81,8 @@ and \code{tableY}.}
 \code{Matrix::which(x@dictionary, TRUE)}.}
 
 \item{with.metadata}{\verb{Logical scalar} whether to append metadata to output}
+
+\item{row.names, optional}{Ignored, for S4 generic. See ?base::as.data.frame.}
 }
 \value{
 an \code{AnansiWeb} object, with sparse binary biadjacency matrix

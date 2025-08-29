@@ -67,7 +67,12 @@ NULL
 #' @name weaveWeb
 #' @rdname weaveWeb
 #' @export
-#'
+#' @usage
+#'weaveWeb(
+#'     y, x, link = NULL,
+#'     tableX = NULL, tableY = NULL,
+#'     metadata = NULL, verbose = TRUE
+#' )
 S7::method(weaveWeb, S7::class_character) <- function(
         x, y,
         link = NULL,
@@ -136,6 +141,14 @@ S7::method(weaveWeb, S7::class_character) <- function(
 #' @name weaveWeb
 #' @rdname weaveWeb
 #' @export
+#' @usage
+#' # Define `y` and `x` arguments with a formula;
+#' weaveWeb(
+#'     x = y ~ x,
+#'     link = NULL, tableX = NULL, tableY = NULL,
+#'     metadata = NULL, verbose = TRUE
+#' )
+#'
 S7::method(weaveWeb, S7::class_formula) <- function(
         x,
         link = NULL,
@@ -206,10 +219,14 @@ weaveKEGG <- function(x, ...) weaveWeb(x, link = kegg_link(), ...)
 #'     compatibility with `mia` argument style.
 #' @param assay.type1,assay.type2 synonymous args to `typeY,typeX` for
 #'     compatibility with `mia` argument style.
-#' @usage weaveWeb(
-#' x, link = NULL, tableY = NULL, tableX = NULL, typeY = NULL, typeX = NULL,
-#' force_new = FALSE, experiment1 = NULL, experiment2 = NULL,
-#' assay.type1 = NULL, assay.type2 = NULL
+#' @usage
+#' # Method for MultiAssayExperiment S4 Class
+#' weaveWeb(
+#'     x, link = NULL,
+#'     tableY = NULL, tableX = NULL, typeY = NULL, typeX = NULL,
+#'     force_new = FALSE,
+#'     experiment1 = NULL, experiment2 = NULL,
+#'     assay.type1 = NULL, assay.type2 = NULL
 #' )
 #'
 S7::method(
@@ -275,6 +292,16 @@ S7::method(
 #' @importClassesFrom SingleCellExperiment SingleCellExperiment
 #' @importFrom SummarizedExperiment colData assay assayNames
 #' @importFrom SingleCellExperiment SingleCellExperiment altExp altExpNames
+#' @usage
+#' # Method for SingleCellExperiment S4 Class
+#' weaveWeb(
+#'     x, link = NULL,
+#'     tableY = NULL, tableX = NULL, typeY = NULL, typeX = NULL,
+#'     force_new = FALSE,
+#'     experiment1 = NULL, experiment2 = NULL,
+#'     assay.type1 = NULL, assay.type2 = NULL
+#' )
+#'
 #'
 S7::method(
     weaveWeb,

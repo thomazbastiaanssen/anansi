@@ -15,8 +15,25 @@ AnansiTale(
   p.values = integer(0)
 )
 }
-\value{
-an \code{AnansiTale} object.
+\arguments{
+\item{subject}{A character that describes the data that was queried.}
+
+\item{type}{A character that describes type of parameter contained in the
+\code{estimates} slot. For example r.values for correlations or r.squared
+for models.}
+
+\item{df}{a vector of length 2, containing df1 and df2 corresponding to the
+F-ratio considered.}
+
+\item{estimates}{A matrix containing the estimates for the parameters named in
+the \code{type} slot.}
+
+\item{f.values}{A matrix containing the f-values, for least-squares.}
+
+\item{t.values}{A matrix containing the t-values, for correlations.}
+
+\item{p.values}{A matrix containing the p.values for the parameters named in
+the \code{type} slot.}
 }
 \description{
 \code{AnansiTale} is the main container that will hold your

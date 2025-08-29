@@ -5,12 +5,37 @@
 \alias{weaveKEGG}
 \title{Weave an AnansiWeb}
 \usage{
+weaveWeb(
+    y, x, link = NULL,
+    tableX = NULL, tableY = NULL,
+    metadata = NULL, verbose = TRUE
+)
+
+# Define `y` and `x` arguments with a formula;
+weaveWeb(
+    x = y ~ x,
+    link = NULL, tableX = NULL, tableY = NULL,
+    metadata = NULL, verbose = TRUE
+)
+
 weaveKEGG(x, ...)
 
+# Method for MultiAssayExperiment S4 Class
 weaveWeb(
-x, link = NULL, tableY = NULL, tableX = NULL, typeY = NULL, typeX = NULL,
-force_new = FALSE, experiment1 = NULL, experiment2 = NULL,
-assay.type1 = NULL, assay.type2 = NULL
+    x, link = NULL,
+    tableY = NULL, tableX = NULL, typeY = NULL, typeX = NULL,
+    force_new = FALSE,
+    experiment1 = NULL, experiment2 = NULL,
+    assay.type1 = NULL, assay.type2 = NULL
+)
+
+# Method for SingleCellExperiment S4 Class
+weaveWeb(
+    x, link = NULL,
+    tableY = NULL, tableX = NULL, typeY = NULL, typeX = NULL,
+    force_new = FALSE,
+    experiment1 = NULL, experiment2 = NULL,
+    assay.type1 = NULL, assay.type2 = NULL
 )
 }
 \arguments{

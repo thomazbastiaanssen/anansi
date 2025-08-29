@@ -5,15 +5,16 @@
 \alias{asMultiFactor}
 \alias{MultiFactor}
 \alias{getEdgeList}
-\alias{dim}
-\alias{names}
+\alias{names,anansi::MultiFactor-method}
 \alias{dimnames}
+\alias{show,anansi::MultiFactor-method}
 \alias{levels.anansi::MultiFactor}
 \alias{unfactor,anansi::MultiFactor-method}
 \alias{droplevels.anansi::MultiFactor}
 \alias{[.anansi::MultiFactor}
 \alias{[<-.anansi::MultiFactor}
 \alias{[[.anansi::MultiFactor}
+\alias{`[[.anansi::MultiFactor`}
 \alias{[[<-.anansi::MultiFactor}
 \alias{as.list.anansi::MultiFactor}
 \title{MultiFactor S7 container class}
@@ -26,6 +27,12 @@ dimnames(x)
 dim(x)
 names(x)
 
+## Indexing
+x[...]
+x[...] <- value
+x[[...]]
+x[[...]] <- value
+
 ## Factor manipulation
 levels(x)
 unfactor(x)
@@ -33,9 +40,11 @@ droplevels(x, exclude = NULL, select = NULL)
 
 ## Coercion
 as.list(x, ..., use.names = TRUE)
+
+getEdgeList(x)
 }
 \arguments{
-\item{x, object}{\code{MultiFactor} on which the method should be applied, or, in
+\item{x}{\code{MultiFactor} on which the method should be applied, or, in
 case of the constructor \code{MultiFactor()}, a named \code{list} of data.frames
 with two named columns each, where elements that share a row indicates
 thet are adjacent.}
@@ -55,15 +64,15 @@ are coerced to integer or whole numbers as by as.integer or for large
 values by trunc (and hence truncated towards zero). Character vectors
 will be matched to the names of the object.}
 
+\item{drop}{Whether to return a \code{list} (Default) or \code{MultiFactor}.}
+
+\item{value}{a replacement character vector of suitable dimensions.}
+
 \item{exclude}{\code{NULL} or \verb{Named character list} of similar structure as
 \code{levels(MultiFactor)}. Which levels to drop from output.}
 
 \item{select}{\code{NULL} or \verb{Named character list} of similar structure as
 \code{levels(MultiFactor)}. Which levels to keep in output.}
-
-\item{value}{a replacement character vector of suitable dimensions.}
-
-\item{drop}{Whether to return a \code{list} (Default) or \code{MultiFactor}.}
 
 \item{use.names}{\verb{Logical scalar}, whether output list should contain
 character (Default) or integer data frame. If \code{FALSE}, returns

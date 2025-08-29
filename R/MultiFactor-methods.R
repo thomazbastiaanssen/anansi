@@ -21,6 +21,12 @@
 #' dim(x)
 #' names(x)
 #'
+#' ## Indexing
+#' x[...]
+#' x[...] <- value
+#' x[[...]]
+#' x[[...]] <- value
+#'
 #' ## Factor manipulation
 #' levels(x)
 #' unfactor(x)
@@ -34,7 +40,7 @@
 #' dimnames(x)
 #' levels(x)
 #'
-#' @param x,object `MultiFactor` on which the method should be applied, or, in
+#' @param x `MultiFactor` on which the method should be applied, or, in
 #'     case of the constructor `MultiFactor()`, a named `list` of data.frames
 #'     with two named columns each, where elements that share a row indicates
 #'     thet are adjacent.
@@ -50,6 +56,7 @@ NULL
 #' @name MultiFactor
 #' @rdname MultiFactor
 #' @aliases getEdgeList
+#' @usage getEdgeList(x)
 #' @export
 #'
 S7::method(getEdgeList, MultiFactor) <- function(x) {
@@ -58,17 +65,14 @@ S7::method(getEdgeList, MultiFactor) <- function(x) {
 
 #' @name MultiFactor
 #' @rdname MultiFactor
-#' @aliases dim
 #' @export
-#' @usage NULL
-#'
-S7::method(dim, MultiFactor) <- function(x) {
-    dim(x@map)
-    }
+S7::method(dim, MultiFactor) <- function(x) dim(x@map)
+
+
 
 #' @name MultiFactor
 #' @rdname MultiFactor
-#' @aliases names
+#' @aliases names,anansi::MultiFactor-method
 #' @export
 #' @usage NULL
 #'
@@ -84,6 +88,58 @@ S7::method(names, MultiFactor) <- function(x) {
 #'
 S7::method(dimnames, MultiFactor) <- function(x) {
     dimnames(x@map)
+}
+
+#' @name MultiFactor
+#' @importFrom methods show
+#' @importMethodsFrom methods show
+#' @aliases show,anansi::MultiFactor-method
+#' @rdname MultiFactor
+#' @usage NULL
+#' @export
+#'
+S7::method(show, MultiFactor) <- function(object) {
+    cat(
+        "An ", class(object),
+        ",\n    ", NCOL(object),
+        " feature types across ",
+        NROW(object),
+        " edge lists.\n\n",
+        sep = ""
+    )
+    Matrix::printSpMatrix(object@map)
+
+    cat(
+        "\nValues represent unique feature names in that edge list.\n\n",
+        "Levels:\n\n",
+        sep = ""
+    )
+    id_w <- max(nchar(colnames(object)))
+    nm_w <- max(nchar(nlevels(object)))
+    for (id in colnames(object)) {
+        num_lvs <- length(levels(object)[[id]])
+        cat(
+            format(id, width = id_w),
+            " : ",
+            format(num_lvs, width = nm_w),
+            " Levels: ",
+            sep = ""
+        )
+
+        if (num_lvs > 4L) {
+            cat(
+                levels(object)[[id]][1],
+                levels(object)[[id]][2],
+                "...",
+                levels(object)[[id]][num_lvs],
+                "\n",
+                sep = " "
+            )
+        } else {
+            cat(levels(object)[[id]], "\n", sep = " ")
+        }
+    }
+    invisible(NULL)
 }
 
 #' @name MultiFactor
@@ -213,14 +269,14 @@ S7::method(`levels<-`, MultiFactor) <- function(x, value) {
     x
 }
 
-#' @param drop Whether to return a `list` (Default) or `MultiFactor`.
-#' @export
 #' @name MultiFactor
 #' @rdname MultiFactor
+#' @param drop Whether to return a `list` (Default) or `MultiFactor`.
+#' @export
 #' @aliases [.anansi::MultiFactor
 #' @usage NULL
 #'
-S7::method(`[`, MultiFactor) <- function(x, ..., drop = TRUE) {
+`[.anansi::MultiFactor` <- function(x, ..., drop = TRUE) {
 
     dot_args <- rlang::dots_list(
         ..., .preserve_empty = TRUE, .ignore_empty = "none"
@@ -262,17 +318,18 @@ S7::method(`[`, MultiFactor) <- function(x, ..., drop = TRUE) {
 
 }
 
+
 #' @export
 #' @name MultiFactor
 #' @rdname MultiFactor
 #' @aliases [<-.anansi::MultiFactor
 #' @usage NULL
 #'
-S7::method(`[<-`, MultiFactor) <- function(
+`[<-.anansi::MultiFactor` <- function(
         x,
         ...,
         value
-    ) {
+) {
     dot_args <- rlang::dots_list(
         ..., .preserve_empty = TRUE, .ignore_empty = "none"
     )
@@ -308,14 +365,13 @@ S7::method(`[<-`, MultiFactor) <- function(
     return(x)
 }
 
-
 #' @export
 #' @rdname MultiFactor
 #' @name MultiFactor
-#' @aliases [[.anansi::MultiFactor
+#' @aliases `[[.anansi::MultiFactor`
 #' @usage NULL
 #'
-S7::method(`[[`, MultiFactor) <- function(x, ...) {
+`[[.anansi::MultiFactor` <- function(x, ...) {
     i <- rlang::dots_list(
         ..., .preserve_empty = TRUE, .ignore_empty = "none"
     )
@@ -345,29 +401,21 @@ S7::method(`[[`, MultiFactor) <- function(x, ...) {
 #' @aliases [[<-.anansi::MultiFactor
 #' @usage NULL
 #'
-S7::method(`[[<-`, MultiFactor) <- function(
-        x,
-        ...,
-        value
-    ) {
-    i <- rlang::dots_list(
-        ..., .preserve_empty = TRUE, .ignore_empty = "none"
-    )
+`[[<-.anansi::MultiFactor` <- function(x, ..., value) {
+    i <- rlang::dots_list( ..., .preserve_empty = TRUE, .ignore_empty = "none")
     stopifnot("exactly one indexing value is required." = length(i) == 1L)
     i <- i[[1L]]
     d <- x@map
-        # If i can't index d, stop. Appending not supported through `[[<-`.
-        if (!all(i %in% colnames(d))) {
-            if (anyNA(colnames(d)[i]) || length(colnames(d)[i]) != length(i)) {
-                stop("No levels corresponding to `i` found in MultiFactor. ")
-            }
+    # If i can't index d, stop. Appending not supported through `[[<-`.
+    if (!all(i %in% colnames(d))) {
+        if (anyNA(colnames(d)[i]) || length(colnames(d)[i]) != length(i)) {
+            stop("No levels corresponding to `i` found in MultiFactor. ")
         }
-        ii <- rowsWithCol(d, i, FALSE)
-        x@index[ii] <- value
-        x
     }
-
-
+    ii <- rowsWithCol(d, i, FALSE)
+    x@index[ii] <- value
+    x
+}
 
 
 ##############################################################################

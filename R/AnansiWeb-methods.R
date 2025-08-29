@@ -22,7 +22,7 @@
 #' ## Coercion
 #' asMAE(x)
 #' as.list(x, ...)
-#' as.data.frame(x, ...)
+#' as.data.frame(x, row.names = NULL, optional = FALSE, ...)
 #'
 #' ## Utilities on feature pairs
 #' pairs(x, ...)
@@ -39,8 +39,6 @@
 #' @seealso \itemize{
 #' \item [weaveWeb()]: for general use.
 #' }
-#' @importFrom methods slotNames slot slot<-
-#' @aliases tableY `tableY<-`
 #' @examples
 #'
 #' # Methods for AnansiWeb
@@ -114,7 +112,7 @@ S7::method(dimnames, AnansiWeb) <- function(x) dimnames(x@dictionary)
 #' @rdname AnansiWeb
 #' @aliases dim.anansi::AnansiWeb
 #' @export
-#' @usage NULL
+#' @usage dim(x)
 #'
 S7::method(dim, AnansiWeb) <- function(x) dim(x@dictionary)
 
@@ -122,14 +120,14 @@ S7::method(dim, AnansiWeb) <- function(x) dim(x@dictionary)
 #' @rdname AnansiWeb
 #' @aliases names.anansi::AnansiWeb
 #' @export
-#' @usage NULL
+#' @usage names(x)
 #'
 S7::method(names, AnansiWeb) <- function(x) names(dimnames(x@dictionary))
 
 #' @name AnansiWeb
 #' @rdname AnansiWeb
 #' @importFrom graphics pairs
-#' @aliases pairs,anansi::AnansiWeb-method pairs.anansi::AnansiWeb
+#' @aliases pairs pairs,anansi::AnansiWeb-method pairs.anansi::AnansiWeb
 #' @returns  a two-column array index, corresponding to i,j coordinates in
 #'   matrix notation.
 #' @export
@@ -177,7 +175,7 @@ S7::method(pairwiseApply, AnansiWeb) <- function(
 
 #' @name AnansiWeb
 #' @rdname AnansiWeb
-#' @aliases getFeaturePairs getFeaturePairs.anansi::AnansiWeb
+#' @aliases getFeaturePairs getFeaturePairs,anansi::AnansiWeb-method
 #' @importFrom Matrix which
 #' @param which `integer matrix`, indicating pair positions in `x@tableY` and
 #'     `x@tableX`, respectively. If `NULL` (default):
@@ -187,7 +185,7 @@ S7::method(pairwiseApply, AnansiWeb) <- function(
 #' @usage NULL
 #' @export
 #'
-S7::method(getFeaturePairs, AnansiWeb) <-  function(x, which = NULL, with.metadata = FALSE) {
+S7::method(getFeaturePairs, AnansiWeb) <-  function(x, ..., which = NULL, with.metadata = FALSE) {
     if (is.null(which)) {
         which <- Matrix::which(x@dictionary, arr.ind = TRUE, useNames = FALSE)
     }
