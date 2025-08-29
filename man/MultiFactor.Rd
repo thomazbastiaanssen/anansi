@@ -5,43 +5,34 @@
 \alias{asMultiFactor}
 \alias{MultiFactor}
 \alias{getEdgeList}
-\alias{getEdgeList,MultiFactor-method}
-\alias{dim,MultiFactor-method}
-\alias{names,MultiFactor-method}
-\alias{dimnames,MultiFactor-method}
-\alias{levels,MultiFactor-method}
-\alias{droplevels.MultiFactor}
-\alias{droplevels,MultiFactor-method}
+\alias{dim}
+\alias{names}
+\alias{dimnames}
+\alias{levels.anansi::MultiFactor}
+\alias{unfactor,anansi::MultiFactor-method}
+\alias{droplevels.anansi::MultiFactor}
 \alias{[,MultiFactor,ANY,ANY-method}
 \alias{[<-,MultiFactor,ANY,ANY,list-method}
 \alias{[[,MultiFactor,ANY-method}
 \alias{[[<-,MultiFactor,ANY,ANY-method}
-\alias{as.list.MultiFactor}
+\alias{as.list.anansi::MultiFactor}
 \title{MultiFactor S7 container class}
 \usage{
 ## Constructor for `MultiFactor` objects
-MultiFactor(x, levels = NULL, drop.unmatched = TRUE)
+MultiFactor(x, levels = NULL, drop.unmatched = FALSE)
 
 ## Accessors
-dimnames(MultiFactor)
-dim(MultiFactor)
-names(MultiFactor)
-
-MultiFactor@map <- value
+dimnames(x)
+dim(x)
+names(x)
 
 ## Factor manipulation
-levels(MultiFactor)
-unfactor(MultiFactor)
-droplevels(MultiFactor, exclude = NULL, select = NULL)
-
-## Subsetting
-subset(MultiFactor, subset, select, ...)
-
-## Combining
-c(MultiFactor, ...)
+levels(x)
+unfactor(x)
+droplevels(x, exclude = NULL, select = NULL)
 
 ## Coercion
-as.list(MultiFactor, ..., use.names = TRUE)
+as.list(x, ..., use.names = TRUE)
 }
 \arguments{
 \item{x, object}{\code{MultiFactor} on which the method should be applied, or, in

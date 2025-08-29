@@ -5,7 +5,6 @@
 #' @slot levels `Named list of character vectors`. Accessed through `levels(x)`
 #' @slot map `(sparse)Matrix` specifying which elements contain which levels.
 #'     Accesses through `x@dictionary`.
-#' @importFrom S7 new_class
 #' @export
 #'
 MultiFactor <- S7::new_class(
@@ -69,6 +68,7 @@ MultiFactor <- S7::new_class(
         )
     }
 )
+S7::S4_register(MultiFactor)
 
 
 #' @rdname MultiFactor
@@ -82,7 +82,7 @@ MultiFactor <- S7::new_class(
 #'     of their respective link data frames.
 #' @usage
 #' ## Constructor for `MultiFactor` objects
-#' MultiFactor(x, levels = NULL, drop.unmatched = TRUE)
+#' MultiFactor(x, levels = NULL, drop.unmatched = FALSE)
 #'
 #' @export
 #' @seealso \itemize{
@@ -202,7 +202,6 @@ AnansiWeb <- S7::new_class(
 
 )
 S7::S4_register(AnansiWeb)
-
 
 #' An S7 class to contain all `anansi` stats results. Not intended for general
 #' use.

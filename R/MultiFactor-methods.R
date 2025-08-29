@@ -17,25 +17,17 @@
 #'
 #' @usage
 #' ## Accessors
-#' dimnames(MultiFactor)
-#' dim(MultiFactor)
-#' names(MultiFactor)
-#'
-#' MultiFactor@map <- value
+#' dimnames(x)
+#' dim(x)
+#' names(x)
 #'
 #' ## Factor manipulation
-#' levels(MultiFactor)
-#' unfactor(MultiFactor)
-#' droplevels(MultiFactor, exclude = NULL, select = NULL)
-#'
-#' ## Subsetting
-#' subset(MultiFactor, subset, select, ...)
-#'
-#' ## Combining
-#' c(MultiFactor, ...)
+#' levels(x)
+#' unfactor(x)
+#' droplevels(x, exclude = NULL, select = NULL)
 #'
 #' ## Coercion
-#' as.list(MultiFactor, ..., use.names = TRUE)
+#' as.list(x, ..., use.names = TRUE)
 #' @examples
 #' x <- MultiFactor(kegg_link())
 #' x
@@ -57,8 +49,7 @@ NULL
 
 #' @name MultiFactor
 #' @rdname MultiFactor
-#' @aliases getEdgeList getEdgeList,MultiFactor-method
-#' @importFrom S7 "method<-"
+#' @aliases getEdgeList
 #' @export
 #'
 S7::method(getEdgeList, MultiFactor) <- function(x) {
@@ -67,7 +58,7 @@ S7::method(getEdgeList, MultiFactor) <- function(x) {
 
 #' @name MultiFactor
 #' @rdname MultiFactor
-#' @aliases dim,MultiFactor-method
+#' @aliases dim
 #' @export
 #' @usage NULL
 #'
@@ -77,7 +68,7 @@ S7::method(dim, MultiFactor) <- function(x) {
 
 #' @name MultiFactor
 #' @rdname MultiFactor
-#' @aliases names,MultiFactor-method
+#' @aliases names
 #' @export
 #' @usage NULL
 #'
@@ -87,7 +78,7 @@ S7::method(names, MultiFactor) <- function(x) {
 
 #' @name MultiFactor
 #' @rdname MultiFactor
-#' @aliases dimnames,MultiFactor-method
+#' @aliases dimnames
 #' @export
 #' @usage NULL
 #'
@@ -97,7 +88,7 @@ S7::method(dimnames, MultiFactor) <- function(x) {
 
 #' @name MultiFactor
 #' @rdname MultiFactor
-#' @aliases levels,MultiFactor-method
+#' @aliases levels.anansi::MultiFactor
 #' @export
 #' @usage NULL
 #'
@@ -107,6 +98,7 @@ S7::method(levels, MultiFactor) <- function(x) {
 
 #' @name MultiFactor
 #' @rdname MultiFactor
+#' @aliases unfactor,anansi::MultiFactor-method
 #' @export
 #' @usage NULL
 #'
@@ -135,13 +127,12 @@ S7::method(unfactor, MultiFactor) <- function(x) {
 #'     `levels(MultiFactor)`. Which levels to keep in output.
 #' @details Only one of `select` and `exclude` should be provided, as they are
 #'     each others complement.
-#' @aliases droplevels.MultiFactor droplevels,MultiFactor-method
-#' @method droplevels MultiFactor
+#' @aliases droplevels.anansi::MultiFactor
 #' @returns A MultiFactor
 #' @export
 #' @usage NULL
 #'
-S7::method(droplevels, MultiFactor) <- function(x, exclude = NULL, select = NULL) {
+S7::method(droplevels, MultiFactor) <- function(x, ..., exclude = NULL, select = NULL) {
     stopifnot(
         "Only one of 'exclude' and 'select' may be provided" = sum(
             is.null(exclude),
@@ -205,14 +196,22 @@ S7::method(droplevels, MultiFactor) <- function(x, exclude = NULL, select = NULL
 
 #' @name MultiFactor
 #' @rdname MultiFactor
+#' @export
+#' @usage NULL
+#'
+S7::method(levels, MultiFactor) <- function(x) {
+    x@levels
+}
+#' @name MultiFactor
+#' @rdname MultiFactor
 #' @param value a replacement character vector of suitable dimensions.
 #' @export
 #' @usage NULL
 #'
-S7::method(levels, MultiFactor) <- function(x, value) {
-    x@levels
+S7::method(`levels<-`, MultiFactor) <- function(x, value) {
+    x@levels <- value
+    x
 }
-
 
 #' @param drop Whether to return a `list` (Default) or `MultiFactor`.
 #' @export

@@ -4,6 +4,7 @@ NULL
 
 rlang::on_load({
     S7::S4_register(anansi:::AnansiWeb);
+    S7::S4_register(anansi:::MultiFactor);
     S7::methods_register()
 })
 

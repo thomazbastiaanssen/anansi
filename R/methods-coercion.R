@@ -1,6 +1,6 @@
 #' @name AnansiWeb
 #' @rdname AnansiWeb
-#' @aliases as.list.AnansiWeb coerce,AnansiWeb-list
+#' @aliases as.list,anansi::AnansiWeb-method
 #' @usage NULL
 #' @export
 #'
@@ -12,8 +12,8 @@ S7::method(as.list, AnansiWeb)  <- function(x) {
 
 #' @name AnansiWeb
 #' @rdname AnansiWeb
-#' @param row.names,optional Ignored, for S4 generic. See ?base::as.data.frame.
-#' @aliases as.data.frame.AnansiWeb-method coerce,AnansiWeb-data.frame
+#' @aliases as.data.frame.anansi::AnansiWeb as.data.frame,anansi::AnansiWeb-method
+#' @importFrom S4Vectors as.data.frame
 #' @usage NULL
 #' @export
 #'
@@ -62,7 +62,7 @@ asMAE <- function(x)  {
 
 #' @name MultiFactor
 #' @rdname MultiFactor
-#' @aliases as.list.MultiFactor
+#' @aliases as.list.anansi::MultiFactor
 #' @returns a named list of character vectors (Default) or integers
 #' (`use.names = FALSE`).
 #' @param use.names `Logical scalar`, whether output list should contain
@@ -71,7 +71,7 @@ asMAE <- function(x)  {
 #' @seealso [unfactor()]
 #' @export
 #'
-S7::method(as.list, MultiFactor) <- function(x, use.names = TRUE) {
+S7::method(as.list, MultiFactor) <- function(x, ..., use.names = TRUE) {
     ifelse(
         use.names,
         yes = return(unfactor(x)),

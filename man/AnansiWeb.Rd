@@ -5,14 +5,19 @@
 \alias{AnansiWeb}
 \alias{tableY}
 \alias{`tableY<-`}
-\alias{which,AnansiWeb-method}
-\alias{pairwiseApply,AnansiWeb-method}
+\alias{show,anansi::AnansiWeb-method}
+\alias{dimnames.anansi::AnansiWeb}
+\alias{dim.anansi::AnansiWeb}
+\alias{names.anansi::AnansiWeb}
+\alias{pairs,anansi::AnansiWeb-method}
+\alias{pairs.anansi::AnansiWeb}
+\alias{pairwiseApply}
+\alias{pairwiseApply.anansi::AnansiWeb}
 \alias{getFeaturePairs}
-\alias{getFeaturePairs,AnansiWeb-method}
-\alias{as.list.AnansiWeb}
-\alias{coerce,AnansiWeb-list}
-\alias{as.data.frame.AnansiWeb-method}
-\alias{coerce,AnansiWeb-data.frame}
+\alias{getFeaturePairs.anansi::AnansiWeb}
+\alias{as.list,anansi::AnansiWeb-method}
+\alias{as.data.frame.anansi::AnansiWeb}
+\alias{as.data.frame,anansi::AnansiWeb-method}
 \alias{asMAE}
 \alias{as.MAE}
 \alias{as.MultiAssayExperiment}
@@ -23,33 +28,22 @@
 AnansiWeb(tableX, tableY, dictionary, metadata = list(), ...)
 
 ## Accessors
-dimnames(AnansiWebx)
-dim(AnansiWeb)
-names(AnansiWeb)
-
-AnansiWeb@tableY
-AnansiWeb@tableY <- value
-AnansiWeb@tableX
-AnansiWeb@tableX <- value
-AnansiWeb@dictionary
-AnansiWeb@dictionary <- value
-AnansiWeb@metadata
-AnansiWeb@metadata <- value
+dimnames(x)
+dim(x)
+names(x)
 
 ## Coercion
 asMAE(x)
-as.list(AnansiWeb)
-as.data.frame(
-    AnansiWeb, row.names = NULL, optional = FALSE
- )
+as.list(x)
+as.data.frame(x)
 
 ## Utilities on feature pairs
-which(AnansiWeb, arr.ind = TRUE, useNames = FALSE)
+pairs(x)
 getFeaturePairs(
-    AnansiWeb, which = NULL, with.metadata = FALSE, ...
+    x, which = NULL, with.metadata = FALSE, ...
 )
 pairwiseApply(
-    AnansiWeb,
+    x,
     FUN,
     MoreArgs = NULL, SIMPLIFY = TRUE, USE.NAMES = TRUE
 )
@@ -66,8 +60,9 @@ to \code{Matrix}}
 
 \item{metadata}{\code{list} of metadata. Optional.}
 
-\item{arr.ind, useNames}{See ?base::which. \code{AnansiWeb} default returns a
-two-column array index.}
+\item{x}{input, \code{AnansiWeb}.}
+
+\item{...}{further arguments for methods}
 
 \item{FUN}{a function with at least two arguments. The variables \code{x} and \code{y},
 in order, refer to the corresponding values of feature pairs in \code{tableX}
@@ -80,13 +75,14 @@ and \code{tableY}.}
 \code{Matrix::which(x@dictionary, TRUE)}.}
 
 \item{with.metadata}{\verb{Logical scalar} whether to append metadata to output}
-
-\item{row.names, optional}{Ignored, for S4 generic. See ?base::as.data.frame.}
 }
 \value{
 an \code{AnansiWeb} object, with sparse binary biadjacency matrix
 with features from \code{y} as rows and features from \code{x} as columns in
 \code{dictionary} slot.
+
+a two-column array index, corresponding to i,j coordinates in
+matrix notation.
 
 A list of data.frames with the paired data
 }
