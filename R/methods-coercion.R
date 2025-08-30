@@ -12,19 +12,33 @@ S7::method(as.list, AnansiWeb)  <- function(x, ...) {
 
 #' @name AnansiWeb
 #' @rdname AnansiWeb
-#' @aliases as.data.frame.anansi::AnansiWeb as.data.frame,anansi::AnansiWeb-method
-#' @param row.names,optional Ignored, for S4 generic. See ?base::as.data.frame.
-#' @importFrom S4Vectors as.data.frame
-#' @usage as.data.frame(x, ...)
-#' `as.data.frame.anansi::AnansiWeb`
+#' @usage NULL
 #'
-S7::method(as.data.frame, AnansiWeb) <- function(x, ...) {
+`as.data.frame.anansi::AnansiWeb` <- function(x, ...) {
     cbind(
         x@tableY,
         x@tableX,
         x@metadata
     )
 }
+
+#' @name AnansiWeb
+#' @rdname AnansiWeb
+#' @aliases as.data.frame.anansi::AnansiWeb
+#' @importFrom S4Vectors as.data.frame
+#' @importFrom S7 convert
+#'
+S7::method(convert, list(AnansiWeb, S7::class_data.frame)) <-
+    function(from, to) `as.data.frame.anansi::AnansiWeb`(from)
+
+#' @name AnansiWeb
+#' @rdname AnansiWeb
+#' @aliases as.list.anansi::AnansiWeb
+#' @importFrom S4Vectors as.data.frame
+#' @importFrom S7 convert
+#'
+S7::method(convert, list(MultiFactor, S7::class_list)) <-
+               function(from, to) `as.list.anansi::AnansiWeb`(x = from)
 
 #' @name AnansiWeb
 #' @rdname AnansiWeb
@@ -63,18 +77,20 @@ asMAE <- function(x)  {
 
 #' @name MultiFactor
 #' @rdname MultiFactor
-#' @aliases as.list.anansi::MultiFactor
+#' @aliases as.list,anansi::MultiFactor-method
 #' @returns a named list of character vectors (Default) or integers
 #' (`use.names = FALSE`).
 #' @param use.names `Logical scalar`, whether output list should contain
 #'     character (Default) or integer data frame. If `FALSE`, returns
 #'     `unfactor(x)`.
+#' @importFrom S7 convert
 #' @seealso [unfactor()]
 #' @export
 #'
-S7::method(as.list, MultiFactor) <- function(x, ..., use.names = TRUE) {
+`as.list.anansi::MultiFactor` <- function(x, ..., use.names = TRUE) {
     ifelse(
         use.names,
         yes = return(unfactor(x)),
         no = return(`names<-`(x@index, rownames(x)))
     )}
+

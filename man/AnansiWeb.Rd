@@ -16,7 +16,7 @@
 \alias{getFeaturePairs,anansi::AnansiWeb-method}
 \alias{as.list,anansi::AnansiWeb-method}
 \alias{as.data.frame.anansi::AnansiWeb}
-\alias{as.data.frame,anansi::AnansiWeb-method}
+\alias{as.list.anansi::AnansiWeb}
 \alias{asMAE}
 \alias{as.MAE}
 \alias{as.MultiAssayExperiment}
@@ -26,15 +26,8 @@
 ## Constructor for `AnansiWeb` objects
 AnansiWeb(tableX, tableY, dictionary, metadata = data.frame())
 
-## Accessors
-dimnames(x)
-dim(x)
-names(x)
-
 ## Coercion
 asMAE(x)
-as.list(x, ...)
-as.data.frame(x, row.names = NULL, optional = FALSE, ...)
 
 ## Utilities on feature pairs
 pairs(x, ...)
@@ -42,17 +35,16 @@ getFeaturePairs(
     x, which = NULL, with.metadata = FALSE, ...
 )
 pairwiseApply(
-    x,
+    X,
     FUN,
     MoreArgs = NULL, SIMPLIFY = TRUE, USE.NAMES = TRUE
 )
 
-dim(x)
+\method{dimnames}{`anansi::AnansiWeb`}(x)
 
-names(x)
+\method{dim}{`anansi::AnansiWeb`}(x)
 
-as.data.frame(x, ...)
-`as.data.frame.anansi::AnansiWeb`
+\method{names}{`anansi::AnansiWeb`}(x)
 
 asMAE(x)
 }
@@ -66,7 +58,7 @@ to \code{Matrix}}
 
 \item{metadata}{\code{list} of metadata. Optional.}
 
-\item{x}{input, \code{AnansiWeb}.}
+\item{x, X}{input, \code{AnansiWeb}.}
 
 \item{...}{further arguments for methods}
 
@@ -81,8 +73,6 @@ and \code{tableY}.}
 \code{Matrix::which(x@dictionary, TRUE)}.}
 
 \item{with.metadata}{\verb{Logical scalar} whether to append metadata to output}
-
-\item{row.names, optional}{Ignored, for S4 generic. See ?base::as.data.frame.}
 }
 \value{
 an \code{AnansiWeb} object, with sparse binary biadjacency matrix

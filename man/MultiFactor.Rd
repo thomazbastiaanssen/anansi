@@ -5,43 +5,49 @@
 \alias{asMultiFactor}
 \alias{MultiFactor}
 \alias{getEdgeList}
-\alias{names,anansi::MultiFactor-method}
-\alias{dimnames}
+\alias{dim.anansi::MultiFactor}
+\alias{names.anansi::MultiFactor}
+\alias{dimnames.anansi::MultiFactor}
 \alias{show,anansi::MultiFactor-method}
-\alias{levels.anansi::MultiFactor}
 \alias{unfactor,anansi::MultiFactor-method}
 \alias{droplevels.anansi::MultiFactor}
+\alias{levels.anansi::MultiFactor}
+\alias{levels<-.anansi::MultiFactor}
 \alias{[.anansi::MultiFactor}
 \alias{[<-.anansi::MultiFactor}
 \alias{[[.anansi::MultiFactor}
 \alias{`[[.anansi::MultiFactor`}
 \alias{[[<-.anansi::MultiFactor}
 \alias{as.list.anansi::MultiFactor}
+\alias{as.list,anansi::MultiFactor-method}
 \title{MultiFactor S7 container class}
 \usage{
 ## Constructor for `MultiFactor` objects
 MultiFactor(x, levels = NULL, drop.unmatched = FALSE)
 
-## Accessors
-dimnames(x)
-dim(x)
-names(x)
-
-## Indexing
-x[...]
-x[...] <- value
-x[[...]]
-x[[...]] <- value
-
-## Factor manipulation
-levels(x)
-unfactor(x)
-droplevels(x, exclude = NULL, select = NULL)
-
-## Coercion
-as.list(x, ..., use.names = TRUE)
-
 getEdgeList(x)
+
+\method{dim}{`anansi::MultiFactor`}(x)
+
+\method{names}{`anansi::MultiFactor`}(x)
+
+\method{dimnames}{`anansi::MultiFactor`}(x)
+
+\method{droplevels}{`anansi::MultiFactor`}(x, ..., exclude = NULL, select = NULL)
+
+\method{levels}{`anansi::MultiFactor`}(x)
+
+\method{levels}{`anansi::MultiFactor`}(x) <- value
+
+\method{[}{`anansi::MultiFactor`}(x, ..., drop = TRUE)
+
+\method{[}{`anansi::MultiFactor`}(x, ...) <- value
+
+\method{[[}{`anansi::MultiFactor`}(x, ...)
+
+\method{[[}{`anansi::MultiFactor`}(x, ...) <- value
+
+\method{as.list}{`anansi::MultiFactor`}(x, ..., use.names = TRUE)
 }
 \arguments{
 \item{x}{\code{MultiFactor} on which the method should be applied, or, in
@@ -64,15 +70,15 @@ are coerced to integer or whole numbers as by as.integer or for large
 values by trunc (and hence truncated towards zero). Character vectors
 will be matched to the names of the object.}
 
-\item{drop}{Whether to return a \code{list} (Default) or \code{MultiFactor}.}
-
-\item{value}{a replacement character vector of suitable dimensions.}
-
 \item{exclude}{\code{NULL} or \verb{Named character list} of similar structure as
 \code{levels(MultiFactor)}. Which levels to drop from output.}
 
 \item{select}{\code{NULL} or \verb{Named character list} of similar structure as
 \code{levels(MultiFactor)}. Which levels to keep in output.}
+
+\item{value}{a replacement character vector of suitable dimensions.}
+
+\item{drop}{Whether to return a \code{list} (Default) or \code{MultiFactor}.}
 
 \item{use.names}{\verb{Logical scalar}, whether output list should contain
 character (Default) or integer data frame. If \code{FALSE}, returns

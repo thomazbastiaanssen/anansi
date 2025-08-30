@@ -11,18 +11,11 @@
 #' The function `AnansiWeb()` constructs an `AnansiWeb` object from two
 #' feature tables and an adjacency matrix.
 #'
-#' @param x input, `AnansiWeb`.
+#' @param x,X input, `AnansiWeb`.
 #' @param ... further arguments for methods
 #' @usage
-#' ## Accessors
-#' dimnames(x)
-#' dim(x)
-#' names(x)
-#'
 #' ## Coercion
 #' asMAE(x)
-#' as.list(x, ...)
-#' as.data.frame(x, row.names = NULL, optional = FALSE, ...)
 #'
 #' ## Utilities on feature pairs
 #' pairs(x, ...)
@@ -30,7 +23,7 @@
 #'     x, which = NULL, with.metadata = FALSE, ...
 #' )
 #' pairwiseApply(
-#'     x,
+#'     X,
 #'     FUN,
 #'     MoreArgs = NULL, SIMPLIFY = TRUE, USE.NAMES = TRUE
 #' )
@@ -104,25 +97,22 @@ S7::method(show, AnansiWeb) <- function(object) {
 #' @rdname AnansiWeb
 #' @aliases dimnames.anansi::AnansiWeb
 #' @export
-#' @usage NULL
 #'
-S7::method(dimnames, AnansiWeb) <- function(x) dimnames(x@dictionary)
+`dimnames.anansi::AnansiWeb` <- function(x) dimnames(x@dictionary)
 
 #' @name AnansiWeb
 #' @rdname AnansiWeb
 #' @aliases dim.anansi::AnansiWeb
 #' @export
-#' @usage dim(x)
 #'
-S7::method(dim, AnansiWeb) <- function(x) dim(x@dictionary)
+`dim.anansi::AnansiWeb`<- function(x) dim(x@dictionary)
 
 #' @name AnansiWeb
 #' @rdname AnansiWeb
 #' @aliases names.anansi::AnansiWeb
 #' @export
-#' @usage names(x)
 #'
-S7::method(names, AnansiWeb) <- function(x) names(dimnames(x@dictionary))
+`names.anansi::AnansiWeb` <- function(x) names(dimnames(x@dictionary))
 
 #' @name AnansiWeb
 #' @rdname AnansiWeb
