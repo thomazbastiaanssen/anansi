@@ -1,7 +1,6 @@
 #' Get a graph object out of an MultiFactor.
 #' @name getGraph
 #' @rdname getGraph
-#' @aliases getGraph
 #' @param x `MultiFactor`
 #' @param format
 #' `Character scalar`, controls output format by package name.
@@ -12,7 +11,7 @@
 #' @seealso [igraph::graph_from_data_frame()] and
 #'     [igraph::as_graphnel()], which are used under the hood, from
 #'     [igraph::igraph()] package.
-#' @export
+#' @method getGraph MultiFactor
 #' @examples
 #' # Generate a regular igraph object
 #' g <- getGraph(kegg_link())

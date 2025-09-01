@@ -66,12 +66,12 @@
 #' )
 NULL
 
-#' @name AnansiWeb
+#' @name show.AnansiWeb
 #' @importFrom methods show
 #' @importMethodsFrom methods show
 #' @aliases show,anansi::AnansiWeb-method
 #' @rdname AnansiWeb
-#' @export
+#' @usage NULL
 #'
 S7::method(show, AnansiWeb) <- function(object) {
     cat(
@@ -93,49 +93,43 @@ S7::method(show, AnansiWeb) <- function(object) {
     invisible(NULL)
 }
 
-#' @name AnansiWeb
+#' @name dimnames.AnansiWeb
 #' @rdname AnansiWeb
-#' @aliases dimnames.anansi::AnansiWeb
-#' @export
+#' @method dimnames AnansiWeb
 #'
-`dimnames.anansi::AnansiWeb` <- function(x) dimnames(x@dictionary)
+S7::method(dimnames, AnansiWeb) <- function(x) dimnames(x@dictionary)
 
-#' @name AnansiWeb
+#' @name dim.AnansiWeb
 #' @rdname AnansiWeb
-#' @aliases dim.anansi::AnansiWeb
-#' @export
+#' @method dim AnansiWeb
 #'
-`dim.anansi::AnansiWeb`<- function(x) dim(x@dictionary)
+S7::method(dim, AnansiWeb) <- function(x) dim(x@dictionary)
 
-#' @name AnansiWeb
+#' @name names.AnansiWeb
 #' @rdname AnansiWeb
-#' @aliases names.anansi::AnansiWeb
-#' @export
+#' @method names AnansiWeb
 #'
-`names.anansi::AnansiWeb` <- function(x) names(dimnames(x@dictionary))
+S7::method(names, AnansiWeb) <- function(x) names(dimnames(x@dictionary))
 
-#' @name AnansiWeb
+#' @name pairs.AnansiWeb
 #' @rdname AnansiWeb
+#' @aliases pairs
 #' @importFrom graphics pairs
-#' @aliases pairs pairs,anansi::AnansiWeb-method pairs.anansi::AnansiWeb
 #' @returns  a two-column array index, corresponding to i,j coordinates in
 #'   matrix notation.
-#' @export
-#' @usage NULL
 #'
 S7::method(pairs, AnansiWeb) <- function(x, ...) Matrix::which(
     x, arr.ind = TRUE, useNames = FALSE
     )
 
-#' @name AnansiWeb
+#' @name pairwiseApply.AnansiWeb
+#' @aliases `pairwiseApply.anansi::AnansiWeb` pairwiseApply
 #' @rdname AnansiWeb
-#' @aliases pairwiseApply pairwiseApply.anansi::AnansiWeb
 #' @param FUN a function with at least two arguments. The variables `x` and `y`,
 #'     in order, refer to the corresponding values of feature pairs in `tableX`
 #'     and `tableY`.
 #' @param MoreArgs,SIMPLIFY,USE.NAMES see ?base::mapply
-#' @export
-#' @usage NULL
+#' @method pairwiseApply AnansiWeb
 #'
 S7::method(pairwiseApply, AnansiWeb) <- function(
         X, FUN, MoreArgs = NULL, SIMPLIFY = TRUE, USE.NAMES = TRUE
@@ -163,17 +157,16 @@ S7::method(pairwiseApply, AnansiWeb) <- function(
         return(out)
     }
 
-#' @name AnansiWeb
+#' @name getFeaturePairs.AnansiWeb
 #' @rdname AnansiWeb
-#' @aliases getFeaturePairs getFeaturePairs,anansi::AnansiWeb-method
+#' @aliases `getFeaturePairs.anansi::AnansiWeb` getFeaturePairs
 #' @importFrom Matrix which
 #' @param which `integer matrix`, indicating pair positions in `x@tableY` and
 #'     `x@tableX`, respectively. If `NULL` (default):
 #'     `Matrix::which(x@dictionary, TRUE)`.
 #' @param with.metadata `Logical scalar` whether to append metadata to output
 #' @return A list of data.frames with the paired data
-#' @usage NULL
-#' @export
+#' @method getFeaturePairs AnansiWeb
 #'
 S7::method(getFeaturePairs, AnansiWeb) <-  function(x, ..., which = NULL, with.metadata = FALSE) {
     if (is.null(which)) {

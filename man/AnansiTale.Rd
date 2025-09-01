@@ -35,6 +35,9 @@ the \code{type} slot.}
 \item{p.values}{A matrix containing the p.values for the parameters named in
 the \code{type} slot.}
 }
+\value{
+an \code{AnansiTale}
+}
 \description{
 \code{AnansiTale} is the main container that will hold your
 stats output data coming out of the \code{anansi} pipeline.

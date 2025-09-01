@@ -14,12 +14,14 @@
 #' A `MultiFactor` object presents itself similar to a `data.frame`, in the
 #' sense that level types can be called as columns and individual data.frame
 #' components can be called as rows.
-#'
 #' @examples
 #' x <- MultiFactor(kegg_link())
 #' x
+#' dim(x)
 #' dimnames(x)
 #' levels(x)
+#' levels(x) <- rev(levels(x))
+#' getEdgeList(x)
 #'
 #' @param x `MultiFactor` on which the method should be applied, or, in
 #'     case of the constructor `MultiFactor()`, a named `list` of data.frames
@@ -34,50 +36,42 @@
 #'     replaced.
 NULL
 
-#' @name MultiFactor
+#' @name getEdgeList.MultiFactor
 #' @rdname MultiFactor
-#' @aliases getEdgeList
-#' @usage getEdgeList(x)
-#' @export
+#' @method getEdgeList MultiFactor
 #'
 S7::method(getEdgeList, MultiFactor) <- function(x) {
     as.data.frame(do.call(rbind, base::names(x)))
     }
 
-#' @name MultiFactor
+#' @name dim.MultiFactor
 #' @rdname MultiFactor
-#' @aliases dim.anansi::MultiFactor
-#' @export
+#' @method dim MultiFactor
 #'
-`dim.anansi::MultiFactor` <- function(x) dim(x@map)
+S7::method(dim, MultiFactor) <- function(x) dim(x@map)
 
 
-
-#' @name MultiFactor
+#' @name names.MultiFactor
 #' @rdname MultiFactor
-#' @aliases names.anansi::MultiFactor
-#' @export
+#' @method names MultiFactor
 #'
-`names.anansi::MultiFactor` <- function(x) {
+S7::method(names, MultiFactor) <- function(x) {
     lapply(x@index, base::names)
 }
 
-#' @name MultiFactor
+#' @name dimnames.MultiFactor
 #' @rdname MultiFactor
-#' @aliases dimnames.anansi::MultiFactor
-#' @export
+#' @method dimnames MultiFactor
 #'
-`dimnames.anansi::MultiFactor` <- function(x) {
+S7::method(dimnames, MultiFactor) <- function(x) {
     dimnames(x@map)
 }
 
-#' @name MultiFactor
-#' @importFrom methods show
+#' @name show.MultiFactor
 #' @importMethodsFrom methods show
-#' @aliases show,anansi::MultiFactor-method
 #' @rdname MultiFactor
+#' @method show MultiFactor
 #' @usage NULL
-#' @export
 #'
 S7::method(show, MultiFactor) <- function(object) {
     cat(
@@ -124,10 +118,9 @@ S7::method(show, MultiFactor) <- function(object) {
 }
 
 
-#' @name MultiFactor
+#' @name unfactor.MultiFactor
 #' @rdname MultiFactor
-#' @aliases unfactor,anansi::MultiFactor-method
-#' @export
+#' @method unfactor MultiFactor
 #'
 S7::method(unfactor, MultiFactor) <- function(x) {
     lv <- levels(x)
@@ -144,8 +137,9 @@ S7::method(unfactor, MultiFactor) <- function(x) {
     return(x)
 }
 
-#' @name MultiFactor
+#' @name droplevels.MultiFactor
 #' @rdname MultiFactor
+#' @aliases droplevels
 #' @description Analogous to `factors`. `droplevels(MultiFactor)` returns a
 #'     `MultiFactor` with unused levels removed.
 #' @param exclude `NULL` or `Named character list` of similar structure as
@@ -154,11 +148,15 @@ S7::method(unfactor, MultiFactor) <- function(x) {
 #'     `levels(MultiFactor)`. Which levels to keep in output.
 #' @details Only one of `select` and `exclude` should be provided, as they are
 #'     each others complement.
-#' @aliases droplevels.anansi::MultiFactor
+#' @usage
+#' droplevels.MultiFactor(x, exclude = NULL, select = NULL)
+#' @examples
+#' droplevels(x, exclude = list(ko = "K00001"), select = NULL)
+#' droplevels(x, select = list(ko = "K00001"))
 #' @returns A MultiFactor
-#' @export
+#' @method droplevels MultiFactor
 #'
-`droplevels.anansi::MultiFactor` <- function(x, ..., exclude = NULL, select = NULL) {
+S7::method(droplevels, MultiFactor) <- function(x, ..., exclude = NULL, select = NULL) {
     stopifnot(
         "Only one of 'exclude' and 'select' may be provided" = sum(
             is.null(exclude),
@@ -220,32 +218,28 @@ S7::method(unfactor, MultiFactor) <- function(x) {
     x@map <- mapMultiFactor(x@index, mode = "counts")
     return(x)    }
 
-#' @name MultiFactor
+#' @name levels.MultiFactor
 #' @rdname MultiFactor
-#' @aliases levels.anansi::MultiFactor
-#' @export
+#' @method levels MultiFactor
 #'
-`levels.anansi::MultiFactor` <- function(x) {
+S7::method(levels, MultiFactor) <- function(x) {
     x@levels
 }
 
-#' @name MultiFactor
-#' @rdname MultiFactor
-#' @param value a replacement character vector of suitable dimensions.
-#' @export
-#'
-`levels<-.anansi::MultiFactor` <- function(x, value) {
-    x@levels <- value
-    x
-}
 
-#' @name MultiFactor
+
+#' @name `[.MultiFactor`
 #' @rdname MultiFactor
 #' @param drop Whether to return a `list` (Default) or `MultiFactor`.
-#' @export
-#' @aliases [.anansi::MultiFactor
+#' @method `[` MultiFactor
+#' @aliases [
+#' @usage
+#' x[..., drop = TRUE]
+#' x[...] <- value
+#' x[[...]]
+#' x[[...]] <- value
 #'
-`[.anansi::MultiFactor` <- function(x, ..., drop = TRUE) {
+S7::method(`[`, MultiFactor) <- function(x, ..., drop = TRUE) {
 
     dot_args <- rlang::dots_list(
         ..., .preserve_empty = TRUE, .ignore_empty = "none"
@@ -287,13 +281,41 @@ S7::method(unfactor, MultiFactor) <- function(x) {
 
 }
 
-
-#' @export
-#' @name MultiFactor
+#' @method `[[` MultiFactor
 #' @rdname MultiFactor
-#' @aliases [<-.anansi::MultiFactor
+#' @name `[[.MultiFactor`
+#' @aliases [[
 #'
-`[<-.anansi::MultiFactor` <- function(
+S7::method(`[[`, MultiFactor) <- function(x, ...) {
+    i <- rlang::dots_list(
+        ..., .preserve_empty = TRUE, .ignore_empty = "none"
+    )
+    i_len <- length(i)
+    stopifnot("Too many arguments provided" = i_len %in% seq(0L, 1L, 1L))
+
+    # Empty returns self
+    if(i_len == 0L) {return(x)}
+    i <- i[[1L]]
+    d <- x@map
+
+    # If i can't index d, return NULL
+
+    if (!all(i %in% colnames(d))) {
+        if (anyNA(colnames(d)[i]) || length(colnames(d)[i]) != length(i)) {
+            return(NULL)
+        }
+    }
+    # Otherwise, return selected elements.
+    ii <- rowsWithCol(d, i, FALSE)
+    x[ii]
+}
+
+#' @method `[<-` MultiFactor
+#' @name `[<-.MultiFactor`
+#' @rdname MultiFactor
+#' @aliases [<-
+#'
+S7::method(`[<-`, MultiFactor) <- function(
         x,
         ...,
         value
@@ -333,41 +355,13 @@ S7::method(unfactor, MultiFactor) <- function(x) {
     return(x)
 }
 
-#' @export
+
+#' @method `[[<-` MultiFactor
 #' @rdname MultiFactor
-#' @name MultiFactor
-#' @aliases `[[.anansi::MultiFactor`
+#' @name `[[<-.MultiFactor`
+#' @aliases [[<-
 #'
-`[[.anansi::MultiFactor` <- function(x, ...) {
-    i <- rlang::dots_list(
-        ..., .preserve_empty = TRUE, .ignore_empty = "none"
-    )
-    i_len <- length(i)
-    stopifnot("Too many arguments provided" = i_len %in% seq(0L, 1L, 1L))
-
-    # Empty returns self
-    if(i_len == 0L) {return(x)}
-    i <- i[[1L]]
-    d <- x@map
-
-    # If i can't index d, return NULL
-
-    if (!all(i %in% colnames(d))) {
-        if (anyNA(colnames(d)[i]) || length(colnames(d)[i]) != length(i)) {
-            return(NULL)
-        }
-    }
-    # Otherwise, return selected elements.
-    ii <- rowsWithCol(d, i, FALSE)
-    x[ii]
-}
-
-#' @export
-#' @rdname MultiFactor
-#' @name MultiFactor
-#' @aliases [[<-.anansi::MultiFactor
-#'
-`[[<-.anansi::MultiFactor` <- function(x, ..., value) {
+S7::method(`[[<-`, MultiFactor) <- function(x, ..., value) {
     i <- rlang::dots_list( ..., .preserve_empty = TRUE, .ignore_empty = "none")
     stopifnot("exactly one indexing value is required." = length(i) == 1L)
     i <- i[[1L]]
@@ -380,6 +374,17 @@ S7::method(unfactor, MultiFactor) <- function(x) {
     }
     ii <- rowsWithCol(d, i, FALSE)
     x@index[ii] <- value
+    x
+}
+
+#' @name levels<-.MultiFactor
+#' @rdname MultiFactor
+#' @aliases levels<-
+#' @param value a replacement character vector of suitable dimensions.
+#' @method `levels<-` MultiFactor
+#'
+S7::method(`levels<-`, MultiFactor) <- function(x, value) {
+    x@levels <- value
     x
 }
 

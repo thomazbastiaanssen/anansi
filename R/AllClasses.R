@@ -3,7 +3,7 @@
 #'     to `factor`s, the integers in those columns correspond to the characters
 #'     in that level. Accessed through regular list methods (e.g., `[`, `[[`).
 #' @slot levels `Named list of character vectors`. Accessed through `levels(x)`
-#' @slot map `(sparse)Matrix` specifying which elements contain which levels.
+#' @slot map `(sparse) Matrix` specifying which elements contain which levels.
 #'     Accesses through `x@dictionary`.
 #' @export
 #'
@@ -13,7 +13,7 @@ MultiFactor <- S7::new_class(
     properties = list(
         index = S7::class_list,
         levels = S7::class_list,
-        map =     getClass("Matrix", where = "Matrix")
+        map =     methods::getClass("Matrix", where = "Matrix")
     ),
     constructor = function(x, levels = NULL, drop.unmatched = FALSE) {
         if (validLinkDF(x)) {x <- list(x = x) }
@@ -231,6 +231,7 @@ S7::S4_register(AnansiWeb)
 #' @param t.values A matrix containing the t-values, for correlations.
 #' @param p.values A matrix containing the p.values for the parameters named in
 #'     the `type` slot.
+#' @returns an `AnansiTale`
 #' @export
 #'
 AnansiTale <- S7::new_class(
