@@ -1,6 +1,5 @@
-#' Get a graph object out of an MultiFactor.
-#' @name getGraph
-#' @rdname getGraph
+#' @title Extract a graph object from a MultiFactor.
+#' @name getGraph.MultiFactor
 #' @param x `MultiFactor`
 #' @param format
 #' `Character scalar`, controls output format by package name.
@@ -12,6 +11,7 @@
 #'     [igraph::as_graphnel()], which are used under the hood, from
 #'     [igraph::igraph()] package.
 #' @method getGraph MultiFactor
+#' @export
 #' @examples
 #' # Generate a regular igraph object
 #' g <- getGraph(kegg_link())
@@ -24,7 +24,9 @@
 #' getGraph(ec2cpd, format = "graph")
 #' getGraph(ec2cpd, format = "igraph")
 #'
-S7::method(getGraph, MultiFactor) <- function(x, format = "igraph") {
+S7::method(getGraph, MultiFactor) <- function(x, format = "igraph") getGraph.MultiFactor(x, format)
+
+getGraph.MultiFactor <- function(x, format = "igraph") {
 
         g <- graph_from_data_frame(getEdgeList(x), directed = FALSE)
 
@@ -37,8 +39,8 @@ S7::method(getGraph, MultiFactor) <- function(x, format = "igraph") {
         return(g)
     }
 
-#' @export
-#' @name getGraph
+#' @method getGraph list
+#' @name getGraph.list
 #' @rdname getGraph
 #'
 S7::method(getGraph, S7::class_list | S7::class_data.frame) <- function(x, format = "igraph") {

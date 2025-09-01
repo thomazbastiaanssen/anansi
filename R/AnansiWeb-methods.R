@@ -11,26 +11,10 @@
 #' The function `AnansiWeb()` constructs an `AnansiWeb` object from two
 #' feature tables and an adjacency matrix.
 #'
-#' @param x,X input, `AnansiWeb`.
-#' @param ... further arguments for methods
-#' @usage
-#' ## Coercion
-#' asMAE(x)
-#'
-#' ## Utilities on feature pairs
-#' pairs(x, ...)
-#' getFeaturePairs(
-#'     x, which = NULL, with.metadata = FALSE, ...
-#' )
-#' pairwiseApply(
-#'     X,
-#'     FUN,
-#'     MoreArgs = NULL, SIMPLIFY = TRUE, USE.NAMES = TRUE
-#' )
-#'
-#'
+#' @param x input, AnansiWeb object
 #' @seealso \itemize{
 #' \item [weaveWeb()]: for general use.
+#' \item [AnansiWeb-pairwise]: for methods for pairwise operations
 #' }
 #' @examples
 #'
@@ -56,14 +40,6 @@
 #'
 #' # Coerce to MultiAssayExperiment
 #' asMAE(web)
-#'
-#' # Extract data.frames in pairs (only show first)
-#' getFeaturePairs(web)[1L]
-#'
-#' pairwiseApply(
-#'     FUN = function(x, y) cor(x, y),
-#'     web
-#' )
 NULL
 
 #' @name show.AnansiWeb
@@ -111,93 +87,6 @@ S7::method(dim, AnansiWeb) <- function(x) dim(x@dictionary)
 #'
 S7::method(names, AnansiWeb) <- function(x) names(dimnames(x@dictionary))
 
-#' @name pairs.AnansiWeb
-#' @rdname AnansiWeb
-#' @aliases pairs
-#' @importFrom graphics pairs
-#' @returns  a two-column array index, corresponding to i,j coordinates in
-#'   matrix notation.
-#'
-S7::method(pairs, AnansiWeb) <- function(x, ...) Matrix::which(
-    x, arr.ind = TRUE, useNames = FALSE
-    )
-
-#' @name pairwiseApply.AnansiWeb
-#' @aliases `pairwiseApply.anansi::AnansiWeb` pairwiseApply
-#' @rdname AnansiWeb
-#' @param FUN a function with at least two arguments. The variables `x` and `y`,
-#'     in order, refer to the corresponding values of feature pairs in `tableX`
-#'     and `tableY`.
-#' @param MoreArgs,SIMPLIFY,USE.NAMES see ?base::mapply
-#' @method pairwiseApply AnansiWeb
-#'
-S7::method(pairwiseApply, AnansiWeb) <- function(
-        X, FUN, MoreArgs = NULL, SIMPLIFY = TRUE, USE.NAMES = TRUE
-        ) {
-
-        tY <- as.data.frame.matrix(X@tableY, make.names = FALSE)
-        tX <- as.data.frame.matrix(X@tableX, make.names = FALSE)
-        wh <- Matrix::which(X@dictionary, arr.ind = TRUE, useNames = FALSE)
-
-        out <- base::.mapply(
-            FUN,
-            dots = list(
-                x = tX[wh[, 2L]],
-                y = tY[wh[, 1L]]
-            ),
-            MoreArgs
-        )
-        if (USE.NAMES) {
-            names(out) <- paste0(colnames(tX)[wh[, 2L]], colnames(tY)[wh[, 1L]])
-        }
-
-        if (SIMPLIFY) {
-            out <- simplify2array(out)
-        }
-        return(out)
-    }
-
-#' @name getFeaturePairs.AnansiWeb
-#' @rdname AnansiWeb
-#' @aliases `getFeaturePairs.anansi::AnansiWeb` getFeaturePairs
-#' @importFrom Matrix which
-#' @param which `integer matrix`, indicating pair positions in `x@tableY` and
-#'     `x@tableX`, respectively. If `NULL` (default):
-#'     `Matrix::which(x@dictionary, TRUE)`.
-#' @param with.metadata `Logical scalar` whether to append metadata to output
-#' @return A list of data.frames with the paired data
-#' @method getFeaturePairs AnansiWeb
-#'
-S7::method(getFeaturePairs, AnansiWeb) <-  function(x, ..., which = NULL, with.metadata = FALSE) {
-    if (is.null(which)) {
-        which <- Matrix::which(x@dictionary, arr.ind = TRUE, useNames = FALSE)
-    }
-    tX <- x@tableX
-    tY <- x@tableY
-    xnames <- colnames(tX)
-    ynames <- colnames(tY)
-    if (!with.metadata) {
-        return(
-            lapply(seq_len(NROW(which)), FUN = function(z) {
-                cbind(
-                    tY[, which[z, 1L], drop = FALSE],
-                    tX[, which[z, 2L], drop = FALSE]
-                )
-            })
-        )
-    } else {
-        metadata <- x@metadata
-        return(
-            lapply(seq_len(NROW(which)), FUN = function(z) {
-                cbind(
-                    tY[, which[z, 1L], drop = FALSE],
-                    tX[, which[z, 2L], drop = FALSE],
-                    metadata
-                )
-            })
-        )
-    }
-}
 
 ################################################################################
 ################################################################################

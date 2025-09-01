@@ -1,6 +1,7 @@
+#' @import S7
+#' @import methods
 #' @rawNamespace if (getRversion() < "4.3.0") importFrom("S7", "@")
 NULL
-
 
 rlang::on_load({
 

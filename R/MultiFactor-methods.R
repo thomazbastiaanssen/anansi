@@ -139,7 +139,7 @@ S7::method(unfactor, MultiFactor) <- function(x) {
 
 #' @name droplevels.MultiFactor
 #' @rdname MultiFactor
-#' @aliases droplevels
+#' @aliases droplevels,MultiFactor-method
 #' @description Analogous to `factors`. `droplevels(MultiFactor)` returns a
 #'     `MultiFactor` with unused levels removed.
 #' @param exclude `NULL` or `Named character list` of similar structure as
@@ -149,9 +149,9 @@ S7::method(unfactor, MultiFactor) <- function(x) {
 #' @details Only one of `select` and `exclude` should be provided, as they are
 #'     each others complement.
 #' @usage
-#' droplevels.MultiFactor(x, exclude = NULL, select = NULL)
+#' \S4method{droplevels}{MultiFactor}(x, ..., exclude = NULL, select = NULL)
 #' @examples
-#' droplevels(x, exclude = list(ko = "K00001"), select = NULL)
+#' droplevels(x, exclude = list(ko = "K00001"))
 #' droplevels(x, select = list(ko = "K00001"))
 #' @returns A MultiFactor
 #' @method droplevels MultiFactor
@@ -225,7 +225,6 @@ S7::method(droplevels, MultiFactor) <- function(x, ..., exclude = NULL, select =
 S7::method(levels, MultiFactor) <- function(x) {
     x@levels
 }
-
 
 
 #' @name `[.MultiFactor`

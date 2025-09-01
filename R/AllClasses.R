@@ -5,6 +5,7 @@
 #' @slot levels `Named list of character vectors`. Accessed through `levels(x)`
 #' @slot map `(sparse) Matrix` specifying which elements contain which levels.
 #'     Accesses through `x@dictionary`.
+#' @importFrom methods getClass
 #' @export
 #'
 MultiFactor <- S7::new_class(

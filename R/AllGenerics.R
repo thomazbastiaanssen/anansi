@@ -1,37 +1,47 @@
-#' @name generic.getEdgeList
-#' @rdname MultiFactor
-#' @usage NULL
+#' Get a listof edges
+#' @name getEdgeList
+#' @rdname getEdgeList
+#' @param x input object
+#' @param ... additional arguments
 #' @export
 getEdgeList        <- S7::new_generic("getEdgeList", "x")
 
-#' @name generic.getGraph
-#' @rdname getGraph
-#' @usage NULL
+#' Get a graph object.
+#' @name getGraph
+#' @seealso [getGraph.MultiFactor()]
+#' @inheritParams getGraph.MultiFactor
+#' @param x input
 #' @export
 getGraph           <- S7::new_generic("getGraph", "x")
 
+#' Get a list of all pairs of features
+#' @name getFeaturePairs
+#' @rdname getFeaturePairs
+#' @param x input object
+#' @param ... additional arguments for specific methods
 #' @export
-#' @rdname AnansiWeb
-#' @usage NULL
-#' @name generic.getFeaturePairs
 getFeaturePairs    <- S7::new_generic("getFeaturePairs", "x")
 
+#' Weave an AnansiWeb object
+#' @name weaveWeb
+#' @param x input object
+#' @param ... additional arguments
+#' @seealso [weaveWeb-methods()]
 #' @export
-#' @rdname weaveWeb
-#' @usage NULL
-#' @name generic.weaveWeb
 weaveWeb           <- S7::new_generic("weaveWeb",   "x")
 
-#' @export
+#' @name plotAnansi
 #' @rdname plotAnansi
-#' @name generic.plotAnansi
+#' @export
 #' @usage NULL
 plotAnansi         <- S7::new_generic("plotAnansi", "x")
 
+#' Apply a function on each pair of features
+#' @name pairwiseApply
+#' @rdname pairwiseApply
+#' @param X input object
+#' @param ... additional arguments
 #' @export
-#' @rdname AnansiWeb
-#' @name generic.pairwiseApply
-#' @usage NULL
 pairwiseApply <- S7::new_generic("pairwiseApply", "X")
 
 unfactor     <- S7::new_external_generic("S4Vectors", "unfactor", "x")
