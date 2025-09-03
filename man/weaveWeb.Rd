@@ -14,8 +14,34 @@ weaveKEGG(x, ...)
 
 \item{...}{additional arguments}
 }
+\value{
+an AnansiWeb object
+}
 \description{
 Weave an AnansiWeb object
+}
+\examples{
+# Setup demo tables
+ec2ko <- kegg_link()[["ec2ko"]]
+ec2cpd <- kegg_link()[["ec2cpd"]]
+
+# Basic usage
+weaveWeb(cpd ~ ko, link = kegg_link())
+weaveWeb(x = "ko", y = "ec", link = ec2ko)
+weaveWeb(ec ~ cpd, link = ec2cpd)
+
+# A wrapper is available for kegg ko, ec and cpd data
+generic <- weaveWeb(cpd ~ ko, link = kegg_link())
+kegg_wrapper <- weaveKEGG(cpd ~ ko)
+
+identical(generic, kegg_wrapper)
+
+# The following are equivalent to transposition:
+a <- weaveWeb(ko ~ cpd, link = kegg_link())@dictionary
+b <- weaveWeb(cpd ~ ko, link = kegg_link())@dictionary
+
+identical(a, Matrix::t(b))
+
 }
 \seealso{
 \code{\link[=weaveWeb-methods]{weaveWeb-methods()}}

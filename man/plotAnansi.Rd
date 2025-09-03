@@ -60,6 +60,8 @@ labelled with correlation coefficients when \code{layout} is \code{graph}.
 (Default: \code{FALSE})}
 }
 \value{
+a figure that can be further modified using the \code{ggplot2} suite
+
 A ggplot2 object.
 }
 \description{

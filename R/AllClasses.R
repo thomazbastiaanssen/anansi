@@ -1,3 +1,19 @@
+#' MultiFactor S7 container class
+#' @name MultiFactor
+#' @rdname MultiFactor-class
+#' @description
+#' `MultiFactor` is an S7 class to organize and manage multiple sets of factors,
+#' for instance when tracing or converting feature IDs across databases. Methods
+#' for `MultiFactor` aim to follow `factor` behaviour.
+#'
+#' @details
+#' The most straightforward way to construct a `MultiFactor` object is as a
+#' named list of named data.frames. The columns of the data.frames indicate the
+#' category of factor in that column.
+#'
+#' A `MultiFactor` object presents itself similar to a `data.frame`, in the
+#' sense that level types can be called as columns and individual data.frame
+#' components can be called as rows.
 #' @slot index Named `list` of named integer data frames of at least two columns
 #'     each. The column names correspond to names in the `levels` slot. Similar
 #'     to `factor`s, the integers in those columns correspond to the characters
@@ -5,7 +21,10 @@
 #' @slot levels `Named list of character vectors`. Accessed through `levels(x)`
 #' @slot map `(sparse) Matrix` specifying which elements contain which levels.
 #'     Accesses through `x@dictionary`.
+#' @returns a MultiFactor object.
 #' @importFrom methods getClass
+#' @inheritParams MultiFactor-methods
+#' @seealso [MultiFactor-methods()]
 #' @export
 #'
 MultiFactor <- S7::new_class(
@@ -17,6 +36,7 @@ MultiFactor <- S7::new_class(
         map =     methods::getClass("Matrix", where = "Matrix")
     ),
     constructor = function(x, levels = NULL, drop.unmatched = FALSE) {
+        if(! is(x, "anansi::MultiFactor")) {
         if (validLinkDF(x)) {x <- list(x = x) }
         stopifnot(
             "Input not correctly formatted." = all(
@@ -28,6 +48,7 @@ MultiFactor <- S7::new_class(
                 )
             )
         )
+        }
         if (is(x, "anansi::MultiFactor")) {
             if (is.null(levels)) {
                 levels <- levels(x)
@@ -72,8 +93,8 @@ MultiFactor <- S7::new_class(
 S7::S4_register(MultiFactor)
 
 
-#' @rdname MultiFactor
-#' @aliases asMultiFactor
+#' @rdname MultiFactor-class
+#' @name asMultiFactor
 #' @param levels an optional named list of vectors of the unique values (as
 #'     character strings) that x might have taken. The default is the unique set
 #'     of values taken by lapply(x, as.character), sorted into increasing order
@@ -94,6 +115,20 @@ asMultiFactor <- function(x, levels = NULL, drop.unmatched = TRUE) {
     MultiFactor(x, levels, drop.unmatched)
 }
 
+#' @title AnansiWeb S7 container class
+#' @rdname AnansiWeb-class
+#' @name AnansiWeb
+#' @description
+#' `AnansiWeb` is an S7 class containing two feature tables as well as a
+#' dictionary to link them. `AnansiWeb` is the main container that will
+#' hold your input data throughout the `anansi` pipeline.
+#'
+#' Typical use of the `anansi` package will involve generating an `AnansiWeb`
+#' object using the `weaveWeb()` function.
+#'
+#' The function `AnansiWeb()` constructs an `AnansiWeb` object from two
+#' feature tables and an adjacency matrix.
+#'
 #' @slot tableY,tableX Two `matrix` objects of measurements, data. Rows are
 #'     samples and columns are features. Access with `@tableY` and `@tableX`.
 #' @slot dictionary `Matrix`, binary adjacency matrix. Optionally sparse.
@@ -112,6 +147,8 @@ asMultiFactor <- function(x, levels = NULL, drop.unmatched = TRUE) {
 #' @importFrom S4Vectors DataFrame
 #' @export
 #' @seealso \itemize{
+#'  \item [AnansiWeb-methods]
+#'  \item [randomAnansi]: For generation of random AnansiWeb objects.
 #'  \item [kegg_link()]: For examples of input for link argument.
 #' }
 #' @returns an `AnansiWeb` object, with sparse binary biadjacency matrix
@@ -122,7 +159,7 @@ asMultiFactor <- function(x, levels = NULL, drop.unmatched = TRUE) {
 #' AnansiWeb(tableX, tableY, dictionary, metadata = data.frame())
 #' @examples
 #'
-#' # Use AnansiWeb() to consrtuct an AnansiWeb object from components:
+#' # Use AnansiWeb() to construct an AnansiWeb object from components:
 #' tX <- `dimnames<-`(replicate(5, (rnorm(36))),
 #'     value = list(
 #'         as.character(seq_len(36)),

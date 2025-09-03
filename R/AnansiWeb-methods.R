@@ -1,23 +1,13 @@
-#' AnansiWeb S7 container class
-#' @name AnansiWeb
-#' @description
-#' `AnansiWeb` is an S7 class containing two feature tables as well as a
-#' dictionary to link them. `AnansiWeb` is the main container that will
-#' hold your input data throughout the `anansi` pipeline.
-#'
-#' Typical use of the `anansi` package will involve generating an `AnansiWeb`
-#' object using the `weaveWeb()` function.
-#'
-#' The function `AnansiWeb()` constructs an `AnansiWeb` object from two
-#' feature tables and an adjacency matrix.
-#'
+#' Methods for AnansiWeb S7 container class
+#' @name AnansiWeb-methods
 #' @param x input, AnansiWeb object
 #' @seealso \itemize{
 #' \item [weaveWeb()]: for general use.
 #' \item [AnansiWeb-pairwise]: for methods for pairwise operations
 #' }
+#' @returns The desired information from an AnansiWeb object
 #' @examples
-#'
+#' web <- randomWeb(n_samp = 36)
 #' # Methods for AnansiWeb
 #' dimnames(web)
 #' dim(web)
@@ -46,8 +36,7 @@ NULL
 #' @importFrom methods show
 #' @importMethodsFrom methods show
 #' @aliases show,anansi::AnansiWeb-method
-#' @rdname AnansiWeb
-#' @usage NULL
+#' @rdname AnansiWeb-methods
 #'
 S7::method(show, AnansiWeb) <- function(object) {
     cat(
@@ -70,19 +59,19 @@ S7::method(show, AnansiWeb) <- function(object) {
 }
 
 #' @name dimnames.AnansiWeb
-#' @rdname AnansiWeb
+#' @rdname AnansiWeb-methods
 #' @method dimnames AnansiWeb
 #'
 S7::method(dimnames, AnansiWeb) <- function(x) dimnames(x@dictionary)
 
 #' @name dim.AnansiWeb
-#' @rdname AnansiWeb
+#' @rdname AnansiWeb-methods
 #' @method dim AnansiWeb
 #'
 S7::method(dim, AnansiWeb) <- function(x) dim(x@dictionary)
 
 #' @name names.AnansiWeb
-#' @rdname AnansiWeb
+#' @rdname AnansiWeb-methods
 #' @method names AnansiWeb
 #'
 S7::method(names, AnansiWeb) <- function(x) names(dimnames(x@dictionary))

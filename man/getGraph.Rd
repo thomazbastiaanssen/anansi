@@ -12,8 +12,15 @@ getGraph(x, ...)
 
 \item{...}{additional arguments (currently not used).}
 }
+\value{
+a specified graph object.
+}
 \description{
 Get a graph object.
+}
+\examples{
+x <- randomMultiFactor(n_features = 10)
+getGraph(x)
 }
 \seealso{
 \code{\link[=getGraph.MultiFactor]{getGraph.MultiFactor()}}

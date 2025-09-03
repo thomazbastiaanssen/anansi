@@ -11,6 +11,19 @@ pairwiseApply(X, ...)
 
 \item{...}{additional arguments}
 }
+\value{
+a list containing the output of applying the function to each feature pair.
+See \code{?base::mapply()}
+}
 \description{
 Apply a function on each pair of features
+}
+\examples{
+web <- randomWeb(10)
+
+pairwiseApply(
+    X = web,
+    FUN = function(x, y) cor(x, y),
+    MoreArgs = NULL, SIMPLIFY = TRUE, USE.NAMES = TRUE
+)
 }

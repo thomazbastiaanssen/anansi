@@ -45,8 +45,8 @@ test_that("MultiFactor indexing works", {
 
 test_that("MultiFactor get/set works", {
     #two-way equivalence
-    expect_identical(x[["a"]], x[["a"]] <- x[, c("a", "b")])
-    expect_identical(x[, c("a", "b")], x[, c("a", "b")] <- x[["a"]])
+    expect_identical(x[["a"]], x[["a"]] <- x[, c("a", "b")][1])
+    expect_identical(x[, c("a", "b")][1], x[, c("a", "b")][1] <- x[["a"]])
 
     expect_identical(x@map, x@map <- x@map)
 })

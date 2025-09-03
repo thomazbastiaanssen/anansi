@@ -11,6 +11,14 @@ getFeaturePairs(x, ...)
 
 \item{...}{additional arguments for specific methods}
 }
+\value{
+an list of two-column data.frames that represent all feature pairs.
+}
 \description{
 Get a list of all pairs of features
+}
+\examples{
+x <- randomWeb(10)
+getFeaturePairs(x)
+
 }

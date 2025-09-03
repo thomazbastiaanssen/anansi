@@ -1,55 +1,77 @@
-#' @name AnansiWeb
-#' @rdname AnansiWeb
-#' @aliases as.list,anansi::AnansiWeb-method
-#' @usage NULL
+#' @title Coercion functions for anansi
+#' @name as.list.AnansiWeb
+#' @rdname anansi-coercion
 #' @method as.list AnansiWeb
+#' @returns An object of the desired class.
+#' @param x input object
+#' @param use.names `Logical scalar`, whether output list should contain
+#'     character (Default) or integer data frame. If `FALSE`, returns
+#'     `unfactor(x)`.
+#' @seealso [unfactor()]
+#' @examples
+#' # AnansiWeb
+#' x <- randomWeb(36)
 #'
-S7::method(as.list, AnansiWeb)  <- function(x, ...) {
+#' as.list(x)
+#' as.data.frame(x)
+#'
+#' # AnansiWeb to MultiAssayExperiment
+#' asMAE(x)
+#'
+#' # MultiFactor
+#' x <- randomMultiFactor()
+#' as.list(x, use.names = TRUE)
+#'
+S7::method(convert, list(AnansiWeb, S7::class_list)) <-
+               function(from, to) as.list.AnansiWeb(x = from)
+
+#' @importFrom S7 convert
+#' @method as.data.frame AnansiWeb
+#' @rdname anansi-coercion
+#' @name as.data.frame.AnansiWeb
+#'
+S7::method(convert, list(AnansiWeb, S7::class_data.frame)) <-
+    function(from, to) as.data.frame.AnansiWeb(x = from)
+
+#' @name as.list.MultiFactor
+#' @rdname anansi-coercion
+#' @importFrom S7 convert
+#'
+S7::method(convert, list(MultiFactor, S7::class_list)) <-
+    function(from, to) as.list(from)
+
+#' @export
+S7::method(as.list, MultiFactor) <- function(x, ..., use.names = TRUE) {
+    ifelse(
+        use.names,
+        yes = return(S4Vectors::unfactor(x)),
+        no = return(`names<-`(x@index, rownames(x)))
+    )}
+
+#' @export
+S7::method(as.list, AnansiWeb) <- function(x, ...) {
     out <- S7::props(x)
     names(out)[c(1L, 2L)] <- names(x)
     out
 }
 
-#' @name AnansiWeb
-#' @rdname AnansiWeb
-#' @method as.data.frame `anansi::AnansiWeb`
-#' @usage NULL
-#'
-`as.data.frame.anansi::AnansiWeb` <- function(x, ...) {
-    cbind(
+#' @export
+S7::method(as.data.frame, AnansiWeb) <- function(x, row.names, optional, ...) {
+        cbind(
         x@tableY,
         x@tableX,
         x@metadata
     )
 }
 
-#' @name AnansiWeb
-#' @rdname AnansiWeb
-#' @aliases as.data.frame.anansi::AnansiWeb
-#' @importFrom S4Vectors as.data.frame
-#' @importFrom S7 convert
-#' @export
-#'
-S7::method(convert, list(AnansiWeb, S7::class_data.frame)) <-
-    function(from, to) `as.data.frame.anansi::AnansiWeb`(from)
-
-#' @name AnansiWeb
-#' @rdname AnansiWeb
-#' @aliases as.list.anansi::AnansiWeb
-#' @importFrom S4Vectors as.data.frame
-#' @importFrom S7 convert
-#' @export
-#'
-S7::method(convert, list(MultiFactor, S7::class_list)) <-
-               function(from, to) `as.list.anansi::AnansiWeb`(x = from)
-
-#' @name AnansiWeb
-#' @rdname AnansiWeb
-#' @aliases as.MAE asMAE as.MultiAssayExperiment asMultiAssayExperiment
+#' @name asMAE
+#' @rdname anansi-coercion
+#' @aliases as.MAE as.MultiAssayExperiment asMultiAssayExperiment
 #' @importClassesFrom MultiAssayExperiment MultiAssayExperiment
 #' @importFrom MultiAssayExperiment MultiAssayExperiment ExperimentList
 #' @importFrom SummarizedExperiment SummarizedExperiment
 #' @export
+#' @usage NULL
 #'
 asMAE <- function(x)  {
 
@@ -78,21 +100,4 @@ asMAE <- function(x)  {
         }
 }
 
-#' @name MultiFactor
-#' @rdname MultiFactor
-#' @aliases as.list.MultiFactor
-#' @returns a named list of character vectors (Default) or integers
-#' (`use.names = FALSE`).
-#' @param use.names `Logical scalar`, whether output list should contain
-#'     character (Default) or integer data frame. If `FALSE`, returns
-#'     `unfactor(x)`.
-#' @seealso [unfactor()]
-#' @method as.list `anansi::MultiFactor`
-#'
-`as.list.anansi::MultiFactor` <- function(x, ..., use.names = TRUE) {
-    ifelse(
-        use.names,
-        yes = return(S4Vectors::unfactor(x)),
-        no = return(`names<-`(x@index, rownames(x)))
-    )}
 

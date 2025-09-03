@@ -37,7 +37,7 @@ subsetByPath <- function(link, all_terms) {
         FUN = function(x) all_terms[c(x, x + 1L)]
     )
     steps <- stepSeq(term_list, link@map)
-    link@index <- link[steps]
+    link@index <- link@index[steps]
     link@levels <- link@levels[all_terms]
     link@map <- mapMultiFactor(link[steps], mode = "counts")
 

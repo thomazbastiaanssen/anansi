@@ -11,6 +11,14 @@ getEdgeList(x, ...)
 
 \item{...}{additional arguments}
 }
+\value{
+a two-column data.frame that lists the content of each entry in the
+input MultiFactor
+}
 \description{
 Get a listof edges
+}
+\examples{
+x <- randomMultiFactor(n_features = 10)
+getEdgeList(x)
 }
