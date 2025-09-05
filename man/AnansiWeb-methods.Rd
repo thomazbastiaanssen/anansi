@@ -2,11 +2,10 @@
 % Please edit documentation in R/AnansiWeb-methods.R
 \name{AnansiWeb-methods}
 \alias{AnansiWeb-methods}
-\alias{show.AnansiWeb}
-\alias{show,anansi::AnansiWeb-method}
-\alias{dimnames.AnansiWeb}
-\alias{dim.AnansiWeb}
-\alias{names.AnansiWeb}
+\alias{show.anansi::AnansiWeb}
+\alias{names.anansi::AnansiWeb}
+\alias{dimnames.anansi::AnansiWeb}
+\alias{dim.anansi::AnansiWeb}
 \title{Methods for AnansiWeb S7 container class}
 \arguments{
 \item{x}{input, AnansiWeb object}
@@ -18,11 +17,15 @@ The desired information from an AnansiWeb object
 Methods for AnansiWeb S7 container class
 }
 \examples{
+# Setup
 web <- randomWeb(n_samp = 36)
-# Methods for AnansiWeb
+
+# Accessors
 dimnames(web)
 dim(web)
 names(web)
+
+# Getters and setters: `@` and `@<-`
 
 web@tableX
 web@tableY
@@ -36,11 +39,14 @@ web@metadata <- data.frame(
     row.names = "id"
 )
 
-# coerce To list
+# Coerce to list
 weblist <- as.list(web)
 
+# Coerce to Data.frame
+webdf <- as.data.frame(web)
+
 # Coerce to MultiAssayExperiment
-asMAE(web)
+mae <- asMAE(web)
 }
 \seealso{
 \itemize{

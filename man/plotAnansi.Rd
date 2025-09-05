@@ -2,6 +2,8 @@
 % Please edit documentation in R/AllGenerics.R, R/plotAnansi-methods.R
 \name{plotAnansi}
 \alias{plotAnansi}
+\alias{plotAnansi-generic}
+\alias{plotAnansi-methods}
 \title{Dissociation plot}
 \arguments{
 \item{x}{a \code{data.frame} object output of \code{\link[=anansi]{anansi()}} in

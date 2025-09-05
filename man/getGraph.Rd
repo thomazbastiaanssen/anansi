@@ -19,9 +19,9 @@ a specified graph object.
 Get a graph object.
 }
 \examples{
-x <- randomMultiFactor(n_features = 10)
-getGraph(x)
+# Show methods
+getGraph
 }
 \seealso{
-\code{\link[=getGraph.MultiFactor]{getGraph.MultiFactor()}}
+\code{\link{MultiFactor-methods}}
 }

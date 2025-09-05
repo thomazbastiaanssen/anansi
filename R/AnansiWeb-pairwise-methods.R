@@ -6,6 +6,23 @@
 #' @rdname AnansiWeb-pairwise
 #' @param X,x input, AnansiWeb object
 #' @param ... additional arguments
+#' @param FUN a function with at least two arguments. The variables `x` and `y`,
+#'     in order, refer to the corresponding values of feature pairs in `tableX`
+#'     and `tableY`.
+#' @param MoreArgs,SIMPLIFY,USE.NAMES see ?base::mapply
+#' @param which `integer matrix`, indicating pair positions in `x@tableY` and
+#'     `x@tableX`, respectively. If `NULL` (default):
+#'     `Matrix::which(x@dictionary, TRUE)`.
+#' @param with.metadata `Logical scalar` whether to append metadata to output
+#' @aliases pairs.AnansiWeb pairs.anansi::AnansiWeb pairwiseApply.AnansiWeb
+#' @aliases pairwiseApply.anansi::AnansiWeb
+#' @returns
+#' pairs: A two-column array index, corresponding to i,j coordinates in matrix
+#' notation. \cr
+#' getFeaturePairs: A list of data.frames with the paired data \cr
+#'
+#'
+
 #' @examples
 #' web <- randomWeb()
 #' # Extract data.frames in pairs (only show first)
@@ -20,31 +37,23 @@
 #'     FUN = function(x, y) cor(x, y),
 #'     MoreArgs = NULL, SIMPLIFY = TRUE, USE.NAMES = TRUE
 #' )
+#'
 NULL
 
-#' @name pairs.AnansiWeb
-#' @rdname AnansiWeb-pairwise
-#' @aliases pairs
+#' @export
 #' @importFrom graphics pairs
-#' @returns  a two-column array index, corresponding to i,j coordinates in
-#'   matrix notation.
-#'
-S7::method(pairs, AnansiWeb) <- function(x, ...) Matrix::which(
+S7::method(pairs, AnansiWeb) <- function(x, ...) `pairs.anansi::AnansiWeb`(x)
+
+#' @export
+`pairs.anansi::AnansiWeb` <- function(x, ...) Matrix::which(
     x@dictionary, arr.ind = TRUE, useNames = FALSE
 )
 
-#' @name getFeaturePairs.AnansiWeb
-#' @rdname AnansiWeb-pairwise
-#' @aliases `getFeaturePairs.anansi::AnansiWeb`
 #' @importFrom Matrix which
-#' @param which `integer matrix`, indicating pair positions in `x@tableY` and
-#'     `x@tableX`, respectively. If `NULL` (default):
-#'     `Matrix::which(x@dictionary, TRUE)`.
-#' @param with.metadata `Logical scalar` whether to append metadata to output
-#' @return A list of data.frames with the paired data
-#' @method getFeaturePairs AnansiWeb
 #'
-S7::method(getFeaturePairs, AnansiWeb) <-  function(x, which = NULL, with.metadata = FALSE) {
+S7::method(getFeaturePairs, AnansiWeb) <-  function(
+        x, which = NULL, with.metadata = FALSE
+        ) {
     if (is.null(which)) {
         which <- Matrix::which(x@dictionary, arr.ind = TRUE, useNames = FALSE)
     }
@@ -76,16 +85,7 @@ S7::method(getFeaturePairs, AnansiWeb) <-  function(x, which = NULL, with.metada
 }
 
 
-#' @name pairwiseApply.AnansiWeb
-#' @aliases `pairwiseApply.anansi::AnansiWeb`
-#' @rdname AnansiWeb-pairwise
-#' @param FUN a function with at least two arguments. The variables `x` and `y`,
-#'     in order, refer to the corresponding values of feature pairs in `tableX`
-#'     and `tableY`.
-#' @param MoreArgs,SIMPLIFY,USE.NAMES see ?base::mapply
-#' @method pairwiseApply AnansiWeb
-#'
-#'
+#' @export
 S7::method(pairwiseApply, AnansiWeb) <- function(
         X, FUN, MoreArgs = NULL, SIMPLIFY = TRUE, USE.NAMES = TRUE
 ) {

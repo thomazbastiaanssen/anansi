@@ -119,6 +119,7 @@
 #'
 #' @seealso [anansi()]
 #' @name plotAnansi
+#' @aliases plotAnansi-methods
 #'
 NULL
 

@@ -1,12 +1,26 @@
 #' Methods for MultiFactor S7 container class
 #' @name MultiFactor-methods
 #' @rdname MultiFactor-methods
+#' @aliases levels.anansi::MultiFactor
+#' @description \describe{
+#'     \item{`droplevels()` }{`droplevels(MultiFactor)` returns a `MultiFactor`
+#'     with unused levels removed, Analogous to the `factor` method.}
+#'     }
 #' @examples
+#' # Setup
 #' x <- MultiFactor(kegg_link())
 #' x
+#'
+#' # Basic properties
 #' dim(x)
 #' dimnames(x)
+#'
+#' # Factor-like properties
 #' levels(x)
+#' droplevels(x)
+#' S4Vectors::unfactor(x)
+#'
+#' # Extract common output formats
 #' getEdgeList(x)
 #'
 #' @param x `MultiFactor` on which the method should be applied, or, in
@@ -20,43 +34,44 @@
 #'     will be matched to the names of the object.
 #' @param value Replacement value, typically of same type as that which is to be
 #'     replaced.
+#' @param exclude `NULL` or `Named character list` of similar structure as
+#'     `levels(MultiFactor)`. Which levels to drop from output.
+#' @param select `NULL` or `Named character list` of similar structure as
+#'     `levels(MultiFactor)`. Which levels to keep in output.
+#' @param use.names,ignore.mcols For compatibility, not used.
+#' @details Only one of `select` and `exclude` should be provided, as they are
+#'     each others complement.
+#' @examples
+#' droplevels(x, exclude = list(ko = "K00001"))
+#' droplevels(x, select = list(ko = "K00001"))
+#' @returns A MultiFactor
 NULL
 
-#' @name getEdgeList.MultiFactor
-#' @rdname MultiFactor-methods
-#' @method getEdgeList MultiFactor
+#' @export
 #'
 S7::method(getEdgeList, MultiFactor) <- function(x) {
     as.data.frame(do.call(rbind, base::names(x)))
     }
 
-#' @name dim.MultiFactor
-#' @rdname MultiFactor-methods
-#' @method dim MultiFactor
+#' @export
 #'
 S7::method(dim, MultiFactor) <- function(x) dim(x@map)
 
 
-#' @name names.MultiFactor
-#' @rdname MultiFactor-methods
-#' @method names MultiFactor
+#' @export
 #'
 S7::method(names, MultiFactor) <- function(x) {
     lapply(x@index, base::names)
 }
 
-#' @name dimnames.MultiFactor
-#' @rdname MultiFactor-methods
-#' @method dimnames MultiFactor
+#' @export
 #'
 S7::method(dimnames, MultiFactor) <- function(x) {
     dimnames(x@map)
 }
 
-#' @name show.MultiFactor
 #' @importMethodsFrom methods show
-#' @rdname MultiFactor-methods
-#' @method show MultiFactor
+#' @export
 #'
 S7::method(show, MultiFactor) <- function(object) {
     cat(
@@ -103,12 +118,12 @@ S7::method(show, MultiFactor) <- function(object) {
 }
 
 
-#' @name unfactor.MultiFactor
-#' @rdname MultiFactor-methods
 #' @importMethodsFrom S4Vectors unfactor
-#' @method unfactor MultiFactor
+#' @importFrom S4Vectors unfactor
+#' @export
 #'
-S7::method(unfactor, MultiFactor) <- function(x) {
+S7::method(unfactor, MultiFactor) <-
+  function(x, use.names = TRUE, ignore.mcols = TRUE) {
     lv <- levels(x)
     ns <- rownames(x)
     x <- x@index
@@ -123,22 +138,8 @@ S7::method(unfactor, MultiFactor) <- function(x) {
     return(x)
 }
 
-#' @name droplevels.MultiFactor
-#' @rdname MultiFactor-methods
-#' @aliases droplevels,MultiFactor-method
-#' @description Analogous to `factors`. `droplevels(MultiFactor)` returns a
-#'     `MultiFactor` with unused levels removed.
-#' @param exclude `NULL` or `Named character list` of similar structure as
-#'     `levels(MultiFactor)`. Which levels to drop from output.
-#' @param select `NULL` or `Named character list` of similar structure as
-#'     `levels(MultiFactor)`. Which levels to keep in output.
-#' @details Only one of `select` and `exclude` should be provided, as they are
-#'     each others complement.
-#' @examples
-#' droplevels(x, exclude = list(ko = "K00001"))
-#' droplevels(x, select = list(ko = "K00001"))
-#' @returns A MultiFactor
-#' @method droplevels MultiFactor
+#' @export
+#' @importMethodsFrom S4Vectors droplevels
 #'
 S7::method(droplevels, MultiFactor) <- function(x, ..., exclude = NULL, select = NULL) {
     stopifnot(
@@ -202,15 +203,12 @@ S7::method(droplevels, MultiFactor) <- function(x, ..., exclude = NULL, select =
     x@map <- mapMultiFactor(x@index, mode = "counts")
     return(x)    }
 
-#' @name levels.MultiFactor
-#' @rdname MultiFactor-methods
-#' @method levels MultiFactor
-#' @export
-#'
-S7::method(levels, MultiFactor) <- function(x) levels.MultiFactor(x)
 
-#' @importMethodsFrom S4Vectors levels
-levels.MultiFactor <- function(x) {
+#' @export
+S7::method(levels, MultiFactor) <- function(x) `levels.anansi::MultiFactor`(x)
+
+#' @export
+`levels.anansi::MultiFactor` <- function(x) {
     x@levels
 }
 

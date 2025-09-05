@@ -15,7 +15,9 @@ weaveKEGG(x, ...)
 \item{...}{additional arguments}
 }
 \value{
-an AnansiWeb object
+an \code{AnansiWeb} object, with sparse binary biadjacency matrix
+with features from \code{y} as rows and features from \code{x} as columns in
+\code{dictionary} slot.
 }
 \description{
 Weave an AnansiWeb object

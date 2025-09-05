@@ -2,6 +2,7 @@
 % Please edit documentation in R/AllGenerics.R
 \name{pairwiseApply}
 \alias{pairwiseApply}
+\alias{pairwiseApply-generic}
 \title{Apply a function on each pair of features}
 \usage{
 pairwiseApply(X, ...)

@@ -3,34 +3,31 @@
 \name{AnansiWeb-pairwise}
 \alias{AnansiWeb-pairwise}
 \alias{pairs.AnansiWeb}
-\alias{pairs}
-\alias{getFeaturePairs.AnansiWeb}
-\alias{`getFeaturePairs.anansi::AnansiWeb`}
+\alias{pairs.anansi::AnansiWeb}
 \alias{pairwiseApply.AnansiWeb}
-\alias{`pairwiseApply.anansi::AnansiWeb`}
+\alias{pairwiseApply.anansi::AnansiWeb}
 \title{Methods for pairwise operations on AnansiWeb objects}
 \arguments{
 \item{X, x}{input, AnansiWeb object}
 
 \item{...}{additional arguments}
 
-\item{which}{\verb{integer matrix}, indicating pair positions in \code{x@tableY} and
-\code{x@tableX}, respectively. If \code{NULL} (default):
-\code{Matrix::which(x@dictionary, TRUE)}.}
-
-\item{with.metadata}{\verb{Logical scalar} whether to append metadata to output}
-
 \item{FUN}{a function with at least two arguments. The variables \code{x} and \code{y},
 in order, refer to the corresponding values of feature pairs in \code{tableX}
 and \code{tableY}.}
 
 \item{MoreArgs, SIMPLIFY, USE.NAMES}{see ?base::mapply}
+
+\item{which}{\verb{integer matrix}, indicating pair positions in \code{x@tableY} and
+\code{x@tableX}, respectively. If \code{NULL} (default):
+\code{Matrix::which(x@dictionary, TRUE)}.}
+
+\item{with.metadata}{\verb{Logical scalar} whether to append metadata to output}
 }
 \value{
-a two-column array index, corresponding to i,j coordinates in
-matrix notation.
-
-A list of data.frames with the paired data
+pairs: A two-column array index, corresponding to i,j coordinates in matrix
+notation. \cr
+getFeaturePairs: A list of data.frames with the paired data \cr
 }
 \description{
 Methods to run pairwise analysis on multi-modal data.
@@ -49,4 +46,5 @@ pairwiseApply(
     FUN = function(x, y) cor(x, y),
     MoreArgs = NULL, SIMPLIFY = TRUE, USE.NAMES = TRUE
 )
+
 }

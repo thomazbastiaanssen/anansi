@@ -11,10 +11,7 @@ MultiFactor(x, levels = NULL, drop.unmatched = FALSE)
 MultiFactor(x, levels = NULL, drop.unmatched = FALSE)
 }
 \arguments{
-\item{x}{\code{MultiFactor} on which the method should be applied, or, in
-case of the constructor \code{MultiFactor()}, a named \code{list} of data.frames
-with two named columns each, where elements that share a row indicates
-thet are adjacent.}
+\item{x}{\code{MultiFactor}}
 
 \item{levels}{an optional named list of vectors of the unique values (as
 character strings) that x might have taken. The default is the unique set

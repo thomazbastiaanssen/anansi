@@ -13,12 +13,12 @@ getEdgeList        <- S7::new_generic("getEdgeList", "x")
 
 #' Get a graph object.
 #' @name getGraph
-#' @seealso [getGraph.MultiFactor()]
-#' @inheritParams getGraph.MultiFactor
+#' @seealso [`MultiFactor-methods`]
 #' @param x input
+#' @param ... additional arguments (currently not used).
 #' @examples
-#' x <- randomMultiFactor(n_features = 10)
-#' getGraph(x)
+#' # Show methods
+#' getGraph
 #' @returns a specified graph object.
 #' @export
 getGraph           <- S7::new_generic("getGraph", "x")
@@ -38,10 +38,13 @@ getFeaturePairs    <- S7::new_generic("getFeaturePairs", "x")
 
 #' Weave an AnansiWeb object
 #' @name weaveWeb
+#' @rdname weaveWeb-generic
 #' @param x input object
 #' @param ... additional arguments
 #' @seealso [weaveWeb-methods()]
-#' @returns an AnansiWeb object
+#' @returns an `AnansiWeb` object, with sparse binary biadjacency matrix
+#' with features from `y` as rows and features from `x` as columns in
+#' `dictionary` slot.
 #' @examples
 #' # Setup demo tables
 #' ec2ko <- kegg_link()[["ec2ko"]]
@@ -69,6 +72,7 @@ weaveWeb           <- S7::new_generic("weaveWeb",   "x")
 
 #' @name plotAnansi
 #' @rdname plotAnansi
+#' @aliases plotAnansi-generic
 #' @export
 #' @returns a figure that can be further modified using the `ggplot2` suite
 #' @usage NULL
@@ -77,6 +81,7 @@ plotAnansi         <- S7::new_generic("plotAnansi", "x")
 #' Apply a function on each pair of features
 #' @name pairwiseApply
 #' @rdname pairwiseApply
+#' @aliases pairwiseApply-generic
 #' @param X input object
 #' @param ... additional arguments
 #' @returns
@@ -93,3 +98,5 @@ plotAnansi         <- S7::new_generic("plotAnansi", "x")
 #' @export
 pairwiseApply <- S7::new_generic("pairwiseApply", "X")
 
+#' @export
+S7::new_external_generic(package = "S4Vectors", name = "unfactor", "x")

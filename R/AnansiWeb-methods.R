@@ -1,17 +1,23 @@
 #' Methods for AnansiWeb S7 container class
 #' @name AnansiWeb-methods
 #' @param x input, AnansiWeb object
+#' @aliases show.anansi::AnansiWeb names.anansi::AnansiWeb
+#' @aliases dimnames.anansi::AnansiWeb dim.anansi::AnansiWeb
 #' @seealso \itemize{
 #' \item [weaveWeb()]: for general use.
 #' \item [AnansiWeb-pairwise]: for methods for pairwise operations
 #' }
 #' @returns The desired information from an AnansiWeb object
 #' @examples
+#'# Setup
 #' web <- randomWeb(n_samp = 36)
-#' # Methods for AnansiWeb
+#'
+#' # Accessors
 #' dimnames(web)
 #' dim(web)
 #' names(web)
+#'
+#' # Getters and setters: `@` and `@<-`
 #'
 #' web@tableX
 #' web@tableY
@@ -25,18 +31,19 @@
 #'     row.names = "id"
 #' )
 #'
-#' # coerce To list
+#' # Coerce to list
 #' weblist <- as.list(web)
 #'
+#' # Coerce to Data.frame
+#' webdf <- as.data.frame(web)
+#'
 #' # Coerce to MultiAssayExperiment
-#' asMAE(web)
+#' mae <- asMAE(web)
 NULL
 
-#' @name show.AnansiWeb
 #' @importFrom methods show
 #' @importMethodsFrom methods show
-#' @aliases show,anansi::AnansiWeb-method
-#' @rdname AnansiWeb-methods
+#' @export
 #'
 S7::method(show, AnansiWeb) <- function(object) {
     cat(
@@ -58,21 +65,15 @@ S7::method(show, AnansiWeb) <- function(object) {
     invisible(NULL)
 }
 
-#' @name dimnames.AnansiWeb
-#' @rdname AnansiWeb-methods
-#' @method dimnames AnansiWeb
+#' @export
 #'
 S7::method(dimnames, AnansiWeb) <- function(x) dimnames(x@dictionary)
 
-#' @name dim.AnansiWeb
-#' @rdname AnansiWeb-methods
-#' @method dim AnansiWeb
+#' @export
 #'
 S7::method(dim, AnansiWeb) <- function(x) dim(x@dictionary)
 
-#' @name names.AnansiWeb
-#' @rdname AnansiWeb-methods
-#' @method names AnansiWeb
+#' @export
 #'
 S7::method(names, AnansiWeb) <- function(x) names(dimnames(x@dictionary))
 
