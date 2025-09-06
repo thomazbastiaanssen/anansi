@@ -27,7 +27,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">anansi</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.7.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.7.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -174,7 +174,7 @@ directly passed to <code>anansi</code> as follows:</p>
 <div class="section level2">
 <h2 id="weave-a-web">Weave a web🕸️<a class="anchor" aria-label="anchor" href="#weave-a-web"></a>
 </h2>
-<p>The <code><a href="../reference/weaveWeb.html">weaveWeb()</a></code> function can be used to parse the tables
+<p>The <code><a href="../reference/weaveWeb-generic.html">weaveWeb()</a></code> function can be used to parse the tables
 <code>t1</code> and <code>t2</code> that we prepared above into an
 <code>AnansiWeb</code> object. The <code>AnansiWeb</code> format is a
 necessary input file for the main <code>anansi</code> workflow. It
@@ -186,7 +186,7 @@ their own custom maps. <a href="https://thomazbastiaanssen.github.io/anansi/arti
 vignette on adjacency matrices.</a></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Create AnansiWeb object from tables</span></span>
-<span><span class="va">web</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/weaveWeb.html">weaveWeb</a></span><span class="op">(</span><span class="va">cpd</span> <span class="op">~</span> <span class="va">ko</span>, tableY <span class="op">=</span> <span class="va">t1</span>, tableX <span class="op">=</span> <span class="va">t2</span>, link <span class="op">=</span> <span class="fu"><a href="../reference/kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">web</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/weaveWeb-generic.html">weaveWeb</a></span><span class="op">(</span><span class="va">cpd</span> <span class="op">~</span> <span class="va">ko</span>, tableY <span class="op">=</span> <span class="va">t1</span>, tableX <span class="op">=</span> <span class="va">t2</span>, link <span class="op">=</span> <span class="fu"><a href="../reference/kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Dropped features in tableX: 2476 remain.</span></span></code></pre>
 </div>
 <div class="section level2">
@@ -388,13 +388,13 @@ coefficient." width="960"></p>
 <p>We can also also use the <code>AnansiWeb</code> object to pull up
 specific pairs of features. The <a href="https://patchwork.data-imaginist.com/" class="external-link"><code>patchwork</code></a>
 provides a wonderful interface to combine plots. We can use
-<code><a href="../reference/AnansiWeb.html">getFeaturePairs()</a></code> to extract the relevant data from our
+<code><a href="../reference/getFeaturePairs.html">getFeaturePairs()</a></code> to extract the relevant data from our
 <code>AnansiWeb</code> object in a convenient list format:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com" class="external-link">patchwork</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Get a list containing data.frames for each feature pair.</span></span>
-<span><span class="va">feature_pairs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/AnansiWeb.html">getFeaturePairs</a></span><span class="op">(</span><span class="va">web</span><span class="op">)</span></span>
+<span><span class="va">feature_pairs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getFeaturePairs.html">getFeaturePairs</a></span><span class="op">(</span><span class="va">web</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># For each, prepare a ggplot object with those features on x &amp; y axes.</span></span>
 <span><span class="va">plot_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span></span>
@@ -459,17 +459,18 @@ function <code>asMAE</code>.</p>
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://waldronlab.io/MultiAssayExperiment/" class="external-link">MultiAssayExperiment</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Store sample metadata into metadata slot of web object</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Annotated-class.html" class="external-link">metadata</a></span><span class="op">(</span><span class="va">web</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="va">FMT_metadata</span>, row.names <span class="op">=</span> <span class="va">FMT_metadata</span><span class="op">$</span><span class="va">Sample_ID</span><span class="op">)</span></span>
+<span><span class="va">web</span><span class="op">@</span><span class="va">metadata</span> <span class="op">&lt;-</span> <span class="fu">`rownames&lt;-`</span><span class="op">(</span><span class="va">FMT_metadata</span>, <span class="va">FMT_metadata</span><span class="op">$</span><span class="va">Sample_ID</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Convert web to mae</span></span>
-<span><span class="va">mae</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/AnansiWeb.html">asMAE</a></span><span class="op">(</span><span class="va">web</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">mae</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/anansi-coercion.html">asMAE</a></span><span class="op">(</span><span class="va">web</span><span class="op">)</span></span></code></pre></div>
 <p>The MAE object can be passed to the <code>weaveWeb</code> function,
 which returns the same output, ready for the <code>anansi</code>
 function.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">web2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/weaveWeb.html">weaveWeb</a></span><span class="op">(</span><span class="va">mae</span>, tableY <span class="op">=</span> <span class="st">"cpd"</span>, tableX <span class="op">=</span> <span class="st">"ko"</span>, link <span class="op">=</span> <span class="fu"><a href="../reference/kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">web2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/weaveWeb-generic.html">weaveWeb</a></span><span class="op">(</span><span class="va">mae</span>, tableY <span class="op">=</span> <span class="st">"cpd"</span>, tableX <span class="op">=</span> <span class="st">"ko"</span>, link <span class="op">=</span> <span class="fu"><a href="../reference/kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/anansi.html">anansi</a></span><span class="op">(</span>web <span class="op">=</span> <span class="va">web2</span>, formula <span class="op">=</span> <span class="op">~</span><span class="va">Legend</span>, adjust.method <span class="op">=</span> <span class="st">"BH"</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/anansi.html">anansi</a></span><span class="op">(</span>web <span class="op">=</span> <span class="va">web2</span>, formula <span class="op">=</span> <span class="op">~</span><span class="va">Legend</span>, adjust.method <span class="op">=</span> <span class="st">"BH"</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>    <span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Fitting least-squares for following model:</span></span>
 <span><span class="co">## ~ x + Legend + x:Legend</span></span></code></pre>
 <pre><code><span><span class="co">## Running correlations for the following groups:</span></span>
@@ -515,54 +516,55 @@ use.</p>
 <span><span class="co">## [8] base     </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## other attached packages:</span></span>
-<span><span class="co">##  [1] MultiAssayExperiment_1.35.3 SummarizedExperiment_1.39.1</span></span>
+<span><span class="co">##  [1] MultiAssayExperiment_1.35.9 SummarizedExperiment_1.39.1</span></span>
 <span><span class="co">##  [3] Biobase_2.69.0              GenomicRanges_1.61.1       </span></span>
-<span><span class="co">##  [5] Seqinfo_0.99.1              IRanges_2.43.0             </span></span>
-<span><span class="co">##  [7] S4Vectors_0.47.0            BiocGenerics_0.55.0        </span></span>
+<span><span class="co">##  [5] Seqinfo_0.99.2              IRanges_2.43.0             </span></span>
+<span><span class="co">##  [7] S4Vectors_0.47.0            BiocGenerics_0.55.1        </span></span>
 <span><span class="co">##  [9] generics_0.1.4              MatrixGenerics_1.21.0      </span></span>
-<span><span class="co">## [11] matrixStats_1.5.0           patchwork_1.3.1            </span></span>
+<span><span class="co">## [11] matrixStats_1.5.0           patchwork_1.3.2            </span></span>
 <span><span class="co">## [13] tidyr_1.3.1                 ggforce_0.5.0              </span></span>
-<span><span class="co">## [15] ggplot2_3.5.2               anansi_0.7.0               </span></span>
-<span><span class="co">## [17] BiocStyle_2.37.0           </span></span>
+<span><span class="co">## [15] ggplot2_3.5.2               anansi_0.7.7               </span></span>
+<span><span class="co">## [17] BiocStyle_2.37.1           </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## loaded via a namespace (and not attached):</span></span>
 <span><span class="co">##  [1] tidyselect_1.2.1            viridisLite_0.4.2          </span></span>
 <span><span class="co">##  [3] dplyr_1.1.4                 farver_2.1.2               </span></span>
-<span><span class="co">##  [5] viridis_0.6.5               ggraph_2.2.1               </span></span>
-<span><span class="co">##  [7] fastmap_1.2.0               SingleCellExperiment_1.31.1</span></span>
-<span><span class="co">##  [9] tweenr_2.0.3                digest_0.6.37              </span></span>
-<span><span class="co">## [11] lifecycle_1.0.4             magrittr_2.0.3             </span></span>
-<span><span class="co">## [13] compiler_4.5.1              rlang_1.1.6                </span></span>
-<span><span class="co">## [15] sass_0.4.10                 tools_4.5.1                </span></span>
-<span><span class="co">## [17] igraph_2.1.4                yaml_2.3.10                </span></span>
-<span><span class="co">## [19] knitr_1.50                  S4Arrays_1.9.1             </span></span>
-<span><span class="co">## [21] labeling_0.4.3              graphlayouts_1.2.2         </span></span>
-<span><span class="co">## [23] htmlwidgets_1.6.4           DelayedArray_0.35.2        </span></span>
-<span><span class="co">## [25] RColorBrewer_1.1-3          abind_1.4-8                </span></span>
-<span><span class="co">## [27] withr_3.0.2                 purrr_1.0.4                </span></span>
-<span><span class="co">## [29] desc_1.4.3                  grid_4.5.1                 </span></span>
-<span><span class="co">## [31] polyclip_1.10-7             scales_1.4.0               </span></span>
-<span><span class="co">## [33] MASS_7.3-65                 cli_3.6.5                  </span></span>
-<span><span class="co">## [35] rmarkdown_2.29              crayon_1.5.3               </span></span>
-<span><span class="co">## [37] ragg_1.4.0                  BiocBaseUtils_1.11.0       </span></span>
-<span><span class="co">## [39] cachem_1.1.0                stringr_1.5.1              </span></span>
-<span><span class="co">## [41] splines_4.5.1               BiocManager_1.30.26        </span></span>
-<span><span class="co">## [43] formatR_1.14                XVector_0.49.0             </span></span>
-<span><span class="co">## [45] vctrs_0.6.5                 Matrix_1.7-3               </span></span>
-<span><span class="co">## [47] jsonlite_2.0.0              bookdown_0.43              </span></span>
-<span><span class="co">## [49] ggrepel_0.9.6               systemfonts_1.2.3          </span></span>
-<span><span class="co">## [51] jquerylib_0.1.4             glue_1.8.0                 </span></span>
-<span><span class="co">## [53] pkgdown_2.1.3               stringi_1.8.7              </span></span>
-<span><span class="co">## [55] gtable_0.3.6                tibble_3.3.0               </span></span>
-<span><span class="co">## [57] pillar_1.10.2               htmltools_0.5.8.1          </span></span>
-<span><span class="co">## [59] R6_2.6.1                    textshaping_1.0.1          </span></span>
-<span><span class="co">## [61] tidygraph_1.3.1             evaluate_1.0.4             </span></span>
-<span><span class="co">## [63] lattice_0.22-7              memoise_2.0.1              </span></span>
-<span><span class="co">## [65] bslib_0.9.0                 Rcpp_1.1.0                 </span></span>
-<span><span class="co">## [67] nlme_3.1-168                gridExtra_2.3              </span></span>
-<span><span class="co">## [69] SparseArray_1.9.0           mgcv_1.9-3                 </span></span>
-<span><span class="co">## [71] xfun_0.52                   fs_1.6.6                   </span></span>
-<span><span class="co">## [73] forcats_1.0.0               pkgconfig_2.0.3</span></span></code></pre>
+<span><span class="co">##  [5] viridis_0.6.5               S7_0.2.0                   </span></span>
+<span><span class="co">##  [7] ggraph_2.2.2                fastmap_1.2.0              </span></span>
+<span><span class="co">##  [9] SingleCellExperiment_1.31.1 tweenr_2.0.3               </span></span>
+<span><span class="co">## [11] digest_0.6.37               lifecycle_1.0.4            </span></span>
+<span><span class="co">## [13] magrittr_2.0.3              compiler_4.5.1             </span></span>
+<span><span class="co">## [15] rlang_1.1.6                 sass_0.4.10                </span></span>
+<span><span class="co">## [17] tools_4.5.1                 igraph_2.1.4               </span></span>
+<span><span class="co">## [19] yaml_2.3.10                 knitr_1.50                 </span></span>
+<span><span class="co">## [21] S4Arrays_1.9.1              labeling_0.4.3             </span></span>
+<span><span class="co">## [23] graphlayouts_1.2.2          htmlwidgets_1.6.4          </span></span>
+<span><span class="co">## [25] DelayedArray_0.35.2         RColorBrewer_1.1-3         </span></span>
+<span><span class="co">## [27] abind_1.4-8                 withr_3.0.2                </span></span>
+<span><span class="co">## [29] purrr_1.1.0                 desc_1.4.3                 </span></span>
+<span><span class="co">## [31] grid_4.5.1                  polyclip_1.10-7            </span></span>
+<span><span class="co">## [33] scales_1.4.0                MASS_7.3-65                </span></span>
+<span><span class="co">## [35] cli_3.6.5                   rmarkdown_2.29             </span></span>
+<span><span class="co">## [37] crayon_1.5.3                ragg_1.5.0                 </span></span>
+<span><span class="co">## [39] BiocBaseUtils_1.11.2        cachem_1.1.0               </span></span>
+<span><span class="co">## [41] stringr_1.5.1               splines_4.5.1              </span></span>
+<span><span class="co">## [43] BiocManager_1.30.26         formatR_1.14               </span></span>
+<span><span class="co">## [45] XVector_0.49.0              vctrs_0.6.5                </span></span>
+<span><span class="co">## [47] Matrix_1.7-4                jsonlite_2.0.0             </span></span>
+<span><span class="co">## [49] bookdown_0.44               ggrepel_0.9.6              </span></span>
+<span><span class="co">## [51] systemfonts_1.2.3           jquerylib_0.1.4            </span></span>
+<span><span class="co">## [53] glue_1.8.0                  pkgdown_2.1.3              </span></span>
+<span><span class="co">## [55] stringi_1.8.7               gtable_0.3.6               </span></span>
+<span><span class="co">## [57] tibble_3.3.0                pillar_1.11.0              </span></span>
+<span><span class="co">## [59] htmltools_0.5.8.1           R6_2.6.1                   </span></span>
+<span><span class="co">## [61] textshaping_1.0.3           tidygraph_1.3.1            </span></span>
+<span><span class="co">## [63] evaluate_1.0.5              lattice_0.22-7             </span></span>
+<span><span class="co">## [65] memoise_2.0.1               bslib_0.9.0                </span></span>
+<span><span class="co">## [67] Rcpp_1.1.0                  nlme_3.1-168               </span></span>
+<span><span class="co">## [69] gridExtra_2.3               SparseArray_1.9.1          </span></span>
+<span><span class="co">## [71] mgcv_1.9-3                  xfun_0.53                  </span></span>
+<span><span class="co">## [73] fs_1.6.6                    forcats_1.0.0              </span></span>
+<span><span class="co">## [75] pkgconfig_2.0.3</span></span></code></pre>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

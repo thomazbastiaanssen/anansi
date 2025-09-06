@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">anansi</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.7.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.7.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -71,14 +71,29 @@ mapping files.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>a two-column <code>data.frame</code> that can be convrted into an adjaceny
-matrix used as input for <code><a href="weaveWeb.html">weaveWeb()</a></code>.</p>
+    <p>a two-column <code>data.frame</code> that can be converted into an adjacency
+matrix used as input for <code><a href="weaveWeb-generic.html">weaveWeb()</a></code>.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="weaveWeb.html">weaveWeb()</a></code></p></div>
+    <div class="dont-index"><p><code><a href="weaveWeb-generic.html">weaveWeb()</a></code></p></div>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># some dummy input, as a character vector of IDs separated by tabs.</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"x_1\ty_1\ty_2\ty_4"</span>, <span class="st">"x_2\ty_1\ty_3"</span>, <span class="st">"x_3\ty_2\ty_y"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">linkBiobakeryMap</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   id.x id.y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  x_1  y_1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  x_1  y_2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  x_1  y_4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  x_2  y_1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  x_2  y_3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  x_3  y_2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7  x_3  y_y</span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 

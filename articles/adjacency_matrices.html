@@ -27,7 +27,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">anansi</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.7.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.7.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -179,7 +179,7 @@ with cells marked with ‘X’ signifying tested feature-pairs.
 <h2 id="sec-mat-2">General use in anansi<a class="anchor" aria-label="anchor" href="#sec-mat-2"></a>
 </h2>
 <p>In anansi, we work with biadjacency matrices in the
-<code>AnansiWeb</code> S4 class, which consists of a biadjacency matrix,
+<code>AnansiWeb</code> S7 class, which consists of a biadjacency matrix,
 in this case we call it a <code>dictionary</code>, as well as two tables
 of observations that should be analysed jointly.</p>
 <p>The anansi package offers some functions that should be sufficient
@@ -190,22 +190,22 @@ interfaces.</p>
 <h3 id="make-a-biadjacency-matrix-with-weaveweb">Make a biadjacency matrix with <code>weaveWeb()</code><a class="anchor" aria-label="anchor" href="#make-a-biadjacency-matrix-with-weaveweb"></a>
 </h3>
 <p>The recommended default interface to generate an
-<code>AnansiWeb</code> object is <code><a href="../reference/weaveWeb.html">weaveWeb()</a></code>. Besides a
+<code>AnansiWeb</code> object is <code><a href="../reference/weaveWeb-generic.html">weaveWeb()</a></code>. Besides a
 traditional interface, it also accepts R <code>formula</code> syntax.
 Once we have an <code>AnansiWeb</code> object, we can use the $ operator
 to access the biadjacency matrix in the ‘dictionary’ slot.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Two interfaces</span></span>
-<span><span class="va">form.web</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/weaveWeb.html">weaveWeb</a></span><span class="op">(</span><span class="va">ec</span> <span class="op">~</span> <span class="va">ko</span>, link <span class="op">=</span> <span class="fu"><a href="../reference/kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">form.web</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/weaveWeb-generic.html">weaveWeb</a></span><span class="op">(</span><span class="va">ec</span> <span class="op">~</span> <span class="va">ko</span>, link <span class="op">=</span> <span class="fu"><a href="../reference/kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">trad.web</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/weaveWeb.html">weaveWeb</a></span><span class="op">(</span>y <span class="op">=</span> <span class="st">"ec"</span>, x <span class="op">=</span> <span class="st">"ko"</span>, link <span class="op">=</span> <span class="fu"><a href="../reference/kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">trad.web</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/weaveWeb-generic.html">weaveWeb</a></span><span class="op">(</span>y <span class="op">=</span> <span class="st">"ec"</span>, x <span class="op">=</span> <span class="st">"ko"</span>, link <span class="op">=</span> <span class="fu"><a href="../reference/kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Same output</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/identical.html" class="external-link">identical</a></span><span class="op">(</span><span class="va">form.web</span>, <span class="va">trad.web</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] TRUE</span></span></code></pre>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Get the biadjacency matrix using the $ operator</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="../reference/AnansiWeb.html">dictionary</a></span><span class="op">(</span><span class="va">form.web</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">form.web</span><span class="op">@</span><span class="va">dictionary</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## 10 x 10 sparse Matrix of class "ngCMatrix"</span></span></code></pre>
 <pre><code><span><span class="co">##   [[ suppressing 10 column names 'K00001', 'K00002', 'K00003' ... ]]</span></span></code></pre>
 <pre><code><span><span class="co">##            ko</span></span>
@@ -228,7 +228,7 @@ website</a>.</p>
 <h4 id="weaveweb-input-link">
 <code>weaveWeb()</code> input: <code>link</code><a class="anchor" aria-label="anchor" href="#weaveweb-input-link"></a>
 </h4>
-<p><code><a href="../reference/weaveWeb.html">weaveWeb()</a></code> takes additional arguments, let’s focus on
+<p><code><a href="../reference/weaveWeb-generic.html">weaveWeb()</a></code> takes additional arguments, let’s focus on
 <code>link</code>, which will take the information necessary to link
 features between input data sets. The anansi package includes such data
 for the <a href="https://www.genome.jp/kegg/" class="external-link">KEGG database</a>, let’s
@@ -267,18 +267,18 @@ workflow. They can be directly called from an <code>AnansiWeb</code>
 object:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Note that the formula controls the order</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="../reference/weaveWeb.html">weaveWeb</a></span><span class="op">(</span><span class="va">ko</span> <span class="op">~</span> <span class="va">ec</span>, link <span class="op">=</span> <span class="fu"><a href="../reference/kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="../reference/weaveWeb-generic.html">weaveWeb</a></span><span class="op">(</span><span class="va">ko</span> <span class="op">~</span> <span class="va">ec</span>, link <span class="op">=</span> <span class="fu"><a href="../reference/kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] "ko" "ec"</span></span></code></pre>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># names() is short for the above</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="../reference/weaveWeb.html">weaveWeb</a></span><span class="op">(</span><span class="va">ec</span> <span class="op">~</span> <span class="va">ko</span>, link <span class="op">=</span> <span class="fu"><a href="../reference/kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="../reference/weaveWeb-generic.html">weaveWeb</a></span><span class="op">(</span><span class="va">ec</span> <span class="op">~</span> <span class="va">ko</span>, link <span class="op">=</span> <span class="fu"><a href="../reference/kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] "ec" "ko"</span></span></code></pre>
 </div>
 </div>
 <div class="section level3">
 <h3 id="the-pre-packaged-kegg-linking-map">The pre-packaged kegg linking map<a class="anchor" aria-label="anchor" href="#the-pre-packaged-kegg-linking-map"></a>
 </h3>
-<p>We need to provide <code><a href="../reference/weaveWeb.html">weaveWeb()</a></code> with a map of which
+<p>We need to provide <code><a href="../reference/weaveWeb-generic.html">weaveWeb()</a></code> with a map of which
 features are linked. We can use the pre-packaged kegg link map, which
 consists of two similarly structured <code>data.frame</code>s in a list,
 one of which we just inspected. We can call it directly using
@@ -312,14 +312,14 @@ correspond to the formula we used just used:
 <code>weaveWeb(ec ~ ko)</code>. We didn’t use the term <code>cpd</code>.
 Further, <code>ec</code> is present in both
 <code>data.frame</code>s.</p>
-<p>We can use <code><a href="../reference/weaveWeb.html">weaveWeb()</a></code> to make a biadjacency matrix
+<p>We can use <code><a href="../reference/weaveWeb-generic.html">weaveWeb()</a></code> to make a biadjacency matrix
 between any combination of one or two similarly structured
 <code>data.frame</code>s, presented as a list. For the pre- packaged
 data set, this means we can link between any two of <code>ec</code>,
 <code>cpd</code> and <code>ko</code>, in either order.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Formula notation</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="../reference/AnansiWeb.html">dictionary</a></span><span class="op">(</span><span class="fu"><a href="../reference/weaveWeb.html">weaveWeb</a></span><span class="op">(</span><span class="va">cpd</span> <span class="op">~</span> <span class="va">ko</span>, link <span class="op">=</span> <span class="fu"><a href="../reference/kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="../reference/weaveWeb-generic.html">weaveWeb</a></span><span class="op">(</span><span class="va">cpd</span> <span class="op">~</span> <span class="va">ko</span>, link <span class="op">=</span> <span class="fu"><a href="../reference/kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">@</span><span class="va">dictionary</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## 10 x 10 sparse Matrix of class "ngCMatrix"</span></span></code></pre>
 <pre><code><span><span class="co">##   [[ suppressing 10 column names 'K00001', 'K00002', 'K00003' ... ]]</span></span></code></pre>
 <pre><code><span><span class="co">##         ko</span></span>
@@ -336,7 +336,7 @@ data set, this means we can link between any two of <code>ec</code>,
 <span><span class="co">##   C00010 . . . . . . . . . .</span></span></code></pre>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Character notation</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="../reference/AnansiWeb.html">dictionary</a></span><span class="op">(</span><span class="fu"><a href="../reference/weaveWeb.html">weaveWeb</a></span><span class="op">(</span>y <span class="op">=</span> <span class="st">"ko"</span>, x <span class="op">=</span> <span class="st">"cpd"</span>, link <span class="op">=</span> <span class="fu"><a href="../reference/kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="../reference/weaveWeb-generic.html">weaveWeb</a></span><span class="op">(</span>y <span class="op">=</span> <span class="st">"ko"</span>, x <span class="op">=</span> <span class="st">"cpd"</span>, link <span class="op">=</span> <span class="fu"><a href="../reference/kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">@</span><span class="va">dictionary</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## 10 x 10 sparse Matrix of class "ngCMatrix"</span></span></code></pre>
 <pre><code><span><span class="co">##   [[ suppressing 10 column names 'C00001', 'C00002', 'C00003' ... ]]</span></span></code></pre>
 <pre><code><span><span class="co">##         cpd</span></span>
@@ -357,7 +357,7 @@ data set, this means we can link between any two of <code>ec</code>,
 <h3 id="use-custom-biadjacency-matrices-with-anansiweb">Use custom biadjacency matrices with AnansiWeb()<a class="anchor" aria-label="anchor" href="#use-custom-biadjacency-matrices-with-anansiweb"></a>
 </h3>
 <p>The most flexible way to make an <code>AnansiWeb</code> object is
-through <code><a href="../reference/AnansiWeb.html">AnansiWeb()</a></code>:</p>
+through <code><a href="../reference/AnansiWeb-class.html">AnansiWeb()</a></code>:</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Prep some dummy input tables</span></span>
 <span><span class="va">tX</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">6</span>, dimnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="cn">NULL</span>, x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"x"</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span>,</span>
@@ -371,7 +371,7 @@ through <code><a href="../reference/AnansiWeb.html">AnansiWeb()</a></code>:</p>
 <span>    ncol <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">NCOL</a></span><span class="op">(</span><span class="va">tX</span><span class="op">)</span>, dimnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">tY</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">tX</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># make the AnansiWeb</span></span>
-<span><span class="va">w</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/AnansiWeb.html">AnansiWeb</a></span><span class="op">(</span>tableY <span class="op">=</span> <span class="va">tY</span>, tableX <span class="op">=</span> <span class="va">tX</span>, dictionary <span class="op">=</span> <span class="va">d</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">w</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/AnansiWeb-class.html">AnansiWeb</a></span><span class="op">(</span>tableY <span class="op">=</span> <span class="va">tY</span>, tableX <span class="op">=</span> <span class="va">tX</span>, dictionary <span class="op">=</span> <span class="va">d</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Warning in AnansiWeb(tableY = tY, tableX = tX, dictionary = d): Dimnames of</span></span>
 <span><span class="co">## 'dictionary' were missing; Assigned 'y' and 'x'.</span></span></code></pre>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
@@ -499,50 +499,51 @@ library provides fantastic support for this.</p>
 <span><span class="co">## [1] stats     graphics  grDevices utils     datasets  methods   base     </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## other attached packages:</span></span>
-<span><span class="co">## [1] Matrix_1.7-3     dplyr_1.1.4      tidygraph_1.3.1  igraph_2.1.4    </span></span>
-<span><span class="co">## [5] ggraph_2.2.1     patchwork_1.3.1  ggplot2_3.5.2    anansi_0.7.0    </span></span>
-<span><span class="co">## [9] BiocStyle_2.37.0</span></span>
+<span><span class="co">## [1] Matrix_1.7-4     dplyr_1.1.4      tidygraph_1.3.1  igraph_2.1.4    </span></span>
+<span><span class="co">## [5] ggraph_2.2.2     patchwork_1.3.2  ggplot2_3.5.2    anansi_0.7.7    </span></span>
+<span><span class="co">## [9] BiocStyle_2.37.1</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## loaded via a namespace (and not attached):</span></span>
 <span><span class="co">##  [1] SummarizedExperiment_1.39.1 gtable_0.3.6               </span></span>
-<span><span class="co">##  [3] xfun_0.52                   bslib_0.9.0                </span></span>
+<span><span class="co">##  [3] xfun_0.53                   bslib_0.9.0                </span></span>
 <span><span class="co">##  [5] htmlwidgets_1.6.4           ggrepel_0.9.6              </span></span>
 <span><span class="co">##  [7] Biobase_2.69.0              lattice_0.22-7             </span></span>
 <span><span class="co">##  [9] vctrs_0.6.5                 tools_4.5.1                </span></span>
 <span><span class="co">## [11] generics_0.1.4              stats4_4.5.1               </span></span>
 <span><span class="co">## [13] tibble_3.3.0                pkgconfig_2.0.3            </span></span>
-<span><span class="co">## [15] BiocBaseUtils_1.11.0        RColorBrewer_1.1-3         </span></span>
-<span><span class="co">## [17] desc_1.4.3                  S4Vectors_0.47.0           </span></span>
-<span><span class="co">## [19] lifecycle_1.0.4             compiler_4.5.1             </span></span>
-<span><span class="co">## [21] farver_2.1.2                textshaping_1.0.1          </span></span>
-<span><span class="co">## [23] ggforce_0.5.0               graphlayouts_1.2.2         </span></span>
-<span><span class="co">## [25] Seqinfo_0.99.1              htmltools_0.5.8.1          </span></span>
-<span><span class="co">## [27] sass_0.4.10                 yaml_2.3.10                </span></span>
-<span><span class="co">## [29] tidyr_1.3.1                 pkgdown_2.1.3              </span></span>
-<span><span class="co">## [31] pillar_1.10.2               crayon_1.5.3               </span></span>
-<span><span class="co">## [33] jquerylib_0.1.4             MASS_7.3-65                </span></span>
-<span><span class="co">## [35] SingleCellExperiment_1.31.1 DelayedArray_0.35.2        </span></span>
-<span><span class="co">## [37] cachem_1.1.0                viridis_0.6.5              </span></span>
-<span><span class="co">## [39] abind_1.4-8                 tidyselect_1.2.1           </span></span>
-<span><span class="co">## [41] digest_0.6.37               purrr_1.0.4                </span></span>
-<span><span class="co">## [43] bookdown_0.43               labeling_0.4.3             </span></span>
-<span><span class="co">## [45] forcats_1.0.0               polyclip_1.10-7            </span></span>
-<span><span class="co">## [47] fastmap_1.2.0               grid_4.5.1                 </span></span>
-<span><span class="co">## [49] cli_3.6.5                   SparseArray_1.9.0          </span></span>
-<span><span class="co">## [51] magrittr_2.0.3              S4Arrays_1.9.1             </span></span>
-<span><span class="co">## [53] withr_3.0.2                 scales_1.4.0               </span></span>
-<span><span class="co">## [55] rmarkdown_2.29              XVector_0.49.0             </span></span>
-<span><span class="co">## [57] matrixStats_1.5.0           gridExtra_2.3              </span></span>
-<span><span class="co">## [59] ragg_1.4.0                  memoise_2.0.1              </span></span>
-<span><span class="co">## [61] evaluate_1.0.4              knitr_1.50                 </span></span>
-<span><span class="co">## [63] GenomicRanges_1.61.1        IRanges_2.43.0             </span></span>
-<span><span class="co">## [65] MultiAssayExperiment_1.35.3 viridisLite_0.4.2          </span></span>
-<span><span class="co">## [67] rlang_1.1.6                 Rcpp_1.1.0                 </span></span>
-<span><span class="co">## [69] glue_1.8.0                  formatR_1.14               </span></span>
-<span><span class="co">## [71] tweenr_2.0.3                BiocManager_1.30.26        </span></span>
-<span><span class="co">## [73] BiocGenerics_0.55.0         jsonlite_2.0.0             </span></span>
-<span><span class="co">## [75] R6_2.6.1                    MatrixGenerics_1.21.0      </span></span>
-<span><span class="co">## [77] systemfonts_1.2.3           fs_1.6.6</span></span></code></pre>
+<span><span class="co">## [15] BiocBaseUtils_1.11.2        RColorBrewer_1.1-3         </span></span>
+<span><span class="co">## [17] S7_0.2.0                    desc_1.4.3                 </span></span>
+<span><span class="co">## [19] S4Vectors_0.47.0            lifecycle_1.0.4            </span></span>
+<span><span class="co">## [21] compiler_4.5.1              farver_2.1.2               </span></span>
+<span><span class="co">## [23] textshaping_1.0.3           ggforce_0.5.0              </span></span>
+<span><span class="co">## [25] graphlayouts_1.2.2          Seqinfo_0.99.2             </span></span>
+<span><span class="co">## [27] htmltools_0.5.8.1           sass_0.4.10                </span></span>
+<span><span class="co">## [29] yaml_2.3.10                 tidyr_1.3.1                </span></span>
+<span><span class="co">## [31] pkgdown_2.1.3               pillar_1.11.0              </span></span>
+<span><span class="co">## [33] crayon_1.5.3                jquerylib_0.1.4            </span></span>
+<span><span class="co">## [35] MASS_7.3-65                 SingleCellExperiment_1.31.1</span></span>
+<span><span class="co">## [37] DelayedArray_0.35.2         cachem_1.1.0               </span></span>
+<span><span class="co">## [39] viridis_0.6.5               abind_1.4-8                </span></span>
+<span><span class="co">## [41] tidyselect_1.2.1            digest_0.6.37              </span></span>
+<span><span class="co">## [43] purrr_1.1.0                 bookdown_0.44              </span></span>
+<span><span class="co">## [45] labeling_0.4.3              forcats_1.0.0              </span></span>
+<span><span class="co">## [47] polyclip_1.10-7             fastmap_1.2.0              </span></span>
+<span><span class="co">## [49] grid_4.5.1                  cli_3.6.5                  </span></span>
+<span><span class="co">## [51] SparseArray_1.9.1           magrittr_2.0.3             </span></span>
+<span><span class="co">## [53] S4Arrays_1.9.1              withr_3.0.2                </span></span>
+<span><span class="co">## [55] scales_1.4.0                rmarkdown_2.29             </span></span>
+<span><span class="co">## [57] XVector_0.49.0              matrixStats_1.5.0          </span></span>
+<span><span class="co">## [59] gridExtra_2.3               ragg_1.5.0                 </span></span>
+<span><span class="co">## [61] memoise_2.0.1               evaluate_1.0.5             </span></span>
+<span><span class="co">## [63] knitr_1.50                  GenomicRanges_1.61.1       </span></span>
+<span><span class="co">## [65] IRanges_2.43.0              MultiAssayExperiment_1.35.9</span></span>
+<span><span class="co">## [67] viridisLite_0.4.2           rlang_1.1.6                </span></span>
+<span><span class="co">## [69] Rcpp_1.1.0                  glue_1.8.0                 </span></span>
+<span><span class="co">## [71] formatR_1.14                tweenr_2.0.3               </span></span>
+<span><span class="co">## [73] BiocManager_1.30.26         BiocGenerics_0.55.1        </span></span>
+<span><span class="co">## [75] jsonlite_2.0.0              R6_2.6.1                   </span></span>
+<span><span class="co">## [77] MatrixGenerics_1.21.0       systemfonts_1.2.3          </span></span>
+<span><span class="co">## [79] fs_1.6.6</span></span></code></pre>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

@@ -13,7 +13,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">anansi</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.7.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.7.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -50,7 +50,7 @@
     </div>
 
     <div class="section level2">
-      <h2 id="association">Association<a class="anchor" aria-label="anchor" href="#association"></a></h2>
+      <h2 id="package">Package<a class="anchor" aria-label="anchor" href="#package"></a></h2>
 
 
 
@@ -62,22 +62,51 @@
 
       <dl><dt>
 
-          <code><a href="weaveWeb.html">weaveWeb()</a></code> <code><a href="weaveWeb.html">weaveKEGG()</a></code>
+          <code><a href="anansi.html">anansi()</a></code>
+
+        </dt>
+        <dd>anansi: Annotation-based Analysis of Specific Interactions.</dd>
+      </dl></div><div class="section level2">
+      <h2 id="methods">Methods<a class="anchor" aria-label="anchor" href="#methods"></a></h2>
+
+
+
+
+    </div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="weaveWeb-methods.html">weaveWeb-methods</a></code> <code><a href="weaveWeb-methods.html">weaveWeb.character</a></code> <code><a href="weaveWeb-methods.html">weaveWeb.formula</a></code> <code><a href="weaveWeb-methods.html">weaveWeb.MultiAssayExperiment</a></code> <code><a href="weaveWeb-methods.html">weaveWeb.TreeSumarizedExperiment</a></code> <code><a href="weaveWeb-methods.html">weaveWeb.SingleCellExperiment</a></code>
 
         </dt>
         <dd>Weave an AnansiWeb</dd>
       </dl><dl><dt>
 
-          <code><a href="anansi.html">anansi()</a></code>
+          <code><a href="AnansiWeb-methods.html">AnansiWeb-methods</a></code> <code><a href="AnansiWeb-methods.html">show.anansi::AnansiWeb</a></code> <code><a href="AnansiWeb-methods.html">names.anansi::AnansiWeb</a></code> <code><a href="AnansiWeb-methods.html">dimnames.anansi::AnansiWeb</a></code> <code><a href="AnansiWeb-methods.html">dim.anansi::AnansiWeb</a></code>
 
         </dt>
-        <dd>anansi: Annotation-based Analysis of Specific Interactions.</dd>
+        <dd>Methods for AnansiWeb S7 container class</dd>
       </dl><dl><dt>
 
-          <code><a href="getGraph.html">getGraph(<i>&lt;MultiFactor&gt;</i>)</a></code> <code><a href="getGraph.html">getGraph(<i>&lt;list&gt;</i>)</a></code>
+          <code><a href="AnansiWeb-pairwise.html">AnansiWeb-pairwise</a></code> <code><a href="AnansiWeb-pairwise.html">pairs.AnansiWeb</a></code> <code><a href="AnansiWeb-pairwise.html">pairs.anansi::AnansiWeb</a></code> <code><a href="AnansiWeb-pairwise.html">pairwiseApply.AnansiWeb</a></code> <code><a href="AnansiWeb-pairwise.html">pairwiseApply.anansi::AnansiWeb</a></code>
 
         </dt>
-        <dd>Get a graph object out of an MultiFactor.</dd>
+        <dd>Methods for pairwise operations on AnansiWeb objects</dd>
+      </dl><dl><dt>
+
+          <code><a href="MultiFactor-methods.html">MultiFactor-methods</a></code> <code><a href="MultiFactor-methods.html">levels.anansi::MultiFactor</a></code> <code><a href="MultiFactor-methods.html">getGraph.anansi::MultiFactor</a></code>
+
+        </dt>
+        <dd>Methods for MultiFactor S7 container class</dd>
+      </dl><dl><dt>
+
+          <code><a href="anansi-coercion.html">as.list(<i>&lt;anansi::AnansiWeb&gt;</i>)</a></code> <code><a href="anansi-coercion.html">as.list(<i>&lt;anansi::MultiFactor&gt;</i>)</a></code> <code><a href="anansi-coercion.html">as.data.frame(<i>&lt;anansi::AnansiWeb&gt;</i>)</a></code> <code><a href="anansi-coercion.html">asMAE()</a></code>
+
+        </dt>
+        <dd>Coercion functions for anansi</dd>
       </dl></div><div class="section level2">
       <h2 id="visualisation">Visualisation<a class="anchor" aria-label="anchor" href="#visualisation"></a></h2>
 
@@ -91,10 +120,10 @@
 
       <dl><dt>
 
-          <code><a href="plotAnansi.html">plotAnansi()</a></code>
+          <code><a href="plotAnansi.html">plotAnansi</a></code> <code><a href="plotAnansi.html">plotAnansi-generic</a></code> <code><a href="plotAnansi.html">plotAnansi-methods</a></code>
 
         </dt>
-        <dd>Bioc style plotting wrapper for anansi output</dd>
+        <dd>Dissociation plot</dd>
       </dl></div><div class="section level2">
       <h2 id="classes">Classes<a class="anchor" aria-label="anchor" href="#classes"></a></h2>
 
@@ -108,22 +137,63 @@
 
       <dl><dt>
 
-          <code><a href="AnansiWeb.html">AnansiWeb()</a></code> <code><a href="AnansiWeb.html">dimnames(<i>&lt;AnansiWeb&gt;</i>)</a></code> <code><a href="AnansiWeb.html">dim(<i>&lt;AnansiWeb&gt;</i>)</a></code> <code><a href="AnansiWeb.html">names(<i>&lt;AnansiWeb&gt;</i>)</a></code> <code><a href="AnansiWeb.html">tableY(<i>&lt;AnansiWeb&gt;</i>)</a></code> <code><a href="AnansiWeb.html">`tableY&lt;-`(<i>&lt;AnansiWeb&gt;</i>)</a></code> <code><a href="AnansiWeb.html">tableX(<i>&lt;AnansiWeb&gt;</i>)</a></code> <code><a href="AnansiWeb.html">`tableX&lt;-`(<i>&lt;AnansiWeb&gt;</i>)</a></code> <code><a href="AnansiWeb.html">dictionary(<i>&lt;AnansiWeb&gt;</i>)</a></code> <code><a href="AnansiWeb.html">`dictionary&lt;-`(<i>&lt;AnansiWeb&gt;</i>)</a></code> <code><a href="AnansiWeb.html">metadata(<i>&lt;AnansiWeb&gt;</i>)</a></code> <code><a href="AnansiWeb.html">`metadata&lt;-`(<i>&lt;AnansiWeb&gt;</i>)</a></code> <code><a href="AnansiWeb.html">asMAE()</a></code> <code><a href="AnansiWeb.html">as.list(<i>&lt;AnansiWeb&gt;</i>)</a></code> <code><a href="AnansiWeb.html">as.data.frame(<i>&lt;AnansiWeb&gt;</i>)</a></code> <code><a href="AnansiWeb.html">which(<i>&lt;AnansiWeb&gt;</i>)</a></code> <code><a href="AnansiWeb.html">getFeaturePairs(<i>&lt;AnansiWeb&gt;</i>)</a></code> <code><a href="AnansiWeb.html">mapply(<i>&lt;AnansiWeb&gt;</i>)</a></code> <code><a href="AnansiWeb.html">show(<i>&lt;AnansiWeb&gt;</i>)</a></code>
+          <code><a href="AnansiWeb-class.html">AnansiWeb()</a></code>
 
         </dt>
-        <dd>AnansiWeb S4 container class</dd>
+        <dd>AnansiWeb S7 container class</dd>
       </dl><dl><dt>
 
-          <code><a href="MultiFactor.html">MultiFactor()</a></code> <code><a href="MultiFactor.html">asMultiFactor()</a></code> <code><a href="MultiFactor.html">dimnames(<i>&lt;MultiFactor&gt;</i>)</a></code> <code><a href="MultiFactor.html">dim(<i>&lt;MultiFactor&gt;</i>)</a></code> <code><a href="MultiFactor.html">names(<i>&lt;MultiFactor&gt;</i>)</a></code> <code><a href="MultiFactor.html">dictionary(<i>&lt;MultiFactor&gt;</i>)</a></code> <code><a href="MultiFactor.html">`dictionary&lt;-`(<i>&lt;MultiFactor&gt;</i>)</a></code> <code><a href="MultiFactor.html">levels(<i>&lt;MultiFactor&gt;</i>)</a></code> <code><a href="MultiFactor.html">unfactor(<i>&lt;MultiFactor&gt;</i>)</a></code> <code><a href="MultiFactor.html">droplevels(<i>&lt;MultiFactor&gt;</i>)</a></code> <code><a href="MultiFactor.html">`[`(<i>&lt;MultiFactor&gt;</i>,<i>&lt;ANY&gt;</i>,<i>&lt;ANY&gt;</i>)</a></code> <code><a href="MultiFactor.html">`[&lt;-`(<i>&lt;MultiFactor&gt;</i>,<i>&lt;ANY&gt;</i>,<i>&lt;ANY&gt;</i>,<i>&lt;list&gt;</i>)</a></code> <code><a href="MultiFactor.html">`[[`(<i>&lt;MultiFactor&gt;</i>,<i>&lt;ANY&gt;</i>)</a></code> <code><a href="MultiFactor.html">`[[&lt;-`(<i>&lt;MultiFactor&gt;</i>,<i>&lt;ANY&gt;</i>,<i>&lt;ANY&gt;</i>)</a></code> <code><a href="MultiFactor.html">subset(<i>&lt;MultiFactor&gt;</i>)</a></code> <code><a href="MultiFactor.html">c(<i>&lt;MultiFactor&gt;</i>)</a></code> <code><a href="MultiFactor.html">as.list(<i>&lt;MultiFactor&gt;</i>)</a></code> <code><a href="MultiFactor.html">getEdgeList(<i>&lt;MultiFactor&gt;</i>)</a></code> <code><a href="MultiFactor.html">show(<i>&lt;MultiFactor&gt;</i>)</a></code>
+          <code><a href="MultiFactor-class.html">MultiFactor()</a></code>
 
         </dt>
-        <dd>MultiFactor S4 container class</dd>
+        <dd>MultiFactor S7 container class</dd>
       </dl><dl><dt>
 
-          <code><a href="anansiTale-class.html">anansiTale-class</a></code>
+          <code><a href="AnansiTale.html">AnansiTale()</a></code>
 
         </dt>
-        <dd>An S4 class to contain all <code>anansi</code> stats results so that they can easily be extracted.</dd>
+        <dd>AnansiTale S7 container class. Not intended for general use.</dd>
+      </dl></div><div class="section level2">
+      <h2 id="generics">Generics<a class="anchor" aria-label="anchor" href="#generics"></a></h2>
+
+
+
+
+    </div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="weaveWeb-generic.html">weaveWeb()</a></code> <code><a href="weaveWeb-generic.html">weaveKEGG()</a></code>
+
+        </dt>
+        <dd>Weave an AnansiWeb object</dd>
+      </dl><dl><dt>
+
+          <code><a href="pairwiseApply.html">pairwiseApply()</a></code>
+
+        </dt>
+        <dd>Apply a function on each pair of features</dd>
+      </dl><dl><dt>
+
+          <code><a href="getFeaturePairs.html">getFeaturePairs()</a></code>
+
+        </dt>
+        <dd>Get a list of all pairs of features</dd>
+      </dl><dl><dt>
+
+          <code><a href="getEdgeList.html">getEdgeList()</a></code>
+
+        </dt>
+        <dd>Get a listof edges</dd>
+      </dl><dl><dt>
+
+          <code><a href="getGraph.html">getGraph()</a></code>
+
+        </dt>
+        <dd>Get a graph object.</dd>
       </dl></div><div class="section level2">
       <h2 id="datasets">Datasets<a class="anchor" aria-label="anchor" href="#datasets"></a></h2>
 
@@ -188,59 +258,6 @@
 
         </dt>
         <dd>make a link data.frame for biobakery mapping files input</dd>
-      </dl></div><div class="section level2">
-      <h2 id="internal-utils">Internal utils<a class="anchor" aria-label="anchor" href="#internal-utils"></a></h2>
-
-
-
-
-    </div><div class="section level2">
-
-
-
-
-      <dl><dt>
-
-          <code><a href="anansiCor.html">anansiCor()</a></code>
-
-        </dt>
-        <dd>Compute r-statistics for each featureY-featureX pair in the dictionary. Typically, the main <code><a href="../reference/anansi.html">anansi()</a></code> function will run this for you.</dd>
-      </dl><dl><dt>
-
-          <code><a href="anansiCorPvalue.html">anansiCorPvalue()</a></code>
-
-        </dt>
-        <dd>Compute r-statistics for each featureY-featureX pair in the dictionary. Typically, the main <code><a href="../reference/anansi.html">anansi()</a></code> function will run this for you.</dd>
-      </dl><dl><dt>
-
-          <code><a href="anansiCorTestByGroup.html">anansiCorTestByGroup()</a></code>
-
-        </dt>
-        <dd>Run correlations for all interacting metabolites and functions.</dd>
-      </dl><dl><dt>
-
-          <code><a href="anansiDiffCor.html">anansiDiffCor()</a></code>
-
-        </dt>
-        <dd>Run differential correlation analysis for all interacting metabolites and functions.</dd>
-      </dl><dl><dt>
-
-          <code><a href="is.categorical.html">is.categorical()</a></code>
-
-        </dt>
-        <dd>Is character, factor or ordered factor</dd>
-      </dl><dl><dt>
-
-          <code><a href="named_group_list.html">named_group_list()</a></code>
-
-        </dt>
-        <dd>Provide name and levels for categories for group terms</dd>
-      </dl><dl><dt>
-
-          <code><a href="named_term_list.html">named_term_list()</a></code>
-
-        </dt>
-        <dd>Provide name and levels for categories</dd>
       </dl></div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
