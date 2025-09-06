@@ -18,3 +18,4 @@ containing vectors are unique levels or 'numeric' if not categorical.
 \description{
 convenience function to generate output
 }
+\keyword{internal}

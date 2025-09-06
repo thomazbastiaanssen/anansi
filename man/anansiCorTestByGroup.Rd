@@ -29,3 +29,4 @@ for you.
 \seealso{
 \code{\link[=anansi]{anansi()}}
 }
+\keyword{internal}

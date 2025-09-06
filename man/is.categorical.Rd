@@ -16,3 +16,4 @@ a boolean.
 wrapper around
 \code{is.character(x) || is.factor(x) || is.ordered(x)}
 }
+\keyword{internal}

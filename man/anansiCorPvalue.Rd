@@ -30,3 +30,4 @@ Typically, the main \code{anansi()} function will run this for you.
 \seealso{
 \code{\link[=anansi]{anansi()}} \cr \code{\link[=anansiCorTestByGroup]{anansiCorTestByGroup()}}
 }
+\keyword{internal}

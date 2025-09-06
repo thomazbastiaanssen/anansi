@@ -249,9 +249,10 @@ AnansiWeb <- S7::new_class(
 )
 S7::S4_register(AnansiWeb)
 
-#' An S7 class to contain all `anansi` stats results. Not intended for general
-#' use.
-#' @rdname AnansiTale-class
+#' @title AnansiTale S7 container class. Not intended for general use.
+#' @rdname AnansiTale
+#' @name AnansiTale
+#' @aliases AnansiTale-class
 #' @slot subject A character that describes the data that was queried.
 #' @slot type A character that describes type of parameter contained in the
 #'     `estimates` slot. For example r.values for correlations or r.squared

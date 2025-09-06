@@ -25,6 +25,7 @@
 #' one for emergent correlations and one for disjointed correlations.
 #' @importFrom stats anova lm pf residuals model.matrix.default terms.formula
 #' @importFrom methods is
+#' @keywords internal
 #'
 anansiDiffCor <- function(
     web,

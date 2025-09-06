@@ -1,12 +1,13 @@
 #' @title Coercion functions for anansi
-#' @name as.list.AnansiWeb
+#' @name anansi-coercion
 #' @rdname anansi-coercion
-#' @method as.list AnansiWeb
 #' @returns An object of the desired class.
 #' @param x input object
 #' @param use.names `Logical scalar`, whether output list should contain
 #'     character (Default) or integer data frame. If `FALSE`, returns
 #'     `unfactor(x)`.
+#' @param row.names,optional Not used. See ?base::data.frame
+#' @param ... additional arguments (currently not used).
 #' @seealso [unfactor()]
 #' @examples
 #' # AnansiWeb
@@ -22,26 +23,42 @@
 #' x <- randomMultiFactor()
 #' as.list(x, use.names = TRUE)
 #'
+NULL
+
+#' @export
 S7::method(convert, list(AnansiWeb, S7::class_list)) <-
-               function(from, to) as.list.AnansiWeb(x = from)
+               function(from, to) `as.list.anansi::AnansiWeb`(x = from)
+
+#' @export
+#' @rdname anansi-coercion
+`as.list.anansi::AnansiWeb` <- function(x, ...) {
+    out <- S7::props(x)
+    names(out)[c(1L, 2L)] <- names(x)
+    out
+    }
 
 #' @importFrom S7 convert
-#' @method as.data.frame AnansiWeb
-#' @rdname anansi-coercion
-#' @name as.data.frame.AnansiWeb
+#' @export
 #'
 S7::method(convert, list(AnansiWeb, S7::class_data.frame)) <-
     function(from, to) as.data.frame.AnansiWeb(x = from)
 
-#' @name as.list.MultiFactor
-#' @rdname anansi-coercion
 #' @importFrom S7 convert
+#' @export
 #'
 S7::method(convert, list(MultiFactor, S7::class_list)) <-
-    function(from, to) as.list(from)
+    function(from, to) `as.list.anansi::MultiFactor`(x = from)
 
 #' @export
-S7::method(as.list, MultiFactor) <- function(x, ..., use.names = TRUE) {
+S7::method(as.list, MultiFactor) <-
+    function(x, ..., use.names = TRUE) `as.list.anansi::MultiFactor`(
+        x, ..., use.names
+        )
+
+#' @export
+#' @importFrom S4Vectors unfactor
+#' @rdname anansi-coercion
+`as.list.anansi::MultiFactor` <- function(x, ..., use.names = TRUE) {
     ifelse(
         use.names,
         yes = return(S4Vectors::unfactor(x)),
@@ -50,14 +67,18 @@ S7::method(as.list, MultiFactor) <- function(x, ..., use.names = TRUE) {
 
 #' @export
 S7::method(as.list, AnansiWeb) <- function(x, ...) {
-    out <- S7::props(x)
-    names(out)[c(1L, 2L)] <- names(x)
-    out
+    `as.list.anansi::AnansiWeb`(x)
 }
 
 #' @export
 S7::method(as.data.frame, AnansiWeb) <- function(x, row.names, optional, ...) {
-        cbind(
+    `as.data.frame.anansi::AnansiWeb`(x)
+    }
+
+#' @export
+#' @rdname anansi-coercion
+`as.data.frame.anansi::AnansiWeb` <- function(x, row.names, optional, ...) {
+    cbind(
         x@tableY,
         x@tableX,
         x@metadata
@@ -71,7 +92,6 @@ S7::method(as.data.frame, AnansiWeb) <- function(x, row.names, optional, ...) {
 #' @importFrom MultiAssayExperiment MultiAssayExperiment ExperimentList
 #' @importFrom SummarizedExperiment SummarizedExperiment
 #' @export
-#' @usage NULL
 #'
 asMAE <- function(x)  {
 

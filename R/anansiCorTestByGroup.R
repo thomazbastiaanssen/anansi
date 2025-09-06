@@ -12,7 +12,7 @@
 #'     score.
 #' @param verbose A boolean. Toggles whether to print diagnostic information
 #'     while running. Useful for debugging errors on large datasets.
-#' @noRd
+#' @keywords internal
 #'
 call_groupwise <- function(web, groups, metadata, verbose) {
     if (is.null(groups)) {
@@ -40,6 +40,7 @@ call_groupwise <- function(web, groups, metadata, verbose) {
 #' @return a list of `AnansiTale` result objects, one for the total dataset and
 #'     per group if applicable.
 #' @seealso [anansi()]
+#' @keywords internal
 #'
 anansiCorTestByGroup <- function(web, group.vec, verbose = TRUE) {
     # Determine all groups
@@ -93,7 +94,7 @@ anansiCorTestByGroup <- function(web, group.vec, verbose = TRUE) {
 #' @return An `AnansiTale` result object.
 #' @seealso [anansi()] \cr [anansiCorTestByGroup()]
 #' @importFrom stats pt
-#' @importFrom methods new
+#' @keywords internal
 #'
 anansiCorPvalue <- function(web, group.bool, verbose) {
     # Compute correlation coefficients
@@ -126,6 +127,7 @@ anansiCorPvalue <- function(web, group.bool, verbose) {
 #' @seealso [anansi()] \cr [anansiCorTestByGroup()]
 #' @return A matrix of r-statistics.
 #' @importFrom stats cor
+#' @keywords internal
 #'
 anansiCor <- function(web, group.bool) {
     # Run correlations on subsections of your data

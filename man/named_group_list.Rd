@@ -21,3 +21,4 @@ Entry is named 'All' and contains all levels.
 \description{
 convenience function to generate group terms output
 }
+\keyword{internal}

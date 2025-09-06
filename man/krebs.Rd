@@ -19,4 +19,7 @@ Enzymes and metabolites that make up the Krebs cycle. Features share a row
 when they play a role in the same reaction.
 Used in vignettes, exported to facilitate user exploration.
 }
+\seealso{
+\code{\link[=krebsDemoWeb]{krebsDemoWeb()}}
+}
 \keyword{datasets}

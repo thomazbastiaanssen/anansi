@@ -14,11 +14,16 @@ development:
   mode: auto
 
 reference:
-- title: Association
+- title: Package
 - contents:
-  - weaveWeb
   - anansi-package
-  - getGraph
+- title: Methods
+- contents:
+  - weaveWeb-methods
+  - AnansiWeb-methods
+  - AnansiWeb-pairwise
+  - MultiFactor-methods
+  - anansi-coercion
 - title: Visualisation
 - contents:
   - plotAnansi
@@ -26,7 +31,14 @@ reference:
 - contents:
   - AnansiWeb
   - MultiFactor
-  - AnansiTale-class
+  - AnansiTale
+- title: Generics
+- contents:
+  - weaveWeb
+  - pairwiseApply
+  - getFeaturePairs
+  - getEdgeList
+  - getGraph
 - title: Datasets
 - contents:
   - randomAnansi
@@ -38,15 +50,5 @@ reference:
 - title: Conversion utils
 - contents:
   - linkBiobakeryMap
-- title: Internal utils
-- contents:
-  - anansiCor
-  - anansiCorPvalue
-  - anansiCorTestByGroup
-  - anansiDiffCor
-  - is.categorical
-  - named_group_list
-  - named_term_list
-
 
 

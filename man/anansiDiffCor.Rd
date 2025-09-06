@@ -36,3 +36,4 @@ one for emergent correlations and one for disjointed correlations.
 Can either take continuous or categorical data. Typically, the main
 \code{anansi()} function will run this for you.
 }
+\keyword{internal}
