@@ -1,3 +1,10 @@
+# anansi 0.7.7
+
+MOVED TO S7 CLASS SYSTEM
+
+* anansi has been fully ported to the recent S7 framework. This change should 
+not affect output or functionality. 
+
 # anansi 0.7.0
 
 NEW FEATURES

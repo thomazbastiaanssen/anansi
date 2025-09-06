@@ -25,6 +25,14 @@
 #' @importFrom methods getClass
 #' @inheritParams MultiFactor-methods
 #' @seealso [MultiFactor-methods()]
+#' @examples
+#' # Generate some random linkage input
+#' x <- data.frame(
+#'     a = sample(letters[seq(3)], 10, replace = TRUE),
+#'     A = sample(LETTERS[seq(3)], 10, replace = TRUE)
+#' )
+#' MultiFactor(x)
+#'
 #' @export
 #'
 MultiFactor <- S7::new_class(
@@ -243,6 +251,7 @@ S7::S4_register(AnansiWeb)
 
 #' An S7 class to contain all `anansi` stats results. Not intended for general
 #' use.
+#' @rdname AnansiTale-class
 #' @slot subject A character that describes the data that was queried.
 #' @slot type A character that describes type of parameter contained in the
 #'     `estimates` slot. For example r.values for correlations or r.squared
@@ -270,6 +279,9 @@ S7::S4_register(AnansiWeb)
 #' @param p.values A matrix containing the p.values for the parameters named in
 #'     the `type` slot.
 #' @returns an `AnansiTale`
+#' @examples
+#' AnansiTale
+#'
 #' @export
 #'
 AnansiTale <- S7::new_class(

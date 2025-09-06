@@ -65,3 +65,7 @@ the \code{type} slot.}
 the \code{type} slot.}
 }}
 
+\examples{
+AnansiTale
+
+}

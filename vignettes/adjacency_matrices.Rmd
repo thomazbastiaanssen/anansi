@@ -269,7 +269,7 @@ krebs_edge_df |>
 ```
 
 # General use in anansi {#sec-mat-2}
-In anansi, we work with biadjacency matrices in the `AnansiWeb` S4 class, which 
+In anansi, we work with biadjacency matrices in the `AnansiWeb` S7 class, which 
 consists of a biadjacency matrix, in this case we call it a `dictionary`, as 
 well as two tables of observations that should be analysed jointly. 
 

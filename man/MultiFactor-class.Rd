@@ -53,6 +53,15 @@ in that level. Accessed through regular list methods (e.g., \code{[}, \code{[[})
 Accesses through \code{x@dictionary}.}
 }}
 
+\examples{
+# Generate some random linkage input
+x <- data.frame(
+    a = sample(letters[seq(3)], 10, replace = TRUE),
+    A = sample(LETTERS[seq(3)], 10, replace = TRUE)
+)
+MultiFactor(x)
+
+}
 \seealso{
 \code{\link[=MultiFactor-methods]{MultiFactor-methods()}}
 
