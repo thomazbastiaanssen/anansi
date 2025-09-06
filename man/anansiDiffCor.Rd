@@ -29,7 +29,7 @@ according to your dictionary.}
 while running. Useful for debugging errors on large datasets.}
 }
 \value{
-a list of \code{anansiTale} result objects, one for the total model,
+a list of \code{AnansiTale} result objects, one for the total model,
 one for emergent correlations and one for disjointed correlations.
 }
 \description{

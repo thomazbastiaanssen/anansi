@@ -1,7 +1,7 @@
 Package: anansi
 Type: Package
 Title: Annotation-Based Analysis of Specific Interactions
-Version: 0.7.0
+Version: 0.7.7
 Authors@R: c(
    person("Thomaz", "Bastiaanssen", email = "thomazbastiaanssen@gmail.com", 
        role = c("aut", "cre"), comment = c(ORCID = "0000-0001-6891-734X")), 
@@ -22,12 +22,12 @@ Description: Studies including both microbiome and metabolomics data are
     differential association. 
 Depends: R (>= 4.4.0)
 Imports:
+    S7,
     stats,
     methods,
     igraph,
     Matrix,
     forcats,
-    BiocGenerics,
     S4Vectors,
     SummarizedExperiment,
     SingleCellExperiment,

@@ -11,11 +11,16 @@ linkBiobakeryMap(map)
 mapping files.}
 }
 \value{
-a two-column \code{data.frame} that can be convrted into an adjaceny
+a two-column \code{data.frame} that can be converted into an adjacency
 matrix used as input for \code{weaveWeb()}.
 }
 \description{
 make a link data.frame for biobakery mapping files input
+}
+\examples{
+# some dummy input, as a character vector of IDs separated by tabs.
+x <- c("x_1\ty_1\ty_2\ty_4", "x_2\ty_1\ty_3", "x_3\ty_2\ty_y")
+linkBiobakeryMap(x)
 }
 \seealso{
 \code{\link[=weaveWeb]{weaveWeb()}}

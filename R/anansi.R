@@ -139,18 +139,18 @@ anansi <- function(
         match.arg(return.format, choices = c("table", "list", "raw"))
     # generate anansiYarn input object
     input <- prepInput(
-        web = web,
-        formula = formula,
-        groups = groups,
+        web      = web,
+        formula  = formula,
+        groups   = groups,
         metadata = metadata,
-        verbose = verbose
+        verbose  = verbose
     )
     int.terms <- input$int.terms
-    groups <- input$groups
-    group.id <- input$group.id
+    groups    <- input$groups
+    group.id  <- input$group.id
     errorterm <- input$error.term
     sat_model <- input$lm.formula
-    metadata <- input$metadata
+    metadata  <- input$metadata
 
     out.list <- vector(
         "list",
@@ -195,19 +195,15 @@ anansi <- function(
 #' Assess formula, trim metadata and prepare output for anansi workflow
 #' @description Initialize `anansiInput` component of output. Should not be
 #' called by user.
-#' @importFrom S4Vectors as.data.frame.DataFrame
 #' @noRd
 #'
 prepInput <- function(web, formula, groups, metadata, verbose) {
-    # If no metadata argument try web slot. If list select one named "metadata".
-    if (is.null(metadata)) metadata <- metadata(web, simplify = FALSE)
-    if (!is.data.frame(metadata)) metadata <- metadata[["metadata"]]
+    # If no metadata argument try web slot.
+    if (is.null(metadata)) metadata <- web@metadata
 
     stopifnot(
-        "No metadata argument provided or found in AnansiWeb" = prod(dim(
-            metadata
-        )) >
-            0
+        "No metadata argument provided or found in AnansiWeb" =
+            prod(dim(metadata)) > 0
     )
     raw_terms <- terms.formula(formula, "Error", data = metadata)
     indErr <- attr(raw_terms, "specials")$Error

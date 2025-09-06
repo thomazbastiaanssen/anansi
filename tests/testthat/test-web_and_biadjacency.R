@@ -8,8 +8,8 @@ test_that("kegg wrapper is equivalent", {
 })
 
 test_that("Swapping terms in formula is equivalent to transposition", {
-    a <- dictionary(weaveWeb(ko ~ cpd, link = kegg_link()))
-    b <- dictionary(weaveWeb(cpd ~ ko, link = kegg_link()))
+    a <- weaveWeb(ko ~ cpd, link = kegg_link())@dictionary
+    b <- weaveWeb(cpd ~ ko, link = kegg_link())@dictionary
 
     expect_identical(a, Matrix::t(b))
 })

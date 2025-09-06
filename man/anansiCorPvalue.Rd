@@ -21,7 +21,7 @@ correlations according to your dictionary.}
 while running. Useful for debugging errors on large datasets.}
 }
 \value{
-An \code{anansiTale} result object.
+An \code{AnansiTale} result object.
 }
 \description{
 Compute r-statistics for each featureY-featureX pair in the dictionary.

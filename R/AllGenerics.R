@@ -1,72 +1,102 @@
-setGeneric(
-    "getGraph",
-    signature = c("x"),
-    function(x, ...) standardGeneric("getGraph")
-)
-
-setGeneric(
-    "tableX",
-    signature = c("x"),
-    function(x, ...) standardGeneric("tableX")
-)
-
-setGeneric(
-    "tableX<-",
-    signature = c("x"),
-    function(x, ..., value) standardGeneric("tableX<-")
-)
-
-setGeneric(
-    "tableY",
-    signature = c("x"),
-    function(x, ...) standardGeneric("tableY")
-)
-
-setGeneric(
-    "tableY<-",
-    signature = c("x"),
-    function(x, ..., value) standardGeneric("tableY<-")
-)
-
-setGeneric(
-    "dictionary",
-    signature = c("x"),
-    function(x, ...) standardGeneric("dictionary")
-)
-
-setGeneric(
-    "dictionary<-",
-    signature = c("x"),
-    function(x, ..., value) standardGeneric("dictionary<-")
-)
-
-setGeneric(
-    "getEdgeList",
-    signature = c("x"),
-    function(x, ...) standardGeneric("getEdgeList")
-)
-
-setGeneric(
-    "getFeaturePairs",
-    signature = c("x"),
-    function(x, ...) standardGeneric("getFeaturePairs")
-)
-
-#' @rdname weaveWeb
+#' Get a listof edges
+#' @name getEdgeList
+#' @rdname getEdgeList
+#' @param x input object
+#' @param ... additional arguments
+#' @examples
+#' x <- randomMultiFactor(n_features = 10)
+#' getEdgeList(x)
+#' @returns a two-column data.frame that lists the content of each entry in the
+#' input MultiFactor
 #' @export
-#'
-setGeneric(
-    "weaveWeb",
-    signature = c("x"),
-    function(x, ...) standardGeneric("weaveWeb")
-)
+getEdgeList        <- S7::new_generic("getEdgeList", "x")
 
-#' Bioc style plotting wrapper for anansi output
+#' Get a graph object.
+#' @name getGraph
+#' @seealso [`MultiFactor-methods`]
+#' @param x input
+#' @param ... additional arguments (currently not used).
+#' @examples
+#' # Show methods
+#' getGraph
+#' @returns a specified graph object.
+#' @export
+getGraph           <- S7::new_generic("getGraph", "x")
+
+#' Get a list of all pairs of features
+#' @name getFeaturePairs
+#' @rdname getFeaturePairs
+#' @param x input object
+#' @param ... additional arguments for specific methods
+#' @returns an list of two-column data.frames that represent all feature pairs.
+#' @examples
+#' x <- randomWeb(10)
+#' getFeaturePairs(x)
 #'
+#' @export
+getFeaturePairs    <- S7::new_generic("getFeaturePairs", "x")
+
+#' Weave an AnansiWeb object
+#' @name weaveWeb
+#' @rdname weaveWeb-generic
+#' @param x input object
+#' @param ... additional arguments
+#' @seealso [weaveWeb-methods()]
+#' @returns an `AnansiWeb` object, with sparse binary biadjacency matrix
+#' with features from `y` as rows and features from `x` as columns in
+#' `dictionary` slot.
+#' @examples
+#' # Setup demo tables
+#' ec2ko <- kegg_link()[["ec2ko"]]
+#' ec2cpd <- kegg_link()[["ec2cpd"]]
+#'
+#' # Basic usage
+#' weaveWeb(cpd ~ ko, link = kegg_link())
+#' weaveWeb(x = "ko", y = "ec", link = ec2ko)
+#' weaveWeb(ec ~ cpd, link = ec2cpd)
+#'
+#' # A wrapper is available for kegg ko, ec and cpd data
+#' generic <- weaveWeb(cpd ~ ko, link = kegg_link())
+#' kegg_wrapper <- weaveKEGG(cpd ~ ko)
+#'
+#' identical(generic, kegg_wrapper)
+#'
+#' # The following are equivalent to transposition:
+#' a <- weaveWeb(ko ~ cpd, link = kegg_link())@dictionary
+#' b <- weaveWeb(cpd ~ ko, link = kegg_link())@dictionary
+#'
+#' identical(a, Matrix::t(b))
+#'
+#' @export
+weaveWeb           <- S7::new_generic("weaveWeb",   "x")
+
+#' @name plotAnansi
 #' @rdname plotAnansi
+#' @aliases plotAnansi-generic
 #' @export
-setGeneric(
-    "plotAnansi",
-    signature = c("x"),
-    function(x, ...) standardGeneric("plotAnansi")
-)
+#' @returns a figure that can be further modified using the `ggplot2` suite
+#' @usage NULL
+plotAnansi         <- S7::new_generic("plotAnansi", "x")
+
+#' Apply a function on each pair of features
+#' @name pairwiseApply
+#' @rdname pairwiseApply
+#' @aliases pairwiseApply-generic
+#' @param X input object
+#' @param ... additional arguments
+#' @returns
+#' a list containing the output of applying the function to each feature pair.
+#' See `?base::mapply()`
+#' @examples
+#' web <- randomWeb(10)
+#'
+#' pairwiseApply(
+#'     X = web,
+#'     FUN = function(x, y) cor(x, y),
+#'     MoreArgs = NULL, SIMPLIFY = TRUE, USE.NAMES = TRUE
+#' )
+#' @export
+pairwiseApply <- S7::new_generic("pairwiseApply", "X")
+
+#' @export
+S7::new_external_generic(package = "S4Vectors", name = "unfactor", "x")

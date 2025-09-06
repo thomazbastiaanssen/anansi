@@ -269,7 +269,7 @@ krebs_edge_df |>
 ```
 
 # General use in anansi {#sec-mat-2}
-In anansi, we work with biadjacency matrices in the `AnansiWeb` S4 class, which 
+In anansi, we work with biadjacency matrices in the `AnansiWeb` S7 class, which 
 consists of a biadjacency matrix, in this case we call it a `dictionary`, as 
 well as two tables of observations that should be analysed jointly. 
 
@@ -293,7 +293,7 @@ trad.web <- weaveWeb(y = "ec", x = "ko", link = kegg_link())
 identical(form.web, trad.web)
 
 # Get the biadjacency matrix using the $ operator
-head(dictionary(form.web), c(10, 10))
+head(form.web@dictionary, c(10, 10))
 ```
 Note that the majority of this matrix consists of dots, it's a sparse matrix, 
 which is a format that can considerably speed up calculations involving huge, 
@@ -355,10 +355,10 @@ packaged data set, this means we can link between any two of `ec`, `cpd` and
 
 ```{r web_formula}
 # Formula notation
-head(dictionary(weaveWeb(cpd ~ ko, link = kegg_link())), c(10, 10))
+head(weaveWeb(cpd ~ ko, link = kegg_link())@dictionary, c(10, 10))
 
 # Character notation
-head(dictionary(weaveWeb(y = "ko", x = "cpd", link = kegg_link())), c(10, 10))
+head(weaveWeb(y = "ko", x = "cpd", link = kegg_link())@dictionary, c(10, 10))
 ```
 
 ## Use custom biadjacency matrices with AnansiWeb()

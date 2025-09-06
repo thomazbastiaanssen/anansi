@@ -1,114 +1,103 @@
-#' @rdname AnansiWeb
-#' @aliases as.list.AnansiWeb coerce,AnansiWeb-list
-#' @usage NULL
-#' @export
-#'
-setMethod("as.list", c(x = "AnansiWeb"), function(x, ...) as(x, "list"))
-
-#' @rdname AnansiWeb
-#' @param row.names,optional Ignored, for S4 generic. See ?base::as.data.frame.
-#' @aliases as.data.frame.AnansiWeb-method coerce,AnansiWeb-data.frame
-#' @importMethodsFrom BiocGenerics as.data.frame
-#' @usage NULL
-#' @export
-#'
-setMethod(
-    "as.data.frame",
-    c(x = "AnansiWeb"),
-    function(x, row.names = NULL, optional = FALSE, ...) {
-        as.data.frame.AnansiWeb(x)
-    }
-)
-
-#' @rdname AnansiWeb
-#' @aliases as.data.frame.AnansiWeb
-#' @method as.data.frame AnansiWeb
-#' @noRd
-#'
-as.data.frame.AnansiWeb <- function(x) {
-    cbind(
-        tableY(x),
-        tableX(x),
-        metadata(x, simplify = TRUE)
-    )
-}
-
-#' @rdname AnansiWeb
-#' @aliases as.MAE as.MultiAssayExperiment asMultiAssayExperiment
-#' @usage NULL
-#' @export
-#'
-asMAE <- function(x) as(x, "MultiAssayExperiment")
-
-#' @importFrom methods as
-#' @export
-#'
-setAs(from = "AnansiWeb", to = "list", def = function(from) {
-    out <- c(
-        list(
-            tableY = from@tableY,
-            tableX = from@tableX,
-            dictionary = from@dictionary
-        ),
-        from@metadata
-    )
-    names(out)[c(1L, 2L)] <- names(from)
-    out
-})
-
-#' @importClassesFrom MultiAssayExperiment MultiAssayExperiment
-#' @importFrom MultiAssayExperiment MultiAssayExperiment ExperimentList
-#' @importFrom SummarizedExperiment SummarizedExperiment
-#' @export
-#'
-setAs(from = "AnansiWeb", to = "MultiAssayExperiment", def = function(from) {
-    tY <- t(tableY(from))
-    tX <- t(tableX(from))
-    to_exp <- ExperimentList(
-        y = SummarizedExperiment(tY),
-        x = SummarizedExperiment(tX)
-    )
-    names(to_exp) <- names(from)
-
-    to_md <- list(dictionary = dictionary(from))
-    to_cd <- metadata(from, simplify = TRUE)
-
-    MultiAssayExperiment::MultiAssayExperiment(
-        experiments = to_exp,
-        metadata = to_md,
-        colData = DataFrame(to_cd)
-    )
-})
-
-#' @export
-#'
-setAs(from = "AnansiWeb", to = "data.frame", def = function(from) {
-    as.data.frame.AnansiWeb(from)
-})
-
-
-#' @rdname MultiFactor
-#' @aliases as.list.MultiFactor
-#' @returns a named list of character vectors (Default) or integers
-#' (`use.names = FALSE`).
-#' @export
-#'
-setMethod("as.list", c(x = "MultiFactor"), function(x, ..., use.names = TRUE) {
-    as.list.MultiFactor(x, ..., use.names)
-})
-
-#' @export
-#' @method as.list MultiFactor
-#' @rdname MultiFactor
+#' @title Coercion functions for anansi
+#' @name as.list.AnansiWeb
+#' @rdname anansi-coercion
+#' @method as.list AnansiWeb
+#' @returns An object of the desired class.
+#' @param x input object
 #' @param use.names `Logical scalar`, whether output list should contain
 #'     character (Default) or integer data frame. If `FALSE`, returns
 #'     `unfactor(x)`.
 #' @seealso [unfactor()]
+#' @examples
+#' # AnansiWeb
+#' x <- randomWeb(36)
 #'
-as.list.MultiFactor <- function(x, ..., use.names = TRUE) {
+#' as.list(x)
+#' as.data.frame(x)
+#'
+#' # AnansiWeb to MultiAssayExperiment
+#' asMAE(x)
+#'
+#' # MultiFactor
+#' x <- randomMultiFactor()
+#' as.list(x, use.names = TRUE)
+#'
+S7::method(convert, list(AnansiWeb, S7::class_list)) <-
+               function(from, to) as.list.AnansiWeb(x = from)
+
+#' @importFrom S7 convert
+#' @method as.data.frame AnansiWeb
+#' @rdname anansi-coercion
+#' @name as.data.frame.AnansiWeb
+#'
+S7::method(convert, list(AnansiWeb, S7::class_data.frame)) <-
+    function(from, to) as.data.frame.AnansiWeb(x = from)
+
+#' @name as.list.MultiFactor
+#' @rdname anansi-coercion
+#' @importFrom S7 convert
+#'
+S7::method(convert, list(MultiFactor, S7::class_list)) <-
+    function(from, to) as.list(from)
+
+#' @export
+S7::method(as.list, MultiFactor) <- function(x, ..., use.names = TRUE) {
     ifelse(
         use.names,
-        yes = return(unfactor(x)),
+        yes = return(S4Vectors::unfactor(x)),
         no = return(`names<-`(x@index, rownames(x)))
+    )}
+
+#' @export
+S7::method(as.list, AnansiWeb) <- function(x, ...) {
+    out <- S7::props(x)
+    names(out)[c(1L, 2L)] <- names(x)
+    out
+}
+
+#' @export
+S7::method(as.data.frame, AnansiWeb) <- function(x, row.names, optional, ...) {
+        cbind(
+        x@tableY,
+        x@tableX,
+        x@metadata
     )
 }
+
+#' @name asMAE
+#' @rdname anansi-coercion
+#' @aliases as.MAE as.MultiAssayExperiment asMultiAssayExperiment
+#' @importClassesFrom MultiAssayExperiment MultiAssayExperiment
+#' @importFrom MultiAssayExperiment MultiAssayExperiment ExperimentList
+#' @importFrom SummarizedExperiment SummarizedExperiment
+#' @export
+#' @usage NULL
+#'
+asMAE <- function(x)  {
+
+    tY <- t(x@tableY)
+    tX <- t(x@tableX)
+    to_exp <- ExperimentList(
+        y = SummarizedExperiment::SummarizedExperiment(tY),
+        x = SummarizedExperiment::SummarizedExperiment(tX)
+    )
+    names(to_exp) <- names(x)
+
+    to_md <- list(dictionary = x@dictionary)
+    to_cd <- x@metadata
+
+    if(prod(dim.data.frame(to_cd)) == 0L) {
+            MultiAssayExperiment::MultiAssayExperiment(
+                experiments = to_exp,
+                metadata = to_md
+            )
+        } else {
+            MultiAssayExperiment::MultiAssayExperiment(
+                experiments = to_exp,
+                metadata = to_md,
+                colData = to_cd
+            )
+        }
+}
+
+

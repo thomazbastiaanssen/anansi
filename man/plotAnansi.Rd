@@ -2,29 +2,9 @@
 % Please edit documentation in R/AllGenerics.R, R/plotAnansi-methods.R
 \name{plotAnansi}
 \alias{plotAnansi}
-\alias{plotAnansi,data.frame-method}
-\title{Bioc style plotting wrapper for anansi output}
-\usage{
-plotAnansi(x, ...)
-
-\S4method{plotAnansi}{data.frame}(
-  x,
-  layout = "dotplot",
-  association.type = NULL,
-  model.var = NULL,
-  group = "All",
-  signif.threshold = NULL,
-  colour_by = NULL,
-  color_by = colour_by,
-  fill_by = "group",
-  size_by = NULL,
-  shape_by = NULL,
-  y_position = "right",
-  x_lab = "cor",
-  y_lab = "",
-  show.cor = FALSE
-)
-}
+\alias{plotAnansi-generic}
+\alias{plotAnansi-methods}
+\title{Dissociation plot}
 \arguments{
 \item{x}{a \code{data.frame} object output of \code{\link[=anansi]{anansi()}} in
 the table format.}
@@ -67,21 +47,23 @@ should be sized. (Default: \code{NULL})}
 terms used in the original \code{anansi} call, \code{x} by which points
 should be shaped. (Default: \code{NULL})}
 
-\item{y_position}{\verb{Character scalar}. Specifies the position of the y
-labels. It should be either \code{"left"} or \code{"right"}.
-(Default: \code{"right"})}
-
 \item{x_lab}{\verb{Character scalar}. Specifies the label of the x axis.
 (Default: \code{"cor"})}
 
 \item{y_lab}{\verb{Character scalar}. Specifies the label of the y axis.
 (Default: \code{""})}
 
+\item{y_position}{\verb{Character scalar}. Specifies the position of the y
+labels. It should be either \code{"left"} or \code{"right"}.
+(Default: \code{"right"})}
+
 \item{show.cor}{\verb{Logical scalar}. Whether correlation edges should be
 labelled with correlation coefficients when \code{layout} is \code{graph}.
 (Default: \code{FALSE})}
 }
 \value{
+a figure that can be further modified using the \code{ggplot2} suite
+
 A ggplot2 object.
 }
 \description{
@@ -104,7 +86,7 @@ library(MultiAssayExperiment)
 library(ggraph)
 
 web <- randomWeb(n_samples = 100)
-mae <- as(web, "MultiAssayExperiment")
+mae <- asMAE(web)
 
 # Perform anansi analysis
 out <- weaveWeb(mae,
