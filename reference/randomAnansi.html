@@ -124,91 +124,36 @@ coercible to <code>Matrix</code>.</p></dd>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Make a random AnansiWeb object</span></span></span>
 <span class="r-in"><span><span class="fu">randomWeb</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;anansi::AnansiWeb&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  @ tableY    : num [1:10, 1:12] 0.9051 0.0585 -0.4541 0.6493 -0.5123 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  .. - attr(*, "dimnames")=List of 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..$ sample_id: chr [1:10] "sample_1_1" "sample_2_1" "sample_3_1" "sample_4_1" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..$ y        : chr [1:12] "y_1" "y_2" "y_3" "y_4" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  @ tableX    : num [1:10, 1:8] 1.026 0.0555 0.5386 0.1539 1.0237 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  .. - attr(*, "dimnames")=List of 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..$ sample_id: chr [1:10] "sample_1_1" "sample_2_1" "sample_3_1" "sample_4_1" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..$ x        : chr [1:8] "x_1" "x_2" "x_3" "x_4" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  @ dictionary:Formal class 'ngCMatrix' [package "Matrix"] with 5 slots</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..@ i       : int [1:48] 0 2 3 4 7 8 9 0 1 2 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..@ p       : int [1:9] 0 7 15 20 28 35 38 43 48</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..@ Dim     : int [1:2] 12 8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..@ Dimnames:List of 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  .. ..$ y: chr [1:12] "y_1" "y_2" "y_3" "y_4" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  .. ..$ x: chr [1:8] "x_1" "x_2" "x_3" "x_4" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..@ factors : list()</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  @ metadata  :'data.frame':	10 obs. of  7 variables:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  .. $ sample_id: chr  "sample_1" "sample_2" "sample_3" "sample_4" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  .. $ repeated : chr  "rep_1" "rep_1" "rep_1" "rep_1" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  .. $ group_ab : chr  "a" "a" "b" "b" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  .. $ subtype  : chr  "x" "z" "z" "y" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  .. $ score_a  : num  -0.978 -1.135 -0.588 0.497 0.157 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  .. $ score_b  : num  0.899 -1.925 1.122 -0.438 0.816 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  .. $ score_c  : num  0.766 -0.143 0.951 0.427 -0.297 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi::AnansiWeb S7_object with 10 observations:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     tableY: y (12 features)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     tableX: x (8 features)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Use @ to access: tableX, tableY, dictionary, metadata.</span>
 <span class="r-in"><span><span class="fu">krebsDemoWeb</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;anansi::AnansiWeb&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  @ tableY    : num [1:400, 1:8] -0.903 -1.776 0.401 -0.681 1.351 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  .. - attr(*, "dimnames")=List of 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..$ sample_id: chr [1:400] "sample_1_1" "sample_1_2" "sample_1_3" "sample_1_4" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..$ Enzyme   : chr [1:8] "aconitase" "isocitrate dehydrogenase" "ketoglutarate dehydrogenase" "succinyl-CoA synthetase" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  @ tableX    : num [1:400, 1:9] -1.123 -1.403 0.57 -0.715 1.456 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  .. - attr(*, "dimnames")=List of 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..$ sample_id : chr [1:400] "sample_1_1" "sample_1_2" "sample_1_3" "sample_1_4" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..$ Metabolite: chr [1:9] "citrate" "cis-aconitate" "isocitrate" "ketoglutarate" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  @ dictionary:Formal class 'ngCMatrix' [package "Matrix"] with 5 slots</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..@ i       : int [1:17] 0 7 0 0 1 1 2 2 3 3 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..@ p       : int [1:10] 0 2 3 5 7 9 11 13 15 17</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..@ Dim     : int [1:2] 8 9</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..@ Dimnames:List of 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  .. ..$ Enzyme    : chr [1:8] "aconitase" "isocitrate dehydrogenase" "ketoglutarate dehydrogenase" "succinyl-CoA synthetase" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  .. ..$ Metabolite: chr [1:9] "citrate" "cis-aconitate" "isocitrate" "ketoglutarate" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..@ factors : list()</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  @ metadata  :'data.frame':	400 obs. of  7 variables:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  .. $ sample_id: chr  "sample_1" "sample_1" "sample_1" "sample_1" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  .. $ repeated : chr  "rep_1" "rep_2" "rep_3" "rep_4" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  .. $ group_ab : chr  "a" "a" "a" "a" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  .. $ subtype  : chr  "z" "z" "z" "z" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  .. $ score_a  : num  -0.723 -0.856 0.115 0.644 1.39 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  .. $ score_b  : num  -0.259 -0.0341 -0.6469 -0.4338 -0.0847 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  .. $ score_c  : num  0.246 2.424 2.54 0.698 -0.236 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi::AnansiWeb S7_object with 400 observations:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     tableY: Enzyme (8 features)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     tableX: Metabolite (9 features)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Use @ to access: tableX, tableY, dictionary, metadata.</span>
 <span class="r-in"><span><span class="fu">randomMultiFactor</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;anansi::MultiFactor&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  @ index :List of 5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  .. $ a2b:'data.frame':	5000 obs. of  2 variables:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..$ a: int [1:5000] 1 2 3 4 8 9 10 12 14 15 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..$ b: int [1:5000] 1 1 1 1 1 1 1 1 1 1 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  .. $ b2c:'data.frame':	5000 obs. of  2 variables:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..$ b: int [1:5000] 1 3 4 5 10 11 12 13 15 18 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..$ c: int [1:5000] 1 1 1 1 1 1 1 1 1 1 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  .. $ c2d:'data.frame':	5000 obs. of  2 variables:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..$ c: int [1:5000] 1 2 3 4 6 7 11 14 16 17 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..$ d: int [1:5000] 1 1 1 1 1 1 1 1 1 1 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  .. $ d2e:'data.frame':	5000 obs. of  2 variables:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..$ d: int [1:5000] 1 2 4 6 11 13 14 15 16 21 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..$ e: int [1:5000] 1 1 1 1 1 1 1 1 1 1 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  .. $ e2f:'data.frame':	5000 obs. of  2 variables:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..$ e: int [1:5000] 1 2 5 6 7 10 11 12 14 15 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..$ f: int [1:5000] 1 1 1 1 1 1 1 1 1 1 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  @ levels:List of 6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  .. $ a: chr [1:100] "a_001" "a_002" "a_003" "a_004" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  .. $ b: chr [1:100] "b_001" "b_002" "b_003" "b_004" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  .. $ c: chr [1:100] "c_001" "c_002" "c_003" "c_004" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  .. $ d: chr [1:100] "d_001" "d_002" "d_003" "d_004" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  .. $ e: chr [1:100] "e_001" "e_002" "e_003" "e_004" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  .. $ f: chr [1:100] "f_001" "f_002" "f_003" "f_004" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  @ map   :Formal class 'dgCMatrix' [package "Matrix"] with 6 slots</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..@ i       : int [1:10] 0 0 1 1 2 2 3 3 4 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..@ p       : int [1:7] 0 1 3 5 7 9 10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..@ Dim     : int [1:2] 5 6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..@ Dimnames:List of 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  .. ..$ : chr [1:5] "a2b" "b2c" "c2d" "d2e" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  .. ..$ : chr [1:6] "a" "b" "c" "d" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..@ x       : num [1:10] 100 100 100 100 100 100 100 100 100 100</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..@ factors : list()</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> An anansi::MultiFactor S7_object,</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     6 feature types across 5 edge lists.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       a   b   c   d   e   f</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> a2b 100 100   .   .   .   .</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> b2c   . 100 100   .   .   .</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> c2d   .   . 100 100   .   .</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> d2e   .   .   . 100 100   .</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> e2f   .   .   .   . 100 100</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Values represent unique feature names in that edge list.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Levels:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> a : 100 Levels: a_001 a_002 ... a_100 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> b : 100 Levels: b_001 b_002 ... b_100 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> c : 100 Levels: c_001 c_002 ... c_100 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> d : 100 Levels: d_001 d_002 ... d_100 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> e : 100 Levels: e_001 e_002 ... e_100 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> f : 100 Levels: f_001 f_002 ... f_100 </span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

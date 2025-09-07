@@ -459,7 +459,7 @@ function <code>asMAE</code>.</p>
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://waldronlab.io/MultiAssayExperiment/" class="external-link">MultiAssayExperiment</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Store sample metadata into metadata slot of web object</span></span>
-<span><span class="va">web</span><span class="op">@</span><span class="va">metadata</span> <span class="op">&lt;-</span> <span class="fu">`rownames&lt;-`</span><span class="op">(</span><span class="va">FMT_metadata</span>, <span class="va">FMT_metadata</span><span class="op">$</span><span class="va">Sample_ID</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/metadata.html">metadata</a></span><span class="op">(</span><span class="va">web</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu">`rownames&lt;-`</span><span class="op">(</span><span class="va">FMT_metadata</span>, <span class="va">FMT_metadata</span><span class="op">$</span><span class="va">Sample_ID</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Convert web to mae</span></span>
 <span><span class="va">mae</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/anansi-coercion.html">asMAE</a></span><span class="op">(</span><span class="va">web</span><span class="op">)</span></span></code></pre></div>

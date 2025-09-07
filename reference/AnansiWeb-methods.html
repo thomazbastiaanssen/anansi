@@ -95,9 +95,9 @@
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">web</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "y" "x"</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Getters and setters: `@` and `@&lt;-`</span></span></span>
+<span class="r-in"><span><span class="co"># Getters and setters:</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">web</span><span class="op">@</span><span class="va">tableX</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="tableX.html">tableX</a></span><span class="op">(</span><span class="va">web</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>              x</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> sample_id             x_1         x_2         x_3         x_4         x_5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   sample_1_1   1.36977586 -0.71753865  0.36242404  0.74322814 -0.91592054</span>
@@ -174,7 +174,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span>   sample_34_1 -1.30661693 -0.82340900  1.49741394</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   sample_35_1  0.09034427  0.43703366 -0.30282688</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   sample_36_1  0.90235804  0.37238811 -1.37683133</span>
-<span class="r-in"><span><span class="va">web</span><span class="op">@</span><span class="va">tableY</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="tableY.html">tableY</a></span><span class="op">(</span><span class="va">web</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>              y</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> sample_id             y_1         y_2          y_3         y_4          y_5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   sample_1_1  -0.22174452  1.39397780  1.803483361 -0.37802855 -0.489258334</span>
@@ -289,7 +289,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span>   sample_34_1  1.0057828  0.889865359</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   sample_35_1  2.1671868 -1.482813325</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   sample_36_1  2.3225565  0.445750348</span>
-<span class="r-in"><span><span class="va">web</span><span class="op">@</span><span class="va">dictionary</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="dictionary.html">dictionary</a></span><span class="op">(</span><span class="va">web</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 12 x 8 sparse Matrix of class "ngCMatrix"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       x</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> y      x_1 x_2 x_3 x_4 x_5 x_6 x_7 x_8</span>
@@ -305,10 +305,85 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span>   y_10   |   |   |   .   |   .   |   |</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   y_11   .   |   .   .   .   |   |   |</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   y_12   |   .   |   .   |   .   |   .</span>
+<span class="r-in"><span><span class="fu"><a href="metadata.html">metadata</a></span><span class="op">(</span><span class="va">web</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             sample_id repeated group_ab subtype     score_a     score_b</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_1_1   sample_1    rep_1        a       x -0.71898093  2.71514421</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_2_1   sample_2    rep_1        a       z -1.11656132 -1.33938704</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_3_1   sample_3    rep_1        a       z -0.78026990 -0.64601525</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_4_1   sample_4    rep_1        a       z -1.77695853 -0.93245461</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_5_1   sample_5    rep_1        b       y -0.42783487 -0.76908693</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_6_1   sample_6    rep_1        b       z -2.03102701  0.37157978</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_7_1   sample_7    rep_1        b       x  2.75076475  0.35543278</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_8_1   sample_8    rep_1        a       y  1.51366972 -0.98399849</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_9_1   sample_9    rep_1        a       z  0.03398894  0.21472959</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_10_1 sample_10    rep_1        b       z  0.74079278 -0.08008508</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_11_1 sample_11    rep_1        b       x -1.27080818 -1.42236955</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_12_1 sample_12    rep_1        b       x -0.16356423  1.10814896</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_13_1 sample_13    rep_1        b       z -0.61094549  1.07847764</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_14_1 sample_14    rep_1        a       z  1.25188419 -0.44025034</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_15_1 sample_15    rep_1        b       z  0.25031947 -0.77816901</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_16_1 sample_16    rep_1        a       x -1.70558168 -1.81859001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_17_1 sample_17    rep_1        a       y -0.85541313 -1.12408090</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_18_1 sample_18    rep_1        b       x -0.14490163  1.06052384</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_19_1 sample_19    rep_1        a       x -0.32444696 -1.47870016</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_20_1 sample_20    rep_1        b       z -0.17256490 -1.55156017</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_21_1 sample_21    rep_1        a       y -1.23606292  0.77750668</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_22_1 sample_22    rep_1        a       x -1.90230421  1.06844014</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_23_1 sample_23    rep_1        a       z -0.09450402 -0.18358770</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_24_1 sample_24    rep_1        b       x  0.03255579  1.55824293</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_25_1 sample_25    rep_1        b       x  0.46129012 -0.21324238</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_26_1 sample_26    rep_1        a       x  1.38140030  0.93053526</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_27_1 sample_27    rep_1        a       x -0.41647627  0.41081180</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_28_1 sample_28    rep_1        b       y  0.68094267 -1.27984430</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_29_1 sample_29    rep_1        a       z -0.41437304 -0.78236663</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_30_1 sample_30    rep_1        b       z -0.51834551 -2.27608345</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_31_1 sample_31    rep_1        a       y -0.68401973 -0.12639591</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_32_1 sample_32    rep_1        a       y -0.88564860  1.44814671</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_33_1 sample_33    rep_1        a       z  0.04923707 -1.44275737</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_34_1 sample_34    rep_1        b       z  0.18556122  1.46718718</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_35_1 sample_35    rep_1        b       x -0.60865779 -0.74329990</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_36_1 sample_36    rep_1        b       x -0.73110285 -0.30422384</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                 score_c</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_1_1   0.33765806</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_2_1  -0.60750209</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_3_1  -0.29556027</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_4_1  -0.13453714</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_5_1   0.81478437</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_6_1  -0.27292173</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_7_1   2.15948580</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_8_1   1.09173757</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_9_1   0.74338485</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_10_1 -1.20785935</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_11_1  0.32781805</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_12_1 -0.53416511</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_13_1  1.28394672</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_14_1  0.02893134</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_15_1 -0.39567707</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_16_1 -0.69486833</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_17_1 -1.49208070</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_18_1  1.44425724</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_19_1 -0.34701739</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_20_1 -0.04025917</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_21_1  1.24663211</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_22_1 -1.34630152</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_23_1 -0.57390128</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_24_1 -0.70595925</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_25_1 -1.85740454</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_26_1 -0.24697048</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_27_1 -0.33556093</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_28_1 -0.24937687</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_29_1  0.45952256</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_30_1 -0.46007548</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_31_1  0.05893280</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_32_1 -0.74259108</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_33_1 -2.16357400</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_34_1 -0.23289649</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_35_1  0.87490683</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_36_1 -0.97349403</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Assign some random metadata</span></span></span>
-<span class="r-in"><span><span class="va">web</span><span class="op">@</span><span class="va">metadata</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>    id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/row.names.html" class="external-link">row.names</a></span><span class="op">(</span><span class="va">web</span><span class="op">@</span><span class="va">tableY</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span><span class="fu"><a href="metadata.html">metadata</a></span><span class="op">(</span><span class="va">web</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/row.names.html" class="external-link">row.names</a></span><span class="op">(</span><span class="fu"><a href="tableY.html">tableY</a></span><span class="op">(</span><span class="va">web</span><span class="op">)</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>    a <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">36</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>    b <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="st">"b"</span><span class="op">)</span>, <span class="fl">36</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>    row.names <span class="op">=</span> <span class="st">"id"</span></span></span>

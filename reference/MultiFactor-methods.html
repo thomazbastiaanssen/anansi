@@ -139,27 +139,20 @@ each others complement.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Setup</span></span></span>
 <span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="MultiFactor-class.html">MultiFactor</a></span><span class="op">(</span><span class="fu"><a href="kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">x</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;anansi::MultiFactor&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  @ index :List of 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  .. $ ec2ko :'data.frame':	9792 obs. of  2 variables:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..$ ec: int [1:9792] 1 2 3 4 5 6 7 8 9 10 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..$ ko: int [1:9792] 1 2 3 4 4 5 6 7 8 9 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  .. $ ec2cpd:'data.frame':	33252 obs. of  2 variables:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..$ ec : int [1:33252] 1 5582 68 1653 2404 5583 5584 90 14 15 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..$ cpd: int [1:33252] 1 1 1 1 1 1 1 1 1 1 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  @ levels:List of 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  .. $ ec : chr [1:6690] "1.1.1.1" "1.1.1.2" "1.1.1.3" "1.1.1.4" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  .. $ ko : chr [1:8817] "K00001" "K00002" "K00003" "K00004" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  .. $ cpd: chr [1:7802] "C00001" "C00002" "C00003" "C00004" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  @ map   :Formal class 'dgCMatrix' [package "Matrix"] with 6 slots</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..@ i       : int [1:4] 0 1 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..@ p       : int [1:4] 0 2 3 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..@ Dim     : int [1:2] 2 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..@ Dimnames:List of 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  .. ..$ : chr [1:2] "ec2ko" "ec2cpd"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  .. ..$ : chr [1:3] "ec" "ko" "cpd"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..@ x       : num [1:4] 5581 5934 8817 7802</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..@ factors : list()</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> An anansi::MultiFactor S7_object,</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     3 feature types across 2 edge lists.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          ec   ko  cpd</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ec2ko  5581 8817    .</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ec2cpd 5934    . 7802</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Values represent unique feature names in that edge list.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Levels:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ec  : 6690 Levels: 1.1.1.1 1.1.1.2 ... 5.3.1.37 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ko  : 8817 Levels: K00001 K00002 ... K28089 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cpd : 7802 Levels: C00001 C00002 ... C23000 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Basic properties</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
@@ -3598,28 +3591,21 @@ each others complement.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [7801] "C22998" "C23000"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/droplevels.html" class="external-link">droplevels</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;anansi::MultiFactor&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  @ index :List of 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  .. $ ec2ko :'data.frame':	9792 obs. of  2 variables:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..$ ec: int [1:9792] 1 2 3 4 5 6 7 8 9 10 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..$ ko: int [1:9792] 1 2 3 4 4 5 6 7 8 9 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  .. $ ec2cpd:'data.frame':	33252 obs. of  2 variables:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..$ ec : int [1:33252] 1 5582 68 1653 2404 5583 5584 90 14 15 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..$ cpd: int [1:33252] 1 1 1 1 1 1 1 1 1 1 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  @ levels:List of 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  .. $ ec : chr [1:6690] "1.1.1.1" "1.1.1.2" "1.1.1.3" "1.1.1.4" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  .. $ ko : chr [1:8817] "K00001" "K00002" "K00003" "K00004" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  .. $ cpd: chr [1:7802] "C00001" "C00002" "C00003" "C00004" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  @ map   :Formal class 'dgCMatrix' [package "Matrix"] with 6 slots</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..@ i       : int [1:4] 0 1 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..@ p       : int [1:4] 0 2 3 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..@ Dim     : int [1:2] 2 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..@ Dimnames:List of 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  .. ..$ : chr [1:2] "ec2ko" "ec2cpd"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  .. ..$ : chr [1:3] "ec" "ko" "cpd"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..@ x       : num [1:4] 5581 5934 8817 7802</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..@ factors : list()</span>
-<span class="r-in"><span><span class="fu">S4Vectors</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Factor-class.html" class="external-link">unfactor</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> An anansi::MultiFactor S7_object,</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     3 feature types across 2 edge lists.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          ec   ko  cpd</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ec2ko  5581 8817    .</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ec2cpd 5934    . 7802</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Values represent unique feature names in that edge list.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Levels:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ec  : 6690 Levels: 1.1.1.1 1.1.1.2 ... 5.3.1.37 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ko  : 8817 Levels: K00001 K00002 ... K28089 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cpd : 7802 Levels: C00001 C00002 ... C23000 </span>
+<span class="r-in"><span><span class="fu">unfactor</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ec2ko</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>               ec     ko</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1        1.1.1.1 K00001</span>
@@ -46678,49 +46664,35 @@ each others complement.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ec2cpd ec cpd</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/droplevels.html" class="external-link">droplevels</a></span><span class="op">(</span><span class="va">x</span>, exclude <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ko <span class="op">=</span> <span class="st">"K00001"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;anansi::MultiFactor&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  @ index :List of 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  .. $ ec2ko :'data.frame':	9791 obs. of  2 variables:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..$ ec: int [1:9791] 2 3 4 5 6 7 8 9 10 11 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..$ ko: int [1:9791] 1 2 3 3 4 5 6 7 8 9 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  .. $ ec2cpd:'data.frame':	33252 obs. of  2 variables:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..$ ec : int [1:33252] 1 5582 68 1653 2404 5583 5584 90 14 15 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..$ cpd: int [1:33252] 1 1 1 1 1 1 1 1 1 1 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  @ levels:List of 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  .. $ ec : chr [1:6690] "1.1.1.1" "1.1.1.2" "1.1.1.3" "1.1.1.4" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  .. $ ko : chr [1:8816] "K00002" "K00003" "K00004" "K00005" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  .. $ cpd: chr [1:7802] "C00001" "C00002" "C00003" "C00004" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  @ map   :Formal class 'dgCMatrix' [package "Matrix"] with 6 slots</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..@ i       : int [1:4] 0 1 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..@ p       : int [1:4] 0 2 3 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..@ Dim     : int [1:2] 2 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..@ Dimnames:List of 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  .. ..$ : chr [1:2] "ec2ko" "ec2cpd"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  .. ..$ : chr [1:3] "ec" "ko" "cpd"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..@ x       : num [1:4] 5581 5934 8816 7802</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..@ factors : list()</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> An anansi::MultiFactor S7_object,</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     3 feature types across 2 edge lists.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          ec   ko  cpd</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ec2ko  5581 8816    .</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ec2cpd 5934    . 7802</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Values represent unique feature names in that edge list.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Levels:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ec  : 6690 Levels: 1.1.1.1 1.1.1.2 ... 5.3.1.37 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ko  : 8816 Levels: K00002 K00003 ... K28089 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cpd : 7802 Levels: C00001 C00002 ... C23000 </span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/droplevels.html" class="external-link">droplevels</a></span><span class="op">(</span><span class="va">x</span>, select <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ko <span class="op">=</span> <span class="st">"K00001"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;anansi::MultiFactor&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  @ index :List of 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  .. $ ec2ko :'data.frame':	1 obs. of  2 variables:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..$ ec: int 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..$ ko: int 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  .. $ ec2cpd:'data.frame':	33252 obs. of  2 variables:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..$ ec : int [1:33252] 1 4826 68 1422 2028 4827 4828 90 14 15 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..$ cpd: int [1:33252] 1 1 1 1 1 1 1 1 1 1 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  @ levels:List of 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  .. $ ec : chr [1:5934] "1.1.1.1" "1.1.1.2" "1.1.1.3" "1.1.1.4" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  .. $ ko : chr "K00001"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  .. $ cpd: chr [1:7802] "C00001" "C00002" "C00003" "C00004" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  @ map   :Formal class 'dgCMatrix' [package "Matrix"] with 6 slots</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..@ i       : int [1:4] 0 1 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..@ p       : int [1:4] 0 2 3 4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..@ Dim     : int [1:2] 2 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..@ Dimnames:List of 2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  .. ..$ : chr [1:2] "ec2ko" "ec2cpd"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  .. ..$ : chr [1:3] "ec" "ko" "cpd"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..@ x       : num [1:4] 1 5934 1 7802</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ..  ..@ factors : list()</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> An anansi::MultiFactor S7_object,</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     3 feature types across 2 edge lists.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          ec ko  cpd</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ec2ko     1  1    .</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ec2cpd 5934  . 7802</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Values represent unique feature names in that edge list.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Levels:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ec  : 5934 Levels: 1.1.1.1 1.1.1.2 ... 5.3.1.37 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ko  : 1 Levels: K00001 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cpd : 7802 Levels: C00001 C00002 ... C23000 </span>
 <span class="r-in"><span><span class="co"># Generate an igraph object</span></span></span>
 <span class="r-in"><span><span class="va">g</span> <span class="op">&lt;-</span> <span class="fu"><a href="getGraph.html">getGraph</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span>, format <span class="op">=</span> <span class="st">"igraph"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">g</span><span class="op">)</span></span></span>

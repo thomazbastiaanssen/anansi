@@ -87,22 +87,22 @@ See <code>?base::mapply()</code></p>
 <span class="r-in"><span>    FUN <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>    MoreArgs <span class="op">=</span> <span class="cn">NULL</span>, SIMPLIFY <span class="op">=</span> <span class="cn">TRUE</span>, USE.NAMES <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      x_1y_4      x_1y_5      x_1y_6      x_1y_8      x_2y_1      x_2y_3 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -0.13487192 -0.63669399 -0.08038377 -0.20805612 -0.41564125 -0.47230381 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      x_2y_4      x_2y_5      x_2y_6      x_2y_8      x_2y_9     x_2y_11 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -0.11439507  0.38720560  0.08065808 -0.05348806  0.03810703  0.08660165 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     x_2y_12      x_3y_7      x_3y_8      x_3y_9     x_3y_10      x_4y_1 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -0.05277905 -0.61947482 -0.04183303  0.22977374  0.07075950 -0.59571704 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      x_4y_3      x_4y_4      x_4y_5      x_4y_7      x_4y_8     x_4y_10 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  0.13627628  0.10551046  0.28002495  0.01921755  0.02204608 -0.50838218 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     x_4y_11      x_5y_1      x_5y_2      x_5y_3      x_5y_5      x_5y_6 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  0.49784081  0.48420028  0.33234829  0.18292176 -0.85714632 -0.27665088 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      x_5y_9     x_5y_12      x_6y_1      x_6y_2      x_6y_6      x_6y_7 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  0.15197538 -0.10595684 -0.15063555  0.49167876  0.20314201  0.12099887 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      x_6y_8     x_6y_10      x_7y_2      x_7y_6      x_7y_9     x_7y_10 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -0.26981615 -0.02183603 -0.16087309  0.29348493 -0.12980213  0.58381108 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      x_8y_1      x_8y_2      x_8y_3      x_8y_5     x_8y_10     x_8y_11 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  0.07744830  0.09199527  0.63549155 -0.33464377 -0.20152476  0.49615276 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       x_1y_1       x_1y_2       x_1y_3       x_1y_4       x_1y_5       x_1y_6 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  0.393958440  0.182903804 -0.128045777  0.069111774  0.413979595 -0.508882536 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       x_1y_7      x_1y_10      x_1y_11      x_1y_12       x_2y_1       x_2y_5 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -0.180015405  0.009612970  0.009173661 -0.094797946  0.371272683  0.096272424 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       x_2y_7       x_2y_9       x_3y_5       x_3y_6       x_3y_7       x_3y_8 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  0.258486552 -0.222546424  0.343832895  0.128071414  0.044479656  0.035560582 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      x_3y_10      x_3y_11       x_4y_3       x_4y_4       x_4y_5       x_4y_6 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -0.397698394  0.374628524 -0.209309119  0.403365173 -0.654835261 -0.232183406 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       x_4y_7       x_4y_9      x_4y_10      x_4y_11       x_5y_3       x_5y_5 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  0.091723101  0.126071902 -0.558179929  0.200957633  0.344670708 -0.456056608 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       x_5y_6       x_5y_9      x_5y_11      x_5y_12       x_6y_2       x_6y_4 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -0.447725666  0.201780805  0.011952422  0.073080177  0.032288322  0.253005896 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       x_6y_5       x_6y_7       x_6y_8      x_6y_11       x_7y_1       x_7y_3 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -0.399227588 -0.445301625  0.279454364 -0.456102312  0.208444375  0.247073361 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       x_7y_4       x_7y_5       x_7y_7       x_7y_9      x_7y_11       x_8y_7 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -0.264359268 -0.223897959 -0.365079047  0.448325257 -0.482706037 -0.075885882 </span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
