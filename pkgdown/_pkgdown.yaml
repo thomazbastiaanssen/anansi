@@ -39,6 +39,11 @@ reference:
   - getFeaturePairs
   - getEdgeList
   - getGraph
+  - tableX
+  - tableY
+  - dictionary
+  - metadata
+  - metadata<-
 - title: Datasets
 - contents:
   - randomAnansi

@@ -3,6 +3,8 @@
 \name{MultiFactor-methods}
 \alias{MultiFactor-methods}
 \alias{levels.anansi::MultiFactor}
+\alias{unfactor}
+\alias{unfactor,anansi::MultiFactor-method}
 \alias{getGraph.anansi::MultiFactor}
 \title{Methods for MultiFactor S7 container class}
 \arguments{
@@ -55,7 +57,7 @@ dimnames(x)
 # Factor-like properties
 levels(x)
 droplevels(x)
-S4Vectors::unfactor(x)
+unfactor(x)
 
 # Extract common output formats
 getEdgeList(x)

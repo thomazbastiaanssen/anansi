@@ -348,7 +348,7 @@ make_saturated_model <- function(formula, raw_terms, indErr, verbose) {
 #' `is.character(x) || is.factor(x) || is.ordered(x)`
 #' @param x an object to be evaluated as being categorical
 #' @returns a boolean.
-#' @keywords internal
+#' @noRd
 #'
 is.categorical <- function(x) is.character(x) || is.factor(x) || is.ordered(x)
 
@@ -367,7 +367,7 @@ lvs_or_num <- function(x) {
 #' @param g character vector of all 'All' followed by all unique terms
 #' @param t character vector of term(s)
 #' @param m data.frame of provided metadata
-#' @keywords internal
+#' @noRd
 #' @returns a named list of character vectors, where names are terms and
 #' containing vectors are unique levels or 'numeric' if not categorical. First
 #' Entry is named 'All' and contains all levels.
@@ -378,7 +378,7 @@ named_group_list <- function(g, t, m) c(list(All = g), lapply(m[t], lvs_or_num))
 #' @description convenience function to generate output
 #' @param t character vector of term(s)
 #' @param m data.frame of provided metadata
-#' @keywords internal
+#' @noRd
 #' @returns a named list of character vectors, where names are terms and
 #' containing vectors are unique levels or 'numeric' if not categorical.
 #'

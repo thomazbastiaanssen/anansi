@@ -39,8 +39,8 @@ kegg_wrapper <- weaveKEGG(cpd ~ ko)
 identical(generic, kegg_wrapper)
 
 # The following are equivalent to transposition:
-a <- weaveWeb(ko ~ cpd, link = kegg_link())@dictionary
-b <- weaveWeb(cpd ~ ko, link = kegg_link())@dictionary
+a <- weaveWeb(ko ~ cpd, link = kegg_link()) |> dictionary()
+b <- weaveWeb(cpd ~ ko, link = kegg_link()) |> dictionary()
 
 identical(a, Matrix::t(b))
 
