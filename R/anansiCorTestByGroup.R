@@ -12,7 +12,8 @@
 #'     score.
 #' @param verbose A boolean. Toggles whether to print diagnostic information
 #'     while running. Useful for debugging errors on large datasets.
-#' @keywords internal
+#' @returns `anansiCorTestByGroup`
+#' @noRd
 #'
 call_groupwise <- function(web, groups, metadata, verbose) {
     if (is.null(groups)) {

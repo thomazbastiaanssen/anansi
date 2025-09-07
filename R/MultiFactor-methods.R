@@ -2,6 +2,7 @@
 #' @name MultiFactor-methods
 #' @rdname MultiFactor-methods
 #' @aliases levels.anansi::MultiFactor
+#' @aliases unfactor unfactor,anansi::MultiFactor-method
 #' @description \describe{
 #'     \item{`droplevels()` }{`droplevels(MultiFactor)` returns a `MultiFactor`
 #'     with unused levels removed, Analogous to the `factor` method.}
@@ -18,7 +19,7 @@
 #' # Factor-like properties
 #' levels(x)
 #' droplevels(x)
-#' S4Vectors::unfactor(x)
+#' unfactor(x)
 #'
 #' # Extract common output formats
 #' getEdgeList(x)
@@ -75,7 +76,7 @@ S7::method(dimnames, MultiFactor) <- function(x) {
 #'
 S7::method(show, MultiFactor) <- function(object) {
     cat(
-        "An ", class(object),
+        "An ", paste(class(object), collapse = " "),
         ",\n    ", NCOL(object),
         " feature types across ",
         NROW(object),
@@ -116,6 +117,10 @@ S7::method(show, MultiFactor) <- function(object) {
     }
     invisible(NULL)
 }
+
+#' @export
+#'
+S7::method(print, MultiFactor) <- function(x, ...) show(x)
 
 
 #' @importMethodsFrom S4Vectors unfactor
@@ -380,6 +385,10 @@ S7::method(`[[`, MultiFactor) <- function(x, i, ...) {
 ##############################################################################
 ##############################################################################
 ##############################################################################
+
+#' For S4 compatibility
+#' @noRd
+unfactor <- function(x) S4Vectors::unfactor(x)
 
 #' @noRd
 #' @param `MultiFactor@index` from first `MultiFactor` in `c()` Method.

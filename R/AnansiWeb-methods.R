@@ -17,15 +17,16 @@
 #' dim(web)
 #' names(web)
 #'
-#' # Getters and setters: `@` and `@<-`
+#' # Getters and setters:
 #'
-#' web@tableX
-#' web@tableY
-#' web@dictionary
+#' tableX(web)
+#' tableY(web)
+#' dictionary(web)
+#' metadata(web)
 #'
 #' # Assign some random metadata
-#' web@metadata <- data.frame(
-#'     id = row.names(web@tableY),
+#' metadata(web) <- data.frame(
+#'     id = row.names(tableY(web)),
 #'     a = rnorm(36),
 #'     b = sample(c("a", "b"), 36, TRUE),
 #'     row.names = "id"
@@ -47,8 +48,8 @@ NULL
 #'
 S7::method(show, AnansiWeb) <- function(object) {
     cat(
-        class(object),
-        " S7 object with ",
+        paste(class(object), collapse = " "),
+        " with ",
         NROW(object@tableX),
         " observations:\n    tableY: ",
         names(object)[1],
@@ -61,9 +62,14 @@ S7::method(show, AnansiWeb) <- function(object) {
         " features)\n",
         sep = ""
     )
-    cat("Use $ to access: tableX, tableY, dictionary, metadata.")
+    cat("Use @ to access: tableX, tableY, dictionary, metadata.")
     invisible(NULL)
 }
+
+#' @export
+#'
+S7::method(print, AnansiWeb) <- function(x, ...) show(x)
+
 
 #' @export
 #'
@@ -73,13 +79,74 @@ S7::method(dimnames, AnansiWeb) <- function(x) dimnames(x@dictionary)
 #'
 S7::method(dim, AnansiWeb) <- function(x) dim(x@dictionary)
 
-#' @export
-#'
 S7::method(names, AnansiWeb) <- function(x) names(dimnames(x@dictionary))
 
+#' @export
+#'
+S7::method(tableX, AnansiWeb) <- function(x) S7::prop(x, "tableX")
+
+#' @export
+#'
+S7::method(tableY, AnansiWeb) <- function(x) S7::prop(x, "tableY")
+
+#' @export
+#'
+S7::method(dictionary, AnansiWeb) <- function(x) S7::prop(x, "dictionary")
+
+#' Get metadata.
+#' @name metadata
+#' @details
+#' Compatible with S4Vectors generic.
+#' @rdname metadata
+#' @importMethodsFrom S4Vectors metadata
+#' @aliases metadata,anansi::AnansiWeb-method
+#' @param x input object
+#' @param ... additional arguments
+#' @returns `metadata` slot of x
+#' @examples
+#' x <- randomWeb(10)
+#' metadata(x)
+#' @export
+#'
+S7::method(metadata, AnansiWeb) <- function(x, ...) S7::prop(x, "metadata")
+
+#' Set metadata.
+#' @name metadata<-
+#' @aliases metadata.set
+#' @details
+#' Compatible with S4Vectors generic.
+#' @importMethodsFrom S4Vectors metadata<-
+#' @aliases metadata<-,anansi::AnansiWeb-method
+#' @param x input object
+#' @param ... additional arguments
+#' @param value replacement value, coerced to data.frame
+#' @returns `x` with modified `metadata` slot.
+#' @examples
+#' x <- randomWeb(10)
+#' metadata(x) <- cbind(
+#'     metadata(x),
+#'     new_groups = c("A", "B")
+#'     )
+#' @export
+#'
+S7::method(`metadata<-`, AnansiWeb) <- function(x, ..., value) {
+    x@metadata <- as.data.frame(value)
+    x
+}
 
 ################################################################################
 ################################################################################
+
+#' For S4Vectors::metadata compatibility
+#' @noRd
+metadata <- function(x) S7::prop(x, "metadata")
+
+#' For S4Vectors::metadata<- compatibility
+#' @noRd
+`metadata<-` <- function(x, value) {
+    xx@metadata <- as.data.frame(value)
+    x
+}
 
 #' Is this a data.frame with exactly two columns that are named?
 #' @noRd

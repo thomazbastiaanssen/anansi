@@ -326,7 +326,7 @@ function `asMAE`.
 library(MultiAssayExperiment)
 
 # Store sample metadata into metadata slot of web object
-web@metadata <- `rownames<-`(FMT_metadata, FMT_metadata$Sample_ID)
+metadata(web) <- `rownames<-`(FMT_metadata, FMT_metadata$Sample_ID)
 
 # Convert web to mae
 mae <- asMAE(web)

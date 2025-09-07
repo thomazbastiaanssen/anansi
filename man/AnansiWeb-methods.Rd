@@ -25,15 +25,16 @@ dimnames(web)
 dim(web)
 names(web)
 
-# Getters and setters: `@` and `@<-`
+# Getters and setters:
 
-web@tableX
-web@tableY
-web@dictionary
+tableX(web)
+tableY(web)
+dictionary(web)
+metadata(web)
 
 # Assign some random metadata
-web@metadata <- data.frame(
-    id = row.names(web@tableY),
+metadata(web) <- data.frame(
+    id = row.names(tableY(web)),
     a = rnorm(36),
     b = sample(c("a", "b"), 36, TRUE),
     row.names = "id"

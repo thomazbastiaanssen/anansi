@@ -7,7 +7,7 @@
 #' x <- randomMultiFactor(n_features = 10)
 #' getEdgeList(x)
 #' @returns a two-column data.frame that lists the content of each entry in the
-#' input MultiFactor
+#'     input MultiFactor
 #' @export
 getEdgeList        <- S7::new_generic("getEdgeList", "x")
 
@@ -43,8 +43,8 @@ getFeaturePairs    <- S7::new_generic("getFeaturePairs", "x")
 #' @param ... additional arguments
 #' @seealso [weaveWeb-methods()]
 #' @returns an `AnansiWeb` object, with sparse binary biadjacency matrix
-#' with features from `y` as rows and features from `x` as columns in
-#' `dictionary` slot.
+#'     with features from `y` as rows and features from `x` as columns in
+#'     `dictionary` slot.
 #' @examples
 #' # Setup demo tables
 #' ec2ko <- kegg_link()[["ec2ko"]]
@@ -62,8 +62,8 @@ getFeaturePairs    <- S7::new_generic("getFeaturePairs", "x")
 #' identical(generic, kegg_wrapper)
 #'
 #' # The following are equivalent to transposition:
-#' a <- weaveWeb(ko ~ cpd, link = kegg_link())@dictionary
-#' b <- weaveWeb(cpd ~ ko, link = kegg_link())@dictionary
+#' a <- weaveWeb(ko ~ cpd, link = kegg_link()) |> dictionary()
+#' b <- weaveWeb(cpd ~ ko, link = kegg_link()) |> dictionary()
 #'
 #' identical(a, Matrix::t(b))
 #'
@@ -86,7 +86,7 @@ plotAnansi         <- S7::new_generic("plotAnansi", "x")
 #' @param ... additional arguments
 #' @returns
 #' a list containing the output of applying the function to each feature pair.
-#' See `?base::mapply()`
+#'     See `?base::mapply()`
 #' @examples
 #' web <- randomWeb(10)
 #'
@@ -99,4 +99,54 @@ plotAnansi         <- S7::new_generic("plotAnansi", "x")
 pairwiseApply <- S7::new_generic("pairwiseApply", "X")
 
 #' @export
-S7::new_external_generic(package = "S4Vectors", name = "unfactor", "x")
+unfactor <- S7::new_external_generic(package = "S4Vectors", name = "unfactor", "x")
+
+#' @export
+metadata <- S7::new_external_generic(package = "S4Vectors", name = "metadata", "x")
+
+#' @export
+`metadata<-` <- S7::new_external_generic(package = "S4Vectors", name = "metadata<-", "x")
+
+
+#' Get tableX
+#' @name tableX
+#' @rdname tableX
+#' @aliases tableX-generic
+#' @param x input object
+#' @param ... additional arguments
+#' @returns `tableX` slot of x
+#' @examples
+#' x <- randomWeb(10)
+#' tableX(x)
+#' @export
+#'
+tableX <- S7::new_generic("tableX", "x")
+
+#' Get tableY
+#' @name tableY
+#' @aliases tableY-generic
+#' @rdname tableY
+#' @param x input object
+#' @param ... additional arguments
+#' @returns `tableY` slot of x
+#' @examples
+#' x <- randomWeb(10)
+#' tableY(x)
+#' @export
+#'
+tableY <- S7::new_generic("tableY", "x")
+
+#' Get dictionary
+#' @name dictionary
+#' @rdname dictionary
+#' @aliases dictionary-generic
+#' @param x input object
+#' @param ... additional arguments
+#' @returns `dictionary` slot of x
+#' @examples
+#' x <- randomWeb(10)
+#' dictionary(x)
+#'
+#' @export
+#'
+dictionary <- S7::new_generic("dictionary", "x")
