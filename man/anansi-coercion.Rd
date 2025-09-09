@@ -9,6 +9,10 @@
 \alias{as.MAE}
 \alias{as.MultiAssayExperiment}
 \alias{asMultiAssayExperiment}
+\alias{asTSE}
+\alias{as.TSE}
+\alias{as.TreeSummarizedExperiment}
+\alias{asTreeSummarizedExperiment}
 \title{Coercion functions for anansi}
 \usage{
 \method{as.list}{`anansi::AnansiWeb`}(x, ...)
@@ -18,6 +22,8 @@
 \method{as.data.frame}{`anansi::AnansiWeb`}(x, row.names, optional, ...)
 
 asMAE(x)
+
+asTSE(x)
 }
 \arguments{
 \item{x}{input object}
@@ -45,6 +51,7 @@ as.data.frame(x)
 
 # AnansiWeb to MultiAssayExperiment
 asMAE(x)
+asTSE(x)
 
 # MultiFactor
 x <- randomMultiFactor()

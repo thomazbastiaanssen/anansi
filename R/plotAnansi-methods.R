@@ -132,178 +132,176 @@ NULL
 #' @importFrom ggforce facet_col
 #' @importFrom stats setNames
 #' @importFrom S4Vectors isEmpty
-S7::method(plotAnansi, S7::class_data.frame) <- function(
-        x,
-        layout = "dotplot",
-        association.type = NULL,
-        model.var = NULL,
-        group = "All",
-        signif.threshold = NULL,
-        colour_by = NULL,
-        color_by = colour_by,
-        fill_by = "group",
-        size_by = NULL,
-        shape_by = NULL,
-        y_position = "right",
-        x_lab = "cor",
-        y_lab = "",
-        show.cor = FALSE
+S7::method(plotAnansi, S7::class_data.frame) <- function(x,
+    layout = "dotplot",
+    association.type = NULL,
+    model.var = NULL,
+    group = "All",
+    signif.threshold = NULL,
+    colour_by = NULL,
+    color_by = colour_by,
+    fill_by = "group",
+    size_by = NULL,
+    shape_by = NULL,
+    y_position = "right",
+    x_lab = "cor",
+    y_lab = "",
+    show.cor = FALSE) {
+    # Create list of Booleans whether args are defined
+    defined_args <- lapply(
+        list(
+            association = association.type,
+            model.var = model.var,
+            signif = signif.threshold
+        ),
+        function(x) !is.null(x)
+    )
+    # Check association.type
+    if (defined_args[["association"]]) {
+        match.arg(
+            association.type,
+            choices = c("disjointed", "emergent", "full")
+        )
+    }
+    # Check model.var
+    if (defined_args[["model.var"]]) {
+        match.arg(model.var, names(attr(x, "model_terms")))
+    }
+    # Check that group is valid for graph layout
+    if (layout == "graph") {
+        match.arg(group, attr(x, "group_terms")$All)
+    }
+    # Check association.type and model.var
+    if (
+        defined_args[["association"]] &&
+            !defined_args[["model.var"]] &&
+            association.type %in% c("disjointed", "emergent")
     ) {
-        # Create list of Booleans whether args are defined
-        defined_args <- lapply(
-            list(
-                association = association.type,
-                model.var = model.var,
-                signif = signif.threshold
-            ),
-            function(x) !is.null(x)
+        stop(
+            "'model.var' must specify a variable of the anansi model ",
+            "when 'association type' is set to ",
+            association.type,
+            call. = FALSE
         )
-        # Check association.type
-        if (defined_args[["association"]]) {
-            match.arg(
-                association.type,
-                choices = c("disjointed", "emergent", "full")
-            )
+    }
+    if (
+        defined_args[["association"]] &&
+            defined_args[["model.var"]] &&
+            association.type == "full"
+    ) {
+        model.var <- NULL
+        warning(
+            "'model.var' is ignored when 'association type' ",
+            "is set to ",
+            association.type,
+            call. = FALSE
+        )
+        model.var <- NULL
+    }
+    # Derive p-value column from association.type and model.var
+    pval <-
+        paste0(c(association.type, model.var, "p.values"), collapse = "_")
+    # Check x
+    if (isEmpty(x)) {
+        stop("'x' is an empty data.frame", call. = FALSE)
+    }
+    if (!all(c("feature_X", "feature_Y") %in% colnames(x))) {
+        stop(
+            "'x' must be the output of 'anansi' in the table format ",
+            "and must contain columns 'feature_X' ,'feature_Y'",
+            call. = FALSE
+        )
+    }
+    if (!any(grepl(pval, names(x)))) {
+        stop("Could not find p-values in 'x'.", call. = FALSE)
+    }
+    # Convert anansi wide to long format
+    x <- .wide2long(x)
+    # Select group for graph layout
+    if (layout == "graph") {
+        x <- x[x$group == group, ]
+    }
+    # Update colour_by if color_by is defined
+    if (!is.null(color_by) && is.null(colour_by)) {
+        colour_by <- color_by
+    }
+    # Check aesthetics
+    defined_args <- c(
+        defined_args,
+        mapply(
+            .check_aes,
+            aes_name = c("colour_by", "fill_by", "size_by", "shape_by"),
+            aes_var = list(colour_by, fill_by, size_by, shape_by),
+            MoreArgs = list(x = x),
+            SIMPLIFY = FALSE
+        )
+    )
+    # Check signif.threshold
+    if (
+        defined_args[["signif"]] &&
+            (!is.numeric(signif.threshold) ||
+                signif.threshold < 0 ||
+                signif.threshold > 1)
+    ) {
+        stop(
+            "'signif.threshold' must be a number between 0 and 1",
+            call. = FALSE
+        )
+    }
+    if (!defined_args[["association"]] && defined_args[["signif"]]) {
+        warning(
+            "'signif.threshold' is ignored when ",
+            "'association type' is not defined",
+            call. = FALSE
+        )
+    }
+    # Check y_position
+    match.arg(y_position, choices = c("left", "right"))
+    # Check show.cor
+    if (!is.logical(show.cor)) {
+        stop("'show.cor' must be either TRUE or FALSE.", call. = FALSE)
+    }
+    # Assemble plot data
+    pData <- data.frame(
+        x = x[["r.values"]],
+        y = x[["feature_X"]],
+        facet = x[["feature_Y"]],
+        colour = if (defined_args[["colour_by"]]) x[[colour_by]] else NA,
+        fill = if (defined_args[["fill_by"]]) x[[fill_by]] else NA,
+        size = if (defined_args[["size_by"]]) x[[size_by]] else NA,
+        shape = if (defined_args[["shape_by"]]) x[[shape_by]] else NA,
+        alpha = if (defined_args[["signif"]]) {
+            factor(x[[pval]] < signif.threshold, levels = c(TRUE, FALSE))
+        } else {
+            NA
         }
-        # Check model.var
-        if (defined_args[["model.var"]]) {
-            match.arg(model.var, names(attr(x, "model_terms")))
-        }
-        # Check that group is valid for graph layout
-        if (layout == "graph") {
-            match.arg(group, attr(x, "group_terms")$All)
-        }
-        # Check association.type and model.var
-        if (
-            defined_args[["association"]] &&
-                !defined_args[["model.var"]] &&
-                association.type %in% c("disjointed", "emergent")
-        ) {
-            stop(
-                "'model.var' must specify a variable of the anansi model ",
-                "when 'association type' is set to ",
-                association.type,
-                call. = FALSE
-            )
-        }
-        if (
-            defined_args[["association"]] &&
-                defined_args[["model.var"]] &&
-                association.type == "full"
-        ) {
-            model.var <- NULL
-            warning(
-                "'model.var' is ignored when 'association type' ",
-                "is set to ",
-                association.type,
-                call. = FALSE
-            )
-            model.var <- NULL
-        }
-        # Derive p-value column from association.type and model.var
-        pval <-
-            paste0(c(association.type, model.var, "p.values"), collapse = "_")
-        # Check x
-        if (isEmpty(x)) {
-            stop("'x' is an empty data.frame", call. = FALSE)
-        }
-        if (!all(c("feature_X", "feature_Y") %in% colnames(x))) {
-            stop(
-                "'x' must be the output of 'anansi' in the table format ",
-                "and must contain columns 'feature_X' ,'feature_Y'",
-                call. = FALSE
-            )
-        }
-        if (!any(grepl(pval, names(x)))) {
-            stop("Could not find p-values in 'x'.", call. = FALSE)
-        }
-        # Convert anansi wide to long format
-        x <- .wide2long(x)
-        # Select group for graph layout
-        if (layout == "graph") {
-            x <- x[x$group == group, ]
-        }
-        # Update colour_by if color_by is defined
-        if (!is.null(color_by) && is.null(colour_by)) {
-            colour_by <- color_by
-        }
-        # Check aesthetics
-        defined_args <- c(
+    )
+    if (layout == "dotplot") {
+        # Generate dotplot
+        p <- .create_dotplot(
+            pData,
             defined_args,
-            mapply(
-                .check_aes,
-                aes_name = c("colour_by", "fill_by", "size_by", "shape_by"),
-                aes_var = list(colour_by, fill_by, size_by, shape_by),
-                MoreArgs = list(x = x),
-                SIMPLIFY = FALSE
-            )
+            association.type,
+            signif.threshold,
+            colour_by,
+            fill_by,
+            shape_by,
+            size_by,
+            y_position,
+            x_lab,
+            y_lab
         )
-        # Check signif.threshold
-        if (
-            defined_args[["signif"]] &&
-                (!is.numeric(signif.threshold) ||
-                    signif.threshold < 0 ||
-                    signif.threshold > 1)
-        ) {
-            stop(
-                "'signif.threshold' must be a number between 0 and 1",
-                call. = FALSE
-            )
-        }
-        if (!defined_args[["association"]] && defined_args[["signif"]]) {
-            warning(
-                "'signif.threshold' is ignored when ",
-                "'association type' is not defined",
-                call. = FALSE
-            )
-        }
-        # Check y_position
-        match.arg(y_position, choices = c("left", "right"))
-        # Check show.cor
-        if (!is.logical(show.cor)) {
-            stop("'show.cor' must be either TRUE or FALSE.", call. = FALSE)
-        }
-        # Assemble plot data
-        pData <- data.frame(
-            x = x[["r.values"]],
-            y = x[["feature_X"]],
-            facet = x[["feature_Y"]],
-            colour = if (defined_args[["colour_by"]]) x[[colour_by]] else NA,
-            fill = if (defined_args[["fill_by"]]) x[[fill_by]] else NA,
-            size = if (defined_args[["size_by"]]) x[[size_by]] else NA,
-            shape = if (defined_args[["shape_by"]]) x[[shape_by]] else NA,
-            alpha = if (defined_args[["signif"]]) {
-                factor(x[[pval]] < signif.threshold, levels = c(TRUE, FALSE))
-            } else {
-                NA
-            }
+    } else if (layout == "graph") {
+        # Generate graph plot
+        p <- .create_graphplot(
+            pData,
+            defined_args,
+            association.type,
+            signif.threshold,
+            show.cor
         )
-        if (layout == "dotplot") {
-            # Generate dotplot
-            p <- .create_dotplot(
-                pData,
-                defined_args,
-                association.type,
-                signif.threshold,
-                colour_by,
-                fill_by,
-                shape_by,
-                size_by,
-                y_position,
-                x_lab,
-                y_lab
-            )
-        } else if (layout == "graph") {
-            # Generate graph plot
-            p <- .create_graphplot(
-                pData,
-                defined_args,
-                association.type,
-                signif.threshold,
-                show.cor
-            )
-        }
-        return(p)
+    }
+    return(p)
 }
 
 ################################ HELP FUNCTIONS ################################
@@ -380,13 +378,12 @@ S7::method(plotAnansi, S7::class_data.frame) <- function(
 # Create graph plot
 #' @importFrom patchwork wrap_plots plot_layout
 .create_graphplot <- function(
-    pData,
-    defined_args,
-    association.type,
-    signif.threshold,
-    show.cor
-) {
-  requireNamespace("ggraph")
+        pData,
+        defined_args,
+        association.type,
+        signif.threshold,
+        show.cor) {
+    requireNamespace("ggraph")
     graph_list <- lapply(
         unique(pData$facet),
         .plot_facet_graph,
@@ -398,7 +395,7 @@ S7::method(plotAnansi, S7::class_data.frame) <- function(
     )
 
     p <- wrap_plots(graph_list) +
-      plot_layout(guides = "collect")
+        plot_layout(guides = "collect")
 
     return(p)
 }
@@ -407,21 +404,21 @@ S7::method(plotAnansi, S7::class_data.frame) <- function(
 #' @importFrom ggraph ggraph geom_edge_link scale_edge_colour_gradient2
 #'   geom_node_point geom_node_text theme_graph
 .plot_facet_graph <- function(
-    facet,
-    pData,
-    defined_args,
-    association.type,
-    signif.threshold,
-    show.cor
-) {
-  requireNamespace("ggraph")
+        facet,
+        pData,
+        defined_args,
+        association.type,
+        signif.threshold,
+        show.cor) {
+    requireNamespace("ggraph")
     # Select group
     pData <- pData[pData$facet == facet, ]
     # Retrieve node data
     node_data <- data.frame(
         node_key = c(facet, pData$y),
         alpha = factor(c(TRUE, as.character(pData$alpha)),
-            levels = c(TRUE, FALSE))
+            levels = c(TRUE, FALSE)
+        )
     )
     # Retrieve edge data
     edge_data <- data.frame(
@@ -433,9 +430,10 @@ S7::method(plotAnansi, S7::class_data.frame) <- function(
     # Combine node and edge data into graph
     graph <- tbl_graph(nodes = node_data, edges = edge_data)
     # Visualise graph
-    p <- ggraph(graph, layout = 'kk') +
+    p <- ggraph(graph, layout = "kk") +
         geom_edge_link(aes(colour = .data$cor, label = .data$label),
-            label_size = 3) +
+            label_size = 3
+        ) +
         scale_edge_colour_gradient2(low = "blue", high = "red", limits = c(-1, 1))
     # Add nodes
     if (defined_args[["signif"]]) {
@@ -464,18 +462,17 @@ S7::method(plotAnansi, S7::class_data.frame) <- function(
 }
 # Create dotplot
 .create_dotplot <- function(
-    pData,
-    defined_args,
-    association.type,
-    signif.threshold,
-    colour_by,
-    fill_by,
-    shape_by,
-    size_by,
-    y_position,
-    x_lab,
-    y_lab
-) {
+        pData,
+        defined_args,
+        association.type,
+        signif.threshold,
+        colour_by,
+        fill_by,
+        shape_by,
+        size_by,
+        y_position,
+        x_lab,
+        y_lab) {
     # Create base plot
     p <- ggplot(data = pData) +
         aes(

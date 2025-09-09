@@ -41,21 +41,23 @@ MultiFactor <- S7::new_class(
     properties = list(
         index = S7::class_list,
         levels = S7::class_list,
-        map =     methods::getClass("Matrix", where = "Matrix")
+        map = methods::getClass("Matrix", where = "Matrix")
     ),
     constructor = function(x, levels = NULL, drop.unmatched = FALSE) {
-        if(! is(x, "anansi::MultiFactor")) {
-        if (validLinkDF(x)) {x <- list(x = x) }
-        stopifnot(
-            "Input not correctly formatted." = all(
-                vapply(
-                    as.list(x, use.names = FALSE),
-                    validLinkDF,
-                    NA,
-                    USE.NAMES = FALSE
+        if (!is(x, "anansi::MultiFactor")) {
+            if (validLinkDF(x)) {
+                x <- list(x = x)
+            }
+            stopifnot(
+                "Input not correctly formatted." = all(
+                    vapply(
+                        as.list(x, use.names = FALSE),
+                        validLinkDF,
+                        NA,
+                        USE.NAMES = FALSE
+                    )
                 )
             )
-        )
         }
         if (is(x, "anansi::MultiFactor")) {
             if (is.null(levels)) {
@@ -230,24 +232,57 @@ AnansiWeb <- S7::new_class(
         )
         if (
             is.null(names(dimnames(dictionary))) ||
-            any(names(dimnames(dictionary)) %in% "")
+                any(names(dimnames(dictionary)) %in% "")
         ) {
             warning("Dimnames of 'dictionary' were missing; Assigned 'y' and 'x'.")
             names(dimnames(dictionary)) <- c("y", "x")
         }
+        metadata <- .check_metadata_labels( metadata, tableY, tableX )
+        print(metadata)
+
 
         # return AnansiWeb
         S7::new_object(
             S7::S7_object(),
-            tableY = tableY,
-            tableX = tableX,
+            tableY = `rownames<-`(tableY, row.names(metadata)),
+            tableX = `rownames<-`(tableX, row.names(metadata)),
             dictionary = dictionary,
             metadata = as.data.frame(metadata)
         )
     }
-
 )
 S7::S4_register(AnansiWeb)
+
+#' AnansiWeb constructor helper function
+#' @noRd
+.check_metadata_labels <- function(metadata, tableY, tableX) {
+    ry <- if(is.null(row.names(tableY))) {
+        as.character(seq_len(NROW(tableY))) } else row.names(tableY)
+    rx <- if(is.null(row.names(tableX))) {
+        as.character(seq_len(NROW(tableX))) } else row.names(tableX)
+
+    id <- if(identical(ry, rx)) ry else as.character(seq_along(ry))
+
+    rn <- id
+    prepend_these <- !grepl("^anansi_ID_", rn)
+    rn[prepend_these] <- paste0("anansi_ID_", rn[prepend_these])
+
+    if(rlang::is_empty(metadata)) {
+        warning(
+            "Argument `metadata` not provided; Please validate sample ID order."
+        )
+        metadata <- data.frame(row.names = rn)
+        return(metadata)
+    }
+
+    if(NROW(metadata) != length(rn)) {
+        stop("Metadata must have exactly one row per sample in tableY,tableX")
+        }
+
+    row.names(metadata) <- rn
+
+    return(metadata)
+}
 
 #' @title AnansiTale S7 container class. Not intended for general use.
 #' @rdname AnansiTale
@@ -298,4 +333,3 @@ AnansiTale <- S7::new_class(
         p.values = S7::class_numeric
     )
 )
-

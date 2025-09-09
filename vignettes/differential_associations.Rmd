@@ -22,14 +22,17 @@ BiocStyle::markdown()
 ```
     
 ```{r setup, include = FALSE}
-knitr::opts_chunk$set(echo = TRUE, 
-                      tidy.opts = list(width.cutoff = 80), 
-                      tidy = TRUE)
+knitr::opts_chunk$set(
+    echo = TRUE,
+    tidy.opts = list(width.cutoff = 80),
+    tidy = TRUE
+)
 # long links
-adj_link <- paste0("https://thomazbastiaanssen.github.io/anansi/", 
-               "articles/adjacency_matrices.html")
+adj_link <- paste0(
+    "https://thomazbastiaanssen.github.io/anansi/",
+    "articles/adjacency_matrices.html"
+)
 library(S7)
-
 ```
 
 # Overview {-}

@@ -1,6 +1,6 @@
-name: build
+name: test-coverage.yml
 'on':
-  push:
+  pull_request:
     branches:
     - devel
 env:
@@ -20,26 +20,16 @@ jobs:
           r: auto
           cont: ghcr.io/bioconductor/bioconductor_docker:devel
           rspm: ~
-        - os: macOS-latest
-          bioc: devel
-          r: auto
-          cont: ~
-          rspm: ~
-        - os: windows-latest
-          bioc: devel
-          r: auto
-          cont: ~
-          rspm: ~
     steps:
     - uses: neurogenomics/rworkflows@master
       with:
         run_bioccheck: ${{ false }}
         run_rcmdcheck: ${{ false }}
         as_cran: ${{ true }}
-        run_vignettes: ${{ true }}
+        run_vignettes: ${{ false }}
         has_testthat: ${{ true }}
-        run_covr: ${{ false }}
-        run_pkgdown: ${{ true }}
+        run_covr: ${{ true }}
+        run_pkgdown: ${{ false }}
         has_runit: ${{ false }}
         has_latex: ${{ false }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

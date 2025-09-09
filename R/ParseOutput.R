@@ -84,8 +84,7 @@ tell_dfr <- function(tale) {
 #' @return A wide format data.frame with summary statistics by feature pair.
 #'
 frame.tale <- function(tale, dic) {
-    switch(
-        tale@type,
+    switch(tale@type,
         "r.values" = frame.tale.cor(tale, dic),
         "r.squared" = frame.tale.ols(tale, dic)
     )

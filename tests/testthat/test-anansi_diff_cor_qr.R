@@ -17,6 +17,7 @@ test_that("full and disjointed parameters correspond to stats::lm()", {
     web <- AnansiWeb(
         tableY = tY,
         tableX = tX,
+        metadata = m,
         dictionary = d
     )
 

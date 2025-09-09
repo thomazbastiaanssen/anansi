@@ -26,5 +26,5 @@ x <- randomWeb(10)
 metadata(x) <- cbind(
     metadata(x),
     new_groups = c("A", "B")
-    )
+)
 }

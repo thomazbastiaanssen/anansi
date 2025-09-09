@@ -18,19 +18,32 @@ text-align: justify}
 </style>
 
 ```{r setup, include = FALSE}
-knitr::opts_chunk$set(echo = TRUE, 
-                      tidy.opts = list(width.cutoff = 80), 
-                      tidy = TRUE)
+knitr::opts_chunk$set(
+    echo = TRUE,
+    tidy.opts = list(width.cutoff = 80),
+    tidy = TRUE
+)
 # long links
-adj_link <- paste0("https://thomazbastiaanssen.github.io/anansi/", 
-               "articles/adjacency_matrices.html")
-dif_link <- paste0("https://thomazbastiaanssen.github.io/anansi/", 
-               "articles/differential_associations.html")
+adj_link <- paste0(
+    "https://thomazbastiaanssen.github.io/anansi/",
+    "articles/adjacency_matrices.html"
+)
+dif_link <- paste0(
+    "https://thomazbastiaanssen.github.io/anansi/",
+    "articles/differential_associations.html"
+)
 
 library(anansi)
 ```
+# Overview {-}
 
-# Introduction
+This vignette can be divided into four sections:
+
+* [Section 1](#sec-anansi-1) introduces the `anansi` framework.
+* [Section 2](#sec-anansi-2) goes through a simple workflow and required input.
+* [Section 3](#sec-anansi-3) discusses more advanced applications of anansi. 
+
+# Introduction {#sec-anansi-1}
 The `anansi` package computes and compares the association between the features 
 of two 'omics datasets that are known to interact based on a database such as 
 KEGG. Studies including both functional microbiome and metabolomics data are
@@ -46,6 +59,21 @@ While `anansi` is geared towards metabolite-function interactions in the context
 of host-microbe interactions, it is perfectly capable of handling any other pair 
 of data sets where some features interact canonically. 
 
+## A note on functional microbiome data
+
+Two common questions in the host-microbiome field are "Who's there?" and "What 
+are they doing?". Techniques like 16S rRNA sequencing and shotgun metagenomics 
+sequencing are most commonly used to answer the first question. The second
+question can be a bit more tricky, as it often requires functional inference 
+software to address them. For 16S sequencing, programs like 
+[PICRUSt2](https://github.com/picrust/picrust2/) can be used to infer function. 
+For shotgun metagenomics, this can be done with programs such as 
+[HUMANn3 in the bioBakery suite](https://github.com/picrust/picrust2) and [woltka](https://github.com/qiyunzhu/woltka). All of these algorithms can 
+produce functional count data in terms of KEGG Orthologues (KOs) organised as 
+tables, which can be directly passed to `anansi`. 
+
+# Getting started with anansi {#sec-anansi-2}
+
 ## Installation
 Install the development version from
 [GitHub](https://github.com/thomazbastiaanssen/anansi) with `remotes`: 
@@ -54,7 +82,7 @@ install.packages("remotes")
 remotes::install_github("thomazbastiaanssen/anansi")
 ```
 
-## Setup
+## Setup 
 ```{r, eval=TRUE}
 # load anansi
 library(anansi)
@@ -66,20 +94,84 @@ library(ggforce)
 # load example data + metadata from FMT Aging study
 data(FMT_data)
 ```
+    
+## Data preparation
 
-# Data preparation
+The anansi framework requires input data to be prepared in a specific format, 
+namely the `AnansiWeb` S7 class. This is to ensure that features are correctly 
+linked across input datasets. We will first discuss the required input data and 
+then demonstrate the `weaveWeb` method, which is the recommended way to prepare 
+input for the anansi framework. 
+
+## Input formatting for anansi
 
 The main `anansi` function expects data in the `AnansiWeb` class format, which 
-contains three tables: 
-The first two tables, `tableY` and `tableX` are the feature tables of your two
-data modalities (e.g., metabolites, genes, microbes, ...). 
-Both tables should have columns as features and rows as samples.
+contains four tables: 
 
-The third table should be a binary adjacency matrix with the column names of 
-`tableY` as rows and the column names of `tableX` as columns. An example of such
-an adjacency matrix comes with the `anansi` package and is referred to as a
-dictionary (because it is used to look up which metabolites interact with which
-functions).  
+### feature tables: `tableY` and `tableX`. 
+
+The first two tables, `tableY` and `tableX` are the feature tables of your two
+data modalities (e.g., metabolites, genes, microbes, ...). Both tables should 
+have columns as features and rows as samples. Below is an example of an 
+appropriately formatted feature table, we will use it in the sections below. 
+
+```{r ko-table-format, echo = FALSE}
+cat("anansi expects samples to be rows and features to be columns:\n")
+t(FMT_KOs[seq(4L),seq(10L)])
+```
+
+```{r, eval=TRUE}
+# Transpose demo tables to input format
+tableY <- t(FMT_metab)
+tableX <- t(FMT_KOs)
+```
+
+### linking information: `link`.
+
+The third table, `link`, provides the information to link the features across 
+the first two tables, `tableY` and `tableX`. `anansi` provides a pre-built map 
+between ko, cpd and ec feature annotations from the KEGG database, but users can
+also provide their custom mapping information. We will not expand on here, but
+[see vignette on adjacency matrices.]`r sprintf("(%s)", adj_link)`
+Also see `?anansi::MultiFactor()` 
+
+### Additional sample data for analysis: Metadata
+
+The final table is `metadata`: a `data.frame` with additional information about 
+the data set. Its rows correspond to samples and its columns to variables that 
+can be used as covariates in downstream `anansi()` analysis.
+
+```{r metadata-format, echo = FALSE}
+cat("anansi expects samples to be rows and features to be columns:\n")
+`rownames<-`(FMT_metadata, NULL)[seq(10L),]
+```
+
+## Weave a web🕸️
+
+The `weaveWeb()` function accepts the four input tables discussed above and 
+collates them into an `AnansiWeb` object. The `AnansiWeb` format is a necessary 
+input file for the main `anansi` workflow. It allows `anansi` to keep track of 
+which features from the two input data sets should be considered as pairs. 
+
+### Specify features to link
+
+Additionally, `weaveWeb()` requires the user to specify the names of the feature
+types that should be linked. These names need to be present as the columns of 
+the `link` table. In this case, we'll link KEGG compound (cpd) to KEGG 
+Orthologues (ko). 
+
+```{r, eval=TRUE}
+# Create AnansiWeb object from tables
+web <- weaveWeb(
+    x = "ko", y = "cpd", 
+    link = kegg_link(),
+    tableY = tableY,
+    tableX = tableX,
+    metadata = FMT_metadata
+)
+```
+
+### On model notation and the names `tableY` and `tableX` 
 
 Though most of the examples use metabolites and functions, `anansi` is able to 
 handle any type of big/'omics data, as long as there is a dictionary available. 
@@ -90,70 +182,63 @@ modeling framework:
 $$
 Y \sim X \times{covariates}
 $$
+### `weaveWeb` with Bioconductor pipeline
 
-### A note on functional microbiome data
+As an alternative to providing input as raw tables, `weaveWeb()` also accepts 
+the Bioconductor classes `MultiAssayExperiment` (MAE) and 
+`TreeSummarizedExperiment` (TSE) as input. Conversely, an `AnansiWeb` object can
+be converted to a MAE or TSE with the functions `asMAE()` and `asTSE()`.
 
-Two common questions in the host-microbiome field are "Who's there?" and "What 
-are they doing?". Techniques like 16S rRNA sequencing and shotgun metagenomics 
-sequencing are most commonly used to answer the first question. The second
-question can be a bit more tricky, as it often requires functional inference 
-software to address them. For 16S sequencing, algorithms like PICRUSt2 and
-Piphillin can be used to infer function. For shotgun metagenomics, HUMANn3 in
-the bioBakery suite can be used. All of these algorithms can produce functional
-count data in terms of KEGG Orthologues (KOs) organised as tables, which can be
-directly passed to `anansi` as follows: 
-
-```{r, eval=TRUE}
-# anansi expects samples to be rows and features to be columns.
-t1 <- t(FMT_metab)
-t2 <- t(FMT_KOs)
+```{r}
+#| bioc1, eval=TRUE, message=FALSE
+# Convert web to mae
+mae <- asMAE(web)
 ```
 
-# Weave a web🕸️
+The MAE object can be passed to the `weaveWeb()` function, which returns the same
+output, ready for the `anansi` function.
 
-The `weaveWeb()` function can be used to parse the tables `t1` and `t2` that 
-we prepared above into an `AnansiWeb` object. The `AnansiWeb` format is a 
-necessary input file for the main `anansi` workflow. It allows `anansi` to keep 
-track of which features from the two input data sets should be considered
-as pairs. 
+```{r}
+#| bioc2, eval=TRUE
 
-`anansi` provides a pre-built map between ko, cpd and ec feature annotations
-from the KEGG database, but users can also provide their own custom maps.
-[See vignette on adjacency matrices.]`r sprintf("(%s)", adj_link)`
-
-```{r, eval=TRUE}
-# Create AnansiWeb object from tables
-web <- weaveWeb(
-    cpd ~ ko,
-    tableY = t1,
-    tableX = t2,
+web.mae <- weaveWeb(
+    mae,
+    tableY = "cpd", tableX = "ko",
     link = kegg_link()
 )
+
+out.mae <- anansi(
+    web = web.mae,
+    formula = ~Legend,
+    adjust.method = "BH",
+    verbose = TRUE,
+)
+
+identical(web, web.mae)
 ```
 
-# Run anansi🕷️
 
-The main workspider is called `anansi` just like the package. Generally, three
+## Run anansi🕷️
+
+The main workspider is called `anansi` just like the package. Generally, two
 main arguments should be specified:
 
 1. `web`: an `AnansiWeb` object, such as the one we generated in the above step.
-2. `formula`: a linking formula. For instance, to assess differential
-   associations between treatments, we use the formula `~ Legend`.
-3. `metadata`: a `data.frame` with additional information about the data set.
-   Its rows correspond to samples and its columns to variables that can be used
-   in `formula` as c.
+2. `formula`: a formula specifying which associations to test. For instance, to 
+assess differential associations between treatments, we use the formula 
+`~ Legend` (corresponding to the `Legend` column in the `metadata` table we 
+provided to `weaveWeb()` above).
 
 ```{r, eval=TRUE}
 # Run anansi on AnansiWeb object
 anansi_out <- anansi(
     web = web,
-    formula = ~ Legend,
-    metadata = FMT_metadata,
+    formula = ~Legend,
     adjust.method = "BH",
     verbose = TRUE
 )
 ```
-# Reporting output📝
+## Reporting output📝
 
 By default, `anansi` outputs a table in the `wide` format. For general 
 reporting, we  recommend sticking to the more legible `table` format by 
@@ -168,7 +253,7 @@ head(anansi_out, c(5, 5))
 colnames(anansi_out)
 ```
 
-## Output statistics
+### Output statistics
 We can see that the output of `anansi()` is structured so that there is one
 feature pair per row, marked by the first two columns. For each of those feature
 pairs, the table contains outcome parameters from several models. In order, we
@@ -188,10 +273,59 @@ provide p-values and adjusted p-values. For more on this,
 | Disjointed  | Linear regression | $R^2$, $F$  | p, adjusted p |
 | Emergent    | Linear regression | $R^2$, $F$  | p, adjusted p |
 
-# Plot the results
+## Plot the results
 
-The long format can be helpful to plug the data into `ggplot2`. Here, we 
-recreate the style of the figure from the FMT Aging study.
+Finally, the output of `anansi` can be visualized with `plotAnansi` by
+specifying the type of association to use.
+
+```{r}
+#| bioc3, eval=TRUE, fig.width = 10, fig.height = 8
+
+# Filter associations by q value
+anansi_out <- anansi_out[anansi_out$full_q.values < 0.2, ]
+
+# Visualize disjointed associations
+plotAnansi(
+    anansi_out,
+    association.type = "disjointed",
+    model.var = "Legend",
+    signif.threshold = 0.05,
+    fill_by = "group"
+)
+```
+
+# Advanced applications and customization {#sec-anansi-3}
+
+## Apply user-defined function on each pair of features
+
+A typical `anansi` workflow, as the one above, estimates associations between 
+each pair of features. More generally, we can use `pairwiseApply()` on the same 
+`AnansiWeb` input object to apply a user-defined function on each pair of 
+features. The function passes as the `FUN` argument is applied on each pair of 
+features, which are pre-mapped to `y` and `x`:  `function(x, y)`. 
+[Also see vignette on adjacency matrices.]`r sprintf("(%s)", adj_link)`
+
+```{r, pairwiseApply}
+# For each feature pair, was the value for x higher than the value for y?
+pairwiseApply(
+    X = web,
+    FUN = function(x, y) x > y, 
+    USE.NAMES = TRUE
+)
+
+# Run cor() on each pair of features
+pairwiseApply(
+    X = web,
+    FUN = function(x, y) cor(x, y), 
+    USE.NAMES = FALSE
+)
+```
+
+## Plotting examples
+
+Automatic plotting functions such as `plotAnansi()` provide a convenient 
+and code-light solution to visualization. However, some may prefer interfacing 
+directly with the `ggplot()` code. We provide code to recreate the above figure:
 
 ```{r}
 #| plot_FMT, eval=TRUE, fig.width=10, fig.height=8, tidy=FALSE,
@@ -217,11 +351,11 @@ ggplot(anansiLong) +
 
     # Define aesthetics
     aes(
-        x = r.values, 
+        x = r.values,
         y = feature_X,
-        fill = cor_group, 
+        fill = cor_group,
         alpha = disjointed_Legend_p.values < 0.05
-        ) +
+    ) +
 
     # Make a vertical dashed red line at x = 0
     geom_vline(xintercept = 0, linetype = "dashed", colour = "red") +
@@ -254,6 +388,7 @@ ggplot(anansiLong) +
 ```
 
 ## Plotting multiple feature pairs at once with patchwork
+
 We can also also use the `AnansiWeb` object to pull up specific pairs of
 features. The [`patchwork`](https://patchwork.data-imaginist.com/) provides a
 wonderful interface to combine plots. We can use `getFeaturePairs()` to
@@ -310,65 +445,11 @@ These types of visualizations of feature pairs work best when the amount of
 feature pairs to be plotted is modest.
 
 ### Note on using `patchwork` with `anansi`: 
+
 Especially for large numbers of feature pairs, it's much more efficient to add 
 shared elements to the patchwork using the `&` operator, rather than adding them
 to the initial `ggplot()` calls in the `lapply()` loop. 
 
-
-# Bioconductor pipeline
-
-`anansi` also supports the Bioconductor class `MultiAssayExperiment` (MAE) as an
-alternative to `AnansiWeb`. The latter can be converted to a MAE with the
-function `asMAE`.
-
-```{r}
-#| bioc1, eval=TRUE, message=FALSE
-library(MultiAssayExperiment)
-
-# Store sample metadata into metadata slot of web object
-metadata(web) <- `rownames<-`(FMT_metadata, FMT_metadata$Sample_ID)
-
-# Convert web to mae
-mae <- asMAE(web)
-```
-
-The MAE object can be passed to the `weaveWeb` function, which returns the same
-output, ready for the `anansi` function.
-
-```{r}
-#| bioc2, eval=TRUE
-
-web2 <- weaveWeb(
-    mae,
-    tableY = "cpd", tableX = "ko",
-    link = kegg_link()
-)
-
-out <- anansi(
-    web = web2,
-    formula = ~Legend,
-    adjust.method = "BH",
-    verbose = TRUE, 
-)
-```
-
-Finally, the output of `anansi` can be visualised with `plotAnansi` by
-specifying the type of association to use.
-
-```{r}
-#| bioc3, eval=TRUE, fig.width = 10, fig.height = 8
-
-# Filter associations by q value
-out <- out[out$full_q.values < 0.2, ]
-
-# Visualize disjointed associations
-plotAnansi(out,
-    association.type = "disjointed",
-    model.var = "Legend",
-    signif.threshold = 0.05,
-    fill_by = "group"
-)
-```
 
 # Session info
 

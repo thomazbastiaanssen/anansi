@@ -76,27 +76,35 @@ t2 <- t(FMT_KOs)
 # Input objects and syntax:
 ## define `x` and `y` as characters
 web <- weaveWeb(
-     x = "ko", y = "cpd", link = kegg_link(),
-     tableX = t2, tableY = t1,
-     metadata = NULL, verbose = TRUE
- )
+    x = "ko", y = "cpd", link = kegg_link(),
+    tableX = t2, tableY = t1,
+    metadata = NULL, verbose = TRUE
+)
 
 ## define `x` and `y` with a formula
 web2 <- weaveWeb(
-     x = cpd ~ ko, link = kegg_link(),
-     tableX = t2, tableY = t1,
-     metadata = NULL, verbose = TRUE
- )
+    x = cpd ~ ko, link = kegg_link(),
+    tableX = t2, tableY = t1,
+    metadata = NULL, verbose = TRUE
+)
 
 identical(web, web2)
 
 # Method for MultiAssayExperiment S4 object
 mae <- asMAE(web)
 weaveWeb(
-     x = mae, link = kegg_link(),
-     tableY = "cpd", tableX = "ko",
-     force_new = FALSE
- )
+    x = mae, link = kegg_link(),
+    tableY = "cpd", tableX = "ko",
+    force_new = FALSE
+)
+
+# Method for TreeSummarizedExperiment S4 object
+tse <- asTSE(web)
+weaveWeb(
+    x = tse, link = kegg_link(),
+    tableY = "cpd", tableX = "ko",
+    force_new = FALSE
+)
 
 }
 \seealso{

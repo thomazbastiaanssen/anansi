@@ -18,9 +18,11 @@ text-align: justify}
 </style>
 
 ```{r setup, include = FALSE}
-knitr::opts_chunk$set(echo = TRUE, 
-                      tidy.opts = list(width.cutoff = 80), 
-                      tidy = TRUE)
+knitr::opts_chunk$set(
+    echo = TRUE,
+    tidy.opts = list(width.cutoff = 80),
+    tidy = TRUE
+)
 library(anansi)
 library(ggplot2)
 ```
@@ -32,7 +34,7 @@ considering pairwise associations that are known to occur *a priori*. In order
 to achieve this, we need to provide this relational information to anansi in the
 form of a (bi)adjacency matrix. 
 
-This vignette is divided by two sections:
+This vignette  can be divided into two sections:
 
 * [Section 1](#sec-mat-1) introduces (bi)adjacency matrices in the context of 
     the anansi framework.  
@@ -152,10 +154,10 @@ $8\times9=72$ hypotheses.
 
 colmat <- data.frame(
     name = c(
-        "aconitase", "isocitrate\ndehydrogenase", 
+        "aconitase", "isocitrate\ndehydrogenase",
         "ketoglutarate\ndehydrogenase", "succinyl-CoA\nsynthetase",
         "succinate\ndehydrogenase", "fumarase", "malate\ndehydrogenase",
-        "citrate\nsynthase", "citrate", "cis-aconitate", "isocitrate", 
+        "citrate\nsynthase", "citrate", "cis-aconitate", "isocitrate",
         "ketoglutarate", "succinyl-CoA", "succinate", "fumarate", "L-malate",
         "oxaloacetate"
     ),
@@ -355,10 +357,10 @@ packaged data set, this means we can link between any two of `ec`, `cpd` and
 
 ```{r web_formula}
 # Formula notation
-head(weaveWeb(cpd ~ ko, link = kegg_link())|> dictionary(), c(10, 10))
+head(weaveWeb(cpd ~ ko, link = kegg_link()) |> dictionary(), c(10, 10))
 
 # Character notation
-head(weaveWeb(y = "ko", x = "cpd", link = kegg_link())|> dictionary(), c(10, 10))
+head(weaveWeb(y = "ko", x = "cpd", link = kegg_link()) |> dictionary(), c(10, 10))
 ```
 
 ## Use custom biadjacency matrices with AnansiWeb()

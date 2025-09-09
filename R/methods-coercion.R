@@ -18,6 +18,7 @@
 #'
 #' # AnansiWeb to MultiAssayExperiment
 #' asMAE(x)
+#' asTSE(x)
 #'
 #' # MultiFactor
 #' x <- randomMultiFactor()
@@ -27,7 +28,7 @@ NULL
 
 #' @export
 S7::method(convert, list(AnansiWeb, S7::class_list)) <-
-               function(from, to) `as.list.anansi::AnansiWeb`(x = from)
+    function(from, to) `as.list.anansi::AnansiWeb`(x = from)
 
 #' @export
 #' @rdname anansi-coercion
@@ -35,7 +36,7 @@ S7::method(convert, list(AnansiWeb, S7::class_list)) <-
     out <- S7::props(x)
     names(out)[c(1L, 2L)] <- names(x)
     out
-    }
+}
 
 #' @importFrom S7 convert
 #' @export
@@ -51,9 +52,11 @@ S7::method(convert, list(MultiFactor, S7::class_list)) <-
 
 #' @export
 S7::method(as.list, MultiFactor) <-
-    function(x, ..., use.names = TRUE) `as.list.anansi::MultiFactor`(
-        x, ..., use.names
+    function(x, ..., use.names = TRUE) {
+        `as.list.anansi::MultiFactor`(
+            x, ..., use.names
         )
+    }
 
 #' @export
 #' @importFrom S4Vectors unfactor
@@ -63,7 +66,8 @@ S7::method(as.list, MultiFactor) <-
         use.names,
         yes = return(S4Vectors::unfactor(x)),
         no = return(`names<-`(x@index, rownames(x)))
-    )}
+    )
+}
 
 #' @export
 S7::method(as.list, AnansiWeb) <- function(x, ...) {
@@ -73,7 +77,7 @@ S7::method(as.list, AnansiWeb) <- function(x, ...) {
 #' @export
 S7::method(as.data.frame, AnansiWeb) <- function(x, row.names, optional, ...) {
     `as.data.frame.anansi::AnansiWeb`(x)
-    }
+}
 
 #' @export
 #' @rdname anansi-coercion
@@ -93,8 +97,7 @@ S7::method(as.data.frame, AnansiWeb) <- function(x, row.names, optional, ...) {
 #' @importFrom SummarizedExperiment SummarizedExperiment
 #' @export
 #'
-asMAE <- function(x)  {
-
+asMAE <- function(x) {
     tY <- t(x@tableY)
     tX <- t(x@tableX)
     to_exp <- ExperimentList(
@@ -106,18 +109,54 @@ asMAE <- function(x)  {
     to_md <- list(dictionary = x@dictionary)
     to_cd <- x@metadata
 
-    if(prod(dim.data.frame(to_cd)) == 0L) {
-            MultiAssayExperiment::MultiAssayExperiment(
-                experiments = to_exp,
-                metadata = to_md
-            )
-        } else {
-            MultiAssayExperiment::MultiAssayExperiment(
-                experiments = to_exp,
-                metadata = to_md,
-                colData = to_cd
-            )
-        }
+    if (prod(dim.data.frame(to_cd)) == 0L) {
+        MultiAssayExperiment::MultiAssayExperiment(
+            experiments = to_exp,
+            metadata = to_md
+        )
+    } else {
+        MultiAssayExperiment::MultiAssayExperiment(
+            experiments = to_exp,
+            metadata = to_md,
+            colData = to_cd
+        )
+    }
 }
 
+#' @name asTSE
+#' @rdname anansi-coercion
+#' @aliases as.TSE as.TreeSummarizedExperiment asTreeSummarizedExperiment
+#' @importClassesFrom TreeSummarizedExperiment TreeSummarizedExperiment
+#' @importFrom TreeSummarizedExperiment TreeSummarizedExperiment
+#' @export
+#'
+asTSE <- function(x) {
+    tY <- t(x@tableY)
+    tX <- t(x@tableX)
+    to_exp <- list(
+        y = tY
+    )
+    names(to_exp) <- names(x)[1]
+    to_alt <- list(
+        x = TreeSummarizedExperiment::TreeSummarizedExperiment(tX)
+    )
+    names(to_alt) <- names(x)[2]
 
+    to_md <- list(dictionary = x@dictionary)
+    to_cd <- x@metadata
+
+    if (prod(dim.data.frame(to_cd)) == 0L) {
+        TreeSummarizedExperiment::TreeSummarizedExperiment(
+            assays = to_exp,
+            altExps = to_alt,
+            metadata = to_md
+        )
+    } else {
+        TreeSummarizedExperiment::TreeSummarizedExperiment(
+            assays = to_exp,
+            altExps = to_alt,
+            metadata = to_md,
+            colData = to_cd
+        )
+    }
+}
