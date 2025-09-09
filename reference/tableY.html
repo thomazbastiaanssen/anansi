@@ -80,43 +80,65 @@
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="randomAnansi.html">randomWeb</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                       sample_id repeated group_ab subtype     score_a</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_1_1   sample_1    rep_1        a       x -0.66645853</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_2_1   sample_2    rep_1        b       y -0.65623696</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_3_1   sample_3    rep_1        b       x -0.62886978</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_4_1   sample_4    rep_1        b       z -1.55000220</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_5_1   sample_5    rep_1        b       x  0.32233860</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_6_1   sample_6    rep_1        b       z -1.54206084</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_7_1   sample_7    rep_1        a       y -0.24916646</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_8_1   sample_8    rep_1        a       z  0.97818533</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_9_1   sample_9    rep_1        b       x  0.52643392</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_10_1 sample_10    rep_1        b       y  0.09392016</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                           score_b    score_c</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_1_1  -0.40965122  1.7070061</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_2_1  -1.83347284 -0.5845248</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_3_1  -0.60147813 -0.7327799</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_4_1   0.71581540  0.3290437</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_5_1   1.79679057 -0.2573286</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_6_1   0.03529339 -0.7067090</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_7_1   0.38920020  1.3423856</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_8_1  -1.21004686  1.8093387</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_9_1  -1.34415427 -1.2136316</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_10_1 -0.57201873  0.2567787</span>
 <span class="r-in"><span><span class="fu">tableY</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>              y</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_id            y_1         y_2        y_3         y_4         y_5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   sample_1_1  -0.2049894 -0.23454961 -0.3331939 -1.64720876 -0.47305173</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   sample_2_1   0.8138331 -0.48320570 -0.1463708 -0.87161432 -2.34324694</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   sample_3_1  -0.8091724 -0.03040413  0.6649085  0.85662346  2.29673101</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   sample_4_1   0.4318057 -0.19314211 -0.3810234 -0.53996440  0.43139706</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   sample_5_1   0.6733660  0.78168486  0.4347859 -1.30988296 -0.83441303</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   sample_6_1   0.3264279  1.48068677 -0.1761793  0.17397443  0.96047930</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   sample_7_1  -0.3109813 -2.11120312 -0.5674695  0.09785279  0.18174073</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   sample_8_1   1.0960023  0.14123083  0.5270825 -2.55815316  0.02194638</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   sample_9_1   0.3237003  0.19547116  1.0509161 -0.10044094  2.88119992</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   sample_10_1 -0.1613746  0.13164117  0.2682412 -0.46341703  0.62154503</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>              y</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_id             y_6        y_7         y_8          y_9       y_10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   sample_1_1   0.46497525  1.0273681  0.04131664  0.602798206  1.5829201</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   sample_2_1   0.06427385  1.1652665 -0.35401696  0.004962834 -0.2217191</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   sample_3_1   0.76912463 -0.3097163  0.71203577  1.101749095 -0.4608052</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   sample_4_1  -0.51455725  0.2431030  0.19394563  1.497564422 -0.7353533</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   sample_5_1   1.35193033 -1.2934209  0.51051628  1.560107930  1.4422201</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   sample_6_1  -0.51483916  1.4059970  1.08844574  0.830988183  1.2082121</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   sample_7_1   0.42005436 -0.9013018  1.13229748 -0.018367945  0.6980183</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   sample_8_1   1.20840755 -0.9244666  0.54590603  1.626116414  0.1064123</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   sample_9_1  -1.42272725  0.2376042  2.01694644 -0.339395703  1.4804371</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   sample_10_1  0.36478658 -1.2580521 -2.06798037  0.937998491 -0.4177403</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>              y</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_id            y_11        y_12</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   sample_1_1  -1.24475094  1.13608436</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   sample_2_1   0.91392633 -0.01543732</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   sample_3_1  -1.75246696  1.21084973</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   sample_4_1  -1.24005289 -1.43858274</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   sample_5_1  -1.37381994 -0.63695339</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   sample_6_1  -0.49694539  0.85064450</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   sample_7_1   0.25770326  0.58778431</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   sample_8_1  -0.49992474 -0.81298574</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   sample_9_1   1.34464410  0.06320848</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   sample_10_1 -0.06950405  0.12130284</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                        y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_id                      y_1         y_2        y_3         y_4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   anansi_ID_sample_1_1  -0.2049894 -0.23454961 -0.3331939 -1.64720876</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   anansi_ID_sample_2_1   0.8138331 -0.48320570 -0.1463708 -0.87161432</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   anansi_ID_sample_3_1  -0.8091724 -0.03040413  0.6649085  0.85662346</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   anansi_ID_sample_4_1   0.4318057 -0.19314211 -0.3810234 -0.53996440</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   anansi_ID_sample_5_1   0.6733660  0.78168486  0.4347859 -1.30988296</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   anansi_ID_sample_6_1   0.3264279  1.48068677 -0.1761793  0.17397443</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   anansi_ID_sample_7_1  -0.3109813 -2.11120312 -0.5674695  0.09785279</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   anansi_ID_sample_8_1   1.0960023  0.14123083  0.5270825 -2.55815316</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   anansi_ID_sample_9_1   0.3237003  0.19547116  1.0509161 -0.10044094</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   anansi_ID_sample_10_1 -0.1613746  0.13164117  0.2682412 -0.46341703</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                        y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_id                       y_5         y_6        y_7         y_8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   anansi_ID_sample_1_1  -0.47305173  0.46497525  1.0273681  0.04131664</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   anansi_ID_sample_2_1  -2.34324694  0.06427385  1.1652665 -0.35401696</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   anansi_ID_sample_3_1   2.29673101  0.76912463 -0.3097163  0.71203577</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   anansi_ID_sample_4_1   0.43139706 -0.51455725  0.2431030  0.19394563</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   anansi_ID_sample_5_1  -0.83441303  1.35193033 -1.2934209  0.51051628</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   anansi_ID_sample_6_1   0.96047930 -0.51483916  1.4059970  1.08844574</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   anansi_ID_sample_7_1   0.18174073  0.42005436 -0.9013018  1.13229748</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   anansi_ID_sample_8_1   0.02194638  1.20840755 -0.9244666  0.54590603</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   anansi_ID_sample_9_1   2.88119992 -1.42272725  0.2376042  2.01694644</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   anansi_ID_sample_10_1  0.62154503  0.36478658 -1.2580521 -2.06798037</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                        y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample_id                        y_9       y_10        y_11        y_12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   anansi_ID_sample_1_1   0.602798206  1.5829201 -1.24475094  1.13608436</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   anansi_ID_sample_2_1   0.004962834 -0.2217191  0.91392633 -0.01543732</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   anansi_ID_sample_3_1   1.101749095 -0.4608052 -1.75246696  1.21084973</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   anansi_ID_sample_4_1   1.497564422 -0.7353533 -1.24005289 -1.43858274</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   anansi_ID_sample_5_1   1.560107930  1.4422201 -1.37381994 -0.63695339</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   anansi_ID_sample_6_1   0.830988183  1.2082121 -0.49694539  0.85064450</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   anansi_ID_sample_7_1  -0.018367945  0.6980183  0.25770326  0.58778431</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   anansi_ID_sample_8_1   1.626116414  0.1064123 -0.49992474 -0.81298574</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   anansi_ID_sample_9_1  -0.339395703  1.4804371  1.34464410  0.06320848</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   anansi_ID_sample_10_1  0.937998491 -0.4177403 -0.06950405  0.12130284</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

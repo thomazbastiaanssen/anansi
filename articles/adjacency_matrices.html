@@ -95,7 +95,7 @@ challenge by only considering pairwise associations that are known to
 occur <em>a priori</em>. In order to achieve this, we need to provide
 this relational information to anansi in the form of a (bi)adjacency
 matrix.</p>
-<p>This vignette is divided by two sections:</p>
+<p>This vignette can be divided into two sections:</p>
 <ul>
 <li>
 <a href="#sec-mat-1">Section 1</a> introduces (bi)adjacency matrices
@@ -196,14 +196,20 @@ Once we have an <code>AnansiWeb</code> object, we can use the $ operator
 to access the biadjacency matrix in the ‘dictionary’ slot.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Two interfaces</span></span>
-<span><span class="va">form.web</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/weaveWeb-generic.html">weaveWeb</a></span><span class="op">(</span><span class="va">ec</span> <span class="op">~</span> <span class="va">ko</span>, link <span class="op">=</span> <span class="fu"><a href="../reference/kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">trad.web</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/weaveWeb-generic.html">weaveWeb</a></span><span class="op">(</span>y <span class="op">=</span> <span class="st">"ec"</span>, x <span class="op">=</span> <span class="st">"ko"</span>, link <span class="op">=</span> <span class="fu"><a href="../reference/kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Same output</span></span>
+<span><span class="va">form.web</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/weaveWeb-generic.html">weaveWeb</a></span><span class="op">(</span><span class="va">ec</span> <span class="op">~</span> <span class="va">ko</span>, link <span class="op">=</span> <span class="fu"><a href="../reference/kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Warning in .check_metadata_labels(metadata, tableY, tableX): Argument</span></span>
+<span><span class="co">## `metadata` not provided; Please validate sample ID order.</span></span></code></pre>
+<pre><code><span><span class="co">## data frame with 0 columns and 1 row</span></span></code></pre>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">trad.web</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/weaveWeb-generic.html">weaveWeb</a></span><span class="op">(</span>y <span class="op">=</span> <span class="st">"ec"</span>, x <span class="op">=</span> <span class="st">"ko"</span>, link <span class="op">=</span> <span class="fu"><a href="../reference/kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Warning in .check_metadata_labels(metadata, tableY, tableX): Argument</span></span>
+<span><span class="co">## `metadata` not provided; Please validate sample ID order.</span></span></code></pre>
+<pre><code><span><span class="co">## data frame with 0 columns and 1 row</span></span></code></pre>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Same output</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/identical.html" class="external-link">identical</a></span><span class="op">(</span><span class="va">form.web</span>, <span class="va">trad.web</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] TRUE</span></span></code></pre>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Get the biadjacency matrix using the $ operator</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="../reference/dictionary.html">dictionary</a></span><span class="op">(</span><span class="va">form.web</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## 10 x 10 sparse Matrix of class "ngCMatrix"</span></span></code></pre>
@@ -233,7 +239,7 @@ website</a>.</p>
 features between input data sets. The anansi package includes such data
 for the <a href="https://www.genome.jp/kegg/" class="external-link">KEGG database</a>, let’s
 take a look at some of it:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Extract the data.frame from the list that kegg_link() returns</span></span>
 <span><span class="va">ec2ko</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span><span class="op">[[</span><span class="st">"ec2ko"</span><span class="op">]</span><span class="op">]</span></span>
 <span></span>
@@ -265,13 +271,19 @@ adjacency).</p>
 be linked. These names are used throughout the <code>AnansiWeb</code>
 workflow. They can be directly called from an <code>AnansiWeb</code>
 object:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Note that the formula controls the order</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="../reference/weaveWeb-generic.html">weaveWeb</a></span><span class="op">(</span><span class="va">ko</span> <span class="op">~</span> <span class="va">ec</span>, link <span class="op">=</span> <span class="fu"><a href="../reference/kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Warning in .check_metadata_labels(metadata, tableY, tableX): Argument</span></span>
+<span><span class="co">## `metadata` not provided; Please validate sample ID order.</span></span></code></pre>
+<pre><code><span><span class="co">## data frame with 0 columns and 1 row</span></span></code></pre>
 <pre><code><span><span class="co">## [1] "ko" "ec"</span></span></code></pre>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># names() is short for the above</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="../reference/weaveWeb-generic.html">weaveWeb</a></span><span class="op">(</span><span class="va">ec</span> <span class="op">~</span> <span class="va">ko</span>, link <span class="op">=</span> <span class="fu"><a href="../reference/kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Warning in .check_metadata_labels(metadata, tableY, tableX): Argument</span></span>
+<span><span class="co">## `metadata` not provided; Please validate sample ID order.</span></span></code></pre>
+<pre><code><span><span class="co">## data frame with 0 columns and 1 row</span></span></code></pre>
 <pre><code><span><span class="co">## [1] "ec" "ko"</span></span></code></pre>
 </div>
 </div>
@@ -283,7 +295,7 @@ features are linked. We can use the pre-packaged kegg link map, which
 consists of two similarly structured <code>data.frame</code>s in a list,
 one of which we just inspected. We can call it directly using
 <code><a href="../reference/kegg_link.html">kegg_link()</a></code>:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Only print the first few entries</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="../reference/kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">head</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## $ec2ko</span></span>
@@ -317,10 +329,13 @@ between any combination of one or two similarly structured
 <code>data.frame</code>s, presented as a list. For the pre- packaged
 data set, this means we can link between any two of <code>ec</code>,
 <code>cpd</code> and <code>ko</code>, in either order.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Formula notation</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="../reference/weaveWeb-generic.html">weaveWeb</a></span><span class="op">(</span><span class="va">cpd</span> <span class="op">~</span> <span class="va">ko</span>, link <span class="op">=</span> <span class="fu"><a href="../reference/kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>    <span class="fu"><a href="../reference/dictionary.html">dictionary</a></span><span class="op">(</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Warning in .check_metadata_labels(metadata, tableY, tableX): Argument</span></span>
+<span><span class="co">## `metadata` not provided; Please validate sample ID order.</span></span></code></pre>
+<pre><code><span><span class="co">## data frame with 0 columns and 1 row</span></span></code></pre>
 <pre><code><span><span class="co">## 10 x 10 sparse Matrix of class "ngCMatrix"</span></span></code></pre>
 <pre><code><span><span class="co">##   [[ suppressing 10 column names 'K00001', 'K00002', 'K00003' ... ]]</span></span></code></pre>
 <pre><code><span><span class="co">##         ko</span></span>
@@ -335,10 +350,13 @@ data set, this means we can link between any two of <code>ec</code>,
 <span><span class="co">##   C00008 . . . . . . . . . .</span></span>
 <span><span class="co">##   C00009 . . . . . . . . . .</span></span>
 <span><span class="co">##   C00010 . . . . . . . . . .</span></span></code></pre>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Character notation</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="../reference/weaveWeb-generic.html">weaveWeb</a></span><span class="op">(</span>y <span class="op">=</span> <span class="st">"ko"</span>, x <span class="op">=</span> <span class="st">"cpd"</span>, link <span class="op">=</span> <span class="fu"><a href="../reference/kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>    <span class="fu"><a href="../reference/dictionary.html">dictionary</a></span><span class="op">(</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Warning in .check_metadata_labels(metadata, tableY, tableX): Argument</span></span>
+<span><span class="co">## `metadata` not provided; Please validate sample ID order.</span></span></code></pre>
+<pre><code><span><span class="co">## data frame with 0 columns and 1 row</span></span></code></pre>
 <pre><code><span><span class="co">## 10 x 10 sparse Matrix of class "ngCMatrix"</span></span></code></pre>
 <pre><code><span><span class="co">##   [[ suppressing 10 column names 'C00001', 'C00002', 'C00003' ... ]]</span></span></code></pre>
 <pre><code><span><span class="co">##         cpd</span></span>
@@ -360,7 +378,7 @@ data set, this means we can link between any two of <code>ec</code>,
 </h3>
 <p>The most flexible way to make an <code>AnansiWeb</code> object is
 through <code><a href="../reference/AnansiWeb-class.html">AnansiWeb()</a></code>:</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Prep some dummy input tables</span></span>
 <span><span class="va">tX</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">6</span>, dimnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="cn">NULL</span>, x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"x"</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span>,</span>
 <span>    sep <span class="op">=</span> <span class="st">"_"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
@@ -376,7 +394,10 @@ through <code><a href="../reference/AnansiWeb-class.html">AnansiWeb()</a></code>
 <span><span class="va">w</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/AnansiWeb-class.html">AnansiWeb</a></span><span class="op">(</span>tableY <span class="op">=</span> <span class="va">tY</span>, tableX <span class="op">=</span> <span class="va">tX</span>, dictionary <span class="op">=</span> <span class="va">d</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Warning in AnansiWeb(tableY = tY, tableX = tX, dictionary = d): Dimnames of</span></span>
 <span><span class="co">## 'dictionary' were missing; Assigned 'y' and 'x'.</span></span></code></pre>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<pre><code><span><span class="co">## Warning in .check_metadata_labels(metadata, tableY, tableX): Argument</span></span>
+<span><span class="co">## `metadata` not provided; Please validate sample ID order.</span></span></code></pre>
+<pre><code><span><span class="co">## data frame with 0 columns and 6 rows</span></span></code></pre>
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Confirm the warning:</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">w</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] "y" "x"</span></span></code></pre>
@@ -393,7 +414,7 @@ Here, we demonstrate a graph-based and matrix based approach.</p>
 common packages that deal with graphs are <a href="https://r.igraph.org/" class="external-link"><code>igraph</code></a> and <a href="https://bioconductor.org/packages/graph/" class="external-link"><code>graph</code></a>.
 To start off, we need to have a graph object, so let’s make one using
 <code>igraph</code>.</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r.igraph.org/" class="external-link">igraph</a></span><span class="op">)</span></span>
 <span><span class="co"># Prepared data.frame for the occasion</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">krebs_edge_df</span><span class="op">)</span></span></code></pre></div>
@@ -404,7 +425,7 @@ To start off, we need to have a graph object, so let’s make one using
 <span><span class="co">## 4 ketoglutarate dehydrogenase  succinyl-CoA</span></span>
 <span><span class="co">## 5     succinyl-CoA synthetase  succinyl-CoA</span></span>
 <span><span class="co">## 6     succinyl-CoA synthetase     succinate</span></span></code></pre>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Convert data.frame to graph</span></span>
 <span><span class="va">g</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r.igraph.org/reference/graph_from_data_frame.html" class="external-link">graph_from_data_frame</a></span><span class="op">(</span><span class="va">krebs_edge_df</span>, directed <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <p>Now that we have constructed a graph, we still need to identify which
@@ -415,7 +436,7 @@ be assigned a boolean vector, where <code>TRUE</code> values become
 columns, corresponding to features in <code>tableX</code>, whereas
 <code>FALSE</code> values become rows, which correspond to those in
 <code>tableY</code>.</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://r.igraph.org/reference/V.html" class="external-link">V</a></span><span class="op">(</span><span class="va">g</span><span class="op">)</span><span class="op">$</span><span class="va">type</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r.igraph.org/reference/V.html" class="external-link">V</a></span><span class="op">(</span><span class="va">g</span><span class="op">)</span><span class="op">$</span><span class="va">name</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">krebs_edge_df</span><span class="op">$</span><span class="va">Metabolite</span></span>
 <span></span>
 <span><span class="co"># Now that we've defined type, we can convert to biadjacency matrix:</span></span>
@@ -445,7 +466,7 @@ functions in <code>igraph</code>.</p>
 <p>We can also define a matrix directly. Conveniently, sparse matrices
 can be defined easily from our starting data. The <code>Matrix</code>
 library provides fantastic support for this.</p>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://Matrix.R-forge.R-project.org" class="external-link">Matrix</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># For this approach, it's useful to prepare the input as two factors:</span></span>
@@ -476,7 +497,7 @@ library provides fantastic support for this.</p>
 <div class="section level2">
 <h2 id="session-info">Session info<a class="anchor" aria-label="anchor" href="#session-info"></a>
 </h2>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## R version 4.5.1 (2025-06-13)</span></span>
 <span><span class="co">## Platform: x86_64-pc-linux-gnu</span></span>
@@ -506,46 +527,52 @@ library provides fantastic support for this.</p>
 <span><span class="co">## [9] BiocStyle_2.37.1</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## loaded via a namespace (and not attached):</span></span>
-<span><span class="co">##  [1] SummarizedExperiment_1.39.1 gtable_0.3.6               </span></span>
-<span><span class="co">##  [3] xfun_0.53                   bslib_0.9.0                </span></span>
-<span><span class="co">##  [5] htmlwidgets_1.6.4           ggrepel_0.9.6              </span></span>
-<span><span class="co">##  [7] Biobase_2.69.0              lattice_0.22-7             </span></span>
-<span><span class="co">##  [9] vctrs_0.6.5                 tools_4.5.1                </span></span>
-<span><span class="co">## [11] generics_0.1.4              stats4_4.5.1               </span></span>
-<span><span class="co">## [13] tibble_3.3.0                pkgconfig_2.0.3            </span></span>
-<span><span class="co">## [15] BiocBaseUtils_1.11.2        RColorBrewer_1.1-3         </span></span>
-<span><span class="co">## [17] S7_0.2.0                    desc_1.4.3                 </span></span>
-<span><span class="co">## [19] S4Vectors_0.47.0            lifecycle_1.0.4            </span></span>
-<span><span class="co">## [21] compiler_4.5.1              farver_2.1.2               </span></span>
-<span><span class="co">## [23] textshaping_1.0.3           ggforce_0.5.0              </span></span>
-<span><span class="co">## [25] graphlayouts_1.2.2          Seqinfo_0.99.2             </span></span>
-<span><span class="co">## [27] htmltools_0.5.8.1           sass_0.4.10                </span></span>
-<span><span class="co">## [29] yaml_2.3.10                 tidyr_1.3.1                </span></span>
-<span><span class="co">## [31] pkgdown_2.1.3               pillar_1.11.0              </span></span>
-<span><span class="co">## [33] crayon_1.5.3                jquerylib_0.1.4            </span></span>
-<span><span class="co">## [35] MASS_7.3-65                 SingleCellExperiment_1.31.1</span></span>
-<span><span class="co">## [37] DelayedArray_0.35.2         cachem_1.1.0               </span></span>
-<span><span class="co">## [39] viridis_0.6.5               abind_1.4-8                </span></span>
-<span><span class="co">## [41] tidyselect_1.2.1            digest_0.6.37              </span></span>
-<span><span class="co">## [43] purrr_1.1.0                 bookdown_0.44              </span></span>
-<span><span class="co">## [45] labeling_0.4.3              forcats_1.0.0              </span></span>
-<span><span class="co">## [47] polyclip_1.10-7             fastmap_1.2.0              </span></span>
-<span><span class="co">## [49] grid_4.5.1                  cli_3.6.5                  </span></span>
-<span><span class="co">## [51] SparseArray_1.9.1           magrittr_2.0.3             </span></span>
-<span><span class="co">## [53] S4Arrays_1.9.1              withr_3.0.2                </span></span>
-<span><span class="co">## [55] scales_1.4.0                rmarkdown_2.29             </span></span>
-<span><span class="co">## [57] XVector_0.49.0              matrixStats_1.5.0          </span></span>
-<span><span class="co">## [59] gridExtra_2.3               ragg_1.5.0                 </span></span>
-<span><span class="co">## [61] memoise_2.0.1               evaluate_1.0.5             </span></span>
-<span><span class="co">## [63] knitr_1.50                  GenomicRanges_1.61.1       </span></span>
-<span><span class="co">## [65] IRanges_2.43.0              MultiAssayExperiment_1.35.9</span></span>
-<span><span class="co">## [67] viridisLite_0.4.2           rlang_1.1.6                </span></span>
-<span><span class="co">## [69] Rcpp_1.1.0                  glue_1.8.0                 </span></span>
-<span><span class="co">## [71] formatR_1.14                tweenr_2.0.3               </span></span>
-<span><span class="co">## [73] BiocManager_1.30.26         BiocGenerics_0.55.1        </span></span>
-<span><span class="co">## [75] jsonlite_2.0.0              R6_2.6.1                   </span></span>
-<span><span class="co">## [77] MatrixGenerics_1.21.0       systemfonts_1.2.3          </span></span>
-<span><span class="co">## [79] fs_1.6.6</span></span></code></pre>
+<span><span class="co">##  [1] tidyselect_1.2.1                viridisLite_0.4.2              </span></span>
+<span><span class="co">##  [3] farver_2.1.2                    viridis_0.6.5                  </span></span>
+<span><span class="co">##  [5] Biostrings_2.77.2               S7_0.2.0                       </span></span>
+<span><span class="co">##  [7] fastmap_1.2.0                   SingleCellExperiment_1.31.1    </span></span>
+<span><span class="co">##  [9] lazyeval_0.2.2                  tweenr_2.0.3                   </span></span>
+<span><span class="co">## [11] digest_0.6.37                   lifecycle_1.0.4                </span></span>
+<span><span class="co">## [13] tidytree_0.4.6                  magrittr_2.0.3                 </span></span>
+<span><span class="co">## [15] compiler_4.5.1                  rlang_1.1.6                    </span></span>
+<span><span class="co">## [17] sass_0.4.10                     tools_4.5.1                    </span></span>
+<span><span class="co">## [19] yaml_2.3.10                     knitr_1.50                     </span></span>
+<span><span class="co">## [21] labeling_0.4.3                  graphlayouts_1.2.2             </span></span>
+<span><span class="co">## [23] S4Arrays_1.9.1                  htmlwidgets_1.6.4              </span></span>
+<span><span class="co">## [25] DelayedArray_0.35.2             RColorBrewer_1.1-3             </span></span>
+<span><span class="co">## [27] TreeSummarizedExperiment_2.17.1 abind_1.4-8                    </span></span>
+<span><span class="co">## [29] BiocParallel_1.43.4             withr_3.0.2                    </span></span>
+<span><span class="co">## [31] purrr_1.1.0                     BiocGenerics_0.55.1            </span></span>
+<span><span class="co">## [33] desc_1.4.3                      grid_4.5.1                     </span></span>
+<span><span class="co">## [35] polyclip_1.10-7                 stats4_4.5.1                   </span></span>
+<span><span class="co">## [37] scales_1.4.0                    MASS_7.3-65                    </span></span>
+<span><span class="co">## [39] MultiAssayExperiment_1.35.9     SummarizedExperiment_1.39.1    </span></span>
+<span><span class="co">## [41] cli_3.6.5                       rmarkdown_2.29                 </span></span>
+<span><span class="co">## [43] crayon_1.5.3                    ragg_1.5.0                     </span></span>
+<span><span class="co">## [45] treeio_1.33.0                   generics_0.1.4                 </span></span>
+<span><span class="co">## [47] BiocBaseUtils_1.11.2            ape_5.8-1                      </span></span>
+<span><span class="co">## [49] cachem_1.1.0                    ggforce_0.5.0                  </span></span>
+<span><span class="co">## [51] parallel_4.5.1                  formatR_1.14                   </span></span>
+<span><span class="co">## [53] BiocManager_1.30.26             XVector_0.49.0                 </span></span>
+<span><span class="co">## [55] matrixStats_1.5.0               vctrs_0.6.5                    </span></span>
+<span><span class="co">## [57] yulab.utils_0.2.1               jsonlite_2.0.0                 </span></span>
+<span><span class="co">## [59] bookdown_0.44                   IRanges_2.43.0                 </span></span>
+<span><span class="co">## [61] S4Vectors_0.47.0                ggrepel_0.9.6                  </span></span>
+<span><span class="co">## [63] systemfonts_1.2.3               jquerylib_0.1.4                </span></span>
+<span><span class="co">## [65] tidyr_1.3.1                     glue_1.8.0                     </span></span>
+<span><span class="co">## [67] pkgdown_2.1.3                   codetools_0.2-20               </span></span>
+<span><span class="co">## [69] gtable_0.3.6                    GenomicRanges_1.61.1           </span></span>
+<span><span class="co">## [71] tibble_3.3.0                    pillar_1.11.0                  </span></span>
+<span><span class="co">## [73] rappdirs_0.3.3                  htmltools_0.5.8.1              </span></span>
+<span><span class="co">## [75] Seqinfo_0.99.2                  R6_2.6.1                       </span></span>
+<span><span class="co">## [77] textshaping_1.0.3               evaluate_1.0.5                 </span></span>
+<span><span class="co">## [79] lattice_0.22-7                  Biobase_2.69.0                 </span></span>
+<span><span class="co">## [81] memoise_2.0.1                   bslib_0.9.0                    </span></span>
+<span><span class="co">## [83] Rcpp_1.1.0                      gridExtra_2.3                  </span></span>
+<span><span class="co">## [85] SparseArray_1.9.1               nlme_3.1-168                   </span></span>
+<span><span class="co">## [87] xfun_0.53                       fs_1.6.6                       </span></span>
+<span><span class="co">## [89] MatrixGenerics_1.21.0           forcats_1.0.0                  </span></span>
+<span><span class="co">## [91] pkgconfig_2.0.3</span></span></code></pre>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

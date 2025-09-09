@@ -98,20 +98,42 @@ getFeaturePairs: A list of data.frames with the paired data <br></p>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">web</span> <span class="op">&lt;-</span> <span class="fu"><a href="randomAnansi.html">randomWeb</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                       sample_id repeated group_ab subtype     score_a</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_1_1   sample_1    rep_1        a       y -1.32180897</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_2_1   sample_2    rep_1        b       z -0.45743264</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_3_1   sample_3    rep_1        b       x  2.90270571</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_4_1   sample_4    rep_1        b       y  0.61997324</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_5_1   sample_5    rep_1        a       z -3.51803913</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_6_1   sample_6    rep_1        b       y -0.04368998</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_7_1   sample_7    rep_1        b       y  0.25764244</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_8_1   sample_8    rep_1        b       y -0.22623901</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_9_1   sample_9    rep_1        b       z  0.40793869</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_10_1 sample_10    rep_1        b       x  0.07640337</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                          score_b     score_c</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_1_1   1.3863451  0.99175861</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_2_1   0.9342226 -0.18927626</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_3_1   1.3013773 -0.36397755</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_4_1   0.3279196  0.17534740</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_5_1  -1.1600496  1.20970475</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_6_1   0.7540315  0.32591187</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_7_1   1.0933145 -0.10945910</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_8_1   1.2232818  0.03397584</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_9_1  -0.4162361 -1.21728965</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_10_1 -0.6632721  0.51167018</span>
 <span class="r-in"><span><span class="co"># Extract data.frames in pairs (only show first)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="getFeaturePairs.html">getFeaturePairs</a></span><span class="op">(</span><span class="va">web</span><span class="op">)</span><span class="op">[</span><span class="fl">1L</span><span class="op">]</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                    y_1        x_1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_1_1  -1.5727175  0.9347076</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_2_1  -0.9864274 -0.4726698</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_3_1   1.9835123  1.5830132</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_4_1  -1.8513784  0.5977542</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_5_1  -0.9097882  0.4660846</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_6_1  -1.9514400 -0.7443675</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_7_1  -0.8002765  0.9590553</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_8_1  -1.8693616  0.1526371</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_9_1  -0.7505715 -0.7693687</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_10_1 -0.5909384  1.3930807</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                              y_1        x_1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_1_1  -1.5727175  0.9347076</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_2_1  -0.9864274 -0.4726698</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_3_1   1.9835123  1.5830132</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_4_1  -1.8513784  0.5977542</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_5_1  -0.9097882  0.4660846</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_6_1  -1.9514400 -0.7443675</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_7_1  -0.8002765  0.9590553</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_8_1  -1.8693616  0.1526371</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_9_1  -0.7505715 -0.7693687</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_10_1 -0.5909384  1.3930807</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/pairs.html" class="external-link">pairs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">web</span><span class="op">)</span></span></span>
@@ -167,628 +189,628 @@ getFeaturePairs: A list of data.frames with the paired data <br></p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="getFeaturePairs.html">getFeaturePairs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">web</span>, which <span class="op">=</span> <span class="cn">NULL</span>, with.metadata <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                    y_1        x_1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_1_1  -1.5727175  0.9347076</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_2_1  -0.9864274 -0.4726698</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_3_1   1.9835123  1.5830132</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_4_1  -1.8513784  0.5977542</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_5_1  -0.9097882  0.4660846</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_6_1  -1.9514400 -0.7443675</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_7_1  -0.8002765  0.9590553</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_8_1  -1.8693616  0.1526371</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_9_1  -0.7505715 -0.7693687</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_10_1 -0.5909384  1.3930807</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                              y_1        x_1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_1_1  -1.5727175  0.9347076</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_2_1  -0.9864274 -0.4726698</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_3_1   1.9835123  1.5830132</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_4_1  -1.8513784  0.5977542</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_5_1  -0.9097882  0.4660846</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_6_1  -1.9514400 -0.7443675</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_7_1  -0.8002765  0.9590553</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_8_1  -1.8693616  0.1526371</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_9_1  -0.7505715 -0.7693687</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_10_1 -0.5909384  1.3930807</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                    y_3        x_1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_1_1  -0.6127534  0.9347076</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_2_1   0.1606625 -0.4726698</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_3_1  -0.6623596  1.5830132</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_4_1  -0.3348517  0.5977542</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_5_1   0.6230116  0.4660846</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_6_1   1.0281943 -0.7443675</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_7_1  -1.1345782  0.9590553</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_8_1   0.9169111  0.1526371</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_9_1   1.2138748 -0.7693687</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_10_1 -0.6859325  1.3930807</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                              y_3        x_1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_1_1  -0.6127534  0.9347076</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_2_1   0.1606625 -0.4726698</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_3_1  -0.6623596  1.5830132</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_4_1  -0.3348517  0.5977542</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_5_1   0.6230116  0.4660846</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_6_1   1.0281943 -0.7443675</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_7_1  -1.1345782  0.9590553</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_8_1   0.9169111  0.1526371</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_9_1   1.2138748 -0.7693687</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_10_1 -0.6859325  1.3930807</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[3]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     y_9        x_1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_1_1   0.35846241  0.9347076</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_2_1   0.04818886 -0.4726698</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_3_1   1.13017228  1.5830132</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_4_1  -0.52763231  0.5977542</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_5_1   0.47957533  0.4660846</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_6_1   1.41752930 -0.7443675</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_7_1  -0.08009077  0.9590553</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_8_1  -0.39418700  0.1526371</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_9_1   0.52525764 -0.7693687</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_10_1 -0.79593510  1.3930807</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                               y_9        x_1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_1_1   0.35846241  0.9347076</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_2_1   0.04818886 -0.4726698</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_3_1   1.13017228  1.5830132</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_4_1  -0.52763231  0.5977542</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_5_1   0.47957533  0.4660846</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_6_1   1.41752930 -0.7443675</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_7_1  -0.08009077  0.9590553</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_8_1  -0.39418700  0.1526371</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_9_1   0.52525764 -0.7693687</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_10_1 -0.79593510  1.3930807</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[4]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                   y_11        x_1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_1_1  -1.6634113  0.9347076</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_2_1   1.9156908 -0.4726698</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_3_1  -0.8168944  1.5830132</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_4_1   0.3836505  0.5977542</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_5_1  -0.4586323  0.4660846</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_6_1  -0.7157040 -0.7443675</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_7_1   0.4295485  0.9590553</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_8_1  -1.1698527  0.1526371</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_9_1   1.3220883 -0.7693687</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_10_1  1.3659646  1.3930807</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                             y_11        x_1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_1_1  -1.6634113  0.9347076</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_2_1   1.9156908 -0.4726698</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_3_1  -0.8168944  1.5830132</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_4_1   0.3836505  0.5977542</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_5_1  -0.4586323  0.4660846</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_6_1  -0.7157040 -0.7443675</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_7_1   0.4295485  0.9590553</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_8_1  -1.1698527  0.1526371</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_9_1   1.3220883 -0.7693687</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_10_1  1.3659646  1.3930807</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[5]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                    y_12        x_1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_1_1  -0.24972371  0.9347076</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_2_1  -0.42472135 -0.4726698</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_3_1   1.09843934  1.5830132</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_4_1   0.67092304  0.5977542</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_5_1   0.03095466  0.4660846</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_6_1   2.36851196 -0.7443675</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_7_1   2.58578811  0.9590553</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_8_1   1.21228095  0.1526371</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_9_1  -1.25119684 -0.7693687</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_10_1  0.40026604  1.3930807</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                              y_12        x_1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_1_1  -0.24972371  0.9347076</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_2_1  -0.42472135 -0.4726698</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_3_1   1.09843934  1.5830132</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_4_1   0.67092304  0.5977542</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_5_1   0.03095466  0.4660846</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_6_1   2.36851196 -0.7443675</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_7_1   2.58578811  0.9590553</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_8_1   1.21228095  0.1526371</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_9_1  -1.25119684 -0.7693687</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_10_1  0.40026604  1.3930807</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[6]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                    y_1         x_2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_1_1  -1.5727175  0.91866877</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_2_1  -0.9864274  1.01608706</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_3_1   1.9835123  0.53463544</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_4_1  -1.8513784 -0.98762856</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_5_1  -0.9097882  1.18779227</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_6_1  -1.9514400 -0.51754221</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_7_1  -0.8002765 -0.25956025</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_8_1  -1.8693616 -0.32806467</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_9_1  -0.7505715  0.07343239</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_10_1 -0.5909384 -0.24786302</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                              y_1         x_2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_1_1  -1.5727175  0.91866877</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_2_1  -0.9864274  1.01608706</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_3_1   1.9835123  0.53463544</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_4_1  -1.8513784 -0.98762856</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_5_1  -0.9097882  1.18779227</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_6_1  -1.9514400 -0.51754221</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_7_1  -0.8002765 -0.25956025</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_8_1  -1.8693616 -0.32806467</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_9_1  -0.7505715  0.07343239</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_10_1 -0.5909384 -0.24786302</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[7]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     y_2         x_2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_1_1  -0.74209927  0.91866877</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_2_1   0.69351208  1.01608706</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_3_1  -0.05946397  0.53463544</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_4_1  -1.86389510 -0.98762856</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_5_1  -1.27450892  1.18779227</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_6_1  -1.78177081 -0.51754221</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_7_1  -0.50859339 -0.25956025</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_8_1  -1.73687829 -0.32806467</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_9_1   0.04048130  0.07343239</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_10_1 -0.12417946 -0.24786302</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                               y_2         x_2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_1_1  -0.74209927  0.91866877</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_2_1   0.69351208  1.01608706</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_3_1  -0.05946397  0.53463544</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_4_1  -1.86389510 -0.98762856</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_5_1  -1.27450892  1.18779227</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_6_1  -1.78177081 -0.51754221</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_7_1  -0.50859339 -0.25956025</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_8_1  -1.73687829 -0.32806467</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_9_1   0.04048130  0.07343239</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_10_1 -0.12417946 -0.24786302</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[8]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                    y_5         x_2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_1_1   0.6314438  0.91866877</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_2_1  -0.4833983  1.01608706</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_3_1  -1.5263339  0.53463544</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_4_1   0.6168423 -0.98762856</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_5_1   1.2292868  1.18779227</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_6_1   0.1574530 -0.51754221</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_7_1   1.4063421 -0.25956025</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_8_1   0.3968009 -0.32806467</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_9_1   0.3264230  0.07343239</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_10_1 -1.4593433 -0.24786302</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                              y_5         x_2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_1_1   0.6314438  0.91866877</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_2_1  -0.4833983  1.01608706</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_3_1  -1.5263339  0.53463544</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_4_1   0.6168423 -0.98762856</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_5_1   1.2292868  1.18779227</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_6_1   0.1574530 -0.51754221</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_7_1   1.4063421 -0.25956025</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_8_1   0.3968009 -0.32806467</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_9_1   0.3264230  0.07343239</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_10_1 -1.4593433 -0.24786302</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[9]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     y_7         x_2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_1_1  -0.75096428  0.91866877</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_2_1  -1.25336629  1.01608706</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_3_1  -1.03623626  0.53463544</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_4_1  -0.02943857 -0.98762856</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_5_1  -0.27494378  1.18779227</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_6_1   0.48545147 -0.51754221</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_7_1   0.91698203 -0.25956025</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_8_1  -0.98534392 -0.32806467</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_9_1  -1.49118975  0.07343239</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_10_1  0.81959245 -0.24786302</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                               y_7         x_2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_1_1  -0.75096428  0.91866877</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_2_1  -1.25336629  1.01608706</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_3_1  -1.03623626  0.53463544</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_4_1  -0.02943857 -0.98762856</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_5_1  -0.27494378  1.18779227</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_6_1   0.48545147 -0.51754221</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_7_1   0.91698203 -0.25956025</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_8_1  -0.98534392 -0.32806467</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_9_1  -1.49118975  0.07343239</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_10_1  0.81959245 -0.24786302</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[10]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     y_8         x_2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_1_1   1.01340453  0.91866877</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_2_1   1.05360525  1.01608706</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_3_1  -0.07142864  0.53463544</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_4_1   0.95244461 -0.98762856</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_5_1  -0.38403752  1.18779227</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_6_1  -0.41775999 -0.51754221</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_7_1  -0.47026817 -0.25956025</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_8_1  -1.69018029 -0.32806467</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_9_1  -0.94549766  0.07343239</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_10_1 -0.34301196 -0.24786302</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                               y_8         x_2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_1_1   1.01340453  0.91866877</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_2_1   1.05360525  1.01608706</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_3_1  -0.07142864  0.53463544</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_4_1   0.95244461 -0.98762856</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_5_1  -0.38403752  1.18779227</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_6_1  -0.41775999 -0.51754221</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_7_1  -0.47026817 -0.25956025</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_8_1  -1.69018029 -0.32806467</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_9_1  -0.94549766  0.07343239</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_10_1 -0.34301196 -0.24786302</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[11]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     y_9         x_2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_1_1   0.35846241  0.91866877</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_2_1   0.04818886  1.01608706</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_3_1   1.13017228  0.53463544</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_4_1  -0.52763231 -0.98762856</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_5_1   0.47957533  1.18779227</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_6_1   1.41752930 -0.51754221</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_7_1  -0.08009077 -0.25956025</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_8_1  -0.39418700 -0.32806467</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_9_1   0.52525764  0.07343239</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_10_1 -0.79593510 -0.24786302</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                               y_9         x_2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_1_1   0.35846241  0.91866877</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_2_1   0.04818886  1.01608706</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_3_1   1.13017228  0.53463544</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_4_1  -0.52763231 -0.98762856</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_5_1   0.47957533  1.18779227</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_6_1   1.41752930 -0.51754221</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_7_1  -0.08009077 -0.25956025</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_8_1  -0.39418700 -0.32806467</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_9_1   0.52525764  0.07343239</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_10_1 -0.79593510 -0.24786302</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[12]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                   y_11         x_2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_1_1  -1.6634113  0.91866877</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_2_1   1.9156908  1.01608706</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_3_1  -0.8168944  0.53463544</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_4_1   0.3836505 -0.98762856</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_5_1  -0.4586323  1.18779227</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_6_1  -0.7157040 -0.51754221</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_7_1   0.4295485 -0.25956025</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_8_1  -1.1698527 -0.32806467</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_9_1   1.3220883  0.07343239</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_10_1  1.3659646 -0.24786302</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                             y_11         x_2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_1_1  -1.6634113  0.91866877</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_2_1   1.9156908  1.01608706</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_3_1  -0.8168944  0.53463544</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_4_1   0.3836505 -0.98762856</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_5_1  -0.4586323  1.18779227</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_6_1  -0.7157040 -0.51754221</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_7_1   0.4295485 -0.25956025</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_8_1  -1.1698527 -0.32806467</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_9_1   1.3220883  0.07343239</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_10_1  1.3659646 -0.24786302</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[13]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     y_2         x_3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_1_1  -0.74209927 -1.37386226</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_2_1   0.69351208 -0.04044582</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_3_1  -0.05946397  0.42153824</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_4_1  -1.86389510  0.20159751</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_5_1  -1.27450892 -1.69719192</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_6_1  -1.78177081  0.64228768</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_7_1  -0.50859339 -0.99523961</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_8_1  -1.73687829  0.96381390</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_9_1   0.04048130 -1.65603723</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_10_1 -0.12417946  1.07086109</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                               y_2         x_3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_1_1  -0.74209927 -1.37386226</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_2_1   0.69351208 -0.04044582</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_3_1  -0.05946397  0.42153824</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_4_1  -1.86389510  0.20159751</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_5_1  -1.27450892 -1.69719192</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_6_1  -1.78177081  0.64228768</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_7_1  -0.50859339 -0.99523961</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_8_1  -1.73687829  0.96381390</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_9_1   0.04048130 -1.65603723</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_10_1 -0.12417946  1.07086109</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[14]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                    y_3         x_3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_1_1  -0.6127534 -1.37386226</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_2_1   0.1606625 -0.04044582</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_3_1  -0.6623596  0.42153824</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_4_1  -0.3348517  0.20159751</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_5_1   0.6230116 -1.69719192</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_6_1   1.0281943  0.64228768</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_7_1  -1.1345782 -0.99523961</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_8_1   0.9169111  0.96381390</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_9_1   1.2138748 -1.65603723</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_10_1 -0.6859325  1.07086109</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                              y_3         x_3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_1_1  -0.6127534 -1.37386226</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_2_1   0.1606625 -0.04044582</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_3_1  -0.6623596  0.42153824</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_4_1  -0.3348517  0.20159751</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_5_1   0.6230116 -1.69719192</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_6_1   1.0281943  0.64228768</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_7_1  -1.1345782 -0.99523961</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_8_1   0.9169111  0.96381390</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_9_1   1.2138748 -1.65603723</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_10_1 -0.6859325  1.07086109</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[15]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                    y_4         x_3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_1_1  -1.0945682 -1.37386226</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_2_1   0.3648741 -0.04044582</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_3_1  -1.0080171  0.42153824</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_4_1   0.5549964  0.20159751</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_5_1   0.4360659 -1.69719192</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_6_1   0.1053733  0.64228768</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_7_1  -0.2537379 -0.99523961</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_8_1  -0.9764912  0.96381390</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_9_1   0.3942178 -1.65603723</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_10_1  1.0149030  1.07086109</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                              y_4         x_3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_1_1  -1.0945682 -1.37386226</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_2_1   0.3648741 -0.04044582</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_3_1  -1.0080171  0.42153824</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_4_1   0.5549964  0.20159751</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_5_1   0.4360659 -1.69719192</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_6_1   0.1053733  0.64228768</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_7_1  -0.2537379 -0.99523961</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_8_1  -0.9764912  0.96381390</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_9_1   0.3942178 -1.65603723</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_10_1  1.0149030  1.07086109</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[16]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     y_7         x_3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_1_1  -0.75096428 -1.37386226</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_2_1  -1.25336629 -0.04044582</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_3_1  -1.03623626  0.42153824</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_4_1  -0.02943857  0.20159751</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_5_1  -0.27494378 -1.69719192</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_6_1   0.48545147  0.64228768</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_7_1   0.91698203 -0.99523961</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_8_1  -0.98534392  0.96381390</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_9_1  -1.49118975 -1.65603723</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_10_1  0.81959245  1.07086109</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                               y_7         x_3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_1_1  -0.75096428 -1.37386226</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_2_1  -1.25336629 -0.04044582</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_3_1  -1.03623626  0.42153824</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_4_1  -0.02943857  0.20159751</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_5_1  -0.27494378 -1.69719192</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_6_1   0.48545147  0.64228768</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_7_1   0.91698203 -0.99523961</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_8_1  -0.98534392  0.96381390</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_9_1  -1.49118975 -1.65603723</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_10_1  0.81959245  1.07086109</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[17]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     y_8         x_3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_1_1   1.01340453 -1.37386226</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_2_1   1.05360525 -0.04044582</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_3_1  -0.07142864  0.42153824</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_4_1   0.95244461  0.20159751</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_5_1  -0.38403752 -1.69719192</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_6_1  -0.41775999  0.64228768</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_7_1  -0.47026817 -0.99523961</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_8_1  -1.69018029  0.96381390</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_9_1  -0.94549766 -1.65603723</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_10_1 -0.34301196  1.07086109</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                               y_8         x_3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_1_1   1.01340453 -1.37386226</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_2_1   1.05360525 -0.04044582</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_3_1  -0.07142864  0.42153824</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_4_1   0.95244461  0.20159751</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_5_1  -0.38403752 -1.69719192</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_6_1  -0.41775999  0.64228768</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_7_1  -0.47026817 -0.99523961</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_8_1  -1.69018029  0.96381390</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_9_1  -0.94549766 -1.65603723</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_10_1 -0.34301196  1.07086109</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[18]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                   y_10         x_3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_1_1   0.2450964 -1.37386226</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_2_1  -0.7793198 -0.04044582</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_3_1   0.5949239  0.42153824</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_4_1   1.1088909  0.20159751</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_5_1  -0.9429690 -1.69719192</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_6_1   0.7003440  0.64228768</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_7_1  -0.4246748 -0.99523961</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_8_1  -1.1431376  0.96381390</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_9_1   0.2334402 -1.65603723</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_10_1 -0.1892366  1.07086109</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                             y_10         x_3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_1_1   0.2450964 -1.37386226</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_2_1  -0.7793198 -0.04044582</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_3_1   0.5949239  0.42153824</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_4_1   1.1088909  0.20159751</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_5_1  -0.9429690 -1.69719192</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_6_1   0.7003440  0.64228768</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_7_1  -0.4246748 -0.99523961</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_8_1  -1.1431376  0.96381390</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_9_1   0.2334402 -1.65603723</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_10_1 -0.1892366  1.07086109</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[19]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                    y_12         x_3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_1_1  -0.24972371 -1.37386226</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_2_1  -0.42472135 -0.04044582</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_3_1   1.09843934  0.42153824</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_4_1   0.67092304  0.20159751</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_5_1   0.03095466 -1.69719192</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_6_1   2.36851196  0.64228768</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_7_1   2.58578811 -0.99523961</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_8_1   1.21228095  0.96381390</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_9_1  -1.25119684 -1.65603723</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_10_1  0.40026604  1.07086109</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                              y_12         x_3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_1_1  -0.24972371 -1.37386226</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_2_1  -0.42472135 -0.04044582</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_3_1   1.09843934  0.42153824</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_4_1   0.67092304  0.20159751</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_5_1   0.03095466 -1.69719192</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_6_1   2.36851196  0.64228768</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_7_1   2.58578811 -0.99523961</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_8_1   1.21228095  0.96381390</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_9_1  -1.25119684 -1.65603723</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_10_1  0.40026604  1.07086109</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[20]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                    y_1         x_4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_1_1  -1.5727175 -0.10902636</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_2_1  -0.9864274  1.89918639</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_3_1   1.9835123 -1.13703073</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_4_1  -1.8513784 -0.27971976</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_5_1  -0.9097882 -0.89412905</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_6_1  -1.9514400  0.13670185</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_7_1  -0.8002765 -0.74916542</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_8_1  -1.8693616  0.51819908</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_9_1  -0.7505715 -0.19233721</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_10_1 -0.5909384  0.02880981</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                              y_1         x_4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_1_1  -1.5727175 -0.10902636</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_2_1  -0.9864274  1.89918639</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_3_1   1.9835123 -1.13703073</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_4_1  -1.8513784 -0.27971976</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_5_1  -0.9097882 -0.89412905</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_6_1  -1.9514400  0.13670185</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_7_1  -0.8002765 -0.74916542</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_8_1  -1.8693616  0.51819908</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_9_1  -0.7505715 -0.19233721</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_10_1 -0.5909384  0.02880981</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[21]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     y_2         x_4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_1_1  -0.74209927 -0.10902636</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_2_1   0.69351208  1.89918639</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_3_1  -0.05946397 -1.13703073</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_4_1  -1.86389510 -0.27971976</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_5_1  -1.27450892 -0.89412905</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_6_1  -1.78177081  0.13670185</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_7_1  -0.50859339 -0.74916542</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_8_1  -1.73687829  0.51819908</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_9_1   0.04048130 -0.19233721</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_10_1 -0.12417946  0.02880981</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                               y_2         x_4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_1_1  -0.74209927 -0.10902636</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_2_1   0.69351208  1.89918639</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_3_1  -0.05946397 -1.13703073</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_4_1  -1.86389510 -0.27971976</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_5_1  -1.27450892 -0.89412905</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_6_1  -1.78177081  0.13670185</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_7_1  -0.50859339 -0.74916542</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_8_1  -1.73687829  0.51819908</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_9_1   0.04048130 -0.19233721</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_10_1 -0.12417946  0.02880981</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[22]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                    y_3         x_4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_1_1  -0.6127534 -0.10902636</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_2_1   0.1606625  1.89918639</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_3_1  -0.6623596 -1.13703073</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_4_1  -0.3348517 -0.27971976</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_5_1   0.6230116 -0.89412905</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_6_1   1.0281943  0.13670185</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_7_1  -1.1345782 -0.74916542</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_8_1   0.9169111  0.51819908</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_9_1   1.2138748 -0.19233721</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_10_1 -0.6859325  0.02880981</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                              y_3         x_4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_1_1  -0.6127534 -0.10902636</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_2_1   0.1606625  1.89918639</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_3_1  -0.6623596 -1.13703073</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_4_1  -0.3348517 -0.27971976</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_5_1   0.6230116 -0.89412905</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_6_1   1.0281943  0.13670185</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_7_1  -1.1345782 -0.74916542</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_8_1   0.9169111  0.51819908</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_9_1   1.2138748 -0.19233721</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_10_1 -0.6859325  0.02880981</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[23]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     y_6         x_4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_1_1  -0.79929553 -0.10902636</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_2_1   0.47001280  1.89918639</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_3_1  -1.15018052 -1.13703073</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_4_1  -0.27159672 -0.27971976</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_5_1   0.45742422 -0.89412905</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_6_1  -0.01695794  0.13670185</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_7_1  -0.54159436 -0.74916542</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_8_1   0.87581342  0.51819908</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_9_1   0.74083815 -0.19233721</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_10_1 -0.16481239  0.02880981</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                               y_6         x_4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_1_1  -0.79929553 -0.10902636</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_2_1   0.47001280  1.89918639</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_3_1  -1.15018052 -1.13703073</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_4_1  -0.27159672 -0.27971976</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_5_1   0.45742422 -0.89412905</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_6_1  -0.01695794  0.13670185</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_7_1  -0.54159436 -0.74916542</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_8_1   0.87581342  0.51819908</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_9_1   0.74083815 -0.19233721</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_10_1 -0.16481239  0.02880981</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[24]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     y_8         x_4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_1_1   1.01340453 -0.10902636</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_2_1   1.05360525  1.89918639</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_3_1  -0.07142864 -1.13703073</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_4_1   0.95244461 -0.27971976</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_5_1  -0.38403752 -0.89412905</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_6_1  -0.41775999  0.13670185</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_7_1  -0.47026817 -0.74916542</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_8_1  -1.69018029  0.51819908</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_9_1  -0.94549766 -0.19233721</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_10_1 -0.34301196  0.02880981</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                               y_8         x_4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_1_1   1.01340453 -0.10902636</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_2_1   1.05360525  1.89918639</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_3_1  -0.07142864 -1.13703073</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_4_1   0.95244461 -0.27971976</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_5_1  -0.38403752 -0.89412905</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_6_1  -0.41775999  0.13670185</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_7_1  -0.47026817 -0.74916542</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_8_1  -1.69018029  0.51819908</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_9_1  -0.94549766 -0.19233721</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_10_1 -0.34301196  0.02880981</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[25]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     y_9         x_4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_1_1   0.35846241 -0.10902636</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_2_1   0.04818886  1.89918639</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_3_1   1.13017228 -1.13703073</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_4_1  -0.52763231 -0.27971976</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_5_1   0.47957533 -0.89412905</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_6_1   1.41752930  0.13670185</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_7_1  -0.08009077 -0.74916542</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_8_1  -0.39418700  0.51819908</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_9_1   0.52525764 -0.19233721</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_10_1 -0.79593510  0.02880981</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                               y_9         x_4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_1_1   0.35846241 -0.10902636</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_2_1   0.04818886  1.89918639</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_3_1   1.13017228 -1.13703073</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_4_1  -0.52763231 -0.27971976</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_5_1   0.47957533 -0.89412905</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_6_1   1.41752930  0.13670185</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_7_1  -0.08009077 -0.74916542</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_8_1  -0.39418700  0.51819908</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_9_1   0.52525764 -0.19233721</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_10_1 -0.79593510  0.02880981</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[26]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                    y_12         x_4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_1_1  -0.24972371 -0.10902636</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_2_1  -0.42472135  1.89918639</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_3_1   1.09843934 -1.13703073</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_4_1   0.67092304 -0.27971976</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_5_1   0.03095466 -0.89412905</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_6_1   2.36851196  0.13670185</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_7_1   2.58578811 -0.74916542</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_8_1   1.21228095  0.51819908</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_9_1  -1.25119684 -0.19233721</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_10_1  0.40026604  0.02880981</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                              y_12         x_4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_1_1  -0.24972371 -0.10902636</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_2_1  -0.42472135  1.89918639</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_3_1   1.09843934 -1.13703073</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_4_1   0.67092304 -0.27971976</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_5_1   0.03095466 -0.89412905</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_6_1   2.36851196  0.13670185</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_7_1   2.58578811 -0.74916542</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_8_1   1.21228095  0.51819908</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_9_1  -1.25119684 -0.19233721</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_10_1  0.40026604  0.02880981</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[27]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     y_6         x_5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_1_1  -0.79929553  0.35859089</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_2_1   0.47001280 -0.02899503</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_3_1  -1.15018052  1.14704207</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_4_1  -0.27159672  0.37358894</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_5_1   0.45742422  0.32333921</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_6_1  -0.01695794 -0.82981932</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_7_1  -0.54159436  1.39446258</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_8_1   0.87581342 -0.19154358</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_9_1   0.74083815  0.27227702</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_10_1 -0.16481239 -1.08165901</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                               y_6         x_5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_1_1  -0.79929553  0.35859089</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_2_1   0.47001280 -0.02899503</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_3_1  -1.15018052  1.14704207</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_4_1  -0.27159672  0.37358894</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_5_1   0.45742422  0.32333921</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_6_1  -0.01695794 -0.82981932</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_7_1  -0.54159436  1.39446258</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_8_1   0.87581342 -0.19154358</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_9_1   0.74083815  0.27227702</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_10_1 -0.16481239 -1.08165901</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[28]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     y_9         x_5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_1_1   0.35846241  0.35859089</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_2_1   0.04818886 -0.02899503</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_3_1   1.13017228  1.14704207</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_4_1  -0.52763231  0.37358894</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_5_1   0.47957533  0.32333921</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_6_1   1.41752930 -0.82981932</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_7_1  -0.08009077  1.39446258</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_8_1  -0.39418700 -0.19154358</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_9_1   0.52525764  0.27227702</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_10_1 -0.79593510 -1.08165901</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                               y_9         x_5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_1_1   0.35846241  0.35859089</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_2_1   0.04818886 -0.02899503</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_3_1   1.13017228  1.14704207</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_4_1  -0.52763231  0.37358894</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_5_1   0.47957533  0.32333921</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_6_1   1.41752930 -0.82981932</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_7_1  -0.08009077  1.39446258</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_8_1  -0.39418700 -0.19154358</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_9_1   0.52525764  0.27227702</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_10_1 -0.79593510 -1.08165901</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[29]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                   y_10         x_5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_1_1   0.2450964  0.35859089</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_2_1  -0.7793198 -0.02899503</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_3_1   0.5949239  1.14704207</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_4_1   1.1088909  0.37358894</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_5_1  -0.9429690  0.32333921</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_6_1   0.7003440 -0.82981932</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_7_1  -0.4246748  1.39446258</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_8_1  -1.1431376 -0.19154358</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_9_1   0.2334402  0.27227702</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_10_1 -0.1892366 -1.08165901</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                             y_10         x_5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_1_1   0.2450964  0.35859089</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_2_1  -0.7793198 -0.02899503</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_3_1   0.5949239  1.14704207</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_4_1   1.1088909  0.37358894</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_5_1  -0.9429690  0.32333921</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_6_1   0.7003440 -0.82981932</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_7_1  -0.4246748  1.39446258</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_8_1  -1.1431376 -0.19154358</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_9_1   0.2334402  0.27227702</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_10_1 -0.1892366 -1.08165901</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[30]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                    y_12         x_5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_1_1  -0.24972371  0.35859089</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_2_1  -0.42472135 -0.02899503</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_3_1   1.09843934  1.14704207</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_4_1   0.67092304  0.37358894</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_5_1   0.03095466  0.32333921</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_6_1   2.36851196 -0.82981932</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_7_1   2.58578811  1.39446258</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_8_1   1.21228095 -0.19154358</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_9_1  -1.25119684  0.27227702</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_10_1  0.40026604 -1.08165901</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                              y_12         x_5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_1_1  -0.24972371  0.35859089</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_2_1  -0.42472135 -0.02899503</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_3_1   1.09843934  1.14704207</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_4_1   0.67092304  0.37358894</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_5_1   0.03095466  0.32333921</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_6_1   2.36851196 -0.82981932</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_7_1   2.58578811  1.39446258</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_8_1   1.21228095 -0.19154358</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_9_1  -1.25119684  0.27227702</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_10_1  0.40026604 -1.08165901</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[31]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                    y_1         x_6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_1_1  -1.5727175 -2.32939936</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_2_1  -0.9864274 -0.54962596</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_3_1   1.9835123 -0.07257999</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_4_1  -1.8513784  1.03228840</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_5_1  -0.9097882  0.21513853</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_6_1  -1.9514400 -0.49434012</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_7_1  -0.8002765  1.51213828</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_8_1  -1.8693616 -0.57946326</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_9_1  -0.7505715  1.67478963</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_10_1 -0.5909384 -1.00098026</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                              y_1         x_6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_1_1  -1.5727175 -2.32939936</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_2_1  -0.9864274 -0.54962596</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_3_1   1.9835123 -0.07257999</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_4_1  -1.8513784  1.03228840</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_5_1  -0.9097882  0.21513853</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_6_1  -1.9514400 -0.49434012</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_7_1  -0.8002765  1.51213828</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_8_1  -1.8693616 -0.57946326</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_9_1  -0.7505715  1.67478963</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_10_1 -0.5909384 -1.00098026</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[32]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                    y_4         x_6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_1_1  -1.0945682 -2.32939936</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_2_1   0.3648741 -0.54962596</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_3_1  -1.0080171 -0.07257999</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_4_1   0.5549964  1.03228840</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_5_1   0.4360659  0.21513853</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_6_1   0.1053733 -0.49434012</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_7_1  -0.2537379  1.51213828</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_8_1  -0.9764912 -0.57946326</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_9_1   0.3942178  1.67478963</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_10_1  1.0149030 -1.00098026</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                              y_4         x_6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_1_1  -1.0945682 -2.32939936</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_2_1   0.3648741 -0.54962596</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_3_1  -1.0080171 -0.07257999</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_4_1   0.5549964  1.03228840</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_5_1   0.4360659  0.21513853</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_6_1   0.1053733 -0.49434012</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_7_1  -0.2537379  1.51213828</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_8_1  -0.9764912 -0.57946326</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_9_1   0.3942178  1.67478963</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_10_1  1.0149030 -1.00098026</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[33]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                    y_5         x_6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_1_1   0.6314438 -2.32939936</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_2_1  -0.4833983 -0.54962596</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_3_1  -1.5263339 -0.07257999</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_4_1   0.6168423  1.03228840</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_5_1   1.2292868  0.21513853</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_6_1   0.1574530 -0.49434012</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_7_1   1.4063421  1.51213828</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_8_1   0.3968009 -0.57946326</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_9_1   0.3264230  1.67478963</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_10_1 -1.4593433 -1.00098026</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                              y_5         x_6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_1_1   0.6314438 -2.32939936</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_2_1  -0.4833983 -0.54962596</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_3_1  -1.5263339 -0.07257999</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_4_1   0.6168423  1.03228840</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_5_1   1.2292868  0.21513853</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_6_1   0.1574530 -0.49434012</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_7_1   1.4063421  1.51213828</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_8_1   0.3968009 -0.57946326</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_9_1   0.3264230  1.67478963</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_10_1 -1.4593433 -1.00098026</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[34]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     y_8         x_6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_1_1   1.01340453 -2.32939936</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_2_1   1.05360525 -0.54962596</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_3_1  -0.07142864 -0.07257999</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_4_1   0.95244461  1.03228840</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_5_1  -0.38403752  0.21513853</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_6_1  -0.41775999 -0.49434012</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_7_1  -0.47026817  1.51213828</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_8_1  -1.69018029 -0.57946326</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_9_1  -0.94549766  1.67478963</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_10_1 -0.34301196 -1.00098026</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                               y_8         x_6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_1_1   1.01340453 -2.32939936</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_2_1   1.05360525 -0.54962596</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_3_1  -0.07142864 -0.07257999</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_4_1   0.95244461  1.03228840</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_5_1  -0.38403752  0.21513853</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_6_1  -0.41775999 -0.49434012</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_7_1  -0.47026817  1.51213828</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_8_1  -1.69018029 -0.57946326</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_9_1  -0.94549766  1.67478963</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_10_1 -0.34301196 -1.00098026</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[35]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                   y_10         x_6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_1_1   0.2450964 -2.32939936</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_2_1  -0.7793198 -0.54962596</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_3_1   0.5949239 -0.07257999</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_4_1   1.1088909  1.03228840</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_5_1  -0.9429690  0.21513853</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_6_1   0.7003440 -0.49434012</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_7_1  -0.4246748  1.51213828</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_8_1  -1.1431376 -0.57946326</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_9_1   0.2334402  1.67478963</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_10_1 -0.1892366 -1.00098026</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                             y_10         x_6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_1_1   0.2450964 -2.32939936</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_2_1  -0.7793198 -0.54962596</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_3_1   0.5949239 -0.07257999</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_4_1   1.1088909  1.03228840</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_5_1  -0.9429690  0.21513853</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_6_1   0.7003440 -0.49434012</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_7_1  -0.4246748  1.51213828</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_8_1  -1.1431376 -0.57946326</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_9_1   0.2334402  1.67478963</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_10_1 -0.1892366 -1.00098026</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[36]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                   y_11         x_6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_1_1  -1.6634113 -2.32939936</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_2_1   1.9156908 -0.54962596</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_3_1  -0.8168944 -0.07257999</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_4_1   0.3836505  1.03228840</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_5_1  -0.4586323  0.21513853</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_6_1  -0.7157040 -0.49434012</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_7_1   0.4295485  1.51213828</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_8_1  -1.1698527 -0.57946326</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_9_1   1.3220883  1.67478963</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_10_1  1.3659646 -1.00098026</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                             y_11         x_6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_1_1  -1.6634113 -2.32939936</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_2_1   1.9156908 -0.54962596</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_3_1  -0.8168944 -0.07257999</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_4_1   0.3836505  1.03228840</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_5_1  -0.4586323  0.21513853</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_6_1  -0.7157040 -0.49434012</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_7_1   0.4295485  1.51213828</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_8_1  -1.1698527 -0.57946326</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_9_1   1.3220883  1.67478963</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_10_1  1.3659646 -1.00098026</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[37]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     y_2        x_7</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_1_1  -0.74209927  1.2227028</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_2_1   0.69351208  1.0771882</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_3_1  -0.05946397 -0.6119455</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_4_1  -1.86389510  0.5068670</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_5_1  -1.27450892  0.4600684</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_6_1  -1.78177081  1.4843919</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_7_1  -0.50859339  0.8819632</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_8_1  -1.73687829 -0.5367022</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_9_1   0.04048130  1.2855537</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_10_1 -0.12417946  0.5878485</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                               y_2        x_7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_1_1  -0.74209927  1.2227028</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_2_1   0.69351208  1.0771882</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_3_1  -0.05946397 -0.6119455</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_4_1  -1.86389510  0.5068670</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_5_1  -1.27450892  0.4600684</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_6_1  -1.78177081  1.4843919</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_7_1  -0.50859339  0.8819632</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_8_1  -1.73687829 -0.5367022</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_9_1   0.04048130  1.2855537</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_10_1 -0.12417946  0.5878485</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[38]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                    y_3        x_7</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_1_1  -0.6127534  1.2227028</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_2_1   0.1606625  1.0771882</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_3_1  -0.6623596 -0.6119455</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_4_1  -0.3348517  0.5068670</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_5_1   0.6230116  0.4600684</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_6_1   1.0281943  1.4843919</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_7_1  -1.1345782  0.8819632</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_8_1   0.9169111 -0.5367022</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_9_1   1.2138748  1.2855537</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_10_1 -0.6859325  0.5878485</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                              y_3        x_7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_1_1  -0.6127534  1.2227028</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_2_1   0.1606625  1.0771882</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_3_1  -0.6623596 -0.6119455</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_4_1  -0.3348517  0.5068670</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_5_1   0.6230116  0.4600684</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_6_1   1.0281943  1.4843919</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_7_1  -1.1345782  0.8819632</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_8_1   0.9169111 -0.5367022</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_9_1   1.2138748  1.2855537</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_10_1 -0.6859325  0.5878485</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[39]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                    y_4        x_7</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_1_1  -1.0945682  1.2227028</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_2_1   0.3648741  1.0771882</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_3_1  -1.0080171 -0.6119455</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_4_1   0.5549964  0.5068670</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_5_1   0.4360659  0.4600684</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_6_1   0.1053733  1.4843919</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_7_1  -0.2537379  0.8819632</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_8_1  -0.9764912 -0.5367022</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_9_1   0.3942178  1.2855537</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_10_1  1.0149030  0.5878485</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                              y_4        x_7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_1_1  -1.0945682  1.2227028</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_2_1   0.3648741  1.0771882</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_3_1  -1.0080171 -0.6119455</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_4_1   0.5549964  0.5068670</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_5_1   0.4360659  0.4600684</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_6_1   0.1053733  1.4843919</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_7_1  -0.2537379  0.8819632</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_8_1  -0.9764912 -0.5367022</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_9_1   0.3942178  1.2855537</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_10_1  1.0149030  0.5878485</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[40]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     y_6        x_7</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_1_1  -0.79929553  1.2227028</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_2_1   0.47001280  1.0771882</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_3_1  -1.15018052 -0.6119455</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_4_1  -0.27159672  0.5068670</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_5_1   0.45742422  0.4600684</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_6_1  -0.01695794  1.4843919</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_7_1  -0.54159436  0.8819632</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_8_1   0.87581342 -0.5367022</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_9_1   0.74083815  1.2855537</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_10_1 -0.16481239  0.5878485</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                               y_6        x_7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_1_1  -0.79929553  1.2227028</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_2_1   0.47001280  1.0771882</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_3_1  -1.15018052 -0.6119455</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_4_1  -0.27159672  0.5068670</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_5_1   0.45742422  0.4600684</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_6_1  -0.01695794  1.4843919</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_7_1  -0.54159436  0.8819632</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_8_1   0.87581342 -0.5367022</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_9_1   0.74083815  1.2855537</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_10_1 -0.16481239  0.5878485</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[41]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                   y_11        x_7</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_1_1  -1.6634113  1.2227028</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_2_1   1.9156908  1.0771882</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_3_1  -0.8168944 -0.6119455</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_4_1   0.3836505  0.5068670</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_5_1  -0.4586323  0.4600684</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_6_1  -0.7157040  1.4843919</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_7_1   0.4295485  0.8819632</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_8_1  -1.1698527 -0.5367022</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_9_1   1.3220883  1.2855537</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_10_1  1.3659646  0.5878485</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                             y_11        x_7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_1_1  -1.6634113  1.2227028</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_2_1   1.9156908  1.0771882</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_3_1  -0.8168944 -0.6119455</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_4_1   0.3836505  0.5068670</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_5_1  -0.4586323  0.4600684</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_6_1  -0.7157040  1.4843919</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_7_1   0.4295485  0.8819632</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_8_1  -1.1698527 -0.5367022</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_9_1   1.3220883  1.2855537</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_10_1  1.3659646  0.5878485</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[42]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                    y_12        x_7</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_1_1  -0.24972371  1.2227028</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_2_1  -0.42472135  1.0771882</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_3_1   1.09843934 -0.6119455</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_4_1   0.67092304  0.5068670</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_5_1   0.03095466  0.4600684</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_6_1   2.36851196  1.4843919</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_7_1   2.58578811  0.8819632</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_8_1   1.21228095 -0.5367022</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_9_1  -1.25119684  1.2855537</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_10_1  0.40026604  0.5878485</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                              y_12        x_7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_1_1  -0.24972371  1.2227028</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_2_1  -0.42472135  1.0771882</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_3_1   1.09843934 -0.6119455</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_4_1   0.67092304  0.5068670</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_5_1   0.03095466  0.4600684</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_6_1   2.36851196  1.4843919</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_7_1   2.58578811  0.8819632</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_8_1   1.21228095 -0.5367022</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_9_1  -1.25119684  1.2855537</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_10_1  0.40026604  0.5878485</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[43]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                    y_1        x_8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_1_1  -1.5727175 -1.3084820</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_2_1  -0.9864274  0.3167263</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_3_1   1.9835123  1.1941583</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_4_1  -1.8513784  0.9130571</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_5_1  -0.9097882 -0.7867530</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_6_1  -1.9514400 -0.4109297</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_7_1  -0.8002765  0.4763737</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_8_1  -1.8693616  0.1859159</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_9_1  -0.7505715 -1.3247163</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_10_1 -0.5909384  1.1723711</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                              y_1        x_8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_1_1  -1.5727175 -1.3084820</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_2_1  -0.9864274  0.3167263</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_3_1   1.9835123  1.1941583</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_4_1  -1.8513784  0.9130571</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_5_1  -0.9097882 -0.7867530</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_6_1  -1.9514400 -0.4109297</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_7_1  -0.8002765  0.4763737</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_8_1  -1.8693616  0.1859159</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_9_1  -0.7505715 -1.3247163</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_10_1 -0.5909384  1.1723711</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[44]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                    y_4        x_8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_1_1  -1.0945682 -1.3084820</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_2_1   0.3648741  0.3167263</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_3_1  -1.0080171  1.1941583</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_4_1   0.5549964  0.9130571</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_5_1   0.4360659 -0.7867530</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_6_1   0.1053733 -0.4109297</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_7_1  -0.2537379  0.4763737</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_8_1  -0.9764912  0.1859159</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_9_1   0.3942178 -1.3247163</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_10_1  1.0149030  1.1723711</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                              y_4        x_8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_1_1  -1.0945682 -1.3084820</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_2_1   0.3648741  0.3167263</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_3_1  -1.0080171  1.1941583</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_4_1   0.5549964  0.9130571</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_5_1   0.4360659 -0.7867530</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_6_1   0.1053733 -0.4109297</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_7_1  -0.2537379  0.4763737</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_8_1  -0.9764912  0.1859159</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_9_1   0.3942178 -1.3247163</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_10_1  1.0149030  1.1723711</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[45]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                    y_5        x_8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_1_1   0.6314438 -1.3084820</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_2_1  -0.4833983  0.3167263</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_3_1  -1.5263339  1.1941583</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_4_1   0.6168423  0.9130571</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_5_1   1.2292868 -0.7867530</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_6_1   0.1574530 -0.4109297</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_7_1   1.4063421  0.4763737</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_8_1   0.3968009  0.1859159</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_9_1   0.3264230 -1.3247163</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_10_1 -1.4593433  1.1723711</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                              y_5        x_8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_1_1   0.6314438 -1.3084820</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_2_1  -0.4833983  0.3167263</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_3_1  -1.5263339  1.1941583</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_4_1   0.6168423  0.9130571</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_5_1   1.2292868 -0.7867530</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_6_1   0.1574530 -0.4109297</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_7_1   1.4063421  0.4763737</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_8_1   0.3968009  0.1859159</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_9_1   0.3264230 -1.3247163</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_10_1 -1.4593433  1.1723711</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[46]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     y_8        x_8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_1_1   1.01340453 -1.3084820</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_2_1   1.05360525  0.3167263</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_3_1  -0.07142864  1.1941583</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_4_1   0.95244461  0.9130571</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_5_1  -0.38403752 -0.7867530</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_6_1  -0.41775999 -0.4109297</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_7_1  -0.47026817  0.4763737</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_8_1  -1.69018029  0.1859159</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_9_1  -0.94549766 -1.3247163</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_10_1 -0.34301196  1.1723711</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                               y_8        x_8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_1_1   1.01340453 -1.3084820</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_2_1   1.05360525  0.3167263</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_3_1  -0.07142864  1.1941583</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_4_1   0.95244461  0.9130571</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_5_1  -0.38403752 -0.7867530</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_6_1  -0.41775999 -0.4109297</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_7_1  -0.47026817  0.4763737</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_8_1  -1.69018029  0.1859159</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_9_1  -0.94549766 -1.3247163</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_10_1 -0.34301196  1.1723711</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[47]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     y_9        x_8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_1_1   0.35846241 -1.3084820</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_2_1   0.04818886  0.3167263</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_3_1   1.13017228  1.1941583</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_4_1  -0.52763231  0.9130571</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_5_1   0.47957533 -0.7867530</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_6_1   1.41752930 -0.4109297</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_7_1  -0.08009077  0.4763737</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_8_1  -0.39418700  0.1859159</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_9_1   0.52525764 -1.3247163</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_10_1 -0.79593510  1.1723711</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                               y_9        x_8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_1_1   0.35846241 -1.3084820</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_2_1   0.04818886  0.3167263</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_3_1   1.13017228  1.1941583</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_4_1  -0.52763231  0.9130571</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_5_1   0.47957533 -0.7867530</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_6_1   1.41752930 -0.4109297</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_7_1  -0.08009077  0.4763737</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_8_1  -0.39418700  0.1859159</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_9_1   0.52525764 -1.3247163</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_10_1 -0.79593510  1.1723711</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[48]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                   y_11        x_8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_1_1  -1.6634113 -1.3084820</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_2_1   1.9156908  0.3167263</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_3_1  -0.8168944  1.1941583</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_4_1   0.3836505  0.9130571</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_5_1  -0.4586323 -0.7867530</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_6_1  -0.7157040 -0.4109297</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_7_1   0.4295485  0.4763737</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_8_1  -1.1698527  0.1859159</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_9_1   1.3220883 -1.3247163</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample_10_1  1.3659646  1.1723711</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                             y_11        x_8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_1_1  -1.6634113 -1.3084820</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_2_1   1.9156908  0.3167263</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_3_1  -0.8168944  1.1941583</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_4_1   0.3836505  0.9130571</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_5_1  -0.4586323 -0.7867530</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_6_1  -0.7157040 -0.4109297</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_7_1   0.4295485  0.4763737</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_8_1  -1.1698527  0.1859159</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_9_1   1.3220883 -1.3247163</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_10_1  1.3659646  1.1723711</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="pairwiseApply.html">pairwiseApply</a></span><span class="op">(</span></span></span>

@@ -154,19 +154,23 @@ linked. If one or more <code>data.frame</code>s, colnames should be as specified
 <span class="r-in"><span><span class="co"># Input objects and syntax:</span></span></span>
 <span class="r-in"><span><span class="co">## define `x` and `y` as characters</span></span></span>
 <span class="r-in"><span><span class="va">web</span> <span class="op">&lt;-</span> <span class="fu"><a href="weaveWeb-generic.html">weaveWeb</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>     x <span class="op">=</span> <span class="st">"ko"</span>, y <span class="op">=</span> <span class="st">"cpd"</span>, link <span class="op">=</span> <span class="fu"><a href="kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>     tableX <span class="op">=</span> <span class="va">t2</span>, tableY <span class="op">=</span> <span class="va">t1</span>,</span></span>
-<span class="r-in"><span>     metadata <span class="op">=</span> <span class="cn">NULL</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span></span></span>
-<span class="r-in"><span> <span class="op">)</span></span></span>
+<span class="r-in"><span>    x <span class="op">=</span> <span class="st">"ko"</span>, y <span class="op">=</span> <span class="st">"cpd"</span>, link <span class="op">=</span> <span class="fu"><a href="kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    tableX <span class="op">=</span> <span class="va">t2</span>, tableY <span class="op">=</span> <span class="va">t1</span>,</span></span>
+<span class="r-in"><span>    metadata <span class="op">=</span> <span class="cn">NULL</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Dropped features in tableX: 2476 remain. </span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Argument `metadata` not provided; Please validate sample ID order.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> data frame with 0 columns and 36 rows</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## define `x` and `y` with a formula</span></span></span>
 <span class="r-in"><span><span class="va">web2</span> <span class="op">&lt;-</span> <span class="fu"><a href="weaveWeb-generic.html">weaveWeb</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>     x <span class="op">=</span> <span class="va">cpd</span> <span class="op">~</span> <span class="va">ko</span>, link <span class="op">=</span> <span class="fu"><a href="kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>     tableX <span class="op">=</span> <span class="va">t2</span>, tableY <span class="op">=</span> <span class="va">t1</span>,</span></span>
-<span class="r-in"><span>     metadata <span class="op">=</span> <span class="cn">NULL</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span></span></span>
-<span class="r-in"><span> <span class="op">)</span></span></span>
+<span class="r-in"><span>    x <span class="op">=</span> <span class="va">cpd</span> <span class="op">~</span> <span class="va">ko</span>, link <span class="op">=</span> <span class="fu"><a href="kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    tableX <span class="op">=</span> <span class="va">t2</span>, tableY <span class="op">=</span> <span class="va">t1</span>,</span></span>
+<span class="r-in"><span>    metadata <span class="op">=</span> <span class="cn">NULL</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Dropped features in tableX: 2476 remain. </span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Argument `metadata` not provided; Please validate sample ID order.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> data frame with 0 columns and 36 rows</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/identical.html" class="external-link">identical</a></span><span class="op">(</span><span class="va">web</span>, <span class="va">web2</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
@@ -174,10 +178,26 @@ linked. If one or more <code>data.frame</code>s, colnames should be as specified
 <span class="r-in"><span><span class="co"># Method for MultiAssayExperiment S4 object</span></span></span>
 <span class="r-in"><span><span class="va">mae</span> <span class="op">&lt;-</span> <span class="fu"><a href="anansi-coercion.html">asMAE</a></span><span class="op">(</span><span class="va">web</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="weaveWeb-generic.html">weaveWeb</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>     x <span class="op">=</span> <span class="va">mae</span>, link <span class="op">=</span> <span class="fu"><a href="kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>     tableY <span class="op">=</span> <span class="st">"cpd"</span>, tableX <span class="op">=</span> <span class="st">"ko"</span>,</span></span>
-<span class="r-in"><span>     force_new <span class="op">=</span> <span class="cn">FALSE</span></span></span>
-<span class="r-in"><span> <span class="op">)</span></span></span>
+<span class="r-in"><span>    x <span class="op">=</span> <span class="va">mae</span>, link <span class="op">=</span> <span class="fu"><a href="kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    tableY <span class="op">=</span> <span class="st">"cpd"</span>, tableX <span class="op">=</span> <span class="st">"ko"</span>,</span></span>
+<span class="r-in"><span>    force_new <span class="op">=</span> <span class="cn">FALSE</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Argument `metadata` not provided; Please validate sample ID order.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> data frame with 0 columns and 36 rows</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi::AnansiWeb S7_object with 36 observations:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     tableY: cpd (3 features)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     tableX: ko (2476 features)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Use @ to access: tableX, tableY, dictionary, metadata.</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Method for TreeSummarizedExperiment S4 object</span></span></span>
+<span class="r-in"><span><span class="va">tse</span> <span class="op">&lt;-</span> <span class="fu"><a href="anansi-coercion.html">asTSE</a></span><span class="op">(</span><span class="va">web</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="weaveWeb-generic.html">weaveWeb</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    x <span class="op">=</span> <span class="va">tse</span>, link <span class="op">=</span> <span class="fu"><a href="kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    tableY <span class="op">=</span> <span class="st">"cpd"</span>, tableX <span class="op">=</span> <span class="st">"ko"</span>,</span></span>
+<span class="r-in"><span>    force_new <span class="op">=</span> <span class="cn">FALSE</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Argument `metadata` not provided; Please validate sample ID order.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> data frame with 0 columns and 36 rows</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> anansi::AnansiWeb S7_object with 36 observations:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     tableY: cpd (3 features)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     tableX: ko (2476 features)</span>

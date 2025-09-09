@@ -81,28 +81,859 @@ See <code>?base::mapply()</code></p>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">web</span> <span class="op">&lt;-</span> <span class="fu"><a href="randomAnansi.html">randomWeb</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                       sample_id repeated group_ab subtype     score_a</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_1_1   sample_1    rep_1        b       z -0.63710166</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_2_1   sample_2    rep_1        a       x  0.74632635</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_3_1   sample_3    rep_1        a       y  1.01846753</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_4_1   sample_4    rep_1        a       z  0.24092295</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_5_1   sample_5    rep_1        b       x  0.20998094</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_6_1   sample_6    rep_1        a       y  1.97638942</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_7_1   sample_7    rep_1        b       z -0.14150444</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_8_1   sample_8    rep_1        b       z  2.69307575</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_9_1   sample_9    rep_1        b       x -1.45569611</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_10_1 sample_10    rep_1        b       z  0.07667912</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                          score_b    score_c</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_1_1   1.5548854  1.2848823</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_2_1  -0.6257260 -2.1422504</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_3_1  -1.1611169 -0.3039372</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_4_1  -0.7328777 -0.7173421</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_5_1  -0.1246043 -0.4457581</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_6_1  -1.1253530 -1.1119900</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_7_1   0.4904111 -0.1787959</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_8_1   1.6677152  0.7971751</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_9_1  -0.6412408  0.6582043</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_10_1  0.6439974  0.3165413</span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># For each feature pair, was the value for x higher than the value for y?</span></span></span>
 <span class="r-in"><span><span class="fu">pairwiseApply</span><span class="op">(</span></span></span>
 <span class="r-in"><span>    X <span class="op">=</span> <span class="va">web</span>,</span></span>
-<span class="r-in"><span>    FUN <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>    MoreArgs <span class="op">=</span> <span class="cn">NULL</span>, SIMPLIFY <span class="op">=</span> <span class="cn">TRUE</span>, USE.NAMES <span class="op">=</span> <span class="cn">TRUE</span></span></span>
+<span class="r-in"><span>    FUN <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="va">x</span> <span class="op">&gt;</span> <span class="va">y</span>,</span></span>
+<span class="r-in"><span>    MoreArgs <span class="op">=</span> <span class="cn">NULL</span>, SIMPLIFY <span class="op">=</span> <span class="cn">FALSE</span>, USE.NAMES <span class="op">=</span> <span class="cn">TRUE</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_1y_1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] FALSE  TRUE FALSE  TRUE FALSE FALSE  TRUE  TRUE  TRUE FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_1y_2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] FALSE  TRUE  TRUE  TRUE FALSE FALSE FALSE  TRUE  TRUE  TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_1y_3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] FALSE  TRUE FALSE  TRUE FALSE FALSE  TRUE  TRUE FALSE  TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_1y_4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] FALSE  TRUE  TRUE  TRUE  TRUE FALSE FALSE  TRUE FALSE FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_1y_5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] FALSE  TRUE FALSE FALSE FALSE FALSE  TRUE  TRUE  TRUE FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_1y_6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] FALSE  TRUE FALSE  TRUE FALSE FALSE  TRUE  TRUE FALSE FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_1y_7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] FALSE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE FALSE  TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_1y_10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] FALSE  TRUE FALSE  TRUE FALSE FALSE  TRUE  TRUE  TRUE  TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_1y_11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] FALSE  TRUE  TRUE FALSE  TRUE FALSE  TRUE  TRUE FALSE FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_1y_12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] FALSE  TRUE FALSE  TRUE  TRUE FALSE  TRUE FALSE FALSE FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_2y_1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  TRUE  TRUE FALSE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_2y_5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] FALSE  TRUE FALSE FALSE FALSE  TRUE  TRUE FALSE  TRUE FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_2y_7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] FALSE  TRUE FALSE FALSE  TRUE FALSE  TRUE FALSE  TRUE  TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_2y_9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  TRUE  TRUE FALSE  TRUE FALSE FALSE  TRUE FALSE  TRUE  TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_3y_5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] FALSE  TRUE  TRUE FALSE FALSE  TRUE FALSE  TRUE  TRUE FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_3y_6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] FALSE FALSE FALSE  TRUE FALSE FALSE  TRUE  TRUE FALSE FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_3y_7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] FALSE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE FALSE  TRUE  TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_3y_8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] FALSE FALSE FALSE  TRUE  TRUE  TRUE FALSE FALSE  TRUE  TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_3y_10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] FALSE FALSE FALSE  TRUE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_3y_11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] FALSE FALSE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_4y_3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] FALSE  TRUE FALSE  TRUE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_4y_4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] FALSE  TRUE  TRUE FALSE  TRUE  TRUE FALSE  TRUE FALSE FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_4y_5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] FALSE  TRUE FALSE FALSE FALSE  TRUE  TRUE  TRUE  TRUE FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_4y_6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] FALSE  TRUE FALSE FALSE FALSE  TRUE  TRUE  TRUE  TRUE FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_4y_7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] FALSE  TRUE  TRUE FALSE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_4y_9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  TRUE  TRUE FALSE  TRUE FALSE  TRUE  TRUE FALSE  TRUE  TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_4y_10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] FALSE  TRUE FALSE FALSE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_4y_11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] FALSE  TRUE  TRUE FALSE  TRUE FALSE  TRUE  TRUE  TRUE FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_5y_3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] FALSE  TRUE FALSE  TRUE FALSE  TRUE  TRUE  TRUE  TRUE FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_5y_5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] FALSE  TRUE FALSE FALSE FALSE  TRUE FALSE  TRUE  TRUE FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_5y_6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] FALSE  TRUE FALSE FALSE FALSE FALSE FALSE  TRUE FALSE FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_5y_9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  TRUE  TRUE FALSE  TRUE FALSE FALSE FALSE  TRUE  TRUE FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_5y_11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] FALSE  TRUE FALSE FALSE FALSE FALSE  TRUE  TRUE  TRUE FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_5y_12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] FALSE  TRUE FALSE FALSE FALSE FALSE FALSE  TRUE  TRUE FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_6y_2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] FALSE  TRUE  TRUE FALSE  TRUE FALSE FALSE  TRUE  TRUE FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_6y_4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_6y_5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] FALSE  TRUE FALSE FALSE FALSE  TRUE  TRUE  TRUE  TRUE FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_6y_7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] FALSE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_6y_8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] FALSE  TRUE FALSE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_6y_11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] FALSE  TRUE  TRUE FALSE  TRUE FALSE  TRUE  TRUE  TRUE FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_7y_1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] FALSE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_7y_3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] FALSE  TRUE  TRUE FALSE FALSE  TRUE  TRUE  TRUE FALSE  TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_7y_4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  TRUE  TRUE  TRUE FALSE  TRUE  TRUE FALSE  TRUE FALSE FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_7y_5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] FALSE  TRUE  TRUE FALSE FALSE  TRUE  TRUE  TRUE  TRUE FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_7y_7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] FALSE  TRUE  TRUE FALSE  TRUE FALSE  TRUE  TRUE  TRUE  TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_7y_9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1]  TRUE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE FALSE  TRUE  TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_7y_11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] FALSE  TRUE  TRUE FALSE  TRUE FALSE  TRUE  TRUE  TRUE  TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_8y_7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] FALSE FALSE  TRUE  TRUE  TRUE FALSE  TRUE FALSE  TRUE  TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Run cor.test() on each pair of features</span></span></span>
+<span class="r-in"><span><span class="fu">pairwiseApply</span><span class="op">(</span></span></span>
+<span class="r-in"><span>    X <span class="op">=</span> <span class="va">web</span>,</span></span>
+<span class="r-in"><span>    FUN <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.test.html" class="external-link">cor.test</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    MoreArgs <span class="op">=</span> <span class="cn">NULL</span>, SIMPLIFY <span class="op">=</span> <span class="cn">FALSE</span>, USE.NAMES <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       x_1y_1       x_1y_2       x_1y_3       x_1y_4       x_1y_5       x_1y_6 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  0.393958440  0.182903804 -0.128045777  0.069111774  0.413979595 -0.508882536 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       x_1y_7      x_1y_10      x_1y_11      x_1y_12       x_2y_1       x_2y_5 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -0.180015405  0.009612970  0.009173661 -0.094797946  0.371272683  0.096272424 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       x_2y_7       x_2y_9       x_3y_5       x_3y_6       x_3y_7       x_3y_8 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  0.258486552 -0.222546424  0.343832895  0.128071414  0.044479656  0.035560582 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      x_3y_10      x_3y_11       x_4y_3       x_4y_4       x_4y_5       x_4y_6 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -0.397698394  0.374628524 -0.209309119  0.403365173 -0.654835261 -0.232183406 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       x_4y_7       x_4y_9      x_4y_10      x_4y_11       x_5y_3       x_5y_5 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  0.091723101  0.126071902 -0.558179929  0.200957633  0.344670708 -0.456056608 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       x_5y_6       x_5y_9      x_5y_11      x_5y_12       x_6y_2       x_6y_4 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -0.447725666  0.201780805  0.011952422  0.073080177  0.032288322  0.253005896 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       x_6y_5       x_6y_7       x_6y_8      x_6y_11       x_7y_1       x_7y_3 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -0.399227588 -0.445301625  0.279454364 -0.456102312  0.208444375  0.247073361 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       x_7y_4       x_7y_5       x_7y_7       x_7y_9      x_7y_11       x_8y_7 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -0.264359268 -0.223897959 -0.365079047  0.448325257 -0.482706037 -0.075885882 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_1y_1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	Pearson's product-moment correlation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> data:  x and y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> t = 1.2123, df = 8, p-value = 0.26</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alternative hypothesis: true correlation is not equal to 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95 percent confidence interval:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  -0.3134075  0.8201495</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample estimates:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       cor </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.3939584 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_1y_2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	Pearson's product-moment correlation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> data:  x and y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> t = 0.52621, df = 8, p-value = 0.613</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alternative hypothesis: true correlation is not equal to 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95 percent confidence interval:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  -0.5048631  0.7286213</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample estimates:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       cor </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.1829038 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_1y_3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	Pearson's product-moment correlation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> data:  x and y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> t = -0.36517, df = 8, p-value = 0.7244</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alternative hypothesis: true correlation is not equal to 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95 percent confidence interval:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  -0.7011451  0.5455645</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample estimates:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        cor </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -0.1280458 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_1y_4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	Pearson's product-moment correlation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> data:  x and y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> t = 0.19595, df = 8, p-value = 0.8495</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alternative hypothesis: true correlation is not equal to 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95 percent confidence interval:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  -0.5860147  0.6696007</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample estimates:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        cor </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.06911177 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_1y_5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	Pearson's product-moment correlation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> data:  x and y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> t = 1.2863, df = 8, p-value = 0.2343</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alternative hypothesis: true correlation is not equal to 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95 percent confidence interval:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  -0.2916716  0.8278300</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample estimates:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       cor </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.4139796 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_1y_6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	Pearson's product-moment correlation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> data:  x and y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> t = -1.672, df = 8, p-value = 0.1331</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alternative hypothesis: true correlation is not equal to 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95 percent confidence interval:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  -0.8622416  0.1776704</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample estimates:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        cor </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -0.5088825 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_1y_7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	Pearson's product-moment correlation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> data:  x and y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> t = -0.51762, df = 8, p-value = 0.6187</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alternative hypothesis: true correlation is not equal to 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95 percent confidence interval:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  -0.7272171  0.5070852</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample estimates:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        cor </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -0.1800154 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_1y_10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	Pearson's product-moment correlation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> data:  x and y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> t = 0.027191, df = 8, p-value = 0.979</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alternative hypothesis: true correlation is not equal to 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95 percent confidence interval:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  -0.6237889  0.6353935</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample estimates:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        cor </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.00961297 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_1y_11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	Pearson's product-moment correlation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> data:  x and y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> t = 0.025948, df = 8, p-value = 0.9799</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alternative hypothesis: true correlation is not equal to 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95 percent confidence interval:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  -0.6240572  0.6351315</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample estimates:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         cor </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.009173661 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_1y_12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	Pearson's product-moment correlation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> data:  x and y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> t = -0.26934, df = 8, p-value = 0.7945</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alternative hypothesis: true correlation is not equal to 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95 percent confidence interval:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  -0.6836208  0.5687771</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample estimates:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         cor </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -0.09479795 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_2y_1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	Pearson's product-moment correlation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> data:  x and y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> t = 1.131, df = 8, p-value = 0.2908</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alternative hypothesis: true correlation is not equal to 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95 percent confidence interval:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  -0.3371720  0.8112571</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample estimates:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       cor </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.3712727 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_2y_5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	Pearson's product-moment correlation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> data:  x and y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> t = 0.27357, df = 8, p-value = 0.7913</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alternative hypothesis: true correlation is not equal to 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95 percent confidence interval:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  -0.5677696  0.6844126</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample estimates:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        cor </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.09627242 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_2y_7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	Pearson's product-moment correlation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> data:  x and y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> t = 0.75683, df = 8, p-value = 0.4709</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alternative hypothesis: true correlation is not equal to 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95 percent confidence interval:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  -0.4432842  0.7638038</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample estimates:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       cor </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.2584866 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_2y_9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	Pearson's product-moment correlation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> data:  x and y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> t = -0.64565, df = 8, p-value = 0.5366</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alternative hypothesis: true correlation is not equal to 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95 percent confidence interval:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  -0.7474405  0.4734153</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample estimates:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        cor </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -0.2225464 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_3y_5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	Pearson's product-moment correlation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> data:  x and y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> t = 1.0356, df = 8, p-value = 0.3307</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alternative hypothesis: true correlation is not equal to 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95 percent confidence interval:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  -0.3647586  0.8002221</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample estimates:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       cor </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.3438329 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_3y_6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	Pearson's product-moment correlation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> data:  x and y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> t = 0.36525, df = 8, p-value = 0.7244</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alternative hypothesis: true correlation is not equal to 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95 percent confidence interval:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  -0.5455462  0.7011583</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample estimates:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       cor </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.1280714 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_3y_7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	Pearson's product-moment correlation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> data:  x and y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> t = 0.12593, df = 8, p-value = 0.9029</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alternative hypothesis: true correlation is not equal to 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95 percent confidence interval:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  -0.6020062  0.6557415</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample estimates:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        cor </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.04447966 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_3y_8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	Pearson's product-moment correlation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> data:  x and y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> t = 0.10064, df = 8, p-value = 0.9223</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alternative hypothesis: true correlation is not equal to 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95 percent confidence interval:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  -0.6076714  0.6506196</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample estimates:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        cor </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.03556058 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_3y_10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	Pearson's product-moment correlation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> data:  x and y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> t = -1.226, df = 8, p-value = 0.2551</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alternative hypothesis: true correlation is not equal to 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95 percent confidence interval:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  -0.8215959  0.3094028</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample estimates:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        cor </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -0.3976984 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_3y_11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	Pearson's product-moment correlation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> data:  x and y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> t = 1.1428, df = 8, p-value = 0.2862</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alternative hypothesis: true correlation is not equal to 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95 percent confidence interval:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  -0.3337125  0.8125854</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample estimates:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       cor </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.3746285 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_4y_3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	Pearson's product-moment correlation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> data:  x and y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> t = -0.60543, df = 8, p-value = 0.5617</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alternative hypothesis: true correlation is not equal to 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95 percent confidence interval:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  -0.7412488  0.4841173</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample estimates:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        cor </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -0.2093091 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_4y_4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	Pearson's product-moment correlation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> data:  x and y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> t = 1.2468, df = 8, p-value = 0.2477</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alternative hypothesis: true correlation is not equal to 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95 percent confidence interval:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  -0.3032866  0.8237773</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample estimates:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       cor </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.4033652 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_4y_5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	Pearson's product-moment correlation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> data:  x and y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> t = -2.4507, df = 8, p-value = 0.03989</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alternative hypothesis: true correlation is not equal to 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95 percent confidence interval:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  -0.90948113 -0.04289438</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample estimates:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        cor </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -0.6548353 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_4y_6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	Pearson's product-moment correlation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> data:  x and y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> t = -0.67516, df = 8, p-value = 0.5186</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alternative hypothesis: true correlation is not equal to 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95 percent confidence interval:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  -0.7518916  0.4654927</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample estimates:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        cor </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -0.2321834 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_4y_7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	Pearson's product-moment correlation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> data:  x and y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> t = 0.26053, df = 8, p-value = 0.801</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alternative hypothesis: true correlation is not equal to 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95 percent confidence interval:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  -0.5708718  0.6819650</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample estimates:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       cor </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.0917231 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_4y_9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	Pearson's product-moment correlation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> data:  x and y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> t = 0.35945, df = 8, p-value = 0.7286</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alternative hypothesis: true correlation is not equal to 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95 percent confidence interval:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  -0.5469720  0.7001237</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample estimates:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       cor </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.1260719 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_4y_10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	Pearson's product-moment correlation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> data:  x and y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> t = -1.9028, df = 8, p-value = 0.09357</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alternative hypothesis: true correlation is not equal to 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95 percent confidence interval:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  -0.8789159  0.1101624</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample estimates:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        cor </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -0.5581799 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_4y_11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	Pearson's product-moment correlation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> data:  x and y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> t = 0.58023, df = 8, p-value = 0.5777</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alternative hypothesis: true correlation is not equal to 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95 percent confidence interval:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  -0.4907642  0.7372953</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample estimates:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       cor </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.2009576 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_5y_3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	Pearson's product-moment correlation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> data:  x and y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> t = 1.0385, df = 8, p-value = 0.3294</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alternative hypothesis: true correlation is not equal to 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95 percent confidence interval:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  -0.3639343  0.8005637</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample estimates:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       cor </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.3446707 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_5y_5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	Pearson's product-moment correlation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> data:  x and y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> t = -1.4494, df = 8, p-value = 0.1853</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alternative hypothesis: true correlation is not equal to 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95 percent confidence interval:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  -0.8434813  0.2434854</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample estimates:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        cor </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -0.4560566 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_5y_6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	Pearson's product-moment correlation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> data:  x and y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> t = -1.4162, df = 8, p-value = 0.1944</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alternative hypothesis: true correlation is not equal to 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95 percent confidence interval:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  -0.8404338  0.2533082</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample estimates:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        cor </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -0.4477257 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_5y_9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	Pearson's product-moment correlation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> data:  x and y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> t = 0.58271, df = 8, p-value = 0.5761</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alternative hypothesis: true correlation is not equal to 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95 percent confidence interval:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  -0.4901126  0.7376866</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample estimates:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       cor </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.2017808 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_5y_11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	Pearson's product-moment correlation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> data:  x and y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> t = 0.033809, df = 8, p-value = 0.9739</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alternative hypothesis: true correlation is not equal to 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95 percent confidence interval:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  -0.6223575  0.6367865</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample estimates:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        cor </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.01195242 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_5y_12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	Pearson's product-moment correlation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> data:  x and y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> t = 0.20726, df = 8, p-value = 0.841</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alternative hypothesis: true correlation is not equal to 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95 percent confidence interval:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  -0.5833898  0.6717950</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample estimates:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        cor </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.07308018 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_6y_2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	Pearson's product-moment correlation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> data:  x and y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> t = 0.091373, df = 8, p-value = 0.9294</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alternative hypothesis: true correlation is not equal to 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95 percent confidence interval:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  -0.6097336  0.6487263</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample estimates:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        cor </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.03228832 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_6y_4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	Pearson's product-moment correlation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> data:  x and y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> t = 0.73967, df = 8, p-value = 0.4806</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alternative hypothesis: true correlation is not equal to 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95 percent confidence interval:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  -0.4479839  0.7613498</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample estimates:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       cor </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.2530059 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_6y_5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	Pearson's product-moment correlation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> data:  x and y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> t = -1.2316, df = 8, p-value = 0.2531</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alternative hypothesis: true correlation is not equal to 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95 percent confidence interval:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  -0.8221858  0.3077581</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample estimates:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        cor </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -0.3992276 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_6y_7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	Pearson's product-moment correlation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> data:  x and y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> t = -1.4067, df = 8, p-value = 0.1972</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alternative hypothesis: true correlation is not equal to 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95 percent confidence interval:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  -0.8395424  0.2561394</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample estimates:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        cor </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -0.4453016 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_6y_8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	Pearson's product-moment correlation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> data:  x and y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> t = 0.82321, df = 8, p-value = 0.4342</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alternative hypothesis: true correlation is not equal to 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95 percent confidence interval:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  -0.4249411  0.7730594</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample estimates:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       cor </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.2794544 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_6y_11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	Pearson's product-moment correlation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> data:  x and y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> t = -1.4496, df = 8, p-value = 0.1852</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alternative hypothesis: true correlation is not equal to 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95 percent confidence interval:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  -0.8434979  0.2434311</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample estimates:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        cor </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -0.4561023 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_7y_1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	Pearson's product-moment correlation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> data:  x and y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> t = 0.60281, df = 8, p-value = 0.5633</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alternative hypothesis: true correlation is not equal to 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95 percent confidence interval:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  -0.4848093  0.7408412</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample estimates:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       cor </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.2084444 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_7y_3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	Pearson's product-moment correlation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> data:  x and y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> t = 0.72119, df = 8, p-value = 0.4913</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alternative hypothesis: true correlation is not equal to 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95 percent confidence interval:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  -0.4530277  0.7586769</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample estimates:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       cor </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.2470734 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_7y_4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	Pearson's product-moment correlation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> data:  x and y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> t = -0.7753, df = 8, p-value = 0.4605</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alternative hypothesis: true correlation is not equal to 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95 percent confidence interval:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  -0.7664173  0.4382052</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample estimates:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        cor </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -0.2643593 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_7y_5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	Pearson's product-moment correlation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> data:  x and y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> t = -0.64978, df = 8, p-value = 0.534</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alternative hypothesis: true correlation is not equal to 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95 percent confidence interval:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  -0.7480676  0.4723110</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample estimates:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       cor </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -0.223898 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_7y_7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	Pearson's product-moment correlation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> data:  x and y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> t = -1.1092, df = 8, p-value = 0.2996</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alternative hypothesis: true correlation is not equal to 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95 percent confidence interval:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  -0.8087934  0.3435069</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample estimates:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       cor </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -0.365079 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_7y_9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	Pearson's product-moment correlation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> data:  x and y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> t = 1.4186, df = 8, p-value = 0.1938</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alternative hypothesis: true correlation is not equal to 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95 percent confidence interval:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  -0.252606  0.840654</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample estimates:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       cor </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.4483253 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_7y_11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	Pearson's product-moment correlation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> data:  x and y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> t = -1.5589, df = 8, p-value = 0.1576</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alternative hypothesis: true correlation is not equal to 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95 percent confidence interval:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  -0.8530650  0.2110694</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample estimates:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       cor </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -0.482706 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $x_8y_7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 	Pearson's product-moment correlation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> data:  x and y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> t = -0.21526, df = 8, p-value = 0.835</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alternative hypothesis: true correlation is not equal to 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95 percent confidence interval:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  -0.6733402  0.5815256</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> sample estimates:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         cor </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -0.07588588 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
