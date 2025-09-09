@@ -126,15 +126,14 @@
 #' p
 #'
 anansi <- function(
-    web,
-    formula,
-    groups = NULL,
-    metadata = NULL,
-    adjust.method = "BH",
-    verbose = TRUE,
-    return.format = "table",
-    ...
-) {
+        web,
+        formula,
+        groups = NULL,
+        metadata = NULL,
+        adjust.method = "BH",
+        verbose = TRUE,
+        return.format = "table",
+        ...) {
     return.format <-
         match.arg(return.format, choices = c("table", "list", "raw"))
     # generate anansiYarn input object
@@ -146,11 +145,11 @@ anansi <- function(
         verbose  = verbose
     )
     int.terms <- input$int.terms
-    groups    <- input$groups
-    group.id  <- input$group.id
+    groups <- input$groups
+    group.id <- input$group.id
     errorterm <- input$error.term
     sat_model <- input$lm.formula
-    metadata  <- input$metadata
+    metadata <- input$metadata
 
     out.list <- vector(
         "list",
@@ -183,8 +182,7 @@ anansi <- function(
             named_group_list(group.id, groups, metadata)
         attr(results, "model_terms") <- named_term_list(int.terms, metadata)
     }
-    switch(
-        return.format,
+    switch(return.format,
         "table" = return(results),
         "list" = return(list(results, input = input)),
         "raw" = return(out.list)

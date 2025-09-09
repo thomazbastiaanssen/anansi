@@ -48,6 +48,9 @@ webdf <- as.data.frame(web)
 
 # Coerce to MultiAssayExperiment
 mae <- asMAE(web)
+
+# Coerce to TreeSummarizedExperiment
+tse <- asTSE(web)
 }
 \seealso{
 \itemize{

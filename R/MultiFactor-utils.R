@@ -31,8 +31,7 @@ mapMultiFactor <- function(x, mode = "counts") {
     )
 
     # mx is a vector of length i that determines the values of sparse Matrix.
-    mx <- switch(
-        mode,
+    mx <- switch(mode,
         "counts" = unlist(
             lapply(x, function(y) {
                 lapply(y, function(z) length(unique(z)))

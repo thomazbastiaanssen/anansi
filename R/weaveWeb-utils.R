@@ -199,7 +199,7 @@ web_missing_link <- function(tableX, tableY, terms, metadata = NULL) {
     }
     stopifnot(
         "args 'tableY,X' cannot contradict args 'experiment1,2'." =
-            length( e_out ) == 1L
+            length(e_out) == 1L
     )
 
     t_out <- unique(c(tab.type, ass.type))
@@ -208,7 +208,7 @@ web_missing_link <- function(tableX, tableY, terms, metadata = NULL) {
     }
     stopifnot(
         "args 'typeY,X.' cannot contradict args 'assay.type1,2'." =
-            length( t_out ) == 1L
+            length(t_out) == 1L
     )
 
     return(list(e_out, t_out))
@@ -216,24 +216,27 @@ web_missing_link <- function(tableX, tableY, terms, metadata = NULL) {
 
 #' @importFrom SummarizedExperiment assay assayNames
 #' @importFrom SingleCellExperiment altExp altExpNames
-.get_table_from_tse <- function(tse, y_id, x_id){
+.get_table_from_tse <- function(tse, y_id, x_id) {
     all_assays <- c(assayNames(tse), altExpNames(tse))
-    if(is.numeric(y_id)) { y_id <- all_assays[y_id] }
-    if(is.numeric(x_id)) { x_id <- all_assays[x_id] }
+    if (is.numeric(y_id)) {
+        y_id <- all_assays[y_id]
+    }
+    if (is.numeric(x_id)) {
+        x_id <- all_assays[x_id]
+    }
 
 
     tab_list <- lapply(c(y_id, x_id),
-           FUN = function(id){
-
-               if( !id %in% all_assays ) {
-                   stop("no assay with name ",id, " found.", call. = FALSE)
-               }
-               if( id %in% assayNames(tse) ){
-                   return( tse )
-               } else {
-                   return( altExp(tse, id) )
-               }
-           }
+        FUN = function(id) {
+            if (!id %in% all_assays) {
+                stop("no assay with name ", id, " found.", call. = FALSE)
+            }
+            if (id %in% assayNames(tse)) {
+                return(tse)
+            } else {
+                return(altExp(tse, id))
+            }
+        }
     )
     names(tab_list) <- c(y_id, x_id)
 
@@ -241,20 +244,26 @@ web_missing_link <- function(tableX, tableY, terms, metadata = NULL) {
 }
 
 #
-.test_mae_has_exp <- function (x, experiment) {
+.test_mae_has_exp <- function(x, experiment) {
     if (is.numeric(experiment) && experiment > length(experiments(x))) {
         stop("'", deparse(substitute(experiment)), "' is greater than the ",
-             "number of experiments in MAE object.", call. = FALSE)
+            "number of experiments in MAE object.",
+            call. = FALSE
+        )
     }
     if (!(is.character(experiment) && experiment %in% names(experiments(x)) ||
-          is.numeric(experiment) && experiment <= length(experiments(x)))) {
+        is.numeric(experiment) && experiment <= length(experiments(x)))) {
         stop("'", deparse(substitute(experiment)), "' ", "must be numeric or character value specifying ",
-             "experiment in experiment(x).", call. = FALSE)
+            "experiment in experiment(x).",
+            call. = FALSE
+        )
     }
     obj <- x[[experiment]]
     if (!(is(obj, "SummarizedExperiment"))) {
         stop("The class of experiment specified by ", deparse(substitute(experiment)),
-             " must be 'SummarizedExperiment'.", call. = FALSE)
+            " must be 'SummarizedExperiment'.",
+            call. = FALSE
+        )
     }
     return(NULL)
 }

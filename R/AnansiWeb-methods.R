@@ -9,7 +9,7 @@
 #' }
 #' @returns The desired information from an AnansiWeb object
 #' @examples
-#'# Setup
+#' # Setup
 #' web <- randomWeb(n_samp = 36)
 #'
 #' # Accessors
@@ -40,6 +40,9 @@
 #'
 #' # Coerce to MultiAssayExperiment
 #' mae <- asMAE(web)
+#'
+#' # Coerce to TreeSummarizedExperiment
+#' tse <- asTSE(web)
 NULL
 
 #' @importFrom methods show
@@ -126,7 +129,7 @@ S7::method(metadata, AnansiWeb) <- function(x, ...) S7::prop(x, "metadata")
 #' metadata(x) <- cbind(
 #'     metadata(x),
 #'     new_groups = c("A", "B")
-#'     )
+#' )
 #' @export
 #'
 S7::method(`metadata<-`, AnansiWeb) <- function(x, ..., value) {

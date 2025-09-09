@@ -52,7 +52,7 @@ NULL
 #'
 S7::method(getEdgeList, MultiFactor) <- function(x) {
     as.data.frame(do.call(rbind, base::names(x)))
-    }
+}
 
 #' @export
 #'
@@ -128,20 +128,20 @@ S7::method(print, MultiFactor) <- function(x, ...) show(x)
 #' @export
 #'
 S7::method(unfactor, MultiFactor) <-
-  function(x, use.names = TRUE, ignore.mcols = TRUE) {
-    lv <- levels(x)
-    ns <- rownames(x)
-    x <- x@index
+    function(x, use.names = TRUE, ignore.mcols = TRUE) {
+        lv <- levels(x)
+        ns <- rownames(x)
+        x <- x@index
 
-    x[] <- lapply(x, function(df) {
-        for (id in names(df)) {
-            df[, id] <- lv[[id]][df[, id]]
-        }
-        return(df)
-    })
+        x[] <- lapply(x, function(df) {
+            for (id in names(df)) {
+                df[, id] <- lv[[id]][df[, id]]
+            }
+            return(df)
+        })
 
-    return(x)
-}
+        return(x)
+    }
 
 #' @export
 #' @importMethodsFrom S4Vectors droplevels
@@ -206,7 +206,8 @@ S7::method(droplevels, MultiFactor) <- function(x, ..., exclude = NULL, select =
         }
     }
     x@map <- mapMultiFactor(x@index, mode = "counts")
-    return(x)    }
+    return(x)
+}
 
 
 #' @export
@@ -218,60 +219,63 @@ S7::method(levels, MultiFactor) <- function(x) `levels.anansi::MultiFactor`(x)
 }
 
 local({
-S7::method(`[`, MultiFactor) <- function(x, i, j, ..., drop = TRUE) {
-    if(!all(names(sys.call()) %in% c("", "drop")))
-        warning("named arguments other than 'drop' are discouraged")
-    raw_call <- rlang::call_match(
-        dots_expand = FALSE, defaults = TRUE)
-
-
-    do.call(
-        ".sub_MultiFactor", rlang::call_args(raw_call),
-        quote = FALSE, envir = rlang::caller_env()
+    S7::method(`[`, MultiFactor) <- function(x, i, j, ..., drop = TRUE) {
+        if (!all(names(sys.call()) %in% c("", "drop"))) {
+            warning("named arguments other than 'drop' are discouraged")
+        }
+        raw_call <- rlang::call_match(
+            dots_expand = FALSE, defaults = TRUE
         )
-}
 
 
-S7::method(`[[`, MultiFactor) <- function(x, i, ...) {
-  raw_call <- rlang::call_match(
-    dots_expand = FALSE, defaults = TRUE, fn = .subsub_MultiFactor)
+        do.call(
+            ".sub_MultiFactor", rlang::call_args(raw_call),
+            quote = FALSE, envir = rlang::caller_env()
+        )
+    }
 
-  do.call( ".subsub_MultiFactor", rlang::call_args(raw_call),
-           envir = rlang::caller_env()
-  )
-}
 
+    S7::method(`[[`, MultiFactor) <- function(x, i, ...) {
+        raw_call <- rlang::call_match(
+            dots_expand = FALSE, defaults = TRUE, fn = .subsub_MultiFactor
+        )
+
+        do.call(".subsub_MultiFactor", rlang::call_args(raw_call),
+            envir = rlang::caller_env()
+        )
+    }
 })
 
 #' @export
 `[<-.anansi::MultiFactor` <- function(x, i, j, ..., value) {
+    if (!all(names(sys.call()) %in% c("", "value"))) {
+        warning("named arguments are discouraged")
+    }
 
-  if(!all(names(sys.call()) %in% c("", "value")))
-    warning("named arguments are discouraged")
-
-  raw_call <- rlang::call_match(
-    dots_expand = FALSE, defaults = TRUE, fn = .sub_rep_MultiFactor)
-  do.call( ".sub_rep_MultiFactor", rlang::call_args(raw_call),
-           envir = rlang::caller_env()
-  )
+    raw_call <- rlang::call_match(
+        dots_expand = FALSE, defaults = TRUE, fn = .sub_rep_MultiFactor
+    )
+    do.call(".sub_rep_MultiFactor", rlang::call_args(raw_call),
+        envir = rlang::caller_env()
+    )
 }
 
 #' @export
 `[[<-.anansi::MultiFactor` <- function(x, i, ..., value) {
-  if(!all(names(sys.call()) %in% c("", "value")))
-    warning("named arguments are discouraged")
-  raw_call <- rlang::call_match(
-    dots_expand = FALSE, defaults = TRUE, fn = .sub_sub_rep_MultiFactor)
-  do.call( ".sub_sub_rep_MultiFactor", rlang::call_args(raw_call),
-           envir = rlang::caller_env()
-  )
-
+    if (!all(names(sys.call()) %in% c("", "value"))) {
+        warning("named arguments are discouraged")
+    }
+    raw_call <- rlang::call_match(
+        dots_expand = FALSE, defaults = TRUE, fn = .sub_sub_rep_MultiFactor
+    )
+    do.call(".sub_sub_rep_MultiFactor", rlang::call_args(raw_call),
+        envir = rlang::caller_env()
+    )
 }
 
 
 
 .sub_MultiFactor <- function(x, i, j, drop = TRUE) {
-
     missing_i <- rlang::is_missing(i)
     missing_j <- rlang::is_missing(j)
     missing_x <- rlang::is_missing(x)
@@ -280,7 +284,9 @@ S7::method(`[[`, MultiFactor) <- function(x, i, ...) {
     stopifnot("Too many arguments provided" = dot_len %in% seq(0L, 2L, 1L))
     # missing_i <- rlang::is_missing(dot_args[[1L]])
 
-    if(dot_len == 0L) { return(x) }
+    if (dot_len == 0L) {
+        return(x)
+    }
 
     d <- x@map
     l <- levels(x)
@@ -309,15 +315,15 @@ S7::method(`[[`, MultiFactor) <- function(x, i, ...) {
     }
 
     MultiFactor(x, levels = l)
-
 }
 
 
 #' @importFrom rlang is_missing
 .subsub_MultiFactor <- function(x, i) {
-
     # Empty returns self
-    if(rlang::is_missing(i)) {return(x)}
+    if (rlang::is_missing(i)) {
+        return(x)
+    }
     i <- i[[1L]]
     d <- x@map
 
@@ -335,50 +341,50 @@ S7::method(`[[`, MultiFactor) <- function(x, i, ...) {
 
 
 .sub_rep_MultiFactor <- function(x, i, j, value) {
+    missing_i <- rlang::is_missing(i)
+    missing_j <- rlang::is_missing(j)
+    missing_x <- rlang::is_missing(x)
+    dot_len <- sum(!missing_i, !missing_j)
 
-  missing_i <- rlang::is_missing(i)
-  missing_j <- rlang::is_missing(j)
-  missing_x <- rlang::is_missing(x)
-  dot_len <- sum(!missing_i, !missing_j)
+    stopifnot("Too many arguments provided" = dot_len %in% seq(0L, 2L, 1L))
 
-  stopifnot("Too many arguments provided" = dot_len %in% seq(0L, 2L, 1L))
-
-  if(dot_len == 0L) { return(x) }
-
-  d <- x@map
-
-  if (!missing_i) ii <- rownames(d[i, , drop = FALSE])
-  if (!missing_j) jj <- colnames(d[, j, drop = FALSE])
-
-  if (missing_j) {
-    x@index[ii] <- value
-    return(x)
-  }
-
-  if (missing_i) {
-    ii <- rowsWithCol(d, jj, names = TRUE)
-  }
-
-  for (i in ii) {
-    for (j in jj) {
-      x@index[[i]][, j] <- value[[i]][, j]
+    if (dot_len == 0L) {
+        return(x)
     }
-  }
-  return(x)
+
+    d <- x@map
+
+    if (!missing_i) ii <- rownames(d[i, , drop = FALSE])
+    if (!missing_j) jj <- colnames(d[, j, drop = FALSE])
+
+    if (missing_j) {
+        x@index[ii] <- value
+        return(x)
+    }
+
+    if (missing_i) {
+        ii <- rowsWithCol(d, jj, names = TRUE)
+    }
+
+    for (i in ii) {
+        for (j in jj) {
+            x@index[[i]][, j] <- value[[i]][, j]
+        }
+    }
+    return(x)
 }
 
-.sub_sub_rep_MultiFactor  <- function(x, i, value) {
-
-  d <- x@map
-  # If i can't index d, stop. Appending not supported through `[[<-`.
-  if (!all(i %in% colnames(d))) {
-    if (anyNA(colnames(d)[i]) || length(colnames(d)[i]) != length(i)) {
-      stop("No levels corresponding to `i` found in MultiFactor. ")
+.sub_sub_rep_MultiFactor <- function(x, i, value) {
+    d <- x@map
+    # If i can't index d, stop. Appending not supported through `[[<-`.
+    if (!all(i %in% colnames(d))) {
+        if (anyNA(colnames(d)[i]) || length(colnames(d)[i]) != length(i)) {
+            stop("No levels corresponding to `i` found in MultiFactor. ")
+        }
     }
-  }
-  ii <- rowsWithCol(d, i, FALSE)
-  x@index[ii] <- value
-  x
+    ii <- rowsWithCol(d, i, FALSE)
+    x@index[ii] <- value
+    x
 }
 
 

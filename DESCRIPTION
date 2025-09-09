@@ -30,8 +30,9 @@ Imports:
     forcats,
     S4Vectors,
     SummarizedExperiment,
-    SingleCellExperiment,
     MultiAssayExperiment,
+    SingleCellExperiment,
+    TreeSummarizedExperiment,
     rlang,
     ggplot2,
     ggforce,
@@ -45,7 +46,6 @@ Suggests:
     graph,
     mia,
     KEGGREST,
-    TreeSummarizedExperiment,
     testthat (>= 3.0.0),
     knitr,
     rmarkdown

@@ -29,27 +29,35 @@
 #' # Input objects and syntax:
 #' ## define `x` and `y` as characters
 #' web <- weaveWeb(
-#'      x = "ko", y = "cpd", link = kegg_link(),
-#'      tableX = t2, tableY = t1,
-#'      metadata = NULL, verbose = TRUE
-#'  )
+#'     x = "ko", y = "cpd", link = kegg_link(),
+#'     tableX = t2, tableY = t1,
+#'     metadata = NULL, verbose = TRUE
+#' )
 #'
 #' ## define `x` and `y` with a formula
 #' web2 <- weaveWeb(
-#'      x = cpd ~ ko, link = kegg_link(),
-#'      tableX = t2, tableY = t1,
-#'      metadata = NULL, verbose = TRUE
-#'  )
+#'     x = cpd ~ ko, link = kegg_link(),
+#'     tableX = t2, tableY = t1,
+#'     metadata = NULL, verbose = TRUE
+#' )
 #'
 #' identical(web, web2)
 #'
 #' # Method for MultiAssayExperiment S4 object
 #' mae <- asMAE(web)
 #' weaveWeb(
-#'      x = mae, link = kegg_link(),
-#'      tableY = "cpd", tableX = "ko",
-#'      force_new = FALSE
-#'  )
+#'     x = mae, link = kegg_link(),
+#'     tableY = "cpd", tableX = "ko",
+#'     force_new = FALSE
+#' )
+#'
+#' # Method for TreeSummarizedExperiment S4 object
+#' tse <- asTSE(web)
+#' weaveWeb(
+#'     x = tse, link = kegg_link(),
+#'     tableY = "cpd", tableX = "ko",
+#'     force_new = FALSE
+#' )
 #'
 #' @param x,y `Character scalar`, names of feature types that should be
 #'     linked. Should be found in the column names of `link`.
@@ -96,28 +104,27 @@ NULL
 weaveKEGG <- function(x, ...) weaveWeb(x, link = kegg_link(), ...)
 
 #' @export
-S7::method(weaveWeb, S7::class_character) <- function(
-        x, y,
-        link = NULL,
-        tableX = NULL,
-        tableY = NULL,
-        metadata = NULL,
-        verbose = TRUE
-) weaveWeb.character(x, y, link, tableX, tableY, metadata, verbose)
+S7::method(weaveWeb, S7::class_character) <- function(x, y,
+    link = NULL,
+    tableX = NULL,
+    tableY = NULL,
+    metadata = NULL,
+    verbose = TRUE) {
+    weaveWeb.character(x, y, link, tableX, tableY, metadata, verbose)
+}
 
-weaveWeb.character <- function(
-        x, y,
-        link = NULL,
-        tableX = NULL,
-        tableY = NULL,
-        metadata = NULL,
-        verbose = TRUE
-) {
+weaveWeb.character <- function(x, y,
+    link = NULL,
+    tableX = NULL,
+    tableY = NULL,
+    metadata = NULL,
+    verbose = TRUE) {
     terms <- c(y, x)
     stopifnot(
         "both 'x' and 'y' terms must be provided as character" =
-            is(terms, "character" ) && length(terms) == 2L )
-    if(is.null(link)) {
+            is(terms, "character") && length(terms) == 2L
+    )
+    if (is.null(link)) {
         stop(
             "'link' argument not provided. To explicitly disable ",
             "knowledge-based selection, use link = 'none' instead. "
@@ -128,7 +135,7 @@ weaveWeb.character <- function(
     }
 
     # Ensure link is a MultiFactor
-        link <- MultiFactor(link, drop.unmatched = TRUE)
+    link <- MultiFactor(link, drop.unmatched = TRUE)
     # Determine required ids in order, only keep relevant elements of link.
     all_terms <- termSeq(x, y, link)
     link <- subsetByPath(link, all_terms)
@@ -171,23 +178,21 @@ weaveWeb.character <- function(
 }
 
 #' @export
-S7::method(weaveWeb, S7::class_formula) <- function(
-        x,
-        link = NULL,
-        tableX = NULL,
-        tableY = NULL,
-        metadata = NULL,
-        verbose = TRUE
-        ) weaveWeb.formula(x, link, tableX, tableY, metadata, verbose)
+S7::method(weaveWeb, S7::class_formula) <- function(x,
+    link = NULL,
+    tableX = NULL,
+    tableY = NULL,
+    metadata = NULL,
+    verbose = TRUE) {
+    weaveWeb.formula(x, link, tableX, tableY, metadata, verbose)
+}
 
-weaveWeb.formula <- function(
-        x,
-        link = NULL,
-        tableX = NULL,
-        tableY = NULL,
-        metadata = NULL,
-        verbose = TRUE
-) {
+weaveWeb.formula <- function(x,
+    link = NULL,
+    tableX = NULL,
+    tableY = NULL,
+    metadata = NULL,
+    verbose = TRUE) {
     if (missing(x) || (length(x) != 3L)) {
         stop("'formula' missing or incorrect")
     }
@@ -207,7 +212,7 @@ weaveWeb.formula <- function(
         )
     }
 
-        link <- MultiFactor(link, drop.unmatched = TRUE)
+    link <- MultiFactor(link, drop.unmatched = TRUE)
 
     if (sum(terms %in% colnames(link)) != 2L) {
         stop("Variables from 'formula' not found in 'link'.")
@@ -231,36 +236,35 @@ weaveWeb.formula <- function(
 #'
 S7::method(
     weaveWeb,
-    methods::getClass( "MultiAssayExperiment", where = "MultiAssayExperiment")
-) <- function(
-        x,
-        link = NULL,
-        tableY = NULL,
-        tableX = NULL,
-        typeY = NULL,
-        typeX = NULL,
-        force_new = FALSE,
-        experiment1 = NULL,
-        experiment2 = NULL,
-        assay.type1 = NULL,
-        assay.type2 = NULL
-) weaveWeb.MultiAssayExperiment(
-    x, link, tableY, tableX, typeY, typeX, force_new,
-    experiment1, experiment2, assay.type1, assay.type2)
+    methods::getClass("MultiAssayExperiment", where = "MultiAssayExperiment")
+) <- function(x,
+    link = NULL,
+    tableY = NULL,
+    tableX = NULL,
+    typeY = NULL,
+    typeX = NULL,
+    force_new = FALSE,
+    experiment1 = NULL,
+    experiment2 = NULL,
+    assay.type1 = NULL,
+    assay.type2 = NULL) {
+    weaveWeb.MultiAssayExperiment(
+        x, link, tableY, tableX, typeY, typeX, force_new,
+        experiment1, experiment2, assay.type1, assay.type2
+    )
+}
 
-weaveWeb.MultiAssayExperiment <- function(
-        x,
-        link = NULL,
-        tableY = NULL,
-        tableX = NULL,
-        typeY = NULL,
-        typeX = NULL,
-        force_new = FALSE,
-        experiment1 = NULL,
-        experiment2 = NULL,
-        assay.type1 = NULL,
-        assay.type2 = NULL
-){
+weaveWeb.MultiAssayExperiment <- function(x,
+    link = NULL,
+    tableY = NULL,
+    tableX = NULL,
+    typeY = NULL,
+    typeX = NULL,
+    force_new = FALSE,
+    experiment1 = NULL,
+    experiment2 = NULL,
+    assay.type1 = NULL,
+    assay.type2 = NULL) {
     y_ids <- .test_coherent(tableY, experiment1, typeY, assay.type1)
     x_ids <- .test_coherent(tableX, experiment2, typeX, assay.type2)
     tableY <- y_ids[[1L]]
@@ -278,7 +282,11 @@ weaveWeb.MultiAssayExperiment <- function(
     if (!force_new) {
         m <- x@metadata
 
-        d <- if( is.null(link) ) {"dictionary"} else {""}
+        d <- if (is.null(link)) {
+            "dictionary"
+        } else {
+            ""
+        }
         if (.check_valid_selection(link, m)) {
             d <- link
         }
@@ -288,7 +296,7 @@ weaveWeb.MultiAssayExperiment <- function(
                 tableY = tY,
                 dictionary = m[[d]],
                 metadata = as.data.frame(colData(x))
-                ))
+            ))
         }
     }
     # Else, generate web object
@@ -299,46 +307,53 @@ weaveWeb.MultiAssayExperiment <- function(
         tableX = tX,
         tableY = tY,
         metadata = as.data.frame(colData(x))
-        )
+    )
 }
 
 #' @export
 #' @importClassesFrom SingleCellExperiment SingleCellExperiment
 #' @importFrom SummarizedExperiment colData assay assayNames
 #' @importFrom SingleCellExperiment SingleCellExperiment altExp altExpNames
+#' @importClassesFrom TreeSummarizedExperiment TreeSummarizedExperiment
 #' @method weaveWeb SingleCellExperiment
 S7::method(
     weaveWeb,
-    methods::getClass("SingleCellExperiment", where = "SingleCellExperiment")
-) <- function(
-        x,
-        link = NULL,
-        tableY = NULL,
-        tableX = NULL,
-        typeY = NULL,
-        typeX = NULL,
-        force_new = FALSE,
-        experiment1 = NULL,
-        experiment2 = NULL,
-        assay.type1 = NULL,
-        assay.type2 = NULL
-) weaveWeb.MultiAssayExperiment(
-    x, link, tableY, tableX, typeY, typeX, force_new,
-    experiment1, experiment2, assay.type1, assay.type2)
+    methods::getClass(
+        "SingleCellExperiment",
+        where = "SingleCellExperiment"
+    ) |
+        methods::getClass(
+            "TreeSummarizedExperiment",
+            where = "TreeSummarizedExperiment"
+        )
+) <- function(x,
+    link = NULL,
+    tableY = NULL,
+    tableX = NULL,
+    typeY = NULL,
+    typeX = NULL,
+    force_new = FALSE,
+    experiment1 = NULL,
+    experiment2 = NULL,
+    assay.type1 = NULL,
+    assay.type2 = NULL) {
+    weaveWeb.SingleCellExperiment(
+        x, link, tableY, tableX, typeY, typeX, force_new,
+        experiment1, experiment2, assay.type1, assay.type2
+    )
+}
 
-weaveWeb.SingleCellExperiment <- function(
-        x,
-        link = NULL,
-        tableY = NULL,
-        tableX = NULL,
-        typeY = NULL,
-        typeX = NULL,
-        force_new = FALSE,
-        experiment1 = NULL,
-        experiment2 = NULL,
-        assay.type1 = NULL,
-        assay.type2 = NULL
-) {
+weaveWeb.SingleCellExperiment <- function(x,
+    link = NULL,
+    tableY = NULL,
+    tableX = NULL,
+    typeY = NULL,
+    typeX = NULL,
+    force_new = FALSE,
+    experiment1 = NULL,
+    experiment2 = NULL,
+    assay.type1 = NULL,
+    assay.type2 = NULL) {
     y_ids <- .test_coherent(tableY, experiment1, typeY, assay.type1)
     x_ids <- .test_coherent(tableX, experiment2, typeX, assay.type2)
     tableY <- y_ids[[1L]]
@@ -356,8 +371,10 @@ weaveWeb.SingleCellExperiment <- function(
     if (!force_new) {
         m <- x@metadata
 
-        if (is.null(link)) {
-            d <- "dictionary"
+        d <- if (is.null(link)) {
+            "dictionary"
+        } else {
+            ""
         }
         if (.check_valid_selection(link, m)) {
             d <- link
@@ -368,8 +385,7 @@ weaveWeb.SingleCellExperiment <- function(
                 tableY = tY,
                 dictionary = m[[d]],
                 metadata = as.data.frame(colData(x))
-                )
-            )
+            ))
         }
     }
     # Generate web object

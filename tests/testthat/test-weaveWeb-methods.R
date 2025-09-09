@@ -1,5 +1,4 @@
-test_that("weaveWeb mae methods", {
-
+test_that("weaveWeb mae and tse methods work", {
     # Combine experiments into MultiAssayExperiment object
     web <- randomWeb(n_samples = 15, n_reps = 1)
     web@metadata$cat_XYZ <- rep(c("X", "Y", "Z"), 5)
@@ -48,31 +47,68 @@ test_that("weaveWeb mae methods", {
         return.format = "raw"
     )
 
-    table2 <- weaveWeb(
+    table.mae <- weaveWeb(
         mae,
         tableY = "y",
         tableX = "x"
     ) |> anansi(
         formula = ~cat_XYZ,
-        verbose = FALSE)
-    list2 <- weaveWeb(
+        verbose = FALSE
+    )
+    list.mae <- weaveWeb(
         mae,
         tableY = "y",
         tableX = "x"
     ) |> anansi(
         formula = ~cat_XYZ,
         return.format = "list",
-        verbose = FALSE)
-    raw2 <- weaveWeb(
+        verbose = FALSE
+    )
+    raw.mae <- weaveWeb(
         mae,
         tableY = "y",
         tableX = "x"
     ) |> anansi(
         formula = ~cat_XYZ,
         return.format = "raw",
-        verbose = FALSE)
+        verbose = FALSE
+    )
 
-    expect_identical(table1, table2)
-    expect_identical(list1, list2)
-    expect_identical(raw1, raw2)
+    expect_identical(table1, table.mae)
+    expect_identical(list1, list.mae)
+    expect_identical(raw1, raw.mae)
+
+    tse <- asTSE(web)
+
+    table.tse <- weaveWeb(
+        tse,
+        tableY = "y",
+        tableX = "x"
+    ) |> anansi(
+        formula = ~cat_XYZ,
+        verbose = FALSE
+    )
+    list.tse <- weaveWeb(
+        tse,
+        tableY = "y",
+        tableX = "x"
+    ) |> anansi(
+        formula = ~cat_XYZ,
+        return.format = "list",
+        verbose = FALSE
+    )
+    raw.tse <- weaveWeb(
+        tse,
+        tableY = "y",
+        tableX = "x"
+    ) |> anansi(
+        formula = ~cat_XYZ,
+        return.format = "raw",
+        verbose = FALSE
+    )
+
+
+    expect_identical(table1, table.tse)
+    expect_identical(list1, list.tse)
+    expect_identical(raw1, raw.tse)
 })

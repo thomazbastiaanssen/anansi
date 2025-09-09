@@ -9,7 +9,7 @@
 #' @returns a two-column data.frame that lists the content of each entry in the
 #'     input MultiFactor
 #' @export
-getEdgeList        <- S7::new_generic("getEdgeList", "x")
+getEdgeList <- S7::new_generic("getEdgeList", "x")
 
 #' Get a graph object.
 #' @name getGraph
@@ -21,7 +21,7 @@ getEdgeList        <- S7::new_generic("getEdgeList", "x")
 #' getGraph
 #' @returns a specified graph object.
 #' @export
-getGraph           <- S7::new_generic("getGraph", "x")
+getGraph <- S7::new_generic("getGraph", "x")
 
 #' Get a list of all pairs of features
 #' @name getFeaturePairs
@@ -34,7 +34,7 @@ getGraph           <- S7::new_generic("getGraph", "x")
 #' getFeaturePairs(x)
 #'
 #' @export
-getFeaturePairs    <- S7::new_generic("getFeaturePairs", "x")
+getFeaturePairs <- S7::new_generic("getFeaturePairs", "x")
 
 #' Weave an AnansiWeb object
 #' @name weaveWeb
@@ -68,7 +68,7 @@ getFeaturePairs    <- S7::new_generic("getFeaturePairs", "x")
 #' identical(a, Matrix::t(b))
 #'
 #' @export
-weaveWeb           <- S7::new_generic("weaveWeb",   "x")
+weaveWeb <- S7::new_generic("weaveWeb", "x")
 
 #' @name plotAnansi
 #' @rdname plotAnansi
@@ -76,7 +76,7 @@ weaveWeb           <- S7::new_generic("weaveWeb",   "x")
 #' @export
 #' @returns a figure that can be further modified using the `ggplot2` suite
 #' @usage NULL
-plotAnansi         <- S7::new_generic("plotAnansi", "x")
+plotAnansi <- S7::new_generic("plotAnansi", "x")
 
 #' Apply a function on each pair of features
 #' @name pairwiseApply
@@ -90,11 +90,20 @@ plotAnansi         <- S7::new_generic("plotAnansi", "x")
 #' @examples
 #' web <- randomWeb(10)
 #'
+#' # For each feature pair, was the value for x higher than the value for y?
 #' pairwiseApply(
 #'     X = web,
-#'     FUN = function(x, y) cor(x, y),
-#'     MoreArgs = NULL, SIMPLIFY = TRUE, USE.NAMES = TRUE
+#'     FUN = function(x, y) x > y,
+#'     MoreArgs = NULL, SIMPLIFY = FALSE, USE.NAMES = TRUE
+#'     )
+#'
+#' # Run cor.test() on each pair of features
+#' pairwiseApply(
+#'     X = web,
+#'     FUN = function(x, y) cor.test(x, y),
+#'     MoreArgs = NULL, SIMPLIFY = FALSE, USE.NAMES = TRUE
 #' )
+#'
 #' @export
 pairwiseApply <- S7::new_generic("pairwiseApply", "X")
 

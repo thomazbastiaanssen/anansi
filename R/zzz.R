@@ -4,10 +4,9 @@
 NULL
 
 rlang::on_load({
-
-    S7::S4_register(anansi:::AnansiWeb);
-    S7::S4_register(anansi:::MultiFactor);
-    S7::methods_register();
+    S7::S4_register(anansi:::AnansiWeb)
+    S7::S4_register(anansi:::MultiFactor)
+    S7::methods_register()
 
 
 
@@ -19,7 +18,7 @@ rlang::on_load({
     # S7::method(dim, MultiFactor)  <- function(x) `dim.anansi::MultiFactor`(x);
     # S7::method(names, MultiFactor) <- function(x) `names.anansi::MultiFactor`(x);
     # S7::method(levels, MultiFactor) <- function(x) `levels.anansi::MultiFactor`(x);
-    #S7::method(`levels<-`, MultiFactor) <- function(x, value) `levels<-.anansi::MultiFactor`(x, value);
+    # S7::method(`levels<-`, MultiFactor) <- function(x, value) `levels<-.anansi::MultiFactor`(x, value);
     # S7::method(droplevels, MultiFactor) <- function(x, exclude = NULL, select = NULL) `droplevels.anansi::MultiFactor`(x, exclude = exclude, select = exclude);
 
 
@@ -30,7 +29,6 @@ rlang::on_load({
     # S7::method(`[<-`, MultiFactor) <- function(x, ..., value) `[<-.anansi::MultiFactor`(x, ..., value);
 
     # S7::method(`[[<-`, MultiFactor) <- function(x, ..., value) `[[<-.anansi::MultiFactor`(x, ..., value)
-
 })
 
 .onLoad <- function(...) {

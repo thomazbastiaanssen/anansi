@@ -10,7 +10,7 @@
 #' linkBiobakeryMap(x)
 #' @export
 #'
-linkBiobakeryMap <- function(map){
+linkBiobakeryMap <- function(map) {
     linkmap <- strsplit(x = map, split = "\t")
     linkmap_names <- vapply(linkmap, FUN = function(x) x[1], FUN.VALUE = "")
     linkmap <- lapply(linkmap, FUN = function(x) x[-1])

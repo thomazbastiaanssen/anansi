@@ -1,4 +1,3 @@
-
 x <- MultiFactor(kegg_link(), drop.unmatched = FALSE)
 
 test_that("Delayed shedding levels works; MultiFactor returns MultiFactor", {
@@ -44,7 +43,7 @@ test_that("MultiFactor indexing works", {
 })
 
 test_that("MultiFactor get/set works", {
-    #two-way equivalence
+    # two-way equivalence
     expect_identical(x[["a"]], x[["a"]] <- x[, c("a", "b")][1])
     expect_identical(x[, c("a", "b")][1], x[, c("a", "b")][1] <- x[["a"]])
 

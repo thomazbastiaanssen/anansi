@@ -8,13 +8,13 @@ test_that("plotAnansi", {
         cpd ~ ko,
         tableY = t1,
         tableX = t2,
+        metadata = FMT_metadata,
         link = kegg_link()
     )
     out <- anansi(
         web = web,
         formula = ~Legend,
         groups = "Legend",
-        metadata = FMT_metadata,
         adjust.method = "BH",
     )
     # Check arguments
