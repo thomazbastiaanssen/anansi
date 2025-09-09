@@ -37,7 +37,7 @@ library(anansi)
 ```
 # Overview {-}
 
-This vignette can be divided into four sections:
+This vignette can be divided into three sections:
 
 * [Section 1](#sec-anansi-1) introduces the `anansi` framework.
 * [Section 2](#sec-anansi-2) goes through a simple workflow and required input.
@@ -153,7 +153,7 @@ collates them into an `AnansiWeb` object. The `AnansiWeb` format is a necessary
 input file for the main `anansi` workflow. It allows `anansi` to keep track of 
 which features from the two input data sets should be considered as pairs. 
 
-### Specify features to link
+### Specify which features to `link`.
 
 Additionally, `weaveWeb()` requires the user to specify the names of the feature
 types that should be linked. These names need to be present as the columns of 
@@ -171,7 +171,7 @@ web <- weaveWeb(
 )
 ```
 
-### On model notation and the names `tableY` and `tableX` 
+### Specify `y`, and `x`
 
 Though most of the examples use metabolites and functions, `anansi` is able to 
 handle any type of big/'omics data, as long as there is a dictionary available. 
@@ -182,7 +182,8 @@ modeling framework:
 $$
 Y \sim X \times{covariates}
 $$
-### `weaveWeb` with Bioconductor pipeline
+
+### `weaveWeb` with Bioconductor ecosystem
 
 As an alternative to providing input as raw tables, `weaveWeb()` also accepts 
 the Bioconductor classes `MultiAssayExperiment` (MAE) and 
@@ -238,6 +239,7 @@ anansi_out <- anansi(
     verbose = TRUE
 )
 ```
+
 ## Reporting output📝
 
 By default, `anansi` outputs a table in the `wide` format. For general 
@@ -254,6 +256,7 @@ colnames(anansi_out)
 ```
 
 ### Output statistics
+
 We can see that the output of `anansi()` is structured so that there is one
 feature pair per row, marked by the first two columns. For each of those feature
 pairs, the table contains outcome parameters from several models. In order, we
@@ -295,6 +298,26 @@ plotAnansi(
 ```
 
 # Advanced applications and customization {#sec-anansi-3}
+
+## Generate `AnansiWeb` with random data
+
+The `randomWeb()` function allows the user to generate random data, which can be
+useful for statistical modeling or to generate placeholder data, for instance.
+
+```{r}
+rweb <- randomWeb(
+  n_samples = 10,
+  n_reps = 1,
+  n_features_x = 8,
+  n_features_y = 12,
+  sparseness = 0.5
+)
+
+# The random object comes with some dummy metadata:
+metadata(rweb)
+
+# also see `?randomAnansi`
+```
 
 ## Apply user-defined function on each pair of features
 
@@ -441,6 +464,7 @@ wrap_plots(plot_list[seq_len(6L)], guides = "collect") &
     theme_bw() &
     labs(x = NULL, y = NULL)
 ```
+
 These types of visualizations of feature pairs work best when the amount of 
 feature pairs to be plotted is modest.
 
