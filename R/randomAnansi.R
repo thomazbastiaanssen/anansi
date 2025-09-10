@@ -27,14 +27,15 @@ NULL
 #' @export
 #'
 randomWeb <- function(
-        n_samples = 10,
-        n_reps = 1L,
-        n_features_x = 8,
-        n_features_y = 12,
-        sparseness = 0.5,
-        tableY = NULL,
-        tableX = NULL,
-        dictionary = NULL) {
+    n_samples = 10,
+    n_reps = 1L,
+    n_features_x = 8,
+    n_features_y = 12,
+    sparseness = 0.5,
+    tableY = NULL,
+    tableX = NULL,
+    dictionary = NULL
+) {
     stopifnot(
         "'sparseness' must be a proportion [0-1]. " = sparseness <= 1 &&
             sparseness > 0
