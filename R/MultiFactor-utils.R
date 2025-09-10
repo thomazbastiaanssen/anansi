@@ -342,7 +342,7 @@ validLevels <- function(levs) {
 #' @noRd
 validLinkDF <- function(x) {
     is.data.frame(x) &&
-        NCOL(x) >= 2L &&
+        NCOL(x) %in% c(2L, 3L) &&
         length(colnames(x)) == NCOL(x)
 }
 
