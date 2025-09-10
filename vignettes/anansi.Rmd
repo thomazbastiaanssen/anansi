@@ -211,7 +211,7 @@ out.mae <- anansi(
     web = web.mae,
     formula = ~Legend,
     adjust.method = "BH",
-    verbose = TRUE,
+    verbose = TRUE
 )
 
 identical(web, web.mae)
@@ -305,20 +305,27 @@ features. The function passes as the `FUN` argument is applied on each pair of
 features, which are pre-mapped to `y` and `x`:  `function(x, y)`. 
 [Also see vignette on adjacency matrices.]`r sprintf("(%s)", adj_link)`
 
-```{r, pairwiseApply}
+```{r, pairwiseApply1}
 # For each feature pair, was the value for x higher than the value for y?
-pairwiseApply(
+pairwise_gt <- pairwiseApply(
     X = web,
     FUN = function(x, y) x > y, 
     USE.NAMES = TRUE
 )
 
+pairwise_gt[1:5, 1:5]
+```
+
+
+```{r, pairwiseApply2}
 # Run cor() on each pair of features
-pairwiseApply(
+pairwise_cor <- pairwiseApply(
     X = web,
     FUN = function(x, y) cor(x, y), 
     USE.NAMES = FALSE
 )
+
+pairwise_cor
 ```
 
 ## Plotting examples

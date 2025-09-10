@@ -238,8 +238,6 @@ AnansiWeb <- S7::new_class(
             names(dimnames(dictionary)) <- c("y", "x")
         }
         metadata <- .check_metadata_labels( metadata, tableY, tableX )
-        print(metadata)
-
 
         # return AnansiWeb
         S7::new_object(
