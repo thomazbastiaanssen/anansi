@@ -199,17 +199,15 @@ to access the biadjacency matrix in the ‘dictionary’ slot.</p>
 <span><span class="va">form.web</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/weaveWeb-generic.html">weaveWeb</a></span><span class="op">(</span><span class="va">ec</span> <span class="op">~</span> <span class="va">ko</span>, link <span class="op">=</span> <span class="fu"><a href="../reference/kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Warning in .check_metadata_labels(metadata, tableY, tableX): Argument</span></span>
 <span><span class="co">## `metadata` not provided; Please validate sample ID order.</span></span></code></pre>
-<pre><code><span><span class="co">## data frame with 0 columns and 1 row</span></span></code></pre>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">trad.web</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/weaveWeb-generic.html">weaveWeb</a></span><span class="op">(</span>y <span class="op">=</span> <span class="st">"ec"</span>, x <span class="op">=</span> <span class="st">"ko"</span>, link <span class="op">=</span> <span class="fu"><a href="../reference/kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Warning in .check_metadata_labels(metadata, tableY, tableX): Argument</span></span>
 <span><span class="co">## `metadata` not provided; Please validate sample ID order.</span></span></code></pre>
-<pre><code><span><span class="co">## data frame with 0 columns and 1 row</span></span></code></pre>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Same output</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/identical.html" class="external-link">identical</a></span><span class="op">(</span><span class="va">form.web</span>, <span class="va">trad.web</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] TRUE</span></span></code></pre>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Get the biadjacency matrix using the $ operator</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="../reference/dictionary.html">dictionary</a></span><span class="op">(</span><span class="va">form.web</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## 10 x 10 sparse Matrix of class "ngCMatrix"</span></span></code></pre>
@@ -239,7 +237,7 @@ website</a>.</p>
 features between input data sets. The anansi package includes such data
 for the <a href="https://www.genome.jp/kegg/" class="external-link">KEGG database</a>, let’s
 take a look at some of it:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Extract the data.frame from the list that kegg_link() returns</span></span>
 <span><span class="va">ec2ko</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span><span class="op">[[</span><span class="st">"ec2ko"</span><span class="op">]</span><span class="op">]</span></span>
 <span></span>
@@ -271,19 +269,17 @@ adjacency).</p>
 be linked. These names are used throughout the <code>AnansiWeb</code>
 workflow. They can be directly called from an <code>AnansiWeb</code>
 object:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Note that the formula controls the order</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="../reference/weaveWeb-generic.html">weaveWeb</a></span><span class="op">(</span><span class="va">ko</span> <span class="op">~</span> <span class="va">ec</span>, link <span class="op">=</span> <span class="fu"><a href="../reference/kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Warning in .check_metadata_labels(metadata, tableY, tableX): Argument</span></span>
 <span><span class="co">## `metadata` not provided; Please validate sample ID order.</span></span></code></pre>
-<pre><code><span><span class="co">## data frame with 0 columns and 1 row</span></span></code></pre>
 <pre><code><span><span class="co">## [1] "ko" "ec"</span></span></code></pre>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># names() is short for the above</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="../reference/weaveWeb-generic.html">weaveWeb</a></span><span class="op">(</span><span class="va">ec</span> <span class="op">~</span> <span class="va">ko</span>, link <span class="op">=</span> <span class="fu"><a href="../reference/kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Warning in .check_metadata_labels(metadata, tableY, tableX): Argument</span></span>
 <span><span class="co">## `metadata` not provided; Please validate sample ID order.</span></span></code></pre>
-<pre><code><span><span class="co">## data frame with 0 columns and 1 row</span></span></code></pre>
 <pre><code><span><span class="co">## [1] "ec" "ko"</span></span></code></pre>
 </div>
 </div>
@@ -295,7 +291,7 @@ features are linked. We can use the pre-packaged kegg link map, which
 consists of two similarly structured <code>data.frame</code>s in a list,
 one of which we just inspected. We can call it directly using
 <code><a href="../reference/kegg_link.html">kegg_link()</a></code>:</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Only print the first few entries</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="../reference/kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">head</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## $ec2ko</span></span>
@@ -329,13 +325,12 @@ between any combination of one or two similarly structured
 <code>data.frame</code>s, presented as a list. For the pre- packaged
 data set, this means we can link between any two of <code>ec</code>,
 <code>cpd</code> and <code>ko</code>, in either order.</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Formula notation</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="../reference/weaveWeb-generic.html">weaveWeb</a></span><span class="op">(</span><span class="va">cpd</span> <span class="op">~</span> <span class="va">ko</span>, link <span class="op">=</span> <span class="fu"><a href="../reference/kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>    <span class="fu"><a href="../reference/dictionary.html">dictionary</a></span><span class="op">(</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Warning in .check_metadata_labels(metadata, tableY, tableX): Argument</span></span>
 <span><span class="co">## `metadata` not provided; Please validate sample ID order.</span></span></code></pre>
-<pre><code><span><span class="co">## data frame with 0 columns and 1 row</span></span></code></pre>
 <pre><code><span><span class="co">## 10 x 10 sparse Matrix of class "ngCMatrix"</span></span></code></pre>
 <pre><code><span><span class="co">##   [[ suppressing 10 column names 'K00001', 'K00002', 'K00003' ... ]]</span></span></code></pre>
 <pre><code><span><span class="co">##         ko</span></span>
@@ -350,13 +345,12 @@ data set, this means we can link between any two of <code>ec</code>,
 <span><span class="co">##   C00008 . . . . . . . . . .</span></span>
 <span><span class="co">##   C00009 . . . . . . . . . .</span></span>
 <span><span class="co">##   C00010 . . . . . . . . . .</span></span></code></pre>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Character notation</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="../reference/weaveWeb-generic.html">weaveWeb</a></span><span class="op">(</span>y <span class="op">=</span> <span class="st">"ko"</span>, x <span class="op">=</span> <span class="st">"cpd"</span>, link <span class="op">=</span> <span class="fu"><a href="../reference/kegg_link.html">kegg_link</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>    <span class="fu"><a href="../reference/dictionary.html">dictionary</a></span><span class="op">(</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Warning in .check_metadata_labels(metadata, tableY, tableX): Argument</span></span>
 <span><span class="co">## `metadata` not provided; Please validate sample ID order.</span></span></code></pre>
-<pre><code><span><span class="co">## data frame with 0 columns and 1 row</span></span></code></pre>
 <pre><code><span><span class="co">## 10 x 10 sparse Matrix of class "ngCMatrix"</span></span></code></pre>
 <pre><code><span><span class="co">##   [[ suppressing 10 column names 'C00001', 'C00002', 'C00003' ... ]]</span></span></code></pre>
 <pre><code><span><span class="co">##         cpd</span></span>
@@ -378,7 +372,7 @@ data set, this means we can link between any two of <code>ec</code>,
 </h3>
 <p>The most flexible way to make an <code>AnansiWeb</code> object is
 through <code><a href="../reference/AnansiWeb-class.html">AnansiWeb()</a></code>:</p>
-<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Prep some dummy input tables</span></span>
 <span><span class="va">tX</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">6</span>, dimnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="cn">NULL</span>, x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"x"</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span>,</span>
 <span>    sep <span class="op">=</span> <span class="st">"_"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
@@ -396,8 +390,7 @@ through <code><a href="../reference/AnansiWeb-class.html">AnansiWeb()</a></code>
 <span><span class="co">## 'dictionary' were missing; Assigned 'y' and 'x'.</span></span></code></pre>
 <pre><code><span><span class="co">## Warning in .check_metadata_labels(metadata, tableY, tableX): Argument</span></span>
 <span><span class="co">## `metadata` not provided; Please validate sample ID order.</span></span></code></pre>
-<pre><code><span><span class="co">## data frame with 0 columns and 6 rows</span></span></code></pre>
-<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Confirm the warning:</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">w</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] "y" "x"</span></span></code></pre>
@@ -414,7 +407,7 @@ Here, we demonstrate a graph-based and matrix based approach.</p>
 common packages that deal with graphs are <a href="https://r.igraph.org/" class="external-link"><code>igraph</code></a> and <a href="https://bioconductor.org/packages/graph/" class="external-link"><code>graph</code></a>.
 To start off, we need to have a graph object, so let’s make one using
 <code>igraph</code>.</p>
-<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r.igraph.org/" class="external-link">igraph</a></span><span class="op">)</span></span>
 <span><span class="co"># Prepared data.frame for the occasion</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">krebs_edge_df</span><span class="op">)</span></span></code></pre></div>
@@ -425,7 +418,7 @@ To start off, we need to have a graph object, so let’s make one using
 <span><span class="co">## 4 ketoglutarate dehydrogenase  succinyl-CoA</span></span>
 <span><span class="co">## 5     succinyl-CoA synthetase  succinyl-CoA</span></span>
 <span><span class="co">## 6     succinyl-CoA synthetase     succinate</span></span></code></pre>
-<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Convert data.frame to graph</span></span>
 <span><span class="va">g</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r.igraph.org/reference/graph_from_data_frame.html" class="external-link">graph_from_data_frame</a></span><span class="op">(</span><span class="va">krebs_edge_df</span>, directed <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <p>Now that we have constructed a graph, we still need to identify which
@@ -436,7 +429,7 @@ be assigned a boolean vector, where <code>TRUE</code> values become
 columns, corresponding to features in <code>tableX</code>, whereas
 <code>FALSE</code> values become rows, which correspond to those in
 <code>tableY</code>.</p>
-<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://r.igraph.org/reference/V.html" class="external-link">V</a></span><span class="op">(</span><span class="va">g</span><span class="op">)</span><span class="op">$</span><span class="va">type</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r.igraph.org/reference/V.html" class="external-link">V</a></span><span class="op">(</span><span class="va">g</span><span class="op">)</span><span class="op">$</span><span class="va">name</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">krebs_edge_df</span><span class="op">$</span><span class="va">Metabolite</span></span>
 <span></span>
 <span><span class="co"># Now that we've defined type, we can convert to biadjacency matrix:</span></span>
@@ -466,7 +459,7 @@ functions in <code>igraph</code>.</p>
 <p>We can also define a matrix directly. Conveniently, sparse matrices
 can be defined easily from our starting data. The <code>Matrix</code>
 library provides fantastic support for this.</p>
-<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://Matrix.R-forge.R-project.org" class="external-link">Matrix</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># For this approach, it's useful to prepare the input as two factors:</span></span>
@@ -497,7 +490,7 @@ library provides fantastic support for this.</p>
 <div class="section level2">
 <h2 id="session-info">Session info<a class="anchor" aria-label="anchor" href="#session-info"></a>
 </h2>
-<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## R version 4.5.1 (2025-06-13)</span></span>
 <span><span class="co">## Platform: x86_64-pc-linux-gnu</span></span>

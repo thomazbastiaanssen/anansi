@@ -81,28 +81,6 @@ See <code>?base::mapply()</code></p>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">web</span> <span class="op">&lt;-</span> <span class="fu"><a href="randomAnansi.html">randomWeb</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                       sample_id repeated group_ab subtype     score_a</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_1_1   sample_1    rep_1        b       z -0.63710166</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_2_1   sample_2    rep_1        a       x  0.74632635</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_3_1   sample_3    rep_1        a       y  1.01846753</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_4_1   sample_4    rep_1        a       z  0.24092295</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_5_1   sample_5    rep_1        b       x  0.20998094</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_6_1   sample_6    rep_1        a       y  1.97638942</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_7_1   sample_7    rep_1        b       z -0.14150444</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_8_1   sample_8    rep_1        b       z  2.69307575</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_9_1   sample_9    rep_1        b       x -1.45569611</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_10_1 sample_10    rep_1        b       z  0.07667912</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                          score_b    score_c</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_1_1   1.5548854  1.2848823</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_2_1  -0.6257260 -2.1422504</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_3_1  -1.1611169 -0.3039372</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_4_1  -0.7328777 -0.7173421</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_5_1  -0.1246043 -0.4457581</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_6_1  -1.1253530 -1.1119900</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_7_1   0.4904111 -0.1787959</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_8_1   1.6677152  0.7971751</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_9_1  -0.6412408  0.6582043</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_10_1  0.6439974  0.3165413</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># For each feature pair, was the value for x higher than the value for y?</span></span></span>
 <span class="r-in"><span><span class="fu">pairwiseApply</span><span class="op">(</span></span></span>

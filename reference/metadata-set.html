@@ -84,28 +84,6 @@
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="randomAnansi.html">randomWeb</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                       sample_id repeated group_ab subtype    score_a    score_b</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_1_1   sample_1    rep_1        a       z  0.9428394  0.3160552</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_2_1   sample_2    rep_1        b       y -0.5206976  0.8195195</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_3_1   sample_3    rep_1        b       x -1.5074413 -0.1136153</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_4_1   sample_4    rep_1        b       z -0.1178446 -1.4400305</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_5_1   sample_5    rep_1        a       x  1.3481454 -1.2929808</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_6_1   sample_6    rep_1        b       x  1.9637590  1.4270875</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_7_1   sample_7    rep_1        b       z -0.1648310 -0.7503329</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_8_1   sample_8    rep_1        a       z  0.6710083  0.6050086</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_9_1   sample_9    rep_1        a       x  0.5070674  1.5881718</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_10_1 sample_10    rep_1        a       y  1.5176955 -0.2853501</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                           score_c</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_1_1  -0.08000474</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_2_1   1.09726700</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_3_1  -0.92805678</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_4_1  -0.86411314</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_5_1   0.70519657</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_6_1  -1.18876700</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_7_1   0.40176596</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_8_1   0.48837600</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_9_1   0.23322725</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> anansi_ID_sample_10_1  0.87707418</span>
 <span class="r-in"><span><span class="fu"><a href="metadata.html">metadata</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="metadata.html">metadata</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>    new_groups <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"B"</span><span class="op">)</span></span></span>
