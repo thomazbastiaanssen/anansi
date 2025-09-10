@@ -254,7 +254,7 @@ randomWebTab <- function(n_samp, n_reps, dictionary, metadata) {
 #' @rdname randomAnansi
 #' @noRd
 #'
-randomWebDic <- function(tableY, tableX, density, metadata) {
+randomWebDic <- function(tableY, tableX, density) {
     dictionary <- rsparsematrix(
         nrow = NCOL(tableY),
         ncol = NCOL(tableX),
