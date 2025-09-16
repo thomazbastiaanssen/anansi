@@ -1,3 +1,7 @@
+# anansi 0.99.0
+
+Submission to Bioconductor
+
 # anansi 0.7.7
 
 MOVED TO S7 CLASS SYSTEM
