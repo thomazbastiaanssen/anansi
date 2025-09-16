@@ -201,6 +201,7 @@ Authors:
 \itemize{
   \item Thomas Quinn \email{contacttomquinn@gmail.com} (\href{https://orcid.org/0000-0003-0286-6329}{ORCID})
   \item Giulio Benedetti \email{giulio.benedetti@utu.fi} (\href{https://orcid.org/0000-0002-8732-7692}{ORCID})
+  \item Tuomas Borman \email{tuomas.v.borman@utu.fi} (\href{https://orcid.org/0000-0002-8563-8884}{ORCID})
   \item Leo Lahti \email{leo.lahti@utu.fi} (\href{https://orcid.org/0000-0001-5537-637X}{ORCID})
 }
 
