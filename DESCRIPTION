@@ -1,7 +1,7 @@
 Package: anansi
 Type: Package
 Title: Annotation-Based Analysis of Specific Interactions
-Version: 0.99.0
+Version: 0.99.1
 Authors@R: c(
    person("Thomaz", "Bastiaanssen", email = "thomazbastiaanssen@gmail.com", 
        role = c("aut", "cre"), comment = c(ORCID = "0000-0001-6891-734X")), 
@@ -22,7 +22,7 @@ Description: Studies including both microbiome and metabolomics data are
     space, only considering metabolite-function pairs that have been recorded in
     a pathway database. This package also provides a framework to assess 
     differential association. 
-Depends: R (>= 4.4.0)
+Depends: R (>= 4.5.0)
 Imports:
     S7,
     stats,
@@ -54,7 +54,7 @@ Suggests:
 License: GPL-3
 Encoding: UTF-8
 LazyData: false
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 Config/testthat/edition: 3
 biocViews: Microbiome, Metabolomics, Regression, Pathways, KEGG
 URL: https://github.com/thomazbastiaanssen/anansi, https://thomazbastiaanssen.github.io/anansi
