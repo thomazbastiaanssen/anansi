@@ -1,7 +1,7 @@
 Package: anansi
 Type: Package
 Title: Annotation-Based Analysis of Specific Interactions
-Version: 0.99.1
+Version: 0.99.2
 Authors@R: c(
    person("Thomaz", "Bastiaanssen", email = "thomazbastiaanssen@gmail.com", 
        role = c("aut", "cre"), comment = c(ORCID = "0000-0001-6891-734X")), 
