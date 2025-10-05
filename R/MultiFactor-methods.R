@@ -17,9 +17,9 @@
 #' dimnames(x)
 #'
 #' # Factor-like properties
-#' levels(x)
+#' head(levels(x)$ko)
 #' droplevels(x)
-#' unfactor(x)
+#' head(unfactor(x)$ec2ko)
 #'
 #' # Extract common output formats
 #' getEdgeList(x)

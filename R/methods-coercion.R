@@ -11,7 +11,11 @@
 #' @seealso [unfactor()]
 #' @examples
 #' # AnansiWeb
-#' x <- randomWeb(36)
+#' x <- randomWeb(
+#'     n_samples = 5,
+#'     n_features_x = 4,
+#'     n_features_y = 6
+#' )
 #'
 #' as.list(x)
 #' as.data.frame(x)
@@ -21,7 +25,7 @@
 #' asTSE(x)
 #'
 #' # MultiFactor
-#' x <- randomMultiFactor()
+#' x <- randomMultiFactor(n_types = 3, n_features = 3)
 #' as.list(x, use.names = TRUE)
 #'
 NULL

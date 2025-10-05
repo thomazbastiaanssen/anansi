@@ -23,17 +23,21 @@ Apply a function on each pair of features
 web <- randomWeb(10)
 
 # For each feature pair, was the value for x higher than the value for y?
-pairwiseApply(
+pairwise_gt <- pairwiseApply(
     X = web,
     FUN = function(x, y) x > y,
     MoreArgs = NULL, SIMPLIFY = FALSE, USE.NAMES = TRUE
-    )
+)
+
+head(pairwise_gt)
 
 # Run cor.test() on each pair of features
-pairwiseApply(
+pairwise_cor <- pairwiseApply(
     X = web,
     FUN = function(x, y) cor.test(x, y),
     MoreArgs = NULL, SIMPLIFY = FALSE, USE.NAMES = TRUE
 )
+
+pairwise_cor[1]
 
 }
