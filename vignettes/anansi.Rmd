@@ -81,7 +81,7 @@ Get the latest stable `R` release from [CRAN](http://cran.r-project.org/). Then
 install `anansi` from [Bioconductor](http://bioconductor.org/) using the
 following code:
 
-```{r 'install', eval = FALSE}
+```{r install, eval = FALSE}
 if (!requireNamespace("BiocManager", quietly = TRUE)) {
     install.packages("BiocManager")
 }
@@ -92,13 +92,13 @@ BiocManager::install("anansi")
 And the development version from
 [GitHub](https://github.com/thomazbastiaanssen/anansi) with `remotes`: 
 
-```{r, 'remotes-install', eval = FALSE}
+```{r remotes-install, eval = FALSE}
 install.packages("remotes")
 remotes::install_github("thomazbastiaanssen/anansi")
 ```
 
 ## Setup 
-```{r, 'load-libraries', eval=TRUE}
+```{r load-libraries, eval=TRUE}
 # load anansi
 library(anansi)
 
@@ -205,8 +205,8 @@ the Bioconductor classes `MultiAssayExperiment` (MAE) and
 `TreeSummarizedExperiment` (TSE) as input. Conversely, an `AnansiWeb` object can
 be converted to a MAE or TSE with the functions `asMAE()` and `asTSE()`.
 
-```{r}
-#| bioc1, eval=TRUE, message=FALSE
+```{r bioc1}
+#| eval=TRUE, message=FALSE
 # Convert web to mae
 mae <- asMAE(web)
 ```
@@ -214,8 +214,8 @@ mae <- asMAE(web)
 The MAE object can be passed to the `weaveWeb()` function, which returns the 
 same output, ready for the `anansi` function.
 
-```{r}
-#| bioc2, eval=TRUE
+```{r bioc2}
+#| eval=TRUE
 
 web.mae <- weaveWeb(
     mae,
@@ -245,7 +245,7 @@ assess differential associations between treatments, we use the formula
 `~ Legend` (corresponding to the `Legend` column in the `metadata` table we 
 provided to `weaveWeb()` above).
 
-```{r, eval=TRUE}
+```{r run-anansi, eval=TRUE}
 # Run anansi on AnansiWeb object
 anansi_out <- anansi(
     web = web,
@@ -296,8 +296,8 @@ provide p-values and adjusted p-values. For more on this,
 Finally, the output of `anansi` can be visualized with `plotAnansi` by
 specifying the type of association to use.
 
-```{r}
-#| bioc3, eval=TRUE, fig.width = 10, fig.height = 8
+```{r bioc3}
+#| eval=TRUE, fig.width = 10, fig.height = 8
 
 # Filter associations by q value
 anansi_out <- anansi_out[anansi_out$full_q.values < 0.2, ]
@@ -343,7 +343,7 @@ features. The function passes as the `FUN` argument is applied on each pair of
 features, which are pre-mapped to `y` and `x`:  `function(x, y)`. 
 [Also see vignette on adjacency matrices.]`r sprintf("(%s)", adj_link)`
 
-```{r, pairwiseApply1}
+```{r pairwiseApply1}
 # For each feature pair, was the value for x higher than the value for y?
 pairwise_gt <- pairwiseApply(
     X = web,
@@ -355,7 +355,7 @@ pairwise_gt[1:5, 1:5]
 ```
 
 
-```{r, pairwiseApply2}
+```{r pairwiseApply2}
 # Run cor() on each pair of features
 pairwise_cor <- pairwiseApply(
     X = web,

@@ -50,8 +50,8 @@ a simplified representation with 8 unique enzymatic reactions and 9 unique
 metabolites. 
 
 [1]: https://en.wikipedia.org/wiki/Citric_acid_cycle
-```{r}
-#| plot-krebs, echo=FALSE, out.width='100%', out.height='100%', warning=FALSE,
+```{r plot-krebs}
+#| echo=FALSE, out.width='100%', out.height='100%', warning=FALSE,
 #| message=FALSE,
 #| fig.cap="Simplified representation of the Krebs cycle. Orange boxes mark
 #| metabolites and blue arrows represent enyzmes. "
@@ -146,8 +146,8 @@ If we were to perform an all-vs-all integrative analysis between our two data
 sets, comprehensively testing every metabolite-enzyme pair, we'd test 
 $8\times9=72$ hypotheses. 
 
-```{r}
-#| all-v-all, echo=FALSE, fig.wide=TRUE, out.width='100%', out.height='60%',
+```{r all-v-all}
+#| echo=FALSE, fig.wide=TRUE, out.width='100%', out.height='60%',
 #| fig.cap="Graph representation of possible association sctructures in the
 #| Krebs cycle. **A)** All-vs-all, with a full graph. **B)** Constrained, only
 #| linking metabolites an enzymes that are known to directly interact."
@@ -237,8 +237,8 @@ In order to 'know' which features-pairs in your data set should be considered,
 anansi requires a *biadjacency matrix*. The biadjacency matrix corresponding to
 to the sparser graph on the right can be seen in the figure below. 
 
-```{r}
-#| krebs-biadj, echo=FALSE, fig.small=TRUE,
+```{r krebs-biadj}
+#| echo=FALSE, fig.small=TRUE,
 #| fig.cap="Matrix representation of the constrained analysis of the Krebs
 #| cycle, with cells marked with 'X' signifying tested feature-pairs."
 #|
