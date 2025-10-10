@@ -19,6 +19,6 @@ Get a list of all pairs of features
 }
 \examples{
 x <- randomWeb(10)
-getFeaturePairs(x)
+head(getFeaturePairs(x), 3)
 
 }

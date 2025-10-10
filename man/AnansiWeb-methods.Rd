@@ -27,10 +27,10 @@ names(web)
 
 # Getters and setters:
 
-tableX(web)
-tableY(web)
+tableX(web)[1:5, 1:5]
+tableY(web)[1:5, 1:5]
 dictionary(web)
-metadata(web)
+head(metadata(web))
 
 # Assign some random metadata
 metadata(web) <- data.frame(

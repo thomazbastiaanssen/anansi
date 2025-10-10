@@ -31,7 +31,7 @@ getGraph <- S7::new_generic("getGraph", "x")
 #' @returns an list of two-column data.frames that represent all feature pairs.
 #' @examples
 #' x <- randomWeb(10)
-#' getFeaturePairs(x)
+#' head(getFeaturePairs(x), 3)
 #'
 #' @export
 getFeaturePairs <- S7::new_generic("getFeaturePairs", "x")
@@ -91,18 +91,22 @@ plotAnansi <- S7::new_generic("plotAnansi", "x")
 #' web <- randomWeb(10)
 #'
 #' # For each feature pair, was the value for x higher than the value for y?
-#' pairwiseApply(
+#' pairwise_gt <- pairwiseApply(
 #'     X = web,
 #'     FUN = function(x, y) x > y,
 #'     MoreArgs = NULL, SIMPLIFY = FALSE, USE.NAMES = TRUE
-#'     )
+#' )
+#' 
+#' head(pairwise_gt)
 #'
 #' # Run cor.test() on each pair of features
-#' pairwiseApply(
+#' pairwise_cor <- pairwiseApply(
 #'     X = web,
 #'     FUN = function(x, y) cor.test(x, y),
 #'     MoreArgs = NULL, SIMPLIFY = FALSE, USE.NAMES = TRUE
 #' )
+#' 
+#' pairwise_cor[1]
 #'
 #' @export
 pairwiseApply <- S7::new_generic("pairwiseApply", "X")
