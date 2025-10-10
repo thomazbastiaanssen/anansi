@@ -25,10 +25,10 @@ S7::method(getGraph, MultiFactor) <- function(
 `getGraph.anansi::MultiFactor` <- function(x, format = "igraph") {
     g <- graph_from_data_frame(getEdgeList(x), directed = FALSE)
 
-    switch(format,
-           "igraph" = {
-           },
-           "graph" = g <- as_graphnel(g)
+    switch(
+        format,
+        "igraph" = {},
+        "graph" = g <- as_graphnel(g)
     )
     return(g)
 }

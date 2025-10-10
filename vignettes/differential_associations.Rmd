@@ -42,7 +42,7 @@ More concretely, this involves estimating the association between pairs of
 features in several contexts. 
 Anansi uses a (bi)adjacency matrix to determine which pars of features to 
 investigate. For more on the 
-[adjacency matrix, see the vignette]`r sprintf("(%s)", adj_link)`. Here, we will 
+[adjacency matrix, see the vignette]`r sprintf("(%s)", adj_link)`. Here, we will
 discuss the different statistical models used to estimate the associations 
 between feature-pairs. 
 
@@ -265,9 +265,9 @@ group_lm <- pairwiseApply(web, FUN = function(x, y) {
 all.equal(score_lm, out$disjointed_score_a_f.values)
 all.equal(group_lm, out$disjointed_group_ab_f.values)
 ```
-We run two separate `pairwiseApply()` calls for the two interaction terms. Because of
-the way `anova()` calculates sum-of-squares (type-I), the order of variables
-matters for `anova()`.
+We run two separate `pairwiseApply()` calls for the two interaction terms. 
+Because of the way `anova()` calculates sum-of-squares (type-I), the order of 
+variables matters for `anova()`.
 
 ## Emergent association
 Emergent associations describe the situation where the **strength** of an 

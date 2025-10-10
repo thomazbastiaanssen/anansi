@@ -226,20 +226,21 @@ web_missing_link <- function(tableX, tableY, terms, metadata = NULL) {
     }
 
 
-    tab_list <- lapply(c(y_id, x_id),
-                       FUN = function(id) {
-                           if (!id %in% all_assays) {
-                               stop(
-                                   "no assay with name ", id,
-                                   " found.", call. = FALSE
-                               )
-                           }
-                           if (id %in% assayNames(tse)) {
-                               return(tse)
-                           } else {
-                               return(altExp(tse, id))
-                           }
-                       }
+    tab_list <- lapply(
+        c(y_id, x_id),
+        FUN = function(id) {
+            if (!id %in% all_assays) {
+                stop(
+                    "no assay with name ", id,
+                    " found.", call. = FALSE
+                )
+            }
+            if (id %in% assayNames(tse)) {
+                return(tse)
+            } else {
+                return(altExp(tse, id))
+            }
+        }
     )
     names(tab_list) <- c(y_id, x_id)
 
@@ -249,13 +250,18 @@ web_missing_link <- function(tableX, tableY, terms, metadata = NULL) {
 #
 .test_mae_has_exp <- function(x, experiment) {
     if (is.numeric(experiment) && experiment > length(experiments(x))) {
-        stop("'", deparse(substitute(experiment)), "' is greater than the ",
-             "number of experiments in MAE object.",
-             call. = FALSE
+        stop(
+            "'", deparse(substitute(experiment)), "' is greater than the ",
+            "number of experiments in MAE object.",
+            call. = FALSE
         )
     }
-    if (!(is.character(experiment) && experiment %in% names(experiments(x)) ||
-          is.numeric(experiment) && experiment <= length(experiments(x)))) {
+    if (
+        !(
+            is.character(experiment) && experiment %in% names(experiments(x)) ||
+            is.numeric(experiment) && experiment <= length(experiments(x))
+        )
+    ) {
         stop(
             "'",
             deparse(substitute(experiment)),

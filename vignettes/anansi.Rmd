@@ -55,8 +55,8 @@ space, only considering  metabolite-function interactions that have been
 recorded in a pathway database. In addition, it provides a framework to assess
 differential associations. 
 
-While `anansi` is geared towards metabolite-function interactions in the context 
-of host-microbe interactions, it is perfectly capable of handling any other pair 
+While `anansi` is geared towards metabolite-function interactions in the context
+of host-microbe interactions, it is perfectly capable of handling any other pair
 of data sets where some features interact canonically. 
 
 ## A note on functional microbiome data
@@ -68,7 +68,8 @@ question can be a bit more tricky, as it often requires functional inference
 software to address them. For 16S sequencing, programs like 
 [PICRUSt2](https://github.com/picrust/picrust2/) can be used to infer function. 
 For shotgun metagenomics, this can be done with programs such as 
-[HUMANn3 in the bioBakery suite](https://github.com/picrust/picrust2) and [woltka](https://github.com/qiyunzhu/woltka). All of these algorithms can 
+[HUMANn3 in the bioBakery suite](https://github.com/picrust/picrust2) and
+[woltka](https://github.com/qiyunzhu/woltka). All of these algorithms can 
 produce functional count data in terms of KEGG Orthologues (KOs) organised as 
 tables, which can be directly passed to `anansi`. 
 
@@ -210,8 +211,8 @@ be converted to a MAE or TSE with the functions `asMAE()` and `asTSE()`.
 mae <- asMAE(web)
 ```
 
-The MAE object can be passed to the `weaveWeb()` function, which returns the same
-output, ready for the `anansi` function.
+The MAE object can be passed to the `weaveWeb()` function, which returns the 
+same output, ready for the `anansi` function.
 
 ```{r}
 #| bioc2, eval=TRUE
