@@ -25,8 +25,8 @@ for models.}
 \item{df}{a vector of length 2, containing df1 and df2 corresponding to the
 F-ratio considered.}
 
-\item{estimates}{A matrix containing the estimates for the parameters named in
-the \code{type} slot.}
+\item{estimates}{A matrix containing the estimates for the parameters named
+in the \code{type} slot.}
 
 \item{f.values}{A matrix containing the f-values, for least-squares.}
 

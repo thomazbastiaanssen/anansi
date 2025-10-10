@@ -28,11 +28,11 @@
 #'     case of the constructor `MultiFactor()`, a named `list` of data.frames
 #'     with two named columns each, where elements that share a row indicates
 #'     thet are adjacent.
-#' @param ... `i,j` indices specifying elements to extract or replace. Indices are
-#'     numeric or character vectors or empty (missing) or NULL. Numeric values
-#'     are coerced to integer or whole numbers as by as.integer or for large
-#'     values by trunc (and hence truncated towards zero). Character vectors
-#'     will be matched to the names of the object.
+#' @param ... `i,j` indices specifying elements to extract or replace. Indices
+#'     are numeric or character vectors or empty (missing) or NULL. Numeric
+#'     values are coerced to integer or whole numbers as by as.integer or for
+#'     large values by trunc (and hence truncated towards zero). Character
+#'     vectors will be matched to the names of the object.
 #' @param value Replacement value, typically of same type as that which is to be
 #'     replaced.
 #' @param exclude `NULL` or `Named character list` of similar structure as
@@ -146,7 +146,9 @@ S7::method(unfactor, MultiFactor) <-
 #' @export
 #' @importMethodsFrom S4Vectors droplevels
 #'
-S7::method(droplevels, MultiFactor) <- function(x, ..., exclude = NULL, select = NULL) {
+S7::method(droplevels, MultiFactor) <- function(
+        x, ..., exclude = NULL, select = NULL
+) {
     stopifnot(
         "Only one of 'exclude' and 'select' may be provided" = sum(
             is.null(exclude),
@@ -241,7 +243,7 @@ local({
         )
 
         do.call(".subsub_MultiFactor", rlang::call_args(raw_call),
-            envir = rlang::caller_env()
+                envir = rlang::caller_env()
         )
     }
 })
@@ -256,7 +258,7 @@ local({
         dots_expand = FALSE, defaults = TRUE, fn = .sub_rep_MultiFactor
     )
     do.call(".sub_rep_MultiFactor", rlang::call_args(raw_call),
-        envir = rlang::caller_env()
+            envir = rlang::caller_env()
     )
 }
 
@@ -269,7 +271,7 @@ local({
         dots_expand = FALSE, defaults = TRUE, fn = .sub_sub_rep_MultiFactor
     )
     do.call(".sub_sub_rep_MultiFactor", rlang::call_args(raw_call),
-        envir = rlang::caller_env()
+            envir = rlang::caller_env()
     )
 }
 

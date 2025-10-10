@@ -74,16 +74,30 @@ tables, which can be directly passed to `anansi`.
 
 # Getting started with anansi {#sec-anansi-2}
 
-## Installation
-Install the development version from
+## Installation instructions
+
+Get the latest stable `R` release from [CRAN](http://cran.r-project.org/). Then
+install `anansi` from [Bioconductor](http://bioconductor.org/) using the
+following code:
+
+```{r 'install', eval = FALSE}
+if (!requireNamespace("BiocManager", quietly = TRUE)) {
+    install.packages("BiocManager")
+}
+
+BiocManager::install("anansi")
+```
+
+And the development version from
 [GitHub](https://github.com/thomazbastiaanssen/anansi) with `remotes`: 
+
 ```{r, 'remotes-install', eval = FALSE}
 install.packages("remotes")
 remotes::install_github("thomazbastiaanssen/anansi")
 ```
 
 ## Setup 
-```{r, eval=TRUE}
+```{r, 'load-libraries', eval=TRUE}
 # load anansi
 library(anansi)
 
@@ -115,12 +129,12 @@ data modalities (e.g., metabolites, genes, microbes, ...). Both tables should
 have columns as features and rows as samples. Below is an example of an 
 appropriately formatted feature table, we will use it in the sections below. 
 
-```{r ko-table-format, echo = FALSE}
+```{r 'ko-table-format', echo = FALSE}
 cat("anansi expects samples to be rows and features to be columns:\n")
 t(FMT_KOs[seq(4L),seq(10L)])
 ```
 
-```{r, eval=TRUE}
+```{r 't-tables',  eval=TRUE}
 # Transpose demo tables to input format
 tableY <- t(FMT_metab)
 tableX <- t(FMT_KOs)
@@ -160,7 +174,7 @@ types that should be linked. These names need to be present as the columns of
 the `link` table. In this case, we'll link KEGG compound (cpd) to KEGG 
 Orthologues (ko). 
 
-```{r, eval=TRUE}
+```{r weaveweb, eval=TRUE}
 # Create AnansiWeb object from tables
 web <- weaveWeb(
     x = "ko", y = "cpd", 
@@ -247,7 +261,7 @@ reporting, we  recommend sticking to the more legible `table` format by
 specifying the `return.format` argument. Let's take a look at the structure of 
 the output table:
 
-```{r, eval=TRUE}
+```{r show-output, eval=TRUE}
 # General structure of anansi() output
 head(anansi_out, c(5, 5))
 
@@ -304,13 +318,13 @@ plotAnansi(
 The `randomWeb()` function allows the user to generate random data, which can be
 useful for statistical modeling or to generate placeholder data, for instance.
 
-```{r}
+```{r r-web}
 rweb <- randomWeb(
-  n_samples = 10,
-  n_reps = 1,
-  n_features_x = 8,
-  n_features_y = 12,
-  sparseness = 0.5
+    n_samples = 10,
+    n_reps = 1,
+    n_features_x = 8,
+    n_features_y = 12,
+    sparseness = 0.5
 )
 
 # The random object comes with some dummy metadata:
@@ -357,7 +371,7 @@ Automatic plotting functions such as `plotAnansi()` provide a convenient
 and code-light solution to visualization. However, some may prefer interfacing 
 directly with the `ggplot()` code. We provide code to recreate the above figure:
 
-```{r}
+```{r plot-extra1}
 #| plot_FMT, eval=TRUE, fig.width=10, fig.height=8, tidy=FALSE,
 #| fig.alt="Differential association plot, with facets separating metabolites
 #| and metabolites on the y-axis. x-axis depicts pearson's correlation
@@ -424,7 +438,7 @@ features. The [`patchwork`](https://patchwork.data-imaginist.com/) provides a
 wonderful interface to combine plots. We can use `getFeaturePairs()` to
 extract the relevant data from our `AnansiWeb` object in a convenient list
 format:   
-```{r}
+```{r plot-extra2}
 #| multiplot, eval=TRUE, message=FALSE, tidy = FALSE
 library(patchwork)
 
@@ -484,6 +498,6 @@ to the initial `ggplot()` calls in the `lapply()` loop.
 
 # Session info
 
-```{r}
+```{r session-info}
 sessionInfo()
 ```

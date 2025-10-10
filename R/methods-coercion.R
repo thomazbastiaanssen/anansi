@@ -27,28 +27,13 @@
 NULL
 
 #' @export
-S7::method(convert, list(AnansiWeb, S7::class_list)) <-
-    function(from, to) `as.list.anansi::AnansiWeb`(x = from)
-
-#' @export
+#' @importFrom S7 props
 #' @rdname anansi-coercion
 `as.list.anansi::AnansiWeb` <- function(x, ...) {
     out <- S7::props(x)
     names(out)[c(1L, 2L)] <- names(x)
     out
 }
-
-#' @importFrom S7 convert
-#' @export
-#'
-S7::method(convert, list(AnansiWeb, S7::class_data.frame)) <-
-    function(from, to) as.data.frame.AnansiWeb(x = from)
-
-#' @importFrom S7 convert
-#' @export
-#'
-S7::method(convert, list(MultiFactor, S7::class_list)) <-
-    function(from, to) `as.list.anansi::MultiFactor`(x = from)
 
 #' @export
 S7::method(as.list, MultiFactor) <-

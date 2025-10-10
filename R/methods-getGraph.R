@@ -18,15 +18,17 @@
 NULL
 
 #' @export
-S7::method(getGraph, MultiFactor) <- function(x, format = "igraph") `getGraph.anansi::MultiFactor`(x, format)
+S7::method(getGraph, MultiFactor) <- function(
+        x, format = "igraph"
+) `getGraph.anansi::MultiFactor`(x, format)
 
 `getGraph.anansi::MultiFactor` <- function(x, format = "igraph") {
     g <- graph_from_data_frame(getEdgeList(x), directed = FALSE)
 
     switch(format,
-        "igraph" = {
-        },
-        "graph" = g <- as_graphnel(g)
+           "igraph" = {
+           },
+           "graph" = g <- as_graphnel(g)
     )
     return(g)
 }
@@ -35,6 +37,8 @@ S7::method(getGraph, MultiFactor) <- function(x, format = "igraph") `getGraph.an
 #' @name getGraph.list
 #' @rdname getGraph
 #'
-S7::method(getGraph, S7::class_list | S7::class_data.frame) <- function(x, format = "igraph") {
+S7::method(getGraph, S7::class_list | S7::class_data.frame) <- function(
+        x, format = "igraph"
+) {
     getGraph(asMultiFactor(x), format)
 }

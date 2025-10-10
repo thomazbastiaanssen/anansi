@@ -23,6 +23,7 @@
 #'     Accesses through `x@dictionary`.
 #' @returns a MultiFactor object.
 #' @importFrom methods getClass
+#' @importFrom S7 new_class
 #' @inheritParams MultiFactor-methods
 #' @seealso [MultiFactor-methods()]
 #' @examples
@@ -36,7 +37,7 @@
 #' @export
 #'
 MultiFactor <- S7::new_class(
-    "MultiFactor",
+    name = "MultiFactor",
     package = "anansi",
     properties = list(
         index = S7::class_list,
@@ -74,7 +75,8 @@ MultiFactor <- S7::new_class(
         # Integer DF Input
         if (all(vapply(x, validIntLinkDF, NA, USE.NAMES = FALSE))) {
             stopifnot(
-                "Input is integers, levels must be provided. " = !is.null(levels)
+                "Input is integers, levels must be provided. " =
+                    !is.null(levels)
             )
             # Factor DF input
         } else if (all(vapply(x, validFactLinkDF, NA, USE.NAMES = FALSE))) {
@@ -155,6 +157,7 @@ asMultiFactor <- function(x, levels = NULL, drop.unmatched = TRUE) {
 #' @importClassesFrom Matrix Matrix
 #' @importFrom Matrix Matrix drop0
 #' @importFrom S4Vectors DataFrame
+#' @importFrom S7 new_class
 #' @export
 #' @seealso \itemize{
 #'  \item [AnansiWeb-methods]
@@ -195,7 +198,7 @@ asMultiFactor <- function(x, levels = NULL, drop.unmatched = TRUE) {
 #' web <- AnansiWeb(tableX = tX, tableY = tY, dictionary = d)
 #'
 AnansiWeb <- S7::new_class(
-    "AnansiWeb",
+    name = "AnansiWeb",
     package = "anansi",
     properties = list(
         tableY = S7::class_numeric | S7::class_logical,
@@ -203,7 +206,9 @@ AnansiWeb <- S7::new_class(
         dictionary = S7::class_any,
         metadata = S7::class_data.frame
     ),
-    constructor = function(tableX, tableY, dictionary, metadata = data.frame()) {
+    constructor = function(
+        tableX, tableY, dictionary, metadata = data.frame()
+        ) {
         # coerce
         if (!is(dictionary, "Matrix")) {
             dictionary <- drop0(Matrix(dictionary, sparse = TRUE))
@@ -213,9 +218,10 @@ AnansiWeb <- S7::new_class(
 
         # check validity
         stopifnot(
-            "'tableX' and 'tableY' need same number of rows (observations)" = NROW(
-                tableX
-            ) ==
+            "'tableX' and 'tableY' need same number of rows (observations)" =
+                NROW(
+                    tableX
+                ) ==
                 NROW(tableY)
         )
         stopifnot(
@@ -234,7 +240,9 @@ AnansiWeb <- S7::new_class(
             is.null(names(dimnames(dictionary))) ||
                 any(names(dimnames(dictionary)) %in% "")
         ) {
-            warning("Dimnames of 'dictionary' were missing; Assigned 'y' and 'x'.")
+            warning(
+                "Dimnames of 'dictionary' were missing; Assigned 'y' and 'x'."
+            )
             names(dimnames(dictionary)) <- c("y", "x")
         }
         metadata <- .check_metadata_labels( metadata, tableY, tableX )
@@ -286,6 +294,7 @@ S7::S4_register(AnansiWeb)
 #' @rdname AnansiTale
 #' @name AnansiTale
 #' @aliases AnansiTale-class
+#' @importFrom S7 new_class
 #' @slot subject A character that describes the data that was queried.
 #' @slot type A character that describes type of parameter contained in the
 #'     `estimates` slot. For example r.values for correlations or r.squared
@@ -306,8 +315,8 @@ S7::S4_register(AnansiWeb)
 #'     for models.
 #' @param df a vector of length 2, containing df1 and df2 corresponding to the
 #'     F-ratio considered.
-#' @param estimates A matrix containing the estimates for the parameters named in
-#'     the `type` slot.
+#' @param estimates A matrix containing the estimates for the parameters named
+#'     in the `type` slot.
 #' @param f.values A matrix containing the f-values, for least-squares.
 #' @param t.values A matrix containing the t-values, for correlations.
 #' @param p.values A matrix containing the p.values for the parameters named in
@@ -319,7 +328,7 @@ S7::S4_register(AnansiWeb)
 #' @export
 #'
 AnansiTale <- S7::new_class(
-    "AnansiTale",
+    name = "AnansiTale",
     package = "anansi",
     properties = list(
         subject = S7::class_character,

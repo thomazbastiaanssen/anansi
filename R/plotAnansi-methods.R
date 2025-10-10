@@ -434,7 +434,9 @@ S7::method(plotAnansi, S7::class_data.frame) <- function(x,
         geom_edge_link(aes(colour = .data$cor, label = .data$label),
             label_size = 3
         ) +
-        scale_edge_colour_gradient2(low = "blue", high = "red", limits = c(-1, 1))
+        scale_edge_colour_gradient2(
+            low = "blue", high = "red", limits = c(-1, 1)
+            )
     # Add nodes
     if (defined_args[["signif"]]) {
         p <- p + geom_node_point(aes(alpha = .data$alpha))

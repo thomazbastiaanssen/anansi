@@ -54,7 +54,9 @@ S7::method(pairs, AnansiWeb) <- function(x, ...) `pairs.anansi::AnansiWeb`(x)
 
 #' @importFrom Matrix which
 #'
-S7::method(getFeaturePairs, AnansiWeb) <- function(x, which = NULL, with.metadata = FALSE) {
+S7::method(getFeaturePairs, AnansiWeb) <- function(
+        x, which = NULL, with.metadata = FALSE
+) {
     if (is.null(which)) {
         which <- Matrix::which(x@dictionary, arr.ind = TRUE, useNames = FALSE)
     }
@@ -87,7 +89,9 @@ S7::method(getFeaturePairs, AnansiWeb) <- function(x, which = NULL, with.metadat
 
 
 #' @export
-S7::method(pairwiseApply, AnansiWeb) <- function(X, FUN, MoreArgs = NULL, SIMPLIFY = TRUE, USE.NAMES = TRUE) {
+S7::method(pairwiseApply, AnansiWeb) <- function(
+        X, FUN, MoreArgs = NULL, SIMPLIFY = TRUE, USE.NAMES = TRUE
+) {
     tY <- as.data.frame.matrix(X@tableY, make.names = FALSE)
     tX <- as.data.frame.matrix(X@tableX, make.names = FALSE)
     wh <- Matrix::which(X@dictionary, arr.ind = TRUE, useNames = FALSE)

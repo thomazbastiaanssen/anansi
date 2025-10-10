@@ -8,11 +8,11 @@
 \alias{getGraph.anansi::MultiFactor}
 \title{Methods for MultiFactor S7 container class}
 \arguments{
-\item{...}{\verb{i,j} indices specifying elements to extract or replace. Indices are
-numeric or character vectors or empty (missing) or NULL. Numeric values
-are coerced to integer or whole numbers as by as.integer or for large
-values by trunc (and hence truncated towards zero). Character vectors
-will be matched to the names of the object.}
+\item{...}{\verb{i,j} indices specifying elements to extract or replace. Indices
+are numeric or character vectors or empty (missing) or NULL. Numeric
+values are coerced to integer or whole numbers as by as.integer or for
+large values by trunc (and hence truncated towards zero). Character
+vectors will be matched to the names of the object.}
 
 \item{value}{Replacement value, typically of same type as that which is to be
 replaced.}

@@ -79,9 +79,12 @@ input
 \subsection{3. Vignettes}{
 
 \itemize{
-\item \href{https://thomazbastiaanssen.github.io/anansi/articles/anansi.html}{1. Getting started with anansi}
-\item \href{https://thomazbastiaanssen.github.io/anansi/articles/adjacency_matrices.html}{2. Adjacency matrices}
-\item \href{https://thomazbastiaanssen.github.io/anansi/articles/association_testing.html}{3. Association testing}
+\item
+\href{https://thomazbastiaanssen.github.io/anansi/articles/anansi.html}{1. Getting started with anansi}
+\item
+\href{https://thomazbastiaanssen.github.io/anansi/articles/adjacency_matrices.html}{2. Adjacency matrices}
+\item
+\href{https://thomazbastiaanssen.github.io/anansi/articles/association_testing.html}{3. Association testing}
 }
 }
 

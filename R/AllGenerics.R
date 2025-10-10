@@ -108,13 +108,19 @@ plotAnansi <- S7::new_generic("plotAnansi", "x")
 pairwiseApply <- S7::new_generic("pairwiseApply", "X")
 
 #' @export
-unfactor <- S7::new_external_generic(package = "S4Vectors", name = "unfactor", "x")
+unfactor <- S7::new_external_generic(
+    package = "S4Vectors", name = "unfactor", "x"
+    )
 
 #' @export
-metadata <- S7::new_external_generic(package = "S4Vectors", name = "metadata", "x")
+metadata <- S7::new_external_generic(
+    package = "S4Vectors", name = "metadata", "x"
+    )
 
 #' @export
-`metadata<-` <- S7::new_external_generic(package = "S4Vectors", name = "metadata<-", "x")
+`metadata<-` <- S7::new_external_generic(
+    package = "S4Vectors", name = "metadata<-", "x"
+    )
 
 
 #' Get tableX

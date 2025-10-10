@@ -458,6 +458,6 @@ head(bi_mat2, n = c(4, 5))
 
 # Session info
 
-```{r}
+```{r session-info}
 sessionInfo()
 ```
