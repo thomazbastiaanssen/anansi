@@ -275,8 +275,8 @@ weaveWeb.MultiAssayExperiment <- function(x,
     .test_mae_has_exp(x, tableX)
 
     # Extract assays
-    tY <- t(assay(experiments(x)[tableY], y_ids[[2L]]))
-    tX <- t(assay(experiments(x)[tableX], x_ids[[2L]]))
+    tY <- t(assay(experiments(x)[[tableY]], y_ids[[2L]]))
+    tX <- t(assay(experiments(x)[[tableX]], x_ids[[2L]]))
 
     # Check if x already contains a dictionary
     if (!force_new) {
